@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <!-- override spring base logging pattern -->
+    <property name="CONSOLE_LOG_PATTERN"
+              value="%d [%-5level] [%thread] %logger{5} %replace(- [%X{consumerId}, %X{callId}, %X{userId}] ){'- \[, , \] ',''}- %m%n"/>
+    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+
+
+    <logger name="no" level="INFO"/>
+    <logger name="no.nav.dagpenger" level="INFO"/>
+    <!--
+     For å unngå denne loggen så settes org.apache.kafka.clients til Error i tester
+     WARN  o.a.k.c.NetworkClient - ... Bootstrap broker localhost:9092 (id: -1 rack: null) disconnected
+     WARN  o.a.k.c.NetworkClient - ... Connection to node -1 (localhost/127.0.0.1:9092) could not be established. Broker may not be available.
+     -->
+    <logger name="org.apache.kafka.clients" level="ERROR"/>
+</configuration>

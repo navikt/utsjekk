@@ -1,0 +1,41 @@
+{
+  "nyTilkjentYtelseMedMetaData": {
+    "personIdent": "01017012345",
+    "behandlingId": "234bed7c-b1d3-11eb-8529-0242ac130003",
+    "vedtaksdato": "2021-07-23",
+    "tilkjentYtelse": {
+      "startdato":  "2020-03-01",
+      "andelerTilkjentYtelse": [
+        {
+          "utbetaltPerPeriode": 3800,
+          "periodetype": "MÅNED",
+          "fraOgMed": "2021-03-01",
+          "tilOgMed": "2022-08-31",
+          "inntekt": 0,
+          "samordningsfradrag": 0,
+          "inntektsreduksjon": 0,
+          "personIdent": "01017012345",
+          "stønadsType": "OVERGANGSSTØNAD",
+          "kildeBehandlingId": "234bed7c-b1d3-11eb-8529-0242ac130003"
+        },
+        {
+          "beløp": 3800,
+          "periodetype": "MÅNED",
+          "fraOgMed": "2022-09-01",
+          "tilOgMed": "2023-11-30",
+          "inntekt": 0,
+          "samordningsfradrag": 0,
+          "inntektsreduksjon": 0,
+          "personIdent": "01017012345",
+          "stønadsType": "OVERGANGSSTØNAD",
+          "kildeBehandlingId": "234bed7c-b1d3-11eb-8529-0242ac130003"
+        }
+      ]
+    },
+    "saksbehandlerId": "12345",
+    "eksternBehandlingId": 123,
+    "stønadstype": "OVERGANGSSTØNAD",
+    "eksternFagsakId": 234
+  },
+  "forrigeBehandlingId": "4b657902-d994-11eb-b8bc-0242ac130003"
+}

@@ -1,0 +1,5 @@
+.idea/
+.DS_Store
+# Log file
+*.log
+**/*.iml
