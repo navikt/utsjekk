@@ -3,10 +3,10 @@ package no.nav.dagpenger.iverksett.infotrygd
 import no.nav.dagpenger.iverksett.felles.FamilieIntegrasjonerClient
 import no.nav.dagpenger.iverksett.infrastruktur.task.opprettNestePubliseringTask
 import no.nav.dagpenger.iverksett.iverksetting.IverksettingRepository
+import no.nav.dagpenger.iverksett.kontrakter.felles.StønadType
+import no.nav.dagpenger.iverksett.kontrakter.infotrygd.OpprettPeriodeHendelseDto
+import no.nav.dagpenger.iverksett.kontrakter.infotrygd.Periode
 import no.nav.dagpenger.iverksett.repository.findByIdOrThrow
-import no.nav.familie.kontrakter.ef.infotrygd.OpprettPeriodeHendelseDto
-import no.nav.familie.kontrakter.ef.infotrygd.Periode
-import no.nav.familie.kontrakter.felles.ef.StønadType
 import no.nav.familie.prosessering.AsyncTaskStep
 import no.nav.familie.prosessering.TaskStepBeskrivelse
 import no.nav.familie.prosessering.domene.Task

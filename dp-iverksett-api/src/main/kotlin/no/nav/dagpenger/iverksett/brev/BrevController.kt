@@ -1,7 +1,7 @@
 package no.nav.dagpenger.iverksett.brev
 
 import no.nav.dagpenger.iverksett.brev.frittstående.FrittståendeBrevService
-import no.nav.familie.kontrakter.ef.felles.FrittståendeBrevDto
+import no.nav.dagpenger.iverksett.kontrakter.felles.FrittståendeBrevDto
 import no.nav.security.token.support.core.api.ProtectedWithClaims
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping

@@ -7,12 +7,12 @@ import no.nav.dagpenger.iverksett.iverksetting.domene.IverksettData
 import no.nav.dagpenger.iverksett.iverksetting.domene.TilbakekrevingResultat
 import no.nav.dagpenger.iverksett.iverksetting.domene.tilSimulering
 import no.nav.dagpenger.iverksett.iverksetting.tilstand.IverksettResultatService
+import no.nav.dagpenger.iverksett.kontrakter.felles.BehandlingType
+import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.OpprettTilbakekrevingRequest
 import no.nav.dagpenger.iverksett.repository.findByIdOrThrow
 import no.nav.dagpenger.iverksett.økonomi.simulering.SimuleringService
 import no.nav.dagpenger.iverksett.økonomi.simulering.harFeilutbetaling
-import no.nav.familie.kontrakter.ef.felles.BehandlingType
 import no.nav.familie.kontrakter.felles.simulering.BeriketSimuleringsresultat
-import no.nav.familie.kontrakter.felles.tilbakekreving.OpprettTilbakekrevingRequest
 import no.nav.familie.prosessering.AsyncTaskStep
 import no.nav.familie.prosessering.TaskStepBeskrivelse
 import no.nav.familie.prosessering.domene.Task

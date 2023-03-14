@@ -4,12 +4,12 @@ import no.nav.dagpenger.iverksett.infrastruktur.transformer.toDomain
 import no.nav.dagpenger.iverksett.iverksetting.domene.AndelTilkjentYtelse
 import no.nav.dagpenger.iverksett.iverksetting.domene.TilkjentYtelse
 import no.nav.dagpenger.iverksett.iverksetting.tilstand.IverksettResultatService
+import no.nav.dagpenger.iverksett.kontrakter.felles.StønadType
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.KonsistensavstemmingDto
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.KonsistensavstemmingTilkjentYtelseDto
 import no.nav.dagpenger.iverksett.util.tilKlassifisering
 import no.nav.dagpenger.iverksett.økonomi.OppdragClient
 import no.nav.dagpenger.iverksett.økonomi.utbetalingsoppdrag.lagPeriodeFraAndel
-import no.nav.familie.kontrakter.ef.iverksett.KonsistensavstemmingDto
-import no.nav.familie.kontrakter.ef.iverksett.KonsistensavstemmingTilkjentYtelseDto
-import no.nav.familie.kontrakter.felles.ef.StønadType
 import no.nav.familie.kontrakter.felles.oppdrag.KonsistensavstemmingUtbetalingsoppdrag
 import no.nav.familie.kontrakter.felles.oppdrag.Utbetalingsoppdrag
 import org.slf4j.LoggerFactory

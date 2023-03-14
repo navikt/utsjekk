@@ -15,13 +15,13 @@ import no.nav.dagpenger.iverksett.iverksetting.domene.Iverksett
 import no.nav.dagpenger.iverksett.iverksetting.domene.IverksettData
 import no.nav.dagpenger.iverksett.iverksetting.domene.Vedtaksdetaljer
 import no.nav.dagpenger.iverksett.iverksetting.tilstand.IverksettResultatService
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.Brevmottaker.IdentType.PERSONIDENT
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.Brevmottaker.MottakerRolle.BRUKER
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.Brevmottaker.MottakerRolle.VERGE
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.IverksettDto
 import no.nav.dagpenger.iverksett.util.ObjectMapperProvider.objectMapper
 import no.nav.dagpenger.iverksett.util.copy
 import no.nav.dagpenger.iverksett.util.opprettBrev
-import no.nav.familie.kontrakter.ef.iverksett.Brevmottaker.IdentType.PERSONIDENT
-import no.nav.familie.kontrakter.ef.iverksett.Brevmottaker.MottakerRolle.BRUKER
-import no.nav.familie.kontrakter.ef.iverksett.Brevmottaker.MottakerRolle.VERGE
-import no.nav.familie.kontrakter.ef.iverksett.IverksettDto
 import no.nav.familie.prosessering.domene.Task
 import no.nav.familie.prosessering.internal.TaskService
 import org.assertj.core.api.Assertions.assertThat

@@ -4,10 +4,10 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
+import no.nav.dagpenger.iverksett.kontrakter.felles.StønadType
 import no.nav.dagpenger.iverksett.util.tilKlassifisering
 import no.nav.dagpenger.iverksett.økonomi.grensesnitt.GrensesnittavstemmingPayload
 import no.nav.dagpenger.iverksett.økonomi.grensesnitt.GrensesnittavstemmingTask
-import no.nav.familie.kontrakter.felles.ef.StønadType
 import no.nav.familie.kontrakter.felles.objectMapper
 import no.nav.familie.kontrakter.felles.oppdrag.GrensesnittavstemmingRequest
 import no.nav.familie.prosessering.domene.Task

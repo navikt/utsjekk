@@ -12,6 +12,8 @@ import no.nav.dagpenger.iverksett.iverksetting.IverksettingRepository
 import no.nav.dagpenger.iverksett.iverksetting.domene.TilbakekrevingResultat
 import no.nav.dagpenger.iverksett.iverksetting.domene.Tilbakekrevingsdetaljer
 import no.nav.dagpenger.iverksett.iverksetting.tilstand.IverksettResultatService
+import no.nav.dagpenger.iverksett.kontrakter.felles.Enhet
+import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.Tilbakekrevingsvalg
 import no.nav.dagpenger.iverksett.lagIverksett
 import no.nav.dagpenger.iverksett.repository.findByIdOrThrow
 import no.nav.dagpenger.iverksett.util.opprettIverksettOvergangsstønad
@@ -19,9 +21,7 @@ import no.nav.dagpenger.iverksett.util.opprettTilbakekrevingMedVarsel
 import no.nav.dagpenger.iverksett.util.opprettTilbakekrevingsdetaljer
 import no.nav.dagpenger.iverksett.økonomi.IverksettMotOppdragTask
 import no.nav.dagpenger.iverksett.økonomi.simulering.SimuleringService
-import no.nav.familie.kontrakter.felles.arbeidsfordeling.Enhet
 import no.nav.familie.kontrakter.felles.simulering.BeriketSimuleringsresultat
-import no.nav.familie.kontrakter.felles.tilbakekreving.Tilbakekrevingsvalg
 import no.nav.familie.prosessering.domene.Task
 import no.nav.familie.prosessering.internal.TaskService
 import org.assertj.core.api.Assertions.assertThat

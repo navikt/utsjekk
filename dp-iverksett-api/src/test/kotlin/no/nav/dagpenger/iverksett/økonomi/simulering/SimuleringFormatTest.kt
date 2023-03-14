@@ -2,7 +2,7 @@ package no.nav.dagpenger.iverksett.økonomi.simulering
 
 import com.fasterxml.jackson.module.kotlin.readValue
 import no.nav.dagpenger.iverksett.ResourceLoaderTestUtil
-import no.nav.familie.kontrakter.ef.iverksett.SimuleringDto
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.SimuleringDto
 import no.nav.familie.kontrakter.felles.objectMapper
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull

@@ -1,7 +1,7 @@
 package no.nav.dagpenger.iverksett.økonomi.utbetalingsoppdrag
 
+import no.nav.dagpenger.iverksett.kontrakter.felles.StønadType
 import no.nav.dagpenger.iverksett.økonomi.lagAndelTilkjentYtelse
-import no.nav.familie.kontrakter.felles.ef.StønadType
 import no.nav.familie.kontrakter.felles.oppdrag.Utbetalingsperiode
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test

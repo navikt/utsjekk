@@ -1,9 +1,8 @@
 package no.nav.dagpenger.iverksett.økonomi.grensesnitt
 
-import no.nav.familie.kontrakter.felles.ef.StønadType
+import no.nav.dagpenger.iverksett.kontrakter.felles.StønadType
 import no.nav.familie.kontrakter.felles.objectMapper
 import no.nav.familie.prosessering.domene.Task
-import no.nav.familie.util.VirkedagerProvider
 import java.time.LocalDate
 import java.time.LocalDateTime
 

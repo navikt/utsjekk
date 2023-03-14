@@ -5,11 +5,11 @@ import no.nav.dagpenger.iverksett.iverksetting.domene.OppdragResultat
 import no.nav.dagpenger.iverksett.iverksetting.domene.TilbakekrevingResultat
 import no.nav.dagpenger.iverksett.iverksetting.domene.TilkjentYtelse
 import no.nav.dagpenger.iverksett.iverksetting.tilstand.IverksettResultatService
+import no.nav.dagpenger.iverksett.kontrakter.felles.Enhet
 import no.nav.dagpenger.iverksett.tilbakekreving.tilOpprettTilbakekrevingRequest
 import no.nav.dagpenger.iverksett.util.IverksettResultatMockBuilder
 import no.nav.dagpenger.iverksett.util.opprettIverksettOvergangsstønad
 import no.nav.dagpenger.iverksett.util.opprettTilkjentYtelse
-import no.nav.familie.kontrakter.felles.arbeidsfordeling.Enhet
 import no.nav.familie.kontrakter.felles.oppdrag.OppdragStatus
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable

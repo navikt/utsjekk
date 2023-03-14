@@ -2,10 +2,10 @@ package no.nav.dagpenger.iverksett.tilbakekreving
 
 import no.nav.dagpenger.iverksett.iverksetting.domene.IverksettData
 import no.nav.dagpenger.iverksett.iverksetting.domene.Tilbakekrevingsdetaljer
+import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.Tilbakekrevingsvalg
 import no.nav.dagpenger.iverksett.økonomi.simulering.hentSammenhengendePerioderMedFeilutbetaling
 import no.nav.familie.kontrakter.felles.simulering.BeriketSimuleringsresultat
 import no.nav.familie.kontrakter.felles.simulering.Simuleringsoppsummering
-import no.nav.familie.kontrakter.felles.tilbakekreving.Tilbakekrevingsvalg
 import java.math.BigDecimal
 
 private val TILBAKEKREVING_UTEN_VARSEL =

@@ -3,7 +3,7 @@ package no.nav.dagpenger.iverksett.tilbakekreving
 import io.mockk.every
 import io.mockk.mockk
 import no.nav.dagpenger.iverksett.infrastruktur.service.KafkaProducerService
-import no.nav.familie.kontrakter.felles.tilbakekreving.HentFagsystemsbehandlingRespons
+import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.HentFagsystemsbehandlingRespons
 import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test

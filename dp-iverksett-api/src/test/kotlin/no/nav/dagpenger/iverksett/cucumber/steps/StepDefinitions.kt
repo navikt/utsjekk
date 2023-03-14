@@ -10,9 +10,9 @@ import no.nav.dagpenger.iverksett.cucumber.domeneparser.parseÅrMåned
 import no.nav.dagpenger.iverksett.infrastruktur.transformer.toDomain
 import no.nav.dagpenger.iverksett.iverksetting.domene.TilkjentYtelse
 import no.nav.dagpenger.iverksett.iverksetting.domene.TilkjentYtelseMedMetaData
+import no.nav.dagpenger.iverksett.kontrakter.felles.StønadType
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.TilkjentYtelseDto
 import no.nav.dagpenger.iverksett.økonomi.utbetalingsoppdrag.UtbetalingsoppdragGenerator
-import no.nav.familie.kontrakter.ef.iverksett.TilkjentYtelseDto
-import no.nav.familie.kontrakter.felles.ef.StønadType
 import no.nav.familie.kontrakter.felles.oppdrag.Utbetalingsoppdrag
 import no.nav.familie.kontrakter.felles.oppdrag.Utbetalingsperiode
 import no.nav.familie.kontrakter.felles.tilbakekreving.Ytelsestype

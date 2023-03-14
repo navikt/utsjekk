@@ -1,11 +1,11 @@
 package no.nav.dagpenger.iverksett.util
 
 import no.nav.dagpenger.iverksett.iverksetting.domene.Vilkårsvurdering
-import no.nav.familie.eksterne.kontrakter.ef.AktivitetsvilkårBarnetilsyn
-import no.nav.familie.kontrakter.ef.felles.RegelId
-import no.nav.familie.kontrakter.ef.felles.VilkårType
-import no.nav.familie.kontrakter.ef.felles.Vilkårsresultat
-import no.nav.familie.kontrakter.ef.iverksett.SvarId
+import no.nav.dagpenger.iverksett.kontrakter.dvh.AktivitetsvilkårBarnetilsyn
+import no.nav.dagpenger.iverksett.kontrakter.felles.RegelId
+import no.nav.dagpenger.iverksett.kontrakter.felles.SvarId
+import no.nav.dagpenger.iverksett.kontrakter.felles.VilkårType
+import no.nav.dagpenger.iverksett.kontrakter.felles.Vilkårsresultat
 
 object VilkårsvurderingUtil {
 

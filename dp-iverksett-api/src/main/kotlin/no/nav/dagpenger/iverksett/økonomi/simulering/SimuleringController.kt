@@ -1,7 +1,7 @@
 package no.nav.dagpenger.iverksett.økonomi.simulering
 
 import no.nav.dagpenger.iverksett.infrastruktur.transformer.toDomain
-import no.nav.familie.kontrakter.ef.iverksett.SimuleringDto
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.SimuleringDto
 import no.nav.familie.kontrakter.felles.Ressurs
 import no.nav.familie.kontrakter.felles.simulering.BeriketSimuleringsresultat
 import no.nav.familie.kontrakter.felles.simulering.DetaljertSimuleringResultat

@@ -9,11 +9,11 @@ import no.nav.dagpenger.iverksett.felles.FamilieIntegrasjonerClient
 import no.nav.dagpenger.iverksett.iverksetting.IverksettingRepository
 import no.nav.dagpenger.iverksett.iverksetting.domene.AndelTilkjentYtelse
 import no.nav.dagpenger.iverksett.iverksetting.domene.Iverksett
+import no.nav.dagpenger.iverksett.kontrakter.infotrygd.OpprettPeriodeHendelseDto
+import no.nav.dagpenger.iverksett.kontrakter.infotrygd.Periode
 import no.nav.dagpenger.iverksett.repository.findByIdOrThrow
 import no.nav.dagpenger.iverksett.util.opprettIverksettOvergangsstønad
 import no.nav.dagpenger.iverksett.økonomi.lagAndelTilkjentYtelse
-import no.nav.familie.kontrakter.ef.infotrygd.OpprettPeriodeHendelseDto
-import no.nav.familie.kontrakter.ef.infotrygd.Periode
 import no.nav.familie.kontrakter.felles.personopplysning.PersonIdentMedHistorikk
 import no.nav.familie.prosessering.domene.Task
 import no.nav.familie.prosessering.internal.TaskService

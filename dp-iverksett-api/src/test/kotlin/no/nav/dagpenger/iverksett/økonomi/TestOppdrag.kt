@@ -4,10 +4,10 @@ import com.github.doyaaaaaken.kotlincsv.dsl.csvReader
 import no.nav.dagpenger.iverksett.iverksetting.domene.AndelTilkjentYtelse
 import no.nav.dagpenger.iverksett.iverksetting.domene.TilkjentYtelse
 import no.nav.dagpenger.iverksett.iverksetting.domene.TilkjentYtelseMedMetaData
+import no.nav.dagpenger.iverksett.kontrakter.felles.StønadType
 import no.nav.dagpenger.iverksett.økonomi.utbetalingsoppdrag.PeriodeId
 import no.nav.dagpenger.iverksett.økonomi.utbetalingsoppdrag.UtbetalingsoppdragGenerator
 import no.nav.dagpenger.iverksett.økonomi.utbetalingsoppdrag.nullAndelTilkjentYtelse
-import no.nav.familie.kontrakter.felles.ef.StønadType
 import no.nav.familie.kontrakter.felles.objectMapper
 import no.nav.familie.kontrakter.felles.oppdrag.Opphør
 import no.nav.familie.kontrakter.felles.oppdrag.Utbetalingsoppdrag

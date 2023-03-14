@@ -2,15 +2,15 @@ package no.nav.dagpenger.iverksett.tilbakekreving
 
 import no.nav.dagpenger.iverksett.iverksetting.domene.TilbakekrevingMedVarsel
 import no.nav.dagpenger.iverksett.iverksetting.domene.Tilbakekrevingsdetaljer
+import no.nav.dagpenger.iverksett.kontrakter.felles.Enhet
+import no.nav.dagpenger.iverksett.kontrakter.felles.Fagsystem
+import no.nav.dagpenger.iverksett.kontrakter.felles.Språkkode
+import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.Behandlingstype
+import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.Tilbakekrevingsvalg
+import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.Ytelsestype
 import no.nav.dagpenger.iverksett.util.opprettIverksettOvergangsstønad
 import no.nav.dagpenger.iverksett.util.opprettTilbakekrevingsdetaljer
-import no.nav.familie.kontrakter.felles.Fagsystem
-import no.nav.familie.kontrakter.felles.Språkkode
-import no.nav.familie.kontrakter.felles.arbeidsfordeling.Enhet
 import no.nav.familie.kontrakter.felles.objectMapper
-import no.nav.familie.kontrakter.felles.tilbakekreving.Behandlingstype
-import no.nav.familie.kontrakter.felles.tilbakekreving.Tilbakekrevingsvalg
-import no.nav.familie.kontrakter.felles.tilbakekreving.Ytelsestype
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.math.BigDecimal

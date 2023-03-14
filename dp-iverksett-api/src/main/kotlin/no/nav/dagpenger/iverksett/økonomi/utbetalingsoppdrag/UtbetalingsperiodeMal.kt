@@ -2,8 +2,8 @@ package no.nav.dagpenger.iverksett.økonomi.utbetalingsoppdrag
 
 import no.nav.dagpenger.iverksett.iverksetting.domene.AndelTilkjentYtelse
 import no.nav.dagpenger.iverksett.iverksetting.domene.TilkjentYtelseMedMetaData
+import no.nav.dagpenger.iverksett.kontrakter.felles.StønadType
 import no.nav.dagpenger.iverksett.util.tilKlassifisering
-import no.nav.familie.kontrakter.felles.ef.StønadType
 import no.nav.familie.kontrakter.felles.oppdrag.Opphør
 import no.nav.familie.kontrakter.felles.oppdrag.Utbetalingsperiode
 import java.math.BigDecimal

@@ -1,11 +1,11 @@
 package no.nav.dagpenger.iverksett.brev
 
 import no.nav.dagpenger.iverksett.iverksetting.domene.IverksettData
-import no.nav.familie.kontrakter.ef.felles.BehandlingType
-import no.nav.familie.kontrakter.ef.felles.BehandlingÅrsak
-import no.nav.familie.kontrakter.ef.felles.Vedtaksresultat
+import no.nav.dagpenger.iverksett.kontrakter.felles.BehandlingType
+import no.nav.dagpenger.iverksett.kontrakter.felles.BehandlingÅrsak
+import no.nav.dagpenger.iverksett.kontrakter.felles.StønadType
+import no.nav.dagpenger.iverksett.kontrakter.felles.Vedtaksresultat
 import no.nav.familie.kontrakter.felles.dokarkiv.Dokumenttype
-import no.nav.familie.kontrakter.felles.ef.StønadType
 
 fun stønadstypeTilDokumenttype(stønadType: StønadType) =
     when (stønadType) {

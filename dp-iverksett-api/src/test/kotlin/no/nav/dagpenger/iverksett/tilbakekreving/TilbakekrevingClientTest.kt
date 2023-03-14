@@ -1,13 +1,13 @@
 package no.nav.dagpenger.iverksett.tilbakekreving
 
 import no.nav.dagpenger.iverksett.ServerTest
-import no.nav.familie.kontrakter.felles.Fagsystem
-import no.nav.familie.kontrakter.felles.Språkkode
-import no.nav.familie.kontrakter.felles.tilbakekreving.Behandling
-import no.nav.familie.kontrakter.felles.tilbakekreving.FeilutbetaltePerioderDto
-import no.nav.familie.kontrakter.felles.tilbakekreving.ForhåndsvisVarselbrevRequest
-import no.nav.familie.kontrakter.felles.tilbakekreving.Periode
-import no.nav.familie.kontrakter.felles.tilbakekreving.Ytelsestype
+import no.nav.dagpenger.iverksett.kontrakter.felles.Fagsystem
+import no.nav.dagpenger.iverksett.kontrakter.felles.Språkkode
+import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.Behandling
+import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.FeilutbetaltePerioderDto
+import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.ForhåndsvisVarselbrevRequest
+import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.Periode
+import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.Ytelsestype
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired

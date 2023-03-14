@@ -1,7 +1,7 @@
 package no.nav.dagpenger.iverksett.infrastruktur.transformer
 
 import no.nav.dagpenger.iverksett.iverksetting.domene.AndelTilkjentYtelse
-import no.nav.familie.kontrakter.ef.iverksett.AndelTilkjentYtelseDto
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.AndelTilkjentYtelseDto
 
 fun AndelTilkjentYtelseDto.toDomain(): AndelTilkjentYtelse {
     return AndelTilkjentYtelse(

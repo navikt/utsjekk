@@ -1,7 +1,7 @@
 package no.nav.dagpenger.iverksett.brev.domain
 
-import no.nav.familie.kontrakter.ef.felles.FrittståendeBrevType
-import no.nav.familie.kontrakter.felles.ef.StønadType
+import no.nav.dagpenger.iverksett.kontrakter.felles.FrittståendeBrevType
+import no.nav.dagpenger.iverksett.kontrakter.felles.StønadType
 import org.springframework.data.annotation.Id
 import org.springframework.data.relational.core.mapping.Column
 import org.springframework.data.relational.core.mapping.Table

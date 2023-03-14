@@ -12,40 +12,40 @@ import no.nav.dagpenger.iverksett.iverksetting.domene.TilkjentYtelse
 import no.nav.dagpenger.iverksett.iverksetting.domene.VedtaksdetaljerBarnetilsyn
 import no.nav.dagpenger.iverksett.iverksetting.domene.VedtaksdetaljerOvergangsstønad
 import no.nav.dagpenger.iverksett.iverksetting.domene.Vilkårsvurdering
+import no.nav.dagpenger.iverksett.kontrakter.dvh.Adressebeskyttelse
+import no.nav.dagpenger.iverksett.kontrakter.dvh.AktivitetType
+import no.nav.dagpenger.iverksett.kontrakter.dvh.Aktivitetskrav
+import no.nav.dagpenger.iverksett.kontrakter.dvh.BehandlingType
+import no.nav.dagpenger.iverksett.kontrakter.dvh.BehandlingÅrsak
+import no.nav.dagpenger.iverksett.kontrakter.dvh.Delårsperiode
+import no.nav.dagpenger.iverksett.kontrakter.dvh.PeriodeMedBeløp
+import no.nav.dagpenger.iverksett.kontrakter.dvh.Person
+import no.nav.dagpenger.iverksett.kontrakter.dvh.Studietype
+import no.nav.dagpenger.iverksett.kontrakter.dvh.Utbetaling
+import no.nav.dagpenger.iverksett.kontrakter.dvh.Utbetalingsdetalj
+import no.nav.dagpenger.iverksett.kontrakter.dvh.UtgiftSkolepenger
+import no.nav.dagpenger.iverksett.kontrakter.dvh.Vedtak
+import no.nav.dagpenger.iverksett.kontrakter.dvh.VedtakBarnetilsynDVH
+import no.nav.dagpenger.iverksett.kontrakter.dvh.VedtakOvergangsstønadDVH
+import no.nav.dagpenger.iverksett.kontrakter.dvh.VedtakSkolepenger
+import no.nav.dagpenger.iverksett.kontrakter.dvh.VedtaksperiodeBarnetilsynDto
+import no.nav.dagpenger.iverksett.kontrakter.dvh.VedtaksperiodeOvergangsstønadDto
+import no.nav.dagpenger.iverksett.kontrakter.dvh.VedtaksperiodeSkolepenger
+import no.nav.dagpenger.iverksett.kontrakter.dvh.VedtaksperiodeType
+import no.nav.dagpenger.iverksett.kontrakter.dvh.Vilkår
+import no.nav.dagpenger.iverksett.kontrakter.dvh.Vilkårsresultat
+import no.nav.dagpenger.iverksett.kontrakter.dvh.VilkårsvurderingDto
+import no.nav.dagpenger.iverksett.kontrakter.dvh.ÅrsakRevurdering
+import no.nav.dagpenger.iverksett.kontrakter.felles.StønadType
 import no.nav.dagpenger.iverksett.util.VilkårsvurderingUtil
 import no.nav.dagpenger.iverksett.util.VilkårsvurderingUtil.hentAktivitetsvilkårBarnetilsyn
 import no.nav.dagpenger.iverksett.util.tilKlassifisering
-import no.nav.familie.eksterne.kontrakter.ef.Adressebeskyttelse
-import no.nav.familie.eksterne.kontrakter.ef.AktivitetType
-import no.nav.familie.eksterne.kontrakter.ef.Aktivitetskrav
-import no.nav.familie.eksterne.kontrakter.ef.BehandlingType
-import no.nav.familie.eksterne.kontrakter.ef.BehandlingÅrsak
-import no.nav.familie.eksterne.kontrakter.ef.Delårsperiode
-import no.nav.familie.eksterne.kontrakter.ef.PeriodeMedBeløp
-import no.nav.familie.eksterne.kontrakter.ef.Person
-import no.nav.familie.eksterne.kontrakter.ef.Studietype
-import no.nav.familie.eksterne.kontrakter.ef.Utbetaling
-import no.nav.familie.eksterne.kontrakter.ef.Utbetalingsdetalj
-import no.nav.familie.eksterne.kontrakter.ef.UtgiftSkolepenger
-import no.nav.familie.eksterne.kontrakter.ef.Vedtak
-import no.nav.familie.eksterne.kontrakter.ef.VedtakBarnetilsynDVH
-import no.nav.familie.eksterne.kontrakter.ef.VedtakOvergangsstønadDVH
-import no.nav.familie.eksterne.kontrakter.ef.VedtakSkolepenger
-import no.nav.familie.eksterne.kontrakter.ef.VedtaksperiodeBarnetilsynDto
-import no.nav.familie.eksterne.kontrakter.ef.VedtaksperiodeOvergangsstønadDto
-import no.nav.familie.eksterne.kontrakter.ef.VedtaksperiodeSkolepenger
-import no.nav.familie.eksterne.kontrakter.ef.VedtaksperiodeType
-import no.nav.familie.eksterne.kontrakter.ef.Vilkår
-import no.nav.familie.eksterne.kontrakter.ef.Vilkårsresultat
-import no.nav.familie.eksterne.kontrakter.ef.VilkårsvurderingDto
-import no.nav.familie.eksterne.kontrakter.ef.ÅrsakRevurdering
-import no.nav.familie.kontrakter.felles.ef.StønadType
 import java.time.LocalDate
 import java.time.Month
 import java.time.Year
 import java.time.ZoneId
-import no.nav.familie.eksterne.kontrakter.ef.Barn as BarnEkstern
-import no.nav.familie.eksterne.kontrakter.ef.StønadType as StønadTypeEkstern
+import no.nav.dagpenger.iverksett.kontrakter.dvh.Barn as BarnEkstern
+import no.nav.dagpenger.iverksett.kontrakter.dvh.StønadType as StønadTypeEkstern
 
 object VedtakstatistikkMapper {
 

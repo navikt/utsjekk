@@ -4,7 +4,6 @@ import com.fasterxml.jackson.module.kotlin.KotlinModule
 import no.nav.dagpenger.iverksett.util.ObjectMapperProvider
 import no.nav.familie.http.client.RetryOAuth2HttpClient
 import no.nav.familie.http.config.RestTemplateAzure
-import no.nav.familie.kafka.KafkaErrorHandler
 import no.nav.familie.kontrakter.felles.objectMapper
 import no.nav.familie.log.filter.LogFilter
 import no.nav.familie.log.filter.RequestTimeFilter

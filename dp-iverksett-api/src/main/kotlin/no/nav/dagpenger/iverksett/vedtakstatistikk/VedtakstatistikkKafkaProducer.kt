@@ -1,10 +1,10 @@
 package no.nav.dagpenger.iverksett.vedtakstatistikk
 
 import no.nav.dagpenger.iverksett.infrastruktur.service.KafkaProducerService
-import no.nav.familie.eksterne.kontrakter.ef.StønadType
-import no.nav.familie.eksterne.kontrakter.ef.VedtakBarnetilsynDVH
-import no.nav.familie.eksterne.kontrakter.ef.VedtakOvergangsstønadDVH
-import no.nav.familie.eksterne.kontrakter.ef.VedtakSkolepenger
+import no.nav.dagpenger.iverksett.kontrakter.dvh.StønadType
+import no.nav.dagpenger.iverksett.kontrakter.dvh.VedtakBarnetilsynDVH
+import no.nav.dagpenger.iverksett.kontrakter.dvh.VedtakOvergangsstønadDVH
+import no.nav.dagpenger.iverksett.kontrakter.dvh.VedtakSkolepenger
 import no.nav.familie.kontrakter.felles.objectMapper
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
@@ -36,7 +36,7 @@ class VedtakstatistikkKafkaProducer(private val kafkaProducerService: KafkaProdu
         secureLogger.debug("Sending to Kafka topic: {}\nVedtakStatistikk: {}", topic, vedtakStatistikk)
 
         runCatching {
-            kafkaProducerService.sendMedStønadstypeIHeader(topic, stønadstype, behandlingId.toString(), vedtakStatistikk)
+            kafkaProducerService.sendMedStønadstypeIHeader(topic, stønadstype.tilFelles(), behandlingId.toString(), vedtakStatistikk)
             logger.info("Vedtakstatistikk for behandling=$behandlingId sent til Kafka")
         }.onFailure {
             val errorMessage = "Could not send vedtak to Kafka. Check secure logs for more information."
@@ -48,3 +48,9 @@ class VedtakstatistikkKafkaProducer(private val kafkaProducerService: KafkaProdu
 }
 
 fun Any.toJson(): String = objectMapper.writeValueAsString(this)
+
+fun StønadType.tilFelles(): no.nav.dagpenger.iverksett.kontrakter.felles.StønadType = when (this) {
+    StønadType.BARNETILSYN -> no.nav.dagpenger.iverksett.kontrakter.felles.StønadType.BARNETILSYN
+    StønadType.SKOLEPENGER -> no.nav.dagpenger.iverksett.kontrakter.felles.StønadType.SKOLEPENGER
+    StønadType.OVERGANGSSTØNAD -> no.nav.dagpenger.iverksett.kontrakter.felles.StønadType.OVERGANGSSTØNAD
+}

@@ -23,28 +23,28 @@ import no.nav.dagpenger.iverksett.iverksetting.domene.VedtaksperiodeSkolepenger
 import no.nav.dagpenger.iverksett.iverksetting.domene.Vilkårsvurdering
 import no.nav.dagpenger.iverksett.iverksetting.domene.Vurdering
 import no.nav.dagpenger.iverksett.iverksetting.domene.ÅrsakRevurdering
-import no.nav.familie.eksterne.kontrakter.ef.AktivitetsvilkårBarnetilsyn
-import no.nav.familie.eksterne.kontrakter.ef.Studietype
-import no.nav.familie.eksterne.kontrakter.ef.Vedtak
-import no.nav.familie.eksterne.kontrakter.ef.Vilkår
-import no.nav.familie.eksterne.kontrakter.ef.VilkårsvurderingDto
-import no.nav.familie.kontrakter.ef.felles.AvslagÅrsak
-import no.nav.familie.kontrakter.ef.felles.BehandlingType
-import no.nav.familie.kontrakter.ef.felles.BehandlingÅrsak
-import no.nav.familie.kontrakter.ef.felles.Opplysningskilde
-import no.nav.familie.kontrakter.ef.felles.RegelId
-import no.nav.familie.kontrakter.ef.felles.Revurderingsårsak
-import no.nav.familie.kontrakter.ef.felles.TilkjentYtelseStatus
-import no.nav.familie.kontrakter.ef.felles.Vedtaksresultat
-import no.nav.familie.kontrakter.ef.felles.VilkårType
-import no.nav.familie.kontrakter.ef.felles.Vilkårsresultat
-import no.nav.familie.kontrakter.ef.iverksett.AdressebeskyttelseGradering
-import no.nav.familie.kontrakter.ef.iverksett.AktivitetType
-import no.nav.familie.kontrakter.ef.iverksett.SkolepengerStudietype
-import no.nav.familie.kontrakter.ef.iverksett.SvarId
-import no.nav.familie.kontrakter.ef.iverksett.VedtaksperiodeType
-import no.nav.familie.kontrakter.felles.Månedsperiode
-import no.nav.familie.kontrakter.felles.ef.StønadType
+import no.nav.dagpenger.iverksett.kontrakter.dvh.AktivitetsvilkårBarnetilsyn
+import no.nav.dagpenger.iverksett.kontrakter.dvh.Studietype
+import no.nav.dagpenger.iverksett.kontrakter.dvh.Vedtak
+import no.nav.dagpenger.iverksett.kontrakter.dvh.Vilkår
+import no.nav.dagpenger.iverksett.kontrakter.dvh.VilkårsvurderingDto
+import no.nav.dagpenger.iverksett.kontrakter.felles.AvslagÅrsak
+import no.nav.dagpenger.iverksett.kontrakter.felles.BehandlingType
+import no.nav.dagpenger.iverksett.kontrakter.felles.BehandlingÅrsak
+import no.nav.dagpenger.iverksett.kontrakter.felles.Månedsperiode
+import no.nav.dagpenger.iverksett.kontrakter.felles.Opplysningskilde
+import no.nav.dagpenger.iverksett.kontrakter.felles.RegelId
+import no.nav.dagpenger.iverksett.kontrakter.felles.Revurderingsårsak
+import no.nav.dagpenger.iverksett.kontrakter.felles.StønadType
+import no.nav.dagpenger.iverksett.kontrakter.felles.SvarId
+import no.nav.dagpenger.iverksett.kontrakter.felles.TilkjentYtelseStatus
+import no.nav.dagpenger.iverksett.kontrakter.felles.Vedtaksresultat
+import no.nav.dagpenger.iverksett.kontrakter.felles.VilkårType
+import no.nav.dagpenger.iverksett.kontrakter.felles.Vilkårsresultat
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.AdressebeskyttelseGradering
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.AktivitetType
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.SkolepengerStudietype
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.VedtaksperiodeType
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
@@ -52,7 +52,7 @@ import java.time.LocalDateTime
 import java.time.YearMonth
 import java.time.ZoneId
 import java.util.UUID
-import no.nav.familie.eksterne.kontrakter.ef.Vilkårsresultat as VilkårsresultatEksterneKontrakter
+import no.nav.dagpenger.iverksett.kontrakter.dvh.Vilkårsresultat as VilkårsresultatEksterneKontrakter
 
 internal class VedtakstatistikkMapperTest {
 

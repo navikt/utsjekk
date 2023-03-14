@@ -1,9 +1,9 @@
 package no.nav.dagpenger.iverksett.infotrygd
 
+import no.nav.dagpenger.iverksett.kontrakter.infotrygd.OpprettPeriodeHendelseDto
+import no.nav.dagpenger.iverksett.kontrakter.infotrygd.OpprettStartBehandlingHendelseDto
+import no.nav.dagpenger.iverksett.kontrakter.infotrygd.OpprettVedtakHendelseDto
 import no.nav.familie.http.client.AbstractPingableRestClient
-import no.nav.familie.kontrakter.ef.infotrygd.OpprettPeriodeHendelseDto
-import no.nav.familie.kontrakter.ef.infotrygd.OpprettStartBehandlingHendelseDto
-import no.nav.familie.kontrakter.ef.infotrygd.OpprettVedtakHendelseDto
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service

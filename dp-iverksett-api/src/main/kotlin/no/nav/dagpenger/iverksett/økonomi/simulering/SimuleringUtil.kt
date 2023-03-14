@@ -1,9 +1,9 @@
 package no.nav.dagpenger.iverksett.økonomi.simulering
 
+import no.nav.dagpenger.iverksett.kontrakter.felles.Datoperiode
+import no.nav.dagpenger.iverksett.kontrakter.felles.StønadType
 import no.nav.dagpenger.iverksett.økonomi.simulering.SimuleringsperiodeEtterbetaling.etterbetaling
 import no.nav.dagpenger.iverksett.økonomi.simulering.SimuleringsperiodeEtterbetaling.medEtterbetaling
-import no.nav.familie.kontrakter.felles.Datoperiode
-import no.nav.familie.kontrakter.felles.ef.StønadType
 import no.nav.familie.kontrakter.felles.simulering.BeriketSimuleringsresultat
 import no.nav.familie.kontrakter.felles.simulering.DetaljertSimuleringResultat
 import no.nav.familie.kontrakter.felles.simulering.FagOmrådeKode

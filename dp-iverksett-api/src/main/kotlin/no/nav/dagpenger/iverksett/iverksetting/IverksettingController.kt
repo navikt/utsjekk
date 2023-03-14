@@ -4,10 +4,10 @@ import no.nav.dagpenger.iverksett.infrastruktur.advice.ApiFeil
 import no.nav.dagpenger.iverksett.infrastruktur.transformer.toDomain
 import no.nav.dagpenger.iverksett.iverksetting.domene.Brev
 import no.nav.dagpenger.iverksett.iverksetting.domene.IverksettData
+import no.nav.dagpenger.iverksett.kontrakter.felles.Vedtaksresultat
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.IverksettDto
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.IverksettStatus
 import no.nav.dagpenger.iverksett.tilbakekreving.validerTilbakekreving
-import no.nav.familie.kontrakter.ef.felles.Vedtaksresultat
-import no.nav.familie.kontrakter.ef.iverksett.IverksettDto
-import no.nav.familie.kontrakter.ef.iverksett.IverksettStatus
 import no.nav.security.token.support.core.api.ProtectedWithClaims
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType

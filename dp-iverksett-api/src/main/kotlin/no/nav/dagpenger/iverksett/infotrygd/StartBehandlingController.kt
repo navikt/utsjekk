@@ -1,6 +1,6 @@
 package no.nav.dagpenger.iverksett.infotrygd
 
-import no.nav.familie.kontrakter.ef.infotrygd.OpprettStartBehandlingHendelseDto
+import no.nav.dagpenger.iverksett.kontrakter.infotrygd.OpprettStartBehandlingHendelseDto
 import no.nav.security.token.support.core.api.ProtectedWithClaims
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody

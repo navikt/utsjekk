@@ -1,8 +1,8 @@
 package no.nav.dagpenger.iverksett.økonomi
 
 import no.nav.dagpenger.iverksett.iverksetting.domene.AndelTilkjentYtelse
-import no.nav.familie.kontrakter.ef.iverksett.AndelTilkjentYtelseDto
-import no.nav.familie.kontrakter.felles.Månedsperiode
+import no.nav.dagpenger.iverksett.kontrakter.felles.Månedsperiode
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.AndelTilkjentYtelseDto
 import java.time.LocalDate
 import java.time.YearMonth
 import java.util.UUID

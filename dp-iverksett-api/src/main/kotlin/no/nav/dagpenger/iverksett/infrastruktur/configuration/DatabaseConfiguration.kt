@@ -13,8 +13,7 @@ import no.nav.dagpenger.iverksett.iverksetting.domene.IverksettSkolepenger
 import no.nav.dagpenger.iverksett.iverksetting.domene.OppdragResultat
 import no.nav.dagpenger.iverksett.iverksetting.domene.TilbakekrevingResultat
 import no.nav.dagpenger.iverksett.iverksetting.domene.TilkjentYtelse
-import no.nav.familie.eksterne.kontrakter.saksstatistikk.ef.BehandlingDVH
-import no.nav.familie.kontrakter.felles.ef.StønadType
+import no.nav.dagpenger.iverksett.kontrakter.felles.StønadType
 import no.nav.familie.kontrakter.felles.objectMapper
 import no.nav.familie.prosessering.PropertiesWrapperTilStringConverter
 import no.nav.familie.prosessering.StringTilPropertiesWrapperConverter
@@ -48,8 +47,6 @@ class DatabaseConfiguration : AbstractJdbcConfiguration() {
             listOf(
                 PropertiesWrapperTilStringConverter(),
                 StringTilPropertiesWrapperConverter(),
-                BehandlingDVHTilStringConverter(),
-                StringTilBehandlingDVHConverter(),
                 TilkjentYtelseTilPGobjectConverter(),
                 PGobjectTilTilkjentYtelseConverter(),
                 OppdragResultatTilPGobjectConverter(),
@@ -146,24 +143,6 @@ class DatabaseConfiguration : AbstractJdbcConfiguration() {
 
         override fun convert(pGobject: PGobject): TilbakekrevingResultat {
             return objectMapper.readValue(pGobject.value!!)
-        }
-    }
-
-    @WritingConverter
-    class BehandlingDVHTilStringConverter : Converter<BehandlingDVH, PGobject> {
-
-        override fun convert(utbetalingsoppdrag: BehandlingDVH): PGobject =
-            PGobject().apply {
-                type = "json"
-                value = objectMapper.writeValueAsString(utbetalingsoppdrag)
-            }
-    }
-
-    @ReadingConverter
-    class StringTilBehandlingDVHConverter : Converter<PGobject, BehandlingDVH> {
-
-        override fun convert(pgObject: PGobject): BehandlingDVH {
-            return objectMapper.readValue(pgObject.value!!)
         }
     }
 

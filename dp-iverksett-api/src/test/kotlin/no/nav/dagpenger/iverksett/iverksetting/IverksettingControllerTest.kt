@@ -2,11 +2,11 @@ package no.nav.dagpenger.iverksett.iverksetting
 
 import no.nav.dagpenger.iverksett.ServerTest
 import no.nav.dagpenger.iverksett.brev.JournalførVedtaksbrevTask
+import no.nav.dagpenger.iverksett.kontrakter.felles.Vedtaksresultat
 import no.nav.dagpenger.iverksett.tilbakekreving.OpprettTilbakekrevingTask
 import no.nav.dagpenger.iverksett.util.opprettIverksettDto
 import no.nav.dagpenger.iverksett.økonomi.IverksettMotOppdragTask
 import no.nav.familie.http.client.MultipartBuilder
-import no.nav.familie.kontrakter.ef.felles.Vedtaksresultat
 import no.nav.familie.kontrakter.felles.Ressurs
 import no.nav.familie.prosessering.internal.TaskService
 import org.assertj.core.api.Assertions.assertThat

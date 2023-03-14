@@ -1,15 +1,15 @@
 package no.nav.dagpenger.iverksett.util
 
-import no.nav.familie.kontrakter.ef.felles.AvslagÅrsak
-import no.nav.familie.kontrakter.ef.felles.BehandlingType
-import no.nav.familie.kontrakter.ef.felles.BehandlingÅrsak
-import no.nav.familie.kontrakter.ef.felles.Opplysningskilde
-import no.nav.familie.kontrakter.ef.felles.Revurderingsårsak
-import no.nav.familie.kontrakter.ef.iverksett.BehandlingMetode
-import no.nav.familie.kontrakter.ef.iverksett.BehandlingsstatistikkDto
-import no.nav.familie.kontrakter.ef.iverksett.Hendelse
-import no.nav.familie.kontrakter.ef.iverksett.ÅrsakRevurderingDto
-import no.nav.familie.kontrakter.felles.ef.StønadType
+import no.nav.dagpenger.iverksett.kontrakter.felles.AvslagÅrsak
+import no.nav.dagpenger.iverksett.kontrakter.felles.BehandlingType
+import no.nav.dagpenger.iverksett.kontrakter.felles.BehandlingÅrsak
+import no.nav.dagpenger.iverksett.kontrakter.felles.Opplysningskilde
+import no.nav.dagpenger.iverksett.kontrakter.felles.Revurderingsårsak
+import no.nav.dagpenger.iverksett.kontrakter.felles.StønadType
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.BehandlingMetode
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.BehandlingsstatistikkDto
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.Hendelse
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.ÅrsakRevurderingDto
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId

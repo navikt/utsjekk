@@ -24,26 +24,26 @@ import no.nav.dagpenger.iverksett.iverksetting.domene.VedtaksperiodeSkolepenger
 import no.nav.dagpenger.iverksett.iverksetting.domene.Vilkårsvurdering
 import no.nav.dagpenger.iverksett.iverksetting.domene.Vurdering
 import no.nav.dagpenger.iverksett.iverksetting.domene.ÅrsakRevurdering
-import no.nav.familie.kontrakter.ef.iverksett.BehandlingsdetaljerDto
-import no.nav.familie.kontrakter.ef.iverksett.DelvilkårsvurderingDto
-import no.nav.familie.kontrakter.ef.iverksett.FagsakdetaljerDto
-import no.nav.familie.kontrakter.ef.iverksett.IverksettBarnetilsynDto
-import no.nav.familie.kontrakter.ef.iverksett.IverksettDto
-import no.nav.familie.kontrakter.ef.iverksett.IverksettOvergangsstønadDto
-import no.nav.familie.kontrakter.ef.iverksett.IverksettSkolepengerDto
-import no.nav.familie.kontrakter.ef.iverksett.PeriodeMedBeløpDto
-import no.nav.familie.kontrakter.ef.iverksett.SøkerDto
-import no.nav.familie.kontrakter.ef.iverksett.TilbakekrevingDto
-import no.nav.familie.kontrakter.ef.iverksett.TilbakekrevingMedVarselDto
-import no.nav.familie.kontrakter.ef.iverksett.VedtaksdetaljerBarnetilsynDto
-import no.nav.familie.kontrakter.ef.iverksett.VedtaksdetaljerOvergangsstønadDto
-import no.nav.familie.kontrakter.ef.iverksett.VedtaksdetaljerSkolepengerDto
-import no.nav.familie.kontrakter.ef.iverksett.VedtaksperiodeBarnetilsynDto
-import no.nav.familie.kontrakter.ef.iverksett.VedtaksperiodeOvergangsstønadDto
-import no.nav.familie.kontrakter.ef.iverksett.VedtaksperiodeSkolepengerDto
-import no.nav.familie.kontrakter.ef.iverksett.VilkårsvurderingDto
-import no.nav.familie.kontrakter.ef.iverksett.VurderingDto
-import no.nav.familie.kontrakter.ef.iverksett.Brevmottaker as BrevmottakerKontrakter
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.BehandlingsdetaljerDto
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.DelvilkårsvurderingDto
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.FagsakdetaljerDto
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.IverksettBarnetilsynDto
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.IverksettDto
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.IverksettOvergangsstønadDto
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.IverksettSkolepengerDto
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.PeriodeMedBeløpDto
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.SøkerDto
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.TilbakekrevingDto
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.TilbakekrevingMedVarselDto
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.VedtaksdetaljerBarnetilsynDto
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.VedtaksdetaljerOvergangsstønadDto
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.VedtaksdetaljerSkolepengerDto
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.VedtaksperiodeBarnetilsynDto
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.VedtaksperiodeOvergangsstønadDto
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.VedtaksperiodeSkolepengerDto
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.VilkårsvurderingDto
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.VurderingDto
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.Brevmottaker as BrevmottakerKontrakter
 
 fun VurderingDto.toDomain(): Vurdering {
     return Vurdering(this.regelId, this.svar, this.begrunnelse)

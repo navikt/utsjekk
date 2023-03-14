@@ -1,15 +1,15 @@
 package no.nav.dagpenger.iverksett.tilbakekreving
 
+import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.Behandling
+import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.FinnesBehandlingResponse
+import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.ForhåndsvisVarselbrevRequest
+import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.OpprettTilbakekrevingRequest
+import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.Ytelsestype
 import no.nav.familie.http.client.AbstractRestClient
 import no.nav.familie.kontrakter.felles.Fagsystem
 import no.nav.familie.kontrakter.felles.Ressurs
 import no.nav.familie.kontrakter.felles.getDataOrThrow
-import no.nav.familie.kontrakter.felles.tilbakekreving.Behandling
-import no.nav.familie.kontrakter.felles.tilbakekreving.FinnesBehandlingResponse
-import no.nav.familie.kontrakter.felles.tilbakekreving.ForhåndsvisVarselbrevRequest
 import no.nav.familie.kontrakter.felles.tilbakekreving.KanBehandlingOpprettesManueltRespons
-import no.nav.familie.kontrakter.felles.tilbakekreving.OpprettTilbakekrevingRequest
-import no.nav.familie.kontrakter.felles.tilbakekreving.Ytelsestype
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpHeaders

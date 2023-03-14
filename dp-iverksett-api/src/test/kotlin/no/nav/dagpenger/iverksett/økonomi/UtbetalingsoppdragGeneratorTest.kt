@@ -3,9 +3,9 @@ package no.nav.dagpenger.iverksett.økonomi
 import no.nav.dagpenger.iverksett.iverksetting.domene.AndelTilkjentYtelse
 import no.nav.dagpenger.iverksett.iverksetting.domene.TilkjentYtelse
 import no.nav.dagpenger.iverksett.iverksetting.domene.TilkjentYtelseMedMetaData
+import no.nav.dagpenger.iverksett.kontrakter.felles.StønadType
+import no.nav.dagpenger.iverksett.kontrakter.felles.TilkjentYtelseStatus
 import no.nav.dagpenger.iverksett.økonomi.utbetalingsoppdrag.UtbetalingsoppdragGenerator.lagTilkjentYtelseMedUtbetalingsoppdrag
-import no.nav.familie.kontrakter.ef.felles.TilkjentYtelseStatus
-import no.nav.familie.kontrakter.felles.ef.StønadType
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.opentest4j.AssertionFailedError

@@ -129,57 +129,12 @@
         </dependency>
 
         <!-- NAV internt -->
-        <dependency>
-            <groupId>no.nav.familie.felles</groupId>
-            <artifactId>sikkerhet</artifactId>
-            <version>${felles.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>no.nav.familie.felles</groupId>
-            <artifactId>log</artifactId>
-            <version>${felles.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>no.nav.familie.felles</groupId>
-            <artifactId>util</artifactId>
-            <version>${felles.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>no.nav.familie.felles</groupId>
-            <artifactId>kafka</artifactId>
-            <version>${felles.version}</version>
-        </dependency>
-        <dependency>
+         <dependency>
             <groupId>no.nav.familie</groupId>
             <artifactId>prosessering-core</artifactId>
             <version>${prosessering.version}</version>
         </dependency>
-        <dependency>
-            <groupId>no.nav.familie.kontrakter</groupId>
-            <artifactId>felles</artifactId>
-            <version>${familie.kontrakter.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>no.nav.familie.kontrakter</groupId>
-            <artifactId>enslig-forsorger</artifactId>
-            <version>${familie.kontrakter.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>no.nav.familie.eksterne.kontrakter</groupId>
-            <artifactId>stonadsstatistikk-ef</artifactId>
-            <version>${familie.eksterne-kontrakter.stonadsstatistikk-ef}</version>
-        </dependency>
-        <dependency>
-            <groupId>no.nav.familie.eksterne.kontrakter</groupId>
-            <artifactId>saksstatistikk-ef</artifactId>
-            <version>${familie.eksterne-kontrakter.saksstatistikk-ef}</version>
-        </dependency>
-        <dependency>
-            <groupId>no.nav.familie.eksterne.kontrakter</groupId>
-            <artifactId>arbeidsoppfolging</artifactId>
-            <version>${familie.eksterne-kontrakter.arbeidsoppfolging}</version>
-        </dependency>
-        <dependency>
+         <dependency>
             <groupId>no.nav.security</groupId>
             <artifactId>token-client-spring</artifactId>
             <version>${token-validation-spring.version}</version>

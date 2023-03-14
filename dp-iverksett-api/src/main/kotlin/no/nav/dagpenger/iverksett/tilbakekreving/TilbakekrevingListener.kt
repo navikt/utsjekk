@@ -4,10 +4,10 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import no.nav.dagpenger.iverksett.felles.FamilieIntegrasjonerClient
 import no.nav.dagpenger.iverksett.iverksetting.IverksettingRepository
 import no.nav.dagpenger.iverksett.iverksetting.domene.IverksettData
+import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.HentFagsystemsbehandlingRequest
+import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.HentFagsystemsbehandlingRespons
+import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.Ytelsestype
 import no.nav.familie.kontrakter.felles.objectMapper
-import no.nav.familie.kontrakter.felles.tilbakekreving.HentFagsystemsbehandlingRequest
-import no.nav.familie.kontrakter.felles.tilbakekreving.HentFagsystemsbehandlingRespons
-import no.nav.familie.kontrakter.felles.tilbakekreving.Ytelsestype
 import no.nav.familie.log.mdc.MDCConstants
 import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.slf4j.LoggerFactory

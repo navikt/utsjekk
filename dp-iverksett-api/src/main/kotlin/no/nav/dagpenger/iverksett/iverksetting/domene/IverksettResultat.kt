@@ -2,8 +2,8 @@ package no.nav.dagpenger.iverksett.iverksetting.domene
 
 import no.nav.dagpenger.iverksett.brev.domain.DistribuerBrevResultatMap
 import no.nav.dagpenger.iverksett.brev.domain.JournalpostResultatMap
+import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.OpprettTilbakekrevingRequest
 import no.nav.familie.kontrakter.felles.oppdrag.OppdragStatus
-import no.nav.familie.kontrakter.felles.tilbakekreving.OpprettTilbakekrevingRequest
 import org.springframework.data.annotation.Id
 import org.springframework.data.relational.core.mapping.Column
 import java.time.LocalDateTime

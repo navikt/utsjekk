@@ -2,19 +2,19 @@ package no.nav.dagpenger.iverksett.tilbakekreving
 
 import no.nav.dagpenger.iverksett.iverksetting.domene.IverksettData
 import no.nav.dagpenger.iverksett.iverksetting.domene.Tilbakekrevingsdetaljer
-import no.nav.familie.kontrakter.ef.felles.BehandlingÅrsak
-import no.nav.familie.kontrakter.felles.Fagsystem
-import no.nav.familie.kontrakter.felles.Språkkode
-import no.nav.familie.kontrakter.felles.arbeidsfordeling.Enhet
-import no.nav.familie.kontrakter.felles.tilbakekreving.Behandlingstype
-import no.nav.familie.kontrakter.felles.tilbakekreving.Faktainfo
-import no.nav.familie.kontrakter.felles.tilbakekreving.HentFagsystemsbehandling
-import no.nav.familie.kontrakter.felles.tilbakekreving.HentFagsystemsbehandlingRespons
-import no.nav.familie.kontrakter.felles.tilbakekreving.OpprettTilbakekrevingRequest
-import no.nav.familie.kontrakter.felles.tilbakekreving.Periode
-import no.nav.familie.kontrakter.felles.tilbakekreving.Tilbakekrevingsvalg
-import no.nav.familie.kontrakter.felles.tilbakekreving.Varsel
-import no.nav.familie.kontrakter.felles.tilbakekreving.Ytelsestype
+import no.nav.dagpenger.iverksett.kontrakter.felles.BehandlingÅrsak
+import no.nav.dagpenger.iverksett.kontrakter.felles.Enhet
+import no.nav.dagpenger.iverksett.kontrakter.felles.Fagsystem
+import no.nav.dagpenger.iverksett.kontrakter.felles.Språkkode
+import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.Behandlingstype
+import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.Faktainfo
+import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.HentFagsystemsbehandling
+import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.HentFagsystemsbehandlingRespons
+import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.OpprettTilbakekrevingRequest
+import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.Periode
+import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.Tilbakekrevingsvalg
+import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.Varsel
+import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.Ytelsestype
 
 const val ENHETSNAVN_BREV = "NAV Arbeid og ytelser"
 

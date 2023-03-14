@@ -1,7 +1,7 @@
 package no.nav.dagpenger.iverksett.vedtakstatistikk
 
 import no.nav.dagpenger.iverksett.infrastruktur.transformer.toDomain
-import no.nav.familie.kontrakter.ef.iverksett.IverksettDto
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.IverksettDto
 import no.nav.security.token.support.core.api.ProtectedWithClaims
 import org.springframework.context.annotation.Profile
 import org.springframework.http.MediaType

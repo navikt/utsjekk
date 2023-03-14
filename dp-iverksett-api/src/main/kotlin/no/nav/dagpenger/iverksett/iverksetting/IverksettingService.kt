@@ -9,14 +9,14 @@ import no.nav.dagpenger.iverksett.iverksetting.domene.Iverksett
 import no.nav.dagpenger.iverksett.iverksetting.domene.IverksettData
 import no.nav.dagpenger.iverksett.iverksetting.domene.OppdragResultat
 import no.nav.dagpenger.iverksett.iverksetting.tilstand.IverksettResultatService
+import no.nav.dagpenger.iverksett.kontrakter.felles.StønadType
+import no.nav.dagpenger.iverksett.kontrakter.felles.Vedtaksresultat
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.IverksettStatus
 import no.nav.dagpenger.iverksett.oppgave.OpprettOppfølgingsOppgaveForOvergangsstønadTask
 import no.nav.dagpenger.iverksett.repository.findByIdOrThrow
 import no.nav.dagpenger.iverksett.util.tilKlassifisering
 import no.nav.dagpenger.iverksett.vedtakstatistikk.VedtakstatistikkTask
 import no.nav.dagpenger.iverksett.økonomi.OppdragClient
-import no.nav.familie.kontrakter.ef.felles.Vedtaksresultat
-import no.nav.familie.kontrakter.ef.iverksett.IverksettStatus
-import no.nav.familie.kontrakter.felles.ef.StønadType
 import no.nav.familie.kontrakter.felles.oppdrag.OppdragId
 import no.nav.familie.kontrakter.felles.oppdrag.OppdragStatus
 import no.nav.familie.prosessering.domene.Task

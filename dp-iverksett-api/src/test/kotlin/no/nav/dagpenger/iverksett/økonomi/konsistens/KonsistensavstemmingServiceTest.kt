@@ -6,13 +6,13 @@ import io.mockk.slot
 import no.nav.dagpenger.iverksett.iverksetting.domene.TilkjentYtelse
 import no.nav.dagpenger.iverksett.iverksetting.domene.TilkjentYtelseMedMetaData
 import no.nav.dagpenger.iverksett.iverksetting.tilstand.IverksettResultatService
+import no.nav.dagpenger.iverksett.kontrakter.felles.StønadType
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.KonsistensavstemmingDto
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.KonsistensavstemmingTilkjentYtelseDto
 import no.nav.dagpenger.iverksett.økonomi.OppdragClient
 import no.nav.dagpenger.iverksett.økonomi.lagAndelTilkjentYtelse
 import no.nav.dagpenger.iverksett.økonomi.lagAndelTilkjentYtelseDto
 import no.nav.dagpenger.iverksett.økonomi.utbetalingsoppdrag.UtbetalingsoppdragGenerator.lagTilkjentYtelseMedUtbetalingsoppdrag
-import no.nav.familie.kontrakter.ef.iverksett.KonsistensavstemmingDto
-import no.nav.familie.kontrakter.ef.iverksett.KonsistensavstemmingTilkjentYtelseDto
-import no.nav.familie.kontrakter.felles.ef.StønadType
 import no.nav.familie.kontrakter.felles.oppdrag.KonsistensavstemmingUtbetalingsoppdrag
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable

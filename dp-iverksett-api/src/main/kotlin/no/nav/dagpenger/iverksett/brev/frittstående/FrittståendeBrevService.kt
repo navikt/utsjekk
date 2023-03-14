@@ -6,7 +6,7 @@ import no.nav.dagpenger.iverksett.brev.domain.FrittståendeBrev
 import no.nav.dagpenger.iverksett.brev.stønadstypeTilDokumenttype
 import no.nav.dagpenger.iverksett.infrastruktur.advice.ApiFeil
 import no.nav.dagpenger.iverksett.infrastruktur.transformer.toDomain
-import no.nav.familie.kontrakter.ef.felles.FrittståendeBrevDto
+import no.nav.dagpenger.iverksett.kontrakter.felles.FrittståendeBrevDto
 import no.nav.familie.kontrakter.felles.dokarkiv.v2.ArkiverDokumentRequest
 import no.nav.familie.kontrakter.felles.dokarkiv.v2.Dokument
 import no.nav.familie.kontrakter.felles.dokarkiv.v2.Filtype

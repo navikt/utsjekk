@@ -1,28 +1,28 @@
 package no.nav.dagpenger.iverksett.vedtakstatistikk
 
-import no.nav.familie.eksterne.kontrakter.ef.Vedtak
-import no.nav.familie.eksterne.kontrakter.ef.Vilkår
-import no.nav.familie.kontrakter.ef.felles.BehandlingType
-import no.nav.familie.kontrakter.ef.felles.BehandlingÅrsak
-import no.nav.familie.kontrakter.ef.felles.Vedtaksresultat
-import no.nav.familie.kontrakter.ef.felles.VilkårType
-import no.nav.familie.kontrakter.ef.felles.Vilkårsresultat
-import no.nav.familie.kontrakter.ef.iverksett.AdressebeskyttelseGradering
-import no.nav.familie.kontrakter.ef.iverksett.AktivitetType
-import no.nav.familie.kontrakter.ef.iverksett.VedtaksperiodeType
+import no.nav.dagpenger.iverksett.kontrakter.dvh.Vedtak
+import no.nav.dagpenger.iverksett.kontrakter.dvh.Vilkår
+import no.nav.dagpenger.iverksett.kontrakter.felles.BehandlingType
+import no.nav.dagpenger.iverksett.kontrakter.felles.BehandlingÅrsak
+import no.nav.dagpenger.iverksett.kontrakter.felles.Vedtaksresultat
+import no.nav.dagpenger.iverksett.kontrakter.felles.VilkårType
+import no.nav.dagpenger.iverksett.kontrakter.felles.Vilkårsresultat
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.AdressebeskyttelseGradering
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.AktivitetType
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.VedtaksperiodeType
 import no.nav.familie.kontrakter.felles.ef.StønadType
 import org.junit.jupiter.api.Test
-import no.nav.familie.eksterne.kontrakter.arbeidsoppfolging.Aktivitetstype as AktivitetstypeEkstern
-import no.nav.familie.eksterne.kontrakter.arbeidsoppfolging.Periodetype as PeriodetypeEkstern
-import no.nav.familie.eksterne.kontrakter.arbeidsoppfolging.Stønadstype as StønadstypeEkstern
-import no.nav.familie.eksterne.kontrakter.arbeidsoppfolging.Vedtaksresultat as VedtaksresultatEkstern
-import no.nav.familie.eksterne.kontrakter.ef.Adressebeskyttelse as AdresseBeskyttelseEkstern
-import no.nav.familie.eksterne.kontrakter.ef.AktivitetType as AktivitetTypeEkstern
-import no.nav.familie.eksterne.kontrakter.ef.BehandlingType as BehandlingTypeEkstern
-import no.nav.familie.eksterne.kontrakter.ef.BehandlingÅrsak as BehandlingÅrsakEkstern
-import no.nav.familie.eksterne.kontrakter.ef.StønadType as StønadTypeEkstern
-import no.nav.familie.eksterne.kontrakter.ef.VedtaksperiodeType as VedtakPeriodeTypeEkstern
-import no.nav.familie.eksterne.kontrakter.ef.Vilkårsresultat as VilkårsresultatEkstern
+import no.nav.dagpenger.iverksett.kontrakter.arbeidsoppfølging.Aktivitetstype as AktivitetstypeEkstern
+import no.nav.dagpenger.iverksett.kontrakter.arbeidsoppfølging.Periodetype as PeriodetypeEkstern
+import no.nav.dagpenger.iverksett.kontrakter.arbeidsoppfølging.Stønadstype as StønadstypeEkstern
+import no.nav.dagpenger.iverksett.kontrakter.arbeidsoppfølging.Vedtaksresultat as VedtaksresultatEkstern
+import no.nav.dagpenger.iverksett.kontrakter.dvh.Adressebeskyttelse as AdresseBeskyttelseEkstern
+import no.nav.dagpenger.iverksett.kontrakter.dvh.AktivitetType as AktivitetTypeEkstern
+import no.nav.dagpenger.iverksett.kontrakter.dvh.BehandlingType as BehandlingTypeEkstern
+import no.nav.dagpenger.iverksett.kontrakter.dvh.BehandlingÅrsak as BehandlingÅrsakEkstern
+import no.nav.dagpenger.iverksett.kontrakter.dvh.StønadType as StønadTypeEkstern
+import no.nav.dagpenger.iverksett.kontrakter.dvh.VedtaksperiodeType as VedtakPeriodeTypeEkstern
+import no.nav.dagpenger.iverksett.kontrakter.dvh.Vilkårsresultat as VilkårsresultatEkstern
 
 class FellesTilEksterneKontrakterEnumTest {
 

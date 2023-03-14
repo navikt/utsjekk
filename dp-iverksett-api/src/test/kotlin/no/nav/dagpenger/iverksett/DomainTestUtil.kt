@@ -6,20 +6,20 @@ import no.nav.dagpenger.iverksett.iverksetting.domene.IverksettData
 import no.nav.dagpenger.iverksett.iverksetting.domene.IverksettOvergangsstønad
 import no.nav.dagpenger.iverksett.iverksetting.domene.Tilbakekrevingsdetaljer
 import no.nav.dagpenger.iverksett.iverksetting.domene.VedtaksperiodeOvergangsstønad
+import no.nav.dagpenger.iverksett.kontrakter.felles.BehandlingType
+import no.nav.dagpenger.iverksett.kontrakter.felles.BehandlingÅrsak
+import no.nav.dagpenger.iverksett.kontrakter.felles.Datoperiode
+import no.nav.dagpenger.iverksett.kontrakter.felles.StønadType
+import no.nav.dagpenger.iverksett.kontrakter.felles.Vedtaksresultat
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.AndelTilkjentYtelseDto
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.SimuleringDto
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.TilkjentYtelseDto
 import no.nav.dagpenger.iverksett.util.behandlingsdetaljer
 import no.nav.dagpenger.iverksett.util.opprettIverksettOvergangsstønad
 import no.nav.dagpenger.iverksett.util.vedtaksdetaljerOvergangsstønad
 import no.nav.dagpenger.iverksett.økonomi.lagAndelTilkjentYtelse
 import no.nav.dagpenger.iverksett.økonomi.lagAndelTilkjentYtelseDto
 import no.nav.dagpenger.iverksett.økonomi.simulering.grupperPosteringerEtterDato
-import no.nav.familie.kontrakter.ef.felles.BehandlingType
-import no.nav.familie.kontrakter.ef.felles.BehandlingÅrsak
-import no.nav.familie.kontrakter.ef.felles.Vedtaksresultat
-import no.nav.familie.kontrakter.ef.iverksett.AndelTilkjentYtelseDto
-import no.nav.familie.kontrakter.ef.iverksett.SimuleringDto
-import no.nav.familie.kontrakter.ef.iverksett.TilkjentYtelseDto
-import no.nav.familie.kontrakter.felles.Datoperiode
-import no.nav.familie.kontrakter.felles.ef.StønadType
 import no.nav.familie.kontrakter.felles.simulering.BeriketSimuleringsresultat
 import no.nav.familie.kontrakter.felles.simulering.BetalingType
 import no.nav.familie.kontrakter.felles.simulering.DetaljertSimuleringResultat
@@ -34,7 +34,7 @@ import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.YearMonth
 import java.util.UUID
-import no.nav.familie.kontrakter.ef.iverksett.TilkjentYtelseMedMetadata as TilkjentYtelseMedMetadataDto
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.TilkjentYtelseMedMetadata as TilkjentYtelseMedMetadataDto
 
 fun simuleringDto(
     andeler: List<AndelTilkjentYtelseDto> = listOf(lagDefaultAndeler()),

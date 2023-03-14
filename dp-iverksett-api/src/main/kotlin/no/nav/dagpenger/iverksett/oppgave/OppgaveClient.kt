@@ -1,10 +1,10 @@
 package no.nav.dagpenger.iverksett.oppgave
 
+import no.nav.dagpenger.iverksett.kontrakter.oppgave.OppgaveResponse
+import no.nav.dagpenger.iverksett.kontrakter.oppgave.OpprettOppgaveRequest
 import no.nav.dagpenger.iverksett.util.medContentTypeJsonUTF8
 import no.nav.familie.http.client.AbstractRestClient
 import no.nav.familie.kontrakter.felles.Ressurs
-import no.nav.familie.kontrakter.felles.oppgave.OppgaveResponse
-import no.nav.familie.kontrakter.felles.oppgave.OpprettOppgaveRequest
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpHeaders

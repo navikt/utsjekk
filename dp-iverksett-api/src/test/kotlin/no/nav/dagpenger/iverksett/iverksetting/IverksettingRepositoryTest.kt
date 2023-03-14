@@ -5,11 +5,11 @@ import no.nav.dagpenger.iverksett.ResourceLoaderTestUtil
 import no.nav.dagpenger.iverksett.ServerTest
 import no.nav.dagpenger.iverksett.infrastruktur.transformer.toDomain
 import no.nav.dagpenger.iverksett.iverksetting.domene.IverksettData
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.IverksettDto
 import no.nav.dagpenger.iverksett.lagIverksett
 import no.nav.dagpenger.iverksett.repository.findByIdOrThrow
 import no.nav.dagpenger.iverksett.util.ObjectMapperProvider.objectMapper
 import no.nav.dagpenger.iverksett.util.opprettBrev
-import no.nav.familie.kontrakter.ef.iverksett.IverksettDto
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired

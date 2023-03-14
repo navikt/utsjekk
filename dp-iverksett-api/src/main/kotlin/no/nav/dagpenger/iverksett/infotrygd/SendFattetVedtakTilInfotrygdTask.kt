@@ -4,8 +4,8 @@ import no.nav.dagpenger.iverksett.felles.FamilieIntegrasjonerClient
 import no.nav.dagpenger.iverksett.infrastruktur.task.opprettNestePubliseringTask
 import no.nav.dagpenger.iverksett.iverksetting.IverksettingRepository
 import no.nav.dagpenger.iverksett.iverksetting.domene.TilkjentYtelse
+import no.nav.dagpenger.iverksett.kontrakter.infotrygd.OpprettVedtakHendelseDto
 import no.nav.dagpenger.iverksett.repository.findByIdOrThrow
-import no.nav.familie.kontrakter.ef.infotrygd.OpprettVedtakHendelseDto
 import no.nav.familie.prosessering.AsyncTaskStep
 import no.nav.familie.prosessering.TaskStepBeskrivelse
 import no.nav.familie.prosessering.domene.Task

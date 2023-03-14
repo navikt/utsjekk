@@ -1,6 +1,6 @@
 package no.nav.dagpenger.iverksett.økonomi.konsistens
 
-import no.nav.familie.kontrakter.ef.iverksett.KonsistensavstemmingDto
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.KonsistensavstemmingDto
 import no.nav.security.token.support.core.api.ProtectedWithClaims
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.PostMapping

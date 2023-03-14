@@ -8,12 +8,12 @@ import io.mockk.slot
 import no.nav.dagpenger.iverksett.felles.FamilieIntegrasjonerClient
 import no.nav.dagpenger.iverksett.iverksetting.IverksettingRepository
 import no.nav.dagpenger.iverksett.iverksetting.domene.Iverksett
+import no.nav.dagpenger.iverksett.kontrakter.felles.Månedsperiode
+import no.nav.dagpenger.iverksett.kontrakter.felles.StønadType
+import no.nav.dagpenger.iverksett.kontrakter.infotrygd.OpprettVedtakHendelseDto
 import no.nav.dagpenger.iverksett.repository.findByIdOrThrow
 import no.nav.dagpenger.iverksett.util.opprettIverksettOvergangsstønad
 import no.nav.dagpenger.iverksett.økonomi.lagAndelTilkjentYtelse
-import no.nav.familie.kontrakter.ef.infotrygd.OpprettVedtakHendelseDto
-import no.nav.familie.kontrakter.felles.Månedsperiode
-import no.nav.familie.kontrakter.felles.ef.StønadType
 import no.nav.familie.kontrakter.felles.personopplysning.PersonIdentMedHistorikk
 import no.nav.familie.prosessering.domene.Task
 import org.assertj.core.api.Assertions.assertThat

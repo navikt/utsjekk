@@ -1,7 +1,7 @@
 package no.nav.dagpenger.iverksett.oppgave
 
 import no.nav.dagpenger.iverksett.iverksetting.domene.VedtaksperiodeOvergangsstønad
-import no.nav.familie.kontrakter.ef.iverksett.AktivitetType
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.AktivitetType
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter

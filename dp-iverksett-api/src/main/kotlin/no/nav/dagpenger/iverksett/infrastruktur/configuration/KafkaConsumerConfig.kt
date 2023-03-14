@@ -1,6 +1,5 @@
 package no.nav.dagpenger.iverksett.infrastruktur.configuration
 
-import no.nav.familie.kafka.KafkaErrorHandler
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

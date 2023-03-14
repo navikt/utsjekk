@@ -1,6 +1,6 @@
 package no.nav.dagpenger.iverksett.util
 
-import no.nav.familie.kontrakter.felles.ef.StønadType
+import no.nav.dagpenger.iverksett.kontrakter.felles.StønadType
 
 fun StønadType.tilKlassifisering() = when (this) {
     StønadType.OVERGANGSSTØNAD -> "EFOG"

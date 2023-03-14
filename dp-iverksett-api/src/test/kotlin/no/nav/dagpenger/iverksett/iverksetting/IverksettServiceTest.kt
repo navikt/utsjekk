@@ -4,11 +4,11 @@ import io.mockk.every
 import io.mockk.mockk
 import no.nav.dagpenger.iverksett.iverksetting.domene.OppdragResultat
 import no.nav.dagpenger.iverksett.iverksetting.tilstand.IverksettResultatService
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.IverksettStatus
 import no.nav.dagpenger.iverksett.util.IverksettResultatMockBuilder
 import no.nav.dagpenger.iverksett.util.mockFeatureToggleService
 import no.nav.dagpenger.iverksett.util.opprettTilkjentYtelse
 import no.nav.dagpenger.iverksett.økonomi.OppdragClient
-import no.nav.familie.kontrakter.ef.iverksett.IverksettStatus
 import no.nav.familie.kontrakter.felles.oppdrag.OppdragStatus
 import no.nav.familie.prosessering.internal.TaskService
 import org.assertj.core.api.Assertions.assertThat
