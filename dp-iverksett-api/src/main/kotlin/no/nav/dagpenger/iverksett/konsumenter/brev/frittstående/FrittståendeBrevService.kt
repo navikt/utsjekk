@@ -7,10 +7,10 @@ import no.nav.dagpenger.iverksett.konsumenter.brev.domain.Brevmottakere
 import no.nav.dagpenger.iverksett.konsumenter.brev.domain.FrittståendeBrev
 import no.nav.dagpenger.iverksett.konsumenter.brev.stønadstypeTilDokumenttype
 import no.nav.dagpenger.iverksett.kontrakter.felles.FrittståendeBrevDto
-import no.nav.familie.kontrakter.felles.dokarkiv.v2.ArkiverDokumentRequest
-import no.nav.familie.kontrakter.felles.dokarkiv.v2.Dokument
-import no.nav.familie.kontrakter.felles.dokarkiv.v2.Filtype
-import no.nav.familie.kontrakter.felles.dokdist.Distribusjonstype
+import no.nav.dagpenger.iverksett.kontrakter.journalføring.dokarkiv.ArkiverDokumentRequest
+import no.nav.dagpenger.iverksett.kontrakter.journalføring.dokarkiv.Dokument
+import no.nav.dagpenger.iverksett.kontrakter.journalføring.dokarkiv.Filtype
+import no.nav.dagpenger.iverksett.kontrakter.journalføring.dokdist.Distribusjonstype
 import no.nav.familie.prosessering.domene.Task
 import no.nav.familie.prosessering.internal.TaskService
 import org.slf4j.LoggerFactory

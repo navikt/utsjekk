@@ -1,14 +1,14 @@
 package no.nav.dagpenger.iverksett.konsumenter.økonomi
 
+import no.nav.dagpenger.iverksett.kontrakter.oppdrag.GrensesnittavstemmingRequest
+import no.nav.dagpenger.iverksett.kontrakter.oppdrag.KonsistensavstemmingUtbetalingsoppdrag
+import no.nav.dagpenger.iverksett.kontrakter.oppdrag.OppdragId
+import no.nav.dagpenger.iverksett.kontrakter.oppdrag.OppdragStatus
+import no.nav.dagpenger.iverksett.kontrakter.oppdrag.Utbetalingsoppdrag
+import no.nav.dagpenger.iverksett.kontrakter.simulering.DetaljertSimuleringResultat
 import no.nav.familie.http.client.AbstractPingableRestClient
 import no.nav.familie.kontrakter.felles.Ressurs
 import no.nav.familie.kontrakter.felles.getDataOrThrow
-import no.nav.familie.kontrakter.felles.oppdrag.GrensesnittavstemmingRequest
-import no.nav.familie.kontrakter.felles.oppdrag.KonsistensavstemmingUtbetalingsoppdrag
-import no.nav.familie.kontrakter.felles.oppdrag.OppdragId
-import no.nav.familie.kontrakter.felles.oppdrag.OppdragStatus
-import no.nav.familie.kontrakter.felles.oppdrag.Utbetalingsoppdrag
-import no.nav.familie.kontrakter.felles.simulering.DetaljertSimuleringResultat
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service

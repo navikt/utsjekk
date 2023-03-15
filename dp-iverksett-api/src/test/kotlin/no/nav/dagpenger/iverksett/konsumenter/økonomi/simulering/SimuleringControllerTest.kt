@@ -10,12 +10,12 @@ import no.nav.dagpenger.iverksett.konsumenter.økonomi.OppdragClient
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.lagAndelTilkjentYtelse
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.lagAndelTilkjentYtelseDto
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.UtbetalingsoppdragGenerator.lagTilkjentYtelseMedUtbetalingsoppdrag
+import no.nav.dagpenger.iverksett.kontrakter.simulering.BeriketSimuleringsresultat
+import no.nav.dagpenger.iverksett.kontrakter.simulering.DetaljertSimuleringResultat
 import no.nav.dagpenger.iverksett.simuleringDto
 import no.nav.dagpenger.iverksett.util.opprettTilkjentYtelse
 import no.nav.dagpenger.iverksett.util.opprettTilkjentYtelseMedMetadata
 import no.nav.familie.kontrakter.felles.Ressurs
-import no.nav.familie.kontrakter.felles.simulering.BeriketSimuleringsresultat
-import no.nav.familie.kontrakter.felles.simulering.DetaljertSimuleringResultat
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach

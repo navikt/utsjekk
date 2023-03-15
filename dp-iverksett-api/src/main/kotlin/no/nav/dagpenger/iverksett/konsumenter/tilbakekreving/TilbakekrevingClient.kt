@@ -1,12 +1,12 @@
 package no.nav.dagpenger.iverksett.konsumenter.tilbakekreving
 
+import no.nav.dagpenger.iverksett.kontrakter.felles.Fagsystem
 import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.Behandling
 import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.FinnesBehandlingResponse
 import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.ForhåndsvisVarselbrevRequest
 import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.OpprettTilbakekrevingRequest
 import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.Ytelsestype
 import no.nav.familie.http.client.AbstractRestClient
-import no.nav.familie.kontrakter.felles.Fagsystem
 import no.nav.familie.kontrakter.felles.Ressurs
 import no.nav.familie.kontrakter.felles.getDataOrThrow
 import no.nav.familie.kontrakter.felles.tilbakekreving.KanBehandlingOpprettesManueltRespons

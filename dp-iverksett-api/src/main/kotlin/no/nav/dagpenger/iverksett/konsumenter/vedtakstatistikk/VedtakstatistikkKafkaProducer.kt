@@ -5,7 +5,7 @@ import no.nav.dagpenger.iverksett.kontrakter.dvh.StønadType
 import no.nav.dagpenger.iverksett.kontrakter.dvh.VedtakBarnetilsynDVH
 import no.nav.dagpenger.iverksett.kontrakter.dvh.VedtakOvergangsstønadDVH
 import no.nav.dagpenger.iverksett.kontrakter.dvh.VedtakSkolepenger
-import no.nav.familie.kontrakter.felles.objectMapper
+import no.nav.dagpenger.iverksett.kontrakter.objectMapper
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service

@@ -4,13 +4,13 @@ import no.nav.dagpenger.iverksett.kontrakter.dvh.Vedtak
 import no.nav.dagpenger.iverksett.kontrakter.dvh.Vilkår
 import no.nav.dagpenger.iverksett.kontrakter.felles.BehandlingType
 import no.nav.dagpenger.iverksett.kontrakter.felles.BehandlingÅrsak
+import no.nav.dagpenger.iverksett.kontrakter.felles.StønadType
 import no.nav.dagpenger.iverksett.kontrakter.felles.Vedtaksresultat
 import no.nav.dagpenger.iverksett.kontrakter.felles.VilkårType
 import no.nav.dagpenger.iverksett.kontrakter.felles.Vilkårsresultat
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.AdressebeskyttelseGradering
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.AktivitetType
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.VedtaksperiodeType
-import no.nav.familie.kontrakter.felles.ef.StønadType
 import org.junit.jupiter.api.Test
 import no.nav.dagpenger.iverksett.kontrakter.arbeidsoppfølging.Aktivitetstype as AktivitetstypeEkstern
 import no.nav.dagpenger.iverksett.kontrakter.arbeidsoppfølging.Periodetype as PeriodetypeEkstern

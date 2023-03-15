@@ -1,16 +1,16 @@
 package no.nav.dagpenger.iverksett.konsumenter.brev
 
 import no.nav.dagpenger.iverksett.infrastruktur.util.medContentTypeJsonUTF8
+import no.nav.dagpenger.iverksett.kontrakter.felles.Fagsystem
+import no.nav.dagpenger.iverksett.kontrakter.journalføring.Journalpost
+import no.nav.dagpenger.iverksett.kontrakter.journalføring.JournalposterForBrukerRequest
+import no.nav.dagpenger.iverksett.kontrakter.journalføring.dokarkiv.ArkiverDokumentRequest
+import no.nav.dagpenger.iverksett.kontrakter.journalføring.dokarkiv.ArkiverDokumentResponse
+import no.nav.dagpenger.iverksett.kontrakter.journalføring.dokdist.DistribuerJournalpostRequest
+import no.nav.dagpenger.iverksett.kontrakter.journalføring.dokdist.Distribusjonstype
 import no.nav.familie.http.client.AbstractPingableRestClient
-import no.nav.familie.kontrakter.felles.Fagsystem
 import no.nav.familie.kontrakter.felles.Ressurs
-import no.nav.familie.kontrakter.felles.dokarkiv.ArkiverDokumentResponse
-import no.nav.familie.kontrakter.felles.dokarkiv.v2.ArkiverDokumentRequest
-import no.nav.familie.kontrakter.felles.dokdist.DistribuerJournalpostRequest
-import no.nav.familie.kontrakter.felles.dokdist.Distribusjonstype
 import no.nav.familie.kontrakter.felles.getDataOrThrow
-import no.nav.familie.kontrakter.felles.journalpost.Journalpost
-import no.nav.familie.kontrakter.felles.journalpost.JournalposterForBrukerRequest
 import no.nav.familie.log.NavHttpHeaders
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory

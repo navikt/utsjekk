@@ -14,7 +14,7 @@ import no.nav.dagpenger.iverksett.konsumenter.brev.domain.Brevmottakere
 import no.nav.dagpenger.iverksett.konsumenter.brev.domain.DistribuerBrevResultatMap
 import no.nav.dagpenger.iverksett.konsumenter.brev.domain.JournalpostResultatMap
 import no.nav.dagpenger.iverksett.kontrakter.felles.StønadType
-import no.nav.familie.kontrakter.felles.objectMapper
+import no.nav.dagpenger.iverksett.kontrakter.objectMapper
 import no.nav.familie.prosessering.PropertiesWrapperTilStringConverter
 import no.nav.familie.prosessering.StringTilPropertiesWrapperConverter
 import org.postgresql.util.PGobject

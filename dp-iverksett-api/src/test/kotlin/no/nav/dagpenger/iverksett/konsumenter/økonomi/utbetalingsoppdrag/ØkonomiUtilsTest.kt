@@ -3,10 +3,10 @@ package no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag
 import no.nav.dagpenger.iverksett.api.domene.AndelTilkjentYtelse
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.lagAndelTilkjentYtelse
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.ØkonomiUtils.utbetalingsperiodeForOpphør
+import no.nav.dagpenger.iverksett.kontrakter.oppdrag.Utbetalingsperiode
 import no.nav.dagpenger.iverksett.util.opprettTilkjentYtelse
 import no.nav.dagpenger.iverksett.util.opprettTilkjentYtelseMedMetadata
 import no.nav.dagpenger.iverksett.util.startmåned
-import no.nav.familie.kontrakter.felles.oppdrag.Utbetalingsperiode
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Nested

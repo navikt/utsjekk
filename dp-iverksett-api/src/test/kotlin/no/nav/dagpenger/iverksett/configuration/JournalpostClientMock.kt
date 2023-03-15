@@ -2,9 +2,9 @@ package no.nav.dagpenger.iverksett.config
 
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock
+import no.nav.dagpenger.iverksett.kontrakter.journalføring.dokarkiv.ArkiverDokumentResponse
+import no.nav.dagpenger.iverksett.kontrakter.objectMapper
 import no.nav.familie.kontrakter.felles.Ressurs
-import no.nav.familie.kontrakter.felles.dokarkiv.ArkiverDokumentResponse
-import no.nav.familie.kontrakter.felles.objectMapper
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Profile

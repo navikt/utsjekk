@@ -8,10 +8,10 @@ import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.Period
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.UtbetalingsoppdragGenerator
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.nullAndelTilkjentYtelse
 import no.nav.dagpenger.iverksett.kontrakter.felles.StønadType
-import no.nav.familie.kontrakter.felles.objectMapper
-import no.nav.familie.kontrakter.felles.oppdrag.Opphør
-import no.nav.familie.kontrakter.felles.oppdrag.Utbetalingsoppdrag
-import no.nav.familie.kontrakter.felles.oppdrag.Utbetalingsperiode
+import no.nav.dagpenger.iverksett.kontrakter.objectMapper
+import no.nav.dagpenger.iverksett.kontrakter.oppdrag.Opphør
+import no.nav.dagpenger.iverksett.kontrakter.oppdrag.Utbetalingsoppdrag
+import no.nav.dagpenger.iverksett.kontrakter.oppdrag.Utbetalingsperiode
 import org.junit.jupiter.api.Assertions
 import java.math.BigDecimal
 import java.net.URL

@@ -10,12 +10,12 @@ import no.nav.dagpenger.iverksett.api.domene.IverksettOvergangsstønad
 import no.nav.dagpenger.iverksett.api.domene.IverksettSkolepenger
 import no.nav.dagpenger.iverksett.infrastruktur.transformer.toDomain
 import no.nav.dagpenger.iverksett.infrastruktur.util.ObjectMapperProvider.objectMapper
+import no.nav.dagpenger.iverksett.kontrakter.felles.StønadType
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.IverksettBarnetilsynDto
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.IverksettDto
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.IverksettOvergangsstønadDto
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.IverksettSkolepengerDto
 import no.nav.dagpenger.iverksett.util.opprettIverksettOvergangsstønad
-import no.nav.familie.kontrakter.felles.ef.StønadType
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test

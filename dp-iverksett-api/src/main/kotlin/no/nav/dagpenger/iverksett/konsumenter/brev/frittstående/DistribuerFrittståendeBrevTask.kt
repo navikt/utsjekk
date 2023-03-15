@@ -8,9 +8,9 @@ import no.nav.dagpenger.iverksett.konsumenter.brev.domain.DistribuerBrevResultat
 import no.nav.dagpenger.iverksett.konsumenter.brev.domain.DistribuerBrevResultatMap
 import no.nav.dagpenger.iverksett.konsumenter.brev.domain.FrittståendeBrev
 import no.nav.dagpenger.iverksett.konsumenter.brev.domain.JournalpostResultat
+import no.nav.dagpenger.iverksett.kontrakter.journalføring.dokdist.Distribusjonstype
+import no.nav.dagpenger.iverksett.kontrakter.objectMapper
 import no.nav.familie.http.client.RessursException
-import no.nav.familie.kontrakter.felles.dokdist.Distribusjonstype
-import no.nav.familie.kontrakter.felles.objectMapper
 import no.nav.familie.prosessering.AsyncTaskStep
 import no.nav.familie.prosessering.TaskStepBeskrivelse
 import no.nav.familie.prosessering.domene.Loggtype

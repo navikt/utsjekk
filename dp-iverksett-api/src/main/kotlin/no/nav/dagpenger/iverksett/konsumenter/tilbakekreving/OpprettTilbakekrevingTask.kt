@@ -11,8 +11,8 @@ import no.nav.dagpenger.iverksett.konsumenter.opprettNesteTask
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.simulering.SimuleringService
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.simulering.harFeilutbetaling
 import no.nav.dagpenger.iverksett.kontrakter.felles.BehandlingType
+import no.nav.dagpenger.iverksett.kontrakter.simulering.BeriketSimuleringsresultat
 import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.OpprettTilbakekrevingRequest
-import no.nav.familie.kontrakter.felles.simulering.BeriketSimuleringsresultat
 import no.nav.familie.prosessering.AsyncTaskStep
 import no.nav.familie.prosessering.TaskStepBeskrivelse
 import no.nav.familie.prosessering.domene.Task

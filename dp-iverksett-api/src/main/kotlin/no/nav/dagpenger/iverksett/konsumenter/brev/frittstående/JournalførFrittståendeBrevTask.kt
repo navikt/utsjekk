@@ -8,10 +8,10 @@ import no.nav.dagpenger.iverksett.konsumenter.brev.domain.JournalpostResultat
 import no.nav.dagpenger.iverksett.konsumenter.brev.domain.JournalpostResultatMap
 import no.nav.dagpenger.iverksett.konsumenter.brev.domain.tilIdType
 import no.nav.dagpenger.iverksett.konsumenter.brev.stønadstypeTilDokumenttype
-import no.nav.familie.kontrakter.felles.dokarkiv.AvsenderMottaker
-import no.nav.familie.kontrakter.felles.dokarkiv.v2.ArkiverDokumentRequest
-import no.nav.familie.kontrakter.felles.dokarkiv.v2.Dokument
-import no.nav.familie.kontrakter.felles.dokarkiv.v2.Filtype
+import no.nav.dagpenger.iverksett.kontrakter.journalføring.dokarkiv.ArkiverDokumentRequest
+import no.nav.dagpenger.iverksett.kontrakter.journalføring.dokarkiv.AvsenderMottaker
+import no.nav.dagpenger.iverksett.kontrakter.journalføring.dokarkiv.Dokument
+import no.nav.dagpenger.iverksett.kontrakter.journalføring.dokarkiv.Filtype
 import no.nav.familie.prosessering.AsyncTaskStep
 import no.nav.familie.prosessering.TaskStepBeskrivelse
 import no.nav.familie.prosessering.domene.Task

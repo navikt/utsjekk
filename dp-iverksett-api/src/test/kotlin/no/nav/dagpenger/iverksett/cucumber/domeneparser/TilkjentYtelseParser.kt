@@ -5,8 +5,8 @@ import no.nav.dagpenger.iverksett.cucumber.domeneparser.IdTIlUUIDHolder.behandli
 import no.nav.dagpenger.iverksett.cucumber.steps.TilkjentYtelseHolder
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.AndelTilkjentYtelseDto
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.TilkjentYtelseDto
-import no.nav.familie.kontrakter.felles.oppdrag.Utbetalingsoppdrag.KodeEndring
-import no.nav.familie.kontrakter.felles.oppdrag.Utbetalingsperiode.SatsType
+import no.nav.dagpenger.iverksett.kontrakter.oppdrag.Utbetalingsoppdrag.KodeEndring
+import no.nav.dagpenger.iverksett.kontrakter.oppdrag.Utbetalingsperiode.SatsType
 import org.assertj.core.api.Assertions.assertThat
 import java.time.LocalDate
 import java.time.YearMonth

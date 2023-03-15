@@ -48,7 +48,7 @@ Anbefaler å bruke [modify-secrets](https://github.com/rajatjindal/kubectl-modif
 ## Kafka
 Topic er opprettet i Aiven og GCP, men den kan også nås fra on-prem. Konfigurasjonen av topic finnes i `topic-dev.yaml` Dersom endringer gjøres på topic, må ny konfigurasjon merges til master.
 Etter merge til master må workflow `Deploy kafka topics` kjøres for at endringene skal tre i kraft. 
-For å se og verifisere konfigurasjon til gitt topic kan kommandoen `kubectl describe topic teamdagpenger.<topic> -n=teamfamilie` kjøres.
+For å se og verifisere konfigurasjon til gitt topic kan kommandoen `kubectl describe topic teamdagpenger.<topic> -n=teamdagpenger` kjøres.
 
 ### Debugging og lesing fra kø med Kafkacat
 Det er mulig å se hva som ligger på kø med Kafkacat uten å lage en egen applikasjon for både dev og prod.

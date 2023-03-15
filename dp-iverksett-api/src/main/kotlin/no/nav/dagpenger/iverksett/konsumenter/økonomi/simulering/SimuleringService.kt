@@ -7,10 +7,10 @@ import no.nav.dagpenger.iverksett.infrastruktur.featuretoggle.FeatureToggleServi
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.OppdragClient
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.UtbetalingsoppdragGenerator
 import no.nav.dagpenger.iverksett.kontrakter.felles.StønadType
+import no.nav.dagpenger.iverksett.kontrakter.oppdrag.Utbetalingsoppdrag
+import no.nav.dagpenger.iverksett.kontrakter.simulering.BeriketSimuleringsresultat
+import no.nav.dagpenger.iverksett.kontrakter.simulering.DetaljertSimuleringResultat
 import no.nav.familie.http.client.RessursException
-import no.nav.familie.kontrakter.felles.oppdrag.Utbetalingsoppdrag
-import no.nav.familie.kontrakter.felles.simulering.BeriketSimuleringsresultat
-import no.nav.familie.kontrakter.felles.simulering.DetaljertSimuleringResultat
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.web.client.HttpClientErrorException

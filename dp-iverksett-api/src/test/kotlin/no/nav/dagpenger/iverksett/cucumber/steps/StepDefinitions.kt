@@ -13,9 +13,9 @@ import no.nav.dagpenger.iverksett.infrastruktur.transformer.toDomain
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.UtbetalingsoppdragGenerator
 import no.nav.dagpenger.iverksett.kontrakter.felles.StønadType
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.TilkjentYtelseDto
-import no.nav.familie.kontrakter.felles.oppdrag.Utbetalingsoppdrag
-import no.nav.familie.kontrakter.felles.oppdrag.Utbetalingsperiode
-import no.nav.familie.kontrakter.felles.tilbakekreving.Ytelsestype
+import no.nav.dagpenger.iverksett.kontrakter.oppdrag.Utbetalingsoppdrag
+import no.nav.dagpenger.iverksett.kontrakter.oppdrag.Utbetalingsperiode
+import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.Ytelsestype
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
 import org.slf4j.Logger

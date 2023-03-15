@@ -4,12 +4,12 @@ import no.nav.dagpenger.iverksett.api.domene.TilbakekrevingMedVarsel
 import no.nav.dagpenger.iverksett.api.domene.Tilbakekrevingsdetaljer
 import no.nav.dagpenger.iverksett.beriketSimuleringsresultat
 import no.nav.dagpenger.iverksett.kontrakter.felles.Datoperiode
+import no.nav.dagpenger.iverksett.kontrakter.simulering.Simuleringsoppsummering
+import no.nav.dagpenger.iverksett.kontrakter.simulering.Simuleringsperiode
 import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.Tilbakekrevingsvalg
 import no.nav.dagpenger.iverksett.medFeilutbetaling
 import no.nav.dagpenger.iverksett.util.opprettIverksettOvergangsstønad
 import no.nav.dagpenger.iverksett.util.opprettTilbakekrevingMedVarsel
-import no.nav.familie.kontrakter.felles.simulering.Simuleringsoppsummering
-import no.nav.familie.kontrakter.felles.simulering.Simuleringsperiode
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.math.BigDecimal

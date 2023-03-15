@@ -1,8 +1,8 @@
 package no.nav.dagpenger.iverksett.konsumenter.tilbakekreving
 
 import no.nav.dagpenger.iverksett.infrastruktur.service.KafkaProducerService
+import no.nav.dagpenger.iverksett.kontrakter.objectMapper
 import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.HentFagsystemsbehandlingRespons
-import no.nav.familie.kontrakter.felles.objectMapper
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component

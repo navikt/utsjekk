@@ -3,14 +3,14 @@ package no.nav.dagpenger.iverksett.konsumenter.vedtak
 import no.nav.dagpenger.iverksett.api.IverksettingRepository
 import no.nav.dagpenger.iverksett.infrastruktur.repository.findByIdOrThrow
 import no.nav.dagpenger.iverksett.konsumenter.opprettNestePubliseringTask
-import no.nav.familie.kontrakter.felles.ef.EnsligForsørgerVedtakhendelse
+import no.nav.dagpenger.iverksett.kontrakter.ef.EnsligForsørgerVedtakhendelse
 import no.nav.familie.prosessering.AsyncTaskStep
 import no.nav.familie.prosessering.TaskStepBeskrivelse
 import no.nav.familie.prosessering.domene.Task
 import no.nav.familie.prosessering.internal.TaskService
 import org.springframework.stereotype.Service
 import java.util.UUID
-import no.nav.familie.kontrakter.felles.ef.StønadType as EksternStønadType
+import no.nav.dagpenger.iverksett.kontrakter.felles.StønadType as EksternStønadType
 
 @Service
 @TaskStepBeskrivelse(

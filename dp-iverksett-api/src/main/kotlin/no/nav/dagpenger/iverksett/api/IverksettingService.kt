@@ -17,8 +17,8 @@ import no.nav.dagpenger.iverksett.konsumenter.økonomi.OppdragClient
 import no.nav.dagpenger.iverksett.kontrakter.felles.StønadType
 import no.nav.dagpenger.iverksett.kontrakter.felles.Vedtaksresultat
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.IverksettStatus
-import no.nav.familie.kontrakter.felles.oppdrag.OppdragId
-import no.nav.familie.kontrakter.felles.oppdrag.OppdragStatus
+import no.nav.dagpenger.iverksett.kontrakter.oppdrag.OppdragId
+import no.nav.dagpenger.iverksett.kontrakter.oppdrag.OppdragStatus
 import no.nav.familie.prosessering.domene.Task
 import no.nav.familie.prosessering.error.TaskExceptionUtenStackTrace
 import no.nav.familie.prosessering.internal.TaskService

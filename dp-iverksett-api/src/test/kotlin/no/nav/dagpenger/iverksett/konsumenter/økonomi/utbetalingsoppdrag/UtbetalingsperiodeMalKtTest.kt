@@ -2,7 +2,7 @@ package no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag
 
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.lagAndelTilkjentYtelse
 import no.nav.dagpenger.iverksett.kontrakter.felles.StønadType
-import no.nav.familie.kontrakter.felles.oppdrag.Utbetalingsperiode
+import no.nav.dagpenger.iverksett.kontrakter.oppdrag.Utbetalingsperiode
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.time.LocalDate

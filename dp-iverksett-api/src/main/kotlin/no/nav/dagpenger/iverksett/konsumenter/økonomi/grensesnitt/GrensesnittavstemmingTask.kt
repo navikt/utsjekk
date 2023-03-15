@@ -4,8 +4,8 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import no.nav.dagpenger.iverksett.infrastruktur.util.tilKlassifisering
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.OppdragClient
 import no.nav.dagpenger.iverksett.kontrakter.felles.StønadType
-import no.nav.familie.kontrakter.felles.objectMapper
-import no.nav.familie.kontrakter.felles.oppdrag.GrensesnittavstemmingRequest
+import no.nav.dagpenger.iverksett.kontrakter.objectMapper
+import no.nav.dagpenger.iverksett.kontrakter.oppdrag.GrensesnittavstemmingRequest
 import no.nav.familie.prosessering.AsyncTaskStep
 import no.nav.familie.prosessering.TaskStepBeskrivelse
 import no.nav.familie.prosessering.domene.Task

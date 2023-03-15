@@ -2,9 +2,9 @@ package no.nav.dagpenger.iverksett.konsumenter.økonomi.simulering
 
 import no.nav.dagpenger.iverksett.infrastruktur.transformer.toDomain
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.SimuleringDto
+import no.nav.dagpenger.iverksett.kontrakter.simulering.BeriketSimuleringsresultat
+import no.nav.dagpenger.iverksett.kontrakter.simulering.DetaljertSimuleringResultat
 import no.nav.familie.kontrakter.felles.Ressurs
-import no.nav.familie.kontrakter.felles.simulering.BeriketSimuleringsresultat
-import no.nav.familie.kontrakter.felles.simulering.DetaljertSimuleringResultat
 import no.nav.security.token.support.core.api.ProtectedWithClaims
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.PostMapping

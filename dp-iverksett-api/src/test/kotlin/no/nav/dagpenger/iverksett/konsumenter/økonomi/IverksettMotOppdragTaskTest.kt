@@ -10,9 +10,9 @@ import no.nav.dagpenger.iverksett.api.IverksettingRepository
 import no.nav.dagpenger.iverksett.api.tilstand.IverksettResultatService
 import no.nav.dagpenger.iverksett.infrastruktur.repository.findByIdOrThrow
 import no.nav.dagpenger.iverksett.infrastruktur.transformer.toDomain
+import no.nav.dagpenger.iverksett.kontrakter.oppdrag.Utbetalingsoppdrag
 import no.nav.dagpenger.iverksett.lagIverksett
 import no.nav.dagpenger.iverksett.util.opprettIverksettDto
-import no.nav.familie.kontrakter.felles.oppdrag.Utbetalingsoppdrag
 import no.nav.familie.prosessering.domene.Task
 import no.nav.familie.prosessering.internal.TaskService
 import org.assertj.core.api.Assertions.assertThat

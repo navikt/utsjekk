@@ -15,13 +15,13 @@ import no.nav.dagpenger.iverksett.infrastruktur.repository.findByIdOrThrow
 import no.nav.dagpenger.iverksett.infrastruktur.transformer.toDomain
 import no.nav.dagpenger.iverksett.kontrakter.felles.BehandlingÅrsak
 import no.nav.dagpenger.iverksett.kontrakter.felles.TilkjentYtelseStatus
+import no.nav.dagpenger.iverksett.kontrakter.oppdrag.OppdragStatus
+import no.nav.dagpenger.iverksett.kontrakter.oppdrag.Utbetalingsoppdrag
+import no.nav.dagpenger.iverksett.kontrakter.oppdrag.Utbetalingsoppdrag.KodeEndring.NY
+import no.nav.dagpenger.iverksett.kontrakter.oppdrag.Utbetalingsperiode
 import no.nav.dagpenger.iverksett.lagIverksett
 import no.nav.dagpenger.iverksett.util.mockFeatureToggleService
 import no.nav.dagpenger.iverksett.util.opprettIverksettDto
-import no.nav.familie.kontrakter.felles.oppdrag.OppdragStatus
-import no.nav.familie.kontrakter.felles.oppdrag.Utbetalingsoppdrag
-import no.nav.familie.kontrakter.felles.oppdrag.Utbetalingsoppdrag.KodeEndring.NY
-import no.nav.familie.kontrakter.felles.oppdrag.Utbetalingsperiode
 import no.nav.familie.prosessering.domene.Task
 import no.nav.familie.prosessering.internal.TaskService
 import org.assertj.core.api.Assertions.assertThat

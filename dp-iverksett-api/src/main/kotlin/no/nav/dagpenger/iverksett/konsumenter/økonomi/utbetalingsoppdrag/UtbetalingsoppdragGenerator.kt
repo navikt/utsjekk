@@ -8,10 +8,10 @@ import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.Økono
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.ØkonomiUtils.andelerUtenNullVerdier
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.ØkonomiUtils.beståendeAndeler
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.ØkonomiUtils.utbetalingsperiodeForOpphør
-import no.nav.familie.kontrakter.felles.oppdrag.Utbetalingsoppdrag
-import no.nav.familie.kontrakter.felles.oppdrag.Utbetalingsoppdrag.KodeEndring.ENDR
-import no.nav.familie.kontrakter.felles.oppdrag.Utbetalingsoppdrag.KodeEndring.NY
-import no.nav.familie.kontrakter.felles.oppdrag.Utbetalingsperiode
+import no.nav.dagpenger.iverksett.kontrakter.oppdrag.Utbetalingsoppdrag
+import no.nav.dagpenger.iverksett.kontrakter.oppdrag.Utbetalingsoppdrag.KodeEndring.ENDR
+import no.nav.dagpenger.iverksett.kontrakter.oppdrag.Utbetalingsoppdrag.KodeEndring.NY
+import no.nav.dagpenger.iverksett.kontrakter.oppdrag.Utbetalingsperiode
 import java.time.LocalDate
 import java.util.UUID
 

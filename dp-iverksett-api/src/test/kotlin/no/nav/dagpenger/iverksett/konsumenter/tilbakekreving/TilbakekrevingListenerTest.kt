@@ -10,6 +10,7 @@ import no.nav.dagpenger.iverksett.api.IverksettingRepository
 import no.nav.dagpenger.iverksett.infrastruktur.FamilieIntegrasjonerClient
 import no.nav.dagpenger.iverksett.kontrakter.felles.Enhet
 import no.nav.dagpenger.iverksett.kontrakter.felles.Språkkode
+import no.nav.dagpenger.iverksett.kontrakter.objectMapper
 import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.Faktainfo
 import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.HentFagsystemsbehandling
 import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.HentFagsystemsbehandlingRespons
@@ -17,7 +18,6 @@ import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.Tilbakekrevingsvalg
 import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.Ytelsestype
 import no.nav.dagpenger.iverksett.lagIverksett
 import no.nav.dagpenger.iverksett.util.opprettIverksettOvergangsstønad
-import no.nav.familie.kontrakter.felles.objectMapper
 import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach

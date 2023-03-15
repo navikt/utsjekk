@@ -4,16 +4,16 @@ import no.nav.dagpenger.iverksett.konsumenter.økonomi.simulering.Simuleringsper
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.simulering.SimuleringsperiodeEtterbetaling.medEtterbetaling
 import no.nav.dagpenger.iverksett.kontrakter.felles.Datoperiode
 import no.nav.dagpenger.iverksett.kontrakter.felles.StønadType
-import no.nav.familie.kontrakter.felles.simulering.BeriketSimuleringsresultat
-import no.nav.familie.kontrakter.felles.simulering.DetaljertSimuleringResultat
-import no.nav.familie.kontrakter.felles.simulering.FagOmrådeKode
-import no.nav.familie.kontrakter.felles.simulering.PosteringType
-import no.nav.familie.kontrakter.felles.simulering.PosteringType.FEILUTBETALING
-import no.nav.familie.kontrakter.felles.simulering.PosteringType.YTELSE
-import no.nav.familie.kontrakter.felles.simulering.SimuleringMottaker
-import no.nav.familie.kontrakter.felles.simulering.Simuleringsoppsummering
-import no.nav.familie.kontrakter.felles.simulering.Simuleringsperiode
-import no.nav.familie.kontrakter.felles.simulering.SimulertPostering
+import no.nav.dagpenger.iverksett.kontrakter.simulering.BeriketSimuleringsresultat
+import no.nav.dagpenger.iverksett.kontrakter.simulering.DetaljertSimuleringResultat
+import no.nav.dagpenger.iverksett.kontrakter.simulering.FagOmrådeKode
+import no.nav.dagpenger.iverksett.kontrakter.simulering.PosteringType
+import no.nav.dagpenger.iverksett.kontrakter.simulering.PosteringType.FEILUTBETALING
+import no.nav.dagpenger.iverksett.kontrakter.simulering.PosteringType.YTELSE
+import no.nav.dagpenger.iverksett.kontrakter.simulering.SimuleringMottaker
+import no.nav.dagpenger.iverksett.kontrakter.simulering.Simuleringsoppsummering
+import no.nav.dagpenger.iverksett.kontrakter.simulering.Simuleringsperiode
+import no.nav.dagpenger.iverksett.kontrakter.simulering.SimulertPostering
 import java.math.BigDecimal
 import java.math.BigDecimal.ZERO
 import java.time.LocalDate
@@ -48,12 +48,12 @@ fun lagSimuleringsoppsummering(
     )
 }
 
-fun grupperPosteringerEtterDato(mottakere: List<SimuleringMottaker>): List<Simuleringsperiode> {
+fun grupperPosteringerEtterDato(mottakere: List<SimuleringMottaker>?): List<Simuleringsperiode> {
     return mottakere
-        .flatMap { it.simulertPostering }
-        .filter { it.posteringType == FEILUTBETALING || it.posteringType == YTELSE }
-        .groupBy { PeriodeMedForfall(fom = it.fom, tom = it.tom, forfallsdato = it.forfallsdato) }
-        .map { (periodeMedForfall, posteringListe) ->
+        ?.flatMap { it.simulertPostering }
+        ?.filter { it.posteringType == FEILUTBETALING || it.posteringType == YTELSE }
+        ?.groupBy { PeriodeMedForfall(fom = it.fom, tom = it.tom, forfallsdato = it.forfallsdato) }
+        ?.map { (periodeMedForfall, posteringListe) ->
             Simuleringsperiode(
                 periodeMedForfall.fom,
                 periodeMedForfall.tom,
@@ -63,7 +63,7 @@ fun grupperPosteringerEtterDato(mottakere: List<SimuleringMottaker>): List<Simul
                 resultat = hentResultat(posteringListe),
                 feilutbetaling = posteringListe.sumBarePositiv(FEILUTBETALING),
             ).medEtterbetaling(hentEtterbetaling(posteringListe))
-        }
+        } ?: emptyList()
 }
 
 fun fagområdeKoderForPosteringer(stønadType: StønadType): Set<FagOmrådeKode> = when (stønadType) {
@@ -148,9 +148,9 @@ fun BeriketSimuleringsresultat.harFeilutbetaling(): Boolean {
 
 fun Simuleringsoppsummering.hentSammenhengendePerioderMedFeilutbetaling(): List<Datoperiode> {
     val perioderMedFeilutbetaling =
-        perioder.sortedBy { it.fom }.filter { it.feilutbetaling > BigDecimal(0) }.map {
+        perioder?.sortedBy { it.fom }?.filter { it.feilutbetaling > BigDecimal(0) }?.map {
             Datoperiode(it.fom, it.tom)
-        }
+        } ?: emptyList()
 
     return perioderMedFeilutbetaling.fold(mutableListOf()) { akkumulatorListe, nestePeriode ->
         val gjeldendePeriode = akkumulatorListe.lastOrNull()

@@ -12,7 +12,7 @@ import java.time.ZonedDateTime
 object ObjectMapperProvider {
 
     val objectMapper: ObjectMapper =
-        no.nav.familie.kontrakter.felles.objectMapper
+        no.nav.dagpenger.iverksett.kontrakter.objectMapper
             .registerModule(IverksettModule())
             .registerModule(
                 SimpleModule().addDeserializer(

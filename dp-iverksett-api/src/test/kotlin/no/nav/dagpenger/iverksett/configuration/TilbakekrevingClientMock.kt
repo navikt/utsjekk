@@ -7,13 +7,13 @@ import com.github.tomakehurst.wiremock.client.WireMock.okForContentType
 import com.github.tomakehurst.wiremock.client.WireMock.okJson
 import com.github.tomakehurst.wiremock.client.WireMock.post
 import com.github.tomakehurst.wiremock.client.WireMock.urlMatching
+import no.nav.dagpenger.iverksett.kontrakter.felles.Fagsystem
+import no.nav.dagpenger.iverksett.kontrakter.objectMapper
 import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.Behandling
 import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.Behandlingsstatus
 import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.Behandlingstype
 import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.FinnesBehandlingResponse
-import no.nav.familie.kontrakter.felles.Fagsystem
 import no.nav.familie.kontrakter.felles.Ressurs
-import no.nav.familie.kontrakter.felles.objectMapper
 import no.nav.familie.kontrakter.felles.tilbakekreving.KanBehandlingOpprettesManueltRespons
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Profile
