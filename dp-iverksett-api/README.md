@@ -17,7 +17,7 @@ Dersom man vil gjøre autentiserte kall mot andre tjenester eller vil kjøre app
 
 #### Client id & client secret
 secret kan hentes fra cluster med
-`kubectl -n teamfamilie get secret azuread-dp-iverksett-lokal -o json | jq '.data | map_values(@base64d)'`
+`kubectl -n teamdagpenger get secret azuread-dp-iverksett-lokal -o json | jq '.data | map_values(@base64d)'`
 
 * `AZURE_APP_CLIENT_ID` (fra secret)
 * `AZURE_APP_CLIENT_SECRET` (fra secret)
@@ -43,12 +43,12 @@ Anbefaler å bruke [modify-secrets](https://github.com/rajatjindal/kubectl-modif
 * `brew install cloud_sql_proxy`
 
 1h temp token
-* `gcloud projects add-iam-policy-binding familie-ef-iverksett --member=user:<FIRSTNAME>.<LASTNAME>@nav.no --role=roles/cloudsql.instanceUser --condition="expression=request.time < timestamp('$(date -v '+1H' -u +'%Y-%m-%dT%H:%M:%SZ')'),title=temp_access"`
+* `gcloud projects add-iam-policy-binding dp-iverksett --member=user:<FIRSTNAME>.<LASTNAME>@nav.no --role=roles/cloudsql.instanceUser --condition="expression=request.time < timestamp('$(date -v '+1H' -u +'%Y-%m-%dT%H:%M:%SZ')'),title=temp_access"`
 
 ## Kafka
 Topic er opprettet i Aiven og GCP, men den kan også nås fra on-prem. Konfigurasjonen av topic finnes i `topic-dev.yaml` Dersom endringer gjøres på topic, må ny konfigurasjon merges til master.
 Etter merge til master må workflow `Deploy kafka topics` kjøres for at endringene skal tre i kraft. 
-For å se og verifisere konfigurasjon til gitt topic kan kommandoen `kubectl describe topic teamfamilie.<topic> -n=teamfamilie` kjøres.
+For å se og verifisere konfigurasjon til gitt topic kan kommandoen `kubectl describe topic teamdagpenger.<topic> -n=teamfamilie` kjøres.
 
 ### Debugging og lesing fra kø med Kafkacat
 Det er mulig å se hva som ligger på kø med Kafkacat uten å lage en egen applikasjon for både dev og prod.

@@ -4,8 +4,6 @@ import no.nav.dagpenger.iverksett.arbeidsoppfolging.SendVedtakTilArbeidsoppfølg
 import no.nav.dagpenger.iverksett.arena.SendFattetVedtakTilArenaTask
 import no.nav.dagpenger.iverksett.brev.DistribuerVedtaksbrevTask
 import no.nav.dagpenger.iverksett.brev.JournalførVedtaksbrevTask
-import no.nav.dagpenger.iverksett.infotrygd.SendFattetVedtakTilInfotrygdTask
-import no.nav.dagpenger.iverksett.infotrygd.SendPerioderTilInfotrygdTask
 import no.nav.dagpenger.iverksett.oppgave.OpprettOppfølgingsOppgaveForOvergangsstønadTask
 import no.nav.dagpenger.iverksett.tilbakekreving.OpprettTilbakekrevingTask
 import no.nav.dagpenger.iverksett.vedtak.PubliserVedtakTilKafkaTask
@@ -29,8 +27,6 @@ fun hovedflyt() = listOf(
 )
 
 fun publiseringsflyt() = listOf(
-    TaskType(SendFattetVedtakTilInfotrygdTask.TYPE),
-    TaskType(SendPerioderTilInfotrygdTask.TYPE), // Hopper til vedtakstatistikk ved migrering
     TaskType(SendFattetVedtakTilArenaTask.TYPE),
     TaskType(PubliserVedtakTilKafkaTask.TYPE),
     TaskType(SendVedtakTilArbeidsoppfølgingTask.TYPE),
@@ -47,11 +43,7 @@ fun Task.opprettNesteTask(): Task {
 }
 
 fun Task.opprettNestePubliseringTask(erMigrering: Boolean = false): Task {
-    val nesteTask = if (erMigrering && this.type == SendPerioderTilInfotrygdTask.TYPE) {
-        TaskType(VedtakstatistikkTask.TYPE)
-    } else {
-        TaskType(this.type).nestePubliseringsflytTask()
-    }
+    val nesteTask = TaskType(this.type).nestePubliseringsflytTask()
     return lagTask(nesteTask)
 }
 
