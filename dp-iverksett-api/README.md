@@ -1,22 +1,27 @@
-# familie-ef-iverksett
-App som tilbyr iverksettingstjenester av stønadene for enslige forsørgere.
+# dp-iverksett
+App som tilbyr orkestrering av iverksetting for dagpenger. Følgende oppgaver gjøres i sekvens: 
+1. Lag og send utbetalingsoppdrag til OS/UR (via dp-oppdrag)
+2. Poll etter iverksatt utbetalingsoppdrag (mot dp-oppdrag)
+3. Journalfør og arkiver brev mot Joark
+4. Distribuer journalført brev
+5. Send opplysninger om vedtak til Arbeidsoppfølging
 
 ## Swagger
 http://localhost:8094/swagger-ui/index.html
 
 ## Bygging lokalt
-Appen kjører på JRE 11. Bygging gjøres ved å kjøre `mvn clean install`.
+Bygging gjøres ved å kjøre `mvn clean install`.
 
 ### Autentisering lokalt
 Dersom man vil gjøre autentiserte kall mot andre tjenester eller vil kjøre applikasjonen sammen med frontend, må man sette opp følgende miljø-variabler:
 
 #### Client id & client secret
 secret kan hentes fra cluster med
-`kubectl -n teamfamilie get secret azuread-familie-ef-iverksett-lokal -o json | jq '.data | map_values(@base64d)'`
+`kubectl -n teamfamilie get secret azuread-dp-iverksett-lokal -o json | jq '.data | map_values(@base64d)'`
 
 * `AZURE_APP_CLIENT_ID` (fra secret)
 * `AZURE_APP_CLIENT_SECRET` (fra secret)
-* Scope for den aktuelle tjenesten (`FAMILIE_INTEGRASJONER_SCOPE`, `FAMILIE_OPPDRAG_SCOPE`, ...)
+* Scope for den aktuelle tjenesten (`DAGPENGER_OPPDRAG_SCOPE`, ...)
 
 Legges inn under ApplicationLocal -> Edit Configurations -> Environment Variables.
 
@@ -58,8 +63,9 @@ Applikasjonen vil deployes til produksjon ved ny commit på master-branchen. Det
 
 Spørsmål knyttet til koden eller prosjektet kan rettes til:
 
-* Mattis Janitz, `mattis.janitz@nav.no`
+* Jørn Ola Birkeland, `jorn.ola.birkeland@nav.no` (dagpenger-fork)
+* Mattis Janitz, `mattis.janitz@nav.no` (familie-ef-iverksett)
 
 ### For NAV-ansatte
 
-Interne henvendelser kan sendes via Slack i kanalen #team-familie.
+Interne henvendelser kan sendes via Slack i kanalen #team-dagpenger.
