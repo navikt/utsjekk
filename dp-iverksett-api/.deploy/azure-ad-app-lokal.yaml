@@ -6,17 +6,17 @@
 # Kjøres en gang eller ved endringer med
 # kubectl apply -f .deploy/azure-ad-app-lokal.yaml
 ###
-apiVersion: nais.io/v1
-kind: AzureAdApplication
-metadata:
-  name: familie-ef-iverksett-lokal
-  namespace: teamfamilie
-  labels:
-    team: teamfamilie
-spec:
-  preAuthorizedApplications:
-    - application: familie-ef-sak-lokal
-      cluster: dev-gcp
-      namespace: teamfamilie
-  tenant: trygdeetaten.no
-  secretName: azuread-familie-ef-iverksett-lokal
+#apiVersion: nais.io/v1
+#kind: AzureAdApplication
+#metadata:
+#  name: dp-iverksett-lokal
+#  namespace: teamdagpenger
+#  labels:
+#    team: teamdagpenger
+#spec:
+#  preAuthorizedApplications:
+#    - application: dp-sak-lokal
+#      cluster: dev-gcp
+#      namespace: teamdagpenger
+#  tenant: trygdeetaten.no
+#  secretName: azuread-dp-iverksett-lokal
