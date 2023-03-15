@@ -1,7 +1,7 @@
 package no.nav.dagpenger.iverksett.infrastruktur.configuration
 
 import com.fasterxml.jackson.module.kotlin.KotlinModule
-import no.nav.dagpenger.iverksett.util.ObjectMapperProvider
+import no.nav.dagpenger.iverksett.infrastruktur.util.ObjectMapperProvider
 import no.nav.familie.http.client.RetryOAuth2HttpClient
 import no.nav.familie.http.config.RestTemplateAzure
 import no.nav.familie.kontrakter.felles.objectMapper

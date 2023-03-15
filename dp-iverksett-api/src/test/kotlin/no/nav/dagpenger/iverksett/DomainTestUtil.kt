@@ -1,11 +1,14 @@
 package no.nav.dagpenger.iverksett
 
-import no.nav.dagpenger.iverksett.iverksetting.domene.Brev
-import no.nav.dagpenger.iverksett.iverksetting.domene.Iverksett
-import no.nav.dagpenger.iverksett.iverksetting.domene.IverksettData
-import no.nav.dagpenger.iverksett.iverksetting.domene.IverksettOvergangsstønad
-import no.nav.dagpenger.iverksett.iverksetting.domene.Tilbakekrevingsdetaljer
-import no.nav.dagpenger.iverksett.iverksetting.domene.VedtaksperiodeOvergangsstønad
+import no.nav.dagpenger.iverksett.api.domene.Brev
+import no.nav.dagpenger.iverksett.api.domene.Iverksett
+import no.nav.dagpenger.iverksett.api.domene.IverksettData
+import no.nav.dagpenger.iverksett.api.domene.IverksettOvergangsstønad
+import no.nav.dagpenger.iverksett.api.domene.Tilbakekrevingsdetaljer
+import no.nav.dagpenger.iverksett.api.domene.VedtaksperiodeOvergangsstønad
+import no.nav.dagpenger.iverksett.konsumenter.økonomi.lagAndelTilkjentYtelse
+import no.nav.dagpenger.iverksett.konsumenter.økonomi.lagAndelTilkjentYtelseDto
+import no.nav.dagpenger.iverksett.konsumenter.økonomi.simulering.grupperPosteringerEtterDato
 import no.nav.dagpenger.iverksett.kontrakter.felles.BehandlingType
 import no.nav.dagpenger.iverksett.kontrakter.felles.BehandlingÅrsak
 import no.nav.dagpenger.iverksett.kontrakter.felles.Datoperiode
@@ -17,9 +20,6 @@ import no.nav.dagpenger.iverksett.kontrakter.iverksett.TilkjentYtelseDto
 import no.nav.dagpenger.iverksett.util.behandlingsdetaljer
 import no.nav.dagpenger.iverksett.util.opprettIverksettOvergangsstønad
 import no.nav.dagpenger.iverksett.util.vedtaksdetaljerOvergangsstønad
-import no.nav.dagpenger.iverksett.økonomi.lagAndelTilkjentYtelse
-import no.nav.dagpenger.iverksett.økonomi.lagAndelTilkjentYtelseDto
-import no.nav.dagpenger.iverksett.økonomi.simulering.grupperPosteringerEtterDato
 import no.nav.familie.kontrakter.felles.simulering.BeriketSimuleringsresultat
 import no.nav.familie.kontrakter.felles.simulering.BetalingType
 import no.nav.familie.kontrakter.felles.simulering.DetaljertSimuleringResultat
