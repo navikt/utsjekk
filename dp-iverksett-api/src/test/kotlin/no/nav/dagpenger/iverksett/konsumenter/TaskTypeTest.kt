@@ -21,8 +21,8 @@ class TaskTypeTest {
 
     @Test
     fun `test taskflyt`() {
-        val opprettTilbakekrevingTask = Task(IverksettMotOppdragTask.TYPE, "", Properties())
-        assertThat(opprettTilbakekrevingTask.type).isEqualTo(IverksettMotOppdragTask.TYPE)
+        val opprettTilbakekrevingTask = Task(OpprettTilbakekrevingTask.TYPE, "", Properties())
+        assertThat(opprettTilbakekrevingTask.type).isEqualTo(OpprettTilbakekrevingTask.TYPE)
         assertThat(opprettTilbakekrevingTask.triggerTid).isBefore(LocalDateTime.now().plusSeconds(1))
 
         val iverksettMotOppdragTask = opprettTilbakekrevingTask.opprettNesteTask()

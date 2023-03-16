@@ -4,7 +4,7 @@ import java.math.BigDecimal
 import java.time.LocalDate
 
 data class Simuleringsoppsummering(
-    val perioder: List<Simuleringsperiode>,
+    val perioder: List<Simuleringsperiode> = emptyList(),
     val fomDatoNestePeriode: LocalDate?,
     val etterbetaling: BigDecimal,
     val feilutbetaling: BigDecimal,
