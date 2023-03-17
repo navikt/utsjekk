@@ -1,70 +1,70 @@
-#apiVersion: "nais.io/v1alpha1"
-#kind: "Application"
-#metadata:
-#  name: dp-iverksett
-#  namespace: teamdagpenger
-#  labels:
-#    team: teamdagpenger
-#spec:
-#  image: {{ image }}
-#  ingresses:
-#    - https://dp-iverksett.intern.dev.nav.no
-#  liveness:
-#    path: /internal/isAlive
-#    initialDelay: 30
-#    failureThreshold: 10
-#  readiness:
-#    path: /internal/isAlive
-#    initialDelay: 30
-#    failureThreshold: 10
-#  prometheus:
-#    enabled: false
-#  replicas:
-#    min: 2
-#    max: 4
-#    cpuThresholdPercentage: 50
-#  resources:
-#    limits:
-#      memory: 1024Mi
-#      cpu: 1500m
-#    requests:
-#      memory: 512Mi
-#      cpu: 500m
-#  secureLogs:
-#    enabled: true
-#  env:
-#    - name: SPRING_PROFILES_ACTIVE
-#      value: dev
-#  envFrom:
-#    - secret: dp-iverksett
-#  azure:
-#    application:
-#      enabled: true
-#      claims:
-#        groups:
-#          - id: "928636f4-fd0d-4149-978e-a6fb68bb19de"  # 0000-GA-STDAPPS gir tilgang til prosessering
-#  accessPolicy:
-#    inbound:
-#      rules:
-#        - application: då-sak
-#        - application: dp-sak-lokal
-#        - application: familie-prosessering
-#    outbound:
-#      rules:
-#        - application: dp-tilbake
-#      external:
-#        - host: dp-oppdrag.dev-fss-pub.nais.io
-#  gcp:
-#    sqlInstances:
-#      - type: POSTGRES_14 # IF This is changed, all data will be lost. Read on nais.io how to upgrade
-#        diskAutoresize: true
-#        cascadingDelete: false
-#        pointInTimeRecovery: true
-#        maintenance:
-#          day: 7
-#          hour: 23
-#        databases:
-#          - name: dp-iverksett
-#            envVarPrefix: DB
-#  kafka:
-#    pool: nav-dev
+apiVersion: "nais.io/v1alpha1"
+kind: "Application"
+metadata:
+  name: dp-iverksett
+  namespace: teamdagpenger
+  labels:
+    team: teamdagpenger
+spec:
+  image: {{ image }}
+  ingresses:
+    - https://dp-iverksett.intern.dev.nav.no
+  liveness:
+    path: /internal/isAlive
+    initialDelay: 30
+    failureThreshold: 10
+  readiness:
+    path: /internal/isAlive
+    initialDelay: 30
+    failureThreshold: 10
+  prometheus:
+    enabled: false
+  replicas:
+    min: 2
+    max: 4
+    cpuThresholdPercentage: 50
+  resources:
+    limits:
+      memory: 1024Mi
+      cpu: 1500m
+    requests:
+      memory: 512Mi
+      cpu: 500m
+  secureLogs:
+    enabled: true
+  env:
+    - name: SPRING_PROFILES_ACTIVE
+      value: dev
+  envFrom:
+    - secret: dp-iverksett
+  azure:
+    application:
+      enabled: true
+      claims:
+        groups:
+          - id: "928636f4-fd0d-4149-978e-a6fb68bb19de"  # 0000-GA-STDAPPS gir tilgang til prosessering
+  accessPolicy:
+    inbound:
+      rules:
+        - application: dp-sak
+        - application: dp-sak-lokal
+        - application: familie-prosessering
+    outbound:
+      rules:
+        - application: dp-tilbake
+      external:
+        - host: dp-oppdrag.dev-fss-pub.nais.io
+  gcp:
+    sqlInstances:
+      - type: POSTGRES_14 # IF This is changed, all data will be lost. Read on nais.io how to upgrade
+        diskAutoresize: true
+        cascadingDelete: false
+        pointInTimeRecovery: true
+        maintenance:
+          day: 7
+          hour: 23
+        databases:
+          - name: dp-iverksett
+            envVarPrefix: DB
+  kafka:
+    pool: nav-dev

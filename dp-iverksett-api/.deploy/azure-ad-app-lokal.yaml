@@ -1,22 +1,22 @@
-#######
-# Denne er brukt til å gjøre det mulig å bruke tokens lokalt
-#
-# secret kan hentes fra cluster med "kubectl -n teamfamilie get secret azuread-familie-ef-iverksett-lokal -o json | jq '.data | map_values(@base64d)'"
-#
-# Kjøres en gang eller ved endringer med
-# kubectl apply -f .deploy/azure-ad-app-lokal.yaml
-###
-#apiVersion: nais.io/v1
-#kind: AzureAdApplication
-#metadata:
-#  name: dp-iverksett-lokal
-#  namespace: teamdagpenger
-#  labels:
-#    team: teamdagpenger
-#spec:
-#  preAuthorizedApplications:
-#    - application: dp-sak-lokal
-#      cluster: dev-gcp
-#      namespace: teamdagpenger
-#  tenant: trygdeetaten.no
-#  secretName: azuread-dp-iverksett-lokal
+######
+ Denne er brukt til å gjøre det mulig å bruke tokens lokalt
+
+ secret kan hentes fra cluster med "kubectl -n teamfamilie get secret azuread-familie-ef-iverksett-lokal -o json | jq '.data | map_values(@base64d)'"
+
+ Kjøres en gang eller ved endringer med
+ kubectl apply -f .deploy/azure-ad-app-lokal.yaml
+##
+apiVersion: nais.io/v1
+kind: AzureAdApplication
+metadata:
+  name: dp-iverksett-lokal
+  namespace: teamdagpenger
+  labels:
+    team: teamdagpenger
+spec:
+  preAuthorizedApplications:
+    - application: dp-sak-lokal
+      cluster: dev-gcp
+      namespace: teamdagpenger
+  tenant: trygdeetaten.no
+  secretName: azuread-dp-iverksett-lokal
