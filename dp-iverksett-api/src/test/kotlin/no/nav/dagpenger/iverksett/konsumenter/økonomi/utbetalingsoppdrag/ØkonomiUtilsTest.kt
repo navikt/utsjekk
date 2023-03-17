@@ -378,7 +378,7 @@ internal class ØkonomiUtilsTest {
             tidligereAndelerMedPeriodeId: List<AndelTilkjentYtelse>,
         ) =
             sisteAndelIKjede ?: tidligereAndelerMedPeriodeId.maxByOrNull { it.periodeId!! }
-                ?.takeIf { it.periode.fomDato != LocalDate.MIN }
+                ?.takeIf { it.periode.fomDato() != LocalDate.MIN }
 
         fun Utbetalingsperiode?.opphørsdato(): YearMonth? = this?.opphør?.opphørDatoFom?.let { YearMonth.from(it) }
 

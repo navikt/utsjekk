@@ -2,105 +2,35 @@ package no.nav.dagpenger.iverksett.konsumenter.vedtakstatistikk
 
 import no.nav.dagpenger.iverksett.api.domene.Barn
 import no.nav.dagpenger.iverksett.api.domene.Behandlingsdetaljer
-import no.nav.dagpenger.iverksett.api.domene.DelårsperiodeSkoleårSkolepenger
-import no.nav.dagpenger.iverksett.api.domene.IverksettBarnetilsyn
 import no.nav.dagpenger.iverksett.api.domene.IverksettOvergangsstønad
-import no.nav.dagpenger.iverksett.api.domene.IverksettSkolepenger
-import no.nav.dagpenger.iverksett.api.domene.SkolepengerUtgift
 import no.nav.dagpenger.iverksett.api.domene.Søker
 import no.nav.dagpenger.iverksett.api.domene.TilkjentYtelse
-import no.nav.dagpenger.iverksett.api.domene.VedtaksdetaljerBarnetilsyn
 import no.nav.dagpenger.iverksett.api.domene.VedtaksdetaljerOvergangsstønad
 import no.nav.dagpenger.iverksett.api.domene.Vilkårsvurdering
 import no.nav.dagpenger.iverksett.infrastruktur.util.VilkårsvurderingUtil
-import no.nav.dagpenger.iverksett.infrastruktur.util.VilkårsvurderingUtil.hentAktivitetsvilkårBarnetilsyn
 import no.nav.dagpenger.iverksett.infrastruktur.util.tilKlassifisering
 import no.nav.dagpenger.iverksett.kontrakter.dvh.Adressebeskyttelse
 import no.nav.dagpenger.iverksett.kontrakter.dvh.AktivitetType
 import no.nav.dagpenger.iverksett.kontrakter.dvh.Aktivitetskrav
 import no.nav.dagpenger.iverksett.kontrakter.dvh.BehandlingType
 import no.nav.dagpenger.iverksett.kontrakter.dvh.BehandlingÅrsak
-import no.nav.dagpenger.iverksett.kontrakter.dvh.Delårsperiode
-import no.nav.dagpenger.iverksett.kontrakter.dvh.PeriodeMedBeløp
 import no.nav.dagpenger.iverksett.kontrakter.dvh.Person
-import no.nav.dagpenger.iverksett.kontrakter.dvh.Studietype
 import no.nav.dagpenger.iverksett.kontrakter.dvh.Utbetaling
 import no.nav.dagpenger.iverksett.kontrakter.dvh.Utbetalingsdetalj
-import no.nav.dagpenger.iverksett.kontrakter.dvh.UtgiftSkolepenger
 import no.nav.dagpenger.iverksett.kontrakter.dvh.Vedtak
-import no.nav.dagpenger.iverksett.kontrakter.dvh.VedtakBarnetilsynDVH
 import no.nav.dagpenger.iverksett.kontrakter.dvh.VedtakOvergangsstønadDVH
-import no.nav.dagpenger.iverksett.kontrakter.dvh.VedtakSkolepenger
-import no.nav.dagpenger.iverksett.kontrakter.dvh.VedtaksperiodeBarnetilsynDto
 import no.nav.dagpenger.iverksett.kontrakter.dvh.VedtaksperiodeOvergangsstønadDto
-import no.nav.dagpenger.iverksett.kontrakter.dvh.VedtaksperiodeSkolepenger
 import no.nav.dagpenger.iverksett.kontrakter.dvh.VedtaksperiodeType
 import no.nav.dagpenger.iverksett.kontrakter.dvh.Vilkår
 import no.nav.dagpenger.iverksett.kontrakter.dvh.Vilkårsresultat
 import no.nav.dagpenger.iverksett.kontrakter.dvh.VilkårsvurderingDto
 import no.nav.dagpenger.iverksett.kontrakter.dvh.ÅrsakRevurdering
 import no.nav.dagpenger.iverksett.kontrakter.felles.StønadType
-import java.time.LocalDate
-import java.time.Month
-import java.time.Year
 import java.time.ZoneId
 import no.nav.dagpenger.iverksett.kontrakter.dvh.Barn as BarnEkstern
 import no.nav.dagpenger.iverksett.kontrakter.dvh.StønadType as StønadTypeEkstern
 
 object VedtakstatistikkMapper {
-
-    fun mapTilVedtakBarnetilsynDVH(
-        iverksett: IverksettBarnetilsyn,
-        forrigeIverksettBehandlingEksternId: Long?,
-    ): VedtakBarnetilsynDVH {
-        return VedtakBarnetilsynDVH(
-            fagsakId = iverksett.fagsak.eksternId,
-            behandlingId = iverksett.behandling.eksternId,
-            relatertBehandlingId = forrigeIverksettBehandlingEksternId,
-            adressebeskyttelse = iverksett.søker.adressebeskyttelse?.let {
-                Adressebeskyttelse.valueOf(it.name)
-            },
-            tidspunktVedtak = iverksett.vedtak.vedtakstidspunkt.atZone(ZoneId.of("Europe/Oslo")),
-            vilkårsvurderinger = iverksett.behandling.vilkårsvurderinger.map {
-                mapTilVilkårsvurderinger(it)
-            },
-            person = mapTilPerson(personIdent = iverksett.søker.personIdent),
-            barn = iverksett.søker.barn.map { mapTilBarn(it) },
-            behandlingType = BehandlingType.valueOf(iverksett.behandling.behandlingType.name),
-            behandlingÅrsak = BehandlingÅrsak.valueOf(iverksett.behandling.behandlingÅrsak.name),
-            vedtak = Vedtak.valueOf(iverksett.vedtak.vedtaksresultat.name),
-            vedtaksperioder = mapToVedtaksperioder(iverksett.vedtak),
-            utbetalinger = iverksett.vedtak.tilkjentYtelse?.let {
-                mapTilUtbetaling(
-                    it,
-                    iverksett.fagsak.stønadstype,
-                    iverksett.fagsak.eksternId,
-                    iverksett.søker,
-                )
-            } ?: emptyList(),
-            aktivitetskrav = hentAktivitetsvilkårBarnetilsyn(iverksett.behandling.vilkårsvurderinger),
-            funksjonellId = iverksett.behandling.eksternId,
-            stønadstype = StønadTypeEkstern.valueOf(iverksett.fagsak.stønadstype.name),
-            perioderKontantstøtte = iverksett.vedtak.kontantstøtte.map {
-                PeriodeMedBeløp(
-                    it.periode.fomDato,
-                    it.periode.tomDato,
-                    it.beløp,
-                )
-            },
-            perioderTilleggsstønad = iverksett.vedtak.tilleggsstønad.map {
-                PeriodeMedBeløp(
-                    it.periode.fomDato,
-                    it.periode.tomDato,
-                    it.beløp,
-                )
-            },
-            kravMottatt = iverksett.behandling.kravMottatt,
-            årsakRevurdering = mapÅrsakRevurdering(iverksett.behandling),
-            avslagÅrsak = iverksett.vedtak.avslagÅrsak?.name,
-        )
-    }
-
     private fun mapÅrsakRevurdering(behandlingsdetaljer: Behandlingsdetaljer): ÅrsakRevurdering? =
         behandlingsdetaljer.årsakRevurdering?.let {
             ÅrsakRevurdering(
@@ -163,8 +93,8 @@ object VedtakstatistikkMapper {
                 samordningsfradrag = it.samordningsfradrag,
                 inntekt = it.inntekt,
                 inntektsreduksjon = it.inntektsreduksjon,
-                fraOgMed = it.periode.fomDato,
-                tilOgMed = it.periode.tomDato,
+                fraOgMed = it.periode.fomDato(),
+                tilOgMed = it.periode.tomDato(),
                 Utbetalingsdetalj(
                     gjelderPerson = mapTilPerson(personIdent = søker.personIdent),
                     klassekode = stønadsType.tilKlassifisering(),
@@ -192,81 +122,11 @@ object VedtakstatistikkMapper {
     private fun mapToVedtaksperioder(vedtaksdetaljer: VedtaksdetaljerOvergangsstønad): List<VedtaksperiodeOvergangsstønadDto> {
         return vedtaksdetaljer.vedtaksperioder.map {
             VedtaksperiodeOvergangsstønadDto(
-                it.periode.fomDato,
-                it.periode.tomDato,
+                it.periode.fomDato(),
+                it.periode.tomDato(),
                 AktivitetType.valueOf(it.aktivitet.name),
                 VedtaksperiodeType.valueOf(it.periodeType.name),
             )
         }
     }
-
-    private fun mapToVedtaksperioder(vedtaksdetaljer: VedtaksdetaljerBarnetilsyn): List<VedtaksperiodeBarnetilsynDto> {
-        return vedtaksdetaljer.vedtaksperioder.map {
-            VedtaksperiodeBarnetilsynDto(
-                it.periode.fomDato,
-                it.periode.tomDato,
-                it.utgifter,
-                it.antallBarn,
-            )
-        }
-    }
-
-    fun mapTilVedtakSkolepengeDVH(iverksett: IverksettSkolepenger, forrigeBehandlingId: Long?): VedtakSkolepenger {
-        return VedtakSkolepenger(
-            fagsakId = iverksett.fagsak.eksternId,
-            behandlingId = iverksett.behandling.eksternId,
-            relatertBehandlingId = forrigeBehandlingId,
-            adressebeskyttelse = iverksett.søker.adressebeskyttelse?.let {
-                Adressebeskyttelse.valueOf(it.name)
-            },
-            tidspunktVedtak = iverksett.vedtak.vedtakstidspunkt.atZone(ZoneId.of("Europe/Oslo")),
-            vilkårsvurderinger = iverksett.behandling.vilkårsvurderinger.map {
-                mapTilVilkårsvurderinger(it)
-            },
-            person = mapTilPerson(personIdent = iverksett.søker.personIdent),
-            barn = iverksett.søker.barn.map { mapTilBarn(it) },
-            behandlingType = BehandlingType.valueOf(iverksett.behandling.behandlingType.name),
-            behandlingÅrsak = BehandlingÅrsak.valueOf(iverksett.behandling.behandlingÅrsak.name),
-            vedtak = Vedtak.valueOf(iverksett.vedtak.vedtaksresultat.name),
-            utbetalinger = iverksett.vedtak.tilkjentYtelse?.let {
-                mapTilUtbetaling(
-                    it,
-                    iverksett.fagsak.stønadstype,
-                    iverksett.fagsak.eksternId,
-                    iverksett.søker,
-                )
-            } ?: emptyList(),
-            funksjonellId = iverksett.behandling.eksternId,
-            stønadstype = StønadTypeEkstern.valueOf(iverksett.fagsak.stønadstype.name),
-            vedtaksperioder = iverksett.vedtak.vedtaksperioder.map {
-                VedtaksperiodeSkolepenger(
-                    skoleår = it.perioder.first().periode.fomDato.utledSkoleår().value,
-                    perioder = it.perioder.map { delårsperiode -> mapTilDelårsperiode(delårsperiode) },
-                    utgifter = it.utgiftsperioder.map { utgiftsperiode -> mapTilUtgiftSkolepenger(utgiftsperiode) },
-                    maksSatsForSkoleår = it.perioder.first().makssatsForSkoleår,
-                )
-            },
-            vedtaksbegrunnelse = iverksett.vedtak.begrunnelse,
-            kravMottatt = iverksett.behandling.kravMottatt,
-            årsakRevurdering = mapÅrsakRevurdering(iverksett.behandling),
-            avslagÅrsak = iverksett.vedtak.avslagÅrsak?.name,
-        )
-    }
-
-    private fun mapTilUtgiftSkolepenger(utgiftsperiode: SkolepengerUtgift) =
-        UtgiftSkolepenger(
-            utgiftsdato = utgiftsperiode.utgiftsdato,
-            utgiftsbeløp = utgiftsperiode.utgifter,
-            utbetaltBeløp = utgiftsperiode.stønad,
-        )
-
-    private fun mapTilDelårsperiode(delårsperiode: DelårsperiodeSkoleårSkolepenger) =
-        Delårsperiode(
-            studietype = Studietype.valueOf(delårsperiode.studietype.name),
-            datoFra = delårsperiode.periode.fomDato,
-            datoTil = delårsperiode.periode.tomDato,
-            studiebelastning = delårsperiode.studiebelastning,
-        )
-
-    private fun LocalDate.utledSkoleår() = if (this.month > Month.JUNE) Year.of(this.year) else Year.of(this.year - 1)
 }

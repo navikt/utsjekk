@@ -1,7 +1,7 @@
 package no.nav.dagpenger.iverksett.konsumenter.tilbakekreving
 
 import no.nav.dagpenger.iverksett.api.IverksettingRepository
-import no.nav.dagpenger.iverksett.api.domene.IverksettData
+import no.nav.dagpenger.iverksett.api.domene.IverksettOvergangsstønad
 import no.nav.dagpenger.iverksett.api.domene.TilbakekrevingResultat
 import no.nav.dagpenger.iverksett.api.domene.tilSimulering
 import no.nav.dagpenger.iverksett.api.tilstand.IverksettResultatService
@@ -58,7 +58,7 @@ class OpprettTilbakekrevingTask(
 
     private fun opprettTilbakekreving(
         behandlingId: UUID,
-        iverksettData: IverksettData,
+        iverksettData: IverksettOvergangsstønad,
     ) {
         logger.info("Det kreves tilbakekrevingsbehandling for behandling=$behandlingId")
         val opprettTilbakekrevingRequest = lagTilbakekrevingRequest(iverksettData)
@@ -74,7 +74,7 @@ class OpprettTilbakekrevingTask(
     }
 
     private fun skalOppretteTilbakekreving(
-        iverksettData: IverksettData,
+        iverksettData: IverksettOvergangsstønad,
         behandlingId: UUID?,
     ): Boolean {
         if (iverksettData.behandling.behandlingType == BehandlingType.FØRSTEGANGSBEHANDLING) {
@@ -96,8 +96,8 @@ class OpprettTilbakekrevingTask(
     }
 
     private fun loggForskjell(
-        nyIverksettData: IverksettData,
-        iverksettData: IverksettData,
+        nyIverksettData: IverksettOvergangsstønad,
+        iverksettData: IverksettOvergangsstønad,
         behandlingId: UUID?,
     ) {
         if (nyIverksettData != iverksettData) {
@@ -109,18 +109,18 @@ class OpprettTilbakekrevingTask(
         taskService.save(task.opprettNesteTask())
     }
 
-    private fun hentBeriketSimulering(originalIverksett: IverksettData): BeriketSimuleringsresultat {
+    private fun hentBeriketSimulering(originalIverksett: IverksettOvergangsstønad): BeriketSimuleringsresultat {
         val simuleringRequest = originalIverksett.tilSimulering()
         return simuleringService.hentBeriketSimulering(simuleringRequest)
     }
 
-    private fun lagTilbakekrevingRequest(iverksett: IverksettData): OpprettTilbakekrevingRequest {
+    private fun lagTilbakekrevingRequest(iverksett: IverksettOvergangsstønad): OpprettTilbakekrevingRequest {
         // Henter ut på nytt, selv om noe finnes i iverksett-dto'en
         val enhet = familieIntegrasjonerClient.hentBehandlendeEnhetForBehandling(iverksett.søker.personIdent)!!
         return iverksett.tilOpprettTilbakekrevingRequest(enhet)
     }
 
-    private fun finnesÅpenTilbakekrevingsbehandling(nyIverksett: IverksettData): Boolean =
+    private fun finnesÅpenTilbakekrevingsbehandling(nyIverksett: IverksettOvergangsstønad): Boolean =
         tilbakekrevingClient.finnesÅpenBehandling(nyIverksett.fagsak.eksternId)
 
     companion object {

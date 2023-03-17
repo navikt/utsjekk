@@ -1,6 +1,6 @@
 package no.nav.dagpenger.iverksett.konsumenter.arena
 
-import no.nav.dagpenger.iverksett.api.domene.IverksettData
+import no.nav.dagpenger.iverksett.api.domene.IverksettOvergangsstønad
 import no.nav.dagpenger.iverksett.kontrakter.felles.Behandlingstema
 import no.nav.dagpenger.iverksett.kontrakter.felles.Vedtaksresultat
 import java.time.LocalDateTime
@@ -9,7 +9,7 @@ import java.util.Locale
 
 private val dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
 
-fun mapIverksettTilVedtakHendelser(iverksettData: IverksettData, aktørId: String): VedtakHendelser {
+fun mapIverksettTilVedtakHendelser(iverksettData: IverksettOvergangsstønad, aktørId: String): VedtakHendelser {
     return VedtakHendelser(
         aktoerID = aktørId,
         avslutningsstatus = mapAvslutningsstatus(iverksettData.vedtak.vedtaksresultat),

@@ -1,13 +1,12 @@
 package no.nav.dagpenger.iverksett.util
 
-import no.nav.dagpenger.iverksett.api.domene.IverksettData
 import no.nav.dagpenger.iverksett.api.domene.IverksettOvergangsstønad
 import no.nav.dagpenger.iverksett.api.domene.TilkjentYtelse
 import no.nav.dagpenger.iverksett.api.domene.Vedtaksdetaljer
 import no.nav.dagpenger.iverksett.api.domene.VedtaksdetaljerOvergangsstønad
 import no.nav.dagpenger.iverksett.konsumenter.brev.domain.Brevmottakere
 
-fun IverksettData.copy(vedtak: Vedtaksdetaljer): IverksettData {
+fun IverksettOvergangsstønad.copy(vedtak: Vedtaksdetaljer): IverksettOvergangsstønad {
     return when (this) {
         is IverksettOvergangsstønad -> this.copy(vedtak = vedtak as VedtaksdetaljerOvergangsstønad)
         else -> error("Ingen støtte ennå")

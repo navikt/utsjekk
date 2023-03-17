@@ -1,6 +1,6 @@
 package no.nav.dagpenger.iverksett.konsumenter.brev
 
-import no.nav.dagpenger.iverksett.api.domene.IverksettData
+import no.nav.dagpenger.iverksett.api.domene.IverksettOvergangsstønad
 import no.nav.dagpenger.iverksett.kontrakter.felles.BehandlingType
 import no.nav.dagpenger.iverksett.kontrakter.felles.BehandlingÅrsak
 import no.nav.dagpenger.iverksett.kontrakter.felles.StønadType
@@ -28,7 +28,7 @@ fun lagStønadtypeTekst(stønadstype: StønadType): String =
         StønadType.SKOLEPENGER -> "stønad til skolepenger"
     }
 
-fun lagVedtakstekst(iverksettData: IverksettData): String =
+fun lagVedtakstekst(iverksettData: IverksettOvergangsstønad): String =
     when {
         iverksettData.behandling.behandlingType === BehandlingType.FØRSTEGANGSBEHANDLING ->
             lagVedtakstekstFørstegangsbehandling(iverksettData)
@@ -40,7 +40,7 @@ fun lagVedtakstekst(iverksettData: IverksettData): String =
         else -> "Vedtak om revurdert "
     }
 
-private fun lagVedtakstekstFørstegangsbehandling(iverksettData: IverksettData) =
+private fun lagVedtakstekstFørstegangsbehandling(iverksettData: IverksettOvergangsstønad) =
     when (iverksettData.vedtak.vedtaksresultat) {
         Vedtaksresultat.INNVILGET -> "Vedtak om innvilget "
         Vedtaksresultat.AVSLÅTT -> "Vedtak om avslått "

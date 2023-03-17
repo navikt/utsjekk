@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.DeserializationContext
 import com.fasterxml.jackson.databind.JsonDeserializer
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.module.SimpleModule
-import no.nav.dagpenger.iverksett.api.domene.IverksettModule
 import java.time.ZoneId
 import java.time.ZonedDateTime
 
@@ -13,7 +12,6 @@ object ObjectMapperProvider {
 
     val objectMapper: ObjectMapper =
         no.nav.dagpenger.iverksett.kontrakter.objectMapper
-            .registerModule(IverksettModule())
             .registerModule(
                 SimpleModule().addDeserializer(
                     ZonedDateTime::class.java,

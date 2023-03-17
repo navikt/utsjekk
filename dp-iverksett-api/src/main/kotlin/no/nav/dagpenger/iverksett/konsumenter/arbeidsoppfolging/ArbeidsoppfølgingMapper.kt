@@ -28,8 +28,8 @@ object ArbeidsoppfølgingMapper {
     fun mapToVedtaksperioder(vedtaksdetaljer: VedtaksdetaljerOvergangsstønad): List<Periode> {
         return vedtaksdetaljer.vedtaksperioder.map {
             Periode(
-                it.periode.fomDato,
-                it.periode.tomDato,
+                it.periode.fomDato(),
+                it.periode.tomDato(),
                 Periodetype.valueOf(it.periodeType.name),
                 Aktivitetstype.valueOf(it.aktivitet.name),
             )

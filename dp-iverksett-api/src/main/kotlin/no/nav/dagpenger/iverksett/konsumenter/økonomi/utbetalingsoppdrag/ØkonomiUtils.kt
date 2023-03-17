@@ -54,7 +54,7 @@ object ØkonomiUtils {
         val førsteEndring = finnDatoForFørsteEndredeAndel(forrigeAndeler, oppdaterteAndeler)
         val består =
             if (førsteEndring != null) {
-                forrigeAndeler.snittAndeler(oppdaterteAndeler).filter { it.periode.fomDato < førsteEndring }
+                forrigeAndeler.snittAndeler(oppdaterteAndeler).filter { it.periode.fomDato() < førsteEndring }
             } else {
                 forrigeAndeler
             }
@@ -94,7 +94,7 @@ object ØkonomiUtils {
         // hvis det ikke finnes tidligere andel så kan vi ikke opphøre noe
         val sisteForrigeAndel = forrigeTilkjentYtelse?.sisteAndelIKjede ?: return null
         val forrigeAndeler = andelerUtenNullVerdier(forrigeTilkjentYtelse)
-        val forrigeMaksDato = forrigeAndeler.maxOfOrNull { it.periode.tomDato }
+        val forrigeMaksDato = forrigeAndeler.maxOfOrNull { it.periode.tomDato() }
         val nyeAndeler = andelerUtenNullVerdier(nyTilkjentYtelse)
 
         val skalOpphøreFørTidligereStartdato = nyTilkjentYtelse.startmåned < forrigeTilkjentYtelse.startmåned
@@ -186,8 +186,8 @@ object ØkonomiUtils {
         oppdaterteAndeler: Set<AndelTilkjentYtelse>,
     ): LocalDate? {
         val førsteEndring = finnDatoForFørsteEndredeAndel(forrigeAndeler, oppdaterteAndeler)
-        val førsteDatoIForrigePeriode = forrigeAndeler.minOfOrNull { it.periode.fomDato }
-        val førsteDatoNyePerioder = oppdaterteAndeler.minOfOrNull { it.periode.fomDato }
+        val førsteDatoIForrigePeriode = forrigeAndeler.minOfOrNull { it.periode.fomDato() }
+        val førsteDatoNyePerioder = oppdaterteAndeler.minOfOrNull { it.periode.fomDato() }
         if (førsteDatoNyePerioder != null && førsteDatoIForrigePeriode != null &&
             førsteDatoNyePerioder.isBefore(førsteDatoIForrigePeriode)
         ) {
@@ -201,7 +201,7 @@ object ØkonomiUtils {
         andelerNyTilkjentYtelse: Set<AndelTilkjentYtelse>,
     ) =
         andelerForrigeTilkjentYtelse.disjunkteAndeler(andelerNyTilkjentYtelse)
-            .minOfOrNull { it.periode.fomDato }
+            .minOfOrNull { it.periode.fomDato() }
 
     /**
      * Sjekker om den nye endringen er etter maks datot for tidligere perioder

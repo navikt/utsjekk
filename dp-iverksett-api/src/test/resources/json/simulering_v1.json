@@ -9,8 +9,10 @@
         {
           "utbetaltPerPeriode": 3800,
           "periodetype": "MÅNED",
-          "fraOgMed": "2021-03-01",
-          "tilOgMed": "2022-08-31",
+          "periode": {
+            "fom": "2021-03",
+            "tom": "2021-08"
+          },
           "inntekt": 0,
           "samordningsfradrag": 0,
           "inntektsreduksjon": 0,
@@ -23,6 +25,10 @@
           "periodetype": "MÅNED",
           "fraOgMed": "2022-09-01",
           "tilOgMed": "2023-11-30",
+          "periode": {
+            "fom": "2021-09",
+            "tom": "2021-11"
+          },
           "inntekt": 0,
           "samordningsfradrag": 0,
           "inntektsreduksjon": 0,

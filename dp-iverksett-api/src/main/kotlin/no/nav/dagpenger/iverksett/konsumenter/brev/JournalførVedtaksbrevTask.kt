@@ -2,7 +2,7 @@ package no.nav.dagpenger.iverksett.konsumenter.brev
 
 import no.nav.dagpenger.iverksett.api.IverksettingRepository
 import no.nav.dagpenger.iverksett.api.domene.Iverksett
-import no.nav.dagpenger.iverksett.api.domene.IverksettData
+import no.nav.dagpenger.iverksett.api.domene.IverksettOvergangsstønad
 import no.nav.dagpenger.iverksett.api.tilstand.IverksettResultatService
 import no.nav.dagpenger.iverksett.infrastruktur.repository.findByIdOrThrow
 import no.nav.dagpenger.iverksett.konsumenter.brev.domain.JournalpostResultat
@@ -121,7 +121,7 @@ class JournalførVedtaksbrevTask(
     }
 
     private fun journalførVedtaksbrevTilBrevmottakere(
-        iverksett: IverksettData,
+        iverksett: IverksettOvergangsstønad,
         journalførteIdenter: List<String>,
         arkiverDokumentRequest: ArkiverDokumentRequest,
         behandlingId: UUID,
@@ -149,7 +149,7 @@ class JournalførVedtaksbrevTask(
 
     private fun journalførVedtaksbrevTilStønadmottaker(
         arkiverDokumentRequest: ArkiverDokumentRequest,
-        iverksett: IverksettData,
+        iverksett: IverksettOvergangsstønad,
         behandlingId: UUID,
     ) {
         journalførOgLagreResultat(
@@ -160,7 +160,7 @@ class JournalførVedtaksbrevTask(
         )
     }
 
-    private fun validerJournalpostResultatErSatt(behandlingId: UUID, iverksett: IverksettData) {
+    private fun validerJournalpostResultatErSatt(behandlingId: UUID, iverksett: IverksettOvergangsstønad) {
         val antallJournalføringer = iverksettResultatService.hentJournalpostResultat(behandlingId)?.size
             ?: error("Ingen journalføringer for behandling=[$behandlingId]")
 
@@ -177,7 +177,7 @@ class JournalførVedtaksbrevTask(
         }
     }
 
-    private fun lagDokumentTittel(iverksett: IverksettData): String =
+    private fun lagDokumentTittel(iverksett: IverksettOvergangsstønad): String =
         lagVedtakstekst(iverksett) + lagStønadtypeTekst(iverksett.fagsak.stønadstype)
 
     override fun onCompletion(task: Task) {

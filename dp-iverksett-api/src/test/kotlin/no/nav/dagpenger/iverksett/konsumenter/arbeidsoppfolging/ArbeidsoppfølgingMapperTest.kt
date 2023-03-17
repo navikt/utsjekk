@@ -29,8 +29,8 @@ class ArbeidsoppfølgingMapperTest {
         assertThat(vedtakTilArbeidsoppfølging.personIdent).isEqualTo(iverksett.søker.personIdent)
 
         val forventetPeriode = Periode(
-            lagMånedsperiode(YearMonth.now()).fomDato,
-            lagMånedsperiode(YearMonth.now()).tomDato,
+            lagMånedsperiode(YearMonth.now()).fomDato(),
+            lagMånedsperiode(YearMonth.now()).tomDato(),
             Periodetype.HOVEDPERIODE,
             Aktivitetstype.BARNET_ER_SYKT,
         )

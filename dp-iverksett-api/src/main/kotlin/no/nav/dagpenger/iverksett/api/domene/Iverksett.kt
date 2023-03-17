@@ -7,7 +7,7 @@ import java.util.UUID
 data class Iverksett(
     @Id
     val behandlingId: UUID,
-    val data: IverksettData,
+    val data: IverksettOvergangsstønad,
     val eksternId: Long,
     @MappedCollection(idColumn = "behandling_id")
     val brev: Brev? = null,

@@ -18,34 +18,13 @@ import java.time.LocalDateTime
 import java.time.YearMonth
 import java.util.UUID
 
-sealed class IverksettDto {
-
-    abstract val fagsak: FagsakdetaljerDto
-    abstract val behandling: BehandlingsdetaljerDto
-    abstract val søker: SøkerDto
-    abstract val vedtak: VedtaksdetaljerDto
-}
-
 data class IverksettOvergangsstønadDto(
-    override val fagsak: FagsakdetaljerDto,
-    override val behandling: BehandlingsdetaljerDto,
-    override val søker: SøkerDto,
-    override val vedtak: VedtaksdetaljerOvergangsstønadDto,
-) : IverksettDto()
+    val fagsak: FagsakdetaljerDto,
+    val behandling: BehandlingsdetaljerDto,
+    val søker: SøkerDto,
+    val vedtak: VedtaksdetaljerOvergangsstønadDto,
+)
 
-data class IverksettBarnetilsynDto(
-    override val fagsak: FagsakdetaljerDto,
-    override val behandling: BehandlingsdetaljerDto,
-    override val søker: SøkerDto,
-    override val vedtak: VedtaksdetaljerBarnetilsynDto,
-) : IverksettDto()
-
-data class IverksettSkolepengerDto(
-    override val fagsak: FagsakdetaljerDto,
-    override val behandling: BehandlingsdetaljerDto,
-    override val søker: SøkerDto,
-    override val vedtak: VedtaksdetaljerSkolepengerDto,
-) : IverksettDto()
 
 data class SøkerDto(
     val personIdent: String,
@@ -99,35 +78,6 @@ data class VedtaksdetaljerOvergangsstønadDto(
     override val avslagÅrsak: AvslagÅrsak? = null,
 ) : VedtaksdetaljerDto()
 
-data class VedtaksdetaljerBarnetilsynDto(
-    override val resultat: Vedtaksresultat,
-    override val vedtakstidspunkt: LocalDateTime,
-    override val opphørÅrsak: OpphørÅrsak?,
-    override val saksbehandlerId: String,
-    override val beslutterId: String,
-    override val tilkjentYtelse: TilkjentYtelseDto?,
-    override val vedtaksperioder: List<VedtaksperiodeBarnetilsynDto> = emptyList(),
-    override val tilbakekreving: TilbakekrevingDto? = null,
-    override val brevmottakere: List<Brevmottaker> = emptyList(),
-    override val avslagÅrsak: AvslagÅrsak? = null,
-    val kontantstøtte: List<PeriodeMedBeløpDto>,
-    val tilleggsstønad: List<PeriodeMedBeløpDto>,
-
-) : VedtaksdetaljerDto()
-
-data class VedtaksdetaljerSkolepengerDto(
-    override val resultat: Vedtaksresultat,
-    override val vedtakstidspunkt: LocalDateTime,
-    override val opphørÅrsak: OpphørÅrsak?,
-    override val saksbehandlerId: String,
-    override val beslutterId: String,
-    override val tilkjentYtelse: TilkjentYtelseDto?,
-    override val vedtaksperioder: List<VedtaksperiodeSkolepengerDto> = emptyList(),
-    override val tilbakekreving: TilbakekrevingDto? = null,
-    override val brevmottakere: List<Brevmottaker> = emptyList(),
-    override val avslagÅrsak: AvslagÅrsak? = null,
-    val begrunnelse: String? = null,
-) : VedtaksdetaljerDto()
 
 data class VilkårsvurderingDto(
     val vilkårType: VilkårType,
@@ -149,54 +99,11 @@ data class VurderingDto(
 sealed class VedtaksperiodeDto
 
 data class VedtaksperiodeOvergangsstønadDto(
-    @Deprecated("Bruk periode!", ReplaceWith("periode.fom")) val fraOgMed: LocalDate? = null,
-    @Deprecated("Bruk periode!", ReplaceWith("periode.tom")) val tilOgMed: LocalDate? = null,
-    val periode: Månedsperiode = Månedsperiode(
-        YearMonth.from(fraOgMed) ?: error("Periode eller fraOgMed må ha verdi!"),
-        YearMonth.from(tilOgMed) ?: error("Periode eller fraOgMed må ha verdi!"),
-    ),
+    val periode: Månedsperiode,
     val aktivitet: AktivitetType,
     val periodeType: VedtaksperiodeType,
 ) : VedtaksperiodeDto()
 
-data class VedtaksperiodeBarnetilsynDto(
-    @Deprecated("Bruk periode!", ReplaceWith("periode.fom")) val fraOgMed: LocalDate? = null,
-    @Deprecated("Bruk periode!", ReplaceWith("periode.tom")) val tilOgMed: LocalDate? = null,
-    val periode: Månedsperiode = Månedsperiode(
-        YearMonth.from(fraOgMed) ?: error("Periode eller fraOgMed må ha verdi!"),
-        YearMonth.from(tilOgMed) ?: error("Periode eller fraOgMed må ha verdi!"),
-    ),
-    val utgifter: Int,
-    val antallBarn: Int,
-) : VedtaksperiodeDto()
-
-data class VedtaksperiodeSkolepengerDto(
-    val perioder: List<DelårsperiodeSkoleårSkolepengerDto>,
-    val utgiftsperioder: List<SkolepengerUtgiftDto>,
-) : VedtaksperiodeDto()
-
-data class DelårsperiodeSkoleårSkolepengerDto(
-    val studietype: SkolepengerStudietype,
-    @Deprecated("Bruk periode!", ReplaceWith("periode.fom")) val fraOgMed: LocalDate? = null,
-    @Deprecated("Bruk periode!", ReplaceWith("periode.tom")) val tilOgMed: LocalDate? = null,
-    val periode: Månedsperiode = Månedsperiode(
-        YearMonth.from(fraOgMed) ?: error("Periode eller fraOgMed må ha verdi!"),
-        YearMonth.from(tilOgMed) ?: error("Periode eller fraOgMed må ha verdi!"),
-    ),
-    val studiebelastning: Int,
-    val maksSatsForSkoleår: Int,
-)
-
-data class SkolepengerUtgiftDto(
-    val utgiftsdato: LocalDate,
-    val utgifter: Int,
-    val stønad: Int,
-)
-
-enum class SkolepengerStudietype {
-    HØGSKOLE_UNIVERSITET,
-    VIDEREGÅENDE,
-}
 
 data class TilbakekrevingDto(
     val tilbakekrevingsvalg: Tilbakekrevingsvalg,
@@ -204,12 +111,7 @@ data class TilbakekrevingDto(
 )
 
 data class PeriodeMedBeløpDto(
-    @Deprecated("Bruk periode!", ReplaceWith("periode.fom")) val fraOgMed: LocalDate? = null,
-    @Deprecated("Bruk periode!", ReplaceWith("periode.tom")) val tilOgMed: LocalDate? = null,
-    val periode: Månedsperiode = Månedsperiode(
-        YearMonth.from(fraOgMed) ?: error("Periode eller fraOgMed må ha verdi!"),
-        YearMonth.from(tilOgMed) ?: error("Periode eller fraOgMed må ha verdi!"),
-    ),
+    val periode: Månedsperiode,
     val beløp: Int,
 )
 

@@ -3,11 +3,11 @@ package no.nav.dagpenger.iverksett.api
 import com.fasterxml.jackson.module.kotlin.readValue
 import no.nav.dagpenger.iverksett.ResourceLoaderTestUtil
 import no.nav.dagpenger.iverksett.ServerTest
-import no.nav.dagpenger.iverksett.api.domene.IverksettData
+import no.nav.dagpenger.iverksett.api.domene.IverksettOvergangsstønad
 import no.nav.dagpenger.iverksett.infrastruktur.repository.findByIdOrThrow
 import no.nav.dagpenger.iverksett.infrastruktur.transformer.toDomain
 import no.nav.dagpenger.iverksett.infrastruktur.util.ObjectMapperProvider.objectMapper
-import no.nav.dagpenger.iverksett.kontrakter.iverksett.IverksettDto
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.IverksettOvergangsstønadDto
 import no.nav.dagpenger.iverksett.lagIverksett
 import no.nav.dagpenger.iverksett.util.opprettBrev
 import org.assertj.core.api.Assertions.assertThat
@@ -22,28 +22,7 @@ class IverksettingRepositoryTest : ServerTest() {
     @Test
     fun `lagre og hent iverksett overgangsstønad, forvent likhet`() {
         val json: String = ResourceLoaderTestUtil.readResource("json/IverksettDtoEksempel.json")
-        val iverksettData: IverksettData = objectMapper.readValue<IverksettDto>(json).toDomain()
-        val iverksett = iverksettingRepository.insert(lagIverksett(iverksettData, opprettBrev()))
-
-        val iverksettResultat = iverksettingRepository.findByIdOrThrow(iverksett.behandlingId)
-        assertThat(iverksett).usingRecursiveComparison().isEqualTo(iverksettResultat)
-    }
-
-    @Test
-    fun `lagre og hent iverksett barnetilsyn, forvent likhet`() {
-        val json: String = ResourceLoaderTestUtil.readResource("json/IverksettBarnetilsynDtoEksempel.json")
-        val iverksettData: IverksettData = objectMapper.readValue<IverksettDto>(json).toDomain()
-        val iverksett = iverksettingRepository.insert(lagIverksett(iverksettData, opprettBrev()))
-
-        val iverksettResultat = iverksettingRepository.findByIdOrThrow(iverksett.behandlingId)
-
-        assertThat(iverksett).usingRecursiveComparison().isEqualTo(iverksettResultat)
-    }
-
-    @Test
-    fun `lagre og hent iverksett skolepenger, forvent likhet`() {
-        val json: String = ResourceLoaderTestUtil.readResource("json/IverksettSkolepengerDtoEksempel.json")
-        val iverksettData: IverksettData = objectMapper.readValue<IverksettDto>(json).toDomain()
+        val iverksettData: IverksettOvergangsstønad = objectMapper.readValue<IverksettOvergangsstønadDto>(json).toDomain()
         val iverksett = iverksettingRepository.insert(lagIverksett(iverksettData, opprettBrev()))
 
         val iverksettResultat = iverksettingRepository.findByIdOrThrow(iverksett.behandlingId)
@@ -53,7 +32,7 @@ class IverksettingRepositoryTest : ServerTest() {
     @Test
     fun `lagre og hent iverksett av eksternId, forvent likhet`() {
         val json: String = ResourceLoaderTestUtil.readResource("json/IverksettDtoEksempel.json")
-        val iverksettData: IverksettData = objectMapper.readValue<IverksettDto>(json).toDomain()
+        val iverksettData: IverksettOvergangsstønad = objectMapper.readValue<IverksettOvergangsstønadDto>(json).toDomain()
         val iverksett = iverksettingRepository.insert(lagIverksett(iverksettData, opprettBrev()))
 
         val iverksettResultat = iverksettingRepository.findByEksternId(iverksett.eksternId)

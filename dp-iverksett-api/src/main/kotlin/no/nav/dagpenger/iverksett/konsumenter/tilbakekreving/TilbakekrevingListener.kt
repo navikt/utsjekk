@@ -2,7 +2,7 @@ package no.nav.dagpenger.iverksett.konsumenter.tilbakekreving
 
 import com.fasterxml.jackson.module.kotlin.readValue
 import no.nav.dagpenger.iverksett.api.IverksettingRepository
-import no.nav.dagpenger.iverksett.api.domene.IverksettData
+import no.nav.dagpenger.iverksett.api.domene.IverksettOvergangsstønad
 import no.nav.dagpenger.iverksett.infrastruktur.FamilieIntegrasjonerClient
 import no.nav.dagpenger.iverksett.kontrakter.objectMapper
 import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.HentFagsystemsbehandlingRequest
@@ -81,7 +81,7 @@ class TilbakekrevingListener(
         ).contains(this.ytelsestype)
     }
 
-    private fun sjekkFagsakIdKonsistens(iverksett: IverksettData, request: HentFagsystemsbehandlingRequest) {
+    private fun sjekkFagsakIdKonsistens(iverksett: IverksettOvergangsstønad, request: HentFagsystemsbehandlingRequest) {
         if (!iverksett.fagsak.eksternId.equals(request.eksternFagsakId.toLong())) {
             error(
                 "Inkonsistens. Ekstern fagsakID mellom iverksatt behandling (ekstern fagsakID=" +

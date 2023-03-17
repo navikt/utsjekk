@@ -3,10 +3,7 @@ package no.nav.dagpenger.iverksett.infrastruktur.configuration
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.fasterxml.jackson.module.kotlin.treeToValue
 import no.nav.dagpenger.iverksett.api.domene.Fagsakdetaljer
-import no.nav.dagpenger.iverksett.api.domene.IverksettBarnetilsyn
-import no.nav.dagpenger.iverksett.api.domene.IverksettData
 import no.nav.dagpenger.iverksett.api.domene.IverksettOvergangsstønad
-import no.nav.dagpenger.iverksett.api.domene.IverksettSkolepenger
 import no.nav.dagpenger.iverksett.api.domene.OppdragResultat
 import no.nav.dagpenger.iverksett.api.domene.TilbakekrevingResultat
 import no.nav.dagpenger.iverksett.api.domene.TilkjentYtelse
@@ -72,23 +69,6 @@ class DatabaseConfiguration : AbstractJdbcConfiguration() {
                 type = "json"
                 value = objectMapper.writeValueAsString(data)
             }
-    }
-
-    @WritingConverter
-    class IverksettDataTilPGobjectConverter : DomainTilPGobjectConverter<IverksettData>()
-
-    @ReadingConverter
-    class PGobjectConverterTilIverksettData : Converter<PGobject, IverksettData> {
-
-        override fun convert(pGobject: PGobject): IverksettData {
-            val fagsakNode = objectMapper.readTree(pGobject.value).findValue("fagsak")
-            val fagsakdetaljer: Fagsakdetaljer = objectMapper.treeToValue(fagsakNode)
-            return when (fagsakdetaljer.stønadstype) {
-                StønadType.BARNETILSYN -> objectMapper.readValue(pGobject.value, IverksettBarnetilsyn::class.java)
-                StønadType.OVERGANGSSTØNAD -> objectMapper.readValue(pGobject.value, IverksettOvergangsstønad::class.java)
-                StønadType.SKOLEPENGER -> objectMapper.readValue(pGobject.value, IverksettSkolepenger::class.java)
-            }
-        }
     }
 
     @WritingConverter
@@ -161,6 +141,23 @@ class DatabaseConfiguration : AbstractJdbcConfiguration() {
 
         override fun convert(pgObject: PGobject): Brevmottakere {
             return objectMapper.readValue(pgObject.value!!)
+        }
+    }
+
+    @WritingConverter
+    class IverksettDataTilPGobjectConverter : DomainTilPGobjectConverter<IverksettOvergangsstønad>()
+
+    @ReadingConverter
+    class PGobjectConverterTilIverksettData : Converter<PGobject, IverksettOvergangsstønad> {
+
+        override fun convert(pGobject: PGobject): IverksettOvergangsstønad {
+            val fagsakNode = no.nav.familie.kontrakter.felles.objectMapper.readTree(pGobject.value).findValue("fagsak")
+            val fagsakdetaljer: Fagsakdetaljer = no.nav.familie.kontrakter.felles.objectMapper.treeToValue(fagsakNode)
+            return when (fagsakdetaljer.stønadstype) {
+                StønadType.BARNETILSYN -> no.nav.familie.kontrakter.felles.objectMapper.readValue(pGobject.value, IverksettOvergangsstønad::class.java)
+                StønadType.OVERGANGSSTØNAD -> no.nav.familie.kontrakter.felles.objectMapper.readValue(pGobject.value, IverksettOvergangsstønad::class.java)
+                StønadType.SKOLEPENGER -> no.nav.familie.kontrakter.felles.objectMapper.readValue(pGobject.value, IverksettOvergangsstønad::class.java)
+            }
         }
     }
 }

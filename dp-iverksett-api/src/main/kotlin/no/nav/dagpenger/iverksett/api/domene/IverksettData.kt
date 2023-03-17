@@ -1,10 +1,5 @@
 package no.nav.dagpenger.iverksett.api.domene
 
-import com.fasterxml.jackson.core.JsonParser
-import com.fasterxml.jackson.databind.DeserializationContext
-import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer
 import no.nav.dagpenger.iverksett.konsumenter.brev.domain.Brevmottakere
 import no.nav.dagpenger.iverksett.kontrakter.felles.AvslagÅrsak
 import no.nav.dagpenger.iverksett.kontrakter.felles.BehandlingType
@@ -22,11 +17,6 @@ import no.nav.dagpenger.iverksett.kontrakter.felles.VilkårType
 import no.nav.dagpenger.iverksett.kontrakter.felles.Vilkårsresultat
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.AdressebeskyttelseGradering
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.AktivitetType
-import no.nav.dagpenger.iverksett.kontrakter.iverksett.IverksettBarnetilsynDto
-import no.nav.dagpenger.iverksett.kontrakter.iverksett.IverksettDto
-import no.nav.dagpenger.iverksett.kontrakter.iverksett.IverksettOvergangsstønadDto
-import no.nav.dagpenger.iverksett.kontrakter.iverksett.IverksettSkolepengerDto
-import no.nav.dagpenger.iverksett.kontrakter.iverksett.SkolepengerStudietype
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.VedtaksperiodeType
 import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.Tilbakekrevingsvalg
 import java.math.BigDecimal
@@ -34,12 +24,12 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.UUID
 
-sealed class IverksettData {
-
-    abstract val fagsak: Fagsakdetaljer
-    abstract val behandling: Behandlingsdetaljer
-    abstract val søker: Søker
-    abstract val vedtak: Vedtaksdetaljer
+data class IverksettOvergangsstønad(
+    val fagsak: Fagsakdetaljer,
+    val behandling: Behandlingsdetaljer,
+    val søker: Søker,
+    val vedtak: VedtaksdetaljerOvergangsstønad,
+) {
 
     fun erGOmregning() = behandling.behandlingÅrsak == BehandlingÅrsak.G_OMREGNING
 
@@ -51,41 +41,7 @@ sealed class IverksettData {
 
     fun skalIkkeSendeBrev() = erMigrering() || erGOmregning() || erKorrigeringUtenBrev() || erSatsendring()
 
-    abstract fun medNyTilbakekreving(nyTilbakekreving: Tilbakekrevingsdetaljer?): IverksettData
-}
-
-data class IverksettOvergangsstønad(
-    override val fagsak: Fagsakdetaljer,
-    override val behandling: Behandlingsdetaljer,
-    override val søker: Søker,
-    override val vedtak: VedtaksdetaljerOvergangsstønad,
-) : IverksettData() {
-
-    override fun medNyTilbakekreving(nyTilbakekreving: Tilbakekrevingsdetaljer?): IverksettOvergangsstønad {
-        return this.copy(vedtak = this.vedtak.copy(tilbakekreving = nyTilbakekreving))
-    }
-}
-
-data class IverksettBarnetilsyn(
-    override val fagsak: Fagsakdetaljer,
-    override val behandling: Behandlingsdetaljer,
-    override val søker: Søker,
-    override val vedtak: VedtaksdetaljerBarnetilsyn,
-) : IverksettData() {
-
-    override fun medNyTilbakekreving(nyTilbakekreving: Tilbakekrevingsdetaljer?): IverksettBarnetilsyn {
-        return this.copy(vedtak = this.vedtak.copy(tilbakekreving = nyTilbakekreving))
-    }
-}
-
-data class IverksettSkolepenger(
-    override val fagsak: Fagsakdetaljer,
-    override val behandling: Behandlingsdetaljer,
-    override val søker: Søker,
-    override val vedtak: VedtaksdetaljerSkolepenger,
-) : IverksettData() {
-
-    override fun medNyTilbakekreving(nyTilbakekreving: Tilbakekrevingsdetaljer?): IverksettSkolepenger {
+    fun medNyTilbakekreving(nyTilbakekreving: Tilbakekrevingsdetaljer?): IverksettOvergangsstønad {
         return this.copy(vedtak = this.vedtak.copy(tilbakekreving = nyTilbakekreving))
     }
 }
@@ -126,29 +82,6 @@ data class VedtaksperiodeBarnetilsyn(
     val utgifter: Int,
     val antallBarn: Int,
 ) : Vedtaksperiode()
-
-data class VedtaksperiodeSkolepenger(
-    val perioder: List<DelårsperiodeSkoleårSkolepenger> = listOf(),
-    val utgiftsperioder: List<SkolepengerUtgift> = listOf(),
-) : Vedtaksperiode()
-
-data class DelårsperiodeSkoleårSkolepenger(
-    val studietype: SkolepengerStudietype,
-    @Deprecated("Bruk periode.", ReplaceWith("periode.fom")) val fraOgMed: LocalDate? = null,
-    @Deprecated("Bruk periode.", ReplaceWith("periode.tom")) val tilOgMed: LocalDate? = null,
-    val periode: Månedsperiode = Månedsperiode(
-        fraOgMed ?: error("Minst en av fraOgMed og periode.fom må ha verdi."),
-        tilOgMed ?: error("Minst en av tilOgMed og periode.tom må ha verdi."),
-    ),
-    val studiebelastning: Int,
-    val makssatsForSkoleår: Int,
-)
-
-data class SkolepengerUtgift(
-    val utgiftsdato: LocalDate,
-    val utgifter: Int,
-    val stønad: Int,
-)
 
 data class PeriodeMedBeløp(
     @Deprecated("Bruk periode.", ReplaceWith("periode.fom")) val fraOgMed: LocalDate? = null,
@@ -202,20 +135,6 @@ data class VedtaksdetaljerBarnetilsyn(
     val tilleggsstønad: List<PeriodeMedBeløp> = listOf(),
 ) : Vedtaksdetaljer()
 
-data class VedtaksdetaljerSkolepenger(
-    override val vedtaksresultat: Vedtaksresultat,
-    override val vedtakstidspunkt: LocalDateTime,
-    override val opphørÅrsak: OpphørÅrsak?,
-    override val saksbehandlerId: String,
-    override val beslutterId: String,
-    override val tilkjentYtelse: TilkjentYtelse?,
-    override val tilbakekreving: Tilbakekrevingsdetaljer? = null,
-    override val brevmottakere: Brevmottakere? = null,
-    override val vedtaksperioder: List<VedtaksperiodeSkolepenger> = listOf(),
-    override val avslagÅrsak: AvslagÅrsak? = null,
-    val begrunnelse: String? = null,
-) : Vedtaksdetaljer()
-
 data class Behandlingsdetaljer(
     val forrigeBehandlingId: UUID? = null,
     val behandlingId: UUID,
@@ -261,42 +180,3 @@ data class TilbakekrevingMedVarsel(
     val sumFeilutbetaling: BigDecimal?,
     val perioder: List<Datoperiode>?,
 )
-
-private class IverksettDeserializer : StdDeserializer<IverksettData>(IverksettData::class.java) {
-
-    override fun deserialize(p: JsonParser, ctxt: DeserializationContext?): IverksettData {
-        val mapper = p.codec as ObjectMapper
-        val node: JsonNode = mapper.readTree(p)
-
-        val stønadstype = node.get("fagsak").get("stønadstype").asText()
-        return when (StønadType.valueOf(stønadstype)) {
-            StønadType.OVERGANGSSTØNAD -> mapper.treeToValue(node, IverksettOvergangsstønad::class.java)
-            StønadType.BARNETILSYN -> mapper.treeToValue(node, IverksettBarnetilsyn::class.java)
-            StønadType.SKOLEPENGER -> mapper.treeToValue(node, IverksettSkolepenger::class.java)
-            else -> error("Har ikke mapping for $stønadstype")
-        }
-    }
-}
-
-class IverksettDtoDeserializer : StdDeserializer<IverksettDto>(IverksettDto::class.java) {
-
-    override fun deserialize(p: JsonParser, ctxt: DeserializationContext?): IverksettDto {
-        val mapper = p.codec as ObjectMapper
-        val node: JsonNode = mapper.readTree(p)
-
-        val stønadstype = node.get("fagsak").get("stønadstype").asText()
-        return when (StønadType.valueOf(stønadstype)) {
-            StønadType.OVERGANGSSTØNAD -> mapper.treeToValue(node, IverksettOvergangsstønadDto::class.java)
-            StønadType.BARNETILSYN -> mapper.treeToValue(node, IverksettBarnetilsynDto::class.java)
-            StønadType.SKOLEPENGER -> mapper.treeToValue(node, IverksettSkolepengerDto::class.java)
-            else -> error("Har ikke mapping for $stønadstype")
-        }
-    }
-}
-
-class IverksettModule : com.fasterxml.jackson.databind.module.SimpleModule() {
-    init {
-        addDeserializer(IverksettDto::class.java, IverksettDtoDeserializer())
-        addDeserializer(IverksettData::class.java, IverksettDeserializer())
-    }
-}

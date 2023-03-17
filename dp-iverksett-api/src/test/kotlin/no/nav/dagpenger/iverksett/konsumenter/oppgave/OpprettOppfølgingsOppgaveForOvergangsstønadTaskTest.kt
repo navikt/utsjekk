@@ -6,7 +6,6 @@ import io.mockk.verify
 import no.nav.dagpenger.iverksett.api.IverksettingRepository
 import no.nav.dagpenger.iverksett.infrastruktur.repository.findByIdOrThrow
 import no.nav.dagpenger.iverksett.lagIverksett
-import no.nav.dagpenger.iverksett.util.opprettIverksettBarnetilsyn
 import no.nav.dagpenger.iverksett.util.opprettIverksettOvergangsstønad
 import no.nav.familie.prosessering.domene.Task
 import no.nav.familie.prosessering.internal.TaskService
@@ -35,15 +34,6 @@ internal class OpprettOppfølgingsOppgaveForOvergangsstønadTaskTest {
 
         verify(exactly = 1) { oppgaveService.skalOppretteVurderHenvendelseOppgave(any()) }
         verify(exactly = 1) { oppgaveService.opprettVurderHenvendelseOppgave(any()) }
-    }
-
-    @Test
-    internal fun `skal ikke opprette oppfølgningsoppgave for barnetilsyn`() {
-        every { iverksettingRepository.findByIdOrThrow(any()) } returns lagIverksett(opprettIverksettBarnetilsyn())
-
-        taskStegService.doTask(opprettTask())
-
-        verify(exactly = 0) { oppgaveService.skalOppretteVurderHenvendelseOppgave(any()) }
     }
 
     @Test

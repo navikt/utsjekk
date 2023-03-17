@@ -30,7 +30,7 @@ import no.nav.dagpenger.iverksett.kontrakter.dvh.ÅrsakRevurdering
 import no.nav.dagpenger.iverksett.kontrakter.felles.Opplysningskilde
 import no.nav.dagpenger.iverksett.kontrakter.felles.Revurderingsårsak
 import no.nav.dagpenger.iverksett.kontrakter.felles.VilkårType
-import no.nav.dagpenger.iverksett.kontrakter.iverksett.IverksettDto
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.IverksettOvergangsstønadDto
 import no.nav.dagpenger.iverksett.util.opprettIverksettOvergangsstønad
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -67,7 +67,7 @@ class VedtakstatistikkServiceTest {
     internal fun `map fra iverksettDtoEksempel til behandlingDVH`() {
         val iverksettDtoJson: String = ResourceLoaderTestUtil.readResource("json/IverksettDtoEksempel.json")
 
-        val iverksettDto = objectMapper.readValue<IverksettDto>(iverksettDtoJson)
+        val iverksettDto = objectMapper.readValue<IverksettOvergangsstønadDto>(iverksettDtoJson)
         val iverksett = iverksettDto.toDomain()
 
         val vedtakOvergangsstønadDVH = slot<VedtakOvergangsstønadDVH>()

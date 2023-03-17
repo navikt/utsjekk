@@ -3,6 +3,7 @@ package no.nav.dagpenger.iverksett.cucumber.domeneparser
 import io.cucumber.datatable.DataTable
 import no.nav.dagpenger.iverksett.cucumber.domeneparser.IdTIlUUIDHolder.behandlingIdTilUUID
 import no.nav.dagpenger.iverksett.cucumber.steps.TilkjentYtelseHolder
+import no.nav.dagpenger.iverksett.kontrakter.felles.Månedsperiode
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.AndelTilkjentYtelseDto
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.TilkjentYtelseDto
 import no.nav.dagpenger.iverksett.kontrakter.oppdrag.Utbetalingsoppdrag.KodeEndring
@@ -38,7 +39,7 @@ object TilkjentYtelseParser {
             }
             val startdato = (
                 startdatoer[behandlingId]
-                    ?: andeler.minOfOrNull { it.periode.fomDato }
+                    ?: andeler.minOfOrNull { it.periode.fomDato() }
                     ?: error("Mangler startdato eller andel for behandling=$behandlingIdInt")
                 )
             TilkjentYtelseHolder(
@@ -116,8 +117,10 @@ object TilkjentYtelseParser {
         inntekt = parseValgfriInt(TilkjentYtelseDomenebegrep.INNTEKT, rad) ?: 0,
         inntektsreduksjon = parseValgfriInt(TilkjentYtelseDomenebegrep.INNTEKTSREDUKSJON, rad) ?: 0,
         samordningsfradrag = parseValgfriInt(TilkjentYtelseDomenebegrep.INNTEKT, rad) ?: 0,
-        fraOgMed = parseÅrMåned(Domenebegrep.FRA_DATO, rad).atDay(1),
-        tilOgMed = parseÅrMåned(Domenebegrep.TIL_DATO, rad).atEndOfMonth(),
+        periode = Månedsperiode(
+            parseÅrMåned(Domenebegrep.FRA_DATO, rad).atDay(1),
+            parseÅrMåned(Domenebegrep.TIL_DATO, rad).atEndOfMonth(),
+        ),
         kildeBehandlingId = null, // ikke i bruk i iverksett
     )
 

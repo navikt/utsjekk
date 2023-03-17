@@ -40,8 +40,7 @@ fun lagAndelTilkjentYtelseDto(
 ) =
     AndelTilkjentYtelseDto(
         beløp = beløp,
-        fraOgMed = fraOgMed,
-        tilOgMed = tilOgMed,
+        periode = Månedsperiode(fraOgMed, tilOgMed),
         inntekt = inntekt,
         samordningsfradrag = samordningsfradrag,
         inntektsreduksjon = inntektsreduksjon,

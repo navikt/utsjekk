@@ -6,7 +6,6 @@ import no.nav.dagpenger.iverksett.api.domene.Behandlingsdetaljer
 import no.nav.dagpenger.iverksett.api.domene.Brev
 import no.nav.dagpenger.iverksett.api.domene.Delvilkårsvurdering
 import no.nav.dagpenger.iverksett.api.domene.Fagsakdetaljer
-import no.nav.dagpenger.iverksett.api.domene.IverksettBarnetilsyn
 import no.nav.dagpenger.iverksett.api.domene.IverksettOvergangsstønad
 import no.nav.dagpenger.iverksett.api.domene.IverksettResultat
 import no.nav.dagpenger.iverksett.api.domene.OppdragResultat
@@ -82,7 +81,7 @@ fun opprettIverksettDto(
     )
     val tilkjentYtelse = TilkjentYtelseDto(
         andelerTilkjentYtelse = listOf(andelTilkjentYtelse),
-        startdato = andelTilkjentYtelse.periode.fomDato,
+        startdato = andelTilkjentYtelse.periode.fomDato(),
     )
 
     return IverksettOvergangsstønadDto(
@@ -289,22 +288,6 @@ private fun lagTilkjentYtelse(
         status = TilkjentYtelseStatus.AKTIV,
         andelerTilkjentYtelse = andeler,
         startmåned = startmåned,
-    )
-
-fun opprettIverksettBarnetilsyn(
-    behandlingsdetaljer: Behandlingsdetaljer = behandlingsdetaljer(),
-    vedtaksdetaljer: VedtaksdetaljerBarnetilsyn = vedtaksdetaljerBarnetilsyn(),
-) =
-    IverksettBarnetilsyn(
-        fagsak = Fagsakdetaljer(fagsakId = UUID.randomUUID(), eksternId = 1L, stønadstype = StønadType.OVERGANGSSTØNAD),
-        behandling = behandlingsdetaljer,
-        søker = Søker(
-            personIdent = "12345678910",
-            barn = emptyList(),
-            tilhørendeEnhet = "4489",
-            adressebeskyttelse = AdressebeskyttelseGradering.UGRADERT,
-        ),
-        vedtak = vedtaksdetaljer,
     )
 
 fun opprettIverksettOvergangsstønad(

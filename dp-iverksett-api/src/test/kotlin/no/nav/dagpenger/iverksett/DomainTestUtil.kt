@@ -2,7 +2,6 @@ package no.nav.dagpenger.iverksett
 
 import no.nav.dagpenger.iverksett.api.domene.Brev
 import no.nav.dagpenger.iverksett.api.domene.Iverksett
-import no.nav.dagpenger.iverksett.api.domene.IverksettData
 import no.nav.dagpenger.iverksett.api.domene.IverksettOvergangsstønad
 import no.nav.dagpenger.iverksett.api.domene.Tilbakekrevingsdetaljer
 import no.nav.dagpenger.iverksett.api.domene.VedtaksperiodeOvergangsstønad
@@ -44,7 +43,7 @@ fun simuleringDto(
     val tilkjentYtelseMedMetaData = TilkjentYtelseMedMetadataDto(
         tilkjentYtelse = TilkjentYtelseDto(
             andelerTilkjentYtelse = andeler,
-            startdato = andeler.minOfOrNull { it.periode.fomDato } ?: LocalDate.now(),
+            startdato = andeler.minOfOrNull { it.periode.fomDato() } ?: LocalDate.now(),
         ),
         saksbehandlerId = "saksbehandlerId",
         eksternBehandlingId = 1,
@@ -202,7 +201,7 @@ fun lagIverksettData(
     )
 }
 
-fun lagIverksett(iverksettData: IverksettData, brev: Brev? = null) = Iverksett(
+fun lagIverksett(iverksettData: IverksettOvergangsstønad, brev: Brev? = null) = Iverksett(
     iverksettData.behandling.behandlingId,
     iverksettData,
     iverksettData.behandling.eksternId,

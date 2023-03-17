@@ -1,6 +1,6 @@
 package no.nav.dagpenger.iverksett.konsumenter.tilbakekreving
 
-import no.nav.dagpenger.iverksett.api.domene.IverksettData
+import no.nav.dagpenger.iverksett.api.domene.IverksettOvergangsstønad
 import no.nav.dagpenger.iverksett.api.domene.Tilbakekrevingsdetaljer
 import no.nav.dagpenger.iverksett.kontrakter.felles.BehandlingÅrsak
 import no.nav.dagpenger.iverksett.kontrakter.felles.Enhet
@@ -27,7 +27,7 @@ fun Tilbakekrevingsdetaljer?.validerTilbakekreving(): Boolean {
     return true
 }
 
-fun IverksettData.tilOpprettTilbakekrevingRequest(enhet: Enhet) =
+fun IverksettOvergangsstønad.tilOpprettTilbakekrevingRequest(enhet: Enhet) =
     OpprettTilbakekrevingRequest(
         fagsystem = Fagsystem.EF,
         ytelsestype = Ytelsestype.valueOf(this.fagsak.stønadstype.name),
@@ -46,7 +46,7 @@ fun IverksettData.tilOpprettTilbakekrevingRequest(enhet: Enhet) =
         faktainfo = lagFaktainfo(this),
     )
 
-fun IverksettData.tilFagsystembehandling(enhet: Enhet) =
+fun IverksettOvergangsstønad.tilFagsystembehandling(enhet: Enhet) =
     HentFagsystemsbehandlingRespons(
         hentFagsystemsbehandling =
         HentFagsystemsbehandling(
@@ -77,7 +77,7 @@ private fun lagVarsel(tilbakekrevingsdetaljer: Tilbakekrevingsdetaljer): Varsel?
     }
 }
 
-private fun lagFaktainfo(iverksett: IverksettData): Faktainfo {
+private fun lagFaktainfo(iverksett: IverksettOvergangsstønad): Faktainfo {
     return Faktainfo(
         revurderingsårsak = iverksett.behandling.behandlingÅrsak.visningsTekst(),
         revurderingsresultat = iverksett.vedtak.vedtaksresultat.visningsnavn,

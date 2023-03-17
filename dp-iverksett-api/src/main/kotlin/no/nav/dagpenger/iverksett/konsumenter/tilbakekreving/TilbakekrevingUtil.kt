@@ -1,6 +1,6 @@
 package no.nav.dagpenger.iverksett.konsumenter.tilbakekreving
 
-import no.nav.dagpenger.iverksett.api.domene.IverksettData
+import no.nav.dagpenger.iverksett.api.domene.IverksettOvergangsstønad
 import no.nav.dagpenger.iverksett.api.domene.Tilbakekrevingsdetaljer
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.simulering.hentSammenhengendePerioderMedFeilutbetaling
 import no.nav.dagpenger.iverksett.kontrakter.simulering.BeriketSimuleringsresultat
@@ -14,7 +14,7 @@ private val TILBAKEKREVING_UTEN_VARSEL =
         tilbakekrevingMedVarsel = null,
     )
 
-fun IverksettData.oppfriskTilbakekreving(beriketSimuleringsresultat: BeriketSimuleringsresultat): IverksettData {
+fun IverksettOvergangsstønad.oppfriskTilbakekreving(beriketSimuleringsresultat: BeriketSimuleringsresultat): IverksettOvergangsstønad {
     val tilbakekreving = this.vedtak.tilbakekreving
     val simuleringsoppsummering = beriketSimuleringsresultat.oppsummering
 

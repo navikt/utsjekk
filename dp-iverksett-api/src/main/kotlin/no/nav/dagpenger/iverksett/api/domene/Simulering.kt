@@ -4,7 +4,7 @@ import java.util.UUID
 
 data class Simulering(val nyTilkjentYtelseMedMetaData: TilkjentYtelseMedMetaData, val forrigeBehandlingId: UUID?)
 
-fun IverksettData.tilSimulering() = Simulering(
+fun IverksettOvergangsstønad.tilSimulering() = Simulering(
     nyTilkjentYtelseMedMetaData = TilkjentYtelseMedMetaData(
         tilkjentYtelse = this.vedtak.tilkjentYtelse!!,
         saksbehandlerId = this.vedtak.saksbehandlerId,

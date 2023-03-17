@@ -52,6 +52,7 @@
     }
   },
   "søker": {
+    "personIdent": "12345678901",
     "barn": [
       {
         "personIdent": "1234567910",
@@ -59,46 +60,41 @@
       }
     ],
     "tilhørendeEnhet": "4489",
-    "adressebeskyttelse": "STRENGT_FORTROLIG",
-    "personIdent": "12345678901"
+    "adressebeskyttelse": "STRENGT_FORTROLIG"
   },
   "vedtak": {
     "resultat": "AVSLÅTT",
-    "opphørÅrsak": "PERIODE_UTLØPT",
     "vedtakstidspunkt": "2021-05-10T01:00:00",
-    "vedtaksperioder": [
-      {
-        "fraOgMed": "2021-06-10",
-        "tilOgMed": "2021-06-10",
-        "aktivitet": "BARNET_ER_SYKT",
-        "periodeType": "HOVEDPERIODE",
-        "periode": {
-          "fom": "2021-06",
-          "tom": "2021-06"
-        }
-      }
-    ],
+    "opphørÅrsak": "PERIODE_UTLØPT",
     "saksbehandlerId": "A123456",
     "beslutterId": "B123456",
     "tilkjentYtelse": {
       "andelerTilkjentYtelse": [
         {
-          "kildeBehandlingId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-          "fraOgMed": "2021-05-10",
-          "tilOgMed": "2021-05-10",
+          "beløp": 0,
+          "inntekt": 0,
+          "inntektsreduksjon": 0,
+          "samordningsfradrag": 0,
           "periode": {
             "fom": "2021-05",
             "tom": "2021-05"
           },
-          "beløp": 0,
-          "inntekt": 0,
-          "samordningsfradrag": 0,
-          "inntektsreduksjon": 0
+          "kildeBehandlingId": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
         }
       ],
       "startdato": null,
       "startmåned": "2020-03"
     },
+    "vedtaksperioder": [
+      {
+        "periode": {
+          "fom": "2021-06",
+          "tom": "2021-06"
+        },
+        "aktivitet": "BARNET_ER_SYKT",
+        "periodeType": "HOVEDPERIODE"
+      }
+    ],
     "tilbakekreving": {
       "tilbakekrevingsvalg": "OPPRETT_TILBAKEKREVING_MED_VARSEL",
       "tilbakekrevingMedVarsel": {
@@ -114,6 +110,6 @@
       }
     },
     "brevmottakere": [],
-    "avslagÅrsak":null
+    "avslagÅrsak": null
   }
 }
