@@ -27,7 +27,7 @@ import no.nav.dagpenger.iverksett.kontrakter.dvh.Vilkårsresultat as Vilkårsres
 class FellesTilEksterneKontrakterEnumTest {
 
     @Test
-    fun `for alle eksterne kontrakter enums, forvent fullstendig mapping fra familie kontrakter enums`() {
+    fun `for alle eksterne kontrakter enums, forvent fullstendig mapping fra dagpenge-kontrakter-enums`() {
         Vedtaksresultat.values().forEach { Vedtak.valueOf(it.name) }
         BehandlingÅrsak.values().forEach { BehandlingÅrsakEkstern.valueOf(it.name) }
         BehandlingType.values().forEach { BehandlingTypeEkstern.valueOf(it.name) }

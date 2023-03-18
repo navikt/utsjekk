@@ -9,7 +9,7 @@ import no.nav.dagpenger.iverksett.konsumenter.tilbakekreving.tilOpprettTilbakekr
 import no.nav.dagpenger.iverksett.kontrakter.felles.Enhet
 import no.nav.dagpenger.iverksett.kontrakter.oppdrag.OppdragStatus
 import no.nav.dagpenger.iverksett.util.IverksettResultatMockBuilder
-import no.nav.dagpenger.iverksett.util.opprettIverksettOvergangsstønad
+import no.nav.dagpenger.iverksett.util.opprettIverksettDagpenger
 import no.nav.dagpenger.iverksett.util.opprettTilkjentYtelse
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
@@ -103,7 +103,7 @@ internal class HentIverksettResultatServiceTest : ServerTest() {
 
     @Test
     fun `lagre tilbakekrevingsresultat, hent IverksettResultat med tilbakekrevingsresultat`() {
-        val iverksett = opprettIverksettOvergangsstønad(behandlingId)
+        val iverksett = opprettIverksettDagpenger(behandlingId)
         val opprettTilbakekrevingRequest = iverksett
             .tilOpprettTilbakekrevingRequest(Enhet("1", "Enhet"))
 
@@ -123,7 +123,7 @@ internal class HentIverksettResultatServiceTest : ServerTest() {
     @Test
     fun `overskriv tomt (null) tilbakekrevingsresultat`() {
         val id = UUID.randomUUID()
-        val iverksett = opprettIverksettOvergangsstønad(id)
+        val iverksett = opprettIverksettDagpenger(id)
         val opprettTilbakekrevingRequest = iverksett
             .tilOpprettTilbakekrevingRequest(Enhet("1", "Enhet"))
 

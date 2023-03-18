@@ -11,7 +11,7 @@ Egenskap: Sekvens
       | 3            | 08.2021   |
       | 4            | 08.2021   |
 
-    Og følgende tilkjente ytelser for Overgangsstønad
+    Og følgende tilkjente ytelser for Dagpenger
       | BehandlingId | Fra dato | Til dato | Beløp |
       | 1            | 08.2021  | 11.2021  | 700   |
       | 1            | 12.2021  | 03.2022  | 900   |
@@ -24,11 +24,11 @@ Egenskap: Sekvens
       | 3            | 02.2022  | 04.2022  | 1200  |
 
 
-    Og følgende tilkjente ytelser uten andel for Overgangsstønad
+    Og følgende tilkjente ytelser uten andel for Dagpenger
       | BehandlingId |
       | 4            |
 
-    Og følgende tilkjente ytelser for Overgangsstønad
+    Og følgende tilkjente ytelser for Dagpenger
       | BehandlingId | Fra dato | Til dato | Beløp |
       | 5            | 07.2021  | 01.2022  | 900   |
 

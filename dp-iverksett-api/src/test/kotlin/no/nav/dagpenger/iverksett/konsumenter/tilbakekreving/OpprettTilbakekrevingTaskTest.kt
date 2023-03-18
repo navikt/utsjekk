@@ -19,7 +19,7 @@ import no.nav.dagpenger.iverksett.kontrakter.felles.Enhet
 import no.nav.dagpenger.iverksett.kontrakter.simulering.BeriketSimuleringsresultat
 import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.Tilbakekrevingsvalg
 import no.nav.dagpenger.iverksett.lagIverksett
-import no.nav.dagpenger.iverksett.util.opprettIverksettOvergangsstønad
+import no.nav.dagpenger.iverksett.util.opprettIverksettDagpenger
 import no.nav.dagpenger.iverksett.util.opprettTilbakekrevingMedVarsel
 import no.nav.dagpenger.iverksett.util.opprettTilbakekrevingsdetaljer
 import no.nav.familie.prosessering.domene.Task
@@ -59,7 +59,7 @@ internal class OpprettTilbakekrevingTaskTest {
     fun `uendret og ingen feilutbetaling - ikke opprett tilbakekreving`() {
         val tilbakekreving = null
         val behandlingsId = UUID.randomUUID()
-        val iverksett = opprettIverksettOvergangsstønad(
+        val iverksett = opprettIverksettDagpenger(
             behandlingsId,
             tilbakekreving = tilbakekreving,
             forrigeBehandlingId = UUID.randomUUID(),
@@ -76,7 +76,7 @@ internal class OpprettTilbakekrevingTaskTest {
     fun `Ingen tilbakekreving under saksbehandling - vi oppretter heller ingen ny nå`() {
         val behandlingsId = UUID.randomUUID()
         val tilbakekreving = null
-        val iverksett = opprettIverksettOvergangsstønad(
+        val iverksett = opprettIverksettDagpenger(
             behandlingsId,
             tilbakekreving = tilbakekreving,
             forrigeBehandlingId = UUID.randomUUID(),
@@ -95,7 +95,7 @@ internal class OpprettTilbakekrevingTaskTest {
             tilbakekrevingsvalg = Tilbakekrevingsvalg.IGNORER_TILBAKEKREVING,
             tilbakekrevingMedVarsel = opprettTilbakekrevingMedVarsel(),
         )
-        val iverksett = opprettIverksettOvergangsstønad(
+        val iverksett = opprettIverksettDagpenger(
             behandlingsId,
             tilbakekreving = tilbakekrevingsdetaljer,
             forrigeBehandlingId = UUID.randomUUID(),
@@ -112,7 +112,7 @@ internal class OpprettTilbakekrevingTaskTest {
     @Test
     fun `førstegangsbehandling skal ikke opprette tilbakekreving`() {
         val behandlingsId = UUID.randomUUID()
-        val iverksett = opprettIverksettOvergangsstønad(behandlingsId, tilbakekreving = null, forrigeBehandlingId = null)
+        val iverksett = opprettIverksettDagpenger(behandlingsId, tilbakekreving = null, forrigeBehandlingId = null)
 
         every { iverksettingRepository.findByIdOrThrow(behandlingsId) } returns lagIverksett(iverksett)
 
@@ -127,7 +127,7 @@ internal class OpprettTilbakekrevingTaskTest {
     fun `uendret, postiv feilutbetaling`() {
         val behandlingsId = UUID.randomUUID()
         val tilbakekreving = opprettTilbakekrevingsdetaljer().medFeilutbetaling(100)
-        val iverksett = opprettIverksettOvergangsstønad(
+        val iverksett = opprettIverksettDagpenger(
             behandlingsId,
             tilbakekreving = tilbakekreving,
             forrigeBehandlingId = UUID.randomUUID(),
@@ -158,7 +158,7 @@ internal class OpprettTilbakekrevingTaskTest {
     fun `feilutbetaling forsvinner på iverksett`() {
         val behandlingsId = UUID.randomUUID()
         val tilbakekreving = opprettTilbakekrevingsdetaljer().medFeilutbetaling(100)
-        val iverksett = opprettIverksettOvergangsstønad(
+        val iverksett = opprettIverksettDagpenger(
             behandlingsId,
             tilbakekreving = tilbakekreving,
             forrigeBehandlingId = UUID.randomUUID(),
@@ -177,7 +177,7 @@ internal class OpprettTilbakekrevingTaskTest {
     fun `feilutbetaling endres`() {
         val behandlingsId = UUID.randomUUID()
         val tilbakekreving = opprettTilbakekrevingsdetaljer().medFeilutbetaling(100)
-        val iverksett = opprettIverksettOvergangsstønad(
+        val iverksett = opprettIverksettDagpenger(
             behandlingsId,
             tilbakekreving = tilbakekreving,
             forrigeBehandlingId = UUID.randomUUID(),

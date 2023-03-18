@@ -8,7 +8,7 @@ import no.nav.dagpenger.iverksett.ResourceLoaderTestUtil
 import no.nav.dagpenger.iverksett.ServerTest
 import no.nav.dagpenger.iverksett.api.IverksettingRepository
 import no.nav.dagpenger.iverksett.api.domene.Iverksett
-import no.nav.dagpenger.iverksett.api.domene.IverksettOvergangsstønad
+import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
 import no.nav.dagpenger.iverksett.api.domene.Vedtaksdetaljer
 import no.nav.dagpenger.iverksett.api.tilstand.IverksettResultatService
 import no.nav.dagpenger.iverksett.config.JournalpostClientMock
@@ -19,7 +19,7 @@ import no.nav.dagpenger.iverksett.konsumenter.brev.domain.Brevmottakere
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.Brevmottaker.IdentType.PERSONIDENT
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.Brevmottaker.MottakerRolle.BRUKER
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.Brevmottaker.MottakerRolle.VERGE
-import no.nav.dagpenger.iverksett.kontrakter.iverksett.IverksettOvergangsstønadDto
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.IverksettDagpengerdDto
 import no.nav.dagpenger.iverksett.util.copy
 import no.nav.dagpenger.iverksett.util.opprettBrev
 import no.nav.familie.prosessering.domene.Task
@@ -214,6 +214,6 @@ class JournalførVedtaksbrevTaskIntegrasjonsTest : ServerTest() {
 
     companion object {
         val json: String = ResourceLoaderTestUtil.readResource("json/IverksettDtoEksempel.json")
-        val iverksett: IverksettOvergangsstønad = objectMapper.readValue<IverksettOvergangsstønadDto>(json).toDomain()
+        val iverksett: IverksettDagpenger = objectMapper.readValue<IverksettDagpengerdDto>(json).toDomain()
     }
 }

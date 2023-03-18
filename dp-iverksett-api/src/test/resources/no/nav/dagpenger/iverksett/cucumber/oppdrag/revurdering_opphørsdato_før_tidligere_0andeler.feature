@@ -10,7 +10,7 @@ Egenskap: Kan opphøre når man bare har 0-andeler
       | BehandlingId | Startdato |
       | 3            | 01.2021   |
 
-    Gitt følgende tilkjente ytelser for Overgangsstønad
+    Gitt følgende tilkjente ytelser for Dagpenger
       | BehandlingId | Fra dato | Til dato | Beløp |
       | 1            | 03.2021  | 03.2021  | 700   |
       | 2            | 02.2021  | 04.2021  | 0     |

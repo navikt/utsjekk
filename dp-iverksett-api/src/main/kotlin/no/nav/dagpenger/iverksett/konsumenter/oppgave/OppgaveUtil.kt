@@ -38,14 +38,14 @@ object OppgaveUtil {
         return OpprettOppgaveRequest(
             ident = OppgaveIdentV2(ident = personIdent, gruppe = IdentGruppe.FOLKEREGISTERIDENT),
             saksId = eksternFagsakId.toString(),
-            tema = Tema.ENF,
+            tema = Tema.DP,
             oppgavetype = oppgavetype,
             fristFerdigstillelse = fristFerdigstillelse(fristFerdigstillelse),
             beskrivelse = beskrivelse,
             enhetsnummer = enhetsnummer.enhetId,
             behandlingstema = opprettBehandlingstema(stønadstype).value,
             tilordnetRessurs = null,
-            behandlesAvApplikasjon = if (settBehandlesAvApplikasjon) "familie-ef-sak" else null,
+            behandlesAvApplikasjon = if (settBehandlesAvApplikasjon) "dp-sak" else null,
         )
     }
 

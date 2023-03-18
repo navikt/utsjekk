@@ -13,7 +13,7 @@ object FrittståendeBrevUtil {
         eksternFagsakId = 1L,
         journalførendeEnhet = "enhet",
         saksbehandlerIdent = "saksbehandlerIdent",
-        stønadstype = StønadType.OVERGANGSSTØNAD,
+        stønadstype = StønadType.DAGPENGER,
         mottakere = Brevmottakere(
             listOf(
                 no.nav.dagpenger.iverksett.konsumenter.brev.domain.Brevmottaker(

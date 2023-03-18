@@ -7,7 +7,7 @@ import no.nav.dagpenger.iverksett.infrastruktur.featuretoggle.FeatureToggleServi
 fun mockFeatureToggleService(enabled: Boolean = true): FeatureToggleService {
     val mockk = mockk<FeatureToggleService>()
     every { mockk.isEnabled(any()) } returns enabled
-    every { mockk.isEnabled("familie.ef.iverksett.stopp-iverksetting") } answers {
+    every { mockk.isEnabled("dp.iverksett.stopp-iverksetting") } answers {
         false
     }
     return mockk

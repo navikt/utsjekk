@@ -40,12 +40,12 @@ class TilbakekrevingClient(
         .toUri()
 
     private fun finnesÅpenBehandlingUri(fagsakId: Long) = UriComponentsBuilder.fromUri(familieTilbakeUri)
-        .pathSegment("api/fagsystem/${Fagsystem.EF}/fagsak/$fagsakId/finnesApenBehandling/v1")
+        .pathSegment("api/fagsystem/${Fagsystem.DP}/fagsak/$fagsakId/finnesApenBehandling/v1")
         .build()
         .toUri()
 
     private fun finnBehandlingerUri(fagsakId: Long) = UriComponentsBuilder.fromUri(familieTilbakeUri)
-        .pathSegment("api/fagsystem/${Fagsystem.EF}/fagsak/$fagsakId/behandlinger/v1")
+        .pathSegment("api/fagsystem/${Fagsystem.DP}/fagsak/$fagsakId/behandlinger/v1")
         .build()
         .toUri()
 

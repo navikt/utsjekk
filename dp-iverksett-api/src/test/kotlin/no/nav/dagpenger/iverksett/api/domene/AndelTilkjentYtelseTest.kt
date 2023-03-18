@@ -70,13 +70,6 @@ internal class AndelTilkjentYtelseTest {
             .isEqualTo(1)
     }
 
-    @Test
-    internal fun `erFullOvergangsstønad er false når inntektsreduksjon eller samordningsfradrag ikke er 0`() {
-        assertThat(lagTY(1, 0, 0).erFullOvergangsstønad()).isTrue
-        assertThat(lagTY(1, 1, 0).erFullOvergangsstønad()).isFalse
-        assertThat(lagTY(1, 0, 1).erFullOvergangsstønad()).isFalse
-    }
-
     private fun lagTY(beløp: Int, inntektsreduksjon: Int = 0, samordningsfradrag: Int = 0) =
         lagAndelTilkjentYtelse(
             beløp = beløp,

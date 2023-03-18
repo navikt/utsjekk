@@ -56,8 +56,8 @@ class JournalpostClient(
 
         val journalpostRequest = DistribuerJournalpostRequest(
             journalpostId = journalpostId,
-            bestillendeFagsystem = Fagsystem.EF,
-            dokumentProdApp = "FAMILIE_EF_SAK",
+            bestillendeFagsystem = Fagsystem.DP,
+            dokumentProdApp = "DP_SAK",
             distribusjonstype = distribusjonstype,
         )
 

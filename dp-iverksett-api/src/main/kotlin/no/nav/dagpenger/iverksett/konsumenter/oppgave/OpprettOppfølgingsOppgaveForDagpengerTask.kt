@@ -1,7 +1,7 @@
 package no.nav.dagpenger.iverksett.konsumenter.oppgave
 
 import no.nav.dagpenger.iverksett.api.IverksettingRepository
-import no.nav.dagpenger.iverksett.api.domene.IverksettOvergangsstønad
+import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
 import no.nav.dagpenger.iverksett.infrastruktur.repository.findByIdOrThrow
 import no.nav.dagpenger.iverksett.konsumenter.opprettNestePubliseringTask
 import no.nav.familie.prosessering.AsyncTaskStep
@@ -14,10 +14,10 @@ import java.util.UUID
 
 @Service
 @TaskStepBeskrivelse(
-    taskStepType = OpprettOppfølgingsOppgaveForOvergangsstønadTask.TYPE,
-    beskrivelse = "Oppretter oppgave om at bruker har innvilget overgangsstønad",
+    taskStepType = OpprettOppfølgingsOppgaveForDagpengerTask.TYPE,
+    beskrivelse = "Oppretter oppgave om at bruker har innvilget dagpenger",
 )
-class OpprettOppfølgingsOppgaveForOvergangsstønadTask(
+class OpprettOppfølgingsOppgaveForDagpengerTask(
     private val oppgaveService: OppgaveService,
     private val iverksettingRepository: IverksettingRepository,
     private val taskService: TaskService,
@@ -28,10 +28,10 @@ class OpprettOppfølgingsOppgaveForOvergangsstønadTask(
     override fun doTask(task: Task) {
         val behandlingId = UUID.fromString(task.payload)
         val iverksett = iverksettingRepository.findByIdOrThrow(behandlingId)
-        if (iverksett.data !is IverksettOvergangsstønad) {
+        if (iverksett.data !is IverksettDagpenger) {
             logger.info(
                 "Oppretter ikke oppfølgningsoppgave for behandling=$behandlingId" +
-                    " då den ikke er overgangsstønad (${iverksett::class.java.simpleName})",
+                    " då den ikke er dagpenger (${iverksett::class.java.simpleName})",
             )
             return
         }
@@ -48,6 +48,6 @@ class OpprettOppfølgingsOppgaveForOvergangsstønadTask(
 
     companion object {
 
-        const val TYPE = "opprettOppfølgingOppgaveForInnvilgetOvergangsstønad"
+        const val TYPE = "opprettOppfølgingOppgaveForInnvilgetDagpenger"
     }
 }

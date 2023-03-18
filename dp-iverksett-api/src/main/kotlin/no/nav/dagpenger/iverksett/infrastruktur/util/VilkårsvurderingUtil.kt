@@ -1,7 +1,6 @@
 package no.nav.dagpenger.iverksett.infrastruktur.util
 
 import no.nav.dagpenger.iverksett.api.domene.Vilkårsvurdering
-import no.nav.dagpenger.iverksett.kontrakter.dvh.AktivitetsvilkårBarnetilsyn
 import no.nav.dagpenger.iverksett.kontrakter.felles.RegelId
 import no.nav.dagpenger.iverksett.kontrakter.felles.SvarId
 import no.nav.dagpenger.iverksett.kontrakter.felles.VilkårType
@@ -21,17 +20,6 @@ object VilkårsvurderingUtil {
                 ?: error("Finner ikke delvilkårsvurderingen for sagt opp eller redusert stilling")
             harSagtOppEllerRedusertStilling(vurdering.svar)
         }
-    }
-
-    fun hentAktivitetsvilkårBarnetilsyn(vilkårsvurderinger: List<Vilkårsvurdering>): AktivitetsvilkårBarnetilsyn? {
-        val vilkårsvurdering = vilkårsvurderinger.find { it.vilkårType == VilkårType.AKTIVITET_ARBEID }
-            ?: error("Finner ikke vurderingen for arbeid aktivitet barnetilsyn")
-
-        val delvikår = vilkårsvurdering.delvilkårsvurderinger.first().vurderinger
-            .find { it.regelId == RegelId.ER_I_ARBEID_ELLER_FORBIGÅENDE_SYKDOM }
-            ?: error("Finner ikke delvilkårvurderingen for arbeid aktivitet barnetilsyn")
-
-        return delvikår.svar?.let { AktivitetsvilkårBarnetilsyn.valueOf(it.name) }
     }
 
     private fun harSagtOppEllerRedusertStilling(svarId: SvarId?) = when (svarId) {

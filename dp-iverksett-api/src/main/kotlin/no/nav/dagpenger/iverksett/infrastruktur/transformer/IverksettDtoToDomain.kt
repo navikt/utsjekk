@@ -3,13 +3,13 @@ package no.nav.dagpenger.iverksett.infrastruktur.transformer
 import no.nav.dagpenger.iverksett.api.domene.Behandlingsdetaljer
 import no.nav.dagpenger.iverksett.api.domene.Delvilkårsvurdering
 import no.nav.dagpenger.iverksett.api.domene.Fagsakdetaljer
-import no.nav.dagpenger.iverksett.api.domene.IverksettOvergangsstønad
+import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
 import no.nav.dagpenger.iverksett.api.domene.PeriodeMedBeløp
 import no.nav.dagpenger.iverksett.api.domene.Søker
 import no.nav.dagpenger.iverksett.api.domene.TilbakekrevingMedVarsel
 import no.nav.dagpenger.iverksett.api.domene.Tilbakekrevingsdetaljer
-import no.nav.dagpenger.iverksett.api.domene.VedtaksdetaljerOvergangsstønad
-import no.nav.dagpenger.iverksett.api.domene.VedtaksperiodeOvergangsstønad
+import no.nav.dagpenger.iverksett.api.domene.VedtaksdetaljerDagpenger
+import no.nav.dagpenger.iverksett.api.domene.VedtaksperiodeDagpenger
 import no.nav.dagpenger.iverksett.api.domene.Vilkårsvurdering
 import no.nav.dagpenger.iverksett.api.domene.Vurdering
 import no.nav.dagpenger.iverksett.api.domene.ÅrsakRevurdering
@@ -18,13 +18,13 @@ import no.nav.dagpenger.iverksett.konsumenter.brev.domain.Brevmottakere
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.BehandlingsdetaljerDto
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.DelvilkårsvurderingDto
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.FagsakdetaljerDto
-import no.nav.dagpenger.iverksett.kontrakter.iverksett.IverksettOvergangsstønadDto
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.IverksettDagpengerdDto
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.PeriodeMedBeløpDto
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.SøkerDto
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.TilbakekrevingDto
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.TilbakekrevingMedVarselDto
-import no.nav.dagpenger.iverksett.kontrakter.iverksett.VedtaksdetaljerOvergangsstønadDto
-import no.nav.dagpenger.iverksett.kontrakter.iverksett.VedtaksperiodeOvergangsstønadDto
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.VedtaksdetaljerDagpengerrDto
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.VedtaksperiodeDagpengerDto
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.VilkårsvurderingDto
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.VurderingDto
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.Brevmottaker as BrevmottakerKontrakter
@@ -72,16 +72,16 @@ fun BehandlingsdetaljerDto.toDomain(): Behandlingsdetaljer {
     )
 }
 
-fun VedtaksperiodeOvergangsstønadDto.toDomain(): VedtaksperiodeOvergangsstønad {
-    return VedtaksperiodeOvergangsstønad(
+fun VedtaksperiodeDagpengerDto.toDomain(): VedtaksperiodeDagpenger {
+    return VedtaksperiodeDagpenger(
         aktivitet = this.aktivitet,
         periode = this.periode,
         periodeType = this.periodeType,
     )
 }
 
-fun VedtaksdetaljerOvergangsstønadDto.toDomain(): VedtaksdetaljerOvergangsstønad {
-    return VedtaksdetaljerOvergangsstønad(
+fun VedtaksdetaljerDagpengerrDto.toDomain(): VedtaksdetaljerDagpenger {
+    return VedtaksdetaljerDagpenger(
         vedtaksresultat = this.resultat,
         vedtakstidspunkt = this.vedtakstidspunkt,
         opphørÅrsak = this.opphørÅrsak,
@@ -126,8 +126,8 @@ fun PeriodeMedBeløpDto.toDomain(): PeriodeMedBeløp =
         beløp = this.beløp,
     )
 
-fun IverksettOvergangsstønadDto.toDomain(): IverksettOvergangsstønad {
-    return IverksettOvergangsstønad(
+fun IverksettDagpengerdDto.toDomain(): IverksettDagpenger {
+    return IverksettDagpenger(
         fagsak = this.fagsak.toDomain(),
         søker = this.søker.toDomain(),
         behandling = this.behandling.toDomain(),

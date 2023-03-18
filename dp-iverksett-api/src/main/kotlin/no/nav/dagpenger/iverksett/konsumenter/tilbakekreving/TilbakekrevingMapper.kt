@@ -1,6 +1,6 @@
 package no.nav.dagpenger.iverksett.konsumenter.tilbakekreving
 
-import no.nav.dagpenger.iverksett.api.domene.IverksettOvergangsstønad
+import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
 import no.nav.dagpenger.iverksett.api.domene.Tilbakekrevingsdetaljer
 import no.nav.dagpenger.iverksett.kontrakter.felles.BehandlingÅrsak
 import no.nav.dagpenger.iverksett.kontrakter.felles.Enhet
@@ -27,9 +27,9 @@ fun Tilbakekrevingsdetaljer?.validerTilbakekreving(): Boolean {
     return true
 }
 
-fun IverksettOvergangsstønad.tilOpprettTilbakekrevingRequest(enhet: Enhet) =
+fun IverksettDagpenger.tilOpprettTilbakekrevingRequest(enhet: Enhet) =
     OpprettTilbakekrevingRequest(
-        fagsystem = Fagsystem.EF,
+        fagsystem = Fagsystem.DP,
         ytelsestype = Ytelsestype.valueOf(this.fagsak.stønadstype.name),
         eksternFagsakId = this.fagsak.eksternId.toString(),
         personIdent = this.søker.personIdent,
@@ -42,11 +42,11 @@ fun IverksettOvergangsstønad.tilOpprettTilbakekrevingRequest(enhet: Enhet) =
         saksbehandlerIdent = this.vedtak.saksbehandlerId,
         varsel = this.vedtak.tilbakekreving?.let { lagVarsel(it) },
         revurderingsvedtaksdato = this.vedtak.vedtakstidspunkt.toLocalDate(),
-        verge = null, // Verge er per nå ikke støttet i familie-ef-sak.
+        verge = null, // Verge er per nå ikke støttet
         faktainfo = lagFaktainfo(this),
     )
 
-fun IverksettOvergangsstønad.tilFagsystembehandling(enhet: Enhet) =
+fun IverksettDagpenger.tilFagsystembehandling(enhet: Enhet) =
     HentFagsystemsbehandlingRespons(
         hentFagsystemsbehandling =
         HentFagsystemsbehandling(
@@ -77,7 +77,7 @@ private fun lagVarsel(tilbakekrevingsdetaljer: Tilbakekrevingsdetaljer): Varsel?
     }
 }
 
-private fun lagFaktainfo(iverksett: IverksettOvergangsstønad): Faktainfo {
+private fun lagFaktainfo(iverksett: IverksettDagpenger): Faktainfo {
     return Faktainfo(
         revurderingsårsak = iverksett.behandling.behandlingÅrsak.visningsTekst(),
         revurderingsresultat = iverksett.vedtak.vedtaksresultat.visningsnavn,

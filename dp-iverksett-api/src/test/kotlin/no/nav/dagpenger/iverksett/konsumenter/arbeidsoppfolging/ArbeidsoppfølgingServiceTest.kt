@@ -3,7 +3,7 @@ package no.nav.dagpenger.iverksett.konsumenter.arbeidsoppfolging
 import io.mockk.justRun
 import io.mockk.mockk
 import io.mockk.verify
-import no.nav.dagpenger.iverksett.util.opprettIverksettOvergangsstønad
+import no.nav.dagpenger.iverksett.util.opprettIverksettDagpenger
 import org.junit.Test
 
 class ArbeidsoppfølgingServiceTest {
@@ -13,9 +13,9 @@ class ArbeidsoppfølgingServiceTest {
     val arbeidsoppfølgingService = ArbeidsoppfølgingService(arbeidsoppfølgingKafkaProducer)
 
     @Test
-    fun `sendTilKafka hvis overgangsstønad`() {
+    fun `sendTilKafka hvis dagpenger`() {
         justRun { arbeidsoppfølgingKafkaProducer.sendVedtak(any()) }
-        val iverksett = opprettIverksettOvergangsstønad()
+        val iverksett = opprettIverksettDagpenger()
         arbeidsoppfølgingService.sendTilKafka(iverksett)
 
         verify(exactly = 1) { arbeidsoppfølgingKafkaProducer.sendVedtak(any()) }

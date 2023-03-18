@@ -6,7 +6,7 @@ Egenskap: Revurdering med 0 beløp beholder periodeId når man har flere periode
 
   Scenario: Revurdering med 0 beløp beholder periodeId når man har flere perioder
 
-    Gitt følgende tilkjente ytelser for Overgangsstønad
+    Gitt følgende tilkjente ytelser for Dagpenger
       | BehandlingId | Fra dato | Til dato | Beløp |
       | 1            | 02.2021  | 02.2021  | 700   |
       | 1            | 03.2021  | 03.2021  | 800   |
@@ -48,7 +48,7 @@ Egenskap: Revurdering med 0 beløp beholder periodeId når man har flere periode
 
   Scenario: Revurdering med 0 beløp beholder periodeId når man har flere perioder, men også endring i tidligere beløp
 
-    Gitt følgende tilkjente ytelser for Overgangsstønad
+    Gitt følgende tilkjente ytelser for Dagpenger
       | BehandlingId | Fra dato | Til dato | Beløp |
       | 1            | 02.2021  | 02.2021  | 700   |
       | 1            | 03.2021  | 03.2021  | 800   |
@@ -76,7 +76,7 @@ Egenskap: Revurdering med 0 beløp beholder periodeId når man har flere periode
 
   Scenario: Revurdering med 0 beløp beholder periodeId når man har flere perioder, før tidligere periode
 
-    Gitt følgende tilkjente ytelser for Overgangsstønad
+    Gitt følgende tilkjente ytelser for Dagpenger
       | BehandlingId | Fra dato | Til dato | Beløp |
       | 1            | 02.2021  | 02.2021  | 700   |
       | 1            | 03.2021  | 03.2021  | 800   |

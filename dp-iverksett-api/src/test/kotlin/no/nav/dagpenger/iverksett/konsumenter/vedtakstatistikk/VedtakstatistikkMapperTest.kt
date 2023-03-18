@@ -5,11 +5,11 @@ import no.nav.dagpenger.iverksett.api.domene.Barn
 import no.nav.dagpenger.iverksett.api.domene.Behandlingsdetaljer
 import no.nav.dagpenger.iverksett.api.domene.Delvilkårsvurdering
 import no.nav.dagpenger.iverksett.api.domene.Fagsakdetaljer
-import no.nav.dagpenger.iverksett.api.domene.IverksettOvergangsstønad
+import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
 import no.nav.dagpenger.iverksett.api.domene.Søker
 import no.nav.dagpenger.iverksett.api.domene.TilkjentYtelse
-import no.nav.dagpenger.iverksett.api.domene.VedtaksdetaljerOvergangsstønad
-import no.nav.dagpenger.iverksett.api.domene.VedtaksperiodeOvergangsstønad
+import no.nav.dagpenger.iverksett.api.domene.VedtaksdetaljerDagpenger
+import no.nav.dagpenger.iverksett.api.domene.VedtaksperiodeDagpenger
 import no.nav.dagpenger.iverksett.api.domene.Vilkårsvurdering
 import no.nav.dagpenger.iverksett.api.domene.Vurdering
 import no.nav.dagpenger.iverksett.api.domene.ÅrsakRevurdering
@@ -52,66 +52,66 @@ internal class VedtakstatistikkMapperTest {
     private val termindato: LocalDate? = LocalDate.now().plusDays(40)
 
     @Test
-    internal fun `skal mappe iverksett til VedtakOvergangsstønadDVH - sjekk alle felter`() {
-        val vedtakOvergangsstønadDVH = VedtakstatistikkMapper.mapTilVedtakOvergangsstønadDVH(
-            iverksettOvergangsstønad(),
+    internal fun `skal mappe iverksett til VedtakDagpengerDVH - sjekk alle felter`() {
+        val vedtakDagpengerDVH = VedtakstatistikkMapper.mapTilVedtakDagpengerDVH(
+            iverksettDagpenger(),
             forrigeBehandlingEksternId,
         )
-        assertThat(vedtakOvergangsstønadDVH.aktivitetskrav.harSagtOppArbeidsforhold).isFalse()
-        assertThat(vedtakOvergangsstønadDVH.aktivitetskrav.aktivitetspliktInntrefferDato).isNull()
-        assertThat(vedtakOvergangsstønadDVH.barn).hasSize(2)
-        assertThat(vedtakOvergangsstønadDVH.barn.first().personIdent).isEqualTo(barnFnr)
-        assertThat(vedtakOvergangsstønadDVH.barn.first().termindato).isEqualTo(termindato)
-        assertThat(vedtakOvergangsstønadDVH.behandlingId).isEqualTo(eksternBehandlingId)
-        assertThat(vedtakOvergangsstønadDVH.behandlingType.name).isEqualTo(BehandlingType.REVURDERING.name)
-        assertThat(vedtakOvergangsstønadDVH.behandlingÅrsak.name).isEqualTo(BehandlingÅrsak.SØKNAD.name)
-        assertThat(vedtakOvergangsstønadDVH.fagsakId).isEqualTo(eksternFagsakId)
-        assertThat(vedtakOvergangsstønadDVH.funksjonellId).isEqualTo(eksternBehandlingId)
-        assertThat(vedtakOvergangsstønadDVH.person.personIdent).isEqualTo(søker)
-        assertThat(vedtakOvergangsstønadDVH.relatertBehandlingId).isEqualTo(forrigeBehandlingEksternId)
-        assertThat(vedtakOvergangsstønadDVH.stønadstype.name).isEqualTo(StønadType.OVERGANGSSTØNAD.name)
-        assertThat(vedtakOvergangsstønadDVH.tidspunktVedtak).isEqualTo(vedtakstidspunkt.atZone(ZoneId.of("Europe/Oslo")))
-        assertThat(vedtakOvergangsstønadDVH.utbetalinger).hasSize(2)
-        assertThat(vedtakOvergangsstønadDVH.utbetalinger.first().fraOgMed).isEqualTo(LocalDate.of(2021, 1, 1))
-        assertThat(vedtakOvergangsstønadDVH.utbetalinger.first().tilOgMed).isEqualTo(LocalDate.of(2021, 5, 31))
-        assertThat(vedtakOvergangsstønadDVH.utbetalinger.first().inntekt).isEqualTo(300000)
-        assertThat(vedtakOvergangsstønadDVH.utbetalinger.first().inntektsreduksjon).isEqualTo(11000)
-        assertThat(vedtakOvergangsstønadDVH.utbetalinger.first().samordningsfradrag).isEqualTo(1000)
-        assertThat(vedtakOvergangsstønadDVH.utbetalinger.first().beløp).isEqualTo(9000)
-        assertThat(vedtakOvergangsstønadDVH.utbetalinger.first().utbetalingsdetalj.delytelseId).isEqualTo("121")
-        assertThat(vedtakOvergangsstønadDVH.utbetalinger.first().utbetalingsdetalj.klassekode).isEqualTo("EFOG")
-        assertThat(vedtakOvergangsstønadDVH.utbetalinger.first().utbetalingsdetalj.gjelderPerson.personIdent).isEqualTo(søker)
-        assertThat(vedtakOvergangsstønadDVH.vedtak).isEqualTo(Vedtak.INNVILGET)
-        assertThat(vedtakOvergangsstønadDVH.vedtaksperioder).hasSize(2)
-        assertThat(vedtakOvergangsstønadDVH.vedtaksperioder.first().fraOgMed).isEqualTo(LocalDate.of(2021, 2, 1))
-        assertThat(vedtakOvergangsstønadDVH.vedtaksperioder.first().tilOgMed).isEqualTo(LocalDate.of(2021, 3, 31))
-        assertThat(vedtakOvergangsstønadDVH.vedtaksperioder.first().aktivitet.name).isEqualTo(AktivitetType.IKKE_AKTIVITETSPLIKT.name)
-        assertThat(vedtakOvergangsstønadDVH.vedtaksperioder.first().periodeType.name).isEqualTo(VedtaksperiodeType.PERIODE_FØR_FØDSEL.name)
-        assertThat(vedtakOvergangsstønadDVH.vilkårsvurderinger).hasSize(12)
-        assertThat(vedtakOvergangsstønadDVH.vilkårsvurderinger.first().vilkår.name).isEqualTo(VilkårType.FORUTGÅENDE_MEDLEMSKAP.name)
-        assertThat(vedtakOvergangsstønadDVH.vilkårsvurderinger.first().resultat.name).isEqualTo(Vilkårsresultat.OPPFYLT.name)
+        assertThat(vedtakDagpengerDVH.aktivitetskrav.harSagtOppArbeidsforhold).isFalse()
+        assertThat(vedtakDagpengerDVH.aktivitetskrav.aktivitetspliktInntrefferDato).isNull()
+        assertThat(vedtakDagpengerDVH.barn).hasSize(2)
+        assertThat(vedtakDagpengerDVH.barn.first().personIdent).isEqualTo(barnFnr)
+        assertThat(vedtakDagpengerDVH.barn.first().termindato).isEqualTo(termindato)
+        assertThat(vedtakDagpengerDVH.behandlingId).isEqualTo(eksternBehandlingId)
+        assertThat(vedtakDagpengerDVH.behandlingType.name).isEqualTo(BehandlingType.REVURDERING.name)
+        assertThat(vedtakDagpengerDVH.behandlingÅrsak.name).isEqualTo(BehandlingÅrsak.SØKNAD.name)
+        assertThat(vedtakDagpengerDVH.fagsakId).isEqualTo(eksternFagsakId)
+        assertThat(vedtakDagpengerDVH.funksjonellId).isEqualTo(eksternBehandlingId)
+        assertThat(vedtakDagpengerDVH.person.personIdent).isEqualTo(søker)
+        assertThat(vedtakDagpengerDVH.relatertBehandlingId).isEqualTo(forrigeBehandlingEksternId)
+        assertThat(vedtakDagpengerDVH.stønadstype.name).isEqualTo(StønadType.DAGPENGER.name)
+        assertThat(vedtakDagpengerDVH.tidspunktVedtak).isEqualTo(vedtakstidspunkt.atZone(ZoneId.of("Europe/Oslo")))
+        assertThat(vedtakDagpengerDVH.utbetalinger).hasSize(2)
+        assertThat(vedtakDagpengerDVH.utbetalinger.first().fraOgMed).isEqualTo(LocalDate.of(2021, 1, 1))
+        assertThat(vedtakDagpengerDVH.utbetalinger.first().tilOgMed).isEqualTo(LocalDate.of(2021, 5, 31))
+        assertThat(vedtakDagpengerDVH.utbetalinger.first().inntekt).isEqualTo(300000)
+        assertThat(vedtakDagpengerDVH.utbetalinger.first().inntektsreduksjon).isEqualTo(11000)
+        assertThat(vedtakDagpengerDVH.utbetalinger.first().samordningsfradrag).isEqualTo(1000)
+        assertThat(vedtakDagpengerDVH.utbetalinger.first().beløp).isEqualTo(9000)
+        assertThat(vedtakDagpengerDVH.utbetalinger.first().utbetalingsdetalj.delytelseId).isEqualTo("121")
+        assertThat(vedtakDagpengerDVH.utbetalinger.first().utbetalingsdetalj.klassekode).isEqualTo("DP")
+        assertThat(vedtakDagpengerDVH.utbetalinger.first().utbetalingsdetalj.gjelderPerson.personIdent).isEqualTo(søker)
+        assertThat(vedtakDagpengerDVH.vedtak).isEqualTo(Vedtak.INNVILGET)
+        assertThat(vedtakDagpengerDVH.vedtaksperioder).hasSize(2)
+        assertThat(vedtakDagpengerDVH.vedtaksperioder.first().fraOgMed).isEqualTo(LocalDate.of(2021, 2, 1))
+        assertThat(vedtakDagpengerDVH.vedtaksperioder.first().tilOgMed).isEqualTo(LocalDate.of(2021, 3, 31))
+        assertThat(vedtakDagpengerDVH.vedtaksperioder.first().aktivitet.name).isEqualTo(AktivitetType.IKKE_AKTIVITETSPLIKT.name)
+        assertThat(vedtakDagpengerDVH.vedtaksperioder.first().periodeType.name).isEqualTo(VedtaksperiodeType.PERIODE_FØR_FØDSEL.name)
+        assertThat(vedtakDagpengerDVH.vilkårsvurderinger).hasSize(12)
+        assertThat(vedtakDagpengerDVH.vilkårsvurderinger.first().vilkår.name).isEqualTo(VilkårType.FORUTGÅENDE_MEDLEMSKAP.name)
+        assertThat(vedtakDagpengerDVH.vilkårsvurderinger.first().resultat.name).isEqualTo(Vilkårsresultat.OPPFYLT.name)
 
-        assertThat(vedtakOvergangsstønadDVH.kravMottatt).isEqualTo(LocalDate.of(2021, 3, 1))
-        assertThat(vedtakOvergangsstønadDVH.årsakRevurdering?.opplysningskilde).isEqualTo(Opplysningskilde.MELDING_MODIA.name)
-        assertThat(vedtakOvergangsstønadDVH.årsakRevurdering?.årsak).isEqualTo(Revurderingsårsak.ENDRING_INNTEKT.name)
+        assertThat(vedtakDagpengerDVH.kravMottatt).isEqualTo(LocalDate.of(2021, 3, 1))
+        assertThat(vedtakDagpengerDVH.årsakRevurdering?.opplysningskilde).isEqualTo(Opplysningskilde.MELDING_MODIA.name)
+        assertThat(vedtakDagpengerDVH.årsakRevurdering?.årsak).isEqualTo(Revurderingsårsak.ENDRING_INNTEKT.name)
     }
 
     @Test
     internal fun `skal mappe iverksett med avslagsårsak`() {
-        val vedtakOvergangsstønadDVH = VedtakstatistikkMapper.mapTilVedtakOvergangsstønadDVH(
-            iverksettOvergangsstønad().copy(
-                vedtak = vedtaksdetaljerOvergangsstønad(
+        val vedtakDagpengerDVH = VedtakstatistikkMapper.mapTilVedtakDagpengerDVH(
+            iverksettDagpenger().copy(
+                vedtak = vedtaksdetaljerDagpenger(
                     Vedtaksresultat.AVSLÅTT,
                     AvslagÅrsak.MINDRE_INNTEKTSENDRINGER,
                 ),
             ),
             forrigeBehandlingEksternId,
         )
-        assertThat(vedtakOvergangsstønadDVH.vedtak).isEqualTo(Vedtak.AVSLÅTT)
-        assertThat(vedtakOvergangsstønadDVH.avslagÅrsak).isEqualTo("MINDRE_INNTEKTSENDRINGER")
+        assertThat(vedtakDagpengerDVH.vedtak).isEqualTo(Vedtak.AVSLÅTT)
+        assertThat(vedtakDagpengerDVH.avslagÅrsak).isEqualTo("MINDRE_INNTEKTSENDRINGER")
     }
 
-    private fun iverksettOvergangsstønad() = IverksettOvergangsstønad(
+    private fun iverksettDagpenger() = IverksettDagpenger(
         fagsak = fagsakdetaljer(),
         behandling = behandlingsdetaljer(),
         søker = Søker(
@@ -123,10 +123,10 @@ internal class VedtakstatistikkMapperTest {
             tilhørendeEnhet = "4489",
             adressebeskyttelse = AdressebeskyttelseGradering.STRENGT_FORTROLIG,
         ),
-        vedtak = vedtaksdetaljerOvergangsstønad(),
+        vedtak = vedtaksdetaljerDagpenger(),
     )
 
-    fun fagsakdetaljer(stønadstype: StønadType = StønadType.OVERGANGSSTØNAD): Fagsakdetaljer =
+    fun fagsakdetaljer(stønadstype: StønadType = StønadType.DAGPENGER): Fagsakdetaljer =
         Fagsakdetaljer(
             fagsakId = fagsakId,
             eksternId = eksternFagsakId,
@@ -177,11 +177,11 @@ internal class VedtakstatistikkMapperTest {
             startmåned = YearMonth.now(),
         )
 
-    fun vedtaksdetaljerOvergangsstønad(
+    fun vedtaksdetaljerDagpenger(
         resultat: Vedtaksresultat = Vedtaksresultat.INNVILGET,
         avslagÅrsak: AvslagÅrsak? = null,
-    ): VedtaksdetaljerOvergangsstønad {
-        return VedtaksdetaljerOvergangsstønad(
+    ): VedtaksdetaljerDagpenger {
+        return VedtaksdetaljerDagpenger(
             vedtaksresultat = resultat,
             avslagÅrsak = avslagÅrsak,
             vedtakstidspunkt = vedtakstidspunkt,
@@ -190,12 +190,12 @@ internal class VedtakstatistikkMapperTest {
             beslutterId = "B123456",
             tilkjentYtelse = tilkjentYtelse(),
             vedtaksperioder = listOf(
-                VedtaksperiodeOvergangsstønad(
+                VedtaksperiodeDagpenger(
                     aktivitet = AktivitetType.IKKE_AKTIVITETSPLIKT,
                     periode = Månedsperiode(YearMonth.of(2021, 2), YearMonth.of(2021, 3)),
                     periodeType = VedtaksperiodeType.PERIODE_FØR_FØDSEL,
                 ),
-                VedtaksperiodeOvergangsstønad(
+                VedtaksperiodeDagpenger(
                     aktivitet = AktivitetType.FORSØRGER_I_ARBEID,
                     periode = Månedsperiode(YearMonth.of(2021, 6), YearMonth.of(2021, 10)),
                     periodeType = VedtaksperiodeType.HOVEDPERIODE,
@@ -436,7 +436,7 @@ internal class VedtakstatistikkMapperTest {
                     Vilkårsresultat.OPPFYLT,
                     listOf(
                         Vurdering(
-                            RegelId.HAR_TIDLIGERE_MOTTATT_OVERGANSSTØNAD,
+                            RegelId.HAR_TIDLIGERE_MOTTATT_DAGPENGER,
                             SvarId.NEI,
                             null,
                         ),

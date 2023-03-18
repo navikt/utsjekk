@@ -14,14 +14,12 @@ import no.nav.dagpenger.iverksett.api.tilstand.IverksettResultatService
 import no.nav.dagpenger.iverksett.infrastruktur.repository.findByIdOrThrow
 import no.nav.dagpenger.iverksett.infrastruktur.transformer.toDomain
 import no.nav.dagpenger.iverksett.konsumenter.brev.domain.JournalpostResultat
-import no.nav.dagpenger.iverksett.kontrakter.felles.StønadType
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.Brevmottaker
 import no.nav.dagpenger.iverksett.kontrakter.journalføring.Journalpost
 import no.nav.dagpenger.iverksett.kontrakter.journalføring.Journalposttype
 import no.nav.dagpenger.iverksett.kontrakter.journalføring.Journalstatus
 import no.nav.dagpenger.iverksett.kontrakter.journalføring.dokarkiv.ArkiverDokumentRequest
 import no.nav.dagpenger.iverksett.kontrakter.journalføring.dokarkiv.ArkiverDokumentResponse
-import no.nav.dagpenger.iverksett.kontrakter.journalføring.dokarkiv.Dokumenttype
 import no.nav.dagpenger.iverksett.util.opprettIverksettDto
 import no.nav.familie.http.client.RessursException
 import no.nav.familie.kontrakter.felles.Ressurs
@@ -144,44 +142,6 @@ internal class JournalførVedtaksbrevTaskTest {
         verify(exactly = 2) { journalpostClient.arkiverDokument(any(), any()) }
         assertThat(arkiverDokumentRequestSlot).hasSize(2)
         assertThat(arkiverDokumentRequestSlot.map { it.avsenderMottaker!!.id }).containsAll(brevmottakere.map { it.ident })
-    }
-
-    @Test
-    internal fun `Journalføring av barnetilsynbrev og opprette ny task`() {
-        every { journalpostClient.arkiverDokument(capture(arkiverDokumentRequestSlot), any()) } returns ArkiverDokumentResponse(
-            journalpostId,
-            true,
-        )
-        every { iverksettingRepository.findByIdOrThrow(behandlingId) }.returns(
-            iverksett.copy(
-                data = opprettIverksettDto(
-                    behandlingId = behandlingId,
-                    stønadType = StønadType.BARNETILSYN,
-                ).toDomain(),
-            ),
-        )
-        every { iverksettResultatService.hentJournalpostResultat(behandlingId) } returns null andThen mapOf(
-            "123" to JournalpostResultat(
-                "journalpostId",
-            ),
-        )
-        every {
-            iverksettResultatService.oppdaterJournalpostResultat(
-                behandlingId,
-                any(),
-                capture(journalpostResultatSlot),
-            )
-        } returns Unit
-
-        journalførVedtaksbrevTask.doTask(Task(JournalførVedtaksbrevTask.TYPE, behandlingIdString, Properties()))
-
-        verify(exactly = 1) { journalpostClient.arkiverDokument(any(), any()) }
-        verify(exactly = 1) { iverksettResultatService.oppdaterJournalpostResultat(behandlingId, any(), any()) }
-        assertThat(arkiverDokumentRequestSlot).hasSize(1)
-        assertThat(arkiverDokumentRequestSlot[0].hoveddokumentvarianter).hasSize(1)
-        assertThat(arkiverDokumentRequestSlot[0].hoveddokumentvarianter.first().dokumenttype)
-            .isEqualTo(Dokumenttype.VEDTAKSBREV_BARNETILSYN)
-        assertThat(journalpostResultatSlot.captured.journalpostId).isEqualTo(journalpostId)
     }
 
     @Test

@@ -6,7 +6,7 @@ Egenskap: Revurderer og sletter periode 2, revurdererer på nytt og skal da bygg
 
   Scenario: Revurderer og sletter periode 2, revurdererer på nytt og skal da bygge videre fra andre perioden sin periodeId
 
-    Gitt følgende tilkjente ytelser for Overgangsstønad
+    Gitt følgende tilkjente ytelser for Dagpenger
       | BehandlingId | Fra dato | Til dato | Beløp |
       | 1            | 03.2021  | 03.2021  | 700   |
       | 1            | 04.2021  | 04.2021  | 800   |

@@ -7,8 +7,8 @@ import io.mockk.slot
 import io.mockk.unmockkAll
 import io.mockk.verify
 import no.nav.dagpenger.iverksett.api.IverksettingRepository
-import no.nav.dagpenger.iverksett.api.domene.IverksettOvergangsstønad
-import no.nav.dagpenger.iverksett.api.domene.VedtaksperiodeOvergangsstønad
+import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
+import no.nav.dagpenger.iverksett.api.domene.VedtaksperiodeDagpenger
 import no.nav.dagpenger.iverksett.infrastruktur.FamilieIntegrasjonerClient
 import no.nav.dagpenger.iverksett.infrastruktur.repository.findByIdOrThrow
 import no.nav.dagpenger.iverksett.kontrakter.felles.BehandlingType
@@ -277,7 +277,7 @@ internal class OppgaveServiceTest {
     @Test
     internal fun `Hvis iverksetting av sanksjon, lag sanksjonsbeskrivelse på oppgave`() {
         val februar23 = YearMonth.of(2023, 2)
-        val iverksett = lagIverksettOvergangsstønadSanksjon(februar23)
+        val iverksett = lagIverksettDagpengerSanksjon(februar23)
 
         val oppgavebeskrivelse = oppgaveService.lagOppgavebeskrivelse(iverksett)
 
@@ -408,7 +408,7 @@ internal class OppgaveServiceTest {
 
     @Test
     internal fun `Forrige behandling er migreringssak, iverksettbehandling er av type sanksjon - skal opprette vurder hendelse oppgave`() {
-        val iverksett = lagIverksettOvergangsstønadSanksjon()
+        val iverksett = lagIverksettDagpengerSanksjon()
         val forrigeBehandlingIverksett = lagMigreringsIverksetting()
 
         every { iverksettRepository.findByIdOrThrow(any()) } returns lagIverksett(forrigeBehandlingIverksett)
@@ -429,9 +429,9 @@ internal class OppgaveServiceTest {
         ),
     )
 
-    private fun lagIverksettOvergangsstønadSanksjon(sanksjonsmåned: YearMonth = YearMonth.now()): IverksettOvergangsstønad {
+    private fun lagIverksettDagpengerSanksjon(sanksjonsmåned: YearMonth = YearMonth.now()): IverksettDagpenger {
         val månedsperiode = Månedsperiode(fom = sanksjonsmåned, tom = sanksjonsmåned)
-        val vedtaksPeriode = VedtaksperiodeOvergangsstønad(
+        val vedtaksPeriode = VedtaksperiodeDagpenger(
             periode = månedsperiode,
             periodeType = VedtaksperiodeType.SANKSJON,
             aktivitet = AktivitetType.IKKE_AKTIVITETSPLIKT,
@@ -452,8 +452,8 @@ internal class OppgaveServiceTest {
         fraOgMed: LocalDate = LocalDate.now(),
         tilOgMed: LocalDate = LocalDate.now(),
         periodeType: VedtaksperiodeType = VedtaksperiodeType.HOVEDPERIODE,
-    ): VedtaksperiodeOvergangsstønad {
-        return VedtaksperiodeOvergangsstønad(
+    ): VedtaksperiodeDagpenger {
+        return VedtaksperiodeDagpenger(
             periode = Månedsperiode(fraOgMed, tilOgMed),
             aktivitet = aktivitet,
             periodeType = periodeType,

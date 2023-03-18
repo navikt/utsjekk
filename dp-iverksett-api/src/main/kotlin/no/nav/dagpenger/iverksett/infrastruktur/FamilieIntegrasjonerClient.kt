@@ -2,12 +2,9 @@ package no.nav.dagpenger.iverksett.infrastruktur
 
 import no.nav.dagpenger.iverksett.kontrakter.felles.Enhet
 import no.nav.familie.http.client.AbstractRestClient
-import no.nav.familie.kontrakter.felles.PersonIdent
 import no.nav.familie.kontrakter.felles.Ressurs
 import no.nav.familie.kontrakter.felles.getDataOrThrow
-import no.nav.familie.kontrakter.felles.personopplysning.FinnPersonidenterResponse
 import no.nav.familie.kontrakter.felles.personopplysning.Ident
-import no.nav.familie.kontrakter.felles.personopplysning.PersonIdentMedHistorikk
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
@@ -22,8 +19,6 @@ class FamilieIntegrasjonerClient(
     private val integrasjonUri: URI,
 ) : AbstractRestClient(restOperations, "familie.integrasjoner") {
 
-    private val hentIdenterURI =
-        UriComponentsBuilder.fromUri(integrasjonUri).pathSegment(PATH_HENT_IDENTER).build().toUri()
     private val aktørUri =
         UriComponentsBuilder.fromUri(integrasjonUri).pathSegment(PATH_AKTØR).build().toUri()
 
@@ -32,19 +27,6 @@ class FamilieIntegrasjonerClient(
 
     private fun arbeidsfordelingOppfølingUri(tema: String) =
         UriComponentsBuilder.fromUri(integrasjonUri).pathSegment(PATH_ARBEIDSFORDELING_OPPFØLGING, tema).build().toUri()
-
-    private fun arbeidsfordelingUriMedRelasjoner(tema: String) =
-        UriComponentsBuilder.fromUri(integrasjonUri)
-            .pathSegment(PATH_ARBEIDSFORDELING, tema)
-            .pathSegment("med-relasjoner")
-            .build()
-            .toUri()
-
-    fun hentIdenter(personident: String, medHistprikk: Boolean): List<PersonIdentMedHistorikk> {
-        val uri = UriComponentsBuilder.fromUri(hentIdenterURI).queryParam("historikk", medHistprikk).build().toUri()
-        val response = postForEntity<Ressurs<FinnPersonidenterResponse>>(uri, PersonIdent(personident))
-        return response.getDataOrThrow().identer
-    }
 
     fun hentAktørId(personident: String): String {
         val response = postForEntity<Ressurs<MutableMap<*, *>>>(aktørUri, Ident(personident))
@@ -60,12 +42,6 @@ class FamilieIntegrasjonerClient(
     fun hentBehandlendeEnhetForBehandling(personident: String): Enhet? {
         val response = postForEntity<Ressurs<List<Enhet>>>(arbeidsfordelingUri(TEMA_ENSLIG_FORSØRGER), Ident(personident))
         return response.getDataOrThrow().firstOrNull()
-    }
-
-    fun hentBehandlendeEnhetForBehandlingMedRelasjoner(personident: String): List<Enhet> {
-        val response =
-            postForEntity<Ressurs<List<Enhet>>>(arbeidsfordelingUriMedRelasjoner(TEMA_ENSLIG_FORSØRGER), Ident(personident))
-        return response.getDataOrThrow()
     }
 
     companion object {

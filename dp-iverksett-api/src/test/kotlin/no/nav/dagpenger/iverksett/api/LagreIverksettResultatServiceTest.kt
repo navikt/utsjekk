@@ -9,7 +9,7 @@ import no.nav.dagpenger.iverksett.konsumenter.brev.domain.JournalpostResultat
 import no.nav.dagpenger.iverksett.konsumenter.tilbakekreving.tilOpprettTilbakekrevingRequest
 import no.nav.dagpenger.iverksett.kontrakter.felles.Enhet
 import no.nav.dagpenger.iverksett.kontrakter.oppdrag.OppdragStatus
-import no.nav.dagpenger.iverksett.util.opprettIverksettOvergangsstønad
+import no.nav.dagpenger.iverksett.util.opprettIverksettDagpenger
 import no.nav.dagpenger.iverksett.util.opprettTilkjentYtelse
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -77,7 +77,7 @@ internal class LagreIverksettResultatServiceTest : ServerTest() {
 
     @Test
     fun `oppdater tilbakekrevingsresultat, forvent ingen unntak`() {
-        val opprettTilbakekrevingRequest = opprettIverksettOvergangsstønad(behandlingsId)
+        val opprettTilbakekrevingRequest = opprettIverksettDagpenger(behandlingsId)
             .tilOpprettTilbakekrevingRequest(Enhet("1", "Enhet"))
 
         tilstandRepositoryService.oppdaterTilbakekrevingResultat(

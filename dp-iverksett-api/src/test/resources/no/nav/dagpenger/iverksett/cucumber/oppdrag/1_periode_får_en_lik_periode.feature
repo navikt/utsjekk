@@ -5,7 +5,7 @@ Egenskap: Har en periode, legger til en ny periode som er lik den forrige
 
   Scenario: Har en periode, legger til en ny periode som er lik den forrige
 
-    Gitt følgende tilkjente ytelser for Overgangsstønad
+    Gitt følgende tilkjente ytelser for Dagpenger
       | BehandlingId | Fra dato | Til dato | Beløp |
       | 1            | 02.2021  | 03.2021  | 700   |
       | 2            | 02.2021  | 03.2021  | 700   |

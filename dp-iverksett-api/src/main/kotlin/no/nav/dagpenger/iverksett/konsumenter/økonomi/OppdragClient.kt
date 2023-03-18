@@ -19,24 +19,24 @@ import java.util.UUID
 
 @Service
 class OppdragClient(
-    @Value("\${FAMILIE_OPPDRAG_API_URL}")
-    private val familieOppdragUri: URI,
+    @Value("\${DP_OPPDRAG_API_URL}")
+    private val dagepngerOppdragUri: URI,
     @Qualifier("azure")
     restOperations: RestOperations,
-) : AbstractPingableRestClient(restOperations, "familie.oppdrag") {
+) : AbstractPingableRestClient(restOperations, "dp.oppdrag") {
 
-    private val postOppdragUri: URI = UriComponentsBuilder.fromUri(familieOppdragUri).pathSegment("api/oppdrag").build().toUri()
+    private val postOppdragUri: URI = UriComponentsBuilder.fromUri(dagepngerOppdragUri).pathSegment("api/oppdrag").build().toUri()
 
-    private val getStatusUri: URI = UriComponentsBuilder.fromUri(familieOppdragUri).pathSegment("api/status").build().toUri()
+    private val getStatusUri: URI = UriComponentsBuilder.fromUri(dagepngerOppdragUri).pathSegment("api/status").build().toUri()
 
     private val grensesnittavstemmingUri: URI =
-        UriComponentsBuilder.fromUri(familieOppdragUri).pathSegment("api/grensesnittavstemming").build().toUri()
+        UriComponentsBuilder.fromUri(dagepngerOppdragUri).pathSegment("api/grensesnittavstemming").build().toUri()
 
     private val konsistensavstemmingUri: URI =
-        UriComponentsBuilder.fromUri(familieOppdragUri).pathSegment("api/konsistensavstemming").build().toUri()
+        UriComponentsBuilder.fromUri(dagepngerOppdragUri).pathSegment("api/konsistensavstemming").build().toUri()
 
     private val postSimuleringUri: URI =
-        UriComponentsBuilder.fromUri(familieOppdragUri).pathSegment("api/simulering/v1").build().toUri()
+        UriComponentsBuilder.fromUri(dagepngerOppdragUri).pathSegment("api/simulering/v1").build().toUri()
 
     fun iverksettOppdrag(utbetalingsoppdrag: Utbetalingsoppdrag): String {
         return postForEntity<Ressurs<String>>(postOppdragUri, utbetalingsoppdrag).getDataOrThrow()

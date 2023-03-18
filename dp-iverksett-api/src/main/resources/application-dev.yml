@@ -1,10 +1,10 @@
 arena-mq:
   queueManager: MQLS01
-  channel: Q1_FAMILIE_EF_IVERKS
+  channel: Q1_DP_IVERKS
   hostname: b27apvl219.preprod.local
   port: 1413
   queueName: QA.Q1_475.SOB_VEDTAKHENDELSER_ARE
 
 DEPLOY_ENV: dev
-ENSLIG_FORSORGER_VEDTAK_TOPIC: teamfamilie.aapen-ensligforsorger-vedtak-test
-ENSLIG_FORSORGER_BEHANDLING_TOPIC: teamfamilie.aapen-ensligforsorger-behandling-test
+DAGPENGER_VEDTAK_TOPIC: teamdagpenger.aapen-dagpenger-vedtak-test
+DAGPENGER_BEHANDLING_TOPIC: teamdagpenger.aapen-dagpenger-behandling-test

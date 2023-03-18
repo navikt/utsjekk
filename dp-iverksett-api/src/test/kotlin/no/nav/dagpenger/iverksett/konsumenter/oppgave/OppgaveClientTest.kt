@@ -84,13 +84,13 @@ class OppgaveClientTest {
         OpprettOppgaveRequest(
             ident = OppgaveIdentV2(ident = personIdent, gruppe = IdentGruppe.FOLKEREGISTERIDENT),
             saksId = null,
-            tema = Tema.ENF,
+            tema = Tema.DP,
             oppgavetype = Oppgavetype.VurderLivshendelse,
             fristFerdigstillelse = LocalDate.now().plusDays(1),
             beskrivelse = beskrivelse,
             enhetsnummer = null,
-            behandlingstema = Behandlingstema.Overgangsstønad.value,
+            behandlingstema = Behandlingstema.Dagpenger.value,
             tilordnetRessurs = null,
-            behandlesAvApplikasjon = "familie-ef-sak",
+            behandlesAvApplikasjon = "dp-sak",
         )
 }

@@ -1,10 +1,10 @@
 apiVersion: kafka.nais.io/v1
 kind: Topic
 metadata:
-  name: aapen-ef-overgangstonad-v1
-  namespace: teamfamilie
+  name: aapen-dagpenger-v1
+  namespace: teamdagpenger
   labels:
-    team: teamfamilie
+    team: teamdagpenger
 spec:
   pool: nav-dev
   config:
@@ -15,12 +15,6 @@ spec:
     retentionBytes: -1
     retentionHours: 720
   acl:
-    - team: teamfamilie
-      application: familie-ef-iverksett
+    - team: teamdagpenger
+      application: dp-iverksett
       access: read
-    - team: teamfamilie
-      application: familie-baks-mottak
-      access: read
-    - team: teamfamilie
-      application: infotrygd-goldengate
-      access: write

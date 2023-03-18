@@ -147,7 +147,7 @@ internal class UtbetalingsoppdragGeneratorTest {
             personIdent = "1",
             behandlingId = behandlingId,
             eksternBehandlingId = 1,
-            stønadstype = StønadType.OVERGANGSSTØNAD,
+            stønadstype = StønadType.DAGPENGER,
             eksternFagsakId = 1,
             saksbehandlerId = "VL",
             vedtaksdato = LocalDate.of(2021, 5, 12),

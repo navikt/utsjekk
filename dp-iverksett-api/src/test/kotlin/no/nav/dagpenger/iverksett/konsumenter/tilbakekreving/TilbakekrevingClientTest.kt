@@ -22,7 +22,7 @@ internal class TilbakekrevingClientTest : ServerTest() {
     fun `hentForhåndsvisningVarselbrev returnere en byteArray med data fra server`() {
         val forhåndsvisVarselbrevRequest =
             ForhåndsvisVarselbrevRequest(
-                ytelsestype = Ytelsestype.OVERGANGSSTØNAD,
+                ytelsestype = Ytelsestype.DAGPENGER,
                 behandlendeEnhetsNavn = "Oslo",
                 språkkode = Språkkode.NB,
                 feilutbetaltePerioderDto = FeilutbetaltePerioderDto(
@@ -34,7 +34,7 @@ internal class TilbakekrevingClientTest : ServerTest() {
                         ),
                     ),
                 ),
-                fagsystem = Fagsystem.EF,
+                fagsystem = Fagsystem.DP,
                 ident = "32165498721",
                 eksternFagsakId = "654654",
             )
@@ -61,7 +61,7 @@ internal class TilbakekrevingClientTest : ServerTest() {
     @Test
     fun `kanBehandlingOpprettesManuelt returnere transportobjekt far server`() {
         val kanBehandlingOpprettesManuelt =
-            tilbakekrevingClient.kanBehandlingOpprettesManuelt(1L, Ytelsestype.OVERGANGSSTØNAD)
+            tilbakekrevingClient.kanBehandlingOpprettesManuelt(1L, Ytelsestype.DAGPENGER)
 
         assertThat(kanBehandlingOpprettesManuelt.kanBehandlingOpprettes).isEqualTo(true)
     }

@@ -4,7 +4,7 @@ import no.nav.dagpenger.iverksett.konsumenter.arbeidsoppfolging.SendVedtakTilArb
 import no.nav.dagpenger.iverksett.konsumenter.arena.SendFattetVedtakTilArenaTask
 import no.nav.dagpenger.iverksett.konsumenter.brev.DistribuerVedtaksbrevTask
 import no.nav.dagpenger.iverksett.konsumenter.brev.JournalførVedtaksbrevTask
-import no.nav.dagpenger.iverksett.konsumenter.oppgave.OpprettOppfølgingsOppgaveForOvergangsstønadTask
+import no.nav.dagpenger.iverksett.konsumenter.oppgave.OpprettOppfølgingsOppgaveForDagpengerTask
 import no.nav.dagpenger.iverksett.konsumenter.tilbakekreving.OpprettTilbakekrevingTask
 import no.nav.dagpenger.iverksett.konsumenter.vedtak.PubliserVedtakTilKafkaTask
 import no.nav.dagpenger.iverksett.konsumenter.vedtakstatistikk.VedtakstatistikkTask
@@ -31,7 +31,7 @@ fun publiseringsflyt() = listOf(
     TaskType(SendFattetVedtakTilArenaTask.TYPE),
     TaskType(PubliserVedtakTilKafkaTask.TYPE),
     TaskType(SendVedtakTilArbeidsoppfølgingTask.TYPE),
-    TaskType(OpprettOppfølgingsOppgaveForOvergangsstønadTask.TYPE),
+    TaskType(OpprettOppfølgingsOppgaveForDagpengerTask.TYPE),
     TaskType(VedtakstatistikkTask.TYPE),
 )
 

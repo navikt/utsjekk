@@ -20,8 +20,8 @@ import no.nav.dagpenger.iverksett.kontrakter.dvh.StønadType
 import no.nav.dagpenger.iverksett.kontrakter.dvh.Utbetaling
 import no.nav.dagpenger.iverksett.kontrakter.dvh.Utbetalingsdetalj
 import no.nav.dagpenger.iverksett.kontrakter.dvh.Vedtak
-import no.nav.dagpenger.iverksett.kontrakter.dvh.VedtakOvergangsstønadDVH
-import no.nav.dagpenger.iverksett.kontrakter.dvh.VedtaksperiodeOvergangsstønadDto
+import no.nav.dagpenger.iverksett.kontrakter.dvh.VedtakDagpengerDVH
+import no.nav.dagpenger.iverksett.kontrakter.dvh.VedtaksperiodeDagpengerDto
 import no.nav.dagpenger.iverksett.kontrakter.dvh.VedtaksperiodeType
 import no.nav.dagpenger.iverksett.kontrakter.dvh.Vilkår
 import no.nav.dagpenger.iverksett.kontrakter.dvh.Vilkårsresultat
@@ -30,8 +30,8 @@ import no.nav.dagpenger.iverksett.kontrakter.dvh.ÅrsakRevurdering
 import no.nav.dagpenger.iverksett.kontrakter.felles.Opplysningskilde
 import no.nav.dagpenger.iverksett.kontrakter.felles.Revurderingsårsak
 import no.nav.dagpenger.iverksett.kontrakter.felles.VilkårType
-import no.nav.dagpenger.iverksett.kontrakter.iverksett.IverksettOvergangsstønadDto
-import no.nav.dagpenger.iverksett.util.opprettIverksettOvergangsstønad
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.IverksettDagpengerdDto
+import no.nav.dagpenger.iverksett.util.opprettIverksettDagpenger
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
@@ -48,47 +48,46 @@ class VedtakstatistikkServiceTest {
     internal fun `vedtakstatistikk skal kalle kafka producer med riktig data`() {
         val behandlingId = UUID.randomUUID()
 
-        val vedtakstatistikkJsonSlot = slot<VedtakOvergangsstønadDVH>()
+        val vedtakstatistikkJsonSlot = slot<VedtakDagpengerDVH>()
         every { vedtakstatistikkKafkaProducer.sendVedtak(capture(vedtakstatistikkJsonSlot)) } just Runs
 
-        val iverksettOvergangsstønad = opprettIverksettOvergangsstønad(behandlingId)
-        vedtakstatistikkService.sendTilKafka(iverksettData = iverksettOvergangsstønad, forrigeIverksett = null)
+        val iverksettDagpenger = opprettIverksettDagpenger(behandlingId)
+        vedtakstatistikkService.sendTilKafka(iverksettData = iverksettDagpenger, forrigeIverksett = null)
 
-        val vedtakOvergangsstønad = opprettVedtakstatistikkOvergangsstønad(
-            behandlingId = iverksettOvergangsstønad.behandling.eksternId,
-            fagsakId = iverksettOvergangsstønad.fagsak.eksternId,
-            tidspunktVedtak = iverksettOvergangsstønad.vedtak.vedtakstidspunkt.toLocalDate(),
-            barn = iverksettOvergangsstønad.søker.barn.map { Barn(it.personIdent, it.termindato) },
+        val vedtakDagpenger = opprettVedtakstatistikkDagpenger(
+            behandlingId = iverksettDagpenger.behandling.eksternId,
+            fagsakId = iverksettDagpenger.fagsak.eksternId,
+            tidspunktVedtak = iverksettDagpenger.vedtak.vedtakstidspunkt.toLocalDate(),
+            barn = iverksettDagpenger.søker.barn.map { Barn(it.personIdent, it.termindato) },
         )
-        assertThat(vedtakOvergangsstønad).isEqualTo(vedtakstatistikkJsonSlot.captured)
+        assertThat(vedtakDagpenger).isEqualTo(vedtakstatistikkJsonSlot.captured)
     }
 
     @Test
     internal fun `map fra iverksettDtoEksempel til behandlingDVH`() {
         val iverksettDtoJson: String = ResourceLoaderTestUtil.readResource("json/IverksettDtoEksempel.json")
 
-        val iverksettDto = objectMapper.readValue<IverksettOvergangsstønadDto>(iverksettDtoJson)
+        val iverksettDto = objectMapper.readValue<IverksettDagpengerdDto>(iverksettDtoJson)
         val iverksett = iverksettDto.toDomain()
 
-        val vedtakOvergangsstønadDVH = slot<VedtakOvergangsstønadDVH>()
-        every { vedtakstatistikkKafkaProducer.sendVedtak(capture(vedtakOvergangsstønadDVH)) } just Runs
+        val vedtakDagpengerDVH = slot<VedtakDagpengerDVH>()
+        every { vedtakstatistikkKafkaProducer.sendVedtak(capture(vedtakDagpengerDVH)) } just Runs
         vedtakstatistikkService.sendTilKafka(iverksett, null)
-        // val vedtakOvergangsstønadDVH = objectMapper.readValue(vedtakOvergangsstønadDVHJsonSlot.captured, VedtakOvergangsstønadDVH::class.java)
-        assertThat(vedtakOvergangsstønadDVH).isNotNull
-        assertThat(vedtakOvergangsstønadDVH.captured.vilkårsvurderinger.size).isEqualTo(2)
+        assertThat(vedtakDagpengerDVH).isNotNull
+        assertThat(vedtakDagpengerDVH.captured.vilkårsvurderinger.size).isEqualTo(2)
         // Egen test på vilkårtype, da det er mismatch mellom ekstern kontrakt og ef. F.eks. finnes ikke aktivitet i kontrakt.
-        assertThat(vedtakOvergangsstønadDVH.captured.vilkårsvurderinger.first().vilkår.name).isEqualTo(VilkårType.AKTIVITET.name)
-        assertThat(vedtakOvergangsstønadDVH.captured.vilkårsvurderinger.last().vilkår.name)
+        assertThat(vedtakDagpengerDVH.captured.vilkårsvurderinger.first().vilkår.name).isEqualTo(VilkårType.AKTIVITET.name)
+        assertThat(vedtakDagpengerDVH.captured.vilkårsvurderinger.last().vilkår.name)
             .isEqualTo(VilkårType.SAGT_OPP_ELLER_REDUSERT.name)
     }
 
-    private fun opprettVedtakstatistikkOvergangsstønad(
+    private fun opprettVedtakstatistikkDagpenger(
         behandlingId: Long,
         fagsakId: Long,
         tidspunktVedtak: LocalDate,
         barn: List<Barn> = emptyList(),
-    ): VedtakOvergangsstønadDVH {
-        return VedtakOvergangsstønadDVH(
+    ): VedtakDagpengerDVH {
+        return VedtakDagpengerDVH(
             fagsakId = fagsakId,
             behandlingId = behandlingId,
             relatertBehandlingId = null,
@@ -106,7 +105,7 @@ class VedtakstatistikkServiceTest {
             behandlingÅrsak = BehandlingÅrsak.SØKNAD,
             vedtak = Vedtak.INNVILGET,
             vedtaksperioder = listOf(
-                VedtaksperiodeOvergangsstønadDto(
+                VedtaksperiodeDagpengerDto(
                     fraOgMed = YearMonth.now().atDay(1),
                     tilOgMed = YearMonth.now().atEndOfMonth(),
                     aktivitet = AktivitetType.BARNET_ER_SYKT,
@@ -122,7 +121,7 @@ class VedtakstatistikkServiceTest {
                     inntektsreduksjon = 5,
                     samordningsfradrag = 2,
                     utbetalingsdetalj = Utbetalingsdetalj(
-                        klassekode = "EFOG",
+                        klassekode = "DP",
                         gjelderPerson = Person(personIdent = "12345678910"),
                         delytelseId = "1",
                     ),
@@ -134,7 +133,7 @@ class VedtakstatistikkServiceTest {
                 harSagtOppArbeidsforhold = true,
             ),
             funksjonellId = 9L,
-            stønadstype = StønadType.OVERGANGSSTØNAD,
+            stønadstype = StønadType.DAGPENGER,
             kravMottatt = LocalDate.of(2021, 3, 3),
             årsakRevurdering = ÅrsakRevurdering(
                 Opplysningskilde.MELDING_MODIA.name,

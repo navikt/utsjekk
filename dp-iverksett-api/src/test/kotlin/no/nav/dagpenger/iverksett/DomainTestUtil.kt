@@ -2,9 +2,9 @@ package no.nav.dagpenger.iverksett
 
 import no.nav.dagpenger.iverksett.api.domene.Brev
 import no.nav.dagpenger.iverksett.api.domene.Iverksett
-import no.nav.dagpenger.iverksett.api.domene.IverksettOvergangsstønad
+import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
 import no.nav.dagpenger.iverksett.api.domene.Tilbakekrevingsdetaljer
-import no.nav.dagpenger.iverksett.api.domene.VedtaksperiodeOvergangsstønad
+import no.nav.dagpenger.iverksett.api.domene.VedtaksperiodeDagpenger
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.lagAndelTilkjentYtelse
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.lagAndelTilkjentYtelseDto
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.simulering.grupperPosteringerEtterDato
@@ -27,8 +27,8 @@ import no.nav.dagpenger.iverksett.kontrakter.simulering.Simuleringsoppsummering
 import no.nav.dagpenger.iverksett.kontrakter.simulering.Simuleringsperiode
 import no.nav.dagpenger.iverksett.kontrakter.simulering.SimulertPostering
 import no.nav.dagpenger.iverksett.util.behandlingsdetaljer
-import no.nav.dagpenger.iverksett.util.opprettIverksettOvergangsstønad
-import no.nav.dagpenger.iverksett.util.vedtaksdetaljerOvergangsstønad
+import no.nav.dagpenger.iverksett.util.opprettIverksettDagpenger
+import no.nav.dagpenger.iverksett.util.vedtaksdetaljerDagpenger
 import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.YearMonth
@@ -47,7 +47,7 @@ fun simuleringDto(
         ),
         saksbehandlerId = "saksbehandlerId",
         eksternBehandlingId = 1,
-        stønadstype = StønadType.OVERGANGSSTØNAD,
+        stønadstype = StønadType.DAGPENGER,
         eksternFagsakId = 1,
         behandlingId = behandlingId,
         personIdent = "12345611111",
@@ -71,7 +71,7 @@ fun detaljertSimuleringResultat(): DetaljertSimuleringResultat {
             SimuleringMottaker(
                 simulertPostering = listOf(
                     SimulertPostering(
-                        fagOmrådeKode = FagOmrådeKode.ENSLIG_FORSØRGER_OVERGANGSSTØNAD,
+                        fagOmrådeKode = FagOmrådeKode.DAGPENGER,
                         fom = LocalDate.of(2021, 1, 1),
                         tom = LocalDate.of(2021, 12, 31),
                         betalingType = BetalingType.DEBIT,
@@ -133,7 +133,7 @@ fun posteringer(
 
 ): List<SimulertPostering> = MutableList(antallMåneder) { index ->
     SimulertPostering(
-        fagOmrådeKode = FagOmrådeKode.ENSLIG_FORSØRGER_OVERGANGSSTØNAD,
+        fagOmrådeKode = FagOmrådeKode.DAGPENGER,
         fom = måned.plusMonths(index.toLong()).atDay(1),
         tom = måned.plusMonths(index.toLong()).atEndOfMonth(),
         betalingType = betalingstype,
@@ -142,7 +142,7 @@ fun posteringer(
         forfallsdato = måned.plusMonths(index.toLong())
             .atEndOfMonth(), // Forfallsdato i bank (dagen går til brukeren). Det sendes til banken kanskje en uke i forveien
         utenInntrekk = false,
-    ) // Brukes ikke for EF
+    )
 }
 
 fun Tilbakekrevingsdetaljer.medFeilutbetaling(feilutbetaling: BigDecimal, periode: Datoperiode) =
@@ -178,19 +178,19 @@ fun lagIverksettData(
     forrigeBehandlingId: UUID? = null,
     behandlingType: BehandlingType,
     vedtaksresultat: Vedtaksresultat,
-    vedtaksperioder: List<VedtaksperiodeOvergangsstønad> = emptyList(),
+    vedtaksperioder: List<VedtaksperiodeDagpenger> = emptyList(),
     erMigrering: Boolean = false,
     andelsdatoer: List<YearMonth> = emptyList(),
     årsak: BehandlingÅrsak = BehandlingÅrsak.SØKNAD,
-): IverksettOvergangsstønad {
+): IverksettDagpenger {
     val behandlingÅrsak = if (erMigrering) BehandlingÅrsak.MIGRERING else årsak
-    return opprettIverksettOvergangsstønad(
+    return opprettIverksettDagpenger(
         behandlingsdetaljer = behandlingsdetaljer(
             forrigeBehandlingId = forrigeBehandlingId,
             behandlingType = behandlingType,
             behandlingÅrsak = behandlingÅrsak,
         ),
-        vedtaksdetaljer = vedtaksdetaljerOvergangsstønad(
+        vedtaksdetaljer = vedtaksdetaljerDagpenger(
             vedtaksresultat = vedtaksresultat,
             vedtaksperioder = vedtaksperioder,
             andeler = andelsdatoer.map {
@@ -201,7 +201,7 @@ fun lagIverksettData(
     )
 }
 
-fun lagIverksett(iverksettData: IverksettOvergangsstønad, brev: Brev? = null) = Iverksett(
+fun lagIverksett(iverksettData: IverksettDagpenger, brev: Brev? = null) = Iverksett(
     iverksettData.behandling.behandlingId,
     iverksettData,
     iverksettData.behandling.eksternId,

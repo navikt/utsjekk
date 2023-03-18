@@ -1,10 +1,10 @@
 apiVersion: kafka.nais.io/v1
 kind: Topic
 metadata:
-  name: aapen-ensligforsorger-vedtak-v1
-  namespace: teamfamilie
+  name: aapen-dagpenger-vedtak-v1
+  namespace: teamdagpenger
   labels:
-    team: teamfamilie
+    team: teamdagpenger
 spec:
   pool: nav-prod
   config:
@@ -15,8 +15,8 @@ spec:
     retentionBytes: -1
     retentionHours: -1
   acl:
-    - team: teamfamilie
-      application: familie-ef-iverksett
+    - team: teamdagpenger
+      application: dp-iverksett
       access: readwrite
     - team: dv-familie
       application: dvh-famef-konsumer

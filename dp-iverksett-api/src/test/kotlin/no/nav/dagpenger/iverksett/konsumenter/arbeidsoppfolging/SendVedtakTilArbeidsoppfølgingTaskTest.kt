@@ -8,7 +8,7 @@ import io.mockk.verify
 import no.nav.dagpenger.iverksett.api.IverksettingRepository
 import no.nav.dagpenger.iverksett.infrastruktur.repository.findByIdOrThrow
 import no.nav.dagpenger.iverksett.infrastruktur.transformer.toDomain
-import no.nav.dagpenger.iverksett.konsumenter.oppgave.OpprettOppfølgingsOppgaveForOvergangsstønadTask
+import no.nav.dagpenger.iverksett.konsumenter.oppgave.OpprettOppfølgingsOppgaveForDagpengerTask
 import no.nav.dagpenger.iverksett.kontrakter.felles.StønadType
 import no.nav.dagpenger.iverksett.lagIverksett
 import no.nav.dagpenger.iverksett.util.opprettIverksettDto
@@ -50,7 +50,7 @@ class SendVedtakTilArbeidsoppfølgingTaskTest {
         task.onCompletion(lagTask())
 
         verify(exactly = 1) { taskService.save(any()) }
-        Assertions.assertThat(taskSlot.captured.type).isEqualTo(OpprettOppfølgingsOppgaveForOvergangsstønadTask.TYPE)
+        Assertions.assertThat(taskSlot.captured.type).isEqualTo(OpprettOppfølgingsOppgaveForDagpengerTask.TYPE)
     }
 
     @Test

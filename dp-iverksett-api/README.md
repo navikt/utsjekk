@@ -52,9 +52,9 @@ For å se og verifisere konfigurasjon til gitt topic kan kommandoen `kubectl des
 
 ### Debugging og lesing fra kø med Kafkacat
 Det er mulig å se hva som ligger på kø med Kafkacat uten å lage en egen applikasjon for både dev og prod.
-Kjør kommando `kafkacat -F <configFile.config> -C -t teamfamilie.<topicnavn> -o -1 -e` for å lese nyeste melding på topic. 
+Kjør kommando `kafkacat -F <configFile.config> -C -t teamdagpenger.<topicnavn> -o -1 -e` for å lese nyeste melding på topic. 
 Se dokumentasjon på kafkacat for å modifisere til å f.eks. se melding på gitt offset.
-Installasjon av kafkacat og oppsett av config-fil er dokumentert i familie-repoet under utvikling. 
+Installasjon av kafkacat og oppsett av config-fil er dokumentert i dagpenger-repoet under utvikling. 
 
 ## Produksjonssetting
 Applikasjonen vil deployes til produksjon ved ny commit på master-branchen. Det er dermed tilstrekkelig å merge PR for å trigge produksjonsbygget.
@@ -64,7 +64,7 @@ Applikasjonen vil deployes til produksjon ved ny commit på master-branchen. Det
 Spørsmål knyttet til koden eller prosjektet kan rettes til:
 
 * Jørn Ola Birkeland, `jorn.ola.birkeland@nav.no` (dagpenger-fork)
-* Mattis Janitz, `mattis.janitz@nav.no` (familie-ef-iverksett)
+* Mattis Janitz, `mattis.janitz@nav.no` (dp-iverksett)
 
 ### For NAV-ansatte
 

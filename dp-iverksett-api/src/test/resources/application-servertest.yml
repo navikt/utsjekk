@@ -36,10 +36,10 @@ funksjonsbrytere:
   unleash:
     uri: http://localhost:4242/api
     environment: local
-    applicationName: familie-ef-iverksett
+    applicationName: dp-iverksett
 
 
-FAMILIE_OPPDRAG_API_URL: http://localhost:8087
+DP_OPPDRAG_API_URL: http://localhost:8087
 FAMILIE_INTEGRASJONER_API_URL: http://localhost:9085
 FAMILIE_TILBAKE_URL: http://localhost:8030
 AZURE_OPENID_CONFIG_TOKEN_ENDPOINT: https://login.microsoftonline.com/navq.onmicrosoft.com/oauth2/v2.0/token

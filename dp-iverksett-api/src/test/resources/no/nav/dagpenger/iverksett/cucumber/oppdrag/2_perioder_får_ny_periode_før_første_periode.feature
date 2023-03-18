@@ -5,7 +5,7 @@ Egenskap: 2 perioder får en ny periode
 
   Scenario: Har 2 perioder og får en endring før første periode
 
-    Gitt følgende tilkjente ytelser for Overgangsstønad
+    Gitt følgende tilkjente ytelser for Dagpenger
       | BehandlingId | Fra dato | Til dato | Beløp |
       | 1            | 02.2021  | 04.2021  | 700   |
       | 1            | 05.2021  | 07.2021  | 900   |

@@ -3,7 +3,7 @@ package no.nav.dagpenger.iverksett.konsumenter.arbeidsoppfolging
 import no.nav.dagpenger.iverksett.infrastruktur.service.KafkaProducerService
 import no.nav.dagpenger.iverksett.konsumenter.vedtakstatistikk.toJson
 import no.nav.dagpenger.iverksett.kontrakter.arbeidsoppfølging.Stønadstype
-import no.nav.dagpenger.iverksett.kontrakter.arbeidsoppfølging.VedtakOvergangsstønadArbeidsoppfølging
+import no.nav.dagpenger.iverksett.kontrakter.arbeidsoppfølging.VedtakDagpengerArbeidsoppfølging
 import no.nav.dagpenger.iverksett.kontrakter.felles.StønadType
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
@@ -18,8 +18,8 @@ class ArbeidsoppfølgingKafkaProducer(private val kafkaProducerService: KafkaPro
     private val logger = LoggerFactory.getLogger(javaClass)
     private val secureLogger = LoggerFactory.getLogger("secureLogger")
 
-    fun sendVedtak(vedtakOvergangsstønadArbeidsoppfølging: VedtakOvergangsstønadArbeidsoppfølging) {
-        sendVedtak(vedtakOvergangsstønadArbeidsoppfølging.vedtakId, vedtakOvergangsstønadArbeidsoppfølging.stønadstype, vedtakOvergangsstønadArbeidsoppfølging.toJson())
+    fun sendVedtak(vedtakDagpengerArbeidsoppfølging: VedtakDagpengerArbeidsoppfølging) {
+        sendVedtak(vedtakDagpengerArbeidsoppfølging.vedtakId, vedtakDagpengerArbeidsoppfølging.stønadstype, vedtakDagpengerArbeidsoppfølging.toJson())
     }
 
     fun sendVedtak(behandlingId: Long, stønadstype: Stønadstype, vedtakArbeidsoppfølging: String) {

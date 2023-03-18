@@ -2,7 +2,7 @@ package no.nav.dagpenger.iverksett.kontrakter.arbeidsoppfølging
 
 import java.time.LocalDate
 
-data class VedtakOvergangsstønadArbeidsoppfølging(
+data class VedtakDagpengerArbeidsoppfølging(
     val vedtakId: Long,
     val personIdent: String,
     val barn: List<Barn>,
@@ -24,9 +24,7 @@ data class Periode(
 )
 
 enum class Stønadstype {
-    OVERGANGSSTØNAD,
-    BARNETILSYN,
-    SKOLEPENGER,
+    DAGPENGER
 }
 
 enum class Vedtaksresultat {

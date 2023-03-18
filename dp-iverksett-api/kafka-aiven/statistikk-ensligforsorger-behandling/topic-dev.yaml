@@ -1,10 +1,10 @@
 apiVersion: kafka.nais.io/v1
 kind: Topic
 metadata:
-  name: aapen-ensligforsorger-behandling-test
-  namespace: teamfamilie
+  name: aapen-dagpeenger-behandling-test
+  namespace: teamdagpenger
   labels:
-    team: teamfamilie
+    team: teamdagpenger
 spec:
   pool: nav-dev
   config:
@@ -15,12 +15,12 @@ spec:
     retentionBytes: -1
     retentionHours: 2016
   acl:
-    - team: teamfamilie
-      application: familie-ef-iverksett
+    - team: teamdagpenger
+      application: dp-iverksett
       access: readwrite
     - team: ptsak
-      application: pt-sak-ensligforsorger-dev
+      application: pt-sak-dagpenger-dev
       access: read
     - team: ptsak
-      application: pt-sak-ensligforsorger-preprod
+      application: pt-sak-dagpenger-preprod
       access: read

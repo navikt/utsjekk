@@ -2,12 +2,11 @@ package no.nav.dagpenger.iverksett.konsumenter.tilbakekreving
 
 import com.fasterxml.jackson.module.kotlin.readValue
 import no.nav.dagpenger.iverksett.api.IverksettingRepository
-import no.nav.dagpenger.iverksett.api.domene.IverksettOvergangsstønad
+import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
 import no.nav.dagpenger.iverksett.infrastruktur.FamilieIntegrasjonerClient
 import no.nav.dagpenger.iverksett.kontrakter.objectMapper
 import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.HentFagsystemsbehandlingRequest
 import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.HentFagsystemsbehandlingRespons
-import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.Ytelsestype
 import no.nav.familie.log.mdc.MDCConstants
 import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.slf4j.LoggerFactory
@@ -28,8 +27,8 @@ class TilbakekrevingListener(
     private val secureLogger = LoggerFactory.getLogger("secureLogger")
 
     @KafkaListener(
-        id = "familie-ef-iverksett",
-        topics = ["teamfamilie.privat-tbk-hentfagsystemsbehandling-request-topic"],
+        id = "dp-iverksett",
+        topics = ["teamdagpenger.privat-tbk-hentfagsystemsbehandling-request-topic"],
         containerFactory = "concurrentTilbakekrevingListenerContainerFactory",
     )
     fun listen(consumerRecord: ConsumerRecord<String, String>) {
@@ -54,9 +53,6 @@ class TilbakekrevingListener(
         try {
             val request: HentFagsystemsbehandlingRequest =
                 objectMapper.readValue(data)
-            if (!request.erEfYtelse()) {
-                return
-            }
             logger.info("HentFagsystemsbehandlingRequest er mottatt i kafka med key=$key og data=$data")
             val iverksett = iverksettingRepository.findByEksternId(request.eksternId.toLong()).data
             sjekkFagsakIdKonsistens(iverksett, request)
@@ -73,15 +69,7 @@ class TilbakekrevingListener(
         }
     }
 
-    private fun HentFagsystemsbehandlingRequest.erEfYtelse(): Boolean {
-        return listOf(
-            Ytelsestype.OVERGANGSSTØNAD,
-            Ytelsestype.SKOLEPENGER,
-            Ytelsestype.BARNETILSYN,
-        ).contains(this.ytelsestype)
-    }
-
-    private fun sjekkFagsakIdKonsistens(iverksett: IverksettOvergangsstønad, request: HentFagsystemsbehandlingRequest) {
+    private fun sjekkFagsakIdKonsistens(iverksett: IverksettDagpenger, request: HentFagsystemsbehandlingRequest) {
         if (!iverksett.fagsak.eksternId.equals(request.eksternFagsakId.toLong())) {
             error(
                 "Inkonsistens. Ekstern fagsakID mellom iverksatt behandling (ekstern fagsakID=" +

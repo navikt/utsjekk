@@ -11,7 +11,7 @@ Egenskap: Opphører vedtak med 0-periode, og deretter innvilget ny stønad
       | 2            | 02.2021   |
       | 3            | 02.2021   |
 
-    Og følgende tilkjente ytelser for Overgangsstønad
+    Og følgende tilkjente ytelser for Dagpenger
       | BehandlingId | Fra dato | Til dato | Beløp |
       | 1            | 03.2021  | 03.2021  | 800   |
       | 2            | 03.2021  | 03.2021  | 0     |

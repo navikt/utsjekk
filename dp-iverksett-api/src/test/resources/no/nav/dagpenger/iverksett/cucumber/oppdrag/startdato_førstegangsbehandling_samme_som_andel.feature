@@ -5,7 +5,7 @@ Egenskap: Førstegangsbehandling - kan sende startdato i en førstegangsbehandli
 
   Scenario: Førstegangsbehandling - kan sende startdato i en førstegangsbehandling
 
-    Gitt følgende tilkjente ytelser for Overgangsstønad
+    Gitt følgende tilkjente ytelser for Dagpenger
       | BehandlingId | Fra dato | Til dato | Beløp |
       | 1            | 03.2021  | 03.2021  | 0     |
       | 1            | 03.2021  | 03.2021  | 700   |

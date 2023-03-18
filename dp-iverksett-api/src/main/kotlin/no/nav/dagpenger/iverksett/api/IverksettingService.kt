@@ -2,7 +2,7 @@ package no.nav.dagpenger.iverksett.api
 
 import no.nav.dagpenger.iverksett.api.domene.Brev
 import no.nav.dagpenger.iverksett.api.domene.Iverksett
-import no.nav.dagpenger.iverksett.api.domene.IverksettOvergangsstønad
+import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
 import no.nav.dagpenger.iverksett.api.domene.OppdragResultat
 import no.nav.dagpenger.iverksett.api.tilstand.IverksettResultatService
 import no.nav.dagpenger.iverksett.infrastruktur.featuretoggle.FeatureToggleService
@@ -10,7 +10,7 @@ import no.nav.dagpenger.iverksett.infrastruktur.repository.findByIdOrThrow
 import no.nav.dagpenger.iverksett.infrastruktur.util.tilKlassifisering
 import no.nav.dagpenger.iverksett.konsumenter.brev.JournalførVedtaksbrevTask
 import no.nav.dagpenger.iverksett.konsumenter.hovedflyt
-import no.nav.dagpenger.iverksett.konsumenter.oppgave.OpprettOppfølgingsOppgaveForOvergangsstønadTask
+import no.nav.dagpenger.iverksett.konsumenter.oppgave.OpprettOppfølgingsOppgaveForDagpengerTask
 import no.nav.dagpenger.iverksett.konsumenter.publiseringsflyt
 import no.nav.dagpenger.iverksett.konsumenter.vedtakstatistikk.VedtakstatistikkTask
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.OppdragClient
@@ -37,8 +37,8 @@ class IverksettingService(
 ) {
 
     @Transactional
-    fun startIverksetting(iverksett: IverksettOvergangsstønad, brev: Brev?) {
-        if (featureToggleService.isEnabled("familie.ef.iverksett.stopp-iverksetting")) {
+    fun startIverksetting(iverksett: IverksettDagpenger, brev: Brev?) {
+        if (featureToggleService.isEnabled("dp.iverksett.stopp-iverksetting")) {
             error("Kan ikke iverksette akkurat nå")
         }
         iverksettingRepository.insert(
@@ -84,18 +84,18 @@ class IverksettingService(
         )
     }
 
-    private fun førstePubliseringsflytTask(iverksett: IverksettOvergangsstønad) = when {
+    private fun førstePubliseringsflytTask(iverksett: IverksettDagpenger) = when {
         iverksett.erGOmregning() || iverksett.erSatsendring() -> VedtakstatistikkTask.TYPE
-        erIverksettingUtenVedtaksperioder(iverksett) -> OpprettOppfølgingsOppgaveForOvergangsstønadTask.TYPE
+        erIverksettingUtenVedtaksperioder(iverksett) -> OpprettOppfølgingsOppgaveForDagpengerTask.TYPE
         else -> publiseringsflyt().first().type
     }
 
-    private fun førsteHovedflytTask(iverksett: IverksettOvergangsstønad) = when {
+    private fun førsteHovedflytTask(iverksett: IverksettDagpenger) = when {
         erIverksettingUtenVedtaksperioder(iverksett) -> JournalførVedtaksbrevTask.TYPE
         else -> hovedflyt().first().type
     }
 
-    private fun erIverksettingUtenVedtaksperioder(iverksett: IverksettOvergangsstønad) =
+    private fun erIverksettingUtenVedtaksperioder(iverksett: IverksettDagpenger) =
         iverksett.vedtak.tilkjentYtelse == null && iverksett.vedtak.vedtaksresultat == Vedtaksresultat.AVSLÅTT
 
     fun utledStatus(behandlingId: UUID): IverksettStatus? {

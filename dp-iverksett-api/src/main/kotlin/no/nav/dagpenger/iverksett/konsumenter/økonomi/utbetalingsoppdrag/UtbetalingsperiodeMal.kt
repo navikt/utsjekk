@@ -59,9 +59,6 @@ fun lagUtbetalingsperiodeForOpphør(
 }
 
 fun mapSatstype(stønadstype: StønadType) = when (stønadstype) {
-    StønadType.OVERGANGSSTØNAD,
-    StønadType.BARNETILSYN,
-    -> Utbetalingsperiode.SatsType.MND
-    StønadType.SKOLEPENGER -> Utbetalingsperiode.SatsType.ENG
+    StønadType.DAGPENGER -> Utbetalingsperiode.SatsType.DAG
     else -> error("Støtter ikke periodetype=$stønadstype")
 }

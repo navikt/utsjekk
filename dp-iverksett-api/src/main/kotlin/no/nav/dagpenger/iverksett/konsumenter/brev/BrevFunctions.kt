@@ -1,6 +1,6 @@
 package no.nav.dagpenger.iverksett.konsumenter.brev
 
-import no.nav.dagpenger.iverksett.api.domene.IverksettOvergangsstønad
+import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
 import no.nav.dagpenger.iverksett.kontrakter.felles.BehandlingType
 import no.nav.dagpenger.iverksett.kontrakter.felles.BehandlingÅrsak
 import no.nav.dagpenger.iverksett.kontrakter.felles.StønadType
@@ -9,26 +9,20 @@ import no.nav.dagpenger.iverksett.kontrakter.journalføring.dokarkiv.Dokumenttyp
 
 fun stønadstypeTilDokumenttype(stønadType: StønadType) =
     when (stønadType) {
-        StønadType.OVERGANGSSTØNAD -> Dokumenttype.OVERGANGSSTØNAD_FRITTSTÅENDE_BREV
-        StønadType.SKOLEPENGER -> Dokumenttype.SKOLEPENGER_FRITTSTÅENDE_BREV
-        StønadType.BARNETILSYN -> Dokumenttype.BARNETILSYN_FRITTSTÅENDE_BREV
+        StønadType.DAGPENGER -> Dokumenttype.DAGPENGER_FRITTSTÅENDE_BREV
     }
 
 fun vedtaksbrevForStønadType(stønadType: StønadType): Dokumenttype =
     when (stønadType) {
-        StønadType.OVERGANGSSTØNAD -> Dokumenttype.VEDTAKSBREV_OVERGANGSSTØNAD
-        StønadType.BARNETILSYN -> Dokumenttype.VEDTAKSBREV_BARNETILSYN
-        StønadType.SKOLEPENGER -> Dokumenttype.VEDTAKSBREV_SKOLEPENGER
+        StønadType.DAGPENGER -> Dokumenttype.VEDTAKSBREV_DAGPENGER
     }
 
 fun lagStønadtypeTekst(stønadstype: StønadType): String =
     when (stønadstype) {
-        StønadType.OVERGANGSSTØNAD -> "overgangstønad"
-        StønadType.BARNETILSYN -> "stønad til barnetilsyn"
-        StønadType.SKOLEPENGER -> "stønad til skolepenger"
+        StønadType.DAGPENGER -> "dagpenger"
     }
 
-fun lagVedtakstekst(iverksettData: IverksettOvergangsstønad): String =
+fun lagVedtakstekst(iverksettData: IverksettDagpenger): String =
     when {
         iverksettData.behandling.behandlingType === BehandlingType.FØRSTEGANGSBEHANDLING ->
             lagVedtakstekstFørstegangsbehandling(iverksettData)
@@ -40,7 +34,7 @@ fun lagVedtakstekst(iverksettData: IverksettOvergangsstønad): String =
         else -> "Vedtak om revurdert "
     }
 
-private fun lagVedtakstekstFørstegangsbehandling(iverksettData: IverksettOvergangsstønad) =
+private fun lagVedtakstekstFørstegangsbehandling(iverksettData: IverksettDagpenger) =
     when (iverksettData.vedtak.vedtaksresultat) {
         Vedtaksresultat.INNVILGET -> "Vedtak om innvilget "
         Vedtaksresultat.AVSLÅTT -> "Vedtak om avslått "

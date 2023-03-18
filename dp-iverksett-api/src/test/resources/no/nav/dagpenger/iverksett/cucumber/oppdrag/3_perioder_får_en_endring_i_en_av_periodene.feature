@@ -6,7 +6,7 @@ Egenskap: 3 perioder og får endring i en av periodene
 
   Scenario: Har 3 perioder og får en endring i den første perioden
 
-    Gitt følgende tilkjente ytelser for Overgangsstønad
+    Gitt følgende tilkjente ytelser for Dagpenger
       | BehandlingId | Fra dato | Til dato | Beløp |
       | 1            | 02.2021  | 04.2021  | 700   |
       | 1            | 05.2021  | 07.2021  | 900   |
@@ -42,7 +42,7 @@ Egenskap: 3 perioder og får endring i en av periodene
 
   Scenario: Har 3 perioder og får en endring i den andre perioden
 
-    Gitt følgende tilkjente ytelser for Overgangsstønad
+    Gitt følgende tilkjente ytelser for Dagpenger
       | BehandlingId | Fra dato | Til dato | Beløp |
       | 1            | 02.2021  | 04.2021  | 700   |
       | 1            | 05.2021  | 07.2021  | 900   |

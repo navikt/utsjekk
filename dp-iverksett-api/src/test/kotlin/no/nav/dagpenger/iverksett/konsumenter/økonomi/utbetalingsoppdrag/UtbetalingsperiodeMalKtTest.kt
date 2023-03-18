@@ -12,21 +12,13 @@ internal class UtbetalingsperiodeMalKtTest {
 
     @Test
     fun `skal mappe stønadstype til riktig satstype`() {
-        assertThat(mapSatstype(StønadType.OVERGANGSSTØNAD)).isEqualTo(Utbetalingsperiode.SatsType.MND)
-        assertThat(mapSatstype(StønadType.BARNETILSYN)).isEqualTo(Utbetalingsperiode.SatsType.MND)
-        assertThat(mapSatstype(StønadType.SKOLEPENGER)).isEqualTo(Utbetalingsperiode.SatsType.ENG)
+        assertThat(mapSatstype(StønadType.DAGPENGER)).isEqualTo(Utbetalingsperiode.SatsType.DAG)
     }
 
     @Test
-    internal fun `skal sette satstype til ENG for skolepenger`() {
-        val utbetalingsperiode = lagUtbetalingsperiode(StønadType.SKOLEPENGER)
-        assertThat(utbetalingsperiode.satsType).isEqualTo(Utbetalingsperiode.SatsType.ENG)
-    }
-
-    @Test
-    internal fun `skal sette satstype til MND for overgangsstønad`() {
-        val utbetalingsperiode = lagUtbetalingsperiode(StønadType.OVERGANGSSTØNAD)
-        assertThat(utbetalingsperiode.satsType).isEqualTo(Utbetalingsperiode.SatsType.MND)
+    internal fun `skal sette satstype til DAG for dagpenger`() {
+        val utbetalingsperiode = lagUtbetalingsperiode(StønadType.DAGPENGER)
+        assertThat(utbetalingsperiode.satsType).isEqualTo(Utbetalingsperiode.SatsType.DAG)
     }
 
     private fun lagUtbetalingsperiode(stønadType: StønadType) =

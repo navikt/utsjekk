@@ -2,10 +2,10 @@ package no.nav.dagpenger.iverksett.konsumenter.vedtakstatistikk
 
 import no.nav.dagpenger.iverksett.api.domene.Barn
 import no.nav.dagpenger.iverksett.api.domene.Behandlingsdetaljer
-import no.nav.dagpenger.iverksett.api.domene.IverksettOvergangsstønad
+import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
 import no.nav.dagpenger.iverksett.api.domene.Søker
 import no.nav.dagpenger.iverksett.api.domene.TilkjentYtelse
-import no.nav.dagpenger.iverksett.api.domene.VedtaksdetaljerOvergangsstønad
+import no.nav.dagpenger.iverksett.api.domene.VedtaksdetaljerDagpenger
 import no.nav.dagpenger.iverksett.api.domene.Vilkårsvurdering
 import no.nav.dagpenger.iverksett.infrastruktur.util.VilkårsvurderingUtil
 import no.nav.dagpenger.iverksett.infrastruktur.util.tilKlassifisering
@@ -18,8 +18,8 @@ import no.nav.dagpenger.iverksett.kontrakter.dvh.Person
 import no.nav.dagpenger.iverksett.kontrakter.dvh.Utbetaling
 import no.nav.dagpenger.iverksett.kontrakter.dvh.Utbetalingsdetalj
 import no.nav.dagpenger.iverksett.kontrakter.dvh.Vedtak
-import no.nav.dagpenger.iverksett.kontrakter.dvh.VedtakOvergangsstønadDVH
-import no.nav.dagpenger.iverksett.kontrakter.dvh.VedtaksperiodeOvergangsstønadDto
+import no.nav.dagpenger.iverksett.kontrakter.dvh.VedtakDagpengerDVH
+import no.nav.dagpenger.iverksett.kontrakter.dvh.VedtaksperiodeDagpengerDto
 import no.nav.dagpenger.iverksett.kontrakter.dvh.VedtaksperiodeType
 import no.nav.dagpenger.iverksett.kontrakter.dvh.Vilkår
 import no.nav.dagpenger.iverksett.kontrakter.dvh.Vilkårsresultat
@@ -39,11 +39,11 @@ object VedtakstatistikkMapper {
             )
         }
 
-    fun mapTilVedtakOvergangsstønadDVH(
-        iverksett: IverksettOvergangsstønad,
+    fun mapTilVedtakDagpengerDVH(
+        iverksett: IverksettDagpenger,
         forrigeIverksettBehandlingEksternId: Long?,
-    ): VedtakOvergangsstønadDVH {
-        return VedtakOvergangsstønadDVH(
+    ): VedtakDagpengerDVH {
+        return VedtakDagpengerDVH(
             fagsakId = iverksett.fagsak.eksternId,
             behandlingId = iverksett.behandling.eksternId,
             relatertBehandlingId = forrigeIverksettBehandlingEksternId,
@@ -119,9 +119,9 @@ object VedtakstatistikkMapper {
         )
     }
 
-    private fun mapToVedtaksperioder(vedtaksdetaljer: VedtaksdetaljerOvergangsstønad): List<VedtaksperiodeOvergangsstønadDto> {
+    private fun mapToVedtaksperioder(vedtaksdetaljer: VedtaksdetaljerDagpenger): List<VedtaksperiodeDagpengerDto> {
         return vedtaksdetaljer.vedtaksperioder.map {
-            VedtaksperiodeOvergangsstønadDto(
+            VedtaksperiodeDagpengerDto(
                 it.periode.fomDato(),
                 it.periode.tomDato(),
                 AktivitetType.valueOf(it.aktivitet.name),

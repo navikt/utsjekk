@@ -2,11 +2,11 @@ package no.nav.dagpenger.iverksett.infrastruktur.json
 
 import com.fasterxml.jackson.module.kotlin.readValue
 import no.nav.dagpenger.iverksett.ResourceLoaderTestUtil
-import no.nav.dagpenger.iverksett.api.domene.IverksettOvergangsstønad
+import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
 import no.nav.dagpenger.iverksett.infrastruktur.transformer.toDomain
 import no.nav.dagpenger.iverksett.infrastruktur.util.ObjectMapperProvider.objectMapper
-import no.nav.dagpenger.iverksett.kontrakter.iverksett.IverksettOvergangsstønadDto
-import no.nav.dagpenger.iverksett.util.opprettIverksettOvergangsstønad
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.IverksettDagpengerdDto
+import no.nav.dagpenger.iverksett.util.opprettIverksettDagpenger
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.util.UUID
@@ -18,13 +18,13 @@ import java.util.UUID
 class IverksettJsonTransformTest {
 
     @Test
-    fun `deserialiser overgangsstønad JSON til IverksettDtoJson, kall toDomain, forvent likhet`() {
+    fun `deserialiser dagpenger JSON til IverksettDtoJson, kall toDomain, forvent likhet`() {
         val json: String = ResourceLoaderTestUtil.readResource("json/IverksettDtoEksempel.json")
-        val iverksettJson = objectMapper.readValue<IverksettOvergangsstønadDto>(json)
+        val iverksettJson = objectMapper.readValue<IverksettDagpengerdDto>(json)
         val iverksett = iverksettJson.toDomain()
 
-        assertThat(iverksettJson).isInstanceOf(IverksettOvergangsstønadDto::class.java)
-        assertThat(iverksett).isInstanceOf(IverksettOvergangsstønad::class.java)
+        assertThat(iverksettJson).isInstanceOf(IverksettDagpengerdDto::class.java)
+        assertThat(iverksett).isInstanceOf(IverksettDagpenger::class.java)
 
         assertThat(iverksett).isNotNull
         assertThat(objectMapper.readTree(json))
@@ -34,15 +34,15 @@ class IverksettJsonTransformTest {
     @Test
     fun `deserialiser JSON til Iverksett, forvent ingen unntak`() {
         val json: String = ResourceLoaderTestUtil.readResource("json/IverksettEksempel.json")
-        val iverksett = objectMapper.readValue<IverksettOvergangsstønad>(json)
+        val iverksett = objectMapper.readValue<IverksettDagpenger>(json)
         assertThat(iverksett).isNotNull
     }
 
     @Test
-    internal fun `deserialiser iverksettOvergangsstønad til json og serialiser tilbake til object, forvent likhet`() {
+    internal fun `deserialiser iverksettDagpenger til json og serialiser tilbake til object, forvent likhet`() {
         val behandlingId = UUID.randomUUID()
-        val iverksett = opprettIverksettOvergangsstønad(behandlingId)
-        val parsetIverksett = objectMapper.readValue<IverksettOvergangsstønad>(objectMapper.writeValueAsString(iverksett))
+        val iverksett = opprettIverksettDagpenger(behandlingId)
+        val parsetIverksett = objectMapper.readValue<IverksettDagpenger>(objectMapper.writeValueAsString(iverksett))
         assertThat(iverksett).isEqualTo(parsetIverksett)
     }
 }

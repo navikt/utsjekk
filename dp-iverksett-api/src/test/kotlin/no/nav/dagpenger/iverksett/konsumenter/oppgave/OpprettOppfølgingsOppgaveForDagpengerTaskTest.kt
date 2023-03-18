@@ -6,27 +6,27 @@ import io.mockk.verify
 import no.nav.dagpenger.iverksett.api.IverksettingRepository
 import no.nav.dagpenger.iverksett.infrastruktur.repository.findByIdOrThrow
 import no.nav.dagpenger.iverksett.lagIverksett
-import no.nav.dagpenger.iverksett.util.opprettIverksettOvergangsstønad
+import no.nav.dagpenger.iverksett.util.opprettIverksettDagpenger
 import no.nav.familie.prosessering.domene.Task
 import no.nav.familie.prosessering.internal.TaskService
 import org.junit.jupiter.api.Test
 import java.util.UUID
 
-internal class OpprettOppfølgingsOppgaveForOvergangsstønadTaskTest {
+internal class OpprettOppfølgingsOppgaveForDagpengerTaskTest {
 
     private val oppgaveService = mockk<OppgaveService>()
     private val iverksettingRepository = mockk<IverksettingRepository>()
     private val taskService = mockk<TaskService>()
 
-    private val taskStegService = OpprettOppfølgingsOppgaveForOvergangsstønadTask(
+    private val taskStegService = OpprettOppfølgingsOppgaveForDagpengerTask(
         oppgaveService,
         iverksettingRepository,
         taskService,
     )
 
     @Test
-    internal fun `skal opprette oppfølgningsoppgave for overgangsstønad`() {
-        every { iverksettingRepository.findByIdOrThrow(any()) } returns lagIverksett(opprettIverksettOvergangsstønad())
+    internal fun `skal opprette oppfølgningsoppgave for dagpenger`() {
+        every { iverksettingRepository.findByIdOrThrow(any()) } returns lagIverksett(opprettIverksettDagpenger())
         every { oppgaveService.skalOppretteVurderHenvendelseOppgave(any()) } returns true
         every { oppgaveService.opprettVurderHenvendelseOppgave(any()) } returns 1
 
@@ -44,5 +44,5 @@ internal class OpprettOppfølgingsOppgaveForOvergangsstønadTaskTest {
         verify(exactly = 1) { taskService.save(any()) }
     }
 
-    private fun opprettTask() = Task(OpprettOppfølgingsOppgaveForOvergangsstønadTask.TYPE, UUID.randomUUID().toString())
+    private fun opprettTask() = Task(OpprettOppfølgingsOppgaveForDagpengerTask.TYPE, UUID.randomUUID().toString())
 }

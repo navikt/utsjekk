@@ -108,7 +108,7 @@ internal class VentePåStatusFraØkonomiTaskTest {
         vedtakdatoFom = LocalDate.of(2021, 1, 1),
         vedtakdatoTom = LocalDate.of(2021, 6, 1),
         sats = BigDecimal.TEN,
-        satsType = Utbetalingsperiode.SatsType.MND,
+        satsType = Utbetalingsperiode.SatsType.DAG,
         utbetalesTil = "x",
         behandlingId = 0,
         utbetalingsgrad = null,

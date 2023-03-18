@@ -1,5 +1,5 @@
 application:
-  name: familie-ef-iverksett
+  name: dp-iverksett
 server:
   servlet:
     context-path: /
@@ -9,7 +9,7 @@ spring:
   flyway:
     enabled: true
   datasource:
-    url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/familie-ef-iverksett
+    url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/dp-iverksett
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
     hikari:
@@ -47,7 +47,7 @@ spring:
     consumer:
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      group-id: srvfamilie-ef-iverks
+      group-id: srvdp-iverks
       max-poll-records: 1
       auto-offset-reset: latest
       enable-auto-commit: false
@@ -68,10 +68,10 @@ no.nav.security.jwt:
   client:
     registration:
       familie-oppdrag:
-        resource-url: ${FAMILIE_OPPDRAG_API_URL}
+        resource-url: ${DP_OPPDRAG_API_URL}
         token-endpoint-url: ${AZURE_OPENID_CONFIG_TOKEN_ENDPOINT}
         grant-type: client_credentials
-        scope: ${FAMILIE_OPPDRAG_SCOPE}
+        scope: ${DP_OPPDRAG_SCOPE}
         authentication:
           client-id: ${AZURE_APP_CLIENT_ID}
           client-secret: ${AZURE_APP_CLIENT_SECRET}
@@ -81,15 +81,6 @@ no.nav.security.jwt:
         token-endpoint-url: ${AZURE_OPENID_CONFIG_TOKEN_ENDPOINT}
         grant-type: client_credentials
         scope: ${FAMILIE_INTEGRASJONER_SCOPE}
-        authentication:
-          client-id: ${AZURE_APP_CLIENT_ID}
-          client-secret: ${AZURE_APP_CLIENT_SECRET}
-          client-auth-method: client_secret_basic
-      infotrygd-feed:
-        resource-url: ${INFOTRYGD_FEED_API_URL}
-        token-endpoint-url: ${AZURE_OPENID_CONFIG_TOKEN_ENDPOINT}
-        grant-type: client_credentials
-        scope: ${EF_INFOTRYGD_FEED_SCOPE}
         authentication:
           client-id: ${AZURE_APP_CLIENT_ID}
           client-secret: ${AZURE_APP_CLIENT_SECRET}
@@ -138,20 +129,18 @@ funksjonsbrytere:
     applicationName: ${NAIS_APP_NAME}
 
 DEPLOY_ENV: prod
-FAMILIE_OPPDRAG_API_URL: https://familie-oppdrag.${DEPLOY_ENV}-fss-pub.nais.io
-FAMILIE_OPPDRAG_SCOPE: api://${DEPLOY_ENV}-fss.teamfamilie.familie-oppdrag/.default
+DP_OPPDRAG_API_URL: https://dp-oppdrag.${DEPLOY_ENV}-fss-pub.nais.io
+DP_OPPDRAG_SCOPE: api://${DEPLOY_ENV}-fss.teamdagpenger.dp-oppdrag/.default
 FAMILIE_INTEGRASJONER_API_URL: https://familie-integrasjoner.${DEPLOY_ENV}-fss-pub.nais.io
 FAMILIE_INTEGRASJONER_SCOPE: api://${DEPLOY_ENV}-fss.teamfamilie.familie-integrasjoner/.default
-INFOTRYGD_FEED_API_URL: https://familie-ef-infotrygd-feed.${DEPLOY_ENV}-fss-pub.nais.io
-EF_INFOTRYGD_FEED_SCOPE: api://${DEPLOY_ENV}-fss.teamfamilie.familie-ef-infotrygd-feed/.default
 FAMILIE_TILBAKE_URL: http://familie-tilbake
 FAMILIE_TILBAKE_SCOPE: api://${DEPLOY_ENV}-gcp.teamfamilie.familie-tilbake/.default
 
-ENSLIG_FORSORGER_VEDTAK_TOPIC: teamfamilie.aapen-ensligforsorger-vedtak-v1
-ENSLIG_FORSORGER_BEHANDLING_TOPIC: teamfamilie.aapen-ensligforsorger-behandling-v1
-ARBEIDSOPPFOLGING_VEDTAK_TOPIC: teamfamilie.aapen-ensligforsorger-vedtak-arbeidsoppfolging
-VEDTAK_TOPIC: teamfamilie.aapen-ensligforsorger-iverksatt-vedtak
-FAGSYSTEMBEHANDLING_RESPONS_TOPIC: teamfamilie.privat-tbk-hentfagsystemsbehandling-respons-topic
+DAGPENGER_VEDTAK_TOPIC: teamdagpenger.aapen-dagpenger-vedtak-v1
+DAGPENGER_BEHANDLING_TOPIC: teamdagpenger.aapen-dagpenger-behandling-v1
+ARBEIDSOPPFOLGING_VEDTAK_TOPIC: teamdagpenger.aapen-dagpenger-vedtak-arbeidsoppfolging
+VEDTAK_TOPIC: teamdagpenger.aapen-dagpenger-iverksatt-vedtak
+FAGSYSTEMBEHANDLING_RESPONS_TOPIC: teamdagpenger.privat-tbk-hentfagsystemsbehandling-respons-topic
 
 prosessering:
   continuousRunning.enabled: true

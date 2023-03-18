@@ -176,7 +176,7 @@ object ØkonomiUtils {
      * Skal finne opphørsdato til utbetalingsoppdraget
      *
      * Returnerer første endret periode, uavhengig om den er andel med 0-beløp eller ikke
-     * Dette for å kunne opphøre perioder bak i tiden, som kan være før perioder som finnes i EF, men som finnes i Infotrygd
+     * Dette for å kunne opphøre perioder bak i tiden, som kan være før perioder som finnes i DP, men som finnes i Arena
      *
      * Hvis forrige kjede inneholder 2 andeler og den nye kjeden endrer i den andre andelen,
      * så skal opphørsdato settes til opphørsdato for andre andelen i forrige kjede

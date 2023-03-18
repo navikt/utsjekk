@@ -67,8 +67,7 @@ enum class VilkårType(val beskrivelse: String) {
     ALDER_PÅ_BARN("Alder på barn"),
     DOKUMENTASJON_TILSYNSUTGIFTER("Dokumentasjon av tilsynsutgifter"),
 
-    // Skolepenger
-    RETT_TIL_OVERGANGSSTØNAD("Er vilkårene for rett til overgangsstønad oppfylt?"),
+    RETT_TIL_DAGPENGER("Er vilkårene for rett til dagpenger oppfylt?"),
     DOKUMENTASJON_AV_UTDANNING("Dokumentasjon av utdanning"),
     ER_UTDANNING_HENSIKTSMESSIG("Er utdanning hensiktsmessig?"),
 }

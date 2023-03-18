@@ -17,7 +17,7 @@
           "samordningsfradrag": 0,
           "inntektsreduksjon": 0,
           "personIdent": "01017012345",
-          "stønadsType": "OVERGANGSSTØNAD",
+          "stønadsType": "DAGPENGER",
           "kildeBehandlingId": "234bed7c-b1d3-11eb-8529-0242ac130003"
         },
         {
@@ -33,14 +33,14 @@
           "samordningsfradrag": 0,
           "inntektsreduksjon": 0,
           "personIdent": "01017012345",
-          "stønadsType": "OVERGANGSSTØNAD",
+          "stønadsType": "DAGPENGER",
           "kildeBehandlingId": "234bed7c-b1d3-11eb-8529-0242ac130003"
         }
       ]
     },
     "saksbehandlerId": "12345",
     "eksternBehandlingId": 123,
-    "stønadstype": "OVERGANGSSTØNAD",
+    "stønadstype": "DAGPENGER",
     "eksternFagsakId": 234
   },
   "forrigeBehandlingId": "4b657902-d994-11eb-b8bc-0242ac130003"

@@ -24,7 +24,7 @@ class SimuleringService(
 ) {
 
     fun hentDetaljertSimuleringResultat(simulering: Simulering): DetaljertSimuleringResultat {
-        if (featureToggleService.isEnabled("familie.ef.iverksett.stopp-iverksetting")) {
+        if (featureToggleService.isEnabled("dp.iverksett.stopp-iverksetting")) {
             error("Kan ikke sende inn simmulere")
         }
         try {
@@ -58,7 +58,7 @@ class SimuleringService(
     }
 
     fun hentBeriketSimulering(simulering: Simulering): BeriketSimuleringsresultat {
-        if (featureToggleService.isEnabled("familie.ef.iverksett.stopp-iverksetting")) {
+        if (featureToggleService.isEnabled("dp.iverksett.stopp-iverksetting")) {
             error("Kan ikke sende inn simmulere")
         }
         val detaljertSimuleringResultat = hentDetaljertSimuleringResultat(simulering)

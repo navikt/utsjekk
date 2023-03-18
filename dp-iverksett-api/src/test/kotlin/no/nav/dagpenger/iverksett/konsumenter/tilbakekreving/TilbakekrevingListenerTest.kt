@@ -17,7 +17,7 @@ import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.HentFagsystemsbehand
 import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.Tilbakekrevingsvalg
 import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.Ytelsestype
 import no.nav.dagpenger.iverksett.lagIverksett
-import no.nav.dagpenger.iverksett.util.opprettIverksettOvergangsstønad
+import no.nav.dagpenger.iverksett.util.opprettIverksettDagpenger
 import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
@@ -31,7 +31,7 @@ internal class TilbakekrevingListenerTest {
     private val tilbakekrevingProducer = mockk<TilbakekrevingProducer>()
 
     private lateinit var listener: TilbakekrevingListener
-    private val behandling = opprettIverksettOvergangsstønad()
+    private val behandling = opprettIverksettDagpenger()
 
     @BeforeEach
     internal fun setUp() {
@@ -44,18 +44,9 @@ internal class TilbakekrevingListenerTest {
     }
 
     @Test
-    internal fun `send kafkamelding til listener med ef-type, forvent kall til kafkaproducer`() {
-        listener.listen(record(Ytelsestype.OVERGANGSSTØNAD))
-        listener.listen(record(Ytelsestype.SKOLEPENGER))
-        listener.listen(record(Ytelsestype.BARNETILSYN))
-        verify(exactly = 3) { tilbakekrevingProducer.send(any(), any()) }
-    }
-
-    @Test
-    internal fun `send kafkamelding til listener med annen type enn overgangsstønad, forvent ingen kall til kafkaproducer`() {
-        listener.listen(record(Ytelsestype.KONTANTSTØTTE))
-        listener.listen(record(Ytelsestype.BARNETRYGD))
-        verify(exactly = 0) { tilbakekrevingProducer.send(any(), any()) }
+    internal fun `send kafkamelding til listener med sp-type, forvent kall til kafkaproducer`() {
+        listener.listen(record(Ytelsestype.DAGPENGER))
+        verify(exactly = 1) { tilbakekrevingProducer.send(any(), any()) }
     }
 
     @Test
@@ -64,11 +55,11 @@ internal class TilbakekrevingListenerTest {
         every { tilbakekrevingProducer.send(capture(respons), any()) } just runs
         every { iverksettingRepository.findByEksternId(any()) }
             .returns(lagIverksett(behandling.copy(fagsak = behandling.fagsak.copy(eksternId = 11L))))
-        listener.listen(record(Ytelsestype.OVERGANGSSTØNAD))
+        listener.listen(record(Ytelsestype.DAGPENGER))
         assertThat(respons.captured.feilMelding!!).contains("Inkonsistens. Ekstern fagsakID")
     }
 
-    private fun record(ytelsestype: Ytelsestype, eksternFagsakId: String = "0"): ConsumerRecord<String, String> {
+    private fun record(ytelsestype: Ytelsestype): ConsumerRecord<String, String> {
         val behandling = objectMapper.writeValueAsString(
             HentFagsystemsbehandling(
                 eksternFagsakId = "0",

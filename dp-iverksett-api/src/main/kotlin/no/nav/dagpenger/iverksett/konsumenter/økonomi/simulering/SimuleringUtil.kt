@@ -67,20 +67,8 @@ fun grupperPosteringerEtterDato(mottakere: List<SimuleringMottaker>?): List<Simu
 }
 
 fun fagområdeKoderForPosteringer(stønadType: StønadType): Set<FagOmrådeKode> = when (stønadType) {
-    StønadType.OVERGANGSSTØNAD -> setOf(
-        FagOmrådeKode.ENSLIG_FORSØRGER_OVERGANGSSTØNAD,
-        FagOmrådeKode.ENSLIG_FORSØRGER_OVERGANGSSTØNAD_INFOTRYGD,
-        FagOmrådeKode.ENSLIG_FORSØRGER_OVERGANGSSTØNAD_MANUELL_POSTERING,
-    )
-    StønadType.BARNETILSYN -> setOf(
-        FagOmrådeKode.ENSLIG_FORSØRGER_BARNETILSYN,
-        FagOmrådeKode.ENSLIG_FORSØRGER_BARNETILSYN_INFOTRYGD,
-        FagOmrådeKode.TILBAKEKREVING_EF_MANUELL_POSTERING,
-    )
-    StønadType.SKOLEPENGER -> setOf(
-        FagOmrådeKode.ENSLIG_FORSØRGER_SKOLEPENGER,
-        FagOmrådeKode.ENSLIG_FORSØRGER_SKOLEPENGER_INFOTRYGD,
-        FagOmrådeKode.TILBAKEKREVING_EF_MANUELL_POSTERING,
+    StønadType.DAGPENGER -> setOf(
+        FagOmrådeKode.DAGPENGER,
     )
 }
 

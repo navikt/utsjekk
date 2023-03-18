@@ -1,12 +1,12 @@
 package no.nav.dagpenger.iverksett.api
 
 import no.nav.dagpenger.iverksett.api.domene.Brev
-import no.nav.dagpenger.iverksett.api.domene.IverksettOvergangsstønad
+import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
 import no.nav.dagpenger.iverksett.infrastruktur.advice.ApiFeil
 import no.nav.dagpenger.iverksett.infrastruktur.transformer.toDomain
 import no.nav.dagpenger.iverksett.konsumenter.tilbakekreving.validerTilbakekreving
 import no.nav.dagpenger.iverksett.kontrakter.felles.Vedtaksresultat
-import no.nav.dagpenger.iverksett.kontrakter.iverksett.IverksettOvergangsstønadDto
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.IverksettDagpengerdDto
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.IverksettStatus
 import no.nav.security.token.support.core.api.ProtectedWithClaims
 import org.springframework.http.HttpStatus
@@ -34,7 +34,7 @@ class IverksettingController(
 
     @PostMapping(consumes = [MediaType.MULTIPART_FORM_DATA_VALUE])
     fun iverksett(
-        @RequestPart("data") iverksettDto: IverksettOvergangsstønadDto,
+        @RequestPart("data") iverksettDto: IverksettDagpengerdDto,
         @RequestPart("fil") fil: MultipartFile,
     ) {
         val iverksett = iverksettDto.toDomain()
@@ -44,7 +44,7 @@ class IverksettingController(
     }
 
     @PostMapping("migrering", "uten-brev")
-    fun iverksett(@RequestBody iverksettDto: IverksettOvergangsstønadDto) {
+    fun iverksett(@RequestBody iverksettDto: IverksettDagpengerdDto) {
         val iverksett = iverksettDto.toDomain()
         valider(iverksett)
         validerUtenBrev(iverksett)
@@ -67,7 +67,7 @@ class IverksettingController(
         return Brev(fil.bytes)
     }
 
-    private fun validerUtenBrev(iverksettData: IverksettOvergangsstønad) {
+    private fun validerUtenBrev(iverksettData: IverksettDagpenger) {
         if (!iverksettData.skalIkkeSendeBrev()) {
             throw ApiFeil(
                 "Kan ikke ha iverksetting uten brev når det ikke er en migrering, " +
@@ -77,7 +77,7 @@ class IverksettingController(
         }
     }
 
-    private fun validerSkalHaBrev(iverksettData: IverksettOvergangsstønad) {
+    private fun validerSkalHaBrev(iverksettData: IverksettDagpenger) {
         if (iverksettData.skalIkkeSendeBrev()) {
             throw ApiFeil(
                 "Kan ikke ha iverksetting med brev når det er migrering, g-omregning eller korrigering uten brev",
@@ -86,7 +86,7 @@ class IverksettingController(
         }
     }
 
-    private fun valider(iverksett: IverksettOvergangsstønad) {
+    private fun valider(iverksett: IverksettDagpenger) {
         if (iverksett.vedtak.tilkjentYtelse == null && iverksett.vedtak.vedtaksresultat != Vedtaksresultat.AVSLÅTT) {
             throw ApiFeil(
                 "Kan ikke ha iverksetting uten tilkjentYtelse " +

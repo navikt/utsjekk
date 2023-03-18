@@ -4,7 +4,7 @@ import no.nav.dagpenger.iverksett.ServerTest
 import no.nav.dagpenger.iverksett.api.IverksettingService
 import no.nav.dagpenger.iverksett.api.tilstand.IverksettResultatService
 import no.nav.dagpenger.iverksett.util.opprettBrev
-import no.nav.dagpenger.iverksett.util.opprettIverksettOvergangsstønad
+import no.nav.dagpenger.iverksett.util.opprettIverksettDagpenger
 import no.nav.familie.prosessering.internal.TaskService
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
@@ -35,7 +35,7 @@ class IverksettMotOppdragIntegrasjonsTest : ServerTest() {
         tilOgMed = YearMonth.of(2021, 1),
     )
     private val iverksett =
-        opprettIverksettOvergangsstønad(behandlingid, andeler = listOf(førsteAndel), startmåned = førsteAndel.periode.fom)
+        opprettIverksettDagpenger(behandlingid, andeler = listOf(førsteAndel), startmåned = førsteAndel.periode.fom)
 
     @BeforeEach
     internal fun setUp() {
@@ -53,7 +53,7 @@ class IverksettMotOppdragIntegrasjonsTest : ServerTest() {
     @Test
     internal fun `revurdering med en ny periode, forvent at den nye perioden har peker på den forrige`() {
         val behandlingIdRevurdering = UUID.randomUUID()
-        val iverksettRevurdering = opprettIverksettOvergangsstønad(
+        val iverksettRevurdering = opprettIverksettDagpenger(
             behandlingIdRevurdering,
             behandlingid,
             listOf(
@@ -80,7 +80,7 @@ class IverksettMotOppdragIntegrasjonsTest : ServerTest() {
     @Test
     internal fun `revurdering der beløpet på den første endres, og en ny legges til, forvent at den første perioden erstattes`() {
         val behandlingIdRevurdering = UUID.randomUUID()
-        val iverksettRevurdering = opprettIverksettOvergangsstønad(
+        val iverksettRevurdering = opprettIverksettDagpenger(
             behandlingIdRevurdering,
             behandlingid,
             listOf(
@@ -109,7 +109,7 @@ class IverksettMotOppdragIntegrasjonsTest : ServerTest() {
         val opphørBehandlingId = UUID.randomUUID()
         val startmåned = førsteAndel.periode.fom
         val iverksettMedOpphør =
-            opprettIverksettOvergangsstønad(opphørBehandlingId, behandlingid, emptyList(), startmåned = startmåned)
+            opprettIverksettDagpenger(opphørBehandlingId, behandlingid, emptyList(), startmåned = startmåned)
 
         taskService.deleteAll(taskService.findAll())
         iverksettingService.startIverksetting(iverksettMedOpphør, opprettBrev())

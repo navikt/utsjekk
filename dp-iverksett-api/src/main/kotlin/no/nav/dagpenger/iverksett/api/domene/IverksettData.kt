@@ -24,11 +24,11 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.UUID
 
-data class IverksettOvergangsstønad(
+data class IverksettDagpenger(
     val fagsak: Fagsakdetaljer,
     val behandling: Behandlingsdetaljer,
     val søker: Søker,
-    val vedtak: VedtaksdetaljerOvergangsstønad,
+    val vedtak: VedtaksdetaljerDagpenger,
 ) {
 
     fun erGOmregning() = behandling.behandlingÅrsak == BehandlingÅrsak.G_OMREGNING
@@ -41,7 +41,7 @@ data class IverksettOvergangsstønad(
 
     fun skalIkkeSendeBrev() = erMigrering() || erGOmregning() || erKorrigeringUtenBrev() || erSatsendring()
 
-    fun medNyTilbakekreving(nyTilbakekreving: Tilbakekrevingsdetaljer?): IverksettOvergangsstønad {
+    fun medNyTilbakekreving(nyTilbakekreving: Tilbakekrevingsdetaljer?): IverksettDagpenger {
         return this.copy(vedtak = this.vedtak.copy(tilbakekreving = nyTilbakekreving))
     }
 }
@@ -61,7 +61,7 @@ data class Søker(
 
 sealed class Vedtaksperiode
 
-data class VedtaksperiodeOvergangsstønad(
+data class VedtaksperiodeDagpenger(
     @Deprecated("Bruk periode.", ReplaceWith("periode.fom")) val fraOgMed: LocalDate? = null,
     @Deprecated("Bruk periode.", ReplaceWith("periode.tom")) val tilOgMed: LocalDate? = null,
     val periode: Månedsperiode = Månedsperiode(
@@ -70,17 +70,6 @@ data class VedtaksperiodeOvergangsstønad(
     ),
     val aktivitet: AktivitetType,
     val periodeType: VedtaksperiodeType,
-) : Vedtaksperiode()
-
-data class VedtaksperiodeBarnetilsyn(
-    @Deprecated("Bruk periode.", ReplaceWith("periode.fom")) val fraOgMed: LocalDate? = null,
-    @Deprecated("Bruk periode.", ReplaceWith("periode.tom")) val tilOgMed: LocalDate? = null,
-    val periode: Månedsperiode = Månedsperiode(
-        fraOgMed ?: error("Minst en av fraOgMed og periode.fom må ha verdi."),
-        tilOgMed ?: error("Minst en av tilOgMed og periode.tom må ha verdi."),
-    ),
-    val utgifter: Int,
-    val antallBarn: Int,
 ) : Vedtaksperiode()
 
 data class PeriodeMedBeløp(
@@ -107,7 +96,7 @@ sealed class Vedtaksdetaljer {
     abstract val avslagÅrsak: AvslagÅrsak?
 }
 
-data class VedtaksdetaljerOvergangsstønad(
+data class VedtaksdetaljerDagpenger(
     override val vedtaksresultat: Vedtaksresultat,
     override val vedtakstidspunkt: LocalDateTime,
     override val opphørÅrsak: OpphørÅrsak?,
@@ -116,23 +105,8 @@ data class VedtaksdetaljerOvergangsstønad(
     override val tilkjentYtelse: TilkjentYtelse?,
     override val tilbakekreving: Tilbakekrevingsdetaljer? = null,
     override val brevmottakere: Brevmottakere? = null,
-    override val vedtaksperioder: List<VedtaksperiodeOvergangsstønad> = listOf(),
+    override val vedtaksperioder: List<VedtaksperiodeDagpenger> = listOf(),
     override val avslagÅrsak: AvslagÅrsak? = null,
-) : Vedtaksdetaljer()
-
-data class VedtaksdetaljerBarnetilsyn(
-    override val vedtaksresultat: Vedtaksresultat,
-    override val vedtakstidspunkt: LocalDateTime,
-    override val opphørÅrsak: OpphørÅrsak?,
-    override val saksbehandlerId: String,
-    override val beslutterId: String,
-    override val tilkjentYtelse: TilkjentYtelse?,
-    override val tilbakekreving: Tilbakekrevingsdetaljer? = null,
-    override val brevmottakere: Brevmottakere? = null,
-    override val vedtaksperioder: List<VedtaksperiodeBarnetilsyn> = listOf(),
-    override val avslagÅrsak: AvslagÅrsak? = null,
-    val kontantstøtte: List<PeriodeMedBeløp> = listOf(),
-    val tilleggsstønad: List<PeriodeMedBeløp> = listOf(),
 ) : Vedtaksdetaljer()
 
 data class Behandlingsdetaljer(

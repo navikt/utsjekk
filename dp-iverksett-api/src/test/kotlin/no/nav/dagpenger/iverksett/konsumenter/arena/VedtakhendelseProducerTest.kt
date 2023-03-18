@@ -5,7 +5,7 @@ import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.slot
-import no.nav.dagpenger.iverksett.util.opprettIverksettOvergangsstønad
+import no.nav.dagpenger.iverksett.util.opprettIverksettDagpenger
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.jms.core.JmsTemplate
@@ -22,7 +22,7 @@ class VedtakhendelseProducerTest {
         val vedtakHendelseXmlSlot = slot<String>()
         every { jmsTemplate.convertAndSend(capture(vedtakHendelseXmlSlot)) } just Runs
 
-        val iverksett = opprettIverksettOvergangsstønad(UUID.randomUUID())
+        val iverksett = opprettIverksettDagpenger(UUID.randomUUID())
         val vedtakHendelser = mapIverksettTilVedtakHendelser(iverksett, "a123")
         vedtakhendelseProducer.produce(vedtakHendelser)
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
@@ -36,8 +36,8 @@ private fun forventetXML(hendelsesTidspunkt: String): String {
         <vedtakHendelser xmlns="http://nav.no/melding/virksomhet/vedtakHendelser/v1/vedtakHendelser">
             <aktoerID xmlns="">a123</aktoerID>
             <avslutningsstatus xmlns="">innvilget</avslutningsstatus>
-            <behandlingstema xmlns="">ab0071</behandlingstema>
-            <hendelsesprodusentREF xmlns="">EF</hendelsesprodusentREF>
+            <behandlingstema xmlns="">abXXXX</behandlingstema>
+            <hendelsesprodusentREF xmlns="">DP</hendelsesprodusentREF>
             <applikasjonSakREF xmlns="">1</applikasjonSakREF>
             <hendelsesTidspunkt xmlns="">$hendelsesTidspunkt</hendelsesTidspunkt>
         </vedtakHendelser>

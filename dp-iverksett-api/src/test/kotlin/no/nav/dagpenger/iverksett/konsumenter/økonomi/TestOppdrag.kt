@@ -148,7 +148,7 @@ class TestOppdragGroup {
                 andelerTilkjentYtelse = andelerTilkjentYtelseInn,
                 startmåned = startmåned,
             ),
-            stønadstype = StønadType.OVERGANGSSTØNAD,
+            stønadstype = StønadType.DAGPENGER,
             eksternBehandlingId = behandlingEksternId,
             eksternFagsakId = fagsakEksternId,
             saksbehandlerId = saksbehandlerId,
@@ -165,7 +165,7 @@ class TestOppdragGroup {
         val utbetalingsoppdrag =
             Utbetalingsoppdrag(
                 kodeEndring = oppdragKode110,
-                fagSystem = "EFOG",
+                fagSystem = "DP",
                 saksnummer = fagsakEksternId.toString(),
                 aktoer = personIdent!!,
                 saksbehandlerId = saksbehandlerId,

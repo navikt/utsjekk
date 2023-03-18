@@ -2,7 +2,7 @@ package no.nav.dagpenger.iverksett.konsumenter.brev
 
 import no.nav.dagpenger.iverksett.api.IverksettingRepository
 import no.nav.dagpenger.iverksett.api.domene.Iverksett
-import no.nav.dagpenger.iverksett.api.domene.IverksettOvergangsstønad
+import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
 import no.nav.dagpenger.iverksett.api.tilstand.IverksettResultatService
 import no.nav.dagpenger.iverksett.infrastruktur.repository.findByIdOrThrow
 import no.nav.dagpenger.iverksett.konsumenter.brev.domain.JournalpostResultat
@@ -82,7 +82,7 @@ class JournalførVedtaksbrevTask(
         mottakerIdent: String,
         eksternReferanseId: String?,
     ): String {
-        val request = JournalposterForBrukerRequest(Bruker(mottakerIdent, BrukerIdType.FNR), 50, listOf(Tema.ENF))
+        val request = JournalposterForBrukerRequest(Bruker(mottakerIdent, BrukerIdType.FNR), 50, listOf(Tema.DP))
         return journalpostClient.finnJournalposter(request)
             .find { it.eksternReferanseId == eksternReferanseId }
             ?.journalpostId
@@ -121,7 +121,7 @@ class JournalførVedtaksbrevTask(
     }
 
     private fun journalførVedtaksbrevTilBrevmottakere(
-        iverksett: IverksettOvergangsstønad,
+        iverksett: IverksettDagpenger,
         journalførteIdenter: List<String>,
         arkiverDokumentRequest: ArkiverDokumentRequest,
         behandlingId: UUID,
@@ -149,7 +149,7 @@ class JournalførVedtaksbrevTask(
 
     private fun journalførVedtaksbrevTilStønadmottaker(
         arkiverDokumentRequest: ArkiverDokumentRequest,
-        iverksett: IverksettOvergangsstønad,
+        iverksett: IverksettDagpenger,
         behandlingId: UUID,
     ) {
         journalførOgLagreResultat(
@@ -160,7 +160,7 @@ class JournalførVedtaksbrevTask(
         )
     }
 
-    private fun validerJournalpostResultatErSatt(behandlingId: UUID, iverksett: IverksettOvergangsstønad) {
+    private fun validerJournalpostResultatErSatt(behandlingId: UUID, iverksett: IverksettDagpenger) {
         val antallJournalføringer = iverksettResultatService.hentJournalpostResultat(behandlingId)?.size
             ?: error("Ingen journalføringer for behandling=[$behandlingId]")
 
@@ -177,7 +177,7 @@ class JournalførVedtaksbrevTask(
         }
     }
 
-    private fun lagDokumentTittel(iverksett: IverksettOvergangsstønad): String =
+    private fun lagDokumentTittel(iverksett: IverksettDagpenger): String =
         lagVedtakstekst(iverksett) + lagStønadtypeTekst(iverksett.fagsak.stønadstype)
 
     override fun onCompletion(task: Task) {

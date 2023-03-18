@@ -15,14 +15,13 @@ import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.Tilbakekrevingsvalg
 import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.LocalDateTime
-import java.time.YearMonth
 import java.util.UUID
 
-data class IverksettOvergangsstønadDto(
+data class IverksettDagpengerdDto(
     val fagsak: FagsakdetaljerDto,
     val behandling: BehandlingsdetaljerDto,
     val søker: SøkerDto,
-    val vedtak: VedtaksdetaljerOvergangsstønadDto,
+    val vedtak: VedtaksdetaljerDagpengerrDto,
 )
 
 
@@ -65,14 +64,14 @@ sealed class VedtaksdetaljerDto {
     abstract val avslagÅrsak: AvslagÅrsak?
 }
 
-data class VedtaksdetaljerOvergangsstønadDto(
+data class VedtaksdetaljerDagpengerrDto(
     override val resultat: Vedtaksresultat,
     override val vedtakstidspunkt: LocalDateTime,
     override val opphørÅrsak: OpphørÅrsak?,
     override val saksbehandlerId: String,
     override val beslutterId: String,
     override val tilkjentYtelse: TilkjentYtelseDto?,
-    override val vedtaksperioder: List<VedtaksperiodeOvergangsstønadDto> = emptyList(),
+    override val vedtaksperioder: List<VedtaksperiodeDagpengerDto> = emptyList(),
     override val tilbakekreving: TilbakekrevingDto? = null,
     override val brevmottakere: List<Brevmottaker> = emptyList(),
     override val avslagÅrsak: AvslagÅrsak? = null,
@@ -98,7 +97,7 @@ data class VurderingDto(
 
 sealed class VedtaksperiodeDto
 
-data class VedtaksperiodeOvergangsstønadDto(
+data class VedtaksperiodeDagpengerDto(
     val periode: Månedsperiode,
     val aktivitet: AktivitetType,
     val periodeType: VedtaksperiodeType,

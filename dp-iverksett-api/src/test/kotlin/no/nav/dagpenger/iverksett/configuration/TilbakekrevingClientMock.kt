@@ -60,9 +60,9 @@ class TilbakekrevingClientMock {
             .willReturn(okJson(behandlingId)),
         post(urlMatching("/api/behandling/manuelt/task/v1"))
             .willReturn(okJson(ok)),
-        get(urlMatching("/api/fagsystem/${Fagsystem.EF}/fagsak/.+/finnesApenBehandling/v1"))
+        get(urlMatching("/api/fagsystem/${Fagsystem.DP}/fagsak/.+/finnesApenBehandling/v1"))
             .willReturn(okJson(finnesBehandlingResponse)),
-        get(urlMatching("/api/fagsystem/${Fagsystem.EF}/fagsak/.+/behandlinger/v1"))
+        get(urlMatching("/api/fagsystem/${Fagsystem.DP}/fagsak/.+/behandlinger/v1"))
             .willReturn(okJson(behandlinger)),
         get(urlMatching("/api/ytelsestype/.+/fagsak/.+/kanBehandlingOpprettesManuelt/v1"))
             .willReturn(okJson(kanOpprettesManuelt)),

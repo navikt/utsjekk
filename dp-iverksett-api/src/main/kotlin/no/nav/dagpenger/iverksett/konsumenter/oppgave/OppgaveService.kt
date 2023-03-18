@@ -1,8 +1,8 @@
 package no.nav.dagpenger.iverksett.konsumenter.oppgave
 
 import no.nav.dagpenger.iverksett.api.IverksettingRepository
-import no.nav.dagpenger.iverksett.api.domene.IverksettOvergangsstønad
-import no.nav.dagpenger.iverksett.api.domene.VedtaksperiodeOvergangsstønad
+import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
+import no.nav.dagpenger.iverksett.api.domene.VedtaksperiodeDagpenger
 import no.nav.dagpenger.iverksett.infrastruktur.FamilieIntegrasjonerClient
 import no.nav.dagpenger.iverksett.infrastruktur.repository.findByIdOrThrow
 import no.nav.dagpenger.iverksett.konsumenter.oppgave.OppgaveBeskrivelse.beskrivelseFørstegangsbehandlingAvslått
@@ -26,7 +26,7 @@ class OppgaveService(
     private val iverksettingRepository: IverksettingRepository,
 ) {
 
-    fun skalOppretteVurderHenvendelseOppgave(iverksett: IverksettOvergangsstønad): Boolean {
+    fun skalOppretteVurderHenvendelseOppgave(iverksett: IverksettDagpenger): Boolean {
         if (iverksett.skalIkkeSendeBrev()) {
             return false
         }
@@ -47,7 +47,7 @@ class OppgaveService(
         }
     }
 
-    fun opprettVurderHenvendelseOppgave(iverksett: IverksettOvergangsstønad): Long {
+    fun opprettVurderHenvendelseOppgave(iverksett: IverksettDagpenger): Long {
         val enhet = familieIntegrasjonerClient.hentBehandlendeEnhetForOppfølging(iverksett.søker.personIdent)
             ?: error("Kunne ikke finne enhetsnummer for personident med behandlingsId=${iverksett.behandling.behandlingId}")
         val beskrivelse = lagOppgavebeskrivelse(iverksett)
@@ -65,14 +65,14 @@ class OppgaveService(
             ?: error("Kunne ikke finne oppgave for behandlingId=${iverksett.behandling.behandlingId}")
     }
 
-    fun lagOppgavebeskrivelse(iverksett: IverksettOvergangsstønad) =
+    fun lagOppgavebeskrivelse(iverksett: IverksettDagpenger) =
         when (iverksett.behandling.behandlingType) {
             BehandlingType.FØRSTEGANGSBEHANDLING -> finnBeskrivelseForFørstegangsbehandlingAvVedtaksresultat(iverksett)
             BehandlingType.REVURDERING -> finnBeskrivelseForRevurderingAvVedtaksresultat(iverksett)
             else -> error("Kunne ikke finne riktig BehandlingType for oppfølgingsoppgave")
         }
 
-    private fun finnBeskrivelseForFørstegangsbehandlingAvVedtaksresultat(iverksett: IverksettOvergangsstønad): String {
+    private fun finnBeskrivelseForFørstegangsbehandlingAvVedtaksresultat(iverksett: IverksettDagpenger): String {
         return when (iverksett.vedtak.vedtaksresultat) {
             Vedtaksresultat.INNVILGET -> beskrivelseFørstegangsbehandlingInnvilget(
                 iverksett.totalVedtaksperiode(),
@@ -84,7 +84,7 @@ class OppgaveService(
         }
     }
 
-    private fun finnBeskrivelseForRevurderingAvVedtaksresultat(iverksett: IverksettOvergangsstønad): String {
+    private fun finnBeskrivelseForRevurderingAvVedtaksresultat(iverksett: IverksettDagpenger): String {
         if (iverksett.behandling.behandlingÅrsak == BehandlingÅrsak.SANKSJON_1_MND) {
             val sanksjonsvedtakMåned: String = iverksett.finnSanksjonsvedtakMåned().tilTekst()
             return "Bruker har fått vedtak om sanksjon 1 mnd: $sanksjonsvedtakMåned"
@@ -105,15 +105,15 @@ class OppgaveService(
         }
     }
 
-    private fun opphørsdato(iverksett: IverksettOvergangsstønad): LocalDate? {
+    private fun opphørsdato(iverksett: IverksettDagpenger): LocalDate? {
         val tilkjentYtelse = iverksett.vedtak.tilkjentYtelse ?: error("TilkjentYtelse er null")
         return tilkjentYtelse.andelerTilkjentYtelse.maxOfOrNull { it.periode.tomDato() }
     }
 
-    private fun aktivitetEllerPeriodeEndret(iverksett: IverksettOvergangsstønad): Boolean {
+    private fun aktivitetEllerPeriodeEndret(iverksett: IverksettDagpenger): Boolean {
         val forrigeBehandlingId = iverksett.behandling.forrigeBehandlingId ?: return true
         val forrigeBehandling = iverksettingRepository.findByIdOrThrow(forrigeBehandlingId).data
-        if (forrigeBehandling !is IverksettOvergangsstønad) {
+        if (forrigeBehandling !is IverksettDagpenger) {
             error("Forrige behandling er av annen type=${forrigeBehandling::class.java.simpleName}")
         }
         if (forrigeBehandling.vedtak.vedtaksresultat == Vedtaksresultat.OPPHØRT) {
@@ -126,33 +126,33 @@ class OppgaveService(
     }
 
     private fun harEndretAktivitet(
-        iverksett: IverksettOvergangsstønad,
-        forrigeBehandling: IverksettOvergangsstønad,
+        iverksett: IverksettDagpenger,
+        forrigeBehandling: IverksettDagpenger,
     ): Boolean {
         return iverksett.gjeldendeVedtak().aktivitet != forrigeBehandling.gjeldendeVedtak().aktivitet
     }
 
     private fun harEndretPeriode(
-        iverksett: IverksettOvergangsstønad,
-        forrigeBehandling: IverksettOvergangsstønad,
+        iverksett: IverksettDagpenger,
+        forrigeBehandling: IverksettDagpenger,
     ): Boolean {
         return iverksett.vedtaksPeriodeMedMaksTilOgMedDato() != forrigeBehandling.vedtaksPeriodeMedMaksTilOgMedDato()
     }
 
-    private fun IverksettOvergangsstønad.gjeldendeVedtak(): VedtaksperiodeOvergangsstønad =
+    private fun IverksettDagpenger.gjeldendeVedtak(): VedtaksperiodeDagpenger =
         this.vedtak.vedtaksperioder.maxByOrNull { it.periode } ?: error("Kunne ikke finne vedtaksperioder")
 
-    private fun IverksettOvergangsstønad.vedtaksPeriodeMedMaksTilOgMedDato(): LocalDate {
+    private fun IverksettDagpenger.vedtaksPeriodeMedMaksTilOgMedDato(): LocalDate {
         return this.vedtak.vedtaksperioder.maxOf { it.periode.tomDato() }
     }
 
-    private fun IverksettOvergangsstønad.totalVedtaksperiode(): Pair<LocalDate, LocalDate> =
+    private fun IverksettDagpenger.totalVedtaksperiode(): Pair<LocalDate, LocalDate> =
         Pair(
             this.vedtak.vedtaksperioder.minOf { it.periode.fomDato() },
             this.vedtak.vedtaksperioder.maxOf { it.periode.tomDato() },
         )
 
-    private fun IverksettOvergangsstønad.finnSanksjonsvedtakMåned(): YearMonth {
+    private fun IverksettDagpenger.finnSanksjonsvedtakMåned(): YearMonth {
         val yearMonth = this.vedtak.vedtaksperioder.findLast { it.periodeType == VedtaksperiodeType.SANKSJON }?.periode?.fom
         return yearMonth
             ?: error("Finner ikke periode for iversetting av sanksjon. Behandling: (${this.behandling.behandlingId})")

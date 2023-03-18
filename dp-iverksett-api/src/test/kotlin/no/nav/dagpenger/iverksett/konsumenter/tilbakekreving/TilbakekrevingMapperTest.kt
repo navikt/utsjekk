@@ -9,7 +9,7 @@ import no.nav.dagpenger.iverksett.kontrakter.objectMapper
 import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.Behandlingstype
 import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.Tilbakekrevingsvalg
 import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.Ytelsestype
-import no.nav.dagpenger.iverksett.util.opprettIverksettOvergangsstønad
+import no.nav.dagpenger.iverksett.util.opprettIverksettDagpenger
 import no.nav.dagpenger.iverksett.util.opprettTilbakekrevingsdetaljer
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -22,16 +22,16 @@ internal class TilbakekrevingMapperTest {
     fun `konverter Iverksetting til OpprettTilbakekrevingRequest`() {
         val behandlingsId = UUID.randomUUID()
         val tilbakekreving = opprettTilbakekrevingsdetaljer()
-        val iverksett = opprettIverksettOvergangsstønad(behandlingsId, tilbakekreving = tilbakekreving)
+        val iverksett = opprettIverksettDagpenger(behandlingsId, tilbakekreving = tilbakekreving)
         val enhet = Enhet("123", "enhet")
         val forventetRevurderingssårsak = "Søknad"
 
         val request = iverksett.tilOpprettTilbakekrevingRequest(enhet)
 
-        assertThat(request.fagsystem).isEqualTo(Fagsystem.EF)
+        assertThat(request.fagsystem).isEqualTo(Fagsystem.DP)
         assertThat(request.eksternFagsakId).isEqualTo(iverksett.fagsak.eksternId.toString())
         assertThat(request.eksternId).isEqualTo(iverksett.behandling.eksternId.toString())
-        assertThat(request.ytelsestype).isEqualTo(Ytelsestype.OVERGANGSSTØNAD)
+        assertThat(request.ytelsestype).isEqualTo(Ytelsestype.DAGPENGER)
 
         assertThat(request.enhetId).isEqualTo(enhet.enhetId)
         assertThat(request.enhetsnavn).isEqualTo(ENHETSNAVN_BREV)
@@ -59,7 +59,7 @@ internal class TilbakekrevingMapperTest {
     @Test
     fun `konverter Iverksetting til Hentfagsystembehandling`() {
         val behandlingsId = UUID.randomUUID()
-        val iverksett = opprettIverksettOvergangsstønad(behandlingsId)
+        val iverksett = opprettIverksettDagpenger(behandlingsId)
         val enhet = Enhet(enhetId = "enhetId", enhetNavn = "enhetNavn")
         val fagsystemsbehandling = iverksett.tilFagsystembehandling(enhet = enhet).hentFagsystemsbehandling!!
 

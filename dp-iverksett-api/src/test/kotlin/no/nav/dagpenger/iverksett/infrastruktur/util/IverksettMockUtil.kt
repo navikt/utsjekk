@@ -6,20 +6,17 @@ import no.nav.dagpenger.iverksett.api.domene.Behandlingsdetaljer
 import no.nav.dagpenger.iverksett.api.domene.Brev
 import no.nav.dagpenger.iverksett.api.domene.Delvilkårsvurdering
 import no.nav.dagpenger.iverksett.api.domene.Fagsakdetaljer
-import no.nav.dagpenger.iverksett.api.domene.IverksettOvergangsstønad
+import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
 import no.nav.dagpenger.iverksett.api.domene.IverksettResultat
 import no.nav.dagpenger.iverksett.api.domene.OppdragResultat
-import no.nav.dagpenger.iverksett.api.domene.PeriodeMedBeløp
 import no.nav.dagpenger.iverksett.api.domene.Søker
 import no.nav.dagpenger.iverksett.api.domene.TilbakekrevingMedVarsel
 import no.nav.dagpenger.iverksett.api.domene.TilbakekrevingResultat
 import no.nav.dagpenger.iverksett.api.domene.Tilbakekrevingsdetaljer
 import no.nav.dagpenger.iverksett.api.domene.TilkjentYtelse
 import no.nav.dagpenger.iverksett.api.domene.TilkjentYtelseMedMetaData
-import no.nav.dagpenger.iverksett.api.domene.VedtaksdetaljerBarnetilsyn
-import no.nav.dagpenger.iverksett.api.domene.VedtaksdetaljerOvergangsstønad
-import no.nav.dagpenger.iverksett.api.domene.VedtaksperiodeBarnetilsyn
-import no.nav.dagpenger.iverksett.api.domene.VedtaksperiodeOvergangsstønad
+import no.nav.dagpenger.iverksett.api.domene.VedtaksdetaljerDagpenger
+import no.nav.dagpenger.iverksett.api.domene.VedtaksperiodeDagpenger
 import no.nav.dagpenger.iverksett.api.domene.Vilkårsvurdering
 import no.nav.dagpenger.iverksett.api.domene.Vurdering
 import no.nav.dagpenger.iverksett.api.domene.ÅrsakRevurdering
@@ -51,10 +48,10 @@ import no.nav.dagpenger.iverksett.kontrakter.iverksett.AktivitetType
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.BehandlingsdetaljerDto
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.DelvilkårsvurderingDto
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.FagsakdetaljerDto
-import no.nav.dagpenger.iverksett.kontrakter.iverksett.IverksettOvergangsstønadDto
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.IverksettDagpengerdDto
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.SøkerDto
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.TilkjentYtelseDto
-import no.nav.dagpenger.iverksett.kontrakter.iverksett.VedtaksdetaljerOvergangsstønadDto
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.VedtaksdetaljerDagpengerrDto
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.VedtaksperiodeType
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.VilkårsvurderingDto
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.VurderingDto
@@ -71,8 +68,8 @@ fun opprettIverksettDto(
     behandlingId: UUID,
     behandlingÅrsak: BehandlingÅrsak = BehandlingÅrsak.SØKNAD,
     andelsbeløp: Int = 5000,
-    stønadType: StønadType = StønadType.OVERGANGSSTØNAD,
-): IverksettOvergangsstønadDto {
+    stønadType: StønadType = StønadType.DAGPENGER,
+): IverksettDagpengerdDto {
     val andelTilkjentYtelse = lagAndelTilkjentYtelseDto(
         beløp = andelsbeløp,
         fraOgMed = LocalDate.of(2021, 1, 1),
@@ -84,7 +81,7 @@ fun opprettIverksettDto(
         startdato = andelTilkjentYtelse.periode.fomDato(),
     )
 
-    return IverksettOvergangsstønadDto(
+    return IverksettDagpengerdDto(
         fagsak = FagsakdetaljerDto(fagsakId = UUID.randomUUID(), eksternId = 1L, stønadstype = stønadType),
         behandling = BehandlingsdetaljerDto(
             behandlingId = behandlingId,
@@ -119,7 +116,7 @@ fun opprettIverksettDto(
             tilhørendeEnhet = "4489",
             adressebeskyttelse = AdressebeskyttelseGradering.UGRADERT,
         ),
-        vedtak = VedtaksdetaljerOvergangsstønadDto(
+        vedtak = VedtaksdetaljerDagpengerrDto(
             resultat = Vedtaksresultat.INNVILGET,
             vedtakstidspunkt = LocalDateTime.of(2021, 5, 12, 0, 0),
             opphørÅrsak = OpphørÅrsak.PERIODE_UTLØPT,
@@ -155,7 +152,7 @@ fun opprettTilkjentYtelseMedMetadata(
         tilkjentYtelse = tilkjentYtelse,
         saksbehandlerId = "saksbehandlerId",
         eksternBehandlingId = eksternId,
-        stønadstype = StønadType.OVERGANGSSTØNAD,
+        stønadstype = StønadType.DAGPENGER,
         eksternFagsakId = 0,
         personIdent = "12345678910",
         behandlingId = behandlingId,
@@ -215,29 +212,22 @@ fun behandlingsdetaljer(
     )
 }
 
-fun vedtaksperioderOvergangsstønad() =
-    VedtaksperiodeOvergangsstønad(
+fun vedtaksperioderDagpenger() =
+    VedtaksperiodeDagpenger(
         periode = lagMånedsperiode(YearMonth.now()),
         aktivitet = AktivitetType.BARNET_ER_SYKT,
         periodeType = VedtaksperiodeType.HOVEDPERIODE,
     )
 
-fun vedtaksperioderBarnetilsyn() =
-    VedtaksperiodeBarnetilsyn(
-        periode = lagMånedsperiode(YearMonth.now()),
-        utgifter = 1,
-        antallBarn = 10,
-    )
-
-fun vedtaksdetaljerOvergangsstønad(
+fun vedtaksdetaljerDagpenger(
     vedtaksresultat: Vedtaksresultat = Vedtaksresultat.INNVILGET,
     andeler: List<AndelTilkjentYtelse> = listOf(opprettAndelTilkjentYtelse()),
     tilbakekreving: Tilbakekrevingsdetaljer? = null,
     startdato: YearMonth = startmåned(andeler),
-    vedtaksperioder: List<VedtaksperiodeOvergangsstønad> = listOf(vedtaksperioderOvergangsstønad()),
-): VedtaksdetaljerOvergangsstønad {
+    vedtaksperioder: List<VedtaksperiodeDagpenger> = listOf(vedtaksperioderDagpenger()),
+): VedtaksdetaljerDagpenger {
     val tilkjentYtelse = lagTilkjentYtelse(andeler, startdato)
-    return VedtaksdetaljerOvergangsstønad(
+    return VedtaksdetaljerDagpenger(
         vedtaksresultat = vedtaksresultat,
         vedtakstidspunkt = LocalDateTime.of(2021, 5, 12, 0, 0),
         opphørÅrsak = OpphørÅrsak.PERIODE_UTLØPT,
@@ -247,34 +237,6 @@ fun vedtaksdetaljerOvergangsstønad(
         vedtaksperioder = vedtaksperioder,
         tilbakekreving = tilbakekreving,
         brevmottakere = Brevmottakere(emptyList()),
-    )
-}
-
-fun vedtaksdetaljerBarnetilsyn(
-    vedtaksresultat: Vedtaksresultat = Vedtaksresultat.INNVILGET,
-    andeler: List<AndelTilkjentYtelse> = listOf(opprettAndelTilkjentYtelse()),
-    tilbakekreving: Tilbakekrevingsdetaljer? = null,
-    startdato: YearMonth = startmåned(andeler),
-    vedtaksperioder: List<VedtaksperiodeBarnetilsyn> = listOf(vedtaksperioderBarnetilsyn()),
-): VedtaksdetaljerBarnetilsyn {
-    val tilkjentYtelse = lagTilkjentYtelse(andeler, startdato)
-    return VedtaksdetaljerBarnetilsyn(
-        vedtaksresultat = vedtaksresultat,
-        vedtakstidspunkt = LocalDateTime.of(2021, 5, 12, 0, 0),
-        opphørÅrsak = OpphørÅrsak.PERIODE_UTLØPT,
-        saksbehandlerId = "A12345",
-        beslutterId = "B23456",
-        tilkjentYtelse = tilkjentYtelse,
-        vedtaksperioder = vedtaksperioder,
-        tilbakekreving = tilbakekreving,
-        brevmottakere = Brevmottakere(emptyList()),
-        kontantstøtte = listOf(
-            PeriodeMedBeløp(
-                periode = Månedsperiode(YearMonth.of(2022, 1), YearMonth.of(2022, 3)),
-                beløp = 10,
-            ),
-        ),
-        tilleggsstønad = listOf(PeriodeMedBeløp(periode = Månedsperiode(YearMonth.of(2022, 2), YearMonth.of(2022, 3)), beløp = 5)),
     )
 }
 
@@ -290,12 +252,12 @@ private fun lagTilkjentYtelse(
         startmåned = startmåned,
     )
 
-fun opprettIverksettOvergangsstønad(
+fun opprettIverksettDagpenger(
     behandlingsdetaljer: Behandlingsdetaljer = behandlingsdetaljer(),
-    vedtaksdetaljer: VedtaksdetaljerOvergangsstønad = vedtaksdetaljerOvergangsstønad(),
+    vedtaksdetaljer: VedtaksdetaljerDagpenger = vedtaksdetaljerDagpenger(),
 ) =
-    IverksettOvergangsstønad(
-        fagsak = Fagsakdetaljer(fagsakId = UUID.randomUUID(), eksternId = 1L, stønadstype = StønadType.OVERGANGSSTØNAD),
+    IverksettDagpenger(
+        fagsak = Fagsakdetaljer(fagsakId = UUID.randomUUID(), eksternId = 1L, stønadstype = StønadType.DAGPENGER),
         behandling = behandlingsdetaljer,
         søker = Søker(
             personIdent = "12345678910",
@@ -306,16 +268,16 @@ fun opprettIverksettOvergangsstønad(
         vedtak = vedtaksdetaljer,
     )
 
-fun opprettIverksettOvergangsstønad(
+fun opprettIverksettDagpenger(
     behandlingId: UUID = UUID.randomUUID(),
     forrigeBehandlingId: UUID? = null,
     andeler: List<AndelTilkjentYtelse> = listOf(opprettAndelTilkjentYtelse()),
     tilbakekreving: Tilbakekrevingsdetaljer? = null,
     startmåned: YearMonth = startmåned(andeler),
-): IverksettOvergangsstønad {
+): IverksettDagpenger {
     val behandlingType = forrigeBehandlingId?.let { BehandlingType.REVURDERING } ?: BehandlingType.FØRSTEGANGSBEHANDLING
-    return IverksettOvergangsstønad(
-        fagsak = Fagsakdetaljer(fagsakId = UUID.randomUUID(), eksternId = 1L, stønadstype = StønadType.OVERGANGSSTØNAD),
+    return IverksettDagpenger(
+        fagsak = Fagsakdetaljer(fagsakId = UUID.randomUUID(), eksternId = 1L, stønadstype = StønadType.DAGPENGER),
         behandling = behandlingsdetaljer(behandlingId, forrigeBehandlingId, behandlingType),
         søker = Søker(
             personIdent = "12345678910",
@@ -323,7 +285,7 @@ fun opprettIverksettOvergangsstønad(
             tilhørendeEnhet = "4489",
             adressebeskyttelse = AdressebeskyttelseGradering.UGRADERT,
         ),
-        vedtak = vedtaksdetaljerOvergangsstønad(Vedtaksresultat.INNVILGET, andeler, tilbakekreving, startmåned),
+        vedtak = vedtaksdetaljerDagpenger(Vedtaksresultat.INNVILGET, andeler, tilbakekreving, startmåned),
     )
 }
 
@@ -342,7 +304,7 @@ fun opprettFrittståendeBrevDto(): FrittståendeBrevDto {
         fil = "fil.pdf".toByteArray(),
         journalførendeEnhet = "4489",
         saksbehandlerIdent = "saksbehandlerIdent",
-        stønadType = StønadType.OVERGANGSSTØNAD,
+        stønadType = StønadType.DAGPENGER,
     )
 }
 

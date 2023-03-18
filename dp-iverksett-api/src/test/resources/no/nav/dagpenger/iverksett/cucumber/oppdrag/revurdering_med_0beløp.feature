@@ -6,7 +6,7 @@ Egenskap: Revurdering med 0 beløp beholder periodeId til neste behandling med p
 
   Scenario: Revurdering med 0 beløp beholder periodeId til neste behandling med periode med beløp
 
-    Gitt følgende tilkjente ytelser for Overgangsstønad
+    Gitt følgende tilkjente ytelser for Dagpenger
       | BehandlingId | Fra dato | Til dato | Beløp |
       | 1            | 02.2021  | 02.2021  | 700   |
       | 2            | 02.2021  | 02.2021  | 0     |

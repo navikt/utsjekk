@@ -8,7 +8,7 @@ import no.nav.dagpenger.iverksett.kontrakter.simulering.Simuleringsoppsummering
 import no.nav.dagpenger.iverksett.kontrakter.simulering.Simuleringsperiode
 import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.Tilbakekrevingsvalg
 import no.nav.dagpenger.iverksett.medFeilutbetaling
-import no.nav.dagpenger.iverksett.util.opprettIverksettOvergangsstønad
+import no.nav.dagpenger.iverksett.util.opprettIverksettDagpenger
 import no.nav.dagpenger.iverksett.util.opprettTilbakekrevingMedVarsel
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -29,7 +29,7 @@ internal class TilbakekrevingUtilTest {
             tilbakekrevingsvalg = Tilbakekrevingsvalg.OPPRETT_TILBAKEKREVING_MED_VARSEL,
             tilbakekrevingMedVarsel = opprettTilbakekrevingMedVarsel(feilutbetaling, perioder),
         )
-        val iverksett = opprettIverksettOvergangsstønad(UUID.randomUUID(), tilbakekreving = tilbakekrevingsdetaljer)
+        val iverksett = opprettIverksettDagpenger(UUID.randomUUID(), tilbakekreving = tilbakekrevingsdetaljer)
 
         val beriketSimuleringsresultat = beriketSimuleringsresultat(feilutbetaling, fom, tom)
 
@@ -118,7 +118,7 @@ internal class TilbakekrevingUtilTest {
             tilbakekrevingsvalg = Tilbakekrevingsvalg.OPPRETT_TILBAKEKREVING_MED_VARSEL,
             tilbakekrevingMedVarsel = opprettTilbakekrevingMedVarsel(BigDecimal.TEN, perioder),
         )
-        val iverksett = opprettIverksettOvergangsstønad(UUID.randomUUID(), tilbakekreving = originalTilbakekreving)
+        val iverksett = opprettIverksettDagpenger(UUID.randomUUID(), tilbakekreving = originalTilbakekreving)
 
         val nyFom = fom.minusMonths(1)
         val nyTom = tom.plusMonths(1)
@@ -137,7 +137,7 @@ internal class TilbakekrevingUtilTest {
             tilbakekrevingsvalg = Tilbakekrevingsvalg.OPPRETT_TILBAKEKREVING_MED_VARSEL,
             tilbakekrevingMedVarsel = opprettTilbakekrevingMedVarsel(BigDecimal.TEN, perioder),
         )
-        val iverksett = opprettIverksettOvergangsstønad(UUID.randomUUID(), tilbakekreving = originalTilbakekreving)
+        val iverksett = opprettIverksettDagpenger(UUID.randomUUID(), tilbakekreving = originalTilbakekreving)
 
         val beriketSimuleringsresultat = beriketSimuleringsresultat(BigDecimal.ZERO, fom, tom)
 

@@ -5,7 +5,7 @@ Egenskap: Revurdering tilbake i tid
 
   Scenario: Revurdering tilbake i tid før vi hadde beløp
 
-    Gitt følgende tilkjente ytelser for Overgangsstønad
+    Gitt følgende tilkjente ytelser for Dagpenger
       | BehandlingId | Fra dato | Til dato | Beløp |
       | 1            | 02.2021  | 02.2021  | 700   |
       | 2            | 01.2021  | 01.2021  | 0     |
@@ -28,7 +28,7 @@ Egenskap: Revurdering tilbake i tid
 
   Scenario: Revurdering tilbake i tid med beløp
 
-    Gitt følgende tilkjente ytelser for Overgangsstønad
+    Gitt følgende tilkjente ytelser for Dagpenger
       | BehandlingId | Fra dato | Til dato | Beløp |
       | 1            | 02.2021  | 02.2021  | 700   |
       | 2            | 01.2021  | 01.2021  | 600   |

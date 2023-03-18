@@ -5,7 +5,7 @@ Egenskap: Revurderer med 0 beløp etter en revurdering med 0 beløp skal sette s
 
   Scenario: Revurderer med 0 beløp etter en revurdering med 0 beløp skal sette startdato på riktig plass
 
-    Gitt følgende tilkjente ytelser for Overgangsstønad
+    Gitt følgende tilkjente ytelser for Dagpenger
       | BehandlingId | Fra dato | Til dato | Beløp |
       | 1            | 03.2021  | 03.2021  | 700   |
       | 2            | 02.2021  | 04.2021  | 0     |

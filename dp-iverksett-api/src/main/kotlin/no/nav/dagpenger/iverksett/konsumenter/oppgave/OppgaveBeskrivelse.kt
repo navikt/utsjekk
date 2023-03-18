@@ -1,6 +1,6 @@
 package no.nav.dagpenger.iverksett.konsumenter.oppgave
 
-import no.nav.dagpenger.iverksett.api.domene.VedtaksperiodeOvergangsstønad
+import no.nav.dagpenger.iverksett.api.domene.VedtaksperiodeDagpenger
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.AktivitetType
 import java.time.LocalDate
 import java.time.YearMonth
@@ -11,28 +11,28 @@ object OppgaveBeskrivelse {
 
     fun beskrivelseFørstegangsbehandlingInnvilget(
         periode: Pair<LocalDate, LocalDate>,
-        vedtak: VedtaksperiodeOvergangsstønad,
+        vedtak: VedtaksperiodeDagpenger,
     ): String {
-        return "Overgangsstønad er innvilget fra ${periode.vedtaksPeriodeToString()}. " +
+        return "Dagpenger er innvilget fra ${periode.vedtaksPeriodeToString()}. " +
             "Aktivitet: ${vedtak.aktivitet.beskrivelse()}."
     }
 
     fun beskrivelseFørstegangsbehandlingAvslått(vedtaksdato: LocalDate): String {
-        return "Søknad om overgangsstønad er avslått i vedtak datert ${vedtaksdato.toReadable()}."
+        return "Søknad om dagpenger er avslått i vedtak datert ${vedtaksdato.toReadable()}."
     }
 
     fun beskrivelseRevurderingInnvilget(
         vedtaksPeriode: Pair<LocalDate, LocalDate>,
-        gjeldendeVedtak: VedtaksperiodeOvergangsstønad,
+        gjeldendeVedtak: VedtaksperiodeDagpenger,
     ): String {
-        return "Overgangsstønad revurdert. Periode ${vedtaksPeriode.vedtaksPeriodeToString()}. " +
+        return "Dagpenger revurdert. Periode ${vedtaksPeriode.vedtaksPeriodeToString()}. " +
             "Aktivitet: ${gjeldendeVedtak.aktivitet.beskrivelse()}."
     }
 
     fun beskrivelseRevurderingOpphørt(opphørsdato: LocalDate?): String {
         return opphørsdato?.let {
-            "Overgangsstønad er stanset fra ${opphørsdato.toReadable()}."
-        } ?: "Overgangsstønad er stanset"
+            "Dagpenger er stanset fra ${opphørsdato.toReadable()}."
+        } ?: "Dagpenger er stanset"
     }
 
     private fun LocalDate.toReadable(): String {

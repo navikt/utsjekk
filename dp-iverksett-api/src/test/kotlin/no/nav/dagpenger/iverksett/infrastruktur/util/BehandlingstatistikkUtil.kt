@@ -31,7 +31,7 @@ fun opprettBehandlingsstatistikkDto(behandlingId: UUID, hendelse: Hendelse, fort
         ansvarligEnhet = "ansvarligEnhet",
         opprettetEnhet = "opprettetEnhet",
         strengtFortroligAdresse = fortrolig,
-        stønadstype = StønadType.OVERGANGSSTØNAD,
+        stønadstype = StønadType.DAGPENGER,
         behandlingstype = BehandlingType.FØRSTEGANGSBEHANDLING,
         relatertBehandlingId = UUID.randomUUID(),
         relatertEksternBehandlingId = null,

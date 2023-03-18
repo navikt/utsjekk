@@ -32,8 +32,6 @@ data class AndelTilkjentYtelse(
 
     fun erNull() = this.beløp == 0
 
-    fun erFullOvergangsstønad() = this.inntektsreduksjon == 0 && this.samordningsfradrag == 0
-
     fun utbetalingsgrad(): Int =
         (100 * (this.beløp.toDouble() / (this.beløp + this.inntektsreduksjon + this.samordningsfradrag))).roundToInt()
 

@@ -1,21 +1,21 @@
 package no.nav.dagpenger.iverksett.konsumenter.arbeidsoppfolging
 
-import no.nav.dagpenger.iverksett.api.domene.IverksettOvergangsstønad
-import no.nav.dagpenger.iverksett.api.domene.VedtaksdetaljerOvergangsstønad
+import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
+import no.nav.dagpenger.iverksett.api.domene.VedtaksdetaljerDagpenger
 import no.nav.dagpenger.iverksett.kontrakter.arbeidsoppfølging.Aktivitetstype
 import no.nav.dagpenger.iverksett.kontrakter.arbeidsoppfølging.Barn
 import no.nav.dagpenger.iverksett.kontrakter.arbeidsoppfølging.Periode
 import no.nav.dagpenger.iverksett.kontrakter.arbeidsoppfølging.Periodetype
 import no.nav.dagpenger.iverksett.kontrakter.arbeidsoppfølging.Stønadstype
-import no.nav.dagpenger.iverksett.kontrakter.arbeidsoppfølging.VedtakOvergangsstønadArbeidsoppfølging
+import no.nav.dagpenger.iverksett.kontrakter.arbeidsoppfølging.VedtakDagpengerArbeidsoppfølging
 import no.nav.dagpenger.iverksett.kontrakter.arbeidsoppfølging.Vedtaksresultat
 
 object ArbeidsoppfølgingMapper {
 
-    fun mapTilVedtakOvergangsstønadTilArbeidsoppfølging(
-        iverksett: IverksettOvergangsstønad,
-    ): VedtakOvergangsstønadArbeidsoppfølging {
-        return VedtakOvergangsstønadArbeidsoppfølging(
+    fun mapTilVedtakDagpengerTilArbeidsoppfølging(
+        iverksett: IverksettDagpenger,
+    ): VedtakDagpengerArbeidsoppfølging {
+        return VedtakDagpengerArbeidsoppfølging(
             vedtakId = iverksett.behandling.eksternId,
             personIdent = iverksett.søker.personIdent,
             barn = iverksett.søker.barn.map { Barn(it.personIdent, it.termindato) },
@@ -25,7 +25,7 @@ object ArbeidsoppfølgingMapper {
         )
     }
 
-    fun mapToVedtaksperioder(vedtaksdetaljer: VedtaksdetaljerOvergangsstønad): List<Periode> {
+    fun mapToVedtaksperioder(vedtaksdetaljer: VedtaksdetaljerDagpenger): List<Periode> {
         return vedtaksdetaljer.vedtaksperioder.map {
             Periode(
                 it.periode.fomDato(),
