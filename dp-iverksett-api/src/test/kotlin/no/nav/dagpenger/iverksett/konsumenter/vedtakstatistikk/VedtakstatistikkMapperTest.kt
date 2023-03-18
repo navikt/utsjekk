@@ -86,7 +86,7 @@ internal class VedtakstatistikkMapperTest {
         assertThat(vedtakDagpengerDVH.vedtaksperioder.first().fraOgMed).isEqualTo(LocalDate.of(2021, 2, 1))
         assertThat(vedtakDagpengerDVH.vedtaksperioder.first().tilOgMed).isEqualTo(LocalDate.of(2021, 3, 31))
         assertThat(vedtakDagpengerDVH.vedtaksperioder.first().aktivitet.name).isEqualTo(AktivitetType.IKKE_AKTIVITETSPLIKT.name)
-        assertThat(vedtakDagpengerDVH.vedtaksperioder.first().periodeType.name).isEqualTo(VedtaksperiodeType.PERIODE_FØR_FØDSEL.name)
+        assertThat(vedtakDagpengerDVH.vedtaksperioder.first().periodeType.name).isEqualTo(VedtaksperiodeType.SANKSJON.name)
         assertThat(vedtakDagpengerDVH.vilkårsvurderinger).hasSize(12)
         assertThat(vedtakDagpengerDVH.vilkårsvurderinger.first().vilkår.name).isEqualTo(VilkårType.FORUTGÅENDE_MEDLEMSKAP.name)
         assertThat(vedtakDagpengerDVH.vilkårsvurderinger.first().resultat.name).isEqualTo(Vilkårsresultat.OPPFYLT.name)
@@ -193,7 +193,7 @@ internal class VedtakstatistikkMapperTest {
                 VedtaksperiodeDagpenger(
                     aktivitet = AktivitetType.IKKE_AKTIVITETSPLIKT,
                     periode = Månedsperiode(YearMonth.of(2021, 2), YearMonth.of(2021, 3)),
-                    periodeType = VedtaksperiodeType.PERIODE_FØR_FØDSEL,
+                    periodeType = VedtaksperiodeType.SANKSJON,
                 ),
                 VedtaksperiodeDagpenger(
                     aktivitet = AktivitetType.FORSØRGER_I_ARBEID,

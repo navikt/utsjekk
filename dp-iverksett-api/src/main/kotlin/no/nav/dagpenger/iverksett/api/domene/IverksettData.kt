@@ -30,7 +30,6 @@ data class IverksettDagpenger(
     val søker: Søker,
     val vedtak: VedtaksdetaljerDagpenger,
 ) {
-
     fun erGOmregning() = behandling.behandlingÅrsak == BehandlingÅrsak.G_OMREGNING
 
     fun erMigrering() = behandling.behandlingÅrsak == BehandlingÅrsak.MIGRERING
@@ -62,52 +61,28 @@ data class Søker(
 sealed class Vedtaksperiode
 
 data class VedtaksperiodeDagpenger(
-    @Deprecated("Bruk periode.", ReplaceWith("periode.fom")) val fraOgMed: LocalDate? = null,
-    @Deprecated("Bruk periode.", ReplaceWith("periode.tom")) val tilOgMed: LocalDate? = null,
-    val periode: Månedsperiode = Månedsperiode(
-        fraOgMed ?: error("Minst en av fraOgMed og periode.fom må ha verdi."),
-        tilOgMed ?: error("Minst en av tilOgMed og periode.tom må ha verdi."),
-    ),
+    val periode: Månedsperiode,
     val aktivitet: AktivitetType,
     val periodeType: VedtaksperiodeType,
 ) : Vedtaksperiode()
 
 data class PeriodeMedBeløp(
-    @Deprecated("Bruk periode.", ReplaceWith("periode.fom")) val fraOgMed: LocalDate? = null,
-    @Deprecated("Bruk periode.", ReplaceWith("periode.tom")) val tilOgMed: LocalDate? = null,
-    val periode: Månedsperiode = Månedsperiode(
-        fraOgMed ?: error("Minst en av fraOgMed og periode.fom må ha verdi."),
-        tilOgMed ?: error("Minst en av tilOgMed og periode.tom må ha verdi."),
-    ),
+    val periode: Månedsperiode,
     val beløp: Int,
 )
 
-sealed class Vedtaksdetaljer {
-
-    abstract val vedtaksresultat: Vedtaksresultat
-    abstract val vedtakstidspunkt: LocalDateTime
-    abstract val opphørÅrsak: OpphørÅrsak?
-    abstract val saksbehandlerId: String
-    abstract val beslutterId: String
-    abstract val tilkjentYtelse: TilkjentYtelse?
-    abstract val tilbakekreving: Tilbakekrevingsdetaljer?
-    abstract val brevmottakere: Brevmottakere?
-    abstract val vedtaksperioder: List<Vedtaksperiode>
-    abstract val avslagÅrsak: AvslagÅrsak?
-}
-
 data class VedtaksdetaljerDagpenger(
-    override val vedtaksresultat: Vedtaksresultat,
-    override val vedtakstidspunkt: LocalDateTime,
-    override val opphørÅrsak: OpphørÅrsak?,
-    override val saksbehandlerId: String,
-    override val beslutterId: String,
-    override val tilkjentYtelse: TilkjentYtelse?,
-    override val tilbakekreving: Tilbakekrevingsdetaljer? = null,
-    override val brevmottakere: Brevmottakere? = null,
-    override val vedtaksperioder: List<VedtaksperiodeDagpenger> = listOf(),
-    override val avslagÅrsak: AvslagÅrsak? = null,
-) : Vedtaksdetaljer()
+    val vedtaksresultat: Vedtaksresultat,
+    val vedtakstidspunkt: LocalDateTime,
+    val opphørÅrsak: OpphørÅrsak?,
+    val saksbehandlerId: String,
+    val beslutterId: String,
+    val tilkjentYtelse: TilkjentYtelse?,
+    val tilbakekreving: Tilbakekrevingsdetaljer? = null,
+    val brevmottakere: Brevmottakere? = null,
+    val vedtaksperioder: List<VedtaksperiodeDagpenger> = listOf(),
+    val avslagÅrsak: AvslagÅrsak? = null,
+)
 
 data class Behandlingsdetaljer(
     val forrigeBehandlingId: UUID? = null,

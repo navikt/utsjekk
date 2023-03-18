@@ -9,7 +9,7 @@ import no.nav.dagpenger.iverksett.ServerTest
 import no.nav.dagpenger.iverksett.api.IverksettingRepository
 import no.nav.dagpenger.iverksett.api.domene.Iverksett
 import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
-import no.nav.dagpenger.iverksett.api.domene.Vedtaksdetaljer
+import no.nav.dagpenger.iverksett.api.domene.VedtaksdetaljerDagpenger
 import no.nav.dagpenger.iverksett.api.tilstand.IverksettResultatService
 import no.nav.dagpenger.iverksett.config.JournalpostClientMock
 import no.nav.dagpenger.iverksett.infrastruktur.transformer.toDomain
@@ -20,7 +20,6 @@ import no.nav.dagpenger.iverksett.kontrakter.iverksett.Brevmottaker.IdentType.PE
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.Brevmottaker.MottakerRolle.BRUKER
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.Brevmottaker.MottakerRolle.VERGE
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.IverksettDagpengerdDto
-import no.nav.dagpenger.iverksett.util.copy
 import no.nav.dagpenger.iverksett.util.opprettBrev
 import no.nav.familie.prosessering.domene.Task
 import no.nav.familie.prosessering.internal.TaskService
@@ -179,7 +178,7 @@ class JournalførVedtaksbrevTaskIntegrasjonsTest : ServerTest() {
 
     private fun resettBrevOgIverksettMedGyldigeBrevmottakere(
         behandlingId: UUID,
-        vedtak: Vedtaksdetaljer,
+        vedtak: VedtaksdetaljerDagpenger,
         brevmottakere: List<Brevmottaker>,
     ) {
         val mapSqlParameterSource = MapSqlParameterSource(mapOf("behandlingId" to behandlingId))

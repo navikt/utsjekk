@@ -24,7 +24,6 @@ data class IverksettDagpengerdDto(
     val vedtak: VedtaksdetaljerDagpengerrDto,
 )
 
-
 data class SøkerDto(
     val personIdent: String,
     val barn: List<BarnDto> = emptyList(),
@@ -50,33 +49,18 @@ data class BehandlingsdetaljerDto(
     val årsakRevurdering: ÅrsakRevurderingDto? = null,
 )
 
-sealed class VedtaksdetaljerDto {
-
-    abstract val resultat: Vedtaksresultat
-    abstract val vedtakstidspunkt: LocalDateTime
-    abstract val opphørÅrsak: OpphørÅrsak?
-    abstract val saksbehandlerId: String
-    abstract val beslutterId: String
-    abstract val tilkjentYtelse: TilkjentYtelseDto?
-    abstract val vedtaksperioder: List<VedtaksperiodeDto>
-    abstract val tilbakekreving: TilbakekrevingDto?
-    abstract val brevmottakere: List<Brevmottaker>
-    abstract val avslagÅrsak: AvslagÅrsak?
-}
-
 data class VedtaksdetaljerDagpengerrDto(
-    override val resultat: Vedtaksresultat,
-    override val vedtakstidspunkt: LocalDateTime,
-    override val opphørÅrsak: OpphørÅrsak?,
-    override val saksbehandlerId: String,
-    override val beslutterId: String,
-    override val tilkjentYtelse: TilkjentYtelseDto?,
-    override val vedtaksperioder: List<VedtaksperiodeDagpengerDto> = emptyList(),
-    override val tilbakekreving: TilbakekrevingDto? = null,
-    override val brevmottakere: List<Brevmottaker> = emptyList(),
-    override val avslagÅrsak: AvslagÅrsak? = null,
-) : VedtaksdetaljerDto()
-
+    val resultat: Vedtaksresultat,
+    val vedtakstidspunkt: LocalDateTime,
+    val opphørÅrsak: OpphørÅrsak?,
+    val saksbehandlerId: String,
+    val beslutterId: String,
+    val tilkjentYtelse: TilkjentYtelseDto?,
+    val vedtaksperioder: List<VedtaksperiodeDagpengerDto> = emptyList(),
+    val tilbakekreving: TilbakekrevingDto? = null,
+    val brevmottakere: List<Brevmottaker> = emptyList(),
+    val avslagÅrsak: AvslagÅrsak? = null,
+)
 
 data class VilkårsvurderingDto(
     val vilkårType: VilkårType,
@@ -94,15 +78,11 @@ data class VurderingDto(
     val svar: SvarId? = null,
     val begrunnelse: String? = null,
 )
-
-sealed class VedtaksperiodeDto
-
 data class VedtaksperiodeDagpengerDto(
     val periode: Månedsperiode,
     val aktivitet: AktivitetType,
     val periodeType: VedtaksperiodeType,
-) : VedtaksperiodeDto()
-
+)
 
 data class TilbakekrevingDto(
     val tilbakekrevingsvalg: Tilbakekrevingsvalg,
@@ -143,10 +123,8 @@ enum class VedtaksperiodeType {
     MIGRERING,
     FORLENGELSE,
     HOVEDPERIODE,
-    PERIODE_FØR_FØDSEL,
     UTVIDELSE,
-    SANKSJON,
-    NY_PERIODE_FOR_NYTT_BARN,
+    SANKSJON
 }
 
 enum class AktivitetType {
