@@ -8,7 +8,7 @@ import no.nav.dagpenger.iverksett.kontrakter.iverksett.TilkjentYtelseMedMetadata
 fun TilkjentYtelseDto.toDomain(): TilkjentYtelse {
     return TilkjentYtelse(
         andelerTilkjentYtelse = this.andelerTilkjentYtelse.map { it.toDomain() },
-        startmåned = this.startmåned,
+        startdato = this.startdato,
     )
 }
 

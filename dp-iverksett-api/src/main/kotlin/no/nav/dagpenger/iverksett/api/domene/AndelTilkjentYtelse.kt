@@ -1,13 +1,12 @@
 package no.nav.dagpenger.iverksett.api.domene
 
-import no.nav.dagpenger.iverksett.kontrakter.felles.Månedsperiode
-import java.time.LocalDate
+import no.nav.dagpenger.iverksett.kontrakter.felles.Datoperiode
 import java.util.UUID
 import kotlin.math.roundToInt
 
 data class AndelTilkjentYtelse(
     val beløp: Int,
-    val periode: Månedsperiode,
+    val periode: Datoperiode,
     val inntekt: Int,
     val samordningsfradrag: Int,
     val inntektsreduksjon: Int,

@@ -49,8 +49,8 @@ data class TestOppdrag(
     val erEndring: Boolean? = null,
     val opphørsdato: LocalDate?,
     val beløp: Int? = null,
-    val startPeriode: YearMonth? = null,
-    val sluttPeriode: YearMonth? = null,
+    val startPeriode: LocalDate? = null,
+    val sluttPeriode: LocalDate? = null,
 ) {
 
     fun tilAndelTilkjentYtelse(): AndelTilkjentYtelse? {
@@ -82,8 +82,8 @@ data class TestOppdrag(
                 forrigePeriodeId = forrigeLinjeId,
                 datoForVedtak = vedtaksdato,
                 klassifisering = ytelse,
-                vedtakdatoFom = startPeriode.atDay(1),
-                vedtakdatoTom = sluttPeriode.atEndOfMonth(),
+                vedtakdatoFom = startPeriode,
+                vedtakdatoTom = sluttPeriode,
                 sats = beløp?.toBigDecimal() ?: BigDecimal.ZERO,
                 satsType = Utbetalingsperiode.SatsType.MND,
                 utbetalesTil = fnr,
@@ -140,13 +140,13 @@ class TestOppdragGroup {
     }
 
     val input: TilkjentYtelseMedMetaData by lazy {
-        val startmåned = startdatoInn?.let { YearMonth.from(it) }
+        val startdato = startdatoInn
             ?: andelerTilkjentYtelseInn.minOfOrNull { it.periode.fom }
             ?: error("Input feiler - hvis man ikke har en andel må man sette startdato")
         TilkjentYtelseMedMetaData(
             TilkjentYtelse(
                 andelerTilkjentYtelse = andelerTilkjentYtelseInn,
-                startmåned = startmåned,
+                startdato = startdato,
             ),
             stønadstype = StønadType.DAGPENGER,
             eksternBehandlingId = behandlingEksternId,
@@ -159,7 +159,7 @@ class TestOppdragGroup {
     }
 
     val output: TilkjentYtelse by lazy {
-        val startmåned = startdatoUt?.let { YearMonth.from(it) }
+        val startdato = startdatoUt
             ?: andelerTilkjentYtelseUt.minOfOrNull { it.periode.fom }
             ?: error("Output feiler - hvis man ikke har en andel må man sette startdato")
         val utbetalingsoppdrag =
@@ -178,7 +178,7 @@ class TestOppdragGroup {
             id = input.tilkjentYtelse.id,
             andelerTilkjentYtelse = andelerTilkjentYtelseUt,
             utbetalingsoppdrag = utbetalingsoppdrag,
-            startmåned = startmåned,
+            startdato = startdato,
         )
     }
 }
@@ -225,8 +225,8 @@ object TestOppdragParser {
                 .firstOrNull { datoKey -> (row[datoKey])?.contains('x') ?: false }
                 ?.let { YearMonth.parse(it) }
 
-            val firstYearMonth = datoKeysMedBeløp.firstOrNull()?.let { YearMonth.parse(it) }
-            val lastYearMonth = datoKeysMedBeløp.lastOrNull()?.let { YearMonth.parse(it) }
+            val førsteDato = datoKeysMedBeløp.firstOrNull()?.let { YearMonth.parse(it).atDay(1) }
+            val sisteDato = datoKeysMedBeløp.lastOrNull()?.let { YearMonth.parse(it).atEndOfMonth() }
             val beløp = datoKeysMedBeløp.firstOrNull()?.let { row[it]?.trim('x') }?.toIntOrNull()
 
             val value = row.getValue(KEY_OPPDRAG)
@@ -249,8 +249,8 @@ object TestOppdragParser {
                 erEndring = row[KEY_ER_ENDRING]?.let { it.toBoolean() },
                 beløp = beløp,
                 opphørsdato = opphørYearMonth?.atDay(1),
-                startPeriode = firstYearMonth,
-                sluttPeriode = lastYearMonth,
+                startPeriode = førsteDato,
+                sluttPeriode = sisteDato,
             )
         }
     }

@@ -73,16 +73,15 @@
       "id": "996d4770-3d03-4b16-b78b-227338219b72",
       "utbetalingsoppdrag": null,
       "status": "IKKE_KLAR",
-      "startdato": null,
-      "startmåned": "2021-01",
+      "startdato": "2020-01-01",
       "andelerTilkjentYtelse": [
         {
           "beløp": 0,
           "fraOgMed": null,
           "tilOgMed": null,
           "periode": {
-            "fom": "2021-05",
-            "tom": "2021-05"
+            "fom": "2021-05-01",
+            "tom": "2021-05-31"
           },
           "inntekt": 0,
           "samordningsfradrag": 0,
@@ -99,8 +98,8 @@
         "fraOgMed": null,
         "tilOgMed": null,
         "periode": {
-          "fom": "2021-06",
-          "tom": "2021-06"
+          "fom": "2021-06-01",
+          "tom": "2021-06-30"
         },
         "periodeType": "HOVEDPERIODE"
       }
@@ -113,7 +112,7 @@
         "perioder": [
           {
             "fom": "2021-01-01",
-            "tom": "2021-01-01"
+            "tom": "2021-01-31"
           }
         ]
       }

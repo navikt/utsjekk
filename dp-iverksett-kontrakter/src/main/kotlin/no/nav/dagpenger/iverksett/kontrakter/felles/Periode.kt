@@ -116,9 +116,6 @@ data class Datoperiode(override val fom: LocalDate, override val tom: LocalDate)
         validate()
     }
 
-    val fomMåned get() = YearMonth.from(fom)
-    val tomMåned get() = YearMonth.from(tom)
-
     constructor(fom: YearMonth, tom: YearMonth) : this(fom.atDay(1), tom.atEndOfMonth())
     constructor(fom: String, tom: String) : this(LocalDate.parse(fom), LocalDate.parse(tom))
     constructor(periode: Pair<String, String>) : this(periode.first, periode.second)
@@ -145,8 +142,6 @@ data class Datoperiode(override val fom: LocalDate, override val tom: LocalDate)
         }
         return (tom.year * 12 + tom.monthValue) - (fom.year * 12 + fom.monthValue) + 1L
     }
-
-    fun toMånedsperiode() = Månedsperiode(fomMåned, tomMåned)
 }
 
 fun <T> List<Periode<T>>.erSammenhengende(): Boolean where T : Comparable<T>, T : Temporal =

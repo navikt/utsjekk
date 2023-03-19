@@ -76,20 +76,19 @@
           "inntektsreduksjon": 0,
           "samordningsfradrag": 0,
           "periode": {
-            "fom": "2021-05",
-            "tom": "2021-05"
+            "fom": "2021-05-01",
+            "tom": "2021-05-31"
           },
           "kildeBehandlingId": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
         }
       ],
-      "startdato": null,
-      "startmåned": "2020-03"
+      "startdato": "2020-03-01"
     },
     "vedtaksperioder": [
       {
         "periode": {
-          "fom": "2021-06",
-          "tom": "2021-06"
+          "fom": "2021-06-01",
+          "tom": "2021-06-30"
         },
         "aktivitet": "BARNET_ER_SYKT",
         "periodeType": "HOVEDPERIODE"
@@ -100,12 +99,6 @@
       "tilbakekrevingMedVarsel": {
         "varseltekst": "varsel",
         "sumFeilutbetaling": 1,
-        "perioder": [
-          {
-            "fom": "2021-01-01",
-            "tom": "2021-01-01"
-          }
-        ],
         "fellesperioder": []
       }
     },

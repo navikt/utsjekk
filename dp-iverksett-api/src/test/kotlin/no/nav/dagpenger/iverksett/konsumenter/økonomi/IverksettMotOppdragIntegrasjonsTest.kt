@@ -11,7 +11,6 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import java.time.LocalDate
-import java.time.YearMonth
 import java.util.UUID
 
 class IverksettMotOppdragIntegrasjonsTest : ServerTest() {
@@ -31,11 +30,11 @@ class IverksettMotOppdragIntegrasjonsTest : ServerTest() {
     private val behandlingid: UUID = UUID.randomUUID()
     private val førsteAndel = lagAndelTilkjentYtelse(
         beløp = 1000,
-        fraOgMed = YearMonth.of(2021, 1),
-        tilOgMed = YearMonth.of(2021, 1),
+        fraOgMed = LocalDate.of(2021, 1, 1),
+        tilOgMed = LocalDate.of(2021, 1, 31),
     )
     private val iverksett =
-        opprettIverksettDagpenger(behandlingid, andeler = listOf(førsteAndel), startmåned = førsteAndel.periode.fom)
+        opprettIverksettDagpenger(behandlingid, andeler = listOf(førsteAndel), startdato = førsteAndel.periode.fom)
 
     @BeforeEach
     internal fun setUp() {
@@ -60,8 +59,8 @@ class IverksettMotOppdragIntegrasjonsTest : ServerTest() {
                 førsteAndel,
                 lagAndelTilkjentYtelse(
                     beløp = 1000,
-                    fraOgMed = YearMonth.now(),
-                    tilOgMed = YearMonth.now().plusMonths(1),
+                    fraOgMed = LocalDate.now(),
+                    tilOgMed = LocalDate.now().plusMonths(1),
                 ),
             ),
         )
@@ -87,8 +86,8 @@ class IverksettMotOppdragIntegrasjonsTest : ServerTest() {
                 førsteAndel.copy(beløp = 299),
                 lagAndelTilkjentYtelse(
                     beløp = 1000,
-                    fraOgMed = YearMonth.now(),
-                    tilOgMed = YearMonth.now().plusMonths(1),
+                    fraOgMed = LocalDate.now(),
+                    tilOgMed = LocalDate.now().plusMonths(1),
                 ),
             ),
         )
@@ -107,9 +106,9 @@ class IverksettMotOppdragIntegrasjonsTest : ServerTest() {
     @Test
     internal fun `iverksett med opphør, forventer beløp lik 0 og dato lik LocalDate MIN`() {
         val opphørBehandlingId = UUID.randomUUID()
-        val startmåned = førsteAndel.periode.fom
+        val startdato = førsteAndel.periode.fom
         val iverksettMedOpphør =
-            opprettIverksettDagpenger(opphørBehandlingId, behandlingid, emptyList(), startmåned = startmåned)
+            opprettIverksettDagpenger(opphørBehandlingId, behandlingid, emptyList(), startdato = startdato)
 
         taskService.deleteAll(taskService.findAll())
         iverksettingService.startIverksetting(iverksettMedOpphør, opprettBrev())
@@ -119,8 +118,8 @@ class IverksettMotOppdragIntegrasjonsTest : ServerTest() {
         assertThat(tilkjentYtelse.andelerTilkjentYtelse).hasSize(1)
         assertThat(tilkjentYtelse.andelerTilkjentYtelse.first().periodeId).isEqualTo(1)
         assertThat(tilkjentYtelse.andelerTilkjentYtelse.first().beløp).isEqualTo(0)
-        assertThat(tilkjentYtelse.andelerTilkjentYtelse.first().periode.fom).isEqualTo(YearMonth.from(LocalDate.MIN))
-        assertThat(tilkjentYtelse.andelerTilkjentYtelse.first().periode.tom).isEqualTo(YearMonth.from(LocalDate.MIN))
+        assertThat(tilkjentYtelse.andelerTilkjentYtelse.first().periode.fom).isEqualTo(LocalDate.MIN)
+        assertThat(tilkjentYtelse.andelerTilkjentYtelse.first().periode.tom).isEqualTo(LocalDate.MIN)
     }
 
     private fun iverksettMotOppdrag() {

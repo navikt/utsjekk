@@ -3,14 +3,13 @@ package no.nav.dagpenger.iverksett.cucumber.domeneparser
 import io.cucumber.datatable.DataTable
 import no.nav.dagpenger.iverksett.cucumber.domeneparser.IdTIlUUIDHolder.behandlingIdTilUUID
 import no.nav.dagpenger.iverksett.cucumber.steps.TilkjentYtelseHolder
-import no.nav.dagpenger.iverksett.kontrakter.felles.Månedsperiode
+import no.nav.dagpenger.iverksett.kontrakter.felles.Datoperiode
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.AndelTilkjentYtelseDto
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.TilkjentYtelseDto
 import no.nav.dagpenger.iverksett.kontrakter.oppdrag.Utbetalingsoppdrag.KodeEndring
 import no.nav.dagpenger.iverksett.kontrakter.oppdrag.Utbetalingsperiode.SatsType
 import org.assertj.core.api.Assertions.assertThat
 import java.time.LocalDate
-import java.time.YearMonth
 import java.util.UUID
 
 object TilkjentYtelseParser {
@@ -19,7 +18,7 @@ object TilkjentYtelseParser {
         return dataTable.groupByBehandlingId().map { (_, rader) ->
             val rad = rader.single()
             val behandlingId = behandlingIdTilUUID[parseInt(Domenebegrep.BEHANDLING_ID, rad)]!!
-            behandlingId to parseÅrMåned(TilkjentYtelseDomenebegrep.STARTDATO, rad).atDay(1)
+            behandlingId to parseDato(TilkjentYtelseDomenebegrep.STARTDATO, rad)
         }.toMap()
     }
 
@@ -39,7 +38,7 @@ object TilkjentYtelseParser {
             }
             val startdato = (
                 startdatoer[behandlingId]
-                    ?: andeler.minOfOrNull { it.periode.fomDato() }
+                    ?: andeler.minOfOrNull { it.periode.fom }
                     ?: error("Mangler startdato eller andel for behandling=$behandlingIdInt")
                 )
             TilkjentYtelseHolder(
@@ -76,24 +75,24 @@ object TilkjentYtelseParser {
             forrigePeriodeId = parseValgfriInt(UtbetalingsoppdragDomenebegrep.FORRIGE_PERIODE_ID, it)?.toLong(),
             sats = parseInt(UtbetalingsoppdragDomenebegrep.BELØP, it),
             satsType = parseValgfriEnum<SatsType>(UtbetalingsoppdragDomenebegrep.TYPE, it) ?: SatsType.DAG,
-            fom = parseÅrMåned(Domenebegrep.FRA_DATO, it).atDay(1),
-            tom = parseÅrMåned(Domenebegrep.TIL_DATO, it).atEndOfMonth(),
-            opphør = parseValgfriÅrMåned(UtbetalingsoppdragDomenebegrep.OPPHØRSDATO, it)?.atDay(1),
+            fom = parseDato(Domenebegrep.FRA_DATO, it),
+            tom = parseDato(Domenebegrep.TIL_DATO, it),
+            opphør = parseValgfriDato(UtbetalingsoppdragDomenebegrep.OPPHØRSDATO, it),
         )
 
-    fun mapForventetTilkjentYtelse(dataTable: DataTable, behandlingIdInt: Int, startdato: YearMonth?): ForventetTilkjentYtelse {
+    fun mapForventetTilkjentYtelse(dataTable: DataTable, behandlingIdInt: Int, startdato: LocalDate?): ForventetTilkjentYtelse {
         val andeler = dataTable.asMaps().map { mapForventetAndel(it) }
         return ForventetTilkjentYtelse(
             behandlingId = behandlingIdTilUUID[behandlingIdInt]!!,
             andeler = andeler,
-            startmåned = startdato ?: andeler.minOfOrNull { it.fom }
+            startdato = startdato ?: andeler.minOfOrNull { it.fom }
                 ?: error("Mangler startdato når det ikke finnes noen andeler for behandling=$behandlingIdInt"),
         )
     }
 
     private fun mapForventetAndel(rad: MutableMap<String, String>) = ForventetAndelTilkjentYtelse(
-        fom = parseValgfriÅrMåned(Domenebegrep.FRA_DATO, rad) ?: YearMonth.from(LocalDate.MIN),
-        tom = parseValgfriÅrMåned(Domenebegrep.TIL_DATO, rad) ?: YearMonth.from(LocalDate.MIN),
+        fom = parseValgfriDato(Domenebegrep.FRA_DATO, rad) ?: LocalDate.MIN,
+        tom = parseValgfriDato(Domenebegrep.TIL_DATO, rad) ?: LocalDate.MIN,
         beløp = parseInt(TilkjentYtelseDomenebegrep.BELØP, rad),
         periodeId = parseInt(TilkjentYtelseDomenebegrep.PERIODE_ID, rad).toLong(),
         forrigePeriodeId = parseValgfriInt(TilkjentYtelseDomenebegrep.FORRIGE_PERIODE_ID, rad)?.toLong(),
@@ -117,9 +116,9 @@ object TilkjentYtelseParser {
         inntekt = parseValgfriInt(TilkjentYtelseDomenebegrep.INNTEKT, rad) ?: 0,
         inntektsreduksjon = parseValgfriInt(TilkjentYtelseDomenebegrep.INNTEKTSREDUKSJON, rad) ?: 0,
         samordningsfradrag = parseValgfriInt(TilkjentYtelseDomenebegrep.INNTEKT, rad) ?: 0,
-        periode = Månedsperiode(
-            parseÅrMåned(Domenebegrep.FRA_DATO, rad).atDay(1),
-            parseÅrMåned(Domenebegrep.TIL_DATO, rad).atEndOfMonth(),
+        periode = Datoperiode(
+            parseDato(Domenebegrep.FRA_DATO, rad),
+            parseDato(Domenebegrep.TIL_DATO, rad),
         ),
         kildeBehandlingId = null, // ikke i bruk i iverksett
     )
@@ -150,17 +149,19 @@ object TilkjentYtelseParser {
     data class ForventetTilkjentYtelse(
         val behandlingId: UUID,
         val andeler: List<ForventetAndelTilkjentYtelse>,
-        val startmåned: YearMonth,
+        val startdato: LocalDate,
     )
 
     data class ForventetAndelTilkjentYtelse(
-        val fom: YearMonth,
-        val tom: YearMonth,
+        val fom: LocalDate,
+        val tom: LocalDate,
         val periodeId: Long,
         val forrigePeriodeId: Long?,
         val beløp: Int,
         val kildeBehandlingId: UUID?,
-    )
+    ) {
+        val periode get() = Datoperiode(fom, tom)
+    }
 }
 
 enum class TilkjentYtelseDomenebegrep(override val nøkkel: String) : Domenenøkkel {

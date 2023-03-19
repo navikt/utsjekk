@@ -3,7 +3,6 @@ package no.nav.dagpenger.iverksett.konsumenter.oppgave
 import no.nav.dagpenger.iverksett.api.domene.VedtaksperiodeDagpenger
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.AktivitetType
 import java.time.LocalDate
-import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
@@ -43,9 +42,9 @@ object OppgaveBeskrivelse {
         return this.first.toReadable() + " - " + this.second.toReadable()
     }
 
-    fun YearMonth.tilTekst(): String {
-        val månedÅrSomTekst = DateTimeFormatter.ofPattern("MMMM yyyy", Locale("nb"))
-        return this.format(månedÅrSomTekst)
+    fun LocalDate.tilTekst(): String {
+        val datoSomTekst = DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale("nb"))
+        return this.format(datoSomTekst)
     }
 
     private fun AktivitetType.beskrivelse(): String {

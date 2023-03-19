@@ -1,16 +1,15 @@
 package no.nav.dagpenger.iverksett.konsumenter.økonomi
 
 import no.nav.dagpenger.iverksett.api.domene.AndelTilkjentYtelse
-import no.nav.dagpenger.iverksett.kontrakter.felles.Månedsperiode
+import no.nav.dagpenger.iverksett.kontrakter.felles.Datoperiode
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.AndelTilkjentYtelseDto
 import java.time.LocalDate
-import java.time.YearMonth
 import java.util.UUID
 
 fun lagAndelTilkjentYtelse(
     beløp: Int,
-    fraOgMed: YearMonth,
-    tilOgMed: YearMonth,
+    fraOgMed: LocalDate,
+    tilOgMed: LocalDate,
     periodeId: Long? = null,
     forrigePeriodeId: Long? = null,
     kildeBehandlingId: UUID? = UUID.randomUUID(),
@@ -20,7 +19,7 @@ fun lagAndelTilkjentYtelse(
 ) =
     AndelTilkjentYtelse(
         beløp = beløp,
-        periode = Månedsperiode(fraOgMed, tilOgMed),
+        periode = Datoperiode(fraOgMed, tilOgMed),
         inntekt = inntekt,
         samordningsfradrag = samordningsfradrag,
         inntektsreduksjon = inntektsreduksjon,
@@ -40,7 +39,7 @@ fun lagAndelTilkjentYtelseDto(
 ) =
     AndelTilkjentYtelseDto(
         beløp = beløp,
-        periode = Månedsperiode(fraOgMed, tilOgMed),
+        periode = Datoperiode(fraOgMed, tilOgMed),
         inntekt = inntekt,
         samordningsfradrag = samordningsfradrag,
         inntektsreduksjon = inntektsreduksjon,

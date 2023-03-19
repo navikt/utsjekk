@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test
 import org.opentest4j.AssertionFailedError
 import org.opentest4j.ValueWrapper
 import java.time.LocalDate
-import java.time.YearMonth
 import java.util.UUID
 
 internal class UtbetalingsoppdragGeneratorTest {
@@ -22,11 +21,11 @@ internal class UtbetalingsoppdragGeneratorTest {
         val behandlingB = UUID.randomUUID()
         val andel1 = opprettAndel(
             2,
-            YearMonth.of(2020, 1),
-            YearMonth.of(2020, 12),
+            LocalDate.of(2020, 1, 1),
+            LocalDate.of(2020, 12, 31),
         ) // endres ikke, beholder kildeBehandlingId
-        val andel2 = opprettAndel(2, YearMonth.of(2021, 1), YearMonth.of(2021, 12)) // endres i behandling b
-        val andel3 = opprettAndel(2, YearMonth.of(2022, 1), YearMonth.of(2022, 12)) // ny i behandling b
+        val andel2 = opprettAndel(2, LocalDate.of(2021, 1, 1), LocalDate.of(2021, 12, 31)) // endres i behandling b
+        val andel3 = opprettAndel(2, LocalDate.of(2022, 1, 1), LocalDate.of(2022, 12, 31)) // ny i behandling b
         val førsteTilkjentYtelse =
             lagTilkjentYtelseMedUtbetalingsoppdrag(
                 opprettTilkjentYtelseMedMetadata(
@@ -121,7 +120,7 @@ internal class UtbetalingsoppdragGeneratorTest {
         assertThat(andelTilkjentYtelse.kildeBehandlingId).isEqualTo(expectedKildeBehandlingId)
     }
 
-    private fun opprettAndel(beløp: Int, stønadFom: YearMonth, stønadTom: YearMonth) =
+    private fun opprettAndel(beløp: Int, stønadFom: LocalDate, stønadTom: LocalDate) =
         lagAndelTilkjentYtelse(
             beløp = beløp,
             fraOgMed = stønadFom,
@@ -133,7 +132,7 @@ internal class UtbetalingsoppdragGeneratorTest {
 
     private fun opprettTilkjentYtelseMedMetadata(
         behandlingId: UUID,
-        startmåned: YearMonth,
+        startdato: LocalDate,
         vararg andelTilkjentYtelse: AndelTilkjentYtelse,
     ) =
         TilkjentYtelseMedMetaData(
@@ -142,7 +141,7 @@ internal class UtbetalingsoppdragGeneratorTest {
                 utbetalingsoppdrag = null,
                 status = TilkjentYtelseStatus.OPPRETTET,
                 andelerTilkjentYtelse = andelTilkjentYtelse.toList(),
-                startmåned = startmåned,
+                startdato = startdato,
             ),
             personIdent = "1",
             behandlingId = behandlingId,

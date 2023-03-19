@@ -3,7 +3,7 @@ package no.nav.dagpenger.iverksett.kontrakter.iverksett
 import no.nav.dagpenger.iverksett.kontrakter.felles.AvslagÅrsak
 import no.nav.dagpenger.iverksett.kontrakter.felles.BehandlingType
 import no.nav.dagpenger.iverksett.kontrakter.felles.BehandlingÅrsak
-import no.nav.dagpenger.iverksett.kontrakter.felles.Månedsperiode
+import no.nav.dagpenger.iverksett.kontrakter.felles.Datoperiode
 import no.nav.dagpenger.iverksett.kontrakter.felles.OpphørÅrsak
 import no.nav.dagpenger.iverksett.kontrakter.felles.RegelId
 import no.nav.dagpenger.iverksett.kontrakter.felles.StønadType
@@ -21,7 +21,7 @@ data class IverksettDagpengerdDto(
     val fagsak: FagsakdetaljerDto,
     val behandling: BehandlingsdetaljerDto,
     val søker: SøkerDto,
-    val vedtak: VedtaksdetaljerDagpengerrDto,
+    val vedtak: VedtaksdetaljerDagpengerDto,
 )
 
 data class SøkerDto(
@@ -49,7 +49,7 @@ data class BehandlingsdetaljerDto(
     val årsakRevurdering: ÅrsakRevurderingDto? = null,
 )
 
-data class VedtaksdetaljerDagpengerrDto(
+data class VedtaksdetaljerDagpengerDto(
     val resultat: Vedtaksresultat,
     val vedtakstidspunkt: LocalDateTime,
     val opphørÅrsak: OpphørÅrsak?,
@@ -76,10 +76,10 @@ data class DelvilkårsvurderingDto(
 data class VurderingDto(
     val regelId: RegelId,
     val svar: SvarId? = null,
-    val begrunnelse: String? = null,
+    val begrunnelse: String? = null
 )
 data class VedtaksperiodeDagpengerDto(
-    val periode: Månedsperiode,
+    val periode: Datoperiode,
     val aktivitet: AktivitetType,
     val periodeType: VedtaksperiodeType,
 )
@@ -89,18 +89,10 @@ data class TilbakekrevingDto(
     val tilbakekrevingMedVarsel: TilbakekrevingMedVarselDto?,
 )
 
-data class PeriodeMedBeløpDto(
-    val periode: Månedsperiode,
-    val beløp: Int,
-)
-
 data class TilbakekrevingMedVarselDto(
     val varseltekst: String,
     val sumFeilutbetaling: BigDecimal? = null, // Hentes fra simulering hvis det mangler
-    @Deprecated("Bruk fellesperioder!", ReplaceWith("fellesperioder"))
-    val perioder: List<no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.Periode>? = null,
-    val fellesperioder: List<Månedsperiode> = perioder?.map { Månedsperiode(it.fom, it.tom) }
-        ?: error("Perioder eller fellesperioder må ha verdi!"),
+    val fellesperioder: List<Datoperiode> = emptyList()
 ) // Hentes fra simulering hvis det mangler
 
 enum class AdressebeskyttelseGradering {

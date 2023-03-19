@@ -17,7 +17,6 @@ import no.nav.dagpenger.iverksett.kontrakter.iverksett.VedtaksperiodeType
 import no.nav.dagpenger.iverksett.kontrakter.oppgave.Oppgavetype
 import org.springframework.stereotype.Service
 import java.time.LocalDate
-import java.time.YearMonth
 
 @Service
 class OppgaveService(
@@ -107,7 +106,7 @@ class OppgaveService(
 
     private fun opphørsdato(iverksett: IverksettDagpenger): LocalDate? {
         val tilkjentYtelse = iverksett.vedtak.tilkjentYtelse ?: error("TilkjentYtelse er null")
-        return tilkjentYtelse.andelerTilkjentYtelse.maxOfOrNull { it.periode.tomDato() }
+        return tilkjentYtelse.andelerTilkjentYtelse.maxOfOrNull { it.periode.fom }
     }
 
     private fun aktivitetEllerPeriodeEndret(iverksett: IverksettDagpenger): Boolean {
@@ -143,18 +142,18 @@ class OppgaveService(
         this.vedtak.vedtaksperioder.maxByOrNull { it.periode } ?: error("Kunne ikke finne vedtaksperioder")
 
     private fun IverksettDagpenger.vedtaksPeriodeMedMaksTilOgMedDato(): LocalDate {
-        return this.vedtak.vedtaksperioder.maxOf { it.periode.tomDato() }
+        return this.vedtak.vedtaksperioder.maxOf { it.periode.tom }
     }
 
     private fun IverksettDagpenger.totalVedtaksperiode(): Pair<LocalDate, LocalDate> =
         Pair(
-            this.vedtak.vedtaksperioder.minOf { it.periode.fomDato() },
-            this.vedtak.vedtaksperioder.maxOf { it.periode.tomDato() },
+            this.vedtak.vedtaksperioder.minOf { it.periode.fom },
+            this.vedtak.vedtaksperioder.maxOf { it.periode.tom },
         )
 
-    private fun IverksettDagpenger.finnSanksjonsvedtakMåned(): YearMonth {
-        val yearMonth = this.vedtak.vedtaksperioder.findLast { it.periodeType == VedtaksperiodeType.SANKSJON }?.periode?.fom
-        return yearMonth
+    private fun IverksettDagpenger.finnSanksjonsvedtakMåned(): LocalDate {
+        val dato = this.vedtak.vedtaksperioder.findLast { it.periodeType == VedtaksperiodeType.SANKSJON }?.periode?.fom
+        return dato
             ?: error("Finner ikke periode for iversetting av sanksjon. Behandling: (${this.behandling.behandlingId})")
     }
 }

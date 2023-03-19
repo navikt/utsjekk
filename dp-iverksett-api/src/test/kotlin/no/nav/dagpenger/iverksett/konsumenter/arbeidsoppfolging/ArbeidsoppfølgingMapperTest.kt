@@ -6,13 +6,12 @@ import no.nav.dagpenger.iverksett.kontrakter.arbeidsoppfølging.Periode
 import no.nav.dagpenger.iverksett.kontrakter.arbeidsoppfølging.Periodetype
 import no.nav.dagpenger.iverksett.kontrakter.arbeidsoppfølging.Stønadstype
 import no.nav.dagpenger.iverksett.kontrakter.arbeidsoppfølging.Vedtaksresultat
-import no.nav.dagpenger.iverksett.util.lagMånedsperiode
 import no.nav.dagpenger.iverksett.util.opprettIverksettDagpenger
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import java.time.LocalDate
 import java.time.YearMonth
-import java.util.*
+import java.util.UUID
 
 class ArbeidsoppfølgingMapperTest {
 
@@ -29,8 +28,8 @@ class ArbeidsoppfølgingMapperTest {
         assertThat(vedtakTilArbeidsoppfølging.personIdent).isEqualTo(iverksett.søker.personIdent)
 
         val forventetPeriode = Periode(
-            lagMånedsperiode(YearMonth.now()).fomDato(),
-            lagMånedsperiode(YearMonth.now()).tomDato(),
+            YearMonth.now().atDay(1),
+            YearMonth.now().atEndOfMonth(),
             Periodetype.HOVEDPERIODE,
             Aktivitetstype.BARNET_ER_SYKT,
         )

@@ -6,28 +6,27 @@ import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.Økono
 import no.nav.dagpenger.iverksett.kontrakter.oppdrag.Utbetalingsperiode
 import no.nav.dagpenger.iverksett.util.opprettTilkjentYtelse
 import no.nav.dagpenger.iverksett.util.opprettTilkjentYtelseMedMetadata
-import no.nav.dagpenger.iverksett.util.startmåned
+import no.nav.dagpenger.iverksett.util.startdato
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
-import java.time.YearMonth
 import java.util.UUID
 
 internal class ØkonomiUtilsTest {
 
-    private val start = YearMonth.of(2021, 3)
-    private val slutt = YearMonth.of(2021, 5)
+    private val start = LocalDate.of(2021, 3, 1)
+    private val slutt = LocalDate.of(2021, 5, 31)
 
-    private val start2 = YearMonth.of(2021, 8)
-    private val slutt2 = YearMonth.of(2021, 10)
+    private val start2 = LocalDate.of(2021, 8, 1)
+    private val slutt2 = LocalDate.of(2021, 10, 31)
 
-    private val start3 = YearMonth.of(2021, 11)
-    private val slutt3 = YearMonth.of(2021, 12)
+    private val start3 = LocalDate.of(2021, 11, 1)
+    private val slutt3 = LocalDate.of(2021, 12, 31)
 
-    private val opphørsdatoFørAndeler = YearMonth.of(2021, 1)
-    private val opphørsdatoEtterAndeler = YearMonth.of(2022, 1) // etter andel sitt dato
+    private val opphørsdatoFørAndeler = LocalDate.of(2021, 1, 1)
+    private val opphørsdatoEtterAndeler = LocalDate.of(2022, 1, 31) // etter andel sitt dato
 
     @Nested
     inner class UtbetalingsperiodeForOpphør {
@@ -40,7 +39,7 @@ internal class ØkonomiUtilsTest {
                 assertThat(
                     testOpphørsdatoUtenTidligereTilkjentYtelse(
                         andeler = emptyList(),
-                        startmåned = YearMonth.now(),
+                        startdato = LocalDate.now(),
                     ),
                 ).isNull()
                 assertThat(testOpphørsdatoUtenTidligereTilkjentYtelse(andeler = listOf(andelMedBeløp()))).isNull()
@@ -50,7 +49,7 @@ internal class ØkonomiUtilsTest {
             @Test
             internal fun `opphørsdato blir null når man ikke har en tidligere behandling`() {
                 listOf(emptyList(), listOf(andelMedBeløp()), listOf(andelUtenBeløp())).forEach { andeler ->
-                    assertThat(testOpphørsdatoUtenTidligereTilkjentYtelse(andeler = andeler, startmåned = opphørsdatoFørAndeler))
+                    assertThat(testOpphørsdatoUtenTidligereTilkjentYtelse(andeler = andeler, startdato = opphørsdatoFørAndeler))
                         .isNull()
                 }
             }
@@ -60,13 +59,13 @@ internal class ØkonomiUtilsTest {
                 assertThat(
                     testOpphørsdatoUtenTidligereTilkjentYtelse(
                         andeler = emptyList(),
-                        startmåned = opphørsdatoEtterAndeler,
+                        startdato = opphørsdatoEtterAndeler,
                     ),
                 )
                     .isNull()
                 listOf(listOf(andelMedBeløp()), listOf(andelUtenBeløp())).forEach { andeler ->
                     assertThatThrownBy {
-                        testOpphørsdatoUtenTidligereTilkjentYtelse(andeler = andeler, startmåned = opphørsdatoEtterAndeler)
+                        testOpphørsdatoUtenTidligereTilkjentYtelse(andeler = andeler, startdato = opphørsdatoEtterAndeler)
                     }.hasMessageContaining("Kan ikke sette opphør etter dato på første perioden")
                 }
             }
@@ -82,10 +81,10 @@ internal class ØkonomiUtilsTest {
                         test(
                             andeler = andeler,
                             tidligereAndeler = andeler,
-                            startmåned = opphørsdatoFørAndeler,
-                            tidligereStartmåned = YearMonth.from(LocalDate.MIN),
+                            startdato = opphørsdatoFørAndeler,
+                            tidligereStartdato = LocalDate.MIN,
                         )
-                    }.hasMessageContaining("Nytt startdato=2021-01 kan ikke være etter")
+                    }.hasMessageContaining("Nytt startdato=2021-01-01 kan ikke være etter")
                 }
             }
 
@@ -94,9 +93,9 @@ internal class ØkonomiUtilsTest {
                 assertThat(
                     test(
                         andeler = emptyList(),
-                        startmåned = start,
+                        startdato = start,
                         tidligereAndeler = emptyList(),
-                        tidligereStartmåned = start,
+                        tidligereStartdato = start,
                     ),
                 ).isNull()
 
@@ -167,7 +166,7 @@ internal class ØkonomiUtilsTest {
                 assertThat(
                     test(
                         andeler = emptyList(),
-                        startmåned = start,
+                        startdato = start,
                         tidligereAndeler = listOf(andelUtenBeløp()),
                     ),
                 ).isNull()
@@ -178,7 +177,7 @@ internal class ØkonomiUtilsTest {
                 assertThat(
                     test(
                         andeler = emptyList(),
-                        startmåned = start,
+                        startdato = start,
                         tidligereAndeler = listOf(andelMedBeløp()),
                     ).opphørsdato(),
                 )
@@ -231,7 +230,7 @@ internal class ØkonomiUtilsTest {
                 assertThat(
                     test(
                         andeler = listOf(andelUtenBeløp()),
-                        startmåned = opphørsdatoFørAndeler,
+                        startdato = opphørsdatoFørAndeler,
                         tidligereAndeler = listOf(andelMedBeløp()),
                     ).opphørsdato(),
                 )
@@ -243,9 +242,9 @@ internal class ØkonomiUtilsTest {
                 assertThat(
                     test(
                         andeler = listOf(andelUtenBeløp()),
-                        startmåned = opphørsdatoFørAndeler,
+                        startdato = opphørsdatoFørAndeler,
                         tidligereAndeler = listOf(andelMedBeløp()),
-                        tidligereStartmåned = opphørsdatoFørAndeler.plusMonths(1),
+                        tidligereStartdato = opphørsdatoFørAndeler.plusMonths(1),
                     ).opphørsdato(),
                 )
                     .isEqualTo(opphørsdatoFørAndeler)
@@ -257,9 +256,9 @@ internal class ØkonomiUtilsTest {
                     assertThat(
                         test(
                             andeler = listOf(it),
-                            startmåned = opphørsdatoFørAndeler,
+                            startdato = opphørsdatoFørAndeler,
                             tidligereAndeler = listOf(it),
-                            tidligereStartmåned = opphørsdatoFørAndeler,
+                            tidligereStartdato = opphørsdatoFørAndeler,
                         ),
                     )
                         .isNull()
@@ -298,7 +297,7 @@ internal class ØkonomiUtilsTest {
                 assertThat(
                     test(
                         andeler = listOf(andelMedBeløp(fra = start2, til = slutt2)),
-                        startmåned = start,
+                        startdato = start,
                         tidligereAndeler = listOf(andelUtenBeløp()),
                     ),
                 )
@@ -349,8 +348,8 @@ internal class ØkonomiUtilsTest {
                     andeler = listOf(andelMedBeløp()),
                     tidligereAndeler = listOf(),
                     sisteAndelIKjede = sisteAndelIKjede,
-                    startmåned = opphørsdatoFørAndeler,
-                    tidligereStartmåned = opphørsdatoFørAndeler,
+                    startdato = opphørsdatoFørAndeler,
+                    tidligereStartdato = opphørsdatoFørAndeler,
                 )
                 assertThat(opphørsperiode.opphørsdato()).isNull()
             }
@@ -359,17 +358,17 @@ internal class ØkonomiUtilsTest {
         private fun test(
             andeler: List<AndelTilkjentYtelse>,
             tidligereAndeler: List<AndelTilkjentYtelse>,
-            startmåned: YearMonth = startmåned(andeler),
-            tidligereStartmåned: YearMonth = startmåned(tidligereAndeler),
+            startdato: LocalDate = startdato(andeler),
+            tidligereStartdato: LocalDate = startdato(tidligereAndeler),
             sisteAndelIKjede: AndelTilkjentYtelse? = null,
         ): Utbetalingsperiode? {
             val tidligereAndelerMedPeriodeId = leggTilPeriodeIdPåTidligereAndeler(tidligereAndeler)
             val forrigeTilkjentYtelse = opprettTilkjentYtelse(
                 andeler = tidligereAndelerMedPeriodeId,
-                startmåned = tidligereStartmåned,
+                startdato = tidligereStartdato,
                 sisteAndelIKjede = sisteAndel(sisteAndelIKjede, tidligereAndelerMedPeriodeId),
             )
-            val nyTilkjentYtelseMedMetaData = tilkjentYtelseMedMetadata(andeler, startmåned)
+            val nyTilkjentYtelseMedMetaData = tilkjentYtelseMedMetadata(andeler, startdato)
             return utbetalingsperiodeForOpphør(forrigeTilkjentYtelse, nyTilkjentYtelseMedMetaData)
         }
 
@@ -378,15 +377,15 @@ internal class ØkonomiUtilsTest {
             tidligereAndelerMedPeriodeId: List<AndelTilkjentYtelse>,
         ) =
             sisteAndelIKjede ?: tidligereAndelerMedPeriodeId.maxByOrNull { it.periodeId!! }
-                ?.takeIf { it.periode.fomDato() != LocalDate.MIN }
+                ?.takeIf { it.periode.fom != LocalDate.MIN }
 
-        fun Utbetalingsperiode?.opphørsdato(): YearMonth? = this?.opphør?.opphørDatoFom?.let { YearMonth.from(it) }
+        fun Utbetalingsperiode?.opphørsdato(): LocalDate? = this?.opphør?.opphørDatoFom?.let { LocalDate.from(it) }
 
         private fun testOpphørsdatoUtenTidligereTilkjentYtelse(
             andeler: List<AndelTilkjentYtelse>,
-            startmåned: YearMonth = startmåned(andeler),
+            startdato: LocalDate = startdato(andeler),
         ) =
-            utbetalingsperiodeForOpphør(null, tilkjentYtelseMedMetadata(andeler, startmåned))
+            utbetalingsperiodeForOpphør(null, tilkjentYtelseMedMetadata(andeler, startdato))
 
         private fun leggTilPeriodeIdPåTidligereAndeler(tidligereAndeler: List<AndelTilkjentYtelse>): List<AndelTilkjentYtelse> {
             val utenNullandeler = tidligereAndeler.filterNot { it.erNull() }
@@ -403,14 +402,14 @@ internal class ØkonomiUtilsTest {
 
         private fun tilkjentYtelseMedMetadata(
             andeler: List<AndelTilkjentYtelse>,
-            startmåned: YearMonth,
+            startdato: LocalDate,
         ) =
-            opprettTilkjentYtelseMedMetadata(tilkjentYtelse = opprettTilkjentYtelse(andeler = andeler, startmåned = startmåned))
+            opprettTilkjentYtelseMedMetadata(tilkjentYtelse = opprettTilkjentYtelse(andeler = andeler, startdato = startdato))
 
         fun andelMedBeløp(
             beløp: Int = 1,
-            fra: YearMonth = start,
-            til: YearMonth = slutt,
+            fra: LocalDate = start,
+            til: LocalDate = slutt,
         ) = lagAndelTilkjentYtelse(
             beløp = beløp,
             fraOgMed = fra,
@@ -418,8 +417,8 @@ internal class ØkonomiUtilsTest {
         )
 
         fun andelUtenBeløp(
-            fra: YearMonth = start,
-            til: YearMonth = slutt,
+            fra: LocalDate = start,
+            til: LocalDate = slutt,
         ) = lagAndelTilkjentYtelse(
             beløp = 0,
             fraOgMed = fra,

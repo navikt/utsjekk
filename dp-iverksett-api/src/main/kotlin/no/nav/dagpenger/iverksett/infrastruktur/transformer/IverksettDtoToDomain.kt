@@ -4,7 +4,6 @@ import no.nav.dagpenger.iverksett.api.domene.Behandlingsdetaljer
 import no.nav.dagpenger.iverksett.api.domene.Delvilkårsvurdering
 import no.nav.dagpenger.iverksett.api.domene.Fagsakdetaljer
 import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
-import no.nav.dagpenger.iverksett.api.domene.PeriodeMedBeløp
 import no.nav.dagpenger.iverksett.api.domene.Søker
 import no.nav.dagpenger.iverksett.api.domene.TilbakekrevingMedVarsel
 import no.nav.dagpenger.iverksett.api.domene.Tilbakekrevingsdetaljer
@@ -19,11 +18,10 @@ import no.nav.dagpenger.iverksett.kontrakter.iverksett.BehandlingsdetaljerDto
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.DelvilkårsvurderingDto
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.FagsakdetaljerDto
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.IverksettDagpengerdDto
-import no.nav.dagpenger.iverksett.kontrakter.iverksett.PeriodeMedBeløpDto
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.SøkerDto
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.TilbakekrevingDto
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.TilbakekrevingMedVarselDto
-import no.nav.dagpenger.iverksett.kontrakter.iverksett.VedtaksdetaljerDagpengerrDto
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.VedtaksdetaljerDagpengerDto
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.VedtaksperiodeDagpengerDto
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.VilkårsvurderingDto
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.VurderingDto
@@ -80,7 +78,7 @@ fun VedtaksperiodeDagpengerDto.toDomain(): VedtaksperiodeDagpenger {
     )
 }
 
-fun VedtaksdetaljerDagpengerrDto.toDomain(): VedtaksdetaljerDagpenger {
+fun VedtaksdetaljerDagpengerDto.toDomain(): VedtaksdetaljerDagpenger {
     return VedtaksdetaljerDagpenger(
         vedtaksresultat = this.resultat,
         vedtakstidspunkt = this.vedtakstidspunkt,
@@ -106,7 +104,7 @@ fun TilbakekrevingMedVarselDto.toDomain(): TilbakekrevingMedVarsel {
     return TilbakekrevingMedVarsel(
         varseltekst = this.varseltekst,
         sumFeilutbetaling = this.sumFeilutbetaling,
-        perioder = this.fellesperioder.map { it.toDatoperiode() },
+        perioder = this.fellesperioder.toList(),
     )
 }
 
@@ -119,13 +117,6 @@ fun BrevmottakerKontrakter.toDomain(): Brevmottaker = Brevmottaker(
     identType = this.identType,
     mottakerRolle = this.mottakerRolle,
 )
-
-fun PeriodeMedBeløpDto.toDomain(): PeriodeMedBeløp =
-    PeriodeMedBeløp(
-        periode = this.periode,
-        beløp = this.beløp,
-    )
-
 fun IverksettDagpengerdDto.toDomain(): IverksettDagpenger {
     return IverksettDagpenger(
         fagsak = this.fagsak.toDomain(),

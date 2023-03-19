@@ -5,7 +5,7 @@ import no.nav.dagpenger.iverksett.api.domene.AndelTilkjentYtelse.Companion.disju
 import no.nav.dagpenger.iverksett.api.domene.AndelTilkjentYtelse.Companion.snittAndeler
 import no.nav.dagpenger.iverksett.api.domene.TilkjentYtelse
 import no.nav.dagpenger.iverksett.api.domene.TilkjentYtelseMedMetaData
-import no.nav.dagpenger.iverksett.kontrakter.felles.Månedsperiode
+import no.nav.dagpenger.iverksett.kontrakter.felles.Datoperiode
 import no.nav.dagpenger.iverksett.kontrakter.oppdrag.Utbetalingsperiode
 import java.time.LocalDate
 import java.util.UUID
@@ -20,7 +20,7 @@ fun AndelTilkjentYtelse.tilPeriodeId(): PeriodeId = PeriodeId(this.periodeId, th
 fun nullAndelTilkjentYtelse(kildeBehandlingId: UUID, periodeId: PeriodeId?): AndelTilkjentYtelse =
     AndelTilkjentYtelse(
         beløp = 0,
-        periode = Månedsperiode(LocalDate.MIN, LocalDate.MIN),
+        periode = Datoperiode(LocalDate.MIN, LocalDate.MIN),
         inntekt = 0,
         samordningsfradrag = 0,
         inntektsreduksjon = 0,
@@ -54,7 +54,7 @@ object ØkonomiUtils {
         val førsteEndring = finnDatoForFørsteEndredeAndel(forrigeAndeler, oppdaterteAndeler)
         val består =
             if (førsteEndring != null) {
-                forrigeAndeler.snittAndeler(oppdaterteAndeler).filter { it.periode.fomDato() < førsteEndring }
+                forrigeAndeler.snittAndeler(oppdaterteAndeler).filter { it.periode.fom < førsteEndring }
             } else {
                 forrigeAndeler
             }
@@ -94,14 +94,14 @@ object ØkonomiUtils {
         // hvis det ikke finnes tidligere andel så kan vi ikke opphøre noe
         val sisteForrigeAndel = forrigeTilkjentYtelse?.sisteAndelIKjede ?: return null
         val forrigeAndeler = andelerUtenNullVerdier(forrigeTilkjentYtelse)
-        val forrigeMaksDato = forrigeAndeler.maxOfOrNull { it.periode.tomDato() }
+        val forrigeMaksDato = forrigeAndeler.maxOfOrNull { it.periode.tom }
         val nyeAndeler = andelerUtenNullVerdier(nyTilkjentYtelse)
 
-        val skalOpphøreFørTidligereStartdato = nyTilkjentYtelse.startmåned < forrigeTilkjentYtelse.startmåned
+        val skalOpphøreFørTidligereStartdato = nyTilkjentYtelse.startdato < forrigeTilkjentYtelse.startdato
         if (skalOpphøreFørTidligereStartdato) {
             return lagUtbetalingsperiodeForOpphør(
                 sisteForrigeAndel,
-                nyTilkjentYtelse.startmåned.atDay(1),
+                nyTilkjentYtelse.startdato!!,
                 nyTilkjentYtelseMedMetaData,
             )
         }
@@ -126,7 +126,7 @@ object ØkonomiUtils {
         forrigeTilkjentYtelse: TilkjentYtelse,
         forrigeAndeler: List<AndelTilkjentYtelse>,
     ) =
-        forrigeAndeler.isEmpty() && opphørsdato != null && opphørsdato >= forrigeTilkjentYtelse.startmåned.atDay(1)
+        forrigeAndeler.isEmpty() && opphørsdato != null && opphørsdato >= forrigeTilkjentYtelse.startdato
 
     /**
      * Ny opphørsdato må finnes hvis det finnes startdato på tidligere tilkjent ytelse
@@ -139,9 +139,9 @@ object ØkonomiUtils {
         gammelVersjon: Boolean = false,
     ) {
         val nyMinDato = nyTilkjentYtelse.andelerTilkjentYtelse.minOfOrNull { it.periode.fom }
-        val forrigeStartdato = forrigeTilkjentYtelse?.startmåned
-        val nyStartdato = nyTilkjentYtelse.startmåned
-        if (forrigeStartdato != null) {
+        val forrigeStartdato = forrigeTilkjentYtelse?.startdato
+        val nyStartdato = nyTilkjentYtelse.startdato
+        if (forrigeStartdato != null && nyStartdato != null) {
             if (nyStartdato > forrigeStartdato) {
                 error("Nytt startdato=$nyStartdato kan ikke være etter forrigeStartdato=$forrigeStartdato")
             }
@@ -149,12 +149,12 @@ object ØkonomiUtils {
         if (gammelVersjon && forrigeTilkjentYtelse == null && nyTilkjentYtelse.andelerTilkjentYtelse.isEmpty()) {
             error("Kan ikke opphøre noe når det ikke finnes en tidligere behandling")
         }
-        if (nyMinDato != null && nyMinDato.isBefore(nyStartdato)) {
+        if (nyMinDato != null && nyStartdato != null && nyMinDato.isBefore(nyStartdato)) {
             error("Kan ikke sette opphør etter dato på første perioden")
         }
 
         if (gammelVersjon) {
-            validerOpphørOg0Andeler(forrigeTilkjentYtelse, nyStartdato.atDay(1), forrigeStartdato?.atDay(1))
+            validerOpphørOg0Andeler(forrigeTilkjentYtelse, nyStartdato, forrigeStartdato)
         }
     }
 
@@ -186,8 +186,8 @@ object ØkonomiUtils {
         oppdaterteAndeler: Set<AndelTilkjentYtelse>,
     ): LocalDate? {
         val førsteEndring = finnDatoForFørsteEndredeAndel(forrigeAndeler, oppdaterteAndeler)
-        val førsteDatoIForrigePeriode = forrigeAndeler.minOfOrNull { it.periode.fomDato() }
-        val førsteDatoNyePerioder = oppdaterteAndeler.minOfOrNull { it.periode.fomDato() }
+        val førsteDatoIForrigePeriode = forrigeAndeler.minOfOrNull { it.periode.fom }
+        val førsteDatoNyePerioder = oppdaterteAndeler.minOfOrNull { it.periode.fom }
         if (førsteDatoNyePerioder != null && førsteDatoIForrigePeriode != null &&
             førsteDatoNyePerioder.isBefore(førsteDatoIForrigePeriode)
         ) {
@@ -201,7 +201,7 @@ object ØkonomiUtils {
         andelerNyTilkjentYtelse: Set<AndelTilkjentYtelse>,
     ) =
         andelerForrigeTilkjentYtelse.disjunkteAndeler(andelerNyTilkjentYtelse)
-            .minOfOrNull { it.periode.fomDato() }
+            .minOfOrNull { it.periode.fom }
 
     /**
      * Sjekker om den nye endringen er etter maks datot for tidligere perioder

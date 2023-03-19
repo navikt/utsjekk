@@ -93,8 +93,8 @@ object VedtakstatistikkMapper {
                 samordningsfradrag = it.samordningsfradrag,
                 inntekt = it.inntekt,
                 inntektsreduksjon = it.inntektsreduksjon,
-                fraOgMed = it.periode.fomDato(),
-                tilOgMed = it.periode.tomDato(),
+                fraOgMed = it.periode.fom,
+                tilOgMed = it.periode.tom,
                 Utbetalingsdetalj(
                     gjelderPerson = mapTilPerson(personIdent = søker.personIdent),
                     klassekode = stønadsType.tilKlassifisering(),
@@ -122,8 +122,8 @@ object VedtakstatistikkMapper {
     private fun mapToVedtaksperioder(vedtaksdetaljer: VedtaksdetaljerDagpenger): List<VedtaksperiodeDagpengerDto> {
         return vedtaksdetaljer.vedtaksperioder.map {
             VedtaksperiodeDagpengerDto(
-                it.periode.fomDato(),
-                it.periode.tomDato(),
+                it.periode.fom,
+                it.periode.tom,
                 AktivitetType.valueOf(it.aktivitet.name),
                 VedtaksperiodeType.valueOf(it.periodeType.name),
             )

@@ -5,7 +5,6 @@ import no.nav.dagpenger.iverksett.kontrakter.felles.AvslagÅrsak
 import no.nav.dagpenger.iverksett.kontrakter.felles.BehandlingType
 import no.nav.dagpenger.iverksett.kontrakter.felles.BehandlingÅrsak
 import no.nav.dagpenger.iverksett.kontrakter.felles.Datoperiode
-import no.nav.dagpenger.iverksett.kontrakter.felles.Månedsperiode
 import no.nav.dagpenger.iverksett.kontrakter.felles.OpphørÅrsak
 import no.nav.dagpenger.iverksett.kontrakter.felles.Opplysningskilde
 import no.nav.dagpenger.iverksett.kontrakter.felles.RegelId
@@ -61,16 +60,10 @@ data class Søker(
 sealed class Vedtaksperiode
 
 data class VedtaksperiodeDagpenger(
-    val periode: Månedsperiode,
+    val periode: Datoperiode,
     val aktivitet: AktivitetType,
     val periodeType: VedtaksperiodeType,
 ) : Vedtaksperiode()
-
-data class PeriodeMedBeløp(
-    val periode: Månedsperiode,
-    val beløp: Int,
-)
-
 data class VedtaksdetaljerDagpenger(
     val vedtaksresultat: Vedtaksresultat,
     val vedtakstidspunkt: LocalDateTime,

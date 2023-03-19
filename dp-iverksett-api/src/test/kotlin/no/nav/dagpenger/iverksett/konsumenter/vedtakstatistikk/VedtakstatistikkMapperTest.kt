@@ -18,7 +18,7 @@ import no.nav.dagpenger.iverksett.kontrakter.dvh.Vedtak
 import no.nav.dagpenger.iverksett.kontrakter.felles.AvslagÅrsak
 import no.nav.dagpenger.iverksett.kontrakter.felles.BehandlingType
 import no.nav.dagpenger.iverksett.kontrakter.felles.BehandlingÅrsak
-import no.nav.dagpenger.iverksett.kontrakter.felles.Månedsperiode
+import no.nav.dagpenger.iverksett.kontrakter.felles.Datoperiode
 import no.nav.dagpenger.iverksett.kontrakter.felles.Opplysningskilde
 import no.nav.dagpenger.iverksett.kontrakter.felles.RegelId
 import no.nav.dagpenger.iverksett.kontrakter.felles.Revurderingsårsak
@@ -155,7 +155,7 @@ internal class VedtakstatistikkMapperTest {
             andelerTilkjentYtelse = listOf(
                 AndelTilkjentYtelse(
                     beløp = 9000,
-                    periode = Månedsperiode(YearMonth.of(2021, 1), YearMonth.of(2021, 5)),
+                    periode = Datoperiode(YearMonth.of(2021, 1), YearMonth.of(2021, 5)),
                     inntekt = 300000,
                     samordningsfradrag = 1000,
                     inntektsreduksjon = 11000,
@@ -165,7 +165,7 @@ internal class VedtakstatistikkMapperTest {
                 ),
                 AndelTilkjentYtelse(
                     beløp = 10000,
-                    periode = Månedsperiode(YearMonth.of(2021, 6), YearMonth.of(2021, 10)),
+                    periode = Datoperiode(YearMonth.of(2021, 6), YearMonth.of(2021, 10)),
                     inntekt = 300000,
                     samordningsfradrag = 0,
                     inntektsreduksjon = 11000,
@@ -174,7 +174,7 @@ internal class VedtakstatistikkMapperTest {
                     kildeBehandlingId = behandlingId,
                 ),
             ),
-            startmåned = YearMonth.now(),
+            startdato = LocalDate.now(),
         )
 
     fun vedtaksdetaljerDagpenger(
@@ -192,12 +192,12 @@ internal class VedtakstatistikkMapperTest {
             vedtaksperioder = listOf(
                 VedtaksperiodeDagpenger(
                     aktivitet = AktivitetType.IKKE_AKTIVITETSPLIKT,
-                    periode = Månedsperiode(YearMonth.of(2021, 2), YearMonth.of(2021, 3)),
+                    periode = Datoperiode(YearMonth.of(2021, 2), YearMonth.of(2021, 3)),
                     periodeType = VedtaksperiodeType.SANKSJON,
                 ),
                 VedtaksperiodeDagpenger(
                     aktivitet = AktivitetType.FORSØRGER_I_ARBEID,
-                    periode = Månedsperiode(YearMonth.of(2021, 6), YearMonth.of(2021, 10)),
+                    periode = Datoperiode(YearMonth.of(2021, 6), YearMonth.of(2021, 10)),
                     periodeType = VedtaksperiodeType.HOVEDPERIODE,
                 ),
             ),

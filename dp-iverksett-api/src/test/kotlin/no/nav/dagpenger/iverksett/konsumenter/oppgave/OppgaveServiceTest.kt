@@ -13,7 +13,7 @@ import no.nav.dagpenger.iverksett.infrastruktur.FamilieIntegrasjonerClient
 import no.nav.dagpenger.iverksett.infrastruktur.repository.findByIdOrThrow
 import no.nav.dagpenger.iverksett.kontrakter.felles.BehandlingType
 import no.nav.dagpenger.iverksett.kontrakter.felles.BehandlingÅrsak
-import no.nav.dagpenger.iverksett.kontrakter.felles.Månedsperiode
+import no.nav.dagpenger.iverksett.kontrakter.felles.Datoperiode
 import no.nav.dagpenger.iverksett.kontrakter.felles.Vedtaksresultat
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.AktivitetType
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.VedtaksperiodeType
@@ -24,7 +24,6 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
-import java.time.YearMonth
 import java.util.UUID
 
 internal class OppgaveServiceTest {
@@ -276,12 +275,12 @@ internal class OppgaveServiceTest {
 
     @Test
     internal fun `Hvis iverksetting av sanksjon, lag sanksjonsbeskrivelse på oppgave`() {
-        val februar23 = YearMonth.of(2023, 2)
-        val iverksett = lagIverksettDagpengerSanksjon(februar23)
+        val førsteFebruar23 = LocalDate.of(2023, 2, 1)
+        val iverksett = lagIverksettDagpengerSanksjon(førsteFebruar23)
 
         val oppgavebeskrivelse = oppgaveService.lagOppgavebeskrivelse(iverksett)
 
-        assertThat(oppgavebeskrivelse).isEqualTo("Bruker har fått vedtak om sanksjon 1 mnd: februar 2023")
+        assertThat(oppgavebeskrivelse).isEqualTo("Bruker har fått vedtak om sanksjon 1 mnd: 01 februar 2023")
     }
 
     @Test
@@ -291,7 +290,7 @@ internal class OppgaveServiceTest {
             BehandlingType.REVURDERING,
             Vedtaksresultat.OPPHØRT,
             listOf(vedtaksPeriode(aktivitet = AktivitetType.FORSØRGER_I_ARBEID)),
-            andelsdatoer = listOf(YearMonth.now()),
+            andelsdatoer = listOf(LocalDate.now()),
         )
 
         oppgaveService.opprettVurderHenvendelseOppgave(iverksett)
@@ -306,12 +305,12 @@ internal class OppgaveServiceTest {
             BehandlingType.REVURDERING,
             Vedtaksresultat.OPPHØRT,
             listOf(vedtaksPeriode(aktivitet = AktivitetType.FORSØRGER_I_ARBEID)),
-            andelsdatoer = listOf(YearMonth.now().minusMonths(2), YearMonth.now(), YearMonth.now().minusMonths(1)),
+            andelsdatoer = listOf(LocalDate.now().minusMonths(2), LocalDate.now(), LocalDate.now().minusMonths(1)),
         )
 
         oppgaveService.opprettVurderHenvendelseOppgave(iverksett)
         verify { OppgaveBeskrivelse.beskrivelseRevurderingOpphørt(capture(opphørsdato)) }
-        assertThat(opphørsdato.captured).isEqualTo(YearMonth.now().atEndOfMonth())
+        assertThat(opphørsdato.captured).isEqualTo(LocalDate.now().minusMonths(1))
     }
 
     @Test
@@ -399,7 +398,7 @@ internal class OppgaveServiceTest {
             BehandlingType.REVURDERING,
             Vedtaksresultat.INNVILGET,
             listOf(vedtaksPeriode(aktivitet = AktivitetType.FORSØRGER_I_ARBEID)),
-            andelsdatoer = listOf(YearMonth.now().minusMonths(2), YearMonth.now(), YearMonth.now().minusMonths(1)),
+            andelsdatoer = listOf(LocalDate.now().minusMonths(2), LocalDate.now(), LocalDate.now().minusMonths(1)),
         )
         val forrigeBehandlingIverksett = lagMigreringsIverksetting()
         every { iverksettRepository.findByIdOrThrow(any()) } returns lagIverksett(forrigeBehandlingIverksett)
@@ -429,14 +428,14 @@ internal class OppgaveServiceTest {
         ),
     )
 
-    private fun lagIverksettDagpengerSanksjon(sanksjonsmåned: YearMonth = YearMonth.now()): IverksettDagpenger {
-        val månedsperiode = Månedsperiode(fom = sanksjonsmåned, tom = sanksjonsmåned)
+    private fun lagIverksettDagpengerSanksjon(sanksjonsdato: LocalDate = LocalDate.now()): IverksettDagpenger {
+        val datoperiode = Datoperiode(fom = sanksjonsdato, tom = sanksjonsdato)
         val vedtaksPeriode = VedtaksperiodeDagpenger(
-            periode = månedsperiode,
+            periode = datoperiode,
             periodeType = VedtaksperiodeType.SANKSJON,
             aktivitet = AktivitetType.IKKE_AKTIVITETSPLIKT,
         )
-        val andeler = listOf(sanksjonsmåned.minusMonths(1), sanksjonsmåned.plusMonths(1))
+        val andeler = listOf(sanksjonsdato.minusMonths(1), sanksjonsdato.plusMonths(1))
         return lagIverksettData(
             UUID.randomUUID(),
             BehandlingType.REVURDERING,
@@ -454,7 +453,7 @@ internal class OppgaveServiceTest {
         periodeType: VedtaksperiodeType = VedtaksperiodeType.HOVEDPERIODE,
     ): VedtaksperiodeDagpenger {
         return VedtaksperiodeDagpenger(
-            periode = Månedsperiode(fraOgMed, tilOgMed),
+            periode = Datoperiode(fraOgMed, tilOgMed),
             aktivitet = aktivitet,
             periodeType = periodeType,
         )

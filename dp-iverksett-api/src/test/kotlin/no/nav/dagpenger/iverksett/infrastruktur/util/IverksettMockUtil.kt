@@ -32,7 +32,6 @@ import no.nav.dagpenger.iverksett.kontrakter.felles.BehandlingÅrsak
 import no.nav.dagpenger.iverksett.kontrakter.felles.Datoperiode
 import no.nav.dagpenger.iverksett.kontrakter.felles.FrittståendeBrevDto
 import no.nav.dagpenger.iverksett.kontrakter.felles.FrittståendeBrevType
-import no.nav.dagpenger.iverksett.kontrakter.felles.Månedsperiode
 import no.nav.dagpenger.iverksett.kontrakter.felles.OpphørÅrsak
 import no.nav.dagpenger.iverksett.kontrakter.felles.Opplysningskilde
 import no.nav.dagpenger.iverksett.kontrakter.felles.RegelId
@@ -51,7 +50,7 @@ import no.nav.dagpenger.iverksett.kontrakter.iverksett.FagsakdetaljerDto
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.IverksettDagpengerdDto
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.SøkerDto
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.TilkjentYtelseDto
-import no.nav.dagpenger.iverksett.kontrakter.iverksett.VedtaksdetaljerDagpengerrDto
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.VedtaksdetaljerDagpengerDto
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.VedtaksperiodeType
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.VilkårsvurderingDto
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.VurderingDto
@@ -78,7 +77,7 @@ fun opprettIverksettDto(
     )
     val tilkjentYtelse = TilkjentYtelseDto(
         andelerTilkjentYtelse = listOf(andelTilkjentYtelse),
-        startdato = andelTilkjentYtelse.periode.fomDato(),
+        startdato = andelTilkjentYtelse.periode.fom,
     )
 
     return IverksettDagpengerdDto(
@@ -116,7 +115,7 @@ fun opprettIverksettDto(
             tilhørendeEnhet = "4489",
             adressebeskyttelse = AdressebeskyttelseGradering.UGRADERT,
         ),
-        vedtak = VedtaksdetaljerDagpengerrDto(
+        vedtak = VedtaksdetaljerDagpengerDto(
             resultat = Vedtaksresultat.INNVILGET,
             vedtakstidspunkt = LocalDateTime.of(2021, 5, 12, 0, 0),
             opphørÅrsak = OpphørÅrsak.PERIODE_UTLØPT,
@@ -130,8 +129,8 @@ fun opprettIverksettDto(
 
 fun opprettAndelTilkjentYtelse(
     beløp: Int = 5000,
-    fra: YearMonth = YearMonth.of(2021, 1),
-    til: YearMonth = YearMonth.of(2021, 12),
+    fra: LocalDate = LocalDate.of(2021, 1, 1),
+    til: LocalDate = LocalDate.of(2021, 12, 31),
 ) = lagAndelTilkjentYtelse(
     beløp = beløp,
     fraOgMed = fra,
@@ -163,14 +162,14 @@ fun opprettTilkjentYtelseMedMetadata(
 fun opprettTilkjentYtelse(
     behandlingId: UUID = UUID.randomUUID(),
     andeler: List<AndelTilkjentYtelse> = listOf(opprettAndelTilkjentYtelse()),
-    startmåned: YearMonth = startmåned(andeler),
+    startdato: LocalDate = startdato(andeler),
     sisteAndelIKjede: AndelTilkjentYtelse? = null,
 ): TilkjentYtelse {
     return TilkjentYtelse(
         id = behandlingId,
         utbetalingsoppdrag = null,
         andelerTilkjentYtelse = andeler,
-        startmåned = startmåned,
+        startdato = startdato,
         sisteAndelIKjede = sisteAndelIKjede,
     )
 }
@@ -214,7 +213,7 @@ fun behandlingsdetaljer(
 
 fun vedtaksperioderDagpenger() =
     VedtaksperiodeDagpenger(
-        periode = lagMånedsperiode(YearMonth.now()),
+        periode = Datoperiode(YearMonth.now().atDay(1), YearMonth.now().atEndOfMonth()),
         aktivitet = AktivitetType.BARNET_ER_SYKT,
         periodeType = VedtaksperiodeType.HOVEDPERIODE,
     )
@@ -223,7 +222,7 @@ fun vedtaksdetaljerDagpenger(
     vedtaksresultat: Vedtaksresultat = Vedtaksresultat.INNVILGET,
     andeler: List<AndelTilkjentYtelse> = listOf(opprettAndelTilkjentYtelse()),
     tilbakekreving: Tilbakekrevingsdetaljer? = null,
-    startdato: YearMonth = startmåned(andeler),
+    startdato: LocalDate = startdato(andeler),
     vedtaksperioder: List<VedtaksperiodeDagpenger> = listOf(vedtaksperioderDagpenger()),
 ): VedtaksdetaljerDagpenger {
     val tilkjentYtelse = lagTilkjentYtelse(andeler, startdato)
@@ -242,14 +241,14 @@ fun vedtaksdetaljerDagpenger(
 
 private fun lagTilkjentYtelse(
     andeler: List<AndelTilkjentYtelse>,
-    startmåned: YearMonth,
+    startdato: LocalDate,
 ): TilkjentYtelse =
     TilkjentYtelse(
         id = UUID.randomUUID(),
         utbetalingsoppdrag = null,
         status = TilkjentYtelseStatus.AKTIV,
         andelerTilkjentYtelse = andeler,
-        startmåned = startmåned,
+        startdato = startdato,
     )
 
 fun opprettIverksettDagpenger(
@@ -273,7 +272,7 @@ fun opprettIverksettDagpenger(
     forrigeBehandlingId: UUID? = null,
     andeler: List<AndelTilkjentYtelse> = listOf(opprettAndelTilkjentYtelse()),
     tilbakekreving: Tilbakekrevingsdetaljer? = null,
-    startmåned: YearMonth = startmåned(andeler),
+    startdato: LocalDate = startdato(andeler),
 ): IverksettDagpenger {
     val behandlingType = forrigeBehandlingId?.let { BehandlingType.REVURDERING } ?: BehandlingType.FØRSTEGANGSBEHANDLING
     return IverksettDagpenger(
@@ -285,11 +284,11 @@ fun opprettIverksettDagpenger(
             tilhørendeEnhet = "4489",
             adressebeskyttelse = AdressebeskyttelseGradering.UGRADERT,
         ),
-        vedtak = vedtaksdetaljerDagpenger(Vedtaksresultat.INNVILGET, andeler, tilbakekreving, startmåned),
+        vedtak = vedtaksdetaljerDagpenger(Vedtaksresultat.INNVILGET, andeler, tilbakekreving, startdato),
     )
 }
 
-fun startmåned(andeler: List<AndelTilkjentYtelse>) =
+fun startdato(andeler: List<AndelTilkjentYtelse>) =
     andeler.minOfOrNull { it.periode.fom } ?: error("Trenger å sette startdato hvs det ikke finnes andeler")
 
 fun opprettBrev(): Brev {
@@ -372,5 +371,3 @@ class IverksettResultatMockBuilder private constructor(
             )
     }
 }
-
-fun lagMånedsperiode(måned: YearMonth) = Månedsperiode(måned, måned)

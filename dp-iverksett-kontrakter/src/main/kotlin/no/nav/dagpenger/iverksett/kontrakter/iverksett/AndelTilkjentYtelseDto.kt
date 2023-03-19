@@ -1,8 +1,6 @@
 package no.nav.dagpenger.iverksett.kontrakter.iverksett
 
-import no.nav.dagpenger.iverksett.kontrakter.felles.Månedsperiode
-import java.time.LocalDate
-import java.time.YearMonth
+import no.nav.dagpenger.iverksett.kontrakter.felles.Datoperiode
 import java.util.UUID
 
 data class AndelTilkjentYtelseDto(
@@ -10,6 +8,6 @@ data class AndelTilkjentYtelseDto(
     val inntekt: Int,
     val inntektsreduksjon: Int,
     val samordningsfradrag: Int,
-    val periode: Månedsperiode,
+    val periode: Datoperiode,
     val kildeBehandlingId: UUID? = null,
 )

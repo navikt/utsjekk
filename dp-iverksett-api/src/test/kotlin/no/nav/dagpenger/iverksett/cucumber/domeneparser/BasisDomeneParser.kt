@@ -16,7 +16,7 @@ fun parseDato(domenebegrep: Domenenøkkel, rad: Map<String, String>): LocalDate 
 }
 
 fun parseValgfriDato(domenebegrep: Domenenøkkel, rad: Map<String, String?>): LocalDate? {
-    return parseValgfriDato(domenebegrep, rad)
+    return parseValgfriDato(valgfriVerdi(domenebegrep, rad))
 }
 
 fun parseÅrMåned(domenebegrep: Domenenøkkel, rad: Map<String, String?>): YearMonth {
@@ -73,7 +73,7 @@ fun parseValgfriBoolean(domenebegrep: Domenenøkkel, rad: Map<String, String?>):
     }
 }
 
-private fun parseDato(dato: String): LocalDate {
+fun parseDato(dato: String): LocalDate {
     return if (dato.contains(".")) {
         LocalDate.parse(dato, norskDatoFormatter)
     } else {
@@ -100,6 +100,14 @@ private fun parseValgfriÅrMåned(verdi: String?): YearMonth? {
     }
 
     return parseÅrMåned(verdi)
+}
+
+private fun parseValgfriDato(verdi: String?): LocalDate? {
+    if (verdi == null || verdi == "") {
+        return null
+    }
+
+    return parseDato(verdi)
 }
 
 fun parseÅrMåned(verdi: String): YearMonth {

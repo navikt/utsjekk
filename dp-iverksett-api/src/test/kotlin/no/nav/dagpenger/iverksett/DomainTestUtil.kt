@@ -43,7 +43,7 @@ fun simuleringDto(
     val tilkjentYtelseMedMetaData = TilkjentYtelseMedMetadataDto(
         tilkjentYtelse = TilkjentYtelseDto(
             andelerTilkjentYtelse = andeler,
-            startdato = andeler.minOfOrNull { it.periode.fomDato() } ?: LocalDate.now(),
+            startdato = andeler.minOfOrNull { it.periode.fom } ?: LocalDate.now(),
         ),
         saksbehandlerId = "saksbehandlerId",
         eksternBehandlingId = 1,
@@ -180,7 +180,7 @@ fun lagIverksettData(
     vedtaksresultat: Vedtaksresultat,
     vedtaksperioder: List<VedtaksperiodeDagpenger> = emptyList(),
     erMigrering: Boolean = false,
-    andelsdatoer: List<YearMonth> = emptyList(),
+    andelsdatoer: List<LocalDate> = emptyList(),
     årsak: BehandlingÅrsak = BehandlingÅrsak.SØKNAD,
 ): IverksettDagpenger {
     val behandlingÅrsak = if (erMigrering) BehandlingÅrsak.MIGRERING else årsak
@@ -196,7 +196,7 @@ fun lagIverksettData(
             andeler = andelsdatoer.map {
                 lagAndelTilkjentYtelse(beløp = 0, fraOgMed = it.minusMonths(1), tilOgMed = it)
             },
-            startdato = andelsdatoer.minByOrNull { it } ?: YearMonth.now(),
+            startdato = andelsdatoer.minByOrNull { it } ?: LocalDate.now(),
         ),
     )
 }
