@@ -1,3 +1,3 @@
 FROM ghcr.io/navikt/baseimages/temurin:17
-COPY ./target/fdp-iverksett.jar "app.jar"
+COPY dp-iverksett-api/target/dp-iverksett-api.jar "app.jar"
 ENV JAVA_OPTS="-XX:MaxRAMPercentage=75"

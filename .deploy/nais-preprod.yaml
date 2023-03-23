@@ -35,8 +35,6 @@ spec:
   env:
     - name: SPRING_PROFILES_ACTIVE
       value: dev
-  envFrom:
-    - secret: dp-iverksett
   azure:
     application:
       enabled: true
@@ -53,18 +51,19 @@ spec:
       rules:
         - application: dp-tilbake
       external:
-        - host: dp-oppdrag.dev-fss-pub.nais.io
+        - host: dp-oppdrag.dev-gcp-pub.nais.io
+        - host: unleash.nais.io
   gcp:
     sqlInstances:
       - type: POSTGRES_14 # IF This is changed, all data will be lost. Read on nais.io how to upgrade
         diskAutoresize: true
-        cascadingDelete: false
+        cascadingDelete: true
         pointInTimeRecovery: true
         maintenance:
           day: 7
           hour: 23
         databases:
-          - name: dp-iverksett
+          - name: dp-iverksett-2
             envVarPrefix: DB
   kafka:
     pool: nav-dev
