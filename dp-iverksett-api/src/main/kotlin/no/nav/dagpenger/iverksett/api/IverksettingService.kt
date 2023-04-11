@@ -66,24 +66,6 @@ class IverksettingService(
         )
     }
 
-    @Transactional
-    fun publiserVedtak(behandlingId: UUID) {
-        val iverksettDbo = iverksettingRepository.findByIdOrThrow(behandlingId)
-
-        taskService.save(
-            Task(
-                type = førstePubliseringsflytTask(iverksettDbo.data),
-                payload = behandlingId.toString(),
-                properties = Properties().apply {
-                    this["personIdent"] = iverksettDbo.data.søker.personIdent
-                    this["behandlingId"] = behandlingId.toString()
-                    this["saksbehandler"] = iverksettDbo.data.vedtak.saksbehandlerId
-                    this["beslutter"] = iverksettDbo.data.vedtak.beslutterId
-                },
-            ),
-        )
-    }
-
     private fun førstePubliseringsflytTask(iverksett: IverksettDagpenger) = when {
         iverksett.erGOmregning() || iverksett.erSatsendring() -> VedtakstatistikkTask.TYPE
         erIverksettingUtenVedtaksperioder(iverksett) -> OpprettOppfølgingsOppgaveForDagpengerTask.TYPE

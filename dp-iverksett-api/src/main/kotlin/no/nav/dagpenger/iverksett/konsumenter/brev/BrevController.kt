@@ -1,5 +1,6 @@
 package no.nav.dagpenger.iverksett.konsumenter.brev
 
+import io.swagger.v3.oas.annotations.tags.Tag
 import no.nav.dagpenger.iverksett.konsumenter.brev.frittstående.FrittståendeBrevService
 import no.nav.dagpenger.iverksett.kontrakter.felles.FrittståendeBrevDto
 import no.nav.security.token.support.core.api.ProtectedWithClaims
@@ -16,7 +17,8 @@ class BrevController(
     private val frittståendeBrevService: FrittståendeBrevService,
 ) {
 
-    @PostMapping("/frittstaende")
+    @PostMapping()
+    @Tag(name = "Brev")
     fun distribuerFrittståendeBrev(
         @RequestBody data: FrittståendeBrevDto,
     ): ResponseEntity<Any> {
