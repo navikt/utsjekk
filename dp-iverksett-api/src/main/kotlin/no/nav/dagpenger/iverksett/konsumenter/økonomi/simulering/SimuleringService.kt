@@ -1,6 +1,7 @@
 package no.nav.dagpenger.iverksett.konsumenter.økonomi.simulering
 
 import no.nav.dagpenger.iverksett.api.domene.Simulering
+import no.nav.dagpenger.iverksett.api.domene.tilTilkjentYtelseMedMetadata
 import no.nav.dagpenger.iverksett.api.tilstand.IverksettResultatService
 import no.nav.dagpenger.iverksett.infrastruktur.advice.ApiFeil
 import no.nav.dagpenger.iverksett.infrastruktur.featuretoggle.FeatureToggleService
@@ -34,7 +35,7 @@ class SimuleringService(
 
             val tilkjentYtelseMedUtbetalingsoppdrag =
                 UtbetalingsoppdragGenerator.lagTilkjentYtelseMedUtbetalingsoppdrag(
-                    simulering.nyTilkjentYtelseMedMetaData,
+                    simulering.tilTilkjentYtelseMedMetadata(),
                     forrigeTilkjentYtelse,
                 )
 
@@ -46,7 +47,7 @@ class SimuleringService(
             }
             return hentSimuleringsresultatOgFiltrerPosteringer(
                 utbetalingsoppdrag,
-                simulering.nyTilkjentYtelseMedMetaData.stønadstype,
+                simulering.stønadstype,
             )
         } catch (feil: Throwable) {
             val cause = feil.cause

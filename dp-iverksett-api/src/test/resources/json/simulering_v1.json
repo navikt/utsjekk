@@ -1,47 +1,42 @@
 {
-  "nyTilkjentYtelseMedMetaData": {
-    "personIdent": "01017012345",
-    "behandlingId": "234bed7c-b1d3-11eb-8529-0242ac130003",
-    "vedtaksdato": "2021-07-23",
-    "tilkjentYtelse": {
-      "startdato":  "2020-03-01",
-      "andelerTilkjentYtelse": [
-        {
-          "utbetaltPerPeriode": 3800,
-          "periodetype": "DAG",
-          "periode": {
-            "fom": "2021-03-01",
-            "tom": "2021-08-31"
-          },
-          "inntekt": 0,
-          "samordningsfradrag": 0,
-          "inntektsreduksjon": 0,
-          "personIdent": "01017012345",
-          "stønadsType": "DAGPENGER",
-          "kildeBehandlingId": "234bed7c-b1d3-11eb-8529-0242ac130003"
-        },
-        {
-          "beløp": 3800,
-          "periodetype": "DAG",
-          "fraOgMed": "2022-09-01",
-          "tilOgMed": "2023-11-30",
-          "periode": {
-            "fom": "2021-09-01",
-            "tom": "2021-11-30"
-          },
-          "inntekt": 0,
-          "samordningsfradrag": 0,
-          "inntektsreduksjon": 0,
-          "personIdent": "01017012345",
-          "stønadsType": "DAGPENGER",
-          "kildeBehandlingId": "234bed7c-b1d3-11eb-8529-0242ac130003"
-        }
-      ]
+  "personIdent": "01017012345",
+  "behandlingId": "234bed7c-b1d3-11eb-8529-0242ac130003",
+  "vedtaksdato": "2021-07-23",
+  "utbetalinger": [
+    {
+      "utbetaltPerPeriode": 3800,
+      "periodetype": "DAG",
+      "periode": {
+        "fom": "2021-03-01",
+        "tom": "2021-08-31"
+      },
+      "inntekt": 0,
+      "samordningsfradrag": 0,
+      "inntektsreduksjon": 0,
+      "personIdent": "01017012345",
+      "stønadsType": "DAGPENGER",
+      "kildeBehandlingId": "234bed7c-b1d3-11eb-8529-0242ac130003"
     },
-    "saksbehandlerId": "12345",
-    "eksternBehandlingId": 123,
-    "stønadstype": "DAGPENGER",
-    "eksternFagsakId": 234
-  },
+    {
+      "beløp": 3800,
+      "periodetype": "DAG",
+      "fraOgMed": "2022-09-01",
+      "tilOgMed": "2023-11-30",
+      "periode": {
+        "fom": "2021-09-01",
+        "tom": "2021-11-30"
+      },
+      "inntekt": 0,
+      "samordningsfradrag": 0,
+      "inntektsreduksjon": 0,
+      "personIdent": "01017012345",
+      "stønadsType": "DAGPENGER",
+      "kildeBehandlingId": "234bed7c-b1d3-11eb-8529-0242ac130003"
+    }
+  ],
+  "saksbehandlerId": "12345",
+  "eksternBehandlingId": 123,
+  "stønadstype": "DAGPENGER",
+  "eksternFagsakId": 234,
   "forrigeBehandlingId": "4b657902-d994-11eb-b8bc-0242ac130003"
 }

@@ -76,7 +76,7 @@ fun opprettIverksettDto(
         kildeBehandlingId = UUID.randomUUID(),
     )
     val tilkjentYtelse = TilkjentYtelseDto(
-        andelerTilkjentYtelse = listOf(andelTilkjentYtelse),
+        utbetalinger = listOf(andelTilkjentYtelse),
         startdato = andelTilkjentYtelse.periode.fom,
     )
 
@@ -121,7 +121,7 @@ fun opprettIverksettDto(
             opphørÅrsak = OpphørÅrsak.PERIODE_UTLØPT,
             saksbehandlerId = "A12345",
             beslutterId = "B23456",
-            tilkjentYtelse = tilkjentYtelse,
+            utbetalinger = tilkjentYtelse.utbetalinger,
             vedtaksperioder = emptyList(),
         ),
     )

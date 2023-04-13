@@ -4,7 +4,6 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import no.nav.dagpenger.iverksett.infrastruktur.transformer.toDomain
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.SimuleringDto
 import no.nav.dagpenger.iverksett.kontrakter.simulering.BeriketSimuleringsresultat
-import no.nav.dagpenger.iverksett.kontrakter.simulering.DetaljertSimuleringResultat
 import no.nav.familie.kontrakter.felles.Ressurs
 import no.nav.security.token.support.core.api.ProtectedWithClaims
 import org.springframework.validation.annotation.Validated
@@ -21,9 +20,9 @@ class SimuleringController(
     private val simuleringService: SimuleringService,
 ) {
 
-    @PostMapping()
+    @PostMapping(produces = ["application/json"])
     @Tag(name = "Simulering")
-    fun hentSimuleringV2(@RequestBody simuleringDto: SimuleringDto): Ressurs<BeriketSimuleringsresultat> {
+    fun hentSimulering(@RequestBody simuleringDto: SimuleringDto): Ressurs<BeriketSimuleringsresultat> {
         val beriketSimuleringResultat =
             simuleringService.hentBeriketSimulering(simuleringDto.toDomain())
         return Ressurs.success(beriketSimuleringResultat)

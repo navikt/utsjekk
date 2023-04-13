@@ -4,8 +4,8 @@ import io.cucumber.datatable.DataTable
 import no.nav.dagpenger.iverksett.cucumber.domeneparser.IdTIlUUIDHolder.behandlingIdTilUUID
 import no.nav.dagpenger.iverksett.cucumber.steps.TilkjentYtelseHolder
 import no.nav.dagpenger.iverksett.kontrakter.felles.Datoperiode
-import no.nav.dagpenger.iverksett.kontrakter.iverksett.AndelTilkjentYtelseDto
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.TilkjentYtelseDto
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.UtbetalingDto
 import no.nav.dagpenger.iverksett.kontrakter.oppdrag.Utbetalingsoppdrag.KodeEndring
 import no.nav.dagpenger.iverksett.kontrakter.oppdrag.Utbetalingsperiode.SatsType
 import org.assertj.core.api.Assertions.assertThat
@@ -45,7 +45,7 @@ object TilkjentYtelseParser {
                 behandlingId = behandlingId,
                 behandlingIdInt = behandlingIdInt,
                 tilkjentYtelse = TilkjentYtelseDto(
-                    andelerTilkjentYtelse = andeler,
+                    utbetalinger = andeler,
                     startdato = startdato,
                 ),
             )
@@ -111,7 +111,7 @@ object TilkjentYtelseParser {
         }
     }
 
-    private fun mapAndelTilkjentYtelse(rad: MutableMap<String, String>) = AndelTilkjentYtelseDto(
+    private fun mapAndelTilkjentYtelse(rad: MutableMap<String, String>) = UtbetalingDto(
         beløp = parseInt(TilkjentYtelseDomenebegrep.BELØP, rad),
         inntekt = parseValgfriInt(TilkjentYtelseDomenebegrep.INNTEKT, rad) ?: 0,
         inntektsreduksjon = parseValgfriInt(TilkjentYtelseDomenebegrep.INNTEKTSREDUKSJON, rad) ?: 0,

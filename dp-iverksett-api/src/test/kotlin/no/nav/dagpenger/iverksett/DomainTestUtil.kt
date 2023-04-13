@@ -13,9 +13,8 @@ import no.nav.dagpenger.iverksett.kontrakter.felles.BehandlingÅrsak
 import no.nav.dagpenger.iverksett.kontrakter.felles.Datoperiode
 import no.nav.dagpenger.iverksett.kontrakter.felles.StønadType
 import no.nav.dagpenger.iverksett.kontrakter.felles.Vedtaksresultat
-import no.nav.dagpenger.iverksett.kontrakter.iverksett.AndelTilkjentYtelseDto
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.SimuleringDto
-import no.nav.dagpenger.iverksett.kontrakter.iverksett.TilkjentYtelseDto
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.UtbetalingDto
 import no.nav.dagpenger.iverksett.kontrakter.simulering.BeriketSimuleringsresultat
 import no.nav.dagpenger.iverksett.kontrakter.simulering.BetalingType
 import no.nav.dagpenger.iverksett.kontrakter.simulering.DetaljertSimuleringResultat
@@ -33,18 +32,15 @@ import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.YearMonth
 import java.util.UUID
-import no.nav.dagpenger.iverksett.kontrakter.iverksett.TilkjentYtelseMedMetadata as TilkjentYtelseMedMetadataDto
 
 fun simuleringDto(
-    andeler: List<AndelTilkjentYtelseDto> = listOf(lagDefaultAndeler()),
+    andeler: List<UtbetalingDto> = listOf(lagDefaultAndeler()),
     forrigeBehandlingId: UUID? = UUID.randomUUID(),
 ): SimuleringDto {
     val behandlingId = UUID.fromString("4b657902-d994-11eb-b8bc-0242ac130003")
-    val tilkjentYtelseMedMetaData = TilkjentYtelseMedMetadataDto(
-        tilkjentYtelse = TilkjentYtelseDto(
-            andelerTilkjentYtelse = andeler,
-            startdato = andeler.minOfOrNull { it.periode.fom } ?: LocalDate.now(),
-        ),
+
+    return SimuleringDto(
+        utbetalinger = andeler,
         saksbehandlerId = "saksbehandlerId",
         eksternBehandlingId = 1,
         stønadstype = StønadType.DAGPENGER,
@@ -52,9 +48,8 @@ fun simuleringDto(
         behandlingId = behandlingId,
         personIdent = "12345611111",
         vedtaksdato = LocalDate.of(2021, 5, 1),
+        forrigeBehandlingId = forrigeBehandlingId,
     )
-
-    return SimuleringDto(tilkjentYtelseMedMetaData, forrigeBehandlingId)
 }
 
 private fun lagDefaultAndeler() =

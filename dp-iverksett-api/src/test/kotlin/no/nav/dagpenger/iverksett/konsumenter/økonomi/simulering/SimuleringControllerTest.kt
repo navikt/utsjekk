@@ -5,7 +5,6 @@ import io.mockk.verify
 import no.nav.dagpenger.iverksett.ServerTest
 import no.nav.dagpenger.iverksett.api.tilstand.IverksettResultatService
 import no.nav.dagpenger.iverksett.beriketSimuleringsresultat
-import no.nav.dagpenger.iverksett.detaljertSimuleringResultat
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.OppdragClient
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.lagAndelTilkjentYtelse
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.lagAndelTilkjentYtelseDto
@@ -48,22 +47,8 @@ class SimuleringControllerTest : ServerTest() {
     @Test
     internal fun `Hent simulering skal gi 200 OK`() {
         val respons = restTemplate
-            .exchange<Ressurs<DetaljertSimuleringResultat>>(
-                localhostUrl("/api/simulering"),
-                HttpMethod.POST,
-                HttpEntity(simuleringDto(), headers),
-            )
-        assertThat(respons.statusCode.value()).isEqualTo(200)
-        assertThat(respons.body?.status).isEqualTo(Ressurs.Status.SUKSESS)
-        assertThat(respons.body?.data).isEqualTo(detaljertSimuleringResultat())
-        verify(exactly = 1) { oppdragClient.hentSimuleringsresultat(any()) }
-    }
-
-    @Test
-    internal fun `Hent simulering v2 skal gi 200 OK`() {
-        val respons = restTemplate
             .exchange<Ressurs<BeriketSimuleringsresultat>>(
-                localhostUrl("/api/simulering/v2"),
+                localhostUrl("/api/simulering"),
                 HttpMethod.POST,
                 HttpEntity(simuleringDto(), headers),
             )
@@ -78,7 +63,7 @@ class SimuleringControllerTest : ServerTest() {
         val request = simuleringDto(andeler = emptyList(), forrigeBehandlingId = null)
         val respons = restTemplate
             .exchange<Ressurs<BeriketSimuleringsresultat>>(
-                localhostUrl("/api/simulering/v2"),
+                localhostUrl("/api/simulering"),
                 HttpMethod.POST,
                 HttpEntity(request, headers),
             )
@@ -94,7 +79,7 @@ class SimuleringControllerTest : ServerTest() {
         val request = simuleringDto(andeler = listOf(lagAndelTilkjentYtelseDto(beløp = 0)), forrigeBehandlingId = null)
         val respons = restTemplate
             .exchange<Ressurs<BeriketSimuleringsresultat>>(
-                localhostUrl("/api/simulering/v2"),
+                localhostUrl("/api/simulering"),
                 HttpMethod.POST,
                 HttpEntity(request, headers),
             )
@@ -114,7 +99,7 @@ class SimuleringControllerTest : ServerTest() {
             simuleringDto(andeler = listOf(lagAndelTilkjentYtelseDto(beløp = 1000)), forrigeBehandlingId = behandlingId)
 
         val response = restTemplate.exchange<Ressurs<BeriketSimuleringsresultat>>(
-            localhostUrl("/api/simulering/v2"),
+            localhostUrl("/api/simulering"),
             HttpMethod.POST,
             HttpEntity(revurdering, headers),
         )
@@ -132,7 +117,7 @@ class SimuleringControllerTest : ServerTest() {
             simuleringDto(andeler = listOf(lagAndelTilkjentYtelseDto(beløp = 0)), forrigeBehandlingId = behandlingId)
 
         val respons = restTemplate.exchange<Ressurs<BeriketSimuleringsresultat>>(
-            localhostUrl("/api/simulering/v2"),
+            localhostUrl("/api/simulering"),
             HttpMethod.POST,
             HttpEntity(revurdering, headers),
         )

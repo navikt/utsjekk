@@ -85,7 +85,7 @@ fun VedtaksdetaljerDagpengerDto.toDomain(): VedtaksdetaljerDagpenger {
         opphørÅrsak = this.opphørÅrsak,
         saksbehandlerId = this.saksbehandlerId,
         beslutterId = this.beslutterId,
-        tilkjentYtelse = this.tilkjentYtelse?.toDomain(),
+        tilkjentYtelse = this.utbetalinger.tilTilkjentYtelse(),
         vedtaksperioder = this.vedtaksperioder.map { it.toDomain() },
         tilbakekreving = this.tilbakekreving?.toDomain(),
         brevmottakere = this.brevmottakere.toDomain(),

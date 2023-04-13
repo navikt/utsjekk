@@ -4,8 +4,8 @@ import no.nav.dagpenger.iverksett.kontrakter.felles.StønadType
 import java.time.LocalDate
 import java.util.UUID
 
-data class SimuleringDto(
-    val utbetalinger: List<UtbetalingDto> = emptyList(),
+data class UtbetalingerMedMetadataDto(
+    val utbetalinger: List<UtbetalingDto>,
     val saksbehandlerId: String,
     val eksternBehandlingId: Long,
     val stønadstype: StønadType,
@@ -13,6 +13,4 @@ data class SimuleringDto(
     val personIdent: String,
     val behandlingId: UUID,
     val vedtaksdato: LocalDate,
-    val forrigeBehandlingId: UUID?,
 )
-

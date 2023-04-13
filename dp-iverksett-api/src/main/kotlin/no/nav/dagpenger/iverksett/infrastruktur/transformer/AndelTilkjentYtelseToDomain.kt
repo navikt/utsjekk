@@ -1,9 +1,9 @@
 package no.nav.dagpenger.iverksett.infrastruktur.transformer
 
 import no.nav.dagpenger.iverksett.api.domene.AndelTilkjentYtelse
-import no.nav.dagpenger.iverksett.kontrakter.iverksett.AndelTilkjentYtelseDto
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.UtbetalingDto
 
-fun AndelTilkjentYtelseDto.toDomain(): AndelTilkjentYtelse {
+fun UtbetalingDto.toDomain(): AndelTilkjentYtelse {
     return AndelTilkjentYtelse(
         beløp = this.beløp,
         periode = this.periode,

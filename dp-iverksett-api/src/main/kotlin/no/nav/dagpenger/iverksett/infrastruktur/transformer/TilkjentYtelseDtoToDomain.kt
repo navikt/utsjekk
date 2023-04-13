@@ -3,18 +3,20 @@ package no.nav.dagpenger.iverksett.infrastruktur.transformer
 import no.nav.dagpenger.iverksett.api.domene.TilkjentYtelse
 import no.nav.dagpenger.iverksett.api.domene.TilkjentYtelseMedMetaData
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.TilkjentYtelseDto
-import no.nav.dagpenger.iverksett.kontrakter.iverksett.TilkjentYtelseMedMetadata as TilkjentYtelseMedMetadataDto
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.UtbetalingDto
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.UtbetalingerMedMetadataDto
+import java.time.LocalDate
 
 fun TilkjentYtelseDto.toDomain(): TilkjentYtelse {
     return TilkjentYtelse(
-        andelerTilkjentYtelse = this.andelerTilkjentYtelse.map { it.toDomain() },
+        andelerTilkjentYtelse = this.utbetalinger.map { it.toDomain() },
         startdato = this.startdato,
     )
 }
 
-fun TilkjentYtelseMedMetadataDto.toDomain(): TilkjentYtelseMedMetaData {
+fun UtbetalingerMedMetadataDto.toDomain(): TilkjentYtelseMedMetaData {
     return TilkjentYtelseMedMetaData(
-        tilkjentYtelse = this.tilkjentYtelse.toDomain(),
+        tilkjentYtelse = this.utbetalinger.tilTilkjentYtelse() ?: tomTilkjentYtelse(),
         saksbehandlerId = this.saksbehandlerId,
         eksternBehandlingId = this.eksternBehandlingId,
         stønadstype = this.stønadstype,
@@ -24,3 +26,18 @@ fun TilkjentYtelseMedMetadataDto.toDomain(): TilkjentYtelseMedMetaData {
         vedtaksdato = this.vedtaksdato,
     )
 }
+
+fun Iterable<UtbetalingDto>.tilTilkjentYtelse(): TilkjentYtelse? {
+    val andeler = this.map { it.toDomain() }
+    val startdato = andeler.minOfOrNull { it.periode.fom } ?: LocalDate.now()
+
+    return when (andeler.size) {
+        0 -> null
+        else -> TilkjentYtelse(andelerTilkjentYtelse = andeler, startdato = startdato)
+    }
+}
+
+fun tomTilkjentYtelse() = TilkjentYtelse(
+    andelerTilkjentYtelse = emptyList(),
+    startdato = LocalDate.now(),
+)

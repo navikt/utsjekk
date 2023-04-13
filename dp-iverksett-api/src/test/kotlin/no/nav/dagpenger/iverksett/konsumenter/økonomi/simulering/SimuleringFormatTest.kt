@@ -16,6 +16,6 @@ class SimuleringFormatTest {
         val simuleringDtoV1 = objectMapper.readValue<SimuleringDto>(v1)
 
         assertNotNull(simuleringDtoV1.forrigeBehandlingId)
-        assertEquals(2, simuleringDtoV1.nyTilkjentYtelseMedMetaData.tilkjentYtelse.andelerTilkjentYtelse.size)
+        assertEquals(2, simuleringDtoV1.utbetalinger.size)
     }
 }

@@ -55,7 +55,7 @@ data class VedtaksdetaljerDagpengerDto(
     val opphørÅrsak: OpphørÅrsak?,
     val saksbehandlerId: String,
     val beslutterId: String,
-    val tilkjentYtelse: TilkjentYtelseDto?,
+    val utbetalinger: List<UtbetalingDto> = emptyList(),
     val vedtaksperioder: List<VedtaksperiodeDagpengerDto> = emptyList(),
     val tilbakekreving: TilbakekrevingDto? = null,
     val brevmottakere: List<Brevmottaker> = emptyList(),

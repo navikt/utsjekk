@@ -2,7 +2,7 @@ package no.nav.dagpenger.iverksett.konsumenter.økonomi
 
 import no.nav.dagpenger.iverksett.api.domene.AndelTilkjentYtelse
 import no.nav.dagpenger.iverksett.kontrakter.felles.Datoperiode
-import no.nav.dagpenger.iverksett.kontrakter.iverksett.AndelTilkjentYtelseDto
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.UtbetalingDto
 import java.time.LocalDate
 import java.util.UUID
 
@@ -37,7 +37,7 @@ fun lagAndelTilkjentYtelseDto(
     samordningsfradrag: Int = 0,
     inntektsreduksjon: Int = 0,
 ) =
-    AndelTilkjentYtelseDto(
+    UtbetalingDto(
         beløp = beløp,
         periode = Datoperiode(fraOgMed, tilOgMed),
         inntekt = inntekt,

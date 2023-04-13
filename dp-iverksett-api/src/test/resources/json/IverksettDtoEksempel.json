@@ -68,22 +68,19 @@
     "opphørÅrsak": "PERIODE_UTLØPT",
     "saksbehandlerId": "A123456",
     "beslutterId": "B123456",
-    "tilkjentYtelse": {
-      "andelerTilkjentYtelse": [
-        {
-          "beløp": 0,
-          "inntekt": 0,
-          "inntektsreduksjon": 0,
-          "samordningsfradrag": 0,
-          "periode": {
-            "fom": "2021-05-01",
-            "tom": "2021-05-31"
-          },
-          "kildeBehandlingId": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
-        }
-      ],
-      "startdato": "2020-03-01"
-    },
+    "utbetalinger": [
+      {
+        "beløp": 0,
+        "inntekt": 0,
+        "inntektsreduksjon": 0,
+        "samordningsfradrag": 0,
+        "periode": {
+          "fom": "2021-05-01",
+          "tom": "2021-05-31"
+        },
+        "kildeBehandlingId": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+      }
+    ],
     "vedtaksperioder": [
       {
         "periode": {

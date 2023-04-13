@@ -43,11 +43,11 @@ class IverksettingControllerTest : ServerTest() {
             .build()
 
         val respons: ResponseEntity<Any> = restTemplate.exchange(
-            localhostUrl("/api/iverksett"),
+            localhostUrl("/api/iverksetting"),
             HttpMethod.POST,
             HttpEntity(request, headers),
         )
-        assertThat(respons.statusCode.value()).isEqualTo(200)
+        assertThat(respons.statusCode.value()).isEqualTo(202)
         val tasker = taskService.findAll()
         assertThat(tasker.map { it.type }).contains(OpprettTilbakekrevingTask.TYPE)
         assertThat(tasker.map { it.type }).doesNotContain(JournalførVedtaksbrevTask.TYPE)
@@ -58,18 +58,18 @@ class IverksettingControllerTest : ServerTest() {
         val iverksettJson = opprettIverksettDto(behandlingId = behandlingId)
         // Copy skal legges inn som egen metode i egen PR
         val iverksettJsonMedAvslag =
-            iverksettJson.copy(vedtak = iverksettJson.vedtak.copy(tilkjentYtelse = null, resultat = Vedtaksresultat.AVSLÅTT))
+            iverksettJson.copy(vedtak = iverksettJson.vedtak.copy(utbetalinger = emptyList(), resultat = Vedtaksresultat.AVSLÅTT))
         val request = MultipartBuilder()
             .withJson("data", iverksettJsonMedAvslag)
             .withByteArray("fil", "1", byteArrayOf(12))
             .build()
 
         val respons: ResponseEntity<Any> = restTemplate.exchange(
-            localhostUrl("/api/iverksett"),
+            localhostUrl("/api/iverksetting"),
             HttpMethod.POST,
             HttpEntity(request, headers),
         )
-        assertThat(respons.statusCode.value()).isEqualTo(200)
+        assertThat(respons.statusCode.value()).isEqualTo(202)
         val tasker = taskService.findAll()
         assertThat(tasker.map { it.type }).doesNotContain(IverksettMotOppdragTask.TYPE)
         assertThat(tasker.map { it.type }).contains(JournalførVedtaksbrevTask.TYPE)
@@ -78,14 +78,14 @@ class IverksettingControllerTest : ServerTest() {
     @Test
     internal fun `Innvilget vedtak uten tilkjent ytelse gir 400 feil`() {
         val iverksettJson = opprettIverksettDto(behandlingId = behandlingId)
-        val iverksettJsonUtenTilkjentYtelse = iverksettJson.copy(vedtak = iverksettJson.vedtak.copy(tilkjentYtelse = null))
+        val iverksettJsonUtenTilkjentYtelse = iverksettJson.copy(vedtak = iverksettJson.vedtak.copy(utbetalinger = emptyList()))
         val request = MultipartBuilder()
             .withJson("data", iverksettJsonUtenTilkjentYtelse)
             .withByteArray("fil", "1", byteArrayOf(12))
             .build()
 
         val respons: ResponseEntity<Ressurs<Nothing>> = restTemplate.exchange(
-            localhostUrl("/api/iverksett"),
+            localhostUrl("/api/iverksetting"),
             HttpMethod.POST,
             HttpEntity(request, headers),
         )
@@ -100,7 +100,7 @@ class IverksettingControllerTest : ServerTest() {
             .build()
 
         val respons: ResponseEntity<Any> = restTemplate.exchange(
-            localhostUrl("/api/iverksett"),
+            localhostUrl("/api/iverksetting"),
             HttpMethod.POST,
             HttpEntity(request, headers),
         )
