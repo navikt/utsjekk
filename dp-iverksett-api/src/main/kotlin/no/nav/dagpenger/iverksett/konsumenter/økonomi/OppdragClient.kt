@@ -25,30 +25,30 @@ class OppdragClient(
     restOperations: RestOperations,
 ) : AbstractPingableRestClient(restOperations, "dp.oppdrag") {
 
-    private val postOppdragUri: URI = UriComponentsBuilder.fromUri(dagepngerOppdragUri).pathSegment("api/oppdrag").build().toUri()
+    private val postOppdragUri: URI = UriComponentsBuilder.fromUri(dagepngerOppdragUri).pathSegment("oppdrag").build().toUri()
 
-    private val getStatusUri: URI = UriComponentsBuilder.fromUri(dagepngerOppdragUri).pathSegment("api/status").build().toUri()
+    private val getStatusUri: URI = UriComponentsBuilder.fromUri(dagepngerOppdragUri).pathSegment("status").build().toUri()
 
     private val grensesnittavstemmingUri: URI =
-        UriComponentsBuilder.fromUri(dagepngerOppdragUri).pathSegment("api/grensesnittavstemming").build().toUri()
+        UriComponentsBuilder.fromUri(dagepngerOppdragUri).pathSegment("grensesnittavstemming").build().toUri()
 
     private val konsistensavstemmingUri: URI =
-        UriComponentsBuilder.fromUri(dagepngerOppdragUri).pathSegment("api/konsistensavstemming").build().toUri()
+        UriComponentsBuilder.fromUri(dagepngerOppdragUri).pathSegment("konsistensavstemming").build().toUri()
 
     private val postSimuleringUri: URI =
-        UriComponentsBuilder.fromUri(dagepngerOppdragUri).pathSegment("api/simulering/v1").build().toUri()
+        UriComponentsBuilder.fromUri(dagepngerOppdragUri).pathSegment("simulering/v1").build().toUri()
 
     fun iverksettOppdrag(utbetalingsoppdrag: Utbetalingsoppdrag): String {
-        return postForEntity<Ressurs<String>>(postOppdragUri, utbetalingsoppdrag).getDataOrThrow()
+        return postForEntity(postOppdragUri, utbetalingsoppdrag)
     }
 
     fun hentStatus(oppdragId: OppdragId): OppdragStatusMedMelding {
-        val ressurs = postForEntity<Ressurs<OppdragStatus>>(getStatusUri, oppdragId)
-        return OppdragStatusMedMelding(ressurs.getDataOrThrow(), ressurs.melding)
-    }
+        val oppdragStatus = postForEntity<String>(getStatusUri, oppdragId)
+        // TODO Burde ha en melding om hva som evt har gått feil
+        return OppdragStatusMedMelding(OppdragStatus.valueOf(oppdragStatus), "") }
 
     fun grensesnittavstemming(grensesnittavstemmingRequest: GrensesnittavstemmingRequest): String {
-        return postForEntity<Ressurs<String>>(grensesnittavstemmingUri, grensesnittavstemmingRequest).getDataOrThrow()
+        return postForEntity(grensesnittavstemmingUri, grensesnittavstemmingRequest)
     }
 
     fun konsistensavstemming(

@@ -69,7 +69,7 @@ class FeatureToggleConfig(
         return object : FeatureToggleService {
             override fun isEnabled(toggleId: String, defaultValue: Boolean): Boolean {
                 if (unleash.environment == "local") {
-                    return true
+                    return System.getenv(toggleId)?.toBoolean() ?: true
                 }
                 return defaultValue
             }

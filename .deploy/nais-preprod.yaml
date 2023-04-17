@@ -44,9 +44,10 @@ spec:
   accessPolicy:
     inbound:
       rules:
-        - application: dp-sak
-        - application: dp-sak-lokal
-        - application: familie-prosessering
+        - application: dp-iverksett # For testing; kan finne bruken token for app'en til å kalle seg selv
+        - application: dp-sak # TODO Navnet på vedtaksløsningen
+        - application: dp-sak-lokal # TODO Navnet på vedtaksløsningen
+        - application: dp-prosessering #frontend for task-rammeverket
     outbound:
       rules:
         - application: dp-tilbake

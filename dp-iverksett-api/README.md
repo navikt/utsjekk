@@ -9,21 +9,22 @@ App som tilbyr orkestrering av iverksetting for dagpenger. Følgende oppgaver gj
 ## Swagger
 http://localhost:8094/swagger-ui/index.html
 
-## Bygging lokalt
+## Kjøring lokalt
 Bygging gjøres ved å kjøre `mvn clean install`.
 
 ### Autentisering lokalt
 Dersom man vil gjøre autentiserte kall mot andre tjenester eller vil kjøre applikasjonen sammen med frontend, må man sette opp følgende miljø-variabler:
+* `AZURE_APP_CLIENT_ID` 
+* `AZURE_APP_CLIENT_SECRET` 
 
-#### Client id & client secret
-secret kan hentes fra cluster med
-`kubectl -n teamdagpenger get secret azuread-dp-iverksett-lokal -o json | jq '.data | map_values(@base64d)'`
+Begge kan hentes fra aktuelt cluster med
+`kubectl -n teamdagpenger get secret azuread-dp-iverksett-<...> -o json | jq '.data | map_values(@base64d)'`
 
-* `AZURE_APP_CLIENT_ID` (fra secret)
-* `AZURE_APP_CLIENT_SECRET` (fra secret)
-* Scope for den aktuelle tjenesten (`DAGPENGER_OPPDRAG_SCOPE`, ...)
+I IntelliJ legges de inn under ApplicationLocal -> Edit Configurations -> Environment Variables.
 
-Legges inn under ApplicationLocal -> Edit Configurations -> Environment Variables.
+### Overtyre funksjonsbrytere
+Funksjonsbrytere lokalt er i utgangspunktet PÅ (enabled=true) kan overstyres med miljøvariable. Det er nødvendig for
+* `dp.iverksett.stopp-iverksetting' = `true`    
 
 ### Kjøring med in-memory-database
 For å kjøre opp appen lokalt, kan en kjøre `ApplicationLocal`.
@@ -44,6 +45,44 @@ Anbefaler å bruke [modify-secrets](https://github.com/rajatjindal/kubectl-modif
 
 1h temp token
 * `gcloud projects add-iam-policy-binding dp-iverksett --member=user:<FIRSTNAME>.<LASTNAME>@nav.no --role=roles/cloudsql.instanceUser --condition="expression=request.time < timestamp('$(date -v '+1H' -u +'%Y-%m-%dT%H:%M:%SZ')'),title=temp_access"`
+
+### Bruk av postman
+Du kan bruke Postman til å kalle APIene i dp-iverksett. Det krever at du har satt opp autentisering i app'en riktig.
+`dp-iverksett` er konfigurert til å kunne kalle seg selv. Dermed kan man bruke token for app'en til å kalle den.
+
+#### Finne token
+Den nødvendige informasjonen for å få token'et får du slik:
+
+1. Endre kontekst til [dev-gcp|prod-gcp] `kubectl config use-context [dev-gcp|prod-gcp]`
+2. Finne navn på secret ved å kjøre `kubectl -n teamdagpenger get secrets` og finne navnet på en secret som starter
+   med `azure-dp-iverksett-`. Kopier navnet på secreten.
+3. Kjør `kubectl -n teamdagpenger get secret [NAVN PÅ SECRET FRA STEG 2] -o json | jq '.data | map_values(@base64d)'`
+
+I Postman gjør du et GET-kall med følgende oppsett:
+
+* URL: `https://login.microsoftonline.com/navq.onmicrosoft.com/oauth2/v2.0/token`
+* Body: `x-www-form-urlencoded` med følgende key-values
+    * `grant_type`: `client_credentials`
+    * `client_id`: <`AZURE_APP_CLIENT_ID`> fra kubectl-kallet over
+    * `client_secret`: <`AZURE_APP_CLIENT_SECRET`> fra kubectl-kallet over
+    * `scope`: `api://[dev-gcp|prod-gcp].teamdagpenger.dp-iverksett/.default`
+
+#### Lagre token globalt i Postman
+
+Et triks kan være å sette opp en "test" under *Tests* i request'en:
+
+```
+pm.test("Lagre token globalt", function () {
+    var jsonData = pm.response.json();
+    pm.globals.set("token-dp-iverksett", jsonData.access_token);
+});
+```
+
+som vil plukke ut token'et og lagre det i en global variabel, her `token-dp-iverksett`
+
+Når du lager kall mot APIet, så kan du sette følgende i header'en for å sende med token'et:
+
+* `Authorization`: `Bearer {{token-dp-iverksett}}`
 
 ## Kafka
 Topic er opprettet i Aiven og GCP, men den kan også nås fra on-prem. Konfigurasjonen av topic finnes i `topic-dev.yaml` Dersom endringer gjøres på topic, må ny konfigurasjon merges til master.
