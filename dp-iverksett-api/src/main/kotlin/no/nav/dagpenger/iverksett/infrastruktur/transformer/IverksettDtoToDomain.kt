@@ -123,5 +123,6 @@ fun IverksettDagpengerdDto.toDomain(): IverksettDagpenger {
         søker = this.søker.toDomain(),
         behandling = this.behandling.toDomain(),
         vedtak = this.vedtak.toDomain(),
+        forrigeVedtak = this.forrigeVedtak?.toDomain(),
     )
 }

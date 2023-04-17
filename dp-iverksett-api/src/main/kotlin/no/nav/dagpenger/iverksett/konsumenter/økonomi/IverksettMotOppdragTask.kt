@@ -1,6 +1,7 @@
 package no.nav.dagpenger.iverksett.konsumenter.økonomi
 
 import no.nav.dagpenger.iverksett.api.IverksettingRepository
+import no.nav.dagpenger.iverksett.api.domene.stemmerMed
 import no.nav.dagpenger.iverksett.api.tilstand.IverksettResultatService
 import no.nav.dagpenger.iverksett.infrastruktur.repository.findByIdOrThrow
 import no.nav.dagpenger.iverksett.konsumenter.opprettNesteTask
@@ -31,9 +32,16 @@ class IverksettMotOppdragTask(
     override fun doTask(task: Task) {
         val behandlingId = UUID.fromString(task.payload)
         val iverksett = iverksettingRepository.findByIdOrThrow(behandlingId).data
-        val forrigeTilkjentYtelse = iverksett.behandling.forrigeBehandlingId?.let {
+        val forrigeTilkjentYtelseLagret = iverksett.behandling.forrigeBehandlingId?.let {
             iverksettResultatService.hentTilkjentYtelse(it) ?: error("Kunne ikke finne tilkjent ytelse for behandlingId=$it")
         }
+
+        val forrigeTilkjentYtelseMottatt = iverksett.forrigeVedtak?.tilkjentYtelse
+
+        if (!forrigeTilkjentYtelseLagret.stemmerMed(forrigeTilkjentYtelseMottatt)) {
+            error("Lagret forrige tilkjent ytelse stemmer ikke med mottatt forrige tilkjent ytelse")
+        }
+
         val nyTilkjentYtelseMedMetaData =
             iverksett.vedtak.tilkjentYtelse?.toMedMetadata(
                 saksbehandlerId = iverksett.vedtak.saksbehandlerId,
@@ -47,7 +55,7 @@ class IverksettMotOppdragTask(
 
         val utbetaling = lagTilkjentYtelseMedUtbetalingsoppdrag(
             nyTilkjentYtelseMedMetaData,
-            forrigeTilkjentYtelse,
+            forrigeTilkjentYtelseLagret,
             iverksett.erGOmregning(),
         )
 

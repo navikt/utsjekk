@@ -22,6 +22,7 @@ data class IverksettDagpengerdDto(
     val behandling: BehandlingsdetaljerDto,
     val søker: SøkerDto,
     val vedtak: VedtaksdetaljerDagpengerDto,
+    val forrigeVedtak: VedtaksdetaljerDagpengerDto? = null
 )
 
 data class SøkerDto(
@@ -50,16 +51,16 @@ data class BehandlingsdetaljerDto(
 )
 
 data class VedtaksdetaljerDagpengerDto(
-    val resultat: Vedtaksresultat,
     val vedtakstidspunkt: LocalDateTime,
+    val resultat: Vedtaksresultat,
     val opphørÅrsak: OpphørÅrsak?,
+    val avslagÅrsak: AvslagÅrsak? = null,
     val saksbehandlerId: String,
     val beslutterId: String,
     val utbetalinger: List<UtbetalingDto> = emptyList(),
     val vedtaksperioder: List<VedtaksperiodeDagpengerDto> = emptyList(),
     val tilbakekreving: TilbakekrevingDto? = null,
     val brevmottakere: List<Brevmottaker> = emptyList(),
-    val avslagÅrsak: AvslagÅrsak? = null,
 )
 
 data class VilkårsvurderingDto(

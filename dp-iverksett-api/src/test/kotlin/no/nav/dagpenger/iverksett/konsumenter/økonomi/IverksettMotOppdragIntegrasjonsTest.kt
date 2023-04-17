@@ -63,6 +63,7 @@ class IverksettMotOppdragIntegrasjonsTest : ServerTest() {
                     tilOgMed = LocalDate.now().plusMonths(1),
                 ),
             ),
+            forrigeVedtak = iverksett.vedtak,
         )
 
         taskService.deleteAll(taskService.findAll())
@@ -80,9 +81,9 @@ class IverksettMotOppdragIntegrasjonsTest : ServerTest() {
     internal fun `revurdering der beløpet på den første endres, og en ny legges til, forvent at den første perioden erstattes`() {
         val behandlingIdRevurdering = UUID.randomUUID()
         val iverksettRevurdering = opprettIverksettDagpenger(
-            behandlingIdRevurdering,
-            behandlingid,
-            listOf(
+            behandlingId = behandlingIdRevurdering,
+            forrigeBehandlingId = behandlingid,
+            andeler = listOf(
                 førsteAndel.copy(beløp = 299),
                 lagAndelTilkjentYtelse(
                     beløp = 1000,
@@ -90,6 +91,7 @@ class IverksettMotOppdragIntegrasjonsTest : ServerTest() {
                     tilOgMed = LocalDate.now().plusMonths(1),
                 ),
             ),
+            forrigeVedtak = iverksett.vedtak,
         )
 
         taskService.deleteAll(taskService.findAll())
@@ -108,7 +110,13 @@ class IverksettMotOppdragIntegrasjonsTest : ServerTest() {
         val opphørBehandlingId = UUID.randomUUID()
         val startdato = førsteAndel.periode.fom
         val iverksettMedOpphør =
-            opprettIverksettDagpenger(opphørBehandlingId, behandlingid, emptyList(), startdato = startdato)
+            opprettIverksettDagpenger(
+                opphørBehandlingId,
+                behandlingid,
+                emptyList(),
+                startdato = startdato,
+                forrigeVedtak = iverksett.vedtak,
+            )
 
         taskService.deleteAll(taskService.findAll())
         iverksettingService.startIverksetting(iverksettMedOpphør, opprettBrev())

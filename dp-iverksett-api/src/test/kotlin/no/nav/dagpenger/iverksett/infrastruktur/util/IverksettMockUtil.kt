@@ -273,6 +273,7 @@ fun opprettIverksettDagpenger(
     andeler: List<AndelTilkjentYtelse> = listOf(opprettAndelTilkjentYtelse()),
     tilbakekreving: Tilbakekrevingsdetaljer? = null,
     startdato: LocalDate = startdato(andeler),
+    forrigeVedtak: VedtaksdetaljerDagpenger? = null,
 ): IverksettDagpenger {
     val behandlingType = forrigeBehandlingId?.let { BehandlingType.REVURDERING } ?: BehandlingType.FØRSTEGANGSBEHANDLING
     return IverksettDagpenger(
@@ -285,6 +286,7 @@ fun opprettIverksettDagpenger(
             adressebeskyttelse = AdressebeskyttelseGradering.UGRADERT,
         ),
         vedtak = vedtaksdetaljerDagpenger(Vedtaksresultat.INNVILGET, andeler, tilbakekreving, startdato),
+        forrigeVedtak = forrigeVedtak,
     )
 }
 
