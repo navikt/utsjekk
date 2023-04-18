@@ -87,7 +87,7 @@ internal class VedtakstatistikkMapperTest {
         assertThat(vedtakDagpengerDVH.vedtaksperioder.first().tilOgMed).isEqualTo(LocalDate.of(2021, 3, 31))
         assertThat(vedtakDagpengerDVH.vedtaksperioder.first().aktivitet.name).isEqualTo(AktivitetType.IKKE_AKTIVITETSPLIKT.name)
         assertThat(vedtakDagpengerDVH.vedtaksperioder.first().periodeType.name).isEqualTo(VedtaksperiodeType.SANKSJON.name)
-        assertThat(vedtakDagpengerDVH.vilkårsvurderinger).hasSize(12)
+        assertThat(vedtakDagpengerDVH.vilkårsvurderinger).hasSize(10)
         assertThat(vedtakDagpengerDVH.vilkårsvurderinger.first().vilkår.name).isEqualTo(VilkårType.FORUTGÅENDE_MEDLEMSKAP.name)
         assertThat(vedtakDagpengerDVH.vilkårsvurderinger.first().resultat.name).isEqualTo(Vilkårsresultat.OPPFYLT.name)
 
@@ -295,33 +295,6 @@ internal class VedtakstatistikkMapperTest {
         ),
 
         Vilkårsvurdering(
-            vilkårType = VilkårType.SAMLIV,
-            resultat = Vilkårsresultat.OPPFYLT,
-            delvilkårsvurderinger = listOf(
-                Delvilkårsvurdering(
-                    resultat = Vilkårsresultat.OPPFYLT,
-                    listOf(
-                        Vurdering(
-                            RegelId.LEVER_IKKE_I_EKTESKAPLIGNENDE_FORHOLD,
-                            SvarId.JA,
-                            null,
-                        ),
-                    ),
-                ),
-                Delvilkårsvurdering(
-                    resultat = Vilkårsresultat.OPPFYLT,
-                    listOf(
-                        Vurdering(
-                            RegelId.LEVER_IKKE_MED_ANNEN_FORELDER,
-                            SvarId.JA,
-                            null,
-                        ),
-                    ),
-                ),
-            ),
-        ),
-
-        Vilkårsvurdering(
             vilkårType = VilkårType.ALENEOMSORG,
             resultat = Vilkårsresultat.OPPFYLT,
             delvilkårsvurderinger = listOf(
@@ -364,23 +337,6 @@ internal class VedtakstatistikkMapperTest {
                 Delvilkårsvurdering(
                     resultat = Vilkårsresultat.SKAL_IKKE_VURDERES,
                     vurderinger = listOf(),
-                ),
-            ),
-        ),
-
-        Vilkårsvurdering(
-            vilkårType = VilkårType.NYTT_BARN_SAMME_PARTNER,
-            resultat = Vilkårsresultat.OPPFYLT,
-            delvilkårsvurderinger = listOf(
-                Delvilkårsvurdering(
-                    Vilkårsresultat.OPPFYLT,
-                    listOf(
-                        Vurdering(
-                            RegelId.HAR_FÅTT_ELLER_VENTER_NYTT_BARN_MED_SAMME_PARTNER,
-                            SvarId.NEI,
-                            null,
-                        ),
-                    ),
                 ),
             ),
         ),
