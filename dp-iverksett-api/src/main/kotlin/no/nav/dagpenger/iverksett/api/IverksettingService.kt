@@ -91,7 +91,7 @@ class IverksettingService(
             it.oppdragResultat?.let { oppdragResultat ->
                 return when (oppdragResultat.oppdragStatus) {
                     OppdragStatus.KVITTERT_OK -> IverksettStatus.OK_MOT_OPPDRAG
-                    OppdragStatus.LAGT_PÅ_KØ -> IverksettStatus.SENDT_TIL_OPPDRAG
+                    OppdragStatus.LAGT_PAA_KOE -> IverksettStatus.SENDT_TIL_OPPDRAG
                     else -> IverksettStatus.FEILET_MOT_OPPDRAG
                 }
             }
