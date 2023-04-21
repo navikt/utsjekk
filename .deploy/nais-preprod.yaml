@@ -51,6 +51,7 @@ spec:
     outbound:
       rules:
         - application: dp-tilbake
+        - application: dp-oppdrag
       external:
         - host: dp-oppdrag.dev-gcp-pub.nais.io
         - host: unleash.nais.io
