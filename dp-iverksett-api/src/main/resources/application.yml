@@ -129,7 +129,7 @@ funksjonsbrytere:
     applicationName: ${NAIS_APP_NAME}
 
 DEPLOY_ENV: prod
-DP_OPPDRAG_API_URL: https://dp-oppdrag.intern.${DEPLOY_ENV}.nav.no
+DP_OPPDRAG_API_URL: http://dp-oppdrag
 DP_OPPDRAG_SCOPE: api://${DEPLOY_ENV}-gcp.teamdagpenger.dp-oppdrag/.default
 FAMILIE_INTEGRASJONER_API_URL: https://familie-integrasjoner.${DEPLOY_ENV}-fss-pub.nais.io
 FAMILIE_INTEGRASJONER_SCOPE: api://${DEPLOY_ENV}-fss.teamfamilie.familie-integrasjoner/.default
