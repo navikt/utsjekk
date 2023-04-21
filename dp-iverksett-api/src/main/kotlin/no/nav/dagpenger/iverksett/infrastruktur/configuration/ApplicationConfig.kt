@@ -73,13 +73,17 @@ class ApplicationConfig {
         return filterRegistration
     }
 
+    @Bean
+    @Primary
+    fun objectMapper() = ObjectMapperProvider.objectMapper
+
     /**
      * Overskrever felles sin som bruker proxy, som ikke skal brukes på gcp
      */
     @Bean
     @Primary
     fun restTemplateBuilder(): RestTemplateBuilder {
-        val jackson2HttpMessageConverter = MappingJackson2HttpMessageConverter(ObjectMapperProvider.objectMapper)
+        val jackson2HttpMessageConverter = MappingJackson2HttpMessageConverter(objectMapper())
         return RestTemplateBuilder()
             .setConnectTimeout(Duration.of(2, ChronoUnit.SECONDS))
             .setReadTimeout(Duration.of(30, ChronoUnit.SECONDS))
