@@ -112,6 +112,20 @@ enum class IverksettStatus {
     IKKE_PÅBEGYNT,
 }
 
+data class IverksettStatusDto(
+    val status: IverksettStatus,
+    val feilmelding: String? = null
+) {
+    fun ok() = IverksettStatusDto(IverksettStatus.OK)
+}
+
+fun IverksettStatus.medFeil(feilmelding: String) = IverksettStatusDto(
+    status = this,
+    feilmelding = feilmelding
+)
+
+fun IverksettStatus.utenFeil() = IverksettStatusDto(this)
+
 enum class VedtaksperiodeType {
     MIGRERING,
     FORLENGELSE,

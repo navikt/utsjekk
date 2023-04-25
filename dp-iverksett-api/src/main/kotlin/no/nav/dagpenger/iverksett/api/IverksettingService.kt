@@ -16,6 +16,9 @@ import no.nav.dagpenger.iverksett.konsumenter.økonomi.OppdragClient
 import no.nav.dagpenger.iverksett.kontrakter.felles.StønadType
 import no.nav.dagpenger.iverksett.kontrakter.felles.Vedtaksresultat
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.IverksettStatus
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.IverksettStatusDto
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.medFeil
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.utenFeil
 import no.nav.dagpenger.iverksett.kontrakter.oppdrag.OppdragId
 import no.nav.dagpenger.iverksett.kontrakter.oppdrag.OppdragStatus
 import no.nav.familie.prosessering.domene.Task
@@ -79,20 +82,20 @@ class IverksettingService(
     private fun erIverksettingUtenVedtaksperioder(iverksett: IverksettDagpenger) =
         iverksett.vedtak.tilkjentYtelse == null && iverksett.vedtak.vedtaksresultat == Vedtaksresultat.AVSLÅTT
 
-    fun utledStatus(behandlingId: UUID): IverksettStatus? {
+    fun utledStatus(behandlingId: UUID): IverksettStatusDto? {
         val iverksettResultat = iverksettResultatService.hentIverksettResultat(behandlingId)
         return iverksettResultat?.let {
             if (it.vedtaksbrevResultat.isNotEmpty()) {
-                return IverksettStatus.OK
+                return IverksettStatus.OK.utenFeil()
             }
             if (it.journalpostResultat.isNotEmpty()) {
-                return IverksettStatus.JOURNALFØRT
+                return IverksettStatus.JOURNALFØRT.utenFeil()
             }
             it.oppdragResultat?.let { oppdragResultat ->
                 return when (oppdragResultat.oppdragStatus) {
-                    OppdragStatus.KVITTERT_OK -> IverksettStatus.OK_MOT_OPPDRAG
-                    OppdragStatus.LAGT_PAA_KOE -> IverksettStatus.SENDT_TIL_OPPDRAG
-                    else -> IverksettStatus.FEILET_MOT_OPPDRAG
+                    OppdragStatus.KVITTERT_OK -> IverksettStatus.OK_MOT_OPPDRAG.utenFeil()
+                    OppdragStatus.LAGT_PAA_KOE -> IverksettStatus.SENDT_TIL_OPPDRAG.utenFeil()
+                    else -> IverksettStatus.FEILET_MOT_OPPDRAG.medFeil()
                 }
             }
             it.tilkjentYtelseForUtbetaling?.let {
