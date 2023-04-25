@@ -95,16 +95,16 @@ class IverksettingService(
                 return when (oppdragResultat.oppdragStatus) {
                     OppdragStatus.KVITTERT_OK -> IverksettStatus.OK_MOT_OPPDRAG.utenFeil()
                     OppdragStatus.LAGT_PAA_KOE -> IverksettStatus.SENDT_TIL_OPPDRAG.utenFeil()
-                    else -> IverksettStatus.FEILET_MOT_OPPDRAG.medFeil()
+                    else -> IverksettStatus.FEILET_MOT_OPPDRAG.medFeil("") // TODO må få feilmelding inn her?
                 }
             }
             it.tilkjentYtelseForUtbetaling?.let {
                 if (it.utbetalingsoppdrag?.utbetalingsperiode?.isEmpty() == true) {
-                    return IverksettStatus.OK_MOT_OPPDRAG
+                    return IverksettStatus.OK_MOT_OPPDRAG.utenFeil()
                 }
-                return IverksettStatus.SENDT_TIL_OPPDRAG
+                return IverksettStatus.SENDT_TIL_OPPDRAG.utenFeil()
             }
-            return IverksettStatus.IKKE_PÅBEGYNT
+            return IverksettStatus.IKKE_PÅBEGYNT.utenFeil()
         }
     }
 
