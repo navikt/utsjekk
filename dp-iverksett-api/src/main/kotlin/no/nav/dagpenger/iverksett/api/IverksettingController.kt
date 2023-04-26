@@ -9,7 +9,7 @@ import no.nav.dagpenger.iverksett.infrastruktur.transformer.toDomain
 import no.nav.dagpenger.iverksett.konsumenter.tilbakekreving.validerTilbakekreving
 import no.nav.dagpenger.iverksett.kontrakter.felles.Vedtaksresultat
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.IverksettDagpengerdDto
-import no.nav.dagpenger.iverksett.kontrakter.iverksett.IverksettStatusDto
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.IverksettStatus
 import no.nav.security.token.support.core.api.ProtectedWithClaims
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
@@ -66,7 +66,7 @@ class IverksettingController(
 
     @GetMapping("{behandlingId}/status", produces = ["application/json"])
     @Tag(name = "Iverksetting")
-    fun hentStatus(@PathVariable behandlingId: UUID): ResponseEntity<IverksettStatusDto> {
+    fun hentStatus(@PathVariable behandlingId: UUID): ResponseEntity<IverksettStatus> {
         val status = iverksettingService.utledStatus(behandlingId)
         return status?.let { ResponseEntity(status, HttpStatus.OK) } ?: ResponseEntity(null, HttpStatus.NOT_FOUND)
     }

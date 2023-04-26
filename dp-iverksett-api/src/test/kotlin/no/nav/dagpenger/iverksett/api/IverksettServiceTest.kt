@@ -37,7 +37,7 @@ internal class IverksettServiceTest {
         every { iverksettResultatService.hentIverksettResultat(behandlingsId) } returns IverksettResultatMockBuilder.Builder()
             .build(behandlingsId, tilkjentYtelse)
 
-        val status = iverksettStatusService.utledStatus(behandlingsId)?.status
+        val status = iverksettStatusService.utledStatus(behandlingsId)
         assertThat(status).isEqualTo(IverksettStatus.SENDT_TIL_OPPDRAG)
     }
 
@@ -49,7 +49,7 @@ internal class IverksettServiceTest {
             .oppdragResultat(OppdragResultat(OppdragStatus.KVITTERT_FUNKSJONELL_FEIL))
             .build(behandlingsId, tilkjentYtelse)
 
-        val status = iverksettStatusService.utledStatus(behandlingsId)?.status
+        val status = iverksettStatusService.utledStatus(behandlingsId)
         assertThat(status).isEqualTo(IverksettStatus.FEILET_MOT_OPPDRAG)
     }
 
@@ -61,7 +61,7 @@ internal class IverksettServiceTest {
             .oppdragResultat(OppdragResultat(OppdragStatus.KVITTERT_OK))
             .build(behandlingsId, tilkjentYtelse)
 
-        val status = iverksettStatusService.utledStatus(behandlingsId)?.status
+        val status = iverksettStatusService.utledStatus(behandlingsId)
         assertThat(status).isEqualTo(IverksettStatus.OK_MOT_OPPDRAG)
     }
 
@@ -74,7 +74,7 @@ internal class IverksettServiceTest {
             .journalPostResultat()
             .build(behandlingsId, tilkjentYtelse)
 
-        val status = iverksettStatusService.utledStatus(behandlingsId)?.status
+        val status = iverksettStatusService.utledStatus(behandlingsId)
         assertThat(status).isEqualTo(IverksettStatus.JOURNALFØRT)
     }
 
@@ -87,7 +87,7 @@ internal class IverksettServiceTest {
             .journalPostResultat()
             .vedtaksbrevResultat(behandlingsId).build(behandlingsId, tilkjentYtelse)
 
-        val status = iverksettStatusService.utledStatus(behandlingsId)?.status
+        val status = iverksettStatusService.utledStatus(behandlingsId)
         assertThat(status).isEqualTo(IverksettStatus.OK)
     }
 }
