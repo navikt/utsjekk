@@ -3,7 +3,6 @@ package no.nav.dagpenger.iverksett.konsumenter.økonomi
 import no.nav.dagpenger.iverksett.kontrakter.oppdrag.GrensesnittavstemmingRequest
 import no.nav.dagpenger.iverksett.kontrakter.oppdrag.KonsistensavstemmingUtbetalingsoppdrag
 import no.nav.dagpenger.iverksett.kontrakter.oppdrag.OppdragId
-import no.nav.dagpenger.iverksett.kontrakter.oppdrag.OppdragStatus
 import no.nav.dagpenger.iverksett.kontrakter.oppdrag.Utbetalingsoppdrag
 import no.nav.dagpenger.iverksett.kontrakter.simulering.DetaljertSimuleringResultat
 import no.nav.familie.http.client.AbstractPingableRestClient
@@ -15,7 +14,7 @@ import org.springframework.stereotype.Service
 import org.springframework.web.client.RestOperations
 import org.springframework.web.util.UriComponentsBuilder
 import java.net.URI
-import java.util.UUID
+import java.util.*
 
 @Service
 class OppdragClient(
@@ -43,9 +42,8 @@ class OppdragClient(
     }
 
     fun hentStatus(oppdragId: OppdragId): OppdragStatusMedMelding {
-        val oppdragStatus = postForEntity<String>(getStatusUri, oppdragId)
-        // TODO Burde ha en melding om hva som evt har gått feil
-        return OppdragStatusMedMelding(OppdragStatus.valueOf(oppdragStatus), "") }
+        return postForEntity(getStatusUri, oppdragId)
+    }
 
     fun grensesnittavstemming(grensesnittavstemmingRequest: GrensesnittavstemmingRequest): String {
         return postForEntity(grensesnittavstemmingUri, grensesnittavstemmingRequest)
