@@ -50,7 +50,7 @@ internal class IverksettMotOppdragTaskTest {
         iverksettMotOppdragTask.doTask(Task(IverksettMotOppdragTask.TYPE, behandlingId.toString(), Properties()))
         verify(exactly = 1) { oppdragClient.iverksettOppdrag(any()) }
         verify(exactly = 1) { iverksettResultatService.oppdaterTilkjentYtelseForUtbetaling(behandlingId, any()) }
-        assertThat(oppdragSlot.captured.fagSystem).isEqualTo("DP")
+        assertThat(oppdragSlot.captured.fagSystem).isEqualTo("DPORAS")
         assertThat(oppdragSlot.captured.kodeEndring).isEqualTo(Utbetalingsoppdrag.KodeEndring.NY)
     }
 
