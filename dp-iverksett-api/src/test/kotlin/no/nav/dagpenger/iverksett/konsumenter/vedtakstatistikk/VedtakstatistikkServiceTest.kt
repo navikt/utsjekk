@@ -121,7 +121,7 @@ class VedtakstatistikkServiceTest {
                     inntektsreduksjon = 5,
                     samordningsfradrag = 2,
                     utbetalingsdetalj = Utbetalingsdetalj(
-                        klassekode = "DP",
+                        klassekode = "DPORAS",
                         gjelderPerson = Person(personIdent = "12345678910"),
                         delytelseId = "1",
                     ),

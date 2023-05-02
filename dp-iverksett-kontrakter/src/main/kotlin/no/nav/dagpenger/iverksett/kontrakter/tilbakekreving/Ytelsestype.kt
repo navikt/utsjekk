@@ -5,7 +5,7 @@ import no.nav.dagpenger.iverksett.kontrakter.felles.Tema
 
 enum class Ytelsestype(val kode: String, val navn: Map<Språkkode, String>) {
     DAGPENGER(
-        "DP",
+        "DPORAS",
         mapOf(
             Språkkode.NB to "Dagpenger",
             Språkkode.NN to "Dagpengar",

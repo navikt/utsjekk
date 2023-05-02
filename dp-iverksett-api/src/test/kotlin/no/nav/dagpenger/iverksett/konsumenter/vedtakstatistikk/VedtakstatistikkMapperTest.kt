@@ -79,7 +79,7 @@ internal class VedtakstatistikkMapperTest {
         assertThat(vedtakDagpengerDVH.utbetalinger.first().samordningsfradrag).isEqualTo(1000)
         assertThat(vedtakDagpengerDVH.utbetalinger.first().beløp).isEqualTo(9000)
         assertThat(vedtakDagpengerDVH.utbetalinger.first().utbetalingsdetalj.delytelseId).isEqualTo("121")
-        assertThat(vedtakDagpengerDVH.utbetalinger.first().utbetalingsdetalj.klassekode).isEqualTo("DP")
+        assertThat(vedtakDagpengerDVH.utbetalinger.first().utbetalingsdetalj.klassekode).isEqualTo("DPORAS")
         assertThat(vedtakDagpengerDVH.utbetalinger.first().utbetalingsdetalj.gjelderPerson.personIdent).isEqualTo(søker)
         assertThat(vedtakDagpengerDVH.vedtak).isEqualTo(Vedtak.INNVILGET)
         assertThat(vedtakDagpengerDVH.vedtaksperioder).hasSize(2)

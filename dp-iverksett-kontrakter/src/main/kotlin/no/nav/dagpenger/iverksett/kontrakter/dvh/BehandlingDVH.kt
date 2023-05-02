@@ -74,7 +74,7 @@ data class Utbetaling(
 
 data class Utbetalingsdetalj(
     val gjelderPerson: Person,
-    val klassekode: String, // Identifiserer detaljert stønadstype i oppdragsystemet: "DP"
+    val klassekode: String, // Identifiserer detaljert stønadstype i oppdragsystemet: "DPORAS"
     val delytelseId: String,
 ) // Identifiderer utbetalingen i oppdragssystemet
 
