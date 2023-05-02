@@ -11,7 +11,6 @@ import no.nav.familie.log.mdc.MDCConstants
 import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.slf4j.LoggerFactory
 import org.slf4j.MDC
-import org.springframework.kafka.annotation.KafkaListener
 import org.springframework.kafka.listener.ConsumerSeekAware
 import org.springframework.stereotype.Component
 import java.util.UUID
@@ -26,11 +25,11 @@ class TilbakekrevingListener(
     private val logger = LoggerFactory.getLogger(javaClass)
     private val secureLogger = LoggerFactory.getLogger("secureLogger")
 
-    @KafkaListener(
+/*    @KafkaListener(
         id = "dp-iverksett",
         topics = ["teamdagpenger.privat-tbk-hentfagsystemsbehandling-request-topic"],
         containerFactory = "concurrentTilbakekrevingListenerContainerFactory",
-    )
+    )*/
     fun listen(consumerRecord: ConsumerRecord<String, String>) {
         val key: String = consumerRecord.key()
         val data: String = consumerRecord.value()
