@@ -26,16 +26,11 @@ jobs:
           distribution: 'temurin'
           java-version: 17
           cache: 'maven'
-      - name: Bygg med maven
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          mvn -B test --settings .m2/maven-settings.xml
       - name: Bygg og last opp image
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          mvn -B package --settings .m2/maven-settings.xml -DskipTests
+          mvn -B package --settings .m2/maven-settings.xml
           echo ${GITHUB_TOKEN} | docker login ghcr.io --username ${GITHUB_REPOSITORY} --password-stdin
           docker build --tag ${IMAGE} .
           docker push ${IMAGE}
