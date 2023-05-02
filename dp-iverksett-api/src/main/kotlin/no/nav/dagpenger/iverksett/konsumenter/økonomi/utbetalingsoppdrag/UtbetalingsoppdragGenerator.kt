@@ -3,6 +3,7 @@ package no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag
 import no.nav.dagpenger.iverksett.api.domene.AndelTilkjentYtelse
 import no.nav.dagpenger.iverksett.api.domene.TilkjentYtelse
 import no.nav.dagpenger.iverksett.api.domene.TilkjentYtelseMedMetaData
+import no.nav.dagpenger.iverksett.infrastruktur.util.tilFagsystem
 import no.nav.dagpenger.iverksett.infrastruktur.util.tilKlassifisering
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.ØkonomiUtils.andelerTilOpprettelse
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.ØkonomiUtils.andelerUtenNullVerdier
@@ -58,7 +59,7 @@ object UtbetalingsoppdragGenerator {
             Utbetalingsoppdrag(
                 saksbehandlerId = nyTilkjentYtelseMedMetaData.saksbehandlerId,
                 kodeEndring = if (erIkkeTidligereIverksattMotOppdrag(forrigeTilkjentYtelse)) NY else ENDR,
-                fagSystem = nyTilkjentYtelseMedMetaData.stønadstype.tilKlassifisering(),
+                fagSystem = nyTilkjentYtelseMedMetaData.stønadstype.tilFagsystem(),
                 saksnummer = nyTilkjentYtelseMedMetaData.eksternFagsakId.toString(),
                 aktoer = nyTilkjentYtelseMedMetaData.personIdent,
                 utbetalingsperiode = utbetalingsperioder,
