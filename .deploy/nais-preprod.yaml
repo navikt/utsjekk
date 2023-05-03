@@ -45,7 +45,7 @@ spec:
     inbound:
       rules:
         - application: dp-iverksett # For testing; kan finne bruken token for app'en til å kalle seg selv
-        - application: dp-sak # TODO Navnet på vedtaksløsningen
+        - application: dp-vedtak
         - application: dp-sak-lokal # TODO Navnet på vedtaksløsningen
         - application: dp-prosessering #frontend for task-rammeverket
     outbound:
