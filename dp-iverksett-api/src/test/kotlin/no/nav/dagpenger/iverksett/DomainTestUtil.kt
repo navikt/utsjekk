@@ -30,6 +30,7 @@ import no.nav.dagpenger.iverksett.util.opprettIverksettDagpenger
 import no.nav.dagpenger.iverksett.util.vedtaksdetaljerDagpenger
 import java.math.BigDecimal
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.YearMonth
 import java.util.UUID
 
@@ -177,6 +178,7 @@ fun lagIverksettData(
     erMigrering: Boolean = false,
     andelsdatoer: List<LocalDate> = emptyList(),
     årsak: BehandlingÅrsak = BehandlingÅrsak.SØKNAD,
+    vedtakstidspunkt: LocalDateTime = LocalDateTime.of(2021, 5, 12, 0, 0),
 ): IverksettDagpenger {
     val behandlingÅrsak = if (erMigrering) BehandlingÅrsak.MIGRERING else årsak
     return opprettIverksettDagpenger(
@@ -192,6 +194,7 @@ fun lagIverksettData(
                 lagAndelTilkjentYtelse(beløp = 0, fraOgMed = it.minusMonths(1), tilOgMed = it)
             },
             startdato = andelsdatoer.minByOrNull { it } ?: LocalDate.now(),
+            vedtakstidspunkt = vedtakstidspunkt,
         ),
     )
 }
