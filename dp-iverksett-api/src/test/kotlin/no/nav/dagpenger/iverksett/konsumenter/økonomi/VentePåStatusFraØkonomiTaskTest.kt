@@ -109,7 +109,7 @@ internal class VentePåStatusFraØkonomiTaskTest {
         sats = BigDecimal.TEN,
         satsType = Utbetalingsperiode.SatsType.DAG,
         utbetalesTil = "x",
-        behandlingId = 0,
+        behandlingId = "0",
         utbetalingsgrad = null,
     )
 

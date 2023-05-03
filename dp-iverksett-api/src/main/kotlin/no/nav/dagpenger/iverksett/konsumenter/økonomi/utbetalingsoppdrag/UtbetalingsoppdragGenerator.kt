@@ -4,7 +4,6 @@ import no.nav.dagpenger.iverksett.api.domene.AndelTilkjentYtelse
 import no.nav.dagpenger.iverksett.api.domene.TilkjentYtelse
 import no.nav.dagpenger.iverksett.api.domene.TilkjentYtelseMedMetaData
 import no.nav.dagpenger.iverksett.infrastruktur.util.tilFagsystem
-import no.nav.dagpenger.iverksett.infrastruktur.util.tilKlassifisering
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.ØkonomiUtils.andelerTilOpprettelse
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.ØkonomiUtils.andelerUtenNullVerdier
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.ØkonomiUtils.beståendeAndeler
@@ -117,7 +116,7 @@ object UtbetalingsoppdragGenerator {
             lagPeriodeFraAndel(
                 andel = it,
                 type = tilkjentYtelse.stønadstype,
-                eksternBehandlingId = tilkjentYtelse.eksternBehandlingId,
+                behandlingId = tilkjentYtelse.behandlingId.toString(),
                 vedtaksdato = tilkjentYtelse.vedtaksdato,
                 personIdent = tilkjentYtelse.personIdent,
             )

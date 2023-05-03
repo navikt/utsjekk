@@ -29,7 +29,7 @@ internal class UtbetalingsperiodeMalKtTest {
                 periodeId = 1,
             ),
             type = stønadType,
-            eksternBehandlingId = 1,
+            behandlingId = "1",
             vedtaksdato = LocalDate.now(),
             personIdent = "",
         )

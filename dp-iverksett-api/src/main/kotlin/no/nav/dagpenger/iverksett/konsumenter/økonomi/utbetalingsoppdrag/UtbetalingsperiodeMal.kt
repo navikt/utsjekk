@@ -20,7 +20,7 @@ import java.time.LocalDate
 fun lagPeriodeFraAndel(
     andel: AndelTilkjentYtelse,
     type: StønadType,
-    eksternBehandlingId: Long,
+    behandlingId: String,
     vedtaksdato: LocalDate,
     personIdent: String,
     opphørKjedeFom: LocalDate? = null,
@@ -38,7 +38,7 @@ fun lagPeriodeFraAndel(
         sats = BigDecimal(andel.beløp),
         satsType = mapSatstype(type),
         utbetalesTil = personIdent,
-        behandlingId = eksternBehandlingId,
+        behandlingId = behandlingId,
         utbetalingsgrad = andel.utbetalingsgrad(),
     )
 
@@ -49,7 +49,7 @@ fun lagUtbetalingsperiodeForOpphør(
 ): Utbetalingsperiode {
     return lagPeriodeFraAndel(
         andel = sisteAndelIKjede,
-        eksternBehandlingId = tilkjentYtelse.eksternBehandlingId,
+        behandlingId = tilkjentYtelse.behandlingId.toString(),
         type = tilkjentYtelse.stønadstype,
         personIdent = tilkjentYtelse.personIdent,
         vedtaksdato = tilkjentYtelse.vedtaksdato,

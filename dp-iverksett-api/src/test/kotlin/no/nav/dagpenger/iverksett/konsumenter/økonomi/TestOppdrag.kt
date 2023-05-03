@@ -87,7 +87,7 @@ data class TestOppdrag(
                 sats = beløp?.toBigDecimal() ?: BigDecimal.ZERO,
                 satsType = Utbetalingsperiode.SatsType.MND,
                 utbetalesTil = fnr,
-                behandlingId = 1,
+                behandlingId = "1",
                 utbetalingsgrad = 100,
             )
         } else if (opphørsdato != null) {
@@ -171,7 +171,7 @@ class TestOppdragGroup {
                 saksbehandlerId = saksbehandlerId,
                 avstemmingTidspunkt = LocalDateTime.now().truncatedTo(ChronoUnit.HOURS),
                 utbetalingsperiode = utbetalingsperioder
-                    .map { it.copy(behandlingId = behandlingEksternId) },
+                    .map { it.copy(behandlingId = behandlingEksternId.toString()) },
             )
 
         TilkjentYtelse(
