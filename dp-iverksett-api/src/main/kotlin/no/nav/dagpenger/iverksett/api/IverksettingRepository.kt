@@ -14,4 +14,6 @@ interface IverksettingRepository : RepositoryInterface<Iverksett, UUID>, InsertU
     fun finnAlleIder(): List<UUID>
 
     fun findByEksternId(eksternId: Long): Iverksett
+
+    fun findByPersonId(personId: String) :List<Iverksett>
 }

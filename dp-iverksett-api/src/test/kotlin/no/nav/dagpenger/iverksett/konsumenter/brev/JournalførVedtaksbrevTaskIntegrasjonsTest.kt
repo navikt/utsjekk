@@ -101,6 +101,7 @@ class JournalførVedtaksbrevTaskIntegrasjonsTest : ServerTest() {
                 iverksettMedBrevmottakere,
                 iverksettMedBrevmottakere.behandling.eksternId,
                 opprettBrev(),
+                iverksett.søker.personIdent
             ),
         )
 
@@ -142,6 +143,7 @@ class JournalførVedtaksbrevTaskIntegrasjonsTest : ServerTest() {
                 iverksettMedBrevmottakere,
                 iverksettMedBrevmottakere.behandling.eksternId,
                 opprettBrev(),
+                iverksett.søker.personIdent
             ),
         )
 
@@ -192,6 +194,7 @@ class JournalførVedtaksbrevTaskIntegrasjonsTest : ServerTest() {
                 iverksettMedGyldigeBrevmottakere,
                 iverksettMedGyldigeBrevmottakere.behandling.eksternId,
                 opprettBrev(),
+                iverksett.søker.personIdent
             ),
         )
     }

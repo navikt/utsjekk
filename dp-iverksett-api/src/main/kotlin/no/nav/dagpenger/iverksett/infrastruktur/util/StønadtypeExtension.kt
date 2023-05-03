@@ -7,6 +7,6 @@ fun StønadType.tilKlassifisering() = when (this) {
     StønadType.DAGPENGER -> "DPORAS"
 }
 
-fun StønadType.tilFagsystem() = when(this) {
+fun StønadType.tilFagsystem() = when (this) {
     StønadType.DAGPENGER -> Fagsystem.DP.tema
 }

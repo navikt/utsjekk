@@ -47,6 +47,7 @@ class IverksettingService(
                 iverksett,
                 iverksett.behandling.eksternId,
                 brev,
+                iverksett.søker.personIdent
             ),
         )
 
