@@ -5,17 +5,15 @@ import no.nav.dagpenger.iverksett.kontrakter.iverksett.IverksettStatus
 import org.springframework.stereotype.Service
 
 @Service
-class VedtakStatusService (
+class VedtakStatusService(
     private val iverksettingRepository: IverksettingRepository,
-    private val iverksettingService: IverksettingService
+    private val iverksettingService: IverksettingService,
 ) {
 
-    fun getVedtakStatus(personId: String) :VedtaksdetaljerDagpenger? {
-        val iverksettinger = iverksettingRepository.findByPersonId(personId)
-
-        return iverksettinger.sortedByDescending { it.data.vedtak.vedtakstidspunkt }
-            .first { iverksetting ->
-                IverksettStatus.OK == iverksettingService.utledStatus(iverksetting.behandlingId)
-            }.data.vedtak
+    fun getVedtakStatus(personId: String): VedtaksdetaljerDagpenger? {
+        return iverksettingRepository.findByPersonId(personId).sortedByDescending { it.data.vedtak.vedtakstidspunkt }
+            .firstOrNull() { iverksetting ->
+                IverksettStatus.SENDT_TIL_OPPDRAG == iverksettingService.utledStatus(iverksetting.behandlingId)
+            }?.data?.vedtak
     }
 }

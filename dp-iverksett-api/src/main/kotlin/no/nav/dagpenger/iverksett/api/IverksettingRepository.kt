@@ -4,6 +4,7 @@ import no.nav.dagpenger.iverksett.api.domene.Iverksett
 import no.nav.dagpenger.iverksett.infrastruktur.repository.InsertUpdateRepository
 import no.nav.dagpenger.iverksett.infrastruktur.repository.RepositoryInterface
 import org.springframework.data.jdbc.repository.query.Query
+import org.springframework.data.repository.query.Param
 import org.springframework.stereotype.Repository
 import java.util.UUID
 
@@ -15,5 +16,6 @@ interface IverksettingRepository : RepositoryInterface<Iverksett, UUID>, InsertU
 
     fun findByEksternId(eksternId: Long): Iverksett
 
-    fun findByPersonId(personId: String) :List<Iverksett>
+    @Query("select behandling_id, data, ekstern_id, person_id from iverksett where data -> 'søker' ->> 'personIdent' = :personId")
+    fun findByPersonId(@Param("personId") personId: String): List<Iverksett>
 }

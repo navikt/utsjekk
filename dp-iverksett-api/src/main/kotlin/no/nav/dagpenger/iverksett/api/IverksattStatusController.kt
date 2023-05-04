@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController
 class IverksattStatusController(
     private val vedtakStatusService: VedtakStatusService,
 ) {
-    @GetMapping("{personId}", produces = ["application/json"])
+    @GetMapping("/{personId}", produces = ["application/json"])
     @Tag(name = "Status")
     fun hentStatusForPerson(@PathVariable personId: String): ResponseEntity<VedtaksdetaljerDagpenger> {
         val status = vedtakStatusService.getVedtakStatus(personId)
