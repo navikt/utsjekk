@@ -1,9 +1,10 @@
 package no.nav.dagpenger.iverksett.kontrakter.arbeidsoppfølging
 
 import java.time.LocalDate
+import java.util.UUID
 
 data class VedtakDagpengerArbeidsoppfølging(
-    val vedtakId: Long,
+    val behanlingId: UUID,
     val personIdent: String,
     val barn: List<Barn>,
     val stønadstype: Stønadstype,

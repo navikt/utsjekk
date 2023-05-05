@@ -34,14 +34,14 @@ data class SøkerDto(
 
 data class FagsakdetaljerDto(
     val fagsakId: UUID,
-    val eksternId: Long,
+    val eksternId: Long? = null, // Ikke i bruk, bær fjernes
     val stønadstype: StønadType,
 )
 
 data class BehandlingsdetaljerDto(
     val behandlingId: UUID,
     val forrigeBehandlingId: UUID? = null,
-    val eksternId: Long,
+    val eksternId: Long? = null, // Ikke i bruk, bær fjernes
     val behandlingType: BehandlingType,
     val behandlingÅrsak: BehandlingÅrsak,
     val vilkårsvurderinger: List<VilkårsvurderingDto> = emptyList(),

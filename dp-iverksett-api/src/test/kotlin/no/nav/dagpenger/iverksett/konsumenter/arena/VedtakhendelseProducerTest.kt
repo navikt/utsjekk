@@ -22,23 +22,27 @@ class VedtakhendelseProducerTest {
         val vedtakHendelseXmlSlot = slot<String>()
         every { jmsTemplate.convertAndSend(capture(vedtakHendelseXmlSlot)) } just Runs
 
-        val iverksett = opprettIverksettDagpenger(UUID.randomUUID())
+        val fagsakId = UUID.randomUUID()
+        val iverksett = opprettIverksettDagpenger(fagsakId = fagsakId)
         val vedtakHendelser = mapIverksettTilVedtakHendelser(iverksett, "a123")
         vedtakhendelseProducer.produce(vedtakHendelser)
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
-        val forventetXML = forventetXML(vedtakHendelser.hendelsesTidspunkt.format(formatter))
+        val forventetXML = forventetXML(
+            fagsakId = fagsakId,
+            hendelsesTidspunkt = vedtakHendelser.hendelsesTidspunkt.format(formatter),
+        )
         assertThat(vedtakHendelseXmlSlot.captured).isEqualTo(forventetXML)
     }
 }
 
-private fun forventetXML(hendelsesTidspunkt: String): String {
+private fun forventetXML(fagsakId: UUID, hendelsesTidspunkt: String): String {
     return """
         <vedtakHendelser xmlns="http://nav.no/melding/virksomhet/vedtakHendelser/v1/vedtakHendelser">
             <aktoerID xmlns="">a123</aktoerID>
             <avslutningsstatus xmlns="">innvilget</avslutningsstatus>
             <behandlingstema xmlns="">abXXXX</behandlingstema>
             <hendelsesprodusentREF xmlns="">DP</hendelsesprodusentREF>
-            <applikasjonSakREF xmlns="">1</applikasjonSakREF>
+            <applikasjonSakREF xmlns="">$fagsakId</applikasjonSakREF>
             <hendelsesTidspunkt xmlns="">$hendelsesTidspunkt</hendelsesTidspunkt>
         </vedtakHendelser>
     """.trim()

@@ -2,11 +2,12 @@ package no.nav.dagpenger.iverksett.kontrakter.dvh
 
 import java.time.LocalDate
 import java.time.ZonedDateTime
+import java.util.UUID
 
 data class VedtakDagpengerDVH(
-    val fagsakId: Long, // Ekstern fagsakId
-    val behandlingId: Long, // Ekstern behandlingId
-    val relatertBehandlingId: Long? = null, // Ekstern behandlingId på relatert behandling
+    val fagsakId: UUID,
+    val behandlingId: UUID,
+    val relatertBehandlingId: UUID? = null,
     val adressebeskyttelse: Adressebeskyttelse? = null,
     val tidspunktVedtak: ZonedDateTime? = null,
     val vilkårsvurderinger: List<VilkårsvurderingDto>,
@@ -18,7 +19,7 @@ data class VedtakDagpengerDVH(
     val vedtaksperioder: List<VedtaksperiodeDagpengerDto>,
     val utbetalinger: List<Utbetaling>,
     val aktivitetskrav: Aktivitetskrav,
-    val funksjonellId: Long? = null,
+    val funksjonellId: UUID? = null,
     val stønadstype: StønadType,
     val kravMottatt: LocalDate? = null,
     val årsakRevurdering: ÅrsakRevurdering? = null,

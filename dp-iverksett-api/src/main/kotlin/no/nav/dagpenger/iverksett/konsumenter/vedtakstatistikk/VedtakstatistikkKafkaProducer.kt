@@ -7,6 +7,7 @@ import no.nav.dagpenger.iverksett.kontrakter.objectMapper
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
+import java.util.UUID
 
 @Service
 class VedtakstatistikkKafkaProducer(private val kafkaProducerService: KafkaProducerService) {
@@ -20,7 +21,7 @@ class VedtakstatistikkKafkaProducer(private val kafkaProducerService: KafkaProdu
     fun sendVedtak(vedtakstatistikk: VedtakDagpengerDVH) {
         sendVedtak(vedtakstatistikk.behandlingId, vedtakstatistikk.stønadstype, vedtakstatistikk.toJson())
     }
-    fun sendVedtak(behandlingId: Long, stønadstype: StønadType, vedtakStatistikk: String) {
+    fun sendVedtak(behandlingId: UUID, stønadstype: StønadType, vedtakStatistikk: String) {
         logger.info("Sending to Kafka topic: {}", topic)
         secureLogger.debug("Sending to Kafka topic: {}\nVedtakStatistikk: {}", topic, vedtakStatistikk)
 

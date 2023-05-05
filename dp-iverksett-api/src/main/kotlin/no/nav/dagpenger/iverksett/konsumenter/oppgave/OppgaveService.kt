@@ -52,7 +52,7 @@ class OppgaveService(
         val beskrivelse = lagOppgavebeskrivelse(iverksett)
         val opprettOppgaveRequest =
             OppgaveUtil.opprettOppgaveRequest(
-                iverksett.fagsak.eksternId,
+                iverksett.fagsak.fagsakId,
                 iverksett.søker.personIdent,
                 iverksett.fagsak.stønadstype,
                 enhet,

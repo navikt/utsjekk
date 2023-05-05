@@ -42,7 +42,6 @@ fun VilkårsvurderingDto.toDomain(): Vilkårsvurdering {
 fun FagsakdetaljerDto.toDomain(): Fagsakdetaljer {
     return Fagsakdetaljer(
         fagsakId = this.fagsakId,
-        eksternId = this.eksternId,
         stønadstype = this.stønadstype,
     )
 }
@@ -60,7 +59,6 @@ fun BehandlingsdetaljerDto.toDomain(): Behandlingsdetaljer {
     return Behandlingsdetaljer(
         behandlingId = this.behandlingId,
         forrigeBehandlingId = this.forrigeBehandlingId,
-        eksternId = this.eksternId,
         behandlingType = this.behandlingType,
         behandlingÅrsak = this.behandlingÅrsak,
         vilkårsvurderinger = this.vilkårsvurderinger.map { it.toDomain() },

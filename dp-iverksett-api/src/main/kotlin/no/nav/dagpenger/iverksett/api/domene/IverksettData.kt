@@ -47,7 +47,6 @@ data class IverksettDagpenger(
 
 data class Fagsakdetaljer(
     val fagsakId: UUID,
-    val eksternId: Long,
     val stønadstype: StønadType,
 )
 
@@ -81,7 +80,6 @@ data class VedtaksdetaljerDagpenger(
 data class Behandlingsdetaljer(
     val forrigeBehandlingId: UUID? = null,
     val behandlingId: UUID,
-    val eksternId: Long,
     val behandlingType: BehandlingType,
     val behandlingÅrsak: BehandlingÅrsak,
     val relatertBehandlingId: UUID? = null,

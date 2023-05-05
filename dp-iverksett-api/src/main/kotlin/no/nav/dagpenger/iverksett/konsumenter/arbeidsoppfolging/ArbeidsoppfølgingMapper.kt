@@ -16,7 +16,7 @@ object ArbeidsoppfølgingMapper {
         iverksett: IverksettDagpenger,
     ): VedtakDagpengerArbeidsoppfølging {
         return VedtakDagpengerArbeidsoppfølging(
-            vedtakId = iverksett.behandling.eksternId,
+            behanlingId = iverksett.behandling.behandlingId,
             personIdent = iverksett.søker.personIdent,
             barn = iverksett.søker.barn.map { Barn(it.personIdent, it.termindato) },
             stønadstype = Stønadstype.valueOf(iverksett.fagsak.stønadstype.name),

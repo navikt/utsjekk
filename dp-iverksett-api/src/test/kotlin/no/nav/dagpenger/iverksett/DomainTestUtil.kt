@@ -45,7 +45,7 @@ fun simuleringDto(
         saksbehandlerId = "saksbehandlerId",
         eksternBehandlingId = 1,
         stønadstype = StønadType.DAGPENGER,
-        eksternFagsakId = 1,
+        sakId = UUID.randomUUID(),
         behandlingId = behandlingId,
         personIdent = "12345611111",
         vedtaksdato = LocalDate.of(2021, 5, 1),
@@ -202,6 +202,5 @@ fun lagIverksettData(
 fun lagIverksett(iverksettData: IverksettDagpenger, brev: Brev? = null) = Iverksett(
     iverksettData.behandling.behandlingId,
     iverksettData,
-    iverksettData.behandling.eksternId,
     brev,
 )

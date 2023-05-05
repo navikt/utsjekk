@@ -44,7 +44,6 @@ class IverksettingService(
             Iverksett(
                 iverksett.behandling.behandlingId,
                 iverksett,
-                iverksett.behandling.eksternId,
                 brev,
             ),
         )
@@ -108,13 +107,12 @@ class IverksettingService(
     fun sjekkStatusPåIverksettOgOppdaterTilstand(
         stønadstype: StønadType,
         personIdent: String,
-        eksternBehandlingId: Long,
         behandlingId: UUID,
     ) {
         val oppdragId = OppdragId(
             fagsystem = stønadstype.tilFagsystem(),
             personIdent = personIdent,
-            behandlingsId = eksternBehandlingId.toString(),
+            behandlingsId = behandlingId.toString(),
         )
 
         val (status, melding) = oppdragClient.hentStatus(oppdragId)

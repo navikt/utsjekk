@@ -31,9 +31,9 @@ fun IverksettDagpenger.tilOpprettTilbakekrevingRequest(enhet: Enhet) =
     OpprettTilbakekrevingRequest(
         fagsystem = Fagsystem.DP,
         ytelsestype = Ytelsestype.valueOf(this.fagsak.stønadstype.name),
-        eksternFagsakId = this.fagsak.eksternId.toString(),
+        eksternFagsakId = this.fagsak.fagsakId.toString(),
         personIdent = this.søker.personIdent,
-        eksternId = this.behandling.eksternId.toString(),
+        eksternId = this.behandling.behandlingId.toString(),
         behandlingstype = Behandlingstype.TILBAKEKREVING, // samme som BAKS gjør
         manueltOpprettet = false, // manuelt opprettet ennå ikke støttet i familie-tilbake?
         språkkode = Språkkode.NB, // Bør følge med iverksett.søker
@@ -50,8 +50,8 @@ fun IverksettDagpenger.tilFagsystembehandling(enhet: Enhet) =
     HentFagsystemsbehandlingRespons(
         hentFagsystemsbehandling =
         HentFagsystemsbehandling(
-            eksternFagsakId = this.fagsak.eksternId.toString(),
-            eksternId = this.behandling.eksternId.toString(),
+            fagsakId = this.fagsak.fagsakId,
+            behandlingId = this.behandling.behandlingId,
             ytelsestype = Ytelsestype.valueOf(this.fagsak.stønadstype.name),
             personIdent = this.søker.personIdent,
             språkkode = Språkkode.NB,

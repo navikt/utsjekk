@@ -211,9 +211,8 @@ private fun toMedMetadata(holder: TilkjentYtelseHolder, stønadType: StønadType
     return holder.tilkjentYtelse.toDomain()
         .toMedMetadata(
             saksbehandlerId = "",
-            eksternBehandlingId = holder.behandlingIdInt.toLong(),
             stønadType = stønadType,
-            eksternFagsakId = 1,
+            sakId = UUID.randomUUID(),
             personIdent = "1",
             behandlingId = holder.behandlingId,
             vedtaksdato = LocalDate.now(),

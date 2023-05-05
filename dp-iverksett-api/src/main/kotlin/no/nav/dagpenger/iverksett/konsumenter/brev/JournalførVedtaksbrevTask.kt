@@ -105,7 +105,7 @@ class JournalførVedtaksbrevTask(
             fnr = iverksett.data.søker.personIdent,
             forsøkFerdigstill = true,
             hoveddokumentvarianter = listOf(dokument),
-            fagsakId = iverksett.data.fagsak.eksternId.toString(),
+            fagsakId = iverksett.data.fagsak.fagsakId.toString(),
             journalførendeEnhet = iverksett.data.søker.tilhørendeEnhet,
             eksternReferanseId = "$behandlingId-vedtaksbrev",
         )

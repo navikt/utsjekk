@@ -45,9 +45,8 @@ class IverksettMotOppdragTask(
         val nyTilkjentYtelseMedMetaData =
             iverksett.vedtak.tilkjentYtelse?.toMedMetadata(
                 saksbehandlerId = iverksett.vedtak.saksbehandlerId,
-                eksternBehandlingId = iverksett.behandling.eksternId,
                 stønadType = iverksett.fagsak.stønadstype,
-                eksternFagsakId = iverksett.fagsak.eksternId,
+                sakId = iverksett.fagsak.fagsakId,
                 personIdent = iverksett.søker.personIdent,
                 behandlingId = iverksett.behandling.behandlingId,
                 vedtaksdato = iverksett.vedtak.vedtakstidspunkt.toLocalDate(),

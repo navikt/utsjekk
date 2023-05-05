@@ -59,7 +59,7 @@ object UtbetalingsoppdragGenerator {
                 saksbehandlerId = nyTilkjentYtelseMedMetaData.saksbehandlerId,
                 kodeEndring = if (erIkkeTidligereIverksattMotOppdrag(forrigeTilkjentYtelse)) NY else ENDR,
                 fagSystem = nyTilkjentYtelseMedMetaData.stønadstype.tilFagsystem(),
-                saksnummer = nyTilkjentYtelseMedMetaData.eksternFagsakId.toString(),
+                saksnummer = nyTilkjentYtelseMedMetaData.sakId.toString(),
                 aktoer = nyTilkjentYtelseMedMetaData.personIdent,
                 utbetalingsperiode = utbetalingsperioder,
                 gOmregning = erGOmregning,
@@ -116,7 +116,7 @@ object UtbetalingsoppdragGenerator {
             lagPeriodeFraAndel(
                 andel = it,
                 type = tilkjentYtelse.stønadstype,
-                behandlingId = tilkjentYtelse.behandlingId.toString(),
+                behandlingId = tilkjentYtelse.behandlingId,
                 vedtaksdato = tilkjentYtelse.vedtaksdato,
                 personIdent = tilkjentYtelse.personIdent,
             )

@@ -27,6 +27,7 @@ import no.nav.dagpenger.iverksett.kontrakter.dvh.VilkårsvurderingDto
 import no.nav.dagpenger.iverksett.kontrakter.dvh.ÅrsakRevurdering
 import no.nav.dagpenger.iverksett.kontrakter.felles.StønadType
 import java.time.ZoneId
+import java.util.UUID
 import no.nav.dagpenger.iverksett.kontrakter.dvh.Barn as BarnEkstern
 import no.nav.dagpenger.iverksett.kontrakter.dvh.StønadType as StønadTypeEkstern
 
@@ -41,12 +42,12 @@ object VedtakstatistikkMapper {
 
     fun mapTilVedtakDagpengerDVH(
         iverksett: IverksettDagpenger,
-        forrigeIverksettBehandlingEksternId: Long?,
+        forrigeIverksettBehandlingId: UUID?,
     ): VedtakDagpengerDVH {
         return VedtakDagpengerDVH(
-            fagsakId = iverksett.fagsak.eksternId,
-            behandlingId = iverksett.behandling.eksternId,
-            relatertBehandlingId = forrigeIverksettBehandlingEksternId,
+            fagsakId = iverksett.fagsak.fagsakId,
+            behandlingId = iverksett.behandling.behandlingId,
+            relatertBehandlingId = forrigeIverksettBehandlingId,
             adressebeskyttelse = iverksett.søker.adressebeskyttelse?.let {
                 Adressebeskyttelse.valueOf(it.name)
             },
@@ -64,7 +65,7 @@ object VedtakstatistikkMapper {
                 mapTilUtbetaling(
                     it,
                     iverksett.fagsak.stønadstype,
-                    iverksett.fagsak.eksternId,
+                    iverksett.fagsak.fagsakId,
                     iverksett.søker,
                 )
             } ?: emptyList(),
@@ -73,7 +74,7 @@ object VedtakstatistikkMapper {
                 harSagtOppArbeidsforhold = VilkårsvurderingUtil
                     .hentHarSagtOppEllerRedusertFraVurderinger(iverksett.behandling.vilkårsvurderinger),
             ),
-            funksjonellId = iverksett.behandling.eksternId,
+            funksjonellId = iverksett.behandling.behandlingId,
             stønadstype = StønadTypeEkstern.valueOf(iverksett.fagsak.stønadstype.name),
             kravMottatt = iverksett.behandling.kravMottatt,
             årsakRevurdering = mapÅrsakRevurdering(iverksett.behandling),
@@ -84,7 +85,7 @@ object VedtakstatistikkMapper {
     private fun mapTilUtbetaling(
         tilkjentYtelse: TilkjentYtelse,
         stønadsType: StønadType,
-        eksternFagsakId: Long,
+        sakId: UUID,
         søker: Søker,
     ): List<Utbetaling> {
         return tilkjentYtelse.andelerTilkjentYtelse.map {
@@ -98,7 +99,7 @@ object VedtakstatistikkMapper {
                 Utbetalingsdetalj(
                     gjelderPerson = mapTilPerson(personIdent = søker.personIdent),
                     klassekode = stønadsType.tilKlassifisering(),
-                    delytelseId = eksternFagsakId.toString() + (it.periodeId ?: ""),
+                    delytelseId = sakId.toString() + (it.periodeId ?: ""),
                 ),
             )
         }

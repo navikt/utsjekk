@@ -8,7 +8,6 @@ data class Iverksett(
     @Id
     val behandlingId: UUID,
     val data: IverksettDagpenger,
-    val eksternId: Long,
     @MappedCollection(idColumn = "behandling_id")
     val brev: Brev? = null,
 )

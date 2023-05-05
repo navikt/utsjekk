@@ -44,7 +44,6 @@ class VentePåStatusFraØkonomiTask(
         iverksettingService.sjekkStatusPåIverksettOgOppdaterTilstand(
             stønadstype = iverksett.fagsak.stønadstype,
             personIdent = iverksett.søker.personIdent,
-            eksternBehandlingId = iverksett.behandling.eksternId,
             behandlingId = behandlingId,
         )
     }

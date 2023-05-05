@@ -55,8 +55,8 @@ class VedtakstatistikkServiceTest {
         vedtakstatistikkService.sendTilKafka(iverksettData = iverksettDagpenger, forrigeIverksett = null)
 
         val vedtakDagpenger = opprettVedtakstatistikkDagpenger(
-            behandlingId = iverksettDagpenger.behandling.eksternId,
-            fagsakId = iverksettDagpenger.fagsak.eksternId,
+            behandlingId = iverksettDagpenger.behandling.behandlingId,
+            fagsakId = iverksettDagpenger.fagsak.fagsakId,
             tidspunktVedtak = iverksettDagpenger.vedtak.vedtakstidspunkt.toLocalDate(),
             barn = iverksettDagpenger.søker.barn.map { Barn(it.personIdent, it.termindato) },
         )
@@ -82,8 +82,8 @@ class VedtakstatistikkServiceTest {
     }
 
     private fun opprettVedtakstatistikkDagpenger(
-        behandlingId: Long,
-        fagsakId: Long,
+        behandlingId: UUID,
+        fagsakId: UUID,
         tidspunktVedtak: LocalDate,
         barn: List<Barn> = emptyList(),
     ): VedtakDagpengerDVH {
@@ -123,7 +123,7 @@ class VedtakstatistikkServiceTest {
                     utbetalingsdetalj = Utbetalingsdetalj(
                         klassekode = "DPORAS",
                         gjelderPerson = Person(personIdent = "12345678910"),
-                        delytelseId = "1",
+                        delytelseId = fagsakId.toString(),
                     ),
                 ),
             ),
@@ -132,7 +132,7 @@ class VedtakstatistikkServiceTest {
                 aktivitetspliktInntrefferDato = null,
                 harSagtOppArbeidsforhold = true,
             ),
-            funksjonellId = 9L,
+            funksjonellId = behandlingId,
             stønadstype = StønadType.DAGPENGER,
             kravMottatt = LocalDate.of(2021, 3, 3),
             årsakRevurdering = ÅrsakRevurdering(
