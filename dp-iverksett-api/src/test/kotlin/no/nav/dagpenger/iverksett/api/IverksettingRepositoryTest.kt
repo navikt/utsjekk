@@ -49,12 +49,12 @@ class IverksettingRepositoryTest : ServerTest() {
         val iverksettData: IverksettDagpenger = objectMapper.readValue<IverksettDagpengerdDto>(json).toDomain()
         val iverksettData2 = iverksettData.copy(
             behandling = iverksettData.behandling.copy(
-                behandlingId = UUID.randomUUID()
+                behandlingId = UUID.randomUUID(),
             ),
         )
         val iverksettDataAnnenPerson = iverksettData.copy(
             behandling = iverksettData.behandling.copy(
-                behandlingId = UUID.randomUUID()
+                behandlingId = UUID.randomUUID(),
             ),
             søker = iverksettData.søker.copy(
                 personIdent = "12345678911",
