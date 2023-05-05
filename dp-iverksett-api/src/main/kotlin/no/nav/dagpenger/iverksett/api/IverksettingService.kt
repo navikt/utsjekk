@@ -7,7 +7,6 @@ import no.nav.dagpenger.iverksett.api.domene.OppdragResultat
 import no.nav.dagpenger.iverksett.api.tilstand.IverksettResultatService
 import no.nav.dagpenger.iverksett.infrastruktur.featuretoggle.FeatureToggleService
 import no.nav.dagpenger.iverksett.infrastruktur.util.tilFagsystem
-import no.nav.dagpenger.iverksett.infrastruktur.util.tilKlassifisering
 import no.nav.dagpenger.iverksett.konsumenter.brev.JournalførVedtaksbrevTask
 import no.nav.dagpenger.iverksett.konsumenter.hovedflyt
 import no.nav.dagpenger.iverksett.konsumenter.oppgave.OpprettOppfølgingsOppgaveForDagpengerTask
@@ -47,7 +46,6 @@ class IverksettingService(
                 iverksett,
                 iverksett.behandling.eksternId,
                 brev,
-                iverksett.søker.personIdent
             ),
         )
 

@@ -290,7 +290,7 @@ fun opprettIverksettDagpenger(
             vedtaksresultat = Vedtaksresultat.INNVILGET,
             andeler = andeler,
             tilbakekreving = tilbakekreving,
-            startdato = startdato
+            startdato = startdato,
         ),
         forrigeVedtak = forrigeVedtak,
     )

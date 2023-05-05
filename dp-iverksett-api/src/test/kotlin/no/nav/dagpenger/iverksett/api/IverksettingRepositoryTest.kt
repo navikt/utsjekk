@@ -47,7 +47,7 @@ class IverksettingRepositoryTest : ServerTest() {
     fun `lagre og hent iverksett på personId, forvent likhet`() {
         val json: String = ResourceLoaderTestUtil.readResource("json/IverksettDtoEksempel.json")
         val iverksettData: IverksettDagpenger = objectMapper.readValue<IverksettDagpengerdDto>(json).toDomain()
-        val iverksett = iverksettingRepository.insert(lagIverksett(iverksettData, opprettBrev()))
+        val iverksett = iverksettingRepository.insert(lagIverksett(iverksettData))
 
         val iverksettResultat = iverksettingRepository.findByPersonId(iverksettData.søker.personIdent).first()
 
@@ -61,17 +61,17 @@ class IverksettingRepositoryTest : ServerTest() {
         val iverksettData2 = iverksettData.copy(
             behandling = iverksettData.behandling.copy(
                 behandlingId = UUID.randomUUID(),
-                eksternId = iverksettData.behandling.eksternId + 1
-            )
+                eksternId = iverksettData.behandling.eksternId + 1,
+            ),
         )
         val iverksettDataAnnenPerson = iverksettData.copy(
             behandling = iverksettData.behandling.copy(
                 behandlingId = UUID.randomUUID(),
-                eksternId = iverksettData.behandling.eksternId + 1
+                eksternId = iverksettData.behandling.eksternId + 1,
             ),
             søker = iverksettData.søker.copy(
-                personIdent = "12345678911"
-            )
+                personIdent = "12345678911",
+            ),
         )
         iverksettingRepository.insert(lagIverksett(iverksettData, opprettBrev()))
         iverksettingRepository.insert(lagIverksett(iverksettData2))

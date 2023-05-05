@@ -204,5 +204,4 @@ fun lagIverksett(iverksettData: IverksettDagpenger, brev: Brev? = null) = Iverks
     iverksettData,
     iverksettData.behandling.eksternId,
     brev,
-    iverksettData.søker.personIdent
 )

@@ -2,7 +2,6 @@ package no.nav.dagpenger.iverksett.api
 
 import io.swagger.v3.oas.annotations.tags.Tag
 import no.nav.dagpenger.iverksett.api.domene.VedtaksdetaljerDagpenger
-import no.nav.security.token.support.core.api.ProtectedWithClaims
 import no.nav.security.token.support.core.api.Unprotected
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType

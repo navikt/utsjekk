@@ -61,7 +61,6 @@ internal class JournalførVedtaksbrevTaskTest {
         iverksettDto.toDomain(),
         iverksettDto.behandling.eksternId,
         Brev(ByteArray(256)),
-        iverksettDto.søker.personIdent
     )
 
     @BeforeEach

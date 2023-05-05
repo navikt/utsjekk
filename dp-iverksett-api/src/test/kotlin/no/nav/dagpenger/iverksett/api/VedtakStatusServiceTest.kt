@@ -12,7 +12,6 @@ import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
 import java.time.LocalDateTime
 
-
 class VedtakStatusServiceTest {
 
     private val iverksettingRepositoryMock: IverksettingRepository = mockk()
@@ -22,9 +21,8 @@ class VedtakStatusServiceTest {
     @Test
     fun `skal hente vedtak som er iverksatt OK`() {
         every { iverksettingRepositoryMock.findByPersonId(any()) } returns listOf(
-            lagIverksett(iverksettDataFørsteVedtak)
+            lagIverksett(iverksettDataFørsteVedtak),
         )
-        every { iverksettingServiceMock.utledStatus(any()) } returns IverksettStatus.OK
 
         val vedtak = vedtakStatusService.getVedtakStatus("12345678910")
 
@@ -35,9 +33,8 @@ class VedtakStatusServiceTest {
     fun `skal hente siste vedtak som er iverksatt OK når det finnes flere`() {
         every { iverksettingRepositoryMock.findByPersonId(any()) } returns listOf(
             lagIverksett(iverksettDataFørsteVedtak),
-            lagIverksett(iverksettDataSisteVedtak)
+            lagIverksett(iverksettDataSisteVedtak),
         )
-        every { iverksettingServiceMock.utledStatus(any()) } returns IverksettStatus.OK
 
         val vedtak = vedtakStatusService.getVedtakStatus("12345678910")
 
@@ -45,13 +42,13 @@ class VedtakStatusServiceTest {
     }
 
     @Test
-    fun `skal hente vedtak som er iverksatt OK når det også finnes vedtak som ikke er ferdig iverksatt`() {
+    fun `skal hente vedtak som er innvilget når det også finnes vedtak som er avslått`() {
         every { iverksettingRepositoryMock.findByPersonId(any()) } returns listOf(
             lagIverksett(iverksettDataFørsteVedtak),
-            lagIverksett(iverksettDataSisteVedtak)
+            lagIverksett(iverksettDataSisteVedtakAvslått),
         )
 
-        every { iverksettingServiceMock.utledStatus(iverksettDataFørsteVedtak.behandling.behandlingId) } returns IverksettStatus.OK
+        every { iverksettingServiceMock.utledStatus(iverksettDataFørsteVedtak.behandling.behandlingId) } returns IverksettStatus.SENDT_TIL_OPPDRAG
         every { iverksettingServiceMock.utledStatus(iverksettDataSisteVedtak.behandling.behandlingId) } returns IverksettStatus.FEILET_MOT_OPPDRAG
 
         val vedtak = vedtakStatusService.getVedtakStatus("12345678910")
@@ -63,12 +60,17 @@ class VedtakStatusServiceTest {
         private val iverksettDataFørsteVedtak = lagIverksettData(
             behandlingType = BehandlingType.FØRSTEGANGSBEHANDLING,
             vedtaksresultat = Vedtaksresultat.INNVILGET,
-            vedtakstidspunkt = LocalDateTime.now().minusMonths(2)
+            vedtakstidspunkt = LocalDateTime.now().minusMonths(2),
         )
         private val iverksettDataSisteVedtak = lagIverksettData(
             behandlingType = BehandlingType.REVURDERING,
             vedtaksresultat = Vedtaksresultat.INNVILGET,
-            vedtakstidspunkt = LocalDateTime.now()
+            vedtakstidspunkt = LocalDateTime.now(),
+        )
+        private val iverksettDataSisteVedtakAvslått = lagIverksettData(
+            behandlingType = BehandlingType.REVURDERING,
+            vedtaksresultat = Vedtaksresultat.AVSLÅTT,
+            vedtakstidspunkt = LocalDateTime.now(),
         )
     }
 }

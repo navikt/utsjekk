@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
 
-
 class IverksattStatusControllerTest {
 
     private val vedtakStatusServiceMock: VedtakStatusService = mockk()

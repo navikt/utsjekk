@@ -16,6 +16,6 @@ interface IverksettingRepository : RepositoryInterface<Iverksett, UUID>, InsertU
 
     fun findByEksternId(eksternId: Long): Iverksett
 
-    @Query("select behandling_id, data, ekstern_id, person_id from iverksett where data -> 'søker' ->> 'personIdent' = :personId")
+    @Query("select behandling_id, data, ekstern_id from iverksett where data -> 'søker' ->> 'personIdent' = :personId")
     fun findByPersonId(@Param("personId") personId: String): List<Iverksett>
 }
