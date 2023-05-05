@@ -42,7 +42,7 @@ class IverksettingController(
     ): ResponseEntity<Void> {
         val iverksett = iverksettDto.toDomain()
         valider(iverksett)
-        validerUtenBrev(iverksett)
+        // validerUtenBrev(iverksett)
         iverksettingService.startIverksetting(iverksett, null)
         return ResponseEntity.accepted().build()
     }
