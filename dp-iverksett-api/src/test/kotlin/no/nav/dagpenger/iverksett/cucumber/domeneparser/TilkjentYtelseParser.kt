@@ -4,6 +4,7 @@ import io.cucumber.datatable.DataTable
 import no.nav.dagpenger.iverksett.cucumber.domeneparser.IdTIlUUIDHolder.behandlingIdTilUUID
 import no.nav.dagpenger.iverksett.cucumber.steps.TilkjentYtelseHolder
 import no.nav.dagpenger.iverksett.kontrakter.felles.Datoperiode
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.DatoperiodeDto
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.TilkjentYtelseDto
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.UtbetalingDto
 import no.nav.dagpenger.iverksett.kontrakter.oppdrag.Utbetalingsoppdrag.KodeEndring
@@ -116,7 +117,7 @@ object TilkjentYtelseParser {
         inntekt = parseValgfriInt(TilkjentYtelseDomenebegrep.INNTEKT, rad) ?: 0,
         inntektsreduksjon = parseValgfriInt(TilkjentYtelseDomenebegrep.INNTEKTSREDUKSJON, rad) ?: 0,
         samordningsfradrag = parseValgfriInt(TilkjentYtelseDomenebegrep.INNTEKT, rad) ?: 0,
-        periode = Datoperiode(
+        periode = DatoperiodeDto(
             parseDato(Domenebegrep.FRA_DATO, rad),
             parseDato(Domenebegrep.TIL_DATO, rad),
         ),

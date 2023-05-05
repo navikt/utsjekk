@@ -28,14 +28,14 @@ data class IverksettDagpengerdDto(
 data class SøkerDto(
     val personIdent: String,
     val barn: List<BarnDto> = emptyList(),
-    val tilhørendeEnhet: String,
+    val tilhørendeEnhet: String = "",
     val adressebeskyttelse: AdressebeskyttelseGradering? = null,
 )
 
 data class FagsakdetaljerDto(
     val fagsakId: UUID,
     val eksternId: Long? = null, // Ikke i bruk, bær fjernes
-    val stønadstype: StønadType,
+    val stønadstype: StønadType = StønadType.DAGPENGER,
 )
 
 data class BehandlingsdetaljerDto(
@@ -53,10 +53,10 @@ data class BehandlingsdetaljerDto(
 data class VedtaksdetaljerDagpengerDto(
     val vedtakstidspunkt: LocalDateTime,
     val resultat: Vedtaksresultat,
-    val opphørÅrsak: OpphørÅrsak?,
-    val avslagÅrsak: AvslagÅrsak? = null,
     val saksbehandlerId: String,
     val beslutterId: String,
+    val opphørÅrsak: OpphørÅrsak? = null,
+    val avslagÅrsak: AvslagÅrsak? = null,
     val utbetalinger: List<UtbetalingDto> = emptyList(),
     val vedtaksperioder: List<VedtaksperiodeDagpengerDto> = emptyList(),
     val tilbakekreving: TilbakekrevingDto? = null,
@@ -80,9 +80,9 @@ data class VurderingDto(
     val begrunnelse: String? = null
 )
 data class VedtaksperiodeDagpengerDto(
-    val periode: Datoperiode,
-    val aktivitet: AktivitetType,
-    val periodeType: VedtaksperiodeType,
+    val periode: DatoperiodeDto,
+    val aktivitet: AktivitetType? = null,
+    val periodeType: VedtaksperiodeType = VedtaksperiodeType.HOVEDPERIODE,
 )
 
 data class TilbakekrevingDto(
@@ -161,4 +161,31 @@ data class Brevmottaker(
         PERSONIDENT,
         ORGANISASJONSNUMMER,
     }
+}
+
+class DatoperiodeDto {
+    var fom: LocalDate
+    var tom: LocalDate? = null
+
+    constructor(fom: LocalDate, tom: LocalDate? = null) {
+        this.fom = fom
+        this.tom = tom
+    }
+
+    constructor(fom: LocalDate) {
+        this.fom = fom
+        this.tom = null
+    }
+
+    var fraOgMedDato: LocalDate
+        set(value) {
+            this.fom = value
+        }
+        get() { return this.fom }
+
+    var tilOgMedDato: LocalDate?
+        set(value) {
+            this.tom = value
+        }
+        get() = this.tom
 }

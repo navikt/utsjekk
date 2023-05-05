@@ -14,6 +14,8 @@ import no.nav.dagpenger.iverksett.api.domene.Vurdering
 import no.nav.dagpenger.iverksett.api.domene.ÅrsakRevurdering
 import no.nav.dagpenger.iverksett.konsumenter.brev.domain.Brevmottaker
 import no.nav.dagpenger.iverksett.konsumenter.brev.domain.Brevmottakere
+import no.nav.dagpenger.iverksett.kontrakter.felles.Datoperiode
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.AktivitetType
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.BehandlingsdetaljerDto
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.DelvilkårsvurderingDto
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.FagsakdetaljerDto
@@ -25,6 +27,7 @@ import no.nav.dagpenger.iverksett.kontrakter.iverksett.VedtaksdetaljerDagpengerD
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.VedtaksperiodeDagpengerDto
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.VilkårsvurderingDto
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.VurderingDto
+import java.time.LocalDate
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.Brevmottaker as BrevmottakerKontrakter
 
 fun VurderingDto.toDomain(): Vurdering {
@@ -70,8 +73,8 @@ fun BehandlingsdetaljerDto.toDomain(): Behandlingsdetaljer {
 
 fun VedtaksperiodeDagpengerDto.toDomain(): VedtaksperiodeDagpenger {
     return VedtaksperiodeDagpenger(
-        aktivitet = this.aktivitet,
-        periode = this.periode,
+        aktivitet = this.aktivitet ?: AktivitetType.IKKE_AKTIVITETSPLIKT,
+        periode = this.periode.let { Datoperiode(it.fom, it.tom ?: LocalDate.MAX) },
         periodeType = this.periodeType,
     )
 }
