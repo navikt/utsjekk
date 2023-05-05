@@ -41,7 +41,7 @@ class IverksettingController(
         @RequestBody iverksettDto: IverksettDagpengerdDto,
     ): ResponseEntity<Void> {
         val iverksett = iverksettDto.toDomain()
-        valider(iverksett)
+        //valider(iverksett)
         // validerUtenBrev(iverksett)
         iverksettingService.startIverksetting(iverksett, null)
         return ResponseEntity.accepted().build()
@@ -58,7 +58,7 @@ class IverksettingController(
         val brev = fil?.let { opprettBrev(it) }
 
         val iverksett = iverksettDto.toDomain()
-        valider(iverksett)
+        //valider(iverksett)
         validerBrev(iverksett, brev)
         iverksettingService.startIverksetting(iverksett, brev)
         return ResponseEntity.accepted().build()
