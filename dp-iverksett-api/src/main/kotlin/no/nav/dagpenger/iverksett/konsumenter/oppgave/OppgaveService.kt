@@ -4,6 +4,8 @@ import no.nav.dagpenger.iverksett.api.IverksettingRepository
 import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
 import no.nav.dagpenger.iverksett.api.domene.VedtaksperiodeDagpenger
 import no.nav.dagpenger.iverksett.infrastruktur.FamilieIntegrasjonerClient
+import no.nav.dagpenger.iverksett.infrastruktur.configuration.FeatureToggleConfig
+import no.nav.dagpenger.iverksett.infrastruktur.featuretoggle.FeatureToggleService
 import no.nav.dagpenger.iverksett.infrastruktur.repository.findByIdOrThrow
 import no.nav.dagpenger.iverksett.konsumenter.oppgave.OppgaveBeskrivelse.beskrivelseFørstegangsbehandlingAvslått
 import no.nav.dagpenger.iverksett.konsumenter.oppgave.OppgaveBeskrivelse.beskrivelseFørstegangsbehandlingInnvilget
@@ -23,10 +25,11 @@ class OppgaveService(
     private val oppgaveClient: OppgaveClient,
     private val familieIntegrasjonerClient: FamilieIntegrasjonerClient,
     private val iverksettingRepository: IverksettingRepository,
+    private val featureToggleService: FeatureToggleService,
 ) {
 
     fun skalOppretteVurderHenvendelseOppgave(iverksett: IverksettDagpenger): Boolean {
-        if (iverksett.skalIkkeSendeBrev()) {
+        if (!featureToggleService.isEnabled(FeatureToggleConfig.SKAL_SENDE_BREV) || iverksett.skalIkkeSendeBrev()) {
             return false
         }
 

@@ -20,6 +20,7 @@ import no.nav.dagpenger.iverksett.kontrakter.iverksett.BehandlingsdetaljerDto
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.DelvilkårsvurderingDto
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.FagsakdetaljerDto
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.IverksettDagpengerdDto
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.SakDto
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.SøkerDto
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.TilbakekrevingDto
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.TilbakekrevingMedVarselDto
@@ -49,6 +50,13 @@ fun FagsakdetaljerDto.toDomain(): Fagsakdetaljer {
     )
 }
 
+fun SakDto.toDomain(): Fagsakdetaljer {
+    return Fagsakdetaljer(
+        fagsakId = this.sakId,
+        stønadstype = this.stønadstype,
+    )
+}
+
 fun SøkerDto.toDomain(): Søker {
     return Søker(
         personIdent = this.personIdent,
@@ -74,13 +82,16 @@ fun BehandlingsdetaljerDto.toDomain(): Behandlingsdetaljer {
 fun VedtaksperiodeDagpengerDto.toDomain(): VedtaksperiodeDagpenger {
     return VedtaksperiodeDagpenger(
         aktivitet = this.aktivitet ?: AktivitetType.IKKE_AKTIVITETSPLIKT,
-        periode = this.periode.let { Datoperiode(it.fom, it.tom ?: LocalDate.MAX) },
+        periode = this.fraOgMedDato?.let { Datoperiode(it, this.tilOgMedDato ?: LocalDate.MAX) }
+            ?: this.periode?.let { Datoperiode(it.fom, it.tom ?: LocalDate.MAX) }
+            ?: throw IllegalStateException("Verken fraOgMedDato eller periode har verdi. En av dem, helst fraOgMedDato, må være satt"),
         periodeType = this.periodeType,
     )
 }
 
 fun VedtaksdetaljerDagpengerDto.toDomain(): VedtaksdetaljerDagpenger {
     return VedtaksdetaljerDagpenger(
+        vedtakstype = this.vedtakstype,
         vedtaksresultat = this.resultat,
         vedtakstidspunkt = this.vedtakstidspunkt,
         opphørÅrsak = this.opphørÅrsak,
@@ -118,9 +129,12 @@ fun BrevmottakerKontrakter.toDomain(): Brevmottaker = Brevmottaker(
     identType = this.identType,
     mottakerRolle = this.mottakerRolle,
 )
+
 fun IverksettDagpengerdDto.toDomain(): IverksettDagpenger {
     return IverksettDagpenger(
-        fagsak = this.fagsak.toDomain(),
+        fagsak = this.sak?.toDomain()
+            ?: this.fagsak?.toDomain()
+            ?: throw IllegalStateException("sak eller fagsak må ha verdi"),
         søker = this.søker.toDomain(),
         behandling = this.behandling.toDomain(),
         vedtak = this.vedtak.toDomain(),

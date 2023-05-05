@@ -19,6 +19,7 @@ import no.nav.dagpenger.iverksett.kontrakter.iverksett.AktivitetType
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.VedtaksperiodeType
 import no.nav.dagpenger.iverksett.lagIverksett
 import no.nav.dagpenger.iverksett.lagIverksettData
+import no.nav.dagpenger.iverksett.util.mockFeatureToggleService
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -31,7 +32,9 @@ internal class OppgaveServiceTest {
     val iverksettRepository = mockk<IverksettingRepository>()
     val familieIntegrasjonerClient = mockk<FamilieIntegrasjonerClient>()
     val oppgaveClient = mockk<OppgaveClient>()
-    val oppgaveService = OppgaveService(oppgaveClient, familieIntegrasjonerClient, iverksettRepository)
+    val featureToggleService = mockFeatureToggleService()
+    val oppgaveService =
+        OppgaveService(oppgaveClient, familieIntegrasjonerClient, iverksettRepository, featureToggleService)
 
     @BeforeEach
     internal fun init() {
@@ -181,7 +184,9 @@ internal class OppgaveServiceTest {
             ),
         )
         val forrigeBehandlingId = iverksett.behandling.forrigeBehandlingId!!
-        every { iverksettRepository.findByIdOrThrow(forrigeBehandlingId) } returns lagIverksett(forrigeBehandlingIverksett)
+        every { iverksettRepository.findByIdOrThrow(forrigeBehandlingId) } returns lagIverksett(
+            forrigeBehandlingIverksett,
+        )
         assertThat(oppgaveService.skalOppretteVurderHenvendelseOppgave(iverksett)).isTrue()
 
         verify(exactly = 1) { iverksettRepository.findByIdOrThrow(forrigeBehandlingId) }

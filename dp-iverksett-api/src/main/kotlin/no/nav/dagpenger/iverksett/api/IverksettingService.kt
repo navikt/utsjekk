@@ -5,6 +5,7 @@ import no.nav.dagpenger.iverksett.api.domene.Iverksett
 import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
 import no.nav.dagpenger.iverksett.api.domene.OppdragResultat
 import no.nav.dagpenger.iverksett.api.tilstand.IverksettResultatService
+import no.nav.dagpenger.iverksett.infrastruktur.configuration.FeatureToggleConfig
 import no.nav.dagpenger.iverksett.infrastruktur.featuretoggle.FeatureToggleService
 import no.nav.dagpenger.iverksett.infrastruktur.util.tilFagsystem
 import no.nav.dagpenger.iverksett.konsumenter.brev.JournalførVedtaksbrevTask
@@ -37,7 +38,7 @@ class IverksettingService(
 
     @Transactional
     fun startIverksetting(iverksett: IverksettDagpenger, brev: Brev?) {
-        if (featureToggleService.isEnabled("dp.iverksett.stopp-iverksetting")) {
+        if (featureToggleService.isEnabled(FeatureToggleConfig.STOPP_IVERKSETTING)) {
             error("Kan ikke iverksette akkurat nå")
         }
         iverksettingRepository.insert(

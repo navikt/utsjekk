@@ -25,6 +25,7 @@ import no.nav.dagpenger.iverksett.kontrakter.felles.Revurderingsårsak
 import no.nav.dagpenger.iverksett.kontrakter.felles.StønadType
 import no.nav.dagpenger.iverksett.kontrakter.felles.SvarId
 import no.nav.dagpenger.iverksett.kontrakter.felles.TilkjentYtelseStatus
+import no.nav.dagpenger.iverksett.kontrakter.felles.VedtakType
 import no.nav.dagpenger.iverksett.kontrakter.felles.Vedtaksresultat
 import no.nav.dagpenger.iverksett.kontrakter.felles.VilkårType
 import no.nav.dagpenger.iverksett.kontrakter.felles.Vilkårsresultat
@@ -178,6 +179,7 @@ internal class VedtakstatistikkMapperTest {
         avslagÅrsak: AvslagÅrsak? = null,
     ): VedtaksdetaljerDagpenger {
         return VedtaksdetaljerDagpenger(
+            vedtakstype = VedtakType.UTBETALINGSVEDTAK,
             vedtaksresultat = resultat,
             avslagÅrsak = avslagÅrsak,
             vedtakstidspunkt = vedtakstidspunkt,

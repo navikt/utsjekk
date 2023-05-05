@@ -8,6 +8,7 @@ import no.nav.dagpenger.iverksett.kontrakter.felles.OpphørÅrsak
 import no.nav.dagpenger.iverksett.kontrakter.felles.RegelId
 import no.nav.dagpenger.iverksett.kontrakter.felles.StønadType
 import no.nav.dagpenger.iverksett.kontrakter.felles.SvarId
+import no.nav.dagpenger.iverksett.kontrakter.felles.VedtakType
 import no.nav.dagpenger.iverksett.kontrakter.felles.Vedtaksresultat
 import no.nav.dagpenger.iverksett.kontrakter.felles.VilkårType
 import no.nav.dagpenger.iverksett.kontrakter.felles.Vilkårsresultat
@@ -18,7 +19,9 @@ import java.time.LocalDateTime
 import java.util.UUID
 
 data class IverksettDagpengerdDto(
-    val fagsak: FagsakdetaljerDto,
+    val sak: SakDto? = null,
+    @Deprecated("Bruk sak")
+    val fagsak: FagsakdetaljerDto? = null,
     val behandling: BehandlingsdetaljerDto,
     val søker: SøkerDto,
     val vedtak: VedtaksdetaljerDagpengerDto,
@@ -32,9 +35,15 @@ data class SøkerDto(
     val adressebeskyttelse: AdressebeskyttelseGradering? = null,
 )
 
+@Deprecated("Bruk SakDto")
 data class FagsakdetaljerDto(
     val fagsakId: UUID,
     val eksternId: Long? = null, // Ikke i bruk, bær fjernes
+    val stønadstype: StønadType = StønadType.DAGPENGER,
+)
+
+data class SakDto(
+    val sakId: UUID,
     val stønadstype: StønadType = StønadType.DAGPENGER,
 )
 
@@ -51,6 +60,7 @@ data class BehandlingsdetaljerDto(
 )
 
 data class VedtaksdetaljerDagpengerDto(
+    val vedtakstype: VedtakType = VedtakType.RAMMEVEDTAK,
     val vedtakstidspunkt: LocalDateTime,
     val resultat: Vedtaksresultat,
     val saksbehandlerId: String,
@@ -80,7 +90,10 @@ data class VurderingDto(
     val begrunnelse: String? = null
 )
 data class VedtaksperiodeDagpengerDto(
-    val periode: DatoperiodeDto,
+    val fraOgMedDato: LocalDate? = null,
+    val tilOgMedDato: LocalDate? = null,
+    @Deprecated("Bruk fraOgMedDato og tilOgMedDato")
+    val periode: DatoperiodeDto? = null,
     val aktivitet: AktivitetType? = null,
     val periodeType: VedtaksperiodeType = VedtaksperiodeType.HOVEDPERIODE,
 )

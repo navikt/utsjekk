@@ -4,6 +4,8 @@ import no.nav.dagpenger.iverksett.api.IverksettingRepository
 import no.nav.dagpenger.iverksett.api.IverksettingService
 import no.nav.dagpenger.iverksett.api.domene.TilkjentYtelse
 import no.nav.dagpenger.iverksett.api.tilstand.IverksettResultatService
+import no.nav.dagpenger.iverksett.infrastruktur.configuration.FeatureToggleConfig
+import no.nav.dagpenger.iverksett.infrastruktur.featuretoggle.FeatureToggleService
 import no.nav.dagpenger.iverksett.infrastruktur.repository.findByIdOrThrow
 import no.nav.dagpenger.iverksett.konsumenter.opprettNesteTask
 import no.nav.familie.prosessering.AsyncTaskStep
@@ -27,6 +29,7 @@ class VentePåStatusFraØkonomiTask(
     private val iverksettingService: IverksettingService,
     private val taskService: TaskService,
     private val iverksettResultatService: IverksettResultatService,
+    private val featureToggleService: FeatureToggleService,
 ) : AsyncTaskStep {
 
     private val logger = LoggerFactory.getLogger(javaClass)
@@ -51,9 +54,13 @@ class VentePåStatusFraØkonomiTask(
         val behandlingId = UUID.fromString(task.payload)
         val iverksett = iverksettingRepository.findByIdOrThrow(behandlingId).data
 
-        if (iverksett.skalIkkeSendeBrev()) {
+        if (!featureToggleService.isEnabled(FeatureToggleConfig.SKAL_SENDE_BREV)) {
+            logger.warn(
+                "Sender ikke ut brev fordi funksjonsbryteren for brevutsending er skrudd AV",
+            )
+        } else if (iverksett.skalIkkeSendeBrev()) {
             logger.info(
-                "Journalfør ikke vedtaksbrev for behandling=$behandlingId då årsak=${iverksett.behandling.behandlingÅrsak}",
+                "Journalfør ikke vedtaksbrev for behandling=$behandlingId fordi årsak=${iverksett.behandling.behandlingÅrsak}",
             )
         } else {
             taskService.save(task.opprettNesteTask())

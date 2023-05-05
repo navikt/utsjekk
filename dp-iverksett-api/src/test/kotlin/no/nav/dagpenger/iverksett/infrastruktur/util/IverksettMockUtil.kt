@@ -39,6 +39,7 @@ import no.nav.dagpenger.iverksett.kontrakter.felles.Revurderingsårsak
 import no.nav.dagpenger.iverksett.kontrakter.felles.StønadType
 import no.nav.dagpenger.iverksett.kontrakter.felles.SvarId
 import no.nav.dagpenger.iverksett.kontrakter.felles.TilkjentYtelseStatus
+import no.nav.dagpenger.iverksett.kontrakter.felles.VedtakType
 import no.nav.dagpenger.iverksett.kontrakter.felles.Vedtaksresultat
 import no.nav.dagpenger.iverksett.kontrakter.felles.VilkårType
 import no.nav.dagpenger.iverksett.kontrakter.felles.Vilkårsresultat
@@ -226,6 +227,7 @@ fun vedtaksdetaljerDagpenger(
 ): VedtaksdetaljerDagpenger {
     val tilkjentYtelse = lagTilkjentYtelse(andeler, startdato)
     return VedtaksdetaljerDagpenger(
+        vedtakstype = VedtakType.UTBETALINGSVEDTAK,
         vedtaksresultat = vedtaksresultat,
         vedtakstidspunkt = vedtakstidspunkt,
         opphørÅrsak = OpphørÅrsak.PERIODE_UTLØPT,
