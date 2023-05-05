@@ -6,6 +6,7 @@ import no.nav.dagpenger.iverksett.kontrakter.oppdrag.Utbetalingsperiode
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
+import java.util.UUID
 
 internal class UtbetalingsperiodeMalKtTest {
 
@@ -29,7 +30,7 @@ internal class UtbetalingsperiodeMalKtTest {
                 periodeId = 1,
             ),
             type = stønadType,
-            behandlingId = "1",
+            behandlingId = UUID.randomUUID(),
             vedtaksdato = LocalDate.now(),
             personIdent = "",
         )

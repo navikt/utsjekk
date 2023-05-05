@@ -4,6 +4,7 @@ import no.nav.dagpenger.iverksett.ServerTest
 import no.nav.dagpenger.iverksett.konsumenter.brev.JournalførVedtaksbrevTask
 import no.nav.dagpenger.iverksett.konsumenter.tilbakekreving.OpprettTilbakekrevingTask
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.IverksettMotOppdragTask
+import no.nav.dagpenger.iverksett.kontrakter.felles.VedtakType
 import no.nav.dagpenger.iverksett.kontrakter.felles.Vedtaksresultat
 import no.nav.dagpenger.iverksett.util.opprettIverksettDto
 import no.nav.familie.http.client.MultipartBuilder
@@ -35,7 +36,7 @@ class IverksettingControllerTest : ServerTest() {
     }
 
     @Test
-    internal fun `starte iverksetting gir 200 OK`() {
+    internal fun `starte iverksetting gir 202 Accepted`() {
         val iverksettJson = opprettIverksettDto(behandlingId = behandlingId)
         val request = MultipartBuilder()
             .withJson("data", iverksettJson)
@@ -54,7 +55,7 @@ class IverksettingControllerTest : ServerTest() {
     }
 
     @Test
-    internal fun `starte iverksetting for avslag ytelse gir 200 OK`() {
+    internal fun `starte iverksetting for avslag ytelse gir 202 Accepted`() {
         val iverksettJson = opprettIverksettDto(behandlingId = behandlingId)
         // Copy skal legges inn som egen metode i egen PR
         val iverksettJsonMedAvslag =
@@ -76,9 +77,14 @@ class IverksettingControllerTest : ServerTest() {
     }
 
     @Test
-    internal fun `Innvilget vedtak uten tilkjent ytelse gir 400 feil`() {
+    internal fun `Innvilget utbetalingsvedtak uten tilkjent ytelse gir 400-feil`() {
         val iverksettJson = opprettIverksettDto(behandlingId = behandlingId)
-        val iverksettJsonUtenTilkjentYtelse = iverksettJson.copy(vedtak = iverksettJson.vedtak.copy(utbetalinger = emptyList()))
+        val iverksettJsonUtenTilkjentYtelse = iverksettJson.copy(
+            vedtak = iverksettJson.vedtak.copy(
+                vedtakstype = VedtakType.UTBETALINGSVEDTAK,
+                utbetalinger = emptyList(),
+            ),
+        )
         val request = MultipartBuilder()
             .withJson("data", iverksettJsonUtenTilkjentYtelse)
             .withByteArray("fil", "1", byteArrayOf(12))
@@ -90,6 +96,28 @@ class IverksettingControllerTest : ServerTest() {
             HttpEntity(request, headers),
         )
         assertThat(respons.statusCode.value()).isEqualTo(400)
+    }
+
+    @Test
+    internal fun `Innvilget rammevedtak uten tilkjent ytelse gir 202 Accepted`() {
+        val iverksettJson = opprettIverksettDto(behandlingId = behandlingId)
+        val iverksettJsonUtenTilkjentYtelse = iverksettJson.copy(
+            vedtak = iverksettJson.vedtak.copy(
+                vedtakstype = VedtakType.RAMMEVEDTAK,
+                utbetalinger = emptyList(),
+            ),
+        )
+        val request = MultipartBuilder()
+            .withJson("data", iverksettJsonUtenTilkjentYtelse)
+            .withByteArray("fil", "1", byteArrayOf(12))
+            .build()
+
+        val respons: ResponseEntity<Ressurs<Nothing>> = restTemplate.exchange(
+            localhostUrl("/api/iverksetting"),
+            HttpMethod.POST,
+            HttpEntity(request, headers),
+        )
+        assertThat(respons.statusCode.value()).isEqualTo(202)
     }
 
     @Test

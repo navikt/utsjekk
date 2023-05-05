@@ -17,9 +17,8 @@ data class TilkjentYtelse(
 
     fun toMedMetadata(
         saksbehandlerId: String,
-        eksternBehandlingId: Long,
         stønadType: StønadType,
-        eksternFagsakId: Long,
+        sakId: UUID,
         personIdent: String,
         behandlingId: UUID,
         vedtaksdato: LocalDate,
@@ -27,9 +26,8 @@ data class TilkjentYtelse(
         return TilkjentYtelseMedMetaData(
             tilkjentYtelse = this,
             saksbehandlerId = saksbehandlerId,
-            eksternBehandlingId = eksternBehandlingId,
             stønadstype = stønadType,
-            eksternFagsakId = eksternFagsakId,
+            sakId = sakId,
             personIdent = personIdent,
             behandlingId = behandlingId,
             vedtaksdato = vedtaksdato,

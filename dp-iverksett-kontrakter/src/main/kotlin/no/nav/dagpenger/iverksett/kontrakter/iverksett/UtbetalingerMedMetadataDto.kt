@@ -7,9 +7,8 @@ import java.util.UUID
 data class UtbetalingerMedMetadataDto(
     val utbetalinger: List<UtbetalingDto>,
     val saksbehandlerId: String,
-    val eksternBehandlingId: Long,
     val stønadstype: StønadType,
-    val eksternFagsakId: Long,
+    val sakId: UUID,
     val personIdent: String,
     val behandlingId: UUID,
     val vedtaksdato: LocalDate,

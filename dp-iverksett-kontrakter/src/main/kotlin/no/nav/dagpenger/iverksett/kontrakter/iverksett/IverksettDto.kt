@@ -8,6 +8,7 @@ import no.nav.dagpenger.iverksett.kontrakter.felles.OpphørÅrsak
 import no.nav.dagpenger.iverksett.kontrakter.felles.RegelId
 import no.nav.dagpenger.iverksett.kontrakter.felles.StønadType
 import no.nav.dagpenger.iverksett.kontrakter.felles.SvarId
+import no.nav.dagpenger.iverksett.kontrakter.felles.VedtakType
 import no.nav.dagpenger.iverksett.kontrakter.felles.Vedtaksresultat
 import no.nav.dagpenger.iverksett.kontrakter.felles.VilkårType
 import no.nav.dagpenger.iverksett.kontrakter.felles.Vilkårsresultat
@@ -18,7 +19,9 @@ import java.time.LocalDateTime
 import java.util.UUID
 
 data class IverksettDagpengerdDto(
-    val fagsak: FagsakdetaljerDto,
+    val sak: SakDto? = null,
+    @Deprecated("Bruk sak")
+    val fagsak: FagsakdetaljerDto? = null,
     val behandling: BehandlingsdetaljerDto,
     val søker: SøkerDto,
     val vedtak: VedtaksdetaljerDagpengerDto,
@@ -28,20 +31,26 @@ data class IverksettDagpengerdDto(
 data class SøkerDto(
     val personIdent: String,
     val barn: List<BarnDto> = emptyList(),
-    val tilhørendeEnhet: String,
+    val tilhørendeEnhet: String = "",
     val adressebeskyttelse: AdressebeskyttelseGradering? = null,
 )
 
+@Deprecated("Bruk SakDto")
 data class FagsakdetaljerDto(
     val fagsakId: UUID,
-    val eksternId: Long,
-    val stønadstype: StønadType,
+    val eksternId: Long? = null, // Ikke i bruk, bær fjernes
+    val stønadstype: StønadType = StønadType.DAGPENGER,
+)
+
+data class SakDto(
+    val sakId: UUID,
+    val stønadstype: StønadType = StønadType.DAGPENGER,
 )
 
 data class BehandlingsdetaljerDto(
     val behandlingId: UUID,
     val forrigeBehandlingId: UUID? = null,
-    val eksternId: Long,
+    val eksternId: Long? = null, // Ikke i bruk, bær fjernes
     val behandlingType: BehandlingType,
     val behandlingÅrsak: BehandlingÅrsak,
     val vilkårsvurderinger: List<VilkårsvurderingDto> = emptyList(),
@@ -51,12 +60,13 @@ data class BehandlingsdetaljerDto(
 )
 
 data class VedtaksdetaljerDagpengerDto(
+    val vedtakstype: VedtakType = VedtakType.RAMMEVEDTAK,
     val vedtakstidspunkt: LocalDateTime,
     val resultat: Vedtaksresultat,
-    val opphørÅrsak: OpphørÅrsak?,
-    val avslagÅrsak: AvslagÅrsak? = null,
     val saksbehandlerId: String,
     val beslutterId: String,
+    val opphørÅrsak: OpphørÅrsak? = null,
+    val avslagÅrsak: AvslagÅrsak? = null,
     val utbetalinger: List<UtbetalingDto> = emptyList(),
     val vedtaksperioder: List<VedtaksperiodeDagpengerDto> = emptyList(),
     val tilbakekreving: TilbakekrevingDto? = null,
@@ -80,9 +90,12 @@ data class VurderingDto(
     val begrunnelse: String? = null
 )
 data class VedtaksperiodeDagpengerDto(
-    val periode: Datoperiode,
-    val aktivitet: AktivitetType,
-    val periodeType: VedtaksperiodeType,
+    val fraOgMedDato: LocalDate? = null,
+    val tilOgMedDato: LocalDate? = null,
+    @Deprecated("Bruk fraOgMedDato og tilOgMedDato")
+    val periode: DatoperiodeDto? = null,
+    val aktivitet: AktivitetType? = null,
+    val periodeType: VedtaksperiodeType = VedtaksperiodeType.HOVEDPERIODE,
 )
 
 data class TilbakekrevingDto(
@@ -161,4 +174,31 @@ data class Brevmottaker(
         PERSONIDENT,
         ORGANISASJONSNUMMER,
     }
+}
+
+class DatoperiodeDto {
+    var fom: LocalDate
+    var tom: LocalDate? = null
+
+    constructor(fom: LocalDate, tom: LocalDate? = null) {
+        this.fom = fom
+        this.tom = tom
+    }
+
+    constructor(fom: LocalDate) {
+        this.fom = fom
+        this.tom = null
+    }
+
+    var fraOgMedDato: LocalDate
+        set(value) {
+            this.fom = value
+        }
+        get() { return this.fom }
+
+    var tilOgMedDato: LocalDate?
+        set(value) {
+            this.tom = value
+        }
+        get() = this.tom
 }

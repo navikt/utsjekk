@@ -25,6 +25,7 @@ import no.nav.dagpenger.iverksett.kontrakter.felles.Revurderingsårsak
 import no.nav.dagpenger.iverksett.kontrakter.felles.StønadType
 import no.nav.dagpenger.iverksett.kontrakter.felles.SvarId
 import no.nav.dagpenger.iverksett.kontrakter.felles.TilkjentYtelseStatus
+import no.nav.dagpenger.iverksett.kontrakter.felles.VedtakType
 import no.nav.dagpenger.iverksett.kontrakter.felles.Vedtaksresultat
 import no.nav.dagpenger.iverksett.kontrakter.felles.VilkårType
 import no.nav.dagpenger.iverksett.kontrakter.felles.Vilkårsresultat
@@ -43,9 +44,7 @@ internal class VedtakstatistikkMapperTest {
 
     private val fagsakId: UUID = UUID.randomUUID()
     private val behandlingId: UUID = UUID.randomUUID()
-    private val forrigeBehandlingEksternId = 11L
-    private val eksternFagsakId = 12L
-    private val eksternBehandlingId = 13L
+    private val forrigeBehandlingId = UUID.randomUUID()
     private val vedtakstidspunkt = LocalDateTime.now()
     private val søker = "01010172272"
     private val barnFnr = "24101576627"
@@ -55,20 +54,20 @@ internal class VedtakstatistikkMapperTest {
     internal fun `skal mappe iverksett til VedtakDagpengerDVH - sjekk alle felter`() {
         val vedtakDagpengerDVH = VedtakstatistikkMapper.mapTilVedtakDagpengerDVH(
             iverksettDagpenger(),
-            forrigeBehandlingEksternId,
+            forrigeBehandlingId,
         )
         assertThat(vedtakDagpengerDVH.aktivitetskrav.harSagtOppArbeidsforhold).isFalse()
         assertThat(vedtakDagpengerDVH.aktivitetskrav.aktivitetspliktInntrefferDato).isNull()
         assertThat(vedtakDagpengerDVH.barn).hasSize(2)
         assertThat(vedtakDagpengerDVH.barn.first().personIdent).isEqualTo(barnFnr)
         assertThat(vedtakDagpengerDVH.barn.first().termindato).isEqualTo(termindato)
-        assertThat(vedtakDagpengerDVH.behandlingId).isEqualTo(eksternBehandlingId)
+        assertThat(vedtakDagpengerDVH.behandlingId).isEqualTo(behandlingId)
         assertThat(vedtakDagpengerDVH.behandlingType.name).isEqualTo(BehandlingType.REVURDERING.name)
         assertThat(vedtakDagpengerDVH.behandlingÅrsak.name).isEqualTo(BehandlingÅrsak.SØKNAD.name)
-        assertThat(vedtakDagpengerDVH.fagsakId).isEqualTo(eksternFagsakId)
-        assertThat(vedtakDagpengerDVH.funksjonellId).isEqualTo(eksternBehandlingId)
+        assertThat(vedtakDagpengerDVH.fagsakId).isEqualTo(fagsakId)
+        assertThat(vedtakDagpengerDVH.funksjonellId).isEqualTo(behandlingId)
         assertThat(vedtakDagpengerDVH.person.personIdent).isEqualTo(søker)
-        assertThat(vedtakDagpengerDVH.relatertBehandlingId).isEqualTo(forrigeBehandlingEksternId)
+        assertThat(vedtakDagpengerDVH.relatertBehandlingId).isEqualTo(forrigeBehandlingId)
         assertThat(vedtakDagpengerDVH.stønadstype.name).isEqualTo(StønadType.DAGPENGER.name)
         assertThat(vedtakDagpengerDVH.tidspunktVedtak).isEqualTo(vedtakstidspunkt.atZone(ZoneId.of("Europe/Oslo")))
         assertThat(vedtakDagpengerDVH.utbetalinger).hasSize(2)
@@ -78,7 +77,7 @@ internal class VedtakstatistikkMapperTest {
         assertThat(vedtakDagpengerDVH.utbetalinger.first().inntektsreduksjon).isEqualTo(11000)
         assertThat(vedtakDagpengerDVH.utbetalinger.first().samordningsfradrag).isEqualTo(1000)
         assertThat(vedtakDagpengerDVH.utbetalinger.first().beløp).isEqualTo(9000)
-        assertThat(vedtakDagpengerDVH.utbetalinger.first().utbetalingsdetalj.delytelseId).isEqualTo("121")
+        assertThat(vedtakDagpengerDVH.utbetalinger.first().utbetalingsdetalj.delytelseId).isEqualTo("${fagsakId}1")
         assertThat(vedtakDagpengerDVH.utbetalinger.first().utbetalingsdetalj.klassekode).isEqualTo("DPORAS")
         assertThat(vedtakDagpengerDVH.utbetalinger.first().utbetalingsdetalj.gjelderPerson.personIdent).isEqualTo(søker)
         assertThat(vedtakDagpengerDVH.vedtak).isEqualTo(Vedtak.INNVILGET)
@@ -105,7 +104,7 @@ internal class VedtakstatistikkMapperTest {
                     AvslagÅrsak.MINDRE_INNTEKTSENDRINGER,
                 ),
             ),
-            forrigeBehandlingEksternId,
+            forrigeBehandlingId,
         )
         assertThat(vedtakDagpengerDVH.vedtak).isEqualTo(Vedtak.AVSLÅTT)
         assertThat(vedtakDagpengerDVH.avslagÅrsak).isEqualTo("MINDRE_INNTEKTSENDRINGER")
@@ -129,7 +128,6 @@ internal class VedtakstatistikkMapperTest {
     fun fagsakdetaljer(stønadstype: StønadType = StønadType.DAGPENGER): Fagsakdetaljer =
         Fagsakdetaljer(
             fagsakId = fagsakId,
-            eksternId = eksternFagsakId,
             stønadstype = stønadstype,
         )
 
@@ -137,7 +135,6 @@ internal class VedtakstatistikkMapperTest {
         Behandlingsdetaljer(
             forrigeBehandlingId = null,
             behandlingId = behandlingId,
-            eksternId = eksternBehandlingId,
             behandlingType = BehandlingType.REVURDERING,
             behandlingÅrsak = BehandlingÅrsak.SØKNAD,
             relatertBehandlingId = null,
@@ -182,6 +179,7 @@ internal class VedtakstatistikkMapperTest {
         avslagÅrsak: AvslagÅrsak? = null,
     ): VedtaksdetaljerDagpenger {
         return VedtaksdetaljerDagpenger(
+            vedtakstype = VedtakType.UTBETALINGSVEDTAK,
             vedtaksresultat = resultat,
             avslagÅrsak = avslagÅrsak,
             vedtakstidspunkt = vedtakstidspunkt,

@@ -14,10 +14,13 @@ import no.nav.dagpenger.iverksett.api.domene.Vurdering
 import no.nav.dagpenger.iverksett.api.domene.ÅrsakRevurdering
 import no.nav.dagpenger.iverksett.konsumenter.brev.domain.Brevmottaker
 import no.nav.dagpenger.iverksett.konsumenter.brev.domain.Brevmottakere
+import no.nav.dagpenger.iverksett.kontrakter.felles.Datoperiode
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.AktivitetType
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.BehandlingsdetaljerDto
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.DelvilkårsvurderingDto
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.FagsakdetaljerDto
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.IverksettDagpengerdDto
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.SakDto
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.SøkerDto
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.TilbakekrevingDto
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.TilbakekrevingMedVarselDto
@@ -25,6 +28,7 @@ import no.nav.dagpenger.iverksett.kontrakter.iverksett.VedtaksdetaljerDagpengerD
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.VedtaksperiodeDagpengerDto
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.VilkårsvurderingDto
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.VurderingDto
+import java.time.LocalDate
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.Brevmottaker as BrevmottakerKontrakter
 
 fun VurderingDto.toDomain(): Vurdering {
@@ -42,7 +46,13 @@ fun VilkårsvurderingDto.toDomain(): Vilkårsvurdering {
 fun FagsakdetaljerDto.toDomain(): Fagsakdetaljer {
     return Fagsakdetaljer(
         fagsakId = this.fagsakId,
-        eksternId = this.eksternId,
+        stønadstype = this.stønadstype,
+    )
+}
+
+fun SakDto.toDomain(): Fagsakdetaljer {
+    return Fagsakdetaljer(
+        fagsakId = this.sakId,
         stønadstype = this.stønadstype,
     )
 }
@@ -60,7 +70,6 @@ fun BehandlingsdetaljerDto.toDomain(): Behandlingsdetaljer {
     return Behandlingsdetaljer(
         behandlingId = this.behandlingId,
         forrigeBehandlingId = this.forrigeBehandlingId,
-        eksternId = this.eksternId,
         behandlingType = this.behandlingType,
         behandlingÅrsak = this.behandlingÅrsak,
         vilkårsvurderinger = this.vilkårsvurderinger.map { it.toDomain() },
@@ -72,14 +81,17 @@ fun BehandlingsdetaljerDto.toDomain(): Behandlingsdetaljer {
 
 fun VedtaksperiodeDagpengerDto.toDomain(): VedtaksperiodeDagpenger {
     return VedtaksperiodeDagpenger(
-        aktivitet = this.aktivitet,
-        periode = this.periode,
+        aktivitet = this.aktivitet ?: AktivitetType.IKKE_AKTIVITETSPLIKT,
+        periode = this.fraOgMedDato?.let { Datoperiode(it, this.tilOgMedDato ?: LocalDate.MAX) }
+            ?: this.periode?.let { Datoperiode(it.fom, it.tom ?: LocalDate.MAX) }
+            ?: throw IllegalStateException("Verken fraOgMedDato eller periode har verdi. En av dem, helst fraOgMedDato, må være satt"),
         periodeType = this.periodeType,
     )
 }
 
 fun VedtaksdetaljerDagpengerDto.toDomain(): VedtaksdetaljerDagpenger {
     return VedtaksdetaljerDagpenger(
+        vedtakstype = this.vedtakstype,
         vedtaksresultat = this.resultat,
         vedtakstidspunkt = this.vedtakstidspunkt,
         opphørÅrsak = this.opphørÅrsak,
@@ -117,9 +129,12 @@ fun BrevmottakerKontrakter.toDomain(): Brevmottaker = Brevmottaker(
     identType = this.identType,
     mottakerRolle = this.mottakerRolle,
 )
+
 fun IverksettDagpengerdDto.toDomain(): IverksettDagpenger {
     return IverksettDagpenger(
-        fagsak = this.fagsak.toDomain(),
+        fagsak = this.sak?.toDomain()
+            ?: this.fagsak?.toDomain()
+            ?: throw IllegalStateException("sak eller fagsak må ha verdi"),
         søker = this.søker.toDomain(),
         behandling = this.behandling.toDomain(),
         vedtak = this.vedtak.toDomain(),

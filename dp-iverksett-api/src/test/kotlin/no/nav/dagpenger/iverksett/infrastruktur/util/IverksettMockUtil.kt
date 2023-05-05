@@ -39,6 +39,7 @@ import no.nav.dagpenger.iverksett.kontrakter.felles.Revurderingsårsak
 import no.nav.dagpenger.iverksett.kontrakter.felles.StønadType
 import no.nav.dagpenger.iverksett.kontrakter.felles.SvarId
 import no.nav.dagpenger.iverksett.kontrakter.felles.TilkjentYtelseStatus
+import no.nav.dagpenger.iverksett.kontrakter.felles.VedtakType
 import no.nav.dagpenger.iverksett.kontrakter.felles.Vedtaksresultat
 import no.nav.dagpenger.iverksett.kontrakter.felles.VilkårType
 import no.nav.dagpenger.iverksett.kontrakter.felles.Vilkårsresultat
@@ -150,9 +151,8 @@ fun opprettTilkjentYtelseMedMetadata(
     return TilkjentYtelseMedMetaData(
         tilkjentYtelse = tilkjentYtelse,
         saksbehandlerId = "saksbehandlerId",
-        eksternBehandlingId = eksternId,
         stønadstype = StønadType.DAGPENGER,
-        eksternFagsakId = 0,
+        sakId = UUID.randomUUID(),
         personIdent = "12345678910",
         behandlingId = behandlingId,
         vedtaksdato = LocalDate.of(2021, 1, 1),
@@ -183,7 +183,6 @@ fun behandlingsdetaljer(
     return Behandlingsdetaljer(
         behandlingId = behandlingId,
         forrigeBehandlingId = forrigeBehandlingId,
-        eksternId = 9L,
         behandlingType = behandlingType,
         behandlingÅrsak = behandlingÅrsak,
         relatertBehandlingId = null,
@@ -228,6 +227,7 @@ fun vedtaksdetaljerDagpenger(
 ): VedtaksdetaljerDagpenger {
     val tilkjentYtelse = lagTilkjentYtelse(andeler, startdato)
     return VedtaksdetaljerDagpenger(
+        vedtakstype = VedtakType.UTBETALINGSVEDTAK,
         vedtaksresultat = vedtaksresultat,
         vedtakstidspunkt = vedtakstidspunkt,
         opphørÅrsak = OpphørÅrsak.PERIODE_UTLØPT,
@@ -257,7 +257,7 @@ fun opprettIverksettDagpenger(
     vedtaksdetaljer: VedtaksdetaljerDagpenger = vedtaksdetaljerDagpenger(),
 ) =
     IverksettDagpenger(
-        fagsak = Fagsakdetaljer(fagsakId = UUID.randomUUID(), eksternId = 1L, stønadstype = StønadType.DAGPENGER),
+        fagsak = Fagsakdetaljer(fagsakId = UUID.randomUUID(), stønadstype = StønadType.DAGPENGER),
         behandling = behandlingsdetaljer,
         søker = Søker(
             personIdent = "12345678910",
@@ -275,10 +275,11 @@ fun opprettIverksettDagpenger(
     tilbakekreving: Tilbakekrevingsdetaljer? = null,
     startdato: LocalDate = startdato(andeler),
     forrigeVedtak: VedtaksdetaljerDagpenger? = null,
+    fagsakId: UUID = UUID.randomUUID(),
 ): IverksettDagpenger {
     val behandlingType = forrigeBehandlingId?.let { BehandlingType.REVURDERING } ?: BehandlingType.FØRSTEGANGSBEHANDLING
     return IverksettDagpenger(
-        fagsak = Fagsakdetaljer(fagsakId = UUID.randomUUID(), eksternId = 1L, stønadstype = StønadType.DAGPENGER),
+        fagsak = Fagsakdetaljer(fagsakId = fagsakId, stønadstype = StønadType.DAGPENGER),
         behandling = behandlingsdetaljer(behandlingId, forrigeBehandlingId, behandlingType),
         søker = Søker(
             personIdent = "12345678910",

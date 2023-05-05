@@ -12,6 +12,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import java.time.LocalDate
+import java.util.UUID
 
 internal class TilbakekrevingClientTest : ServerTest() {
 
@@ -45,7 +46,7 @@ internal class TilbakekrevingClientTest : ServerTest() {
 
     @Test
     fun `finnesÅpenBehandling returnerer true hvis server retrurnerer transportobjekt med true`() {
-        val finnesÅpenBehandling = tilbakekrevingClient.finnesÅpenBehandling(1L)
+        val finnesÅpenBehandling = tilbakekrevingClient.finnesÅpenBehandling(UUID.randomUUID())
 
         assertThat(finnesÅpenBehandling).isEqualTo(true)
     }

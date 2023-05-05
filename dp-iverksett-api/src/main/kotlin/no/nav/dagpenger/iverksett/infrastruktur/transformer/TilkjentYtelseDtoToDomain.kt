@@ -18,9 +18,8 @@ fun UtbetalingerMedMetadataDto.toDomain(): TilkjentYtelseMedMetaData {
     return TilkjentYtelseMedMetaData(
         tilkjentYtelse = this.utbetalinger.tilTilkjentYtelse() ?: tomTilkjentYtelse(),
         saksbehandlerId = this.saksbehandlerId,
-        eksternBehandlingId = this.eksternBehandlingId,
         stønadstype = this.stønadstype,
-        eksternFagsakId = this.eksternFagsakId,
+        sakId = this.sakId,
         personIdent = this.personIdent,
         behandlingId = this.behandlingId,
         vedtaksdato = this.vedtaksdato,

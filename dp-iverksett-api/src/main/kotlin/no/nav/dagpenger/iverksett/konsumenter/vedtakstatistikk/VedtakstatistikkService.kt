@@ -13,7 +13,7 @@ class VedtakstatistikkService(
         vedtakstatistikkKafkaProducer.sendVedtak(
             VedtakstatistikkMapper.mapTilVedtakDagpengerDVH(
                 iverksettData,
-                forrigeIverksett?.behandling?.eksternId,
+                forrigeIverksett?.behandling?.behandlingId,
             ),
         )
     }

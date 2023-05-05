@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component
 import org.springframework.web.client.RestOperations
 import org.springframework.web.util.UriComponentsBuilder
 import java.net.URI
+import java.util.UUID
 
 @Component
 class TilbakekrevingClient(
@@ -39,7 +40,7 @@ class TilbakekrevingClient(
         .build()
         .toUri()
 
-    private fun finnesÅpenBehandlingUri(fagsakId: Long) = UriComponentsBuilder.fromUri(familieTilbakeUri)
+    private fun finnesÅpenBehandlingUri(fagsakId: UUID) = UriComponentsBuilder.fromUri(familieTilbakeUri)
         .pathSegment("api/fagsystem/${Fagsystem.DP}/fagsak/$fagsakId/finnesApenBehandling/v1")
         .build()
         .toUri()
@@ -69,7 +70,7 @@ class TilbakekrevingClient(
         postForEntity<Ressurs<String>>(opprettTilbakekrevingUri, opprettTilbakekrevingRequest)
     }
 
-    fun finnesÅpenBehandling(fagsakId: Long): Boolean {
+    fun finnesÅpenBehandling(fagsakId: UUID): Boolean {
         val response: Ressurs<FinnesBehandlingResponse> = getForEntity(finnesÅpenBehandlingUri(fagsakId))
         return response.getDataOrThrow().finnesÅpenBehandling
     }

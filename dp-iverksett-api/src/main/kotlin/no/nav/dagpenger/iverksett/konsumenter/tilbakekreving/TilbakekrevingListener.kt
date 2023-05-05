@@ -53,7 +53,7 @@ class TilbakekrevingListener(
             val request: HentFagsystemsbehandlingRequest =
                 objectMapper.readValue(data)
             logger.info("HentFagsystemsbehandlingRequest er mottatt i kafka med key=$key og data=$data")
-            val iverksett = iverksettingRepository.findByEksternId(request.eksternId.toLong()).data
+            val iverksett = iverksettingRepository.findById(request.behandlingId).get().data
             sjekkFagsakIdKonsistens(iverksett, request)
             familieIntegrasjonerClient.hentBehandlendeEnhetForBehandling(iverksett.søker.personIdent)?.let {
                 val fagsystemsbehandling = iverksett.tilFagsystembehandling(it)
@@ -69,11 +69,11 @@ class TilbakekrevingListener(
     }
 
     private fun sjekkFagsakIdKonsistens(iverksett: IverksettDagpenger, request: HentFagsystemsbehandlingRequest) {
-        if (!iverksett.fagsak.eksternId.equals(request.eksternFagsakId.toLong())) {
+        if (iverksett.fagsak.fagsakId != request.fagsakId) {
             error(
-                "Inkonsistens. Ekstern fagsakID mellom iverksatt behandling (ekstern fagsakID=" +
-                    "${iverksett.fagsak.eksternId}) og request (ekstern fagsakID=${request.eksternFagsakId}) er ulike, " +
-                    "med eksternID=${request.eksternId.toLong()}",
+                "Inkonsistens. FagsakID mellom iverksatt behandling (fagsakID=" +
+                    "${iverksett.fagsak.fagsakId}) og request (ekstern fagsakID=${request.fagsakId}) er ulike, " +
+                    "med behandlingID=${request.behandlingId}",
             )
         }
     }

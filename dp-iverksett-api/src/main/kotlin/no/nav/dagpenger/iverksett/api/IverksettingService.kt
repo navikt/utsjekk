@@ -5,6 +5,7 @@ import no.nav.dagpenger.iverksett.api.domene.Iverksett
 import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
 import no.nav.dagpenger.iverksett.api.domene.OppdragResultat
 import no.nav.dagpenger.iverksett.api.tilstand.IverksettResultatService
+import no.nav.dagpenger.iverksett.infrastruktur.configuration.FeatureToggleConfig
 import no.nav.dagpenger.iverksett.infrastruktur.featuretoggle.FeatureToggleService
 import no.nav.dagpenger.iverksett.infrastruktur.util.tilFagsystem
 import no.nav.dagpenger.iverksett.konsumenter.brev.JournalførVedtaksbrevTask
@@ -37,14 +38,13 @@ class IverksettingService(
 
     @Transactional
     fun startIverksetting(iverksett: IverksettDagpenger, brev: Brev?) {
-        if (featureToggleService.isEnabled("dp.iverksett.stopp-iverksetting")) {
+        if (featureToggleService.isEnabled(FeatureToggleConfig.STOPP_IVERKSETTING)) {
             error("Kan ikke iverksette akkurat nå")
         }
         iverksettingRepository.insert(
             Iverksett(
                 iverksett.behandling.behandlingId,
                 iverksett,
-                iverksett.behandling.eksternId,
                 brev,
             ),
         )
@@ -108,13 +108,12 @@ class IverksettingService(
     fun sjekkStatusPåIverksettOgOppdaterTilstand(
         stønadstype: StønadType,
         personIdent: String,
-        eksternBehandlingId: Long,
         behandlingId: UUID,
     ) {
         val oppdragId = OppdragId(
             fagsystem = stønadstype.tilFagsystem(),
             personIdent = personIdent,
-            behandlingsId = eksternBehandlingId.toString(),
+            behandlingsId = behandlingId.toString(),
         )
 
         val (status, melding) = oppdragClient.hentStatus(oppdragId)

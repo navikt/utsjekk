@@ -9,7 +9,7 @@ data class SimuleringDto(
     val saksbehandlerId: String,
     val eksternBehandlingId: Long,
     val stønadstype: StønadType,
-    val eksternFagsakId: Long,
+    val sakId: UUID,
     val personIdent: String,
     val behandlingId: UUID,
     val vedtaksdato: LocalDate,

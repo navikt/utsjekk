@@ -8,6 +8,7 @@ import no.nav.dagpenger.iverksett.kontrakter.felles.StønadType
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
+import java.util.UUID
 
 @Component
 class ArbeidsoppfølgingKafkaProducer(private val kafkaProducerService: KafkaProducerService) {
@@ -19,10 +20,14 @@ class ArbeidsoppfølgingKafkaProducer(private val kafkaProducerService: KafkaPro
     private val secureLogger = LoggerFactory.getLogger("secureLogger")
 
     fun sendVedtak(vedtakDagpengerArbeidsoppfølging: VedtakDagpengerArbeidsoppfølging) {
-        sendVedtak(vedtakDagpengerArbeidsoppfølging.vedtakId, vedtakDagpengerArbeidsoppfølging.stønadstype, vedtakDagpengerArbeidsoppfølging.toJson())
+        sendVedtak(
+            vedtakDagpengerArbeidsoppfølging.behanlingId,
+            vedtakDagpengerArbeidsoppfølging.stønadstype,
+            vedtakDagpengerArbeidsoppfølging.toJson(),
+        )
     }
 
-    fun sendVedtak(behandlingId: Long, stønadstype: Stønadstype, vedtakArbeidsoppfølging: String) {
+    fun sendVedtak(behandlingId: UUID, stønadstype: Stønadstype, vedtakArbeidsoppfølging: String) {
         logger.info("Sending to Kafka topic: {}", topic)
         secureLogger.debug("Sending to Kafka topic: {}\nArbeidsoppfølging: {}", topic, vedtakArbeidsoppfølging)
 

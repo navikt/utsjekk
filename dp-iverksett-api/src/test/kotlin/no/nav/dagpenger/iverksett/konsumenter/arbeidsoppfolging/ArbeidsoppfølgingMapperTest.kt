@@ -21,7 +21,7 @@ class ArbeidsoppfølgingMapperTest {
 
         val vedtakTilArbeidsoppfølging = ArbeidsoppfølgingMapper.mapTilVedtakDagpengerTilArbeidsoppfølging(iverksett)
 
-        assertThat(vedtakTilArbeidsoppfølging.vedtakId).isEqualTo(iverksett.behandling.eksternId)
+        assertThat(vedtakTilArbeidsoppfølging.behanlingId).isEqualTo(iverksett.behandling.behandlingId)
         assertThat(vedtakTilArbeidsoppfølging.stønadstype).isEqualTo(Stønadstype.DAGPENGER)
         assertThat(vedtakTilArbeidsoppfølging.personIdent).isEqualTo(iverksett.søker.personIdent)
         assertThat(vedtakTilArbeidsoppfølging.vedtaksresultat).isEqualTo(Vedtaksresultat.INNVILGET)

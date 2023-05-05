@@ -33,17 +33,6 @@ class IverksettingRepositoryTest : ServerTest() {
     }
 
     @Test
-    fun `lagre og hent iverksett av eksternId, forvent likhet`() {
-        val json: String = ResourceLoaderTestUtil.readResource("json/IverksettDtoEksempel.json")
-        val iverksettData: IverksettDagpenger = objectMapper.readValue<IverksettDagpengerdDto>(json).toDomain()
-        val iverksett = iverksettingRepository.insert(lagIverksett(iverksettData, opprettBrev()))
-
-        val iverksettResultat = iverksettingRepository.findByEksternId(iverksett.eksternId)
-
-        assertThat(iverksett).usingRecursiveComparison().isEqualTo(iverksettResultat)
-    }
-
-    @Test
     fun `lagre og hent iverksett på personId, forvent likhet`() {
         val json: String = ResourceLoaderTestUtil.readResource("json/IverksettDtoEksempel.json")
         val iverksettData: IverksettDagpenger = objectMapper.readValue<IverksettDagpengerdDto>(json).toDomain()
@@ -61,13 +50,11 @@ class IverksettingRepositoryTest : ServerTest() {
         val iverksettData2 = iverksettData.copy(
             behandling = iverksettData.behandling.copy(
                 behandlingId = UUID.randomUUID(),
-                eksternId = iverksettData.behandling.eksternId + 1,
             ),
         )
         val iverksettDataAnnenPerson = iverksettData.copy(
             behandling = iverksettData.behandling.copy(
                 behandlingId = UUID.randomUUID(),
-                eksternId = iverksettData.behandling.eksternId + 1,
             ),
             søker = iverksettData.søker.copy(
                 personIdent = "12345678911",

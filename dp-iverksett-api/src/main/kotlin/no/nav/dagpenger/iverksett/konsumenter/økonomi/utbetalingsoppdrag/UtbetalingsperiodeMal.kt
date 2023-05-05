@@ -8,6 +8,7 @@ import no.nav.dagpenger.iverksett.kontrakter.oppdrag.Opphør
 import no.nav.dagpenger.iverksett.kontrakter.oppdrag.Utbetalingsperiode
 import java.math.BigDecimal
 import java.time.LocalDate
+import java.util.UUID
 
 /**
  * * Lager utbetalingsperioder som legges på utbetalingsoppdrag. En utbetalingsperiode tilsvarer linjer hos økonomi
@@ -20,7 +21,7 @@ import java.time.LocalDate
 fun lagPeriodeFraAndel(
     andel: AndelTilkjentYtelse,
     type: StønadType,
-    behandlingId: String,
+    behandlingId: UUID,
     vedtaksdato: LocalDate,
     personIdent: String,
     opphørKjedeFom: LocalDate? = null,
@@ -49,7 +50,7 @@ fun lagUtbetalingsperiodeForOpphør(
 ): Utbetalingsperiode {
     return lagPeriodeFraAndel(
         andel = sisteAndelIKjede,
-        behandlingId = tilkjentYtelse.behandlingId.toString(),
+        behandlingId = tilkjentYtelse.behandlingId,
         type = tilkjentYtelse.stønadstype,
         personIdent = tilkjentYtelse.personIdent,
         vedtaksdato = tilkjentYtelse.vedtaksdato,

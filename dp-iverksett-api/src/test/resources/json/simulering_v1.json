@@ -35,8 +35,7 @@
     }
   ],
   "saksbehandlerId": "12345",
-  "eksternBehandlingId": 123,
   "stønadstype": "DAGPENGER",
-  "eksternFagsakId": 234,
+  "sakId": "4b657902-d994-11eb-b8bc-0242ac130004",
   "forrigeBehandlingId": "4b657902-d994-11eb-b8bc-0242ac130003"
 }

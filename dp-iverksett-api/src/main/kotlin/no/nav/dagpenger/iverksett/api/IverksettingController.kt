@@ -5,8 +5,11 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import no.nav.dagpenger.iverksett.api.domene.Brev
 import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
 import no.nav.dagpenger.iverksett.infrastruktur.advice.ApiFeil
+import no.nav.dagpenger.iverksett.infrastruktur.configuration.FeatureToggleConfig
+import no.nav.dagpenger.iverksett.infrastruktur.featuretoggle.FeatureToggleService
 import no.nav.dagpenger.iverksett.infrastruktur.transformer.toDomain
 import no.nav.dagpenger.iverksett.konsumenter.tilbakekreving.validerTilbakekreving
+import no.nav.dagpenger.iverksett.kontrakter.felles.VedtakType
 import no.nav.dagpenger.iverksett.kontrakter.felles.Vedtaksresultat
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.IverksettDagpengerdDto
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.IverksettStatus
@@ -32,6 +35,7 @@ import java.util.UUID
 @ProtectedWithClaims(issuer = "azuread")
 class IverksettingController(
     private val iverksettingService: IverksettingService,
+    private val featureToggleService: FeatureToggleService,
 ) {
     @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE])
     @Tag(name = "Iverksetting")
@@ -83,7 +87,9 @@ class IverksettingController(
     }
 
     private fun validerUtenBrev(iverksettData: IverksettDagpenger) {
-        if (!iverksettData.skalIkkeSendeBrev()) {
+        if (featureToggleService.isEnabled(FeatureToggleConfig.SKAL_SENDE_BREV, false) &&
+            !iverksettData.skalIkkeSendeBrev()
+        ) {
             throw ApiFeil(
                 "Kan ikke ha iverksetting uten brev når det ikke er en migrering, " +
                     "g-omregning eller korrigering uten brev ",
@@ -93,7 +99,9 @@ class IverksettingController(
     }
 
     private fun validerSkalHaBrev(iverksettData: IverksettDagpenger) {
-        if (iverksettData.skalIkkeSendeBrev()) {
+        if (featureToggleService.isEnabled(FeatureToggleConfig.SKAL_SENDE_BREV, false) &&
+            iverksettData.skalIkkeSendeBrev()
+        ) {
             throw ApiFeil(
                 "Kan ikke ha iverksetting med brev når det er migrering, g-omregning eller korrigering uten brev",
                 HttpStatus.BAD_REQUEST,
@@ -102,7 +110,10 @@ class IverksettingController(
     }
 
     private fun valider(iverksett: IverksettDagpenger) {
-        if (iverksett.vedtak.tilkjentYtelse == null && iverksett.vedtak.vedtaksresultat != Vedtaksresultat.AVSLÅTT) {
+        if (iverksett.vedtak.tilkjentYtelse == null &&
+            iverksett.vedtak.vedtaksresultat != Vedtaksresultat.AVSLÅTT &&
+            iverksett.vedtak.vedtakstype != VedtakType.RAMMEVEDTAK
+        ) {
             throw ApiFeil(
                 "Kan ikke ha iverksetting uten tilkjentYtelse " +
                     "for vedtak med resultat=${iverksett.vedtak.vedtaksresultat}",

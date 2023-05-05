@@ -1,4 +1,5 @@
 {
+  "sak": null,
   "fagsak": {
     "fagsakId": "234bed7c-b1d3-11eb-9999-0242ac130003",
     "eksternId": 12,
@@ -63,6 +64,7 @@
     "adressebeskyttelse": "STRENGT_FORTROLIG"
   },
   "vedtak": {
+    "vedtakstype": "RAMMEVEDTAK",
     "resultat": "AVSLÅTT",
     "vedtakstidspunkt": "2021-05-10T01:00:00",
     "opphørÅrsak": "PERIODE_UTLØPT",
@@ -83,6 +85,8 @@
     ],
     "vedtaksperioder": [
       {
+        "fraOgMedDato": null,
+        "tilOgMedDato": null,
         "periode": {
           "fom": "2021-06-01",
           "tom": "2021-06-30"
@@ -102,5 +106,5 @@
     "brevmottakere": [],
     "avslagÅrsak": null
   },
-  "forrigeVedtak":  null
+  "forrigeVedtak": null
 }

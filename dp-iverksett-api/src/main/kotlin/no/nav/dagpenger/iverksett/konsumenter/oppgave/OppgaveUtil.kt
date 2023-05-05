@@ -14,6 +14,7 @@ import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.Month
 import java.util.Locale
+import java.util.UUID
 
 object OppgaveUtil {
 
@@ -26,7 +27,7 @@ object OppgaveUtil {
     }
 
     fun opprettOppgaveRequest(
-        eksternFagsakId: Long,
+        sakId: UUID,
         personIdent: String,
         stønadstype: StønadType,
         enhetsnummer: Enhet,
@@ -37,7 +38,7 @@ object OppgaveUtil {
     ): OpprettOppgaveRequest {
         return OpprettOppgaveRequest(
             ident = OppgaveIdentV2(ident = personIdent, gruppe = IdentGruppe.FOLKEREGISTERIDENT),
-            saksId = eksternFagsakId.toString(),
+            saksId = sakId.toString(),
             tema = Tema.DP,
             oppgavetype = oppgavetype,
             fristFerdigstillelse = fristFerdigstillelse(fristFerdigstillelse),

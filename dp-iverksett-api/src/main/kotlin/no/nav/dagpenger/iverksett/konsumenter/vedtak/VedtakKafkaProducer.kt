@@ -1,8 +1,8 @@
 package no.nav.dagpenger.iverksett.konsumenter.vedtak
 
 import no.nav.dagpenger.iverksett.infrastruktur.service.KafkaProducerService
-import no.nav.dagpenger.iverksett.kontrakter.ef.EnsligForsørgerVedtakhendelse
 import no.nav.dagpenger.iverksett.kontrakter.objectMapper
+import no.nav.dagpenger.iverksett.kontrakter.samordning.DagpengerVedtakhendelse
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 
@@ -12,7 +12,7 @@ class VedtakKafkaProducer(private val kafkaProducerService: KafkaProducerService
     @Value("\${VEDTAK_TOPIC}")
     lateinit var topic: String
 
-    fun sendVedtak(hendelse: EnsligForsørgerVedtakhendelse) {
+    fun sendVedtak(hendelse: DagpengerVedtakhendelse) {
         kafkaProducerService.send(topic, hendelse.behandlingId.toString(), objectMapper.writeValueAsString(hendelse))
     }
 }

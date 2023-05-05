@@ -21,8 +21,8 @@ import java.time.YearMonth
 import java.time.temporal.ChronoUnit
 import java.util.UUID
 
-private const val behandlingEksternId = 0L
-private const val fagsakEksternId = 1L
+private val behandlingId = UUID.randomUUID()
+private val sakId = UUID.randomUUID()
 private const val saksbehandlerId = "VL"
 private val vedtaksdato = LocalDate.of(2021, 5, 12)
 
@@ -87,7 +87,7 @@ data class TestOppdrag(
                 sats = beløp?.toBigDecimal() ?: BigDecimal.ZERO,
                 satsType = Utbetalingsperiode.SatsType.MND,
                 utbetalesTil = fnr,
-                behandlingId = "1",
+                behandlingId = behandlingId,
                 utbetalingsgrad = 100,
             )
         } else if (opphørsdato != null) {
@@ -149,8 +149,7 @@ class TestOppdragGroup {
                 startdato = startdato,
             ),
             stønadstype = StønadType.DAGPENGER,
-            eksternBehandlingId = behandlingEksternId,
-            eksternFagsakId = fagsakEksternId,
+            sakId = sakId,
             saksbehandlerId = saksbehandlerId,
             personIdent = personIdent!!,
             behandlingId = oppdragId!!,
@@ -166,12 +165,12 @@ class TestOppdragGroup {
             Utbetalingsoppdrag(
                 kodeEndring = oppdragKode110,
                 fagSystem = "DP",
-                saksnummer = fagsakEksternId.toString(),
+                saksnummer = sakId.toString(),
                 aktoer = personIdent!!,
                 saksbehandlerId = saksbehandlerId,
                 avstemmingTidspunkt = LocalDateTime.now().truncatedTo(ChronoUnit.HOURS),
                 utbetalingsperiode = utbetalingsperioder
-                    .map { it.copy(behandlingId = behandlingEksternId.toString()) },
+                    .map { it.copy(behandlingId = behandlingId) },
             )
 
         TilkjentYtelse(

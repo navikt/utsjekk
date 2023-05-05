@@ -4,6 +4,7 @@ import no.nav.dagpenger.iverksett.api.domene.Simulering
 import no.nav.dagpenger.iverksett.api.domene.tilTilkjentYtelseMedMetadata
 import no.nav.dagpenger.iverksett.api.tilstand.IverksettResultatService
 import no.nav.dagpenger.iverksett.infrastruktur.advice.ApiFeil
+import no.nav.dagpenger.iverksett.infrastruktur.configuration.FeatureToggleConfig
 import no.nav.dagpenger.iverksett.infrastruktur.featuretoggle.FeatureToggleService
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.OppdragClient
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.UtbetalingsoppdragGenerator
@@ -25,7 +26,7 @@ class SimuleringService(
 ) {
 
     fun hentDetaljertSimuleringResultat(simulering: Simulering): DetaljertSimuleringResultat {
-        if (featureToggleService.isEnabled("dp.iverksett.stopp-iverksetting")) {
+        if (featureToggleService.isEnabled(FeatureToggleConfig.STOPP_IVERKSETTING)) {
             error("Kan ikke sende inn simmulere")
         }
         try {
@@ -59,7 +60,7 @@ class SimuleringService(
     }
 
     fun hentBeriketSimulering(simulering: Simulering): BeriketSimuleringsresultat {
-        if (featureToggleService.isEnabled("dp.iverksett.stopp-iverksetting")) {
+        if (featureToggleService.isEnabled(FeatureToggleConfig.STOPP_IVERKSETTING)) {
             error("Kan ikke sende inn simmulere")
         }
         val detaljertSimuleringResultat = hentDetaljertSimuleringResultat(simulering)

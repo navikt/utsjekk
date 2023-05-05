@@ -3,7 +3,7 @@ package no.nav.dagpenger.iverksett.konsumenter.vedtak
 import no.nav.dagpenger.iverksett.api.IverksettingRepository
 import no.nav.dagpenger.iverksett.infrastruktur.repository.findByIdOrThrow
 import no.nav.dagpenger.iverksett.konsumenter.opprettNestePubliseringTask
-import no.nav.dagpenger.iverksett.kontrakter.ef.EnsligForsørgerVedtakhendelse
+import no.nav.dagpenger.iverksett.kontrakter.samordning.DagpengerVedtakhendelse
 import no.nav.familie.prosessering.AsyncTaskStep
 import no.nav.familie.prosessering.TaskStepBeskrivelse
 import no.nav.familie.prosessering.domene.Task
@@ -28,8 +28,8 @@ class PubliserVedtakTilKafkaTask(
         val behandlingId = UUID.fromString(task.payload)
         val iverksett = iverksettingRepository.findByIdOrThrow(behandlingId).data
         vedtakKafkaProducer.sendVedtak(
-            EnsligForsørgerVedtakhendelse(
-                behandlingId = iverksett.behandling.eksternId,
+            DagpengerVedtakhendelse(
+                behandlingId = iverksett.behandling.behandlingId,
                 personIdent = iverksett.søker.personIdent,
                 stønadType = EksternStønadType.valueOf(iverksett.fagsak.stønadstype.name),
             ),

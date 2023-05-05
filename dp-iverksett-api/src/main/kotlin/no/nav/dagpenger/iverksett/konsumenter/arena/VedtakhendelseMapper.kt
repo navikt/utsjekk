@@ -18,7 +18,7 @@ fun mapIverksettTilVedtakHendelser(iverksettData: IverksettDagpenger, aktørId: 
                 .replaceFirstChar { it.uppercase() },
         ).value,
         hendelsesprodusentREF = "DP",
-        applikasjonSakREF = iverksettData.fagsak.eksternId.toString(),
+        applikasjonSakREF = iverksettData.fagsak.fagsakId.toString(),
         hendelsesTidspunkt = LocalDateTime.now().format(dateTimeFormatter),
     )
 }

@@ -49,7 +49,13 @@ internal class VentePåStatusFraØkonomiTaskTest {
     )
 
     private val ventePåStatusFraØkonomiTask =
-        VentePåStatusFraØkonomiTask(iverksettingRepository, iverksettingService, taskService, iverksettResultatService)
+        VentePåStatusFraØkonomiTask(
+            iverksettingRepository,
+            iverksettingService,
+            taskService,
+            iverksettResultatService,
+            mockFeatureToggleService(),
+        )
 
     @BeforeEach
     internal fun setUp() {
@@ -62,11 +68,20 @@ internal class VentePåStatusFraØkonomiTaskTest {
     @Test
     internal fun `kjør doTask for VentePåStatusFraØkonomiTaskhvis, forvent ingen unntak`() {
         val oppdragResultatSlot = slot<OppdragResultat>()
-        every { iverksettResultatService.hentTilkjentYtelse(behandlingId) } returns tilkjentYtelse(listOf(utbetalingsperiode))
+        every { iverksettResultatService.hentTilkjentYtelse(behandlingId) } returns tilkjentYtelse(
+            listOf(
+                utbetalingsperiode,
+            ),
+        )
 
         runTask(Task(IverksettMotOppdragTask.TYPE, behandlingId.toString(), Properties()))
 
-        verify(exactly = 1) { iverksettResultatService.oppdaterOppdragResultat(behandlingId, capture(oppdragResultatSlot)) }
+        verify(exactly = 1) {
+            iverksettResultatService.oppdaterOppdragResultat(
+                behandlingId,
+                capture(oppdragResultatSlot),
+            )
+        }
         assertThat(oppdragResultatSlot.captured.oppdragStatus).isEqualTo(OppdragStatus.KVITTERT_OK)
         verify(exactly = 1) { taskService.save(any()) }
     }
@@ -85,7 +100,11 @@ internal class VentePåStatusFraØkonomiTaskTest {
     internal fun `migrering - skal ikke opprette task for journalføring av vedtaksbrev`() {
         val opprettIverksettDto = opprettIverksettDto(behandlingId, behandlingÅrsak = BehandlingÅrsak.MIGRERING)
         every { iverksettingRepository.findByIdOrThrow(any()) } returns lagIverksett(opprettIverksettDto.toDomain())
-        every { iverksettResultatService.hentTilkjentYtelse(behandlingId) } returns tilkjentYtelse(listOf(utbetalingsperiode))
+        every { iverksettResultatService.hentTilkjentYtelse(behandlingId) } returns tilkjentYtelse(
+            listOf(
+                utbetalingsperiode,
+            ),
+        )
 
         runTask(Task(IverksettMotOppdragTask.TYPE, behandlingId.toString(), Properties()))
 
@@ -109,7 +128,7 @@ internal class VentePåStatusFraØkonomiTaskTest {
         sats = BigDecimal.TEN,
         satsType = Utbetalingsperiode.SatsType.DAG,
         utbetalesTil = "x",
-        behandlingId = "0",
+        behandlingId = UUID.randomUUID(),
         utbetalingsgrad = null,
     )
 

@@ -33,7 +33,8 @@ class IverksettMotOppdragTask(
         val behandlingId = UUID.fromString(task.payload)
         val iverksett = iverksettingRepository.findByIdOrThrow(behandlingId).data
         val forrigeTilkjentYtelseLagret = iverksett.behandling.forrigeBehandlingId?.let {
-            iverksettResultatService.hentTilkjentYtelse(it) ?: error("Kunne ikke finne tilkjent ytelse for behandlingId=$it")
+            iverksettResultatService.hentTilkjentYtelse(it)
+                ?: error("Kunne ikke finne tilkjent ytelse for behandlingId=$it")
         }
 
         val forrigeTilkjentYtelseMottatt = iverksett.forrigeVedtak?.tilkjentYtelse
@@ -42,32 +43,32 @@ class IverksettMotOppdragTask(
             error("Lagret forrige tilkjent ytelse stemmer ikke med mottatt forrige tilkjent ytelse")
         }
 
-        val nyTilkjentYtelseMedMetaData =
-            iverksett.vedtak.tilkjentYtelse?.toMedMetadata(
-                saksbehandlerId = iverksett.vedtak.saksbehandlerId,
-                eksternBehandlingId = iverksett.behandling.eksternId,
-                stønadType = iverksett.fagsak.stønadstype,
-                eksternFagsakId = iverksett.fagsak.eksternId,
-                personIdent = iverksett.søker.personIdent,
-                behandlingId = iverksett.behandling.behandlingId,
-                vedtaksdato = iverksett.vedtak.vedtakstidspunkt.toLocalDate(),
-            ) ?: error("Mangler tilkjent ytelse på vedtaket")
-
-        val utbetaling = lagTilkjentYtelseMedUtbetalingsoppdrag(
-            nyTilkjentYtelseMedMetaData,
-            forrigeTilkjentYtelseLagret,
-            iverksett.erGOmregning(),
-        )
-
-        iverksettResultatService.oppdaterTilkjentYtelseForUtbetaling(behandlingId = behandlingId, utbetaling)
-        utbetaling.utbetalingsoppdrag?.let {
-            if (it.utbetalingsperiode.isNotEmpty()) {
-                oppdragClient.iverksettOppdrag(it)
-            } else {
-                log.warn("Iverksetter ikke noe mot oppdrag. Ingen utbetalingsperioder. behandlingId=$behandlingId")
+        iverksett.vedtak.tilkjentYtelse?.toMedMetadata(
+            saksbehandlerId = iverksett.vedtak.saksbehandlerId,
+            stønadType = iverksett.fagsak.stønadstype,
+            sakId = iverksett.fagsak.fagsakId,
+            personIdent = iverksett.søker.personIdent,
+            behandlingId = iverksett.behandling.behandlingId,
+            vedtaksdato = iverksett.vedtak.vedtakstidspunkt.toLocalDate(),
+        )?.let { tilkjentYtelseMedMetaData ->
+            lagTilkjentYtelseMedUtbetalingsoppdrag(
+                tilkjentYtelseMedMetaData,
+                forrigeTilkjentYtelseLagret,
+                iverksett.erGOmregning(),
+            )
+        }?.also { tilkjentYtelseMedUtbetalingsoppdrag ->
+            iverksettResultatService.oppdaterTilkjentYtelseForUtbetaling(
+                behandlingId = behandlingId,
+                tilkjentYtelseForUtbetaling = tilkjentYtelseMedUtbetalingsoppdrag,
+            )
+            tilkjentYtelseMedUtbetalingsoppdrag.utbetalingsoppdrag?.let { utbetalingsoppdrag ->
+                if (utbetalingsoppdrag.utbetalingsperiode.isNotEmpty()) {
+                    oppdragClient.iverksettOppdrag(utbetalingsoppdrag)
+                } else {
+                    log.warn("Iverksetter ikke noe mot oppdrag. Ingen utbetalingsperioder i utbetalingsoppdraget. behandlingId=$behandlingId")
+                }
             }
-        }
-            ?: error("Utbetalingsoppdrag mangler for iverksetting")
+        } ?: log.warn("Iverksetter ikke noe mot oppdrag. Ikke utbetalingsoppdrag. behandlingId=$behandlingId")
     }
 
     override fun onCompletion(task: Task) {

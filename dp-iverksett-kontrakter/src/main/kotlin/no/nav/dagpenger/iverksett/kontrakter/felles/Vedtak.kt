@@ -1,5 +1,10 @@
 package no.nav.dagpenger.iverksett.kontrakter.felles
 
+
+enum class VedtakType  {
+    RAMMEVEDTAK,
+    UTBETALINGSVEDTAK
+}
 enum class Vedtaksresultat(val visningsnavn: String) {
     INNVILGET(visningsnavn = "Innvilget"),
     OPPHØRT(visningsnavn = "Opphørt"),

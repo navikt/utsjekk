@@ -29,8 +29,8 @@ internal class TilbakekrevingMapperTest {
         val request = iverksett.tilOpprettTilbakekrevingRequest(enhet)
 
         assertThat(request.fagsystem).isEqualTo(Fagsystem.DP)
-        assertThat(request.eksternFagsakId).isEqualTo(iverksett.fagsak.eksternId.toString())
-        assertThat(request.eksternId).isEqualTo(iverksett.behandling.eksternId.toString())
+        assertThat(request.eksternFagsakId).isEqualTo(iverksett.fagsak.fagsakId.toString())
+        assertThat(request.eksternId).isEqualTo(iverksett.behandling.behandlingId.toString())
         assertThat(request.ytelsestype).isEqualTo(Ytelsestype.DAGPENGER)
 
         assertThat(request.enhetId).isEqualTo(enhet.enhetId)
@@ -63,8 +63,8 @@ internal class TilbakekrevingMapperTest {
         val enhet = Enhet(enhetId = "enhetId", enhetNavn = "enhetNavn")
         val fagsystemsbehandling = iverksett.tilFagsystembehandling(enhet = enhet).hentFagsystemsbehandling!!
 
-        assertThat(fagsystemsbehandling.eksternId).isEqualTo(iverksett.behandling.eksternId.toString())
-        assertThat(fagsystemsbehandling.eksternFagsakId).isEqualTo(iverksett.fagsak.eksternId.toString())
+        assertThat(fagsystemsbehandling.behandlingId).isEqualTo(iverksett.behandling.behandlingId)
+        assertThat(fagsystemsbehandling.fagsakId).isEqualTo(iverksett.fagsak.fagsakId)
         assertThat(fagsystemsbehandling.ytelsestype.name).isEqualTo(iverksett.fagsak.stønadstype.name)
         assertThat(fagsystemsbehandling.revurderingsvedtaksdato).isEqualTo(iverksett.vedtak.vedtakstidspunkt.toLocalDate())
         assertThat(fagsystemsbehandling.personIdent).isEqualTo(iverksett.søker.personIdent)

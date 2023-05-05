@@ -5,9 +5,9 @@ import java.util.UUID
 
 data class UtbetalingDto(
     val beløp: Int,
-    val inntekt: Int,
-    val inntektsreduksjon: Int,
-    val samordningsfradrag: Int,
-    val periode: Datoperiode,
+    val periode: DatoperiodeDto,
+    val inntekt: Int? = null,
+    val inntektsreduksjon: Int? = null,
+    val samordningsfradrag: Int? = null,
     val kildeBehandlingId: UUID? = null,
 )

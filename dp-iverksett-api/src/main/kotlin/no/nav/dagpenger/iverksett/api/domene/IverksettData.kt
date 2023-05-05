@@ -11,6 +11,7 @@ import no.nav.dagpenger.iverksett.kontrakter.felles.RegelId
 import no.nav.dagpenger.iverksett.kontrakter.felles.Revurderingsårsak
 import no.nav.dagpenger.iverksett.kontrakter.felles.StønadType
 import no.nav.dagpenger.iverksett.kontrakter.felles.SvarId
+import no.nav.dagpenger.iverksett.kontrakter.felles.VedtakType
 import no.nav.dagpenger.iverksett.kontrakter.felles.Vedtaksresultat
 import no.nav.dagpenger.iverksett.kontrakter.felles.VilkårType
 import no.nav.dagpenger.iverksett.kontrakter.felles.Vilkårsresultat
@@ -38,7 +39,8 @@ data class IverksettDagpenger(
 
     fun erSatsendring() = behandling.behandlingÅrsak == BehandlingÅrsak.SATSENDRING
 
-    fun skalIkkeSendeBrev() = erMigrering() || erGOmregning() || erKorrigeringUtenBrev() || erSatsendring()
+    fun skalIkkeSendeBrev() =
+        erMigrering() || erGOmregning() || erKorrigeringUtenBrev() || erSatsendring()
 
     fun medNyTilbakekreving(nyTilbakekreving: Tilbakekrevingsdetaljer?): IverksettDagpenger {
         return this.copy(vedtak = this.vedtak.copy(tilbakekreving = nyTilbakekreving))
@@ -47,8 +49,7 @@ data class IverksettDagpenger(
 
 data class Fagsakdetaljer(
     val fagsakId: UUID,
-    val eksternId: Long,
-    val stønadstype: StønadType,
+    val stønadstype: StønadType = StønadType.DAGPENGER,
 )
 
 data class Søker(
@@ -66,6 +67,7 @@ data class VedtaksperiodeDagpenger(
     val periodeType: VedtaksperiodeType,
 ) : Vedtaksperiode()
 data class VedtaksdetaljerDagpenger(
+    val vedtakstype: VedtakType = VedtakType.RAMMEVEDTAK,
     val vedtaksresultat: Vedtaksresultat,
     val vedtakstidspunkt: LocalDateTime,
     val opphørÅrsak: OpphørÅrsak?,
@@ -81,7 +83,6 @@ data class VedtaksdetaljerDagpenger(
 data class Behandlingsdetaljer(
     val forrigeBehandlingId: UUID? = null,
     val behandlingId: UUID,
-    val eksternId: Long,
     val behandlingType: BehandlingType,
     val behandlingÅrsak: BehandlingÅrsak,
     val relatertBehandlingId: UUID? = null,

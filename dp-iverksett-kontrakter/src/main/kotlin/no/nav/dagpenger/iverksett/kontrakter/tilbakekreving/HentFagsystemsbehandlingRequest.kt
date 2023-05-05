@@ -3,11 +3,12 @@ package no.nav.dagpenger.iverksett.kontrakter.tilbakekreving
 import no.nav.dagpenger.iverksett.kontrakter.felles.Regelverk
 import no.nav.dagpenger.iverksett.kontrakter.felles.Språkkode
 import java.time.LocalDate
+import java.util.UUID
 
 data class HentFagsystemsbehandlingRequest(
-    val eksternFagsakId: String,
+    val fagsakId: UUID,
     val ytelsestype: Ytelsestype,
-    val eksternId: String,
+    val behandlingId: UUID,
 )
 
 data class HentFagsystemsbehandlingRespons(
@@ -16,10 +17,10 @@ data class HentFagsystemsbehandlingRespons(
 )
 
 data class HentFagsystemsbehandling(
-    val eksternFagsakId: String,
+    val fagsakId: UUID,
     val ytelsestype: Ytelsestype,
     val regelverk: Regelverk? = null,
-    val eksternId: String,
+    val behandlingId: UUID,
     val personIdent: String,
     val språkkode: Språkkode = Språkkode.NB,
     val enhetId: String,

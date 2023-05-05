@@ -23,6 +23,8 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
+import java.util.Optional
+import java.util.UUID
 
 internal class TilbakekrevingListenerTest {
 
@@ -35,8 +37,8 @@ internal class TilbakekrevingListenerTest {
 
     @BeforeEach
     internal fun setUp() {
-        every { iverksettingRepository.findByEksternId(any()) }
-            .returns(lagIverksett(behandling))
+        every { iverksettingRepository.findById(any()) }
+            .returns(Optional.of(lagIverksett(behandling)))
         every { familieIntegrasjonerClient.hentBehandlendeEnhetForBehandling(any()) }
             .returns(Enhet(enhetId = "0", enhetNavn = "navn"))
         every { tilbakekrevingProducer.send(any(), any()) } just runs
@@ -53,17 +55,23 @@ internal class TilbakekrevingListenerTest {
     internal fun `kafkamelding med fagsakID forskjellig fra iverksatt fagsakID, forvent feilmelding om inkonsistens`() {
         val respons = slot<HentFagsystemsbehandlingRespons>()
         every { tilbakekrevingProducer.send(capture(respons), any()) } just runs
-        every { iverksettingRepository.findByEksternId(any()) }
-            .returns(lagIverksett(behandling.copy(fagsak = behandling.fagsak.copy(eksternId = 11L))))
+        every { iverksettingRepository.findById(any()) }
+            .returns(
+                Optional.of(
+                    lagIverksett(
+                        behandling.copy(fagsak = behandling.fagsak.copy(fagsakId = UUID.randomUUID())),
+                    ),
+                ),
+            )
         listener.listen(record(Ytelsestype.DAGPENGER))
-        assertThat(respons.captured.feilMelding!!).contains("Inkonsistens. Ekstern fagsakID")
+        assertThat(respons.captured.feilMelding!!).contains("Inkonsistens. FagsakID")
     }
 
     private fun record(ytelsestype: Ytelsestype): ConsumerRecord<String, String> {
         val behandling = objectMapper.writeValueAsString(
             HentFagsystemsbehandling(
-                eksternFagsakId = "0",
-                eksternId = "1",
+                fagsakId = UUID.randomUUID(),
+                behandlingId = UUID.randomUUID(),
                 ytelsestype = ytelsestype,
                 personIdent = "12345678910",
                 språkkode = Språkkode.NB,
