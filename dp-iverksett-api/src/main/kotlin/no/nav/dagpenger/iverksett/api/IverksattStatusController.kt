@@ -3,6 +3,7 @@ package no.nav.dagpenger.iverksett.api
 import io.swagger.v3.oas.annotations.tags.Tag
 import no.nav.dagpenger.iverksett.api.domene.VedtaksdetaljerDagpenger
 import no.nav.security.token.support.core.api.ProtectedWithClaims
+import no.nav.security.token.support.core.api.Unprotected
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController
     path = ["/api/vedtakstatus"],
     produces = [MediaType.APPLICATION_JSON_VALUE],
 )
-@ProtectedWithClaims(issuer = "azuread")
+@Unprotected
 class IverksattStatusController(
     private val vedtakStatusService: VedtakStatusService,
 ) {
