@@ -222,13 +222,14 @@ fun vedtaksdetaljerDagpenger(
     vedtaksresultat: Vedtaksresultat = Vedtaksresultat.INNVILGET,
     andeler: List<AndelTilkjentYtelse> = listOf(opprettAndelTilkjentYtelse()),
     tilbakekreving: Tilbakekrevingsdetaljer? = null,
+    vedtakstidspunkt: LocalDateTime = LocalDateTime.of(2021, 5, 12, 0, 0),
     startdato: LocalDate = startdato(andeler),
     vedtaksperioder: List<VedtaksperiodeDagpenger> = listOf(vedtaksperioderDagpenger()),
 ): VedtaksdetaljerDagpenger {
     val tilkjentYtelse = lagTilkjentYtelse(andeler, startdato)
     return VedtaksdetaljerDagpenger(
         vedtaksresultat = vedtaksresultat,
-        vedtakstidspunkt = LocalDateTime.of(2021, 5, 12, 0, 0),
+        vedtakstidspunkt = vedtakstidspunkt,
         opphørÅrsak = OpphørÅrsak.PERIODE_UTLØPT,
         saksbehandlerId = "A12345",
         beslutterId = "B23456",
@@ -285,7 +286,12 @@ fun opprettIverksettDagpenger(
             tilhørendeEnhet = "4489",
             adressebeskyttelse = AdressebeskyttelseGradering.UGRADERT,
         ),
-        vedtak = vedtaksdetaljerDagpenger(Vedtaksresultat.INNVILGET, andeler, tilbakekreving, startdato),
+        vedtak = vedtaksdetaljerDagpenger(
+            vedtaksresultat = Vedtaksresultat.INNVILGET,
+            andeler = andeler,
+            tilbakekreving = tilbakekreving,
+            startdato = startdato,
+        ),
         forrigeVedtak = forrigeVedtak,
     )
 }
