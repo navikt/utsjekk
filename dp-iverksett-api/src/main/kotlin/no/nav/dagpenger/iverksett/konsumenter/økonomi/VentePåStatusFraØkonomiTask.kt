@@ -35,9 +35,8 @@ class VentePåStatusFraØkonomiTask(
         val behandlingId = UUID.fromString(task.payload)
         val iverksett = iverksettingRepository.findByIdOrThrow(behandlingId).data
         val tilkjentYtelse = iverksettResultatService.hentTilkjentYtelse(behandlingId)
-            ?: error("Kunne ikke finne tilkjent ytelse for behandling=$behandlingId")
 
-        if (tilkjentYtelse.harIngenUtbetalingsperioder()) {
+        if (tilkjentYtelse.harIngenUtbetaling()) {
             return
         }
 
@@ -66,8 +65,7 @@ class VentePåStatusFraØkonomiTask(
         const val TYPE = "sjekkStatusPåOppdrag"
     }
 
-    fun TilkjentYtelse.harIngenUtbetalingsperioder(): Boolean {
-        return this.utbetalingsoppdrag?.utbetalingsperiode?.isEmpty()
-            ?: error("Kunne ikke finne utbetalingsoppdrag for TilkjentYtelse")
+    fun TilkjentYtelse?.harIngenUtbetaling(): Boolean {
+        return this?.utbetalingsoppdrag?.utbetalingsperiode.isNullOrEmpty()
     }
 }
