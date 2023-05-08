@@ -41,6 +41,8 @@ fun lagAndelTilkjentYtelseDto(
     UtbetalingDto(
         beløp = beløp,
         periode = DatoperiodeDto(fraOgMed, tilOgMed),
+        fraOgMedDato = fraOgMed,
+        tilOgMedDato = tilOgMed,
         inntekt = inntekt,
         samordningsfradrag = samordningsfradrag,
         inntektsreduksjon = inntektsreduksjon,
