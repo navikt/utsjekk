@@ -65,21 +65,24 @@
   },
   "vedtak": {
     "vedtakstype": "RAMMEVEDTAK",
-    "resultat": "AVSLÅTT",
     "vedtakstidspunkt": "2021-05-10T01:00:00",
-    "opphørÅrsak": "PERIODE_UTLØPT",
+    "resultat": "AVSLÅTT",
     "saksbehandlerId": "A123456",
     "beslutterId": "B123456",
+    "opphørÅrsak": "PERIODE_UTLØPT",
+    "avslagÅrsak": null,
     "utbetalinger": [
       {
         "beløp": 0,
-        "inntekt": 0,
-        "inntektsreduksjon": 0,
-        "samordningsfradrag": 0,
+        "fraOgMedDato": "2021-05-01",
+        "tilOgMedDato": "2021-05-31",
         "periode": {
           "fom": "2021-05-01",
           "tom": "2021-05-31"
         },
+        "inntekt": 0,
+        "inntektsreduksjon": 0,
+        "samordningsfradrag": 0,
         "kildeBehandlingId": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
       }
     ],
@@ -103,8 +106,7 @@
         "fellesperioder": []
       }
     },
-    "brevmottakere": [],
-    "avslagÅrsak": null
+    "brevmottakere": []
   },
   "forrigeVedtak": null
 }

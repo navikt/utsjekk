@@ -39,7 +39,11 @@ object TilkjentYtelseParser {
             }
             val startdato = (
                 startdatoer[behandlingId]
-                    ?: andeler.minOfOrNull { it.periode.fom }
+                    ?: andeler.minOfOrNull {
+                        it.fraOgMedDato
+                            ?: it.periode?.fom
+                            ?: throw IllegalStateException("Verken fraOgMedDato eller periode har verdi. En av dem, helst fraOgMedDato, må være satt")
+                    }
                     ?: error("Mangler startdato eller andel for behandling=$behandlingIdInt")
                 )
             TilkjentYtelseHolder(
@@ -121,6 +125,8 @@ object TilkjentYtelseParser {
             parseDato(Domenebegrep.FRA_DATO, rad),
             parseDato(Domenebegrep.TIL_DATO, rad),
         ),
+        fraOgMedDato = parseDato(Domenebegrep.FRA_DATO, rad),
+        tilOgMedDato = parseDato(Domenebegrep.TIL_DATO, rad),
         kildeBehandlingId = null, // ikke i bruk i iverksett
     )
 
