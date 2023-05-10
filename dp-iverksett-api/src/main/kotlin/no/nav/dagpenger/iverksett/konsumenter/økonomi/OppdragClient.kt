@@ -1,13 +1,14 @@
 package no.nav.dagpenger.iverksett.konsumenter.økonomi
 
+import no.nav.dagpenger.iverksett.infrastruktur.advice.Ressurs
+import no.nav.dagpenger.iverksett.infrastruktur.advice.getDataOrThrow
 import no.nav.dagpenger.iverksett.kontrakter.oppdrag.GrensesnittavstemmingRequest
 import no.nav.dagpenger.iverksett.kontrakter.oppdrag.KonsistensavstemmingUtbetalingsoppdrag
 import no.nav.dagpenger.iverksett.kontrakter.oppdrag.OppdragId
+import no.nav.dagpenger.iverksett.kontrakter.oppdrag.OppdragStatus
 import no.nav.dagpenger.iverksett.kontrakter.oppdrag.Utbetalingsoppdrag
 import no.nav.dagpenger.iverksett.kontrakter.simulering.DetaljertSimuleringResultat
 import no.nav.familie.http.client.AbstractPingableRestClient
-import no.nav.familie.kontrakter.felles.Ressurs
-import no.nav.familie.kontrakter.felles.getDataOrThrow
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
@@ -38,11 +39,12 @@ class OppdragClient(
         UriComponentsBuilder.fromUri(dagepngerOppdragUri).pathSegment("simulering/v1").build().toUri()
 
     fun iverksettOppdrag(utbetalingsoppdrag: Utbetalingsoppdrag): String {
-        return postForEntity(postOppdragUri, utbetalingsoppdrag)
+        return postForEntity<Ressurs<String>>(postOppdragUri, utbetalingsoppdrag).data!!
     }
 
     fun hentStatus(oppdragId: OppdragId): OppdragStatusMedMelding {
-        return postForEntity(getStatusUri, oppdragId)
+        val ressurs = postForEntity<Ressurs<OppdragStatus>>(getStatusUri, oppdragId)
+        return OppdragStatusMedMelding(ressurs.data!!,ressurs.melding)
     }
 
     fun grensesnittavstemming(grensesnittavstemmingRequest: GrensesnittavstemmingRequest): String {
