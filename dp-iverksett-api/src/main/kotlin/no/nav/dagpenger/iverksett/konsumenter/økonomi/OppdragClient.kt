@@ -44,11 +44,13 @@ class OppdragClient(
 
     fun hentStatus(oppdragId: OppdragId): OppdragStatusMedMelding {
         val ressurs = postForEntity<Ressurs<OppdragStatus>>(getStatusUri, oppdragId)
-        return OppdragStatusMedMelding(ressurs.data!!, ressurs.melding)
+        val data = ressurs.getDataOrThrow()
+        return OppdragStatusMedMelding(data, ressurs.melding)
     }
 
     fun grensesnittavstemming(grensesnittavstemmingRequest: GrensesnittavstemmingRequest): String {
-        return postForEntity(grensesnittavstemmingUri, grensesnittavstemmingRequest)
+        val ressurs = postForEntity<Ressurs<String>>(grensesnittavstemmingUri, grensesnittavstemmingRequest)
+        return ressurs.getDataOrThrow()
     }
 
     fun konsistensavstemming(
