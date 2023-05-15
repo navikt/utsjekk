@@ -44,7 +44,7 @@ class OppdragClient(
 
     fun hentStatus(oppdragId: OppdragId): OppdragStatusMedMelding {
         val ressurs = postForEntity<Ressurs<OppdragStatus>>(getStatusUri, oppdragId)
-        return OppdragStatusMedMelding(ressurs.data!!,ressurs.melding)
+        return OppdragStatusMedMelding(ressurs.data!!, ressurs.melding)
     }
 
     fun grensesnittavstemming(grensesnittavstemmingRequest: GrensesnittavstemmingRequest): String {
