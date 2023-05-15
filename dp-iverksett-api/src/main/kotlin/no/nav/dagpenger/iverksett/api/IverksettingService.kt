@@ -136,7 +136,7 @@ class IverksettingService(
     }
 
     fun lagreGrensesnittavstemmingTask() {
-        if (taskService.findAll().any { it.type == GrensesnittavstemmingTask.TYPE && it.status.kanPlukkes() || it.status == Status.BEHANDLER  || it.status == Status.PLUKKET }) {
+        if (taskService.findAll().any { it.type == GrensesnittavstemmingTask.TYPE && it.erAktiv() }) {
             logger.info("Plukkbar task for grensesnittavstemming allerede opprettet - lager ikke ny task")
             return
         }
@@ -153,3 +153,5 @@ class IverksettingService(
         private val logger = LoggerFactory.getLogger(this::class.java)
     }
 }
+
+fun Task.erAktiv() = this.status != Status.AVVIKSHÅNDTERT && this.status != Status.MANUELL_OPPFØLGING
