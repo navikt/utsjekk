@@ -40,6 +40,7 @@ class VentePåStatusFraØkonomiTask(
         val tilkjentYtelse = iverksettResultatService.hentTilkjentYtelse(behandlingId)
 
         if (tilkjentYtelse.harIngenUtbetaling()) {
+            logger.info("Iverksetting har ikke utbetalingsoppdrag. Sjekker ikke status fra OS/UR")
             return
         }
 

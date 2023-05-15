@@ -78,7 +78,9 @@ fun opprettIverksettDto(
     )
     val tilkjentYtelse = TilkjentYtelseDto(
         utbetalinger = listOf(andelTilkjentYtelse),
-        startdato = andelTilkjentYtelse.periode.fom,
+        startdato = andelTilkjentYtelse.fraOgMedDato
+            ?: andelTilkjentYtelse.periode?.fom
+            ?: throw IllegalStateException("Verken fraOgMedDato eller periode har verdi. En av dem, helst fraOgMedDato, må være satt"),
     )
 
     return IverksettDagpengerdDto(

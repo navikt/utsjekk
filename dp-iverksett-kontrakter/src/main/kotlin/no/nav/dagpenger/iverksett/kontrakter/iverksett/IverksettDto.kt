@@ -176,29 +176,7 @@ data class Brevmottaker(
     }
 }
 
-class DatoperiodeDto {
-    var fom: LocalDate
-    var tom: LocalDate? = null
-
-    constructor(fom: LocalDate, tom: LocalDate? = null) {
-        this.fom = fom
-        this.tom = tom
-    }
-
-    constructor(fom: LocalDate) {
-        this.fom = fom
-        this.tom = null
-    }
-
-    var fraOgMedDato: LocalDate
-        set(value) {
-            this.fom = value
-        }
-        get() { return this.fom }
-
-    var tilOgMedDato: LocalDate?
-        set(value) {
-            this.tom = value
-        }
-        get() = this.tom
-}
+data class DatoperiodeDto(
+    val fom: LocalDate,
+    val tom: LocalDate? = null
+)
