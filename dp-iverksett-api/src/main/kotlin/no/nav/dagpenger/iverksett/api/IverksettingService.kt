@@ -14,6 +14,9 @@ import no.nav.dagpenger.iverksett.konsumenter.oppgave.OpprettOppfølgingsOppgave
 import no.nav.dagpenger.iverksett.konsumenter.publiseringsflyt
 import no.nav.dagpenger.iverksett.konsumenter.vedtakstatistikk.VedtakstatistikkTask
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.OppdragClient
+import no.nav.dagpenger.iverksett.konsumenter.økonomi.grensesnitt.GrensesnittavstemmingDto
+import no.nav.dagpenger.iverksett.konsumenter.økonomi.grensesnitt.GrensesnittavstemmingTask
+import no.nav.dagpenger.iverksett.konsumenter.økonomi.grensesnitt.tilTask
 import no.nav.dagpenger.iverksett.kontrakter.felles.StønadType
 import no.nav.dagpenger.iverksett.kontrakter.felles.Vedtaksresultat
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.IverksettStatus
@@ -22,8 +25,11 @@ import no.nav.dagpenger.iverksett.kontrakter.oppdrag.OppdragStatus
 import no.nav.familie.prosessering.domene.Task
 import no.nav.familie.prosessering.error.TaskExceptionUtenStackTrace
 import no.nav.familie.prosessering.internal.TaskService
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.time.LocalDate
+import java.time.LocalDateTime
 import java.util.Properties
 import java.util.UUID
 
@@ -126,5 +132,23 @@ class IverksettingService(
             behandlingId = behandlingId,
             OppdragResultat(oppdragStatus = status),
         )
+    }
+
+    fun lagreGrensesnittavstemmingTask() {
+        if (taskService.findAll().any { it.type == GrensesnittavstemmingTask.TYPE }) {
+            logger.info("Task for grensesnittavstemming allerede opprettet - lager ikke ny task")
+            return
+        }
+
+        val grensesnittavstemmingDto = GrensesnittavstemmingDto(
+            stønadstype = StønadType.DAGPENGER,
+            fraDato = LocalDate.now().minusDays(1),
+            triggerTid = LocalDateTime.now(),
+        )
+        taskService.save(grensesnittavstemmingDto.tilTask())
+    }
+
+    companion object {
+        private val logger = LoggerFactory.getLogger(this::class.java)
     }
 }

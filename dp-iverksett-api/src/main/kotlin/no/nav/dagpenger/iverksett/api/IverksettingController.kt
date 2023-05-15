@@ -75,6 +75,12 @@ class IverksettingController(
         return status?.let { ResponseEntity(status, HttpStatus.OK) } ?: ResponseEntity(null, HttpStatus.NOT_FOUND)
     }
 
+    @PostMapping("/start-grensesnittavstemming")
+    fun startGrensesnittavstemming(): ResponseEntity<Void> {
+        iverksettingService.lagreGrensesnittavstemmingTask()
+        return ResponseEntity.accepted().build()
+    }
+
     private fun opprettBrev(fil: MultipartFile): Brev {
         return Brev(fil.bytes)
     }

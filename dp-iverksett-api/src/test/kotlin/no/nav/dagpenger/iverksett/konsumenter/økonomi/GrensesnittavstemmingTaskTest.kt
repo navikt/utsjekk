@@ -4,6 +4,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
+import no.nav.dagpenger.iverksett.infrastruktur.util.tilFagsystem
 import no.nav.dagpenger.iverksett.infrastruktur.util.tilKlassifisering
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.grensesnitt.GrensesnittavstemmingPayload
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.grensesnitt.GrensesnittavstemmingTask
@@ -40,7 +41,7 @@ internal class GrensesnittavstemmingTaskTest {
         val capturedGrensesnittRequest = grensesnittavstemmingRequestSlot.captured
         assertThat(capturedGrensesnittRequest.fra).isEqualTo(LocalDate.of(2018, 4, 18).atStartOfDay())
         assertThat(capturedGrensesnittRequest.til).isEqualTo(LocalDate.of(2018, 4, 19).atStartOfDay())
-        assertThat(capturedGrensesnittRequest.fagsystem).isEqualTo(StønadType.DAGPENGER.tilKlassifisering())
+        assertThat(capturedGrensesnittRequest.fagsystem).isEqualTo(StønadType.DAGPENGER.tilFagsystem())
     }
 
     @Test

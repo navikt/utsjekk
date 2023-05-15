@@ -1,7 +1,7 @@
 package no.nav.dagpenger.iverksett.konsumenter.økonomi.grensesnitt
 
 import com.fasterxml.jackson.module.kotlin.readValue
-import no.nav.dagpenger.iverksett.infrastruktur.util.tilKlassifisering
+import no.nav.dagpenger.iverksett.infrastruktur.util.tilFagsystem
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.OppdragClient
 import no.nav.dagpenger.iverksett.kontrakter.felles.StønadType
 import no.nav.dagpenger.iverksett.kontrakter.objectMapper
@@ -33,7 +33,7 @@ class GrensesnittavstemmingTask(
 
             logger.info("Gjør ${task.id} $stønadstype avstemming mot oppdrag fra $fraTidspunkt til $tilTidspunkt")
             val grensesnittavstemmingRequest = GrensesnittavstemmingRequest(
-                fagsystem = stønadstype.tilKlassifisering(),
+                fagsystem = stønadstype.tilFagsystem(),
                 fra = fraTidspunkt,
                 til = tilTidspunkt,
             )
