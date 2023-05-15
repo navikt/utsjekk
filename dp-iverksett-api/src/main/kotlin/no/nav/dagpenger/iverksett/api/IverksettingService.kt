@@ -142,7 +142,7 @@ class IverksettingService(
 
         val grensesnittavstemmingDto = GrensesnittavstemmingDto(
             stønadstype = StønadType.DAGPENGER,
-            fraDato = LocalDate.now().minusDays(1),
+            fraDato = LocalDate.now().minusDays(5),
             triggerTid = LocalDateTime.now(),
         )
         taskService.save(grensesnittavstemmingDto.tilTask())
