@@ -22,6 +22,7 @@ import no.nav.dagpenger.iverksett.kontrakter.felles.Vedtaksresultat
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.IverksettStatus
 import no.nav.dagpenger.iverksett.kontrakter.oppdrag.OppdragId
 import no.nav.dagpenger.iverksett.kontrakter.oppdrag.OppdragStatus
+import no.nav.familie.prosessering.domene.Status
 import no.nav.familie.prosessering.domene.Task
 import no.nav.familie.prosessering.error.TaskExceptionUtenStackTrace
 import no.nav.familie.prosessering.internal.TaskService
@@ -135,8 +136,8 @@ class IverksettingService(
     }
 
     fun lagreGrensesnittavstemmingTask() {
-        if (taskService.findAll().any { it.type == GrensesnittavstemmingTask.TYPE }) {
-            logger.info("Task for grensesnittavstemming allerede opprettet - lager ikke ny task")
+        if (taskService.findAll().any { it.type == GrensesnittavstemmingTask.TYPE && it.status.kanPlukkes() || it.status == Status.BEHANDLER  || it.status == Status.PLUKKET }) {
+            logger.info("Plukkbar task for grensesnittavstemming allerede opprettet - lager ikke ny task")
             return
         }
 
