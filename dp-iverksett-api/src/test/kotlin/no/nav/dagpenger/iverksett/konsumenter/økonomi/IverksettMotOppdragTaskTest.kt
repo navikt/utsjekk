@@ -10,9 +10,10 @@ import no.nav.dagpenger.iverksett.api.IverksettingRepository
 import no.nav.dagpenger.iverksett.api.tilstand.IverksettResultatService
 import no.nav.dagpenger.iverksett.infrastruktur.repository.findByIdOrThrow
 import no.nav.dagpenger.iverksett.infrastruktur.transformer.toDomain
-import no.nav.dagpenger.iverksett.kontrakter.oppdrag.Utbetalingsoppdrag
 import no.nav.dagpenger.iverksett.lagIverksett
 import no.nav.dagpenger.iverksett.util.opprettIverksettDto
+import no.nav.dagpenger.kontrakter.utbetaling.Fagsystem
+import no.nav.dagpenger.kontrakter.utbetaling.Utbetalingsoppdrag
 import no.nav.familie.prosessering.domene.Task
 import no.nav.familie.prosessering.internal.TaskService
 import org.assertj.core.api.Assertions.assertThat
@@ -50,7 +51,7 @@ internal class IverksettMotOppdragTaskTest {
         iverksettMotOppdragTask.doTask(Task(IverksettMotOppdragTask.TYPE, behandlingId.toString(), Properties()))
         verify(exactly = 1) { oppdragClient.iverksettOppdrag(any()) }
         verify(exactly = 1) { iverksettResultatService.oppdaterTilkjentYtelseForUtbetaling(behandlingId, any()) }
-        assertThat(oppdragSlot.captured.fagSystem).isEqualTo("DP")
+        assertThat(oppdragSlot.captured.fagSystem).isEqualTo(Fagsystem.Dagpenger)
         assertThat(oppdragSlot.captured.kodeEndring).isEqualTo(Utbetalingsoppdrag.KodeEndring.NY)
     }
 

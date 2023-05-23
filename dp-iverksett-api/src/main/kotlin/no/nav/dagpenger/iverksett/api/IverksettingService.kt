@@ -20,8 +20,8 @@ import no.nav.dagpenger.iverksett.konsumenter.økonomi.grensesnitt.tilTask
 import no.nav.dagpenger.iverksett.kontrakter.felles.StønadType
 import no.nav.dagpenger.iverksett.kontrakter.felles.Vedtaksresultat
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.IverksettStatus
-import no.nav.dagpenger.iverksett.kontrakter.oppdrag.OppdragId
 import no.nav.dagpenger.iverksett.kontrakter.oppdrag.OppdragStatus
+import no.nav.dagpenger.kontrakter.utbetaling.OppdragId
 import no.nav.familie.prosessering.domene.Status
 import no.nav.familie.prosessering.domene.Task
 import no.nav.familie.prosessering.error.TaskExceptionUtenStackTrace
@@ -120,7 +120,7 @@ class IverksettingService(
         val oppdragId = OppdragId(
             fagsystem = stønadstype.tilFagsystem(),
             personIdent = personIdent,
-            behandlingsId = behandlingId.toString(),
+            behandlingsId = behandlingId,
         )
 
         val (status, melding) = oppdragClient.hentStatus(oppdragId)

@@ -61,6 +61,12 @@
             <version>${jackson.version}</version>
         </dependency>
 
+        <!-- Nav -->
+        <dependency>
+            <groupId>no.nav.dagpenger</groupId>
+            <artifactId>dp-kontrakter</artifactId>
+        </dependency>
+
         <!-- Test -->
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>

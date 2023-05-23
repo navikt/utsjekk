@@ -20,7 +20,6 @@ class OppdragClientMock {
     fun oppdragClient(): OppdragClient {
         val oppdragClientMock = mockk<OppdragClient>()
 
-        every { oppdragClientMock.konsistensavstemming(any()) } returns "OK"
         every { oppdragClientMock.grensesnittavstemming(any()) } returns "OK"
         every { oppdragClientMock.iverksettOppdrag(any()) } returns "OK"
         every { oppdragClientMock.hentSimuleringsresultat(any()) } returns detaljertSimuleringResultat()

@@ -8,10 +8,10 @@ import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.Økono
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.ØkonomiUtils.andelerUtenNullVerdier
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.ØkonomiUtils.beståendeAndeler
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.ØkonomiUtils.utbetalingsperiodeForOpphør
-import no.nav.dagpenger.iverksett.kontrakter.oppdrag.Utbetalingsoppdrag
-import no.nav.dagpenger.iverksett.kontrakter.oppdrag.Utbetalingsoppdrag.KodeEndring.ENDR
-import no.nav.dagpenger.iverksett.kontrakter.oppdrag.Utbetalingsoppdrag.KodeEndring.NY
-import no.nav.dagpenger.iverksett.kontrakter.oppdrag.Utbetalingsperiode
+import no.nav.dagpenger.kontrakter.utbetaling.Utbetalingsoppdrag
+import no.nav.dagpenger.kontrakter.utbetaling.Utbetalingsoppdrag.KodeEndring.ENDR
+import no.nav.dagpenger.kontrakter.utbetaling.Utbetalingsoppdrag.KodeEndring.NY
+import no.nav.dagpenger.kontrakter.utbetaling.Utbetalingsperiode
 import java.time.LocalDate
 import java.util.UUID
 
@@ -59,7 +59,7 @@ object UtbetalingsoppdragGenerator {
                 saksbehandlerId = nyTilkjentYtelseMedMetaData.saksbehandlerId,
                 kodeEndring = if (erIkkeTidligereIverksattMotOppdrag(forrigeTilkjentYtelse)) NY else ENDR,
                 fagSystem = nyTilkjentYtelseMedMetaData.stønadstype.tilFagsystem(),
-                saksnummer = nyTilkjentYtelseMedMetaData.sakId.toString(),
+                saksnummer = nyTilkjentYtelseMedMetaData.sakId,
                 aktoer = nyTilkjentYtelseMedMetaData.personIdent,
                 utbetalingsperiode = utbetalingsperioder,
                 gOmregning = erGOmregning,

@@ -1,11 +1,11 @@
 package no.nav.dagpenger.iverksett.konsumenter.tilbakekreving
 
-import no.nav.dagpenger.iverksett.kontrakter.felles.Fagsystem
 import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.Behandling
 import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.FinnesBehandlingResponse
 import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.ForhåndsvisVarselbrevRequest
 import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.OpprettTilbakekrevingRequest
 import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.Ytelsestype
+import no.nav.dagpenger.kontrakter.utbetaling.Fagsystem
 import no.nav.familie.http.client.AbstractRestClient
 import no.nav.familie.kontrakter.felles.Ressurs
 import no.nav.familie.kontrakter.felles.getDataOrThrow
@@ -41,12 +41,12 @@ class TilbakekrevingClient(
         .toUri()
 
     private fun finnesÅpenBehandlingUri(fagsakId: UUID) = UriComponentsBuilder.fromUri(familieTilbakeUri)
-        .pathSegment("api/fagsystem/${Fagsystem.DP}/fagsak/$fagsakId/finnesApenBehandling/v1")
+        .pathSegment("api/fagsystem/${Fagsystem.Dagpenger.kode}/fagsak/$fagsakId/finnesApenBehandling/v1")
         .build()
         .toUri()
 
     private fun finnBehandlingerUri(fagsakId: Long) = UriComponentsBuilder.fromUri(familieTilbakeUri)
-        .pathSegment("api/fagsystem/${Fagsystem.DP}/fagsak/$fagsakId/behandlinger/v1")
+        .pathSegment("api/fagsystem/${Fagsystem.Dagpenger.kode}/fagsak/$fagsakId/behandlinger/v1")
         .build()
         .toUri()
 

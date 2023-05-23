@@ -1,8 +1,8 @@
 package no.nav.dagpenger.iverksett.kontrakter.tilbakekreving
 
-import no.nav.dagpenger.iverksett.kontrakter.felles.Fagsystem
 import no.nav.dagpenger.iverksett.kontrakter.felles.Regelverk
 import no.nav.dagpenger.iverksett.kontrakter.felles.Språkkode
+import no.nav.dagpenger.kontrakter.utbetaling.Fagsystem
 import java.time.LocalDate
 
 data class OpprettTilbakekrevingRequest(

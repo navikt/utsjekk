@@ -9,9 +9,10 @@ import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.Utbeta
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.nullAndelTilkjentYtelse
 import no.nav.dagpenger.iverksett.kontrakter.felles.StønadType
 import no.nav.dagpenger.iverksett.kontrakter.objectMapper
-import no.nav.dagpenger.iverksett.kontrakter.oppdrag.Opphør
-import no.nav.dagpenger.iverksett.kontrakter.oppdrag.Utbetalingsoppdrag
-import no.nav.dagpenger.iverksett.kontrakter.oppdrag.Utbetalingsperiode
+import no.nav.dagpenger.kontrakter.utbetaling.Fagsystem
+import no.nav.dagpenger.kontrakter.utbetaling.Opphør
+import no.nav.dagpenger.kontrakter.utbetaling.Utbetalingsoppdrag
+import no.nav.dagpenger.kontrakter.utbetaling.Utbetalingsperiode
 import org.junit.jupiter.api.Assertions
 import java.math.BigDecimal
 import java.net.URL
@@ -164,8 +165,8 @@ class TestOppdragGroup {
         val utbetalingsoppdrag =
             Utbetalingsoppdrag(
                 kodeEndring = oppdragKode110,
-                fagSystem = "DP",
-                saksnummer = sakId.toString(),
+                fagSystem = Fagsystem.Dagpenger,
+                saksnummer = sakId,
                 aktoer = personIdent!!,
                 saksbehandlerId = saksbehandlerId,
                 avstemmingTidspunkt = LocalDateTime.now().truncatedTo(ChronoUnit.HOURS),

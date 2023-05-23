@@ -2,12 +2,11 @@ package no.nav.dagpenger.iverksett.konsumenter.økonomi
 
 import no.nav.dagpenger.iverksett.infrastruktur.advice.Ressurs
 import no.nav.dagpenger.iverksett.infrastruktur.advice.getDataOrThrow
-import no.nav.dagpenger.iverksett.kontrakter.oppdrag.GrensesnittavstemmingRequest
-import no.nav.dagpenger.iverksett.kontrakter.oppdrag.KonsistensavstemmingUtbetalingsoppdrag
-import no.nav.dagpenger.iverksett.kontrakter.oppdrag.OppdragId
 import no.nav.dagpenger.iverksett.kontrakter.oppdrag.OppdragStatus
-import no.nav.dagpenger.iverksett.kontrakter.oppdrag.Utbetalingsoppdrag
 import no.nav.dagpenger.iverksett.kontrakter.simulering.DetaljertSimuleringResultat
+import no.nav.dagpenger.kontrakter.utbetaling.GrensesnittavstemmingRequest
+import no.nav.dagpenger.kontrakter.utbetaling.OppdragId
+import no.nav.dagpenger.kontrakter.utbetaling.Utbetalingsoppdrag
 import no.nav.familie.http.client.AbstractPingableRestClient
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
@@ -51,20 +50,6 @@ class OppdragClient(
     fun grensesnittavstemming(grensesnittavstemmingRequest: GrensesnittavstemmingRequest): String {
         val ressurs = postForEntity<Ressurs<String>>(grensesnittavstemmingUri, grensesnittavstemmingRequest)
         return ressurs.getDataOrThrow()
-    }
-
-    fun konsistensavstemming(
-        konsistensavstemmingUtbetalingsoppdrag: KonsistensavstemmingUtbetalingsoppdrag,
-        sendStartmelding: Boolean = true,
-        sendAvsluttmelding: Boolean = true,
-        transaksjonId: UUID? = null,
-    ): String {
-        val url = UriComponentsBuilder.fromUri(konsistensavstemmingUri)
-            .queryParam("sendStartmelding", sendStartmelding)
-            .queryParam("sendAvsluttmelding", sendAvsluttmelding)
-            .queryParam("transaksjonId", transaksjonId.toString())
-            .build().toUri()
-        return postForEntity<Ressurs<String>>(url, konsistensavstemmingUtbetalingsoppdrag).getDataOrThrow()
     }
 
     fun hentSimuleringsresultat(utbetalingsoppdrag: Utbetalingsoppdrag): DetaljertSimuleringResultat {

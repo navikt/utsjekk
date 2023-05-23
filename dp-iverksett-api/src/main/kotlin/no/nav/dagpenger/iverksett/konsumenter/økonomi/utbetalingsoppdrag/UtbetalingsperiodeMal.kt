@@ -4,8 +4,8 @@ import no.nav.dagpenger.iverksett.api.domene.AndelTilkjentYtelse
 import no.nav.dagpenger.iverksett.api.domene.TilkjentYtelseMedMetaData
 import no.nav.dagpenger.iverksett.infrastruktur.util.tilKlassifisering
 import no.nav.dagpenger.iverksett.kontrakter.felles.StønadType
-import no.nav.dagpenger.iverksett.kontrakter.oppdrag.Opphør
-import no.nav.dagpenger.iverksett.kontrakter.oppdrag.Utbetalingsperiode
+import no.nav.dagpenger.kontrakter.utbetaling.Opphør
+import no.nav.dagpenger.kontrakter.utbetaling.Utbetalingsperiode
 import java.math.BigDecimal
 import java.time.LocalDate
 import java.util.UUID

@@ -1,6 +1,6 @@
 package no.nav.dagpenger.iverksett.kontrakter.journalføring.dokarkiv
 
-import no.nav.dagpenger.iverksett.kontrakter.felles.Fagsystem
+import no.nav.dagpenger.kontrakter.utbetaling.Fagsystem
 
 data class Sak(
     val arkivsaksnummer: String? = null,

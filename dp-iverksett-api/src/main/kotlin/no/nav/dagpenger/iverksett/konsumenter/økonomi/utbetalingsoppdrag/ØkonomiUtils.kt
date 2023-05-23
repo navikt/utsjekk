@@ -6,7 +6,7 @@ import no.nav.dagpenger.iverksett.api.domene.AndelTilkjentYtelse.Companion.snitt
 import no.nav.dagpenger.iverksett.api.domene.TilkjentYtelse
 import no.nav.dagpenger.iverksett.api.domene.TilkjentYtelseMedMetaData
 import no.nav.dagpenger.iverksett.kontrakter.felles.Datoperiode
-import no.nav.dagpenger.iverksett.kontrakter.oppdrag.Utbetalingsperiode
+import no.nav.dagpenger.kontrakter.utbetaling.Utbetalingsperiode
 import java.time.LocalDate
 import java.util.UUID
 

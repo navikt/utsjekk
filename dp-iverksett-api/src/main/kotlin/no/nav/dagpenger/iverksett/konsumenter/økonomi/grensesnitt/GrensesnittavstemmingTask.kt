@@ -5,7 +5,7 @@ import no.nav.dagpenger.iverksett.infrastruktur.util.tilFagsystem
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.OppdragClient
 import no.nav.dagpenger.iverksett.kontrakter.felles.StønadType
 import no.nav.dagpenger.iverksett.kontrakter.objectMapper
-import no.nav.dagpenger.iverksett.kontrakter.oppdrag.GrensesnittavstemmingRequest
+import no.nav.dagpenger.kontrakter.utbetaling.GrensesnittavstemmingRequest
 import no.nav.familie.prosessering.AsyncTaskStep
 import no.nav.familie.prosessering.TaskStepBeskrivelse
 import no.nav.familie.prosessering.domene.Task

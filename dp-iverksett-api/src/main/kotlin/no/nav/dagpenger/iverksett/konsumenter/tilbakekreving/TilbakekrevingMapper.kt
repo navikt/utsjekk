@@ -4,7 +4,6 @@ import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
 import no.nav.dagpenger.iverksett.api.domene.Tilbakekrevingsdetaljer
 import no.nav.dagpenger.iverksett.kontrakter.felles.BehandlingÅrsak
 import no.nav.dagpenger.iverksett.kontrakter.felles.Enhet
-import no.nav.dagpenger.iverksett.kontrakter.felles.Fagsystem
 import no.nav.dagpenger.iverksett.kontrakter.felles.Språkkode
 import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.Behandlingstype
 import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.Faktainfo
@@ -15,6 +14,7 @@ import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.Periode
 import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.Tilbakekrevingsvalg
 import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.Varsel
 import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.Ytelsestype
+import no.nav.dagpenger.kontrakter.utbetaling.Fagsystem
 
 const val ENHETSNAVN_BREV = "NAV Arbeid og ytelser"
 
@@ -29,7 +29,7 @@ fun Tilbakekrevingsdetaljer?.validerTilbakekreving(): Boolean {
 
 fun IverksettDagpenger.tilOpprettTilbakekrevingRequest(enhet: Enhet) =
     OpprettTilbakekrevingRequest(
-        fagsystem = Fagsystem.DP,
+        fagsystem = Fagsystem.Dagpenger,
         ytelsestype = Ytelsestype.valueOf(this.fagsak.stønadstype.name),
         eksternFagsakId = this.fagsak.fagsakId.toString(),
         personIdent = this.søker.personIdent,

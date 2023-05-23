@@ -16,12 +16,13 @@ import no.nav.dagpenger.iverksett.infrastruktur.transformer.toDomain
 import no.nav.dagpenger.iverksett.kontrakter.felles.BehandlingÅrsak
 import no.nav.dagpenger.iverksett.kontrakter.felles.TilkjentYtelseStatus
 import no.nav.dagpenger.iverksett.kontrakter.oppdrag.OppdragStatus
-import no.nav.dagpenger.iverksett.kontrakter.oppdrag.Utbetalingsoppdrag
-import no.nav.dagpenger.iverksett.kontrakter.oppdrag.Utbetalingsoppdrag.KodeEndring.NY
-import no.nav.dagpenger.iverksett.kontrakter.oppdrag.Utbetalingsperiode
 import no.nav.dagpenger.iverksett.lagIverksett
 import no.nav.dagpenger.iverksett.util.mockFeatureToggleService
 import no.nav.dagpenger.iverksett.util.opprettIverksettDto
+import no.nav.dagpenger.kontrakter.utbetaling.Fagsystem
+import no.nav.dagpenger.kontrakter.utbetaling.Utbetalingsoppdrag
+import no.nav.dagpenger.kontrakter.utbetaling.Utbetalingsoppdrag.KodeEndring.NY
+import no.nav.dagpenger.kontrakter.utbetaling.Utbetalingsperiode
 import no.nav.familie.prosessering.domene.Task
 import no.nav.familie.prosessering.internal.TaskService
 import org.assertj.core.api.Assertions.assertThat
@@ -137,8 +138,8 @@ internal class VentePåStatusFraØkonomiTaskTest {
             id = UUID.randomUUID(),
             utbetalingsoppdrag = Utbetalingsoppdrag(
                 kodeEndring = NY,
-                fagSystem = "",
-                saksnummer = "",
+                fagSystem = Fagsystem.Dagpenger,
+                saksnummer = UUID.randomUUID(),
                 aktoer = "",
                 saksbehandlerId = "",
                 avstemmingTidspunkt = LocalDateTime.now(),

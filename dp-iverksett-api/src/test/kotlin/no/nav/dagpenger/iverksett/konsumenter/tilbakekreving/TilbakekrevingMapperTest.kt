@@ -3,7 +3,6 @@ package no.nav.dagpenger.iverksett.konsumenter.tilbakekreving
 import no.nav.dagpenger.iverksett.api.domene.TilbakekrevingMedVarsel
 import no.nav.dagpenger.iverksett.api.domene.Tilbakekrevingsdetaljer
 import no.nav.dagpenger.iverksett.kontrakter.felles.Enhet
-import no.nav.dagpenger.iverksett.kontrakter.felles.Fagsystem
 import no.nav.dagpenger.iverksett.kontrakter.felles.Språkkode
 import no.nav.dagpenger.iverksett.kontrakter.objectMapper
 import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.Behandlingstype
@@ -11,6 +10,7 @@ import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.Tilbakekrevingsvalg
 import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.Ytelsestype
 import no.nav.dagpenger.iverksett.util.opprettIverksettDagpenger
 import no.nav.dagpenger.iverksett.util.opprettTilbakekrevingsdetaljer
+import no.nav.dagpenger.kontrakter.utbetaling.Fagsystem
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.math.BigDecimal
@@ -28,7 +28,7 @@ internal class TilbakekrevingMapperTest {
 
         val request = iverksett.tilOpprettTilbakekrevingRequest(enhet)
 
-        assertThat(request.fagsystem).isEqualTo(Fagsystem.DP)
+        assertThat(request.fagsystem).isEqualTo(Fagsystem.Dagpenger)
         assertThat(request.eksternFagsakId).isEqualTo(iverksett.fagsak.fagsakId.toString())
         assertThat(request.eksternId).isEqualTo(iverksett.behandling.behandlingId.toString())
         assertThat(request.ytelsestype).isEqualTo(Ytelsestype.DAGPENGER)

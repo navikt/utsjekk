@@ -20,4 +20,29 @@
         <module>dp-iverksett-kontrakter</module>
         <module>dp-iverksett-api</module>
     </modules>
+
+    <properties>
+        <dp-kontrakter.version>1.0_20230523105402_5cd73b8</dp-kontrakter.version>
+    </properties>
+
+    <repositories>
+        <repository>
+            <id>github</id>
+            <url>https://maven.pkg.github.com</url>
+        </repository>
+        <repository>
+            <id>central</id>
+            <url>https://repo.maven.apache.org/maven2</url>
+        </repository>
+    </repositories>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>no.nav.dagpenger</groupId>
+                <artifactId>dp-kontrakter</artifactId>
+                <version>${dp-kontrakter.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 </project>
