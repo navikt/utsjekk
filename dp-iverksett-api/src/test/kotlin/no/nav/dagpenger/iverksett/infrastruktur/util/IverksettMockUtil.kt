@@ -36,7 +36,6 @@ import no.nav.dagpenger.iverksett.kontrakter.felles.OpphørÅrsak
 import no.nav.dagpenger.iverksett.kontrakter.felles.Opplysningskilde
 import no.nav.dagpenger.iverksett.kontrakter.felles.RegelId
 import no.nav.dagpenger.iverksett.kontrakter.felles.Revurderingsårsak
-import no.nav.dagpenger.iverksett.kontrakter.felles.StønadType
 import no.nav.dagpenger.iverksett.kontrakter.felles.SvarId
 import no.nav.dagpenger.iverksett.kontrakter.felles.TilkjentYtelseStatus
 import no.nav.dagpenger.iverksett.kontrakter.felles.VedtakType
@@ -57,6 +56,7 @@ import no.nav.dagpenger.iverksett.kontrakter.iverksett.VilkårsvurderingDto
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.VurderingDto
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.ÅrsakRevurderingDto
 import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.Tilbakekrevingsvalg
+import no.nav.dagpenger.kontrakter.utbetaling.StønadType
 import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -68,7 +68,7 @@ fun opprettIverksettDto(
     behandlingId: UUID,
     behandlingÅrsak: BehandlingÅrsak = BehandlingÅrsak.SØKNAD,
     andelsbeløp: Int = 5000,
-    stønadType: StønadType = StønadType.DAGPENGER,
+    stønadType: StønadType = StønadType.DAGPENGER_ARBEIDSSOKER_ORDINAER,
 ): IverksettDagpengerdDto {
     val andelTilkjentYtelse = lagAndelTilkjentYtelseDto(
         beløp = andelsbeløp,
@@ -153,7 +153,7 @@ fun opprettTilkjentYtelseMedMetadata(
     return TilkjentYtelseMedMetaData(
         tilkjentYtelse = tilkjentYtelse,
         saksbehandlerId = "saksbehandlerId",
-        stønadstype = StønadType.DAGPENGER,
+        stønadstype = StønadType.DAGPENGER_ARBEIDSSOKER_ORDINAER,
         sakId = UUID.randomUUID(),
         personIdent = "12345678910",
         behandlingId = behandlingId,
@@ -259,7 +259,7 @@ fun opprettIverksettDagpenger(
     vedtaksdetaljer: VedtaksdetaljerDagpenger = vedtaksdetaljerDagpenger(),
 ) =
     IverksettDagpenger(
-        fagsak = Fagsakdetaljer(fagsakId = UUID.randomUUID(), stønadstype = StønadType.DAGPENGER),
+        fagsak = Fagsakdetaljer(fagsakId = UUID.randomUUID(), stønadstype = StønadType.DAGPENGER_ARBEIDSSOKER_ORDINAER),
         behandling = behandlingsdetaljer,
         søker = Søker(
             personIdent = "12345678910",
@@ -281,7 +281,7 @@ fun opprettIverksettDagpenger(
 ): IverksettDagpenger {
     val behandlingType = forrigeBehandlingId?.let { BehandlingType.REVURDERING } ?: BehandlingType.FØRSTEGANGSBEHANDLING
     return IverksettDagpenger(
-        fagsak = Fagsakdetaljer(fagsakId = fagsakId, stønadstype = StønadType.DAGPENGER),
+        fagsak = Fagsakdetaljer(fagsakId = fagsakId, stønadstype = StønadType.DAGPENGER_ARBEIDSSOKER_ORDINAER),
         behandling = behandlingsdetaljer(behandlingId, forrigeBehandlingId, behandlingType),
         søker = Søker(
             personIdent = "12345678910",
@@ -314,7 +314,7 @@ fun opprettFrittståendeBrevDto(): FrittståendeBrevDto {
         fil = "fil.pdf".toByteArray(),
         journalførendeEnhet = "4489",
         saksbehandlerIdent = "saksbehandlerIdent",
-        stønadType = StønadType.DAGPENGER,
+        stønadType = StønadType.DAGPENGER_ARBEIDSSOKER_ORDINAER,
     )
 }
 

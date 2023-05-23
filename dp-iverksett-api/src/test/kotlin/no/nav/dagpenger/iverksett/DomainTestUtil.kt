@@ -11,7 +11,6 @@ import no.nav.dagpenger.iverksett.konsumenter.økonomi.simulering.grupperPosteri
 import no.nav.dagpenger.iverksett.kontrakter.felles.BehandlingType
 import no.nav.dagpenger.iverksett.kontrakter.felles.BehandlingÅrsak
 import no.nav.dagpenger.iverksett.kontrakter.felles.Datoperiode
-import no.nav.dagpenger.iverksett.kontrakter.felles.StønadType
 import no.nav.dagpenger.iverksett.kontrakter.felles.Vedtaksresultat
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.SimuleringDto
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.UtbetalingDto
@@ -28,6 +27,7 @@ import no.nav.dagpenger.iverksett.kontrakter.simulering.SimulertPostering
 import no.nav.dagpenger.iverksett.util.behandlingsdetaljer
 import no.nav.dagpenger.iverksett.util.opprettIverksettDagpenger
 import no.nav.dagpenger.iverksett.util.vedtaksdetaljerDagpenger
+import no.nav.dagpenger.kontrakter.utbetaling.StønadType
 import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -44,7 +44,7 @@ fun simuleringDto(
         utbetalinger = andeler,
         saksbehandlerId = "saksbehandlerId",
         eksternBehandlingId = 1,
-        stønadstype = StønadType.DAGPENGER,
+        stønadstype = StønadType.DAGPENGER_ARBEIDSSOKER_ORDINAER,
         sakId = UUID.randomUUID(),
         behandlingId = behandlingId,
         personIdent = "12345611111",

@@ -4,9 +4,9 @@ import no.nav.dagpenger.iverksett.kontrakter.arbeidsoppfølging.Aktivitetstype
 import no.nav.dagpenger.iverksett.kontrakter.arbeidsoppfølging.Barn
 import no.nav.dagpenger.iverksett.kontrakter.arbeidsoppfølging.Periode
 import no.nav.dagpenger.iverksett.kontrakter.arbeidsoppfølging.Periodetype
-import no.nav.dagpenger.iverksett.kontrakter.arbeidsoppfølging.Stønadstype
 import no.nav.dagpenger.iverksett.kontrakter.arbeidsoppfølging.Vedtaksresultat
 import no.nav.dagpenger.iverksett.util.opprettIverksettDagpenger
+import no.nav.dagpenger.kontrakter.utbetaling.StønadType
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import java.time.LocalDate
@@ -22,7 +22,7 @@ class ArbeidsoppfølgingMapperTest {
         val vedtakTilArbeidsoppfølging = ArbeidsoppfølgingMapper.mapTilVedtakDagpengerTilArbeidsoppfølging(iverksett)
 
         assertThat(vedtakTilArbeidsoppfølging.behanlingId).isEqualTo(iverksett.behandling.behandlingId)
-        assertThat(vedtakTilArbeidsoppfølging.stønadstype).isEqualTo(Stønadstype.DAGPENGER)
+        assertThat(vedtakTilArbeidsoppfølging.stønadstype).isEqualTo(StønadType.DAGPENGER_ARBEIDSSOKER_ORDINAER)
         assertThat(vedtakTilArbeidsoppfølging.personIdent).isEqualTo(iverksett.søker.personIdent)
         assertThat(vedtakTilArbeidsoppfølging.vedtaksresultat).isEqualTo(Vedtaksresultat.INNVILGET)
         assertThat(vedtakTilArbeidsoppfølging.personIdent).isEqualTo(iverksett.søker.personIdent)

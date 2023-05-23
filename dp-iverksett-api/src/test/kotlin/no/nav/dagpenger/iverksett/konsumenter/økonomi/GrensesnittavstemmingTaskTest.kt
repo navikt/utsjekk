@@ -4,12 +4,12 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
-import no.nav.dagpenger.iverksett.infrastruktur.util.tilFagsystem
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.grensesnitt.GrensesnittavstemmingPayload
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.grensesnitt.GrensesnittavstemmingTask
-import no.nav.dagpenger.iverksett.kontrakter.felles.StønadType
 import no.nav.dagpenger.iverksett.kontrakter.objectMapper
 import no.nav.dagpenger.kontrakter.utbetaling.GrensesnittavstemmingRequest
+import no.nav.dagpenger.kontrakter.utbetaling.StønadType
+import no.nav.dagpenger.kontrakter.utbetaling.tilFagsystem
 import no.nav.familie.prosessering.domene.Task
 import no.nav.familie.prosessering.internal.TaskService
 import org.assertj.core.api.Assertions.assertThat
@@ -40,7 +40,7 @@ internal class GrensesnittavstemmingTaskTest {
         val capturedGrensesnittRequest = grensesnittavstemmingRequestSlot.captured
         assertThat(capturedGrensesnittRequest.fra).isEqualTo(LocalDate.of(2018, 4, 18).atStartOfDay())
         assertThat(capturedGrensesnittRequest.til).isEqualTo(LocalDate.of(2018, 4, 19).atStartOfDay())
-        assertThat(capturedGrensesnittRequest.fagsystem).isEqualTo(StønadType.DAGPENGER.tilFagsystem())
+        assertThat(capturedGrensesnittRequest.fagsystem).isEqualTo(StønadType.DAGPENGER_ARBEIDSSOKER_ORDINAER.tilFagsystem())
     }
 
     @Test
@@ -60,7 +60,7 @@ internal class GrensesnittavstemmingTaskTest {
             objectMapper.writeValueAsString(
                 GrensesnittavstemmingPayload(
                     fraDato = LocalDate.of(2018, 4, 19),
-                    stønadstype = StønadType.DAGPENGER,
+                    stønadstype = StønadType.DAGPENGER_ARBEIDSSOKER_ORDINAER,
                 ),
             )
         assertThat(slot.captured.payload).isEqualTo(forventetPayload)
@@ -72,7 +72,7 @@ internal class GrensesnittavstemmingTaskTest {
             objectMapper.writeValueAsString(
                 GrensesnittavstemmingPayload(
                     fraDato = LocalDate.of(2018, 4, 18),
-                    stønadstype = StønadType.DAGPENGER,
+                    stønadstype = StønadType.DAGPENGER_ARBEIDSSOKER_ORDINAER,
                 ),
             )
     }

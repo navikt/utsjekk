@@ -11,9 +11,9 @@ import no.nav.dagpenger.iverksett.cucumber.domeneparser.TilkjentYtelseParser
 import no.nav.dagpenger.iverksett.cucumber.domeneparser.parseDato
 import no.nav.dagpenger.iverksett.infrastruktur.transformer.toDomain
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.UtbetalingsoppdragGenerator
-import no.nav.dagpenger.iverksett.kontrakter.felles.StønadType
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.TilkjentYtelseDto
 import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.Ytelsestype
+import no.nav.dagpenger.kontrakter.utbetaling.StønadType
 import no.nav.dagpenger.kontrakter.utbetaling.Utbetalingsoppdrag
 import no.nav.dagpenger.kontrakter.utbetaling.Utbetalingsperiode
 import org.assertj.core.api.Assertions.assertThat
@@ -46,13 +46,13 @@ class StepDefinitions {
 
     @Gitt("følgende tilkjente ytelser for {}")
     fun følgende_vedtak(stønadTypeArg: String, dataTable: DataTable) {
-        stønadType = StønadType.valueOf(stønadTypeArg.uppercase())
+        stønadType = finnStønadType(stønadTypeArg)
         tilkjentYtelse.addAll(TilkjentYtelseParser.mapTilkjentYtelse(dataTable, startdato))
     }
 
     @Gitt("følgende tilkjente ytelser uten andel for {}")
     fun `følgende tilkjente ytelser uten andel for`(stønadTypeArg: String, dataTable: DataTable) {
-        stønadType = StønadType.valueOf(stønadTypeArg.uppercase())
+        stønadType = finnStønadType(stønadTypeArg)
         tilkjentYtelse.addAll(TilkjentYtelseParser.mapTilkjentYtelse(dataTable, startdato, false))
     }
 
@@ -204,6 +204,15 @@ class StepDefinitions {
                 it.value.utbetalingsoppdrag?.utbetalingsperiode?.isNotEmpty() == medUtbetalingsperiode
             }.map { it.key }
         assertThat(expectedBehandlingIder).containsExactlyInAnyOrderElementsOf(list)
+    }
+
+    private fun finnStønadType(stønadTypeArg: String): StønadType {
+        val stønadTypeString = stønadTypeArg.uppercase()
+
+        return when (stønadTypeString) {
+            "DAGPENGER" -> StønadType.DAGPENGER_ARBEIDSSOKER_ORDINAER
+            else -> StønadType.valueOf(stønadTypeString)
+        }
     }
 }
 

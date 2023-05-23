@@ -22,7 +22,6 @@ import no.nav.dagpenger.iverksett.kontrakter.felles.Datoperiode
 import no.nav.dagpenger.iverksett.kontrakter.felles.Opplysningskilde
 import no.nav.dagpenger.iverksett.kontrakter.felles.RegelId
 import no.nav.dagpenger.iverksett.kontrakter.felles.Revurderingsårsak
-import no.nav.dagpenger.iverksett.kontrakter.felles.StønadType
 import no.nav.dagpenger.iverksett.kontrakter.felles.SvarId
 import no.nav.dagpenger.iverksett.kontrakter.felles.TilkjentYtelseStatus
 import no.nav.dagpenger.iverksett.kontrakter.felles.VedtakType
@@ -32,6 +31,7 @@ import no.nav.dagpenger.iverksett.kontrakter.felles.Vilkårsresultat
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.AdressebeskyttelseGradering
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.AktivitetType
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.VedtaksperiodeType
+import no.nav.dagpenger.kontrakter.utbetaling.StønadType
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
@@ -68,7 +68,7 @@ internal class VedtakstatistikkMapperTest {
         assertThat(vedtakDagpengerDVH.funksjonellId).isEqualTo(behandlingId)
         assertThat(vedtakDagpengerDVH.person.personIdent).isEqualTo(søker)
         assertThat(vedtakDagpengerDVH.relatertBehandlingId).isEqualTo(forrigeBehandlingId)
-        assertThat(vedtakDagpengerDVH.stønadstype.name).isEqualTo(StønadType.DAGPENGER.name)
+        assertThat(vedtakDagpengerDVH.stønadstype.name).isEqualTo("DAGPENGER")
         assertThat(vedtakDagpengerDVH.tidspunktVedtak).isEqualTo(vedtakstidspunkt.atZone(ZoneId.of("Europe/Oslo")))
         assertThat(vedtakDagpengerDVH.utbetalinger).hasSize(2)
         assertThat(vedtakDagpengerDVH.utbetalinger.first().fraOgMed).isEqualTo(LocalDate.of(2021, 1, 1))
@@ -125,7 +125,7 @@ internal class VedtakstatistikkMapperTest {
         vedtak = vedtaksdetaljerDagpenger(),
     )
 
-    fun fagsakdetaljer(stønadstype: StønadType = StønadType.DAGPENGER): Fagsakdetaljer =
+    fun fagsakdetaljer(stønadstype: StønadType = StønadType.DAGPENGER_ARBEIDSSOKER_ORDINAER): Fagsakdetaljer =
         Fagsakdetaljer(
             fagsakId = fagsakId,
             stønadstype = stønadstype,

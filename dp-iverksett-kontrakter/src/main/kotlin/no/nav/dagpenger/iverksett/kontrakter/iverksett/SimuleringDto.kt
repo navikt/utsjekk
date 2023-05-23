@@ -1,6 +1,6 @@
 package no.nav.dagpenger.iverksett.kontrakter.iverksett
 
-import no.nav.dagpenger.iverksett.kontrakter.felles.StønadType
+import no.nav.dagpenger.kontrakter.utbetaling.StønadType
 import java.time.LocalDate
 import java.util.UUID
 

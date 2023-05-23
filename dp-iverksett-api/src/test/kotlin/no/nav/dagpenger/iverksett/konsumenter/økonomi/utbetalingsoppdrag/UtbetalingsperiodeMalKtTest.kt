@@ -1,7 +1,7 @@
 package no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag
 
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.lagAndelTilkjentYtelse
-import no.nav.dagpenger.iverksett.kontrakter.felles.StønadType
+import no.nav.dagpenger.kontrakter.utbetaling.StønadType
 import no.nav.dagpenger.kontrakter.utbetaling.Utbetalingsperiode
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -12,12 +12,12 @@ internal class UtbetalingsperiodeMalKtTest {
 
     @Test
     fun `skal mappe stønadstype til riktig satstype`() {
-        assertThat(mapSatstype(StønadType.DAGPENGER)).isEqualTo(Utbetalingsperiode.SatsType.DAG)
+        assertThat(mapSatstype(StønadType.DAGPENGER_ARBEIDSSOKER_ORDINAER)).isEqualTo(Utbetalingsperiode.SatsType.DAG)
     }
 
     @Test
     internal fun `skal sette satstype til DAG for dagpenger`() {
-        val utbetalingsperiode = lagUtbetalingsperiode(StønadType.DAGPENGER)
+        val utbetalingsperiode = lagUtbetalingsperiode(StønadType.DAGPENGER_ARBEIDSSOKER_ORDINAER)
         assertThat(utbetalingsperiode.satsType).isEqualTo(Utbetalingsperiode.SatsType.DAG)
     }
 

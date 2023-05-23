@@ -8,7 +8,6 @@ import no.nav.dagpenger.iverksett.api.domene.TilkjentYtelse
 import no.nav.dagpenger.iverksett.api.domene.VedtaksdetaljerDagpenger
 import no.nav.dagpenger.iverksett.api.domene.Vilkårsvurdering
 import no.nav.dagpenger.iverksett.infrastruktur.util.VilkårsvurderingUtil
-import no.nav.dagpenger.iverksett.infrastruktur.util.tilKlassifisering
 import no.nav.dagpenger.iverksett.kontrakter.dvh.Adressebeskyttelse
 import no.nav.dagpenger.iverksett.kontrakter.dvh.AktivitetType
 import no.nav.dagpenger.iverksett.kontrakter.dvh.Aktivitetskrav
@@ -25,7 +24,8 @@ import no.nav.dagpenger.iverksett.kontrakter.dvh.Vilkår
 import no.nav.dagpenger.iverksett.kontrakter.dvh.Vilkårsresultat
 import no.nav.dagpenger.iverksett.kontrakter.dvh.VilkårsvurderingDto
 import no.nav.dagpenger.iverksett.kontrakter.dvh.ÅrsakRevurdering
-import no.nav.dagpenger.iverksett.kontrakter.felles.StønadType
+import no.nav.dagpenger.kontrakter.utbetaling.StønadType
+import no.nav.dagpenger.kontrakter.utbetaling.tilKlassifisering
 import java.time.ZoneId
 import java.util.UUID
 import no.nav.dagpenger.iverksett.kontrakter.dvh.Barn as BarnEkstern
@@ -75,11 +75,19 @@ object VedtakstatistikkMapper {
                     .hentHarSagtOppEllerRedusertFraVurderinger(iverksett.behandling.vilkårsvurderinger),
             ),
             funksjonellId = iverksett.behandling.behandlingId,
-            stønadstype = StønadTypeEkstern.valueOf(iverksett.fagsak.stønadstype.name),
+            stønadstype = mapStønadType(iverksett.fagsak.stønadstype),
             kravMottatt = iverksett.behandling.kravMottatt,
             årsakRevurdering = mapÅrsakRevurdering(iverksett.behandling),
             avslagÅrsak = iverksett.vedtak.avslagÅrsak?.name,
         )
+    }
+
+    private fun mapStønadType(stønadsType: StønadType): StønadTypeEkstern = when (stønadsType) {
+        StønadType.DAGPENGER_ARBEIDSSOKER_ORDINAER,
+        StønadType.DAGPENGER_PERMITTERING_ORDINAER,
+        StønadType.DAGPENGER_PERMITTERING_FISKEINDUSTRI,
+        StønadType.DAGPENGER_EOS,
+        -> StønadTypeEkstern.DAGPENGER
     }
 
     private fun mapTilUtbetaling(

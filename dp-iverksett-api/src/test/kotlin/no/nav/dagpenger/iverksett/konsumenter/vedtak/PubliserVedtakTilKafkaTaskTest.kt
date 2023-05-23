@@ -10,7 +10,6 @@ import no.nav.dagpenger.iverksett.api.IverksettingRepository
 import no.nav.dagpenger.iverksett.infrastruktur.repository.findByIdOrThrow
 import no.nav.dagpenger.iverksett.infrastruktur.transformer.toDomain
 import no.nav.dagpenger.iverksett.konsumenter.arbeidsoppfolging.SendVedtakTilArbeidsoppfølgingTask
-import no.nav.dagpenger.iverksett.kontrakter.felles.StønadType
 import no.nav.dagpenger.iverksett.lagIverksett
 import no.nav.dagpenger.iverksett.util.opprettIverksettDto
 import no.nav.familie.prosessering.domene.Task
@@ -19,7 +18,6 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.util.UUID
-import no.nav.dagpenger.iverksett.kontrakter.felles.StønadType as EksternStønadType
 
 internal class PubliserVedtakTilKafkaTaskTest {
 
@@ -52,11 +50,6 @@ internal class PubliserVedtakTilKafkaTaskTest {
 
         verify(exactly = 1) { taskService.save(any()) }
         assertThat(taskSlot.captured.type).isEqualTo(SendVedtakTilArbeidsoppfølgingTask.TYPE)
-    }
-
-    @Test
-    internal fun `skal mappe stønadstyper`() {
-        assertThat(EksternStønadType.values().map { it.name }).isEqualTo(StønadType.values().map { it.name })
     }
 
     private fun lagTask() = Task(PubliserVedtakTilKafkaTask.TYPE, UUID.randomUUID().toString())

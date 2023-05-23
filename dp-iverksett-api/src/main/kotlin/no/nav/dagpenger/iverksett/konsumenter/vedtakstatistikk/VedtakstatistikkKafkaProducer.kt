@@ -39,6 +39,6 @@ class VedtakstatistikkKafkaProducer(private val kafkaProducerService: KafkaProdu
 
 fun Any.toJson(): String = objectMapper.writeValueAsString(this)
 
-fun StønadType.tilFelles(): no.nav.dagpenger.iverksett.kontrakter.felles.StønadType = when (this) {
-    StønadType.DAGPENGER -> no.nav.dagpenger.iverksett.kontrakter.felles.StønadType.DAGPENGER
+fun StønadType.tilFelles(): no.nav.dagpenger.kontrakter.utbetaling.StønadType = when (this) {
+    StønadType.DAGPENGER -> no.nav.dagpenger.kontrakter.utbetaling.StønadType.DAGPENGER_ARBEIDSSOKER_ORDINAER
 }

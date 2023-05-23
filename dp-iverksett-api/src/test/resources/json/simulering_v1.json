@@ -14,7 +14,7 @@
       "samordningsfradrag": 0,
       "inntektsreduksjon": 0,
       "personIdent": "01017012345",
-      "stønadsType": "DAGPENGER",
+      "stønadsType": "DAGPENGER_ARBEIDSSOKER_ORDINAER",
       "kildeBehandlingId": "234bed7c-b1d3-11eb-8529-0242ac130003"
     },
     {
@@ -30,12 +30,12 @@
       "samordningsfradrag": 0,
       "inntektsreduksjon": 0,
       "personIdent": "01017012345",
-      "stønadsType": "DAGPENGER",
+      "stønadsType": "DAGPENGER_ARBEIDSSOKER_ORDINAER",
       "kildeBehandlingId": "234bed7c-b1d3-11eb-8529-0242ac130003"
     }
   ],
   "saksbehandlerId": "12345",
-  "stønadstype": "DAGPENGER",
+  "stønadstype": "DAGPENGER_ARBEIDSSOKER_ORDINAER",
   "sakId": "4b657902-d994-11eb-b8bc-0242ac130004",
   "forrigeBehandlingId": "4b657902-d994-11eb-b8bc-0242ac130003"
 }

@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonValue
 
 enum class Behandlingstema(@JsonValue val value: String) {
-    Dagpenger("abXXXX"), //TODO Må finnes
+    Dagpenger_arbeidssoker_ordinaer("abXXXX"), //TODO Må finnes
     Feilutbetaling("ab0006"),
     Tilbakebetaling("ab0007"), // Tilbakekreving
     Klage("ae0058"),

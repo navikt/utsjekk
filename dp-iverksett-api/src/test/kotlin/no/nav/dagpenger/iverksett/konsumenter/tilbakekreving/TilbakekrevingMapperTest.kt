@@ -31,7 +31,7 @@ internal class TilbakekrevingMapperTest {
         assertThat(request.fagsystem).isEqualTo(Fagsystem.Dagpenger)
         assertThat(request.eksternFagsakId).isEqualTo(iverksett.fagsak.fagsakId.toString())
         assertThat(request.eksternId).isEqualTo(iverksett.behandling.behandlingId.toString())
-        assertThat(request.ytelsestype).isEqualTo(Ytelsestype.DAGPENGER)
+        assertThat(request.ytelsestype).isEqualTo(Ytelsestype.DAGPENGER_ARBEIDSSOKER_ORDINAER)
 
         assertThat(request.enhetId).isEqualTo(enhet.enhetId)
         assertThat(request.enhetsnavn).isEqualTo(ENHETSNAVN_BREV)

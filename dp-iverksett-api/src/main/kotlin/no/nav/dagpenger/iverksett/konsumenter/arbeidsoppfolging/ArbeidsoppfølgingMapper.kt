@@ -6,7 +6,6 @@ import no.nav.dagpenger.iverksett.kontrakter.arbeidsoppfølging.Aktivitetstype
 import no.nav.dagpenger.iverksett.kontrakter.arbeidsoppfølging.Barn
 import no.nav.dagpenger.iverksett.kontrakter.arbeidsoppfølging.Periode
 import no.nav.dagpenger.iverksett.kontrakter.arbeidsoppfølging.Periodetype
-import no.nav.dagpenger.iverksett.kontrakter.arbeidsoppfølging.Stønadstype
 import no.nav.dagpenger.iverksett.kontrakter.arbeidsoppfølging.VedtakDagpengerArbeidsoppfølging
 import no.nav.dagpenger.iverksett.kontrakter.arbeidsoppfølging.Vedtaksresultat
 
@@ -19,7 +18,7 @@ object ArbeidsoppfølgingMapper {
             behanlingId = iverksett.behandling.behandlingId,
             personIdent = iverksett.søker.personIdent,
             barn = iverksett.søker.barn.map { Barn(it.personIdent, it.termindato) },
-            stønadstype = Stønadstype.valueOf(iverksett.fagsak.stønadstype.name),
+            stønadstype = iverksett.fagsak.stønadstype,
             vedtaksresultat = Vedtaksresultat.valueOf(iverksett.vedtak.vedtaksresultat.name),
             periode = mapToVedtaksperioder(iverksett.vedtak),
         )

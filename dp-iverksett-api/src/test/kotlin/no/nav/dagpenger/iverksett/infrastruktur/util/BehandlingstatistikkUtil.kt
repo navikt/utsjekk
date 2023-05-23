@@ -5,11 +5,11 @@ import no.nav.dagpenger.iverksett.kontrakter.felles.BehandlingType
 import no.nav.dagpenger.iverksett.kontrakter.felles.BehandlingÅrsak
 import no.nav.dagpenger.iverksett.kontrakter.felles.Opplysningskilde
 import no.nav.dagpenger.iverksett.kontrakter.felles.Revurderingsårsak
-import no.nav.dagpenger.iverksett.kontrakter.felles.StønadType
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.BehandlingMetode
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.BehandlingsstatistikkDto
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.Hendelse
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.ÅrsakRevurderingDto
+import no.nav.dagpenger.kontrakter.utbetaling.StønadType
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -31,7 +31,7 @@ fun opprettBehandlingsstatistikkDto(behandlingId: UUID, hendelse: Hendelse, fort
         ansvarligEnhet = "ansvarligEnhet",
         opprettetEnhet = "opprettetEnhet",
         strengtFortroligAdresse = fortrolig,
-        stønadstype = StønadType.DAGPENGER,
+        stønadstype = StønadType.DAGPENGER_ARBEIDSSOKER_ORDINAER,
         behandlingstype = BehandlingType.FØRSTEGANGSBEHANDLING,
         relatertBehandlingId = UUID.randomUUID(),
         relatertEksternBehandlingId = null,

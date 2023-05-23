@@ -1,6 +1,7 @@
 package no.nav.dagpenger.iverksett.kontrakter.felles
 
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.Brevmottaker
+import no.nav.dagpenger.kontrakter.utbetaling.StønadType
 
 data class FrittståendeBrevDto(
     val personIdent: String,

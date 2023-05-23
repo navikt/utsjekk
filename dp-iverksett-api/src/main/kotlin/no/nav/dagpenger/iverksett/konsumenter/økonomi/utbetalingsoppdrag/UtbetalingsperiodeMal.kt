@@ -2,10 +2,10 @@ package no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag
 
 import no.nav.dagpenger.iverksett.api.domene.AndelTilkjentYtelse
 import no.nav.dagpenger.iverksett.api.domene.TilkjentYtelseMedMetaData
-import no.nav.dagpenger.iverksett.infrastruktur.util.tilKlassifisering
-import no.nav.dagpenger.iverksett.kontrakter.felles.StønadType
 import no.nav.dagpenger.kontrakter.utbetaling.Opphør
+import no.nav.dagpenger.kontrakter.utbetaling.StønadType
 import no.nav.dagpenger.kontrakter.utbetaling.Utbetalingsperiode
+import no.nav.dagpenger.kontrakter.utbetaling.tilKlassifisering
 import java.math.BigDecimal
 import java.time.LocalDate
 import java.util.UUID
@@ -60,6 +60,9 @@ fun lagUtbetalingsperiodeForOpphør(
 }
 
 fun mapSatstype(stønadstype: StønadType) = when (stønadstype) {
-    StønadType.DAGPENGER -> Utbetalingsperiode.SatsType.DAG
-    else -> error("Støtter ikke periodetype=$stønadstype")
+    StønadType.DAGPENGER_ARBEIDSSOKER_ORDINAER,
+    StønadType.DAGPENGER_PERMITTERING_ORDINAER,
+    StønadType.DAGPENGER_PERMITTERING_FISKEINDUSTRI,
+    StønadType.DAGPENGER_EOS,
+    -> Utbetalingsperiode.SatsType.DAG
 }

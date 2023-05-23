@@ -3,7 +3,6 @@ package no.nav.dagpenger.iverksett.konsumenter.økonomi.simulering
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.simulering.SimuleringsperiodeEtterbetaling.etterbetaling
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.simulering.SimuleringsperiodeEtterbetaling.medEtterbetaling
 import no.nav.dagpenger.iverksett.kontrakter.felles.Datoperiode
-import no.nav.dagpenger.iverksett.kontrakter.felles.StønadType
 import no.nav.dagpenger.iverksett.kontrakter.simulering.BeriketSimuleringsresultat
 import no.nav.dagpenger.iverksett.kontrakter.simulering.DetaljertSimuleringResultat
 import no.nav.dagpenger.iverksett.kontrakter.simulering.FagOmrådeKode
@@ -14,6 +13,7 @@ import no.nav.dagpenger.iverksett.kontrakter.simulering.SimuleringMottaker
 import no.nav.dagpenger.iverksett.kontrakter.simulering.Simuleringsoppsummering
 import no.nav.dagpenger.iverksett.kontrakter.simulering.Simuleringsperiode
 import no.nav.dagpenger.iverksett.kontrakter.simulering.SimulertPostering
+import no.nav.dagpenger.kontrakter.utbetaling.StønadType
 import java.math.BigDecimal
 import java.math.BigDecimal.ZERO
 import java.time.LocalDate
@@ -67,9 +67,11 @@ fun grupperPosteringerEtterDato(mottakere: List<SimuleringMottaker>?): List<Simu
 }
 
 fun fagområdeKoderForPosteringer(stønadType: StønadType): Set<FagOmrådeKode> = when (stønadType) {
-    StønadType.DAGPENGER -> setOf(
-        FagOmrådeKode.DAGPENGER,
-    )
+    StønadType.DAGPENGER_ARBEIDSSOKER_ORDINAER,
+    StønadType.DAGPENGER_PERMITTERING_ORDINAER,
+    StønadType.DAGPENGER_PERMITTERING_FISKEINDUSTRI,
+    StønadType.DAGPENGER_EOS,
+    -> setOf(FagOmrådeKode.DAGPENGER)
 }
 
 private fun hentNyttBeløp(posteringer: List<SimulertPostering>) =

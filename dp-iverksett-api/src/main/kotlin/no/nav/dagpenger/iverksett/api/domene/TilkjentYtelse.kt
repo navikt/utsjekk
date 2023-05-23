@@ -1,7 +1,7 @@
 package no.nav.dagpenger.iverksett.api.domene
 
-import no.nav.dagpenger.iverksett.kontrakter.felles.StønadType
 import no.nav.dagpenger.iverksett.kontrakter.felles.TilkjentYtelseStatus
+import no.nav.dagpenger.kontrakter.utbetaling.StønadType
 import no.nav.dagpenger.kontrakter.utbetaling.Utbetalingsoppdrag
 import java.time.LocalDate
 import java.util.UUID

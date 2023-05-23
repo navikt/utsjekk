@@ -2,9 +2,8 @@ package no.nav.dagpenger.iverksett.konsumenter.arbeidsoppfolging
 
 import no.nav.dagpenger.iverksett.infrastruktur.service.KafkaProducerService
 import no.nav.dagpenger.iverksett.konsumenter.vedtakstatistikk.toJson
-import no.nav.dagpenger.iverksett.kontrakter.arbeidsoppfølging.Stønadstype
 import no.nav.dagpenger.iverksett.kontrakter.arbeidsoppfølging.VedtakDagpengerArbeidsoppfølging
-import no.nav.dagpenger.iverksett.kontrakter.felles.StønadType
+import no.nav.dagpenger.kontrakter.utbetaling.StønadType
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
@@ -27,7 +26,7 @@ class ArbeidsoppfølgingKafkaProducer(private val kafkaProducerService: KafkaPro
         )
     }
 
-    fun sendVedtak(behandlingId: UUID, stønadstype: Stønadstype, vedtakArbeidsoppfølging: String) {
+    fun sendVedtak(behandlingId: UUID, stønadstype: StønadType, vedtakArbeidsoppfølging: String) {
         logger.info("Sending to Kafka topic: {}", topic)
         secureLogger.debug("Sending to Kafka topic: {}\nArbeidsoppfølging: {}", topic, vedtakArbeidsoppfølging)
 

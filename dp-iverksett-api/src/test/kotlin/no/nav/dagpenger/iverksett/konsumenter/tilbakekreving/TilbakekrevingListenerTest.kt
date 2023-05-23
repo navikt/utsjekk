@@ -47,7 +47,7 @@ internal class TilbakekrevingListenerTest {
 
     @Test
     internal fun `send kafkamelding til listener med sp-type, forvent kall til kafkaproducer`() {
-        listener.listen(record(Ytelsestype.DAGPENGER))
+        listener.listen(record(Ytelsestype.DAGPENGER_ARBEIDSSOKER_ORDINAER))
         verify(exactly = 1) { tilbakekrevingProducer.send(any(), any()) }
     }
 
@@ -63,7 +63,7 @@ internal class TilbakekrevingListenerTest {
                     ),
                 ),
             )
-        listener.listen(record(Ytelsestype.DAGPENGER))
+        listener.listen(record(Ytelsestype.DAGPENGER_ARBEIDSSOKER_ORDINAER))
         assertThat(respons.captured.feilMelding!!).contains("Inkonsistens. FagsakID")
     }
 

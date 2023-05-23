@@ -10,7 +10,6 @@ import no.nav.familie.prosessering.domene.Task
 import no.nav.familie.prosessering.internal.TaskService
 import org.springframework.stereotype.Service
 import java.util.UUID
-import no.nav.dagpenger.iverksett.kontrakter.felles.StønadType as EksternStønadType
 
 @Service
 @TaskStepBeskrivelse(
@@ -31,7 +30,7 @@ class PubliserVedtakTilKafkaTask(
             DagpengerVedtakhendelse(
                 behandlingId = iverksett.behandling.behandlingId,
                 personIdent = iverksett.søker.personIdent,
-                stønadType = EksternStønadType.valueOf(iverksett.fagsak.stønadstype.name),
+                stønadType = iverksett.fagsak.stønadstype,
             ),
         )
     }

@@ -4,8 +4,8 @@ import no.nav.dagpenger.iverksett.api.domene.AndelTilkjentYtelse
 import no.nav.dagpenger.iverksett.api.domene.TilkjentYtelse
 import no.nav.dagpenger.iverksett.api.domene.TilkjentYtelseMedMetaData
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.UtbetalingsoppdragGenerator.lagTilkjentYtelseMedUtbetalingsoppdrag
-import no.nav.dagpenger.iverksett.kontrakter.felles.StønadType
 import no.nav.dagpenger.iverksett.kontrakter.felles.TilkjentYtelseStatus
+import no.nav.dagpenger.kontrakter.utbetaling.StønadType
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.opentest4j.AssertionFailedError
@@ -145,7 +145,7 @@ internal class UtbetalingsoppdragGeneratorTest {
             ),
             personIdent = "1",
             behandlingId = behandlingId,
-            stønadstype = StønadType.DAGPENGER,
+            stønadstype = StønadType.DAGPENGER_ARBEIDSSOKER_ORDINAER,
             sakId = UUID.randomUUID(),
             saksbehandlerId = "VL",
             vedtaksdato = LocalDate.of(2021, 5, 12),

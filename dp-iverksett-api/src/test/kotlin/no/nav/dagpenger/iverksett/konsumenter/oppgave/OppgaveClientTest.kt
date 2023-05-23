@@ -89,7 +89,7 @@ class OppgaveClientTest {
             fristFerdigstillelse = LocalDate.now().plusDays(1),
             beskrivelse = beskrivelse,
             enhetsnummer = null,
-            behandlingstema = Behandlingstema.Dagpenger.value,
+            behandlingstema = Behandlingstema.Dagpenger_arbeidssoker_ordinaer.value,
             tilordnetRessurs = null,
             behandlesAvApplikasjon = "dp-sak",
         )

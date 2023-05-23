@@ -1,6 +1,6 @@
 package no.nav.dagpenger.iverksett.kontrakter.samordning
 
-import no.nav.dagpenger.iverksett.kontrakter.felles.StønadType
+import no.nav.dagpenger.kontrakter.utbetaling.StønadType
 import java.util.UUID
 
 data class DagpengerVedtakhendelse(

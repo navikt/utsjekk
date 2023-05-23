@@ -1,5 +1,6 @@
 package no.nav.dagpenger.iverksett.kontrakter.arbeidsoppfølging
 
+import no.nav.dagpenger.kontrakter.utbetaling.StønadType
 import java.time.LocalDate
 import java.util.UUID
 
@@ -7,7 +8,7 @@ data class VedtakDagpengerArbeidsoppfølging(
     val behanlingId: UUID,
     val personIdent: String,
     val barn: List<Barn>,
-    val stønadstype: Stønadstype,
+    val stønadstype: StønadType,
     val periode: List<Periode>,
     val vedtaksresultat: Vedtaksresultat,
 )
@@ -23,10 +24,6 @@ data class Periode(
     val periodetype: Periodetype,
     val aktivitetstype: Aktivitetstype,
 )
-
-enum class Stønadstype {
-    DAGPENGER
-}
 
 enum class Vedtaksresultat {
     INNVILGET,
