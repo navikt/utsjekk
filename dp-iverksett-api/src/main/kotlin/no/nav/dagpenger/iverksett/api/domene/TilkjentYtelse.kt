@@ -50,6 +50,7 @@ private fun TilkjentYtelse?.lagNormaliserteAndeler(): List<AndelTilkjentYtelse> 
                 beløp = it.beløp,
                 periode = it.periode,
                 inntekt = it.inntekt,
+                stønadstype = it.stønadstype,
                 samordningsfradrag = it.samordningsfradrag,
                 inntektsreduksjon = it.inntektsreduksjon,
             )

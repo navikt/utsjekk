@@ -8,25 +8,25 @@ data class VedtakDagpengerDVH(
     val fagsakId: UUID,
     val behandlingId: UUID,
     val relatertBehandlingId: UUID? = null,
-    val adressebeskyttelse: Adressebeskyttelse? = null,
+    val adressebeskyttelse: AdressebeskyttelseDVH? = null,
     val tidspunktVedtak: ZonedDateTime? = null,
-    val vilkårsvurderinger: List<VilkårsvurderingDto>,
-    val person: Person,
-    val barn: List<Barn>,
-    val behandlingType: BehandlingType,
-    val behandlingÅrsak: BehandlingÅrsak,
-    val vedtak: Vedtak? = null,
-    val vedtaksperioder: List<VedtaksperiodeDagpengerDto>,
-    val utbetalinger: List<Utbetaling>,
-    val aktivitetskrav: Aktivitetskrav,
+    val vilkårsvurderinger: List<VilkårsvurderingDVH>,
+    val person: PersonDVH,
+    val barn: List<BarnDVH>,
+    val behandlingType: BehandlingTypeDVH,
+    val behandlingÅrsak: BehandlingÅrsakDVH,
+    val vedtak: VedtakresultatDVH? = null,
+    val vedtaksperioder: List<VedtaksperiodeDagpengerDVH>,
+    val utbetalinger: List<UtbetalingDVH>,
+    val aktivitetskrav: AktivitetskravDVH,
     val funksjonellId: UUID? = null,
-    val stønadstype: StønadType,
+    val stønadstype: StønadTypeDVH,
     val kravMottatt: LocalDate? = null,
-    val årsakRevurdering: ÅrsakRevurdering? = null,
+    val årsakRevurdering: ÅrsakRevurderingDVH? = null,
     val avslagÅrsak: String? = null, // F.eks: VILKÅR_IKKE_OPPFYLT, BARN_OVER_ÅTTE_ÅR, STØNADSTID_OPPBRUKT, MANGLENDE_OPPLYSNINGER, MINDRE_INNTEKTSENDRINGER
 )
 
-enum class BehandlingType {
+enum class BehandlingTypeDVH {
     FØRSTEGANGSBEHANDLING,
     REVURDERING, // Inkluderer opphør
     KLAGE,
@@ -34,7 +34,7 @@ enum class BehandlingType {
     TILBAKEFØRING_TIL_INFOTRYGD,
 }
 
-enum class BehandlingÅrsak {
+enum class BehandlingÅrsakDVH {
     SØKNAD,
     NYE_OPPLYSNINGER,
     SANKSJON_1_MND,
@@ -46,45 +46,45 @@ enum class BehandlingÅrsak {
     SATSENDRING,
 }
 
-enum class Vedtak {
+enum class VedtakresultatDVH {
     INNVILGET,
     OPPHØRT,
     AVSLÅTT,
 }
 
-enum class Adressebeskyttelse {
+enum class AdressebeskyttelseDVH {
     STRENGT_FORTROLIG,
     STRENGT_FORTROLIG_UTLAND,
     FORTROLIG,
     UGRADERT,
 }
 
-data class Person(val personIdent: String? = null)
+data class PersonDVH(val personIdent: String? = null)
 
-data class Barn(val personIdent: String? = null, val termindato: LocalDate? = null)
+data class BarnDVH(val personIdent: String? = null, val termindato: LocalDate? = null)
 
-data class Utbetaling(
+data class UtbetalingDVH(
     val beløp: Int,
     var samordningsfradrag: Int,
     val inntekt: Int,
     val inntektsreduksjon: Int,
     val fraOgMed: LocalDate,
     val tilOgMed: LocalDate,
-    val utbetalingsdetalj: Utbetalingsdetalj,
+    val utbetalingsdetalj: UtbetalingsdetaljDVH,
 )
 
-data class Utbetalingsdetalj(
-    val gjelderPerson: Person,
+data class UtbetalingsdetaljDVH(
+    val gjelderPerson: PersonDVH,
     val klassekode: String, // Identifiserer detaljert stønadstype i oppdragsystemet: "DPORAS"
     val delytelseId: String,
 ) // Identifiderer utbetalingen i oppdragssystemet
 
-data class VilkårsvurderingDto(
-    val vilkår: Vilkår,
-    val resultat: Vilkårsresultat,
+data class VilkårsvurderingDVH(
+    val vilkår: VilkårDVH,
+    val resultat: VilkårsresultatDVH,
 )
 
-enum class Vilkårsresultat {
+enum class VilkårsresultatDVH {
     OPPFYLT,
     AUTOMATISK_OPPFYLT,
     IKKE_OPPFYLT,
@@ -93,7 +93,7 @@ enum class Vilkårsresultat {
     SKAL_IKKE_VURDERES,
 }
 
-enum class Vilkår {
+enum class VilkårDVH {
     FORUTGÅENDE_MEDLEMSKAP,
     LOVLIG_OPPHOLD,
     MOR_ELLER_FAR,
@@ -112,16 +112,16 @@ enum class Vilkår {
     DOKUMENTASJON_AV_UTDANNING,
     ER_UTDANNING_HENSIKTSMESSIG,
 }
-data class Aktivitetskrav(val aktivitetspliktInntrefferDato: LocalDate?, val harSagtOppArbeidsforhold: Boolean?)
+data class AktivitetskravDVH(val aktivitetspliktInntrefferDato: LocalDate?, val harSagtOppArbeidsforhold: Boolean?)
 
-data class VedtaksperiodeDagpengerDto(
+data class VedtaksperiodeDagpengerDVH(
     val fraOgMed: LocalDate,
     val tilOgMed: LocalDate,
-    val aktivitet: AktivitetType,
-    val periodeType: VedtaksperiodeType,
+    val aktivitet: AktivitetTypeDVH,
+    val periodeType: VedtaksperiodeTypeDVH,
 )
 
-enum class VedtaksperiodeType {
+enum class VedtaksperiodeTypeDVH {
     MIGRERING,
     FORLENGELSE,
     HOVEDPERIODE,
@@ -131,7 +131,7 @@ enum class VedtaksperiodeType {
     NY_PERIODE_FOR_NYTT_BARN,
 }
 
-enum class AktivitetType {
+enum class AktivitetTypeDVH {
     MIGRERING,
     IKKE_AKTIVITETSPLIKT,
     BARN_UNDER_ETT_ÅR,
@@ -154,11 +154,11 @@ enum class AktivitetType {
     FORLENGELSE_STØNAD_UT_SKOLEÅRET,
 }
 
-enum class StønadType {
+enum class StønadTypeDVH {
     DAGPENGER
 }
 
-data class ÅrsakRevurdering(
+data class ÅrsakRevurderingDVH(
     val opplysningskilde: String,
     val årsak: String,
 )

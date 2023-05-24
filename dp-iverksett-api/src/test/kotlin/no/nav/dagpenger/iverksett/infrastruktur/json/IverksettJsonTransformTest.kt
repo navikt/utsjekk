@@ -20,15 +20,15 @@ class IverksettJsonTransformTest {
     @Test
     fun `deserialiser dagpenger JSON til IverksettDtoJson, kall toDomain, forvent likhet`() {
         val json: String = ResourceLoaderTestUtil.readResource("json/IverksettDtoEksempel.json")
-        val iverksettJson = objectMapper.readValue<IverksettDagpengerdDto>(json)
-        val iverksett = iverksettJson.toDomain()
+        val iverksettDto = objectMapper.readValue<IverksettDagpengerdDto>(json)
+        val iverksett = iverksettDto.toDomain()
 
-        assertThat(iverksettJson).isInstanceOf(IverksettDagpengerdDto::class.java)
+        assertThat(iverksettDto).isInstanceOf(IverksettDagpengerdDto::class.java)
         assertThat(iverksett).isInstanceOf(IverksettDagpenger::class.java)
 
         assertThat(iverksett).isNotNull
         assertThat(objectMapper.readTree(json))
-            .isEqualTo(objectMapper.readTree(objectMapper.writeValueAsString(iverksettJson)))
+            .isEqualTo(objectMapper.readTree(objectMapper.writeValueAsString(iverksettDto)))
     }
 
     @Test

@@ -4,6 +4,7 @@ import no.nav.dagpenger.iverksett.api.domene.AndelTilkjentYtelse
 import no.nav.dagpenger.iverksett.kontrakter.felles.Datoperiode
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.DatoperiodeDto
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.UtbetalingDto
+import no.nav.dagpenger.kontrakter.utbetaling.StønadType
 import java.time.LocalDate
 import java.util.UUID
 
@@ -17,6 +18,7 @@ fun lagAndelTilkjentYtelse(
     inntekt: Int = 0,
     samordningsfradrag: Int = 0,
     inntektsreduksjon: Int = 0,
+    stønadstype: StønadType = StønadType.DAGPENGER_ARBEIDSSOKER_ORDINAER,
 ) =
     AndelTilkjentYtelse(
         beløp = beløp,
@@ -27,6 +29,7 @@ fun lagAndelTilkjentYtelse(
         periodeId = periodeId,
         forrigePeriodeId = forrigePeriodeId,
         kildeBehandlingId = kildeBehandlingId,
+        stønadstype = stønadstype,
     )
 
 fun lagAndelTilkjentYtelseDto(

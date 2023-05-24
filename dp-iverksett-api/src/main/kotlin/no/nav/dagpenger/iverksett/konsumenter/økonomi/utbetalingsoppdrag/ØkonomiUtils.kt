@@ -6,6 +6,7 @@ import no.nav.dagpenger.iverksett.api.domene.AndelTilkjentYtelse.Companion.snitt
 import no.nav.dagpenger.iverksett.api.domene.TilkjentYtelse
 import no.nav.dagpenger.iverksett.api.domene.TilkjentYtelseMedMetaData
 import no.nav.dagpenger.iverksett.kontrakter.felles.Datoperiode
+import no.nav.dagpenger.kontrakter.utbetaling.StønadType
 import no.nav.dagpenger.kontrakter.utbetaling.Utbetalingsperiode
 import java.time.LocalDate
 import java.util.UUID
@@ -21,10 +22,10 @@ fun nullAndelTilkjentYtelse(kildeBehandlingId: UUID, periodeId: PeriodeId?): And
     AndelTilkjentYtelse(
         beløp = 0,
         periode = Datoperiode(LocalDate.MIN, LocalDate.MIN),
+        stønadstype = StønadType.DAGPENGER_ARBEIDSSOKER_ORDINAER,
         inntekt = 0,
         samordningsfradrag = 0,
         inntektsreduksjon = 0,
-
         periodeId = periodeId?.gjeldende,
         kildeBehandlingId = kildeBehandlingId,
         forrigePeriodeId = periodeId?.forrige,

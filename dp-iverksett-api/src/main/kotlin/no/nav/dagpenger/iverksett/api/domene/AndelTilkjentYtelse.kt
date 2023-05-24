@@ -1,6 +1,7 @@
 package no.nav.dagpenger.iverksett.api.domene
 
 import no.nav.dagpenger.iverksett.kontrakter.felles.Datoperiode
+import no.nav.dagpenger.kontrakter.utbetaling.StønadType
 import java.util.UUID
 import kotlin.math.roundToInt
 
@@ -8,6 +9,7 @@ data class AndelTilkjentYtelse(
     val beløp: Int,
     val periode: Datoperiode,
     val inntekt: Int,
+    val stønadstype: StønadType,
     val samordningsfradrag: Int,
     val inntektsreduksjon: Int,
     val periodeId: Long? = null,

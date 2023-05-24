@@ -76,6 +76,7 @@
         "beløp": 0,
         "fraOgMedDato": "2021-05-01",
         "tilOgMedDato": "2021-05-31",
+        "stønadstype":"DAGPENGER_ARBEIDSSOKER_ORDINAER",
         "periode": {
           "fom": "2021-05-01",
           "tom": "2021-05-31"

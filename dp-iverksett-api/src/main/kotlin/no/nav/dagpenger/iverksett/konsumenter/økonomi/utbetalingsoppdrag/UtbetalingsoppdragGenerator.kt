@@ -115,7 +115,7 @@ object UtbetalingsoppdragGenerator {
         return andeler.map {
             lagPeriodeFraAndel(
                 andel = it,
-                type = tilkjentYtelse.stønadstype,
+                type = it.stønadstype,
                 behandlingId = tilkjentYtelse.behandlingId,
                 vedtaksdato = tilkjentYtelse.vedtaksdato,
                 personIdent = tilkjentYtelse.personIdent,

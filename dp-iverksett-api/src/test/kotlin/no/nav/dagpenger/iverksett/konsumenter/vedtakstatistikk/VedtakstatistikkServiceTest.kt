@@ -9,24 +9,24 @@ import io.mockk.slot
 import no.nav.dagpenger.iverksett.ResourceLoaderTestUtil
 import no.nav.dagpenger.iverksett.infrastruktur.transformer.toDomain
 import no.nav.dagpenger.iverksett.infrastruktur.util.ObjectMapperProvider.objectMapper
-import no.nav.dagpenger.iverksett.kontrakter.dvh.Adressebeskyttelse
-import no.nav.dagpenger.iverksett.kontrakter.dvh.AktivitetType
-import no.nav.dagpenger.iverksett.kontrakter.dvh.Aktivitetskrav
-import no.nav.dagpenger.iverksett.kontrakter.dvh.Barn
-import no.nav.dagpenger.iverksett.kontrakter.dvh.BehandlingType
-import no.nav.dagpenger.iverksett.kontrakter.dvh.BehandlingÅrsak
-import no.nav.dagpenger.iverksett.kontrakter.dvh.Person
-import no.nav.dagpenger.iverksett.kontrakter.dvh.StønadType
-import no.nav.dagpenger.iverksett.kontrakter.dvh.Utbetaling
-import no.nav.dagpenger.iverksett.kontrakter.dvh.Utbetalingsdetalj
-import no.nav.dagpenger.iverksett.kontrakter.dvh.Vedtak
+import no.nav.dagpenger.iverksett.kontrakter.dvh.AdressebeskyttelseDVH
+import no.nav.dagpenger.iverksett.kontrakter.dvh.AktivitetTypeDVH
+import no.nav.dagpenger.iverksett.kontrakter.dvh.AktivitetskravDVH
+import no.nav.dagpenger.iverksett.kontrakter.dvh.BarnDVH
+import no.nav.dagpenger.iverksett.kontrakter.dvh.BehandlingTypeDVH
+import no.nav.dagpenger.iverksett.kontrakter.dvh.BehandlingÅrsakDVH
+import no.nav.dagpenger.iverksett.kontrakter.dvh.PersonDVH
+import no.nav.dagpenger.iverksett.kontrakter.dvh.StønadTypeDVH
+import no.nav.dagpenger.iverksett.kontrakter.dvh.UtbetalingDVH
+import no.nav.dagpenger.iverksett.kontrakter.dvh.UtbetalingsdetaljDVH
 import no.nav.dagpenger.iverksett.kontrakter.dvh.VedtakDagpengerDVH
-import no.nav.dagpenger.iverksett.kontrakter.dvh.VedtaksperiodeDagpengerDto
-import no.nav.dagpenger.iverksett.kontrakter.dvh.VedtaksperiodeType
-import no.nav.dagpenger.iverksett.kontrakter.dvh.Vilkår
-import no.nav.dagpenger.iverksett.kontrakter.dvh.Vilkårsresultat
-import no.nav.dagpenger.iverksett.kontrakter.dvh.VilkårsvurderingDto
-import no.nav.dagpenger.iverksett.kontrakter.dvh.ÅrsakRevurdering
+import no.nav.dagpenger.iverksett.kontrakter.dvh.VedtakresultatDVH
+import no.nav.dagpenger.iverksett.kontrakter.dvh.VedtaksperiodeDagpengerDVH
+import no.nav.dagpenger.iverksett.kontrakter.dvh.VedtaksperiodeTypeDVH
+import no.nav.dagpenger.iverksett.kontrakter.dvh.VilkårDVH
+import no.nav.dagpenger.iverksett.kontrakter.dvh.VilkårsresultatDVH
+import no.nav.dagpenger.iverksett.kontrakter.dvh.VilkårsvurderingDVH
+import no.nav.dagpenger.iverksett.kontrakter.dvh.ÅrsakRevurderingDVH
 import no.nav.dagpenger.iverksett.kontrakter.felles.Opplysningskilde
 import no.nav.dagpenger.iverksett.kontrakter.felles.Revurderingsårsak
 import no.nav.dagpenger.iverksett.kontrakter.felles.VilkårType
@@ -58,7 +58,7 @@ class VedtakstatistikkServiceTest {
             behandlingId = iverksettDagpenger.behandling.behandlingId,
             fagsakId = iverksettDagpenger.fagsak.fagsakId,
             tidspunktVedtak = iverksettDagpenger.vedtak.vedtakstidspunkt.toLocalDate(),
-            barn = iverksettDagpenger.søker.barn.map { Barn(it.personIdent, it.termindato) },
+            barn = iverksettDagpenger.søker.barn.map { BarnDVH(it.personIdent, it.termindato) },
         )
         assertThat(vedtakDagpenger).isEqualTo(vedtakstatistikkJsonSlot.captured)
     }
@@ -85,57 +85,57 @@ class VedtakstatistikkServiceTest {
         behandlingId: UUID,
         fagsakId: UUID,
         tidspunktVedtak: LocalDate,
-        barn: List<Barn> = emptyList(),
+        barn: List<BarnDVH> = emptyList(),
     ): VedtakDagpengerDVH {
         return VedtakDagpengerDVH(
             fagsakId = fagsakId,
             behandlingId = behandlingId,
             relatertBehandlingId = null,
-            adressebeskyttelse = Adressebeskyttelse.UGRADERT,
+            adressebeskyttelse = AdressebeskyttelseDVH.UGRADERT,
             tidspunktVedtak = tidspunktVedtak.atStartOfDay(ZoneId.of("Europe/Oslo")),
             vilkårsvurderinger = listOf(
-                VilkårsvurderingDto(
-                    vilkår = Vilkår.SAGT_OPP_ELLER_REDUSERT,
-                    resultat = Vilkårsresultat.OPPFYLT,
+                VilkårsvurderingDVH(
+                    vilkår = VilkårDVH.SAGT_OPP_ELLER_REDUSERT,
+                    resultat = VilkårsresultatDVH.OPPFYLT,
                 ),
             ),
-            person = Person(personIdent = "12345678910"),
+            person = PersonDVH(personIdent = "12345678910"),
             barn = barn,
-            behandlingType = BehandlingType.FØRSTEGANGSBEHANDLING,
-            behandlingÅrsak = BehandlingÅrsak.SØKNAD,
-            vedtak = Vedtak.INNVILGET,
+            behandlingType = BehandlingTypeDVH.FØRSTEGANGSBEHANDLING,
+            behandlingÅrsak = BehandlingÅrsakDVH.SØKNAD,
+            vedtak = VedtakresultatDVH.INNVILGET,
             vedtaksperioder = listOf(
-                VedtaksperiodeDagpengerDto(
+                VedtaksperiodeDagpengerDVH(
                     fraOgMed = YearMonth.now().atDay(1),
                     tilOgMed = YearMonth.now().atEndOfMonth(),
-                    aktivitet = AktivitetType.BARNET_ER_SYKT,
-                    periodeType = VedtaksperiodeType.HOVEDPERIODE,
+                    aktivitet = AktivitetTypeDVH.BARNET_ER_SYKT,
+                    periodeType = VedtaksperiodeTypeDVH.HOVEDPERIODE,
                 ),
             ),
             utbetalinger = listOf(
-                Utbetaling(
+                UtbetalingDVH(
                     beløp = 5000,
                     fraOgMed = LocalDate.parse("2021-01-01"),
                     tilOgMed = LocalDate.parse("2021-12-31"),
                     inntekt = 100,
                     inntektsreduksjon = 5,
                     samordningsfradrag = 2,
-                    utbetalingsdetalj = Utbetalingsdetalj(
+                    utbetalingsdetalj = UtbetalingsdetaljDVH(
                         klassekode = "DPORAS",
-                        gjelderPerson = Person(personIdent = "12345678910"),
+                        gjelderPerson = PersonDVH(personIdent = "12345678910"),
                         delytelseId = fagsakId.toString(),
                     ),
                 ),
             ),
 
-            aktivitetskrav = Aktivitetskrav(
+            aktivitetskrav = AktivitetskravDVH(
                 aktivitetspliktInntrefferDato = null,
                 harSagtOppArbeidsforhold = true,
             ),
             funksjonellId = behandlingId,
-            stønadstype = StønadType.DAGPENGER,
+            stønadstype = StønadTypeDVH.DAGPENGER,
             kravMottatt = LocalDate.of(2021, 3, 3),
-            årsakRevurdering = ÅrsakRevurdering(
+            årsakRevurdering = ÅrsakRevurderingDVH(
                 Opplysningskilde.MELDING_MODIA.name,
                 Revurderingsårsak.ENDRING_INNTEKT.name,
             ),

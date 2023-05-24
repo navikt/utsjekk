@@ -14,7 +14,7 @@ import no.nav.dagpenger.iverksett.api.domene.Vilkårsvurdering
 import no.nav.dagpenger.iverksett.api.domene.Vurdering
 import no.nav.dagpenger.iverksett.api.domene.ÅrsakRevurdering
 import no.nav.dagpenger.iverksett.konsumenter.brev.domain.Brevmottakere
-import no.nav.dagpenger.iverksett.kontrakter.dvh.Vedtak
+import no.nav.dagpenger.iverksett.kontrakter.dvh.VedtakresultatDVH
 import no.nav.dagpenger.iverksett.kontrakter.felles.AvslagÅrsak
 import no.nav.dagpenger.iverksett.kontrakter.felles.BehandlingType
 import no.nav.dagpenger.iverksett.kontrakter.felles.BehandlingÅrsak
@@ -80,7 +80,7 @@ internal class VedtakstatistikkMapperTest {
         assertThat(vedtakDagpengerDVH.utbetalinger.first().utbetalingsdetalj.delytelseId).isEqualTo("${fagsakId}1")
         assertThat(vedtakDagpengerDVH.utbetalinger.first().utbetalingsdetalj.klassekode).isEqualTo("DPORAS")
         assertThat(vedtakDagpengerDVH.utbetalinger.first().utbetalingsdetalj.gjelderPerson.personIdent).isEqualTo(søker)
-        assertThat(vedtakDagpengerDVH.vedtak).isEqualTo(Vedtak.INNVILGET)
+        assertThat(vedtakDagpengerDVH.vedtak).isEqualTo(VedtakresultatDVH.INNVILGET)
         assertThat(vedtakDagpengerDVH.vedtaksperioder).hasSize(2)
         assertThat(vedtakDagpengerDVH.vedtaksperioder.first().fraOgMed).isEqualTo(LocalDate.of(2021, 2, 1))
         assertThat(vedtakDagpengerDVH.vedtaksperioder.first().tilOgMed).isEqualTo(LocalDate.of(2021, 3, 31))
@@ -106,7 +106,7 @@ internal class VedtakstatistikkMapperTest {
             ),
             forrigeBehandlingId,
         )
-        assertThat(vedtakDagpengerDVH.vedtak).isEqualTo(Vedtak.AVSLÅTT)
+        assertThat(vedtakDagpengerDVH.vedtak).isEqualTo(VedtakresultatDVH.AVSLÅTT)
         assertThat(vedtakDagpengerDVH.avslagÅrsak).isEqualTo("MINDRE_INNTEKTSENDRINGER")
     }
 
@@ -153,6 +153,7 @@ internal class VedtakstatistikkMapperTest {
                 AndelTilkjentYtelse(
                     beløp = 9000,
                     periode = Datoperiode(YearMonth.of(2021, 1), YearMonth.of(2021, 5)),
+                    stønadstype = StønadType.DAGPENGER_ARBEIDSSOKER_ORDINAER,
                     inntekt = 300000,
                     samordningsfradrag = 1000,
                     inntektsreduksjon = 11000,
@@ -163,6 +164,7 @@ internal class VedtakstatistikkMapperTest {
                 AndelTilkjentYtelse(
                     beløp = 10000,
                     periode = Datoperiode(YearMonth.of(2021, 6), YearMonth.of(2021, 10)),
+                    stønadstype = StønadType.DAGPENGER_ARBEIDSSOKER_ORDINAER,
                     inntekt = 300000,
                     samordningsfradrag = 0,
                     inntektsreduksjon = 11000,

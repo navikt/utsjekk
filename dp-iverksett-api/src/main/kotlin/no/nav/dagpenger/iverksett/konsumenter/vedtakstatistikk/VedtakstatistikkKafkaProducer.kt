@@ -1,7 +1,7 @@
 package no.nav.dagpenger.iverksett.konsumenter.vedtakstatistikk
 
 import no.nav.dagpenger.iverksett.infrastruktur.service.KafkaProducerService
-import no.nav.dagpenger.iverksett.kontrakter.dvh.StønadType
+import no.nav.dagpenger.iverksett.kontrakter.dvh.StønadTypeDVH
 import no.nav.dagpenger.iverksett.kontrakter.dvh.VedtakDagpengerDVH
 import no.nav.dagpenger.iverksett.kontrakter.objectMapper
 import org.slf4j.LoggerFactory
@@ -21,7 +21,7 @@ class VedtakstatistikkKafkaProducer(private val kafkaProducerService: KafkaProdu
     fun sendVedtak(vedtakstatistikk: VedtakDagpengerDVH) {
         sendVedtak(vedtakstatistikk.behandlingId, vedtakstatistikk.stønadstype, vedtakstatistikk.toJson())
     }
-    fun sendVedtak(behandlingId: UUID, stønadstype: StønadType, vedtakStatistikk: String) {
+    fun sendVedtak(behandlingId: UUID, stønadstype: StønadTypeDVH, vedtakStatistikk: String) {
         logger.info("Sending to Kafka topic: {}", topic)
         secureLogger.debug("Sending to Kafka topic: {}\nVedtakStatistikk: {}", topic, vedtakStatistikk)
 
@@ -39,6 +39,6 @@ class VedtakstatistikkKafkaProducer(private val kafkaProducerService: KafkaProdu
 
 fun Any.toJson(): String = objectMapper.writeValueAsString(this)
 
-fun StønadType.tilFelles(): no.nav.dagpenger.kontrakter.utbetaling.StønadType = when (this) {
-    StønadType.DAGPENGER -> no.nav.dagpenger.kontrakter.utbetaling.StønadType.DAGPENGER_ARBEIDSSOKER_ORDINAER
+fun StønadTypeDVH.tilFelles(): no.nav.dagpenger.kontrakter.utbetaling.StønadType = when (this) {
+    StønadTypeDVH.DAGPENGER -> no.nav.dagpenger.kontrakter.utbetaling.StønadType.DAGPENGER_ARBEIDSSOKER_ORDINAER
 }
