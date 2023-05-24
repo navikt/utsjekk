@@ -14,6 +14,8 @@ import no.nav.dagpenger.iverksett.api.domene.Vurdering
 import no.nav.dagpenger.iverksett.api.domene.ÅrsakRevurdering
 import no.nav.dagpenger.iverksett.konsumenter.brev.domain.Brevmottaker
 import no.nav.dagpenger.iverksett.konsumenter.brev.domain.Brevmottakere
+import no.nav.dagpenger.iverksett.kontrakter.felles.BehandlingType
+import no.nav.dagpenger.iverksett.kontrakter.felles.BehandlingÅrsak
 import no.nav.dagpenger.iverksett.kontrakter.felles.Datoperiode
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.AktivitetType
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.BehandlingsdetaljerDto
@@ -29,6 +31,7 @@ import no.nav.dagpenger.iverksett.kontrakter.iverksett.VedtaksperiodeDagpengerDt
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.VilkårsvurderingDto
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.VurderingDto
 import java.time.LocalDate
+import java.util.UUID
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.Brevmottaker as BrevmottakerKontrakter
 
 fun VurderingDto.toDomain(): Vurdering {
@@ -132,12 +135,28 @@ fun BrevmottakerKontrakter.toDomain(): Brevmottaker = Brevmottaker(
 
 fun IverksettDagpengerdDto.toDomain(): IverksettDagpenger {
     return IverksettDagpenger(
-        fagsak = this.sak?.toDomain()
-            ?: this.fagsak?.toDomain()
-            ?: throw IllegalStateException("sak eller fagsak må ha verdi"),
-        søker = this.søker.toDomain(),
-        behandling = this.behandling.toDomain(),
+        fagsak = this.fagsak?.toDomain()
+            ?: this.sak?.toDomain()
+            ?: this.sakId.tilSak()
+            ?: throw IllegalStateException("sakId, sak eller fagsak må ha verdi"),
+        søker = this.søker?.toDomain()
+            ?: this.personIdent.tilSøker()
+            ?: throw IllegalStateException("personIdent eller søker må ha verdi"),
+        behandling = this.behandling?.toDomain()
+            ?: this.behandlingId?.tilBehandling()
+            ?: throw IllegalStateException("behandlingId eller behandling må ha verdi"),
         vedtak = this.vedtak.toDomain(),
         forrigeVedtak = this.forrigeVedtak?.toDomain(),
+    )
+}
+
+fun UUID?.tilSak(): Fagsakdetaljer? = this?.let { Fagsakdetaljer(it) }
+fun String?.tilSøker(): Søker? = this?.let { Søker(personIdent = it, tilhørendeEnhet = "") }
+
+fun UUID?.tilBehandling(): Behandlingsdetaljer? = this?.let {
+    Behandlingsdetaljer(
+        behandlingId = it,
+        behandlingType = BehandlingType.FØRSTEGANGSBEHANDLING,
+        behandlingÅrsak = BehandlingÅrsak.SØKNAD,
     )
 }

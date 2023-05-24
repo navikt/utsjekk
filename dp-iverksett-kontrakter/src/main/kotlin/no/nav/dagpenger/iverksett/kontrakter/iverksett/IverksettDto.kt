@@ -19,11 +19,16 @@ import java.time.LocalDateTime
 import java.util.UUID
 
 data class IverksettDagpengerdDto(
+    val sakId: UUID? = null,
+    @Deprecated("Bruk sakId")
     val sak: SakDto? = null,
-    @Deprecated("Bruk sak")
+    @Deprecated("Bruk sakId")
     val fagsak: FagsakdetaljerDto? = null,
-    val behandling: BehandlingsdetaljerDto,
-    val søker: SøkerDto,
+    val behandlingId: UUID? = null,
+    val behandling: BehandlingsdetaljerDto? = null,
+    val personIdent: String? = null,
+    @Deprecated("Bruk personIdent")
+    val søker: SøkerDto?=null,
     val vedtak: VedtaksdetaljerDagpengerDto,
     val forrigeVedtak: VedtaksdetaljerDagpengerDto? = null
 )
@@ -42,6 +47,7 @@ data class FagsakdetaljerDto(
     val stønadstype: StønadType = StønadType.DAGPENGER_ARBEIDSSOKER_ORDINAER,
 )
 
+@Deprecated("Bruk SakId")
 data class SakDto(
     val sakId: UUID,
     val stønadstype: StønadType = StønadType.DAGPENGER_ARBEIDSSOKER_ORDINAER,

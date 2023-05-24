@@ -56,9 +56,10 @@ internal class JournalførVedtaksbrevTaskTest {
 
     private val iverksettDto = opprettIverksettDto(behandlingId = behandlingId)
 
+    val iverksettDagpenger = iverksettDto.toDomain()
     private val iverksett = Iverksett(
-        iverksettDto.behandling.behandlingId,
-        iverksettDto.toDomain(),
+        iverksettDagpenger.behandling.behandlingId,
+        iverksettDagpenger,
         Brev(ByteArray(256)),
     )
 

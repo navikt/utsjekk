@@ -112,6 +112,7 @@ fun opprettIverksettDto(
             kravMottatt = LocalDate.of(2021, 3, 3),
             årsakRevurdering = ÅrsakRevurderingDto(Opplysningskilde.MELDING_MODIA, Revurderingsårsak.ENDRING_INNTEKT),
         ),
+        personIdent = "12345678910",
         søker = SøkerDto(
             personIdent = "12345678910",
             barn = emptyList(),
