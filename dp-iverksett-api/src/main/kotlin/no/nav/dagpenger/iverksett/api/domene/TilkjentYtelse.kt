@@ -53,7 +53,7 @@ private fun TilkjentYtelse?.lagNormaliserteAndeler(): List<AndelTilkjentYtelse> 
                 stønadstype = it.stønadstype,
                 samordningsfradrag = it.samordningsfradrag,
                 inntektsreduksjon = it.inntektsreduksjon,
-                ferietilllegg = it.ferietilllegg,
+                ferietillegg = it.ferietillegg,
             )
         } ?: emptyList()
 }
