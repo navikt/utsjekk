@@ -1,20 +1,7 @@
 package no.nav.dagpenger.iverksett.kontrakter.iverksett
 
-import no.nav.dagpenger.iverksett.kontrakter.arbeidsoppfølging.Barn
 import no.nav.dagpenger.iverksett.kontrakter.brev.Brevmottakere
-import no.nav.dagpenger.iverksett.kontrakter.felles.AvslagÅrsak
-import no.nav.dagpenger.iverksett.kontrakter.felles.BehandlingType
-import no.nav.dagpenger.iverksett.kontrakter.felles.BehandlingÅrsak
-import no.nav.dagpenger.iverksett.kontrakter.felles.Datoperiode
-import no.nav.dagpenger.iverksett.kontrakter.felles.OpphørÅrsak
-import no.nav.dagpenger.iverksett.kontrakter.felles.Opplysningskilde
-import no.nav.dagpenger.iverksett.kontrakter.felles.RegelId
-import no.nav.dagpenger.iverksett.kontrakter.felles.Revurderingsårsak
-import no.nav.dagpenger.iverksett.kontrakter.felles.SvarId
-import no.nav.dagpenger.iverksett.kontrakter.felles.VedtakType
-import no.nav.dagpenger.iverksett.kontrakter.felles.Vedtaksresultat
-import no.nav.dagpenger.iverksett.kontrakter.felles.VilkårType
-import no.nav.dagpenger.iverksett.kontrakter.felles.Vilkårsresultat
+import no.nav.dagpenger.iverksett.kontrakter.felles.*
 import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.Tilbakekrevingsvalg
 import no.nav.dagpenger.kontrakter.utbetaling.StønadType
 import java.math.BigDecimal

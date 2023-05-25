@@ -3,11 +3,11 @@ package no.nav.dagpenger.iverksett.konsumenter.arbeidsoppfolging
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.IverksettDagpenger
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.VedtaksdetaljerDagpenger
 import no.nav.dagpenger.iverksett.kontrakter.arbeidsoppfølging.Aktivitetstype
-import no.nav.dagpenger.iverksett.kontrakter.arbeidsoppfølging.Barn
 import no.nav.dagpenger.iverksett.kontrakter.arbeidsoppfølging.Periode
 import no.nav.dagpenger.iverksett.kontrakter.arbeidsoppfølging.Periodetype
 import no.nav.dagpenger.iverksett.kontrakter.arbeidsoppfølging.VedtakDagpengerArbeidsoppfølging
 import no.nav.dagpenger.iverksett.kontrakter.arbeidsoppfølging.Vedtaksresultat
+import no.nav.dagpenger.iverksett.kontrakter.felles.Barn
 
 object ArbeidsoppfølgingMapper {
 

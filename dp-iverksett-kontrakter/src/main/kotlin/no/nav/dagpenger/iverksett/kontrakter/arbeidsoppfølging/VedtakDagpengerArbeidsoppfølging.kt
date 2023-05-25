@@ -1,5 +1,6 @@
 package no.nav.dagpenger.iverksett.kontrakter.arbeidsoppfølging
 
+import no.nav.dagpenger.iverksett.kontrakter.felles.Barn
 import no.nav.dagpenger.kontrakter.utbetaling.StønadType
 import java.time.LocalDate
 import java.util.UUID
@@ -11,11 +12,6 @@ data class VedtakDagpengerArbeidsoppfølging(
     val stønadstype: StønadType,
     val periode: List<Periode>,
     val vedtaksresultat: Vedtaksresultat,
-)
-
-data class Barn(
-    val fødselsnummer: String? = null,
-    val termindato: LocalDate? = null,
 )
 
 data class Periode(

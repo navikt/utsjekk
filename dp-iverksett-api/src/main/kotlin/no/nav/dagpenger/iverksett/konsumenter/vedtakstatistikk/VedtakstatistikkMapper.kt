@@ -1,12 +1,5 @@
 package no.nav.dagpenger.iverksett.konsumenter.vedtakstatistikk
 
-import no.nav.dagpenger.iverksett.api.domene.Barn
-import no.nav.dagpenger.iverksett.kontrakter.iverksett.Behandlingsdetaljer
-import no.nav.dagpenger.iverksett.kontrakter.iverksett.IverksettDagpenger
-import no.nav.dagpenger.iverksett.kontrakter.iverksett.Søker
-import no.nav.dagpenger.iverksett.kontrakter.iverksett.TilkjentYtelse
-import no.nav.dagpenger.iverksett.kontrakter.iverksett.VedtaksdetaljerDagpenger
-import no.nav.dagpenger.iverksett.kontrakter.iverksett.Vilkårsvurdering
 import no.nav.dagpenger.iverksett.infrastruktur.util.VilkårsvurderingUtil
 import no.nav.dagpenger.iverksett.kontrakter.dvh.AdressebeskyttelseDVH
 import no.nav.dagpenger.iverksett.kontrakter.dvh.AktivitetTypeDVH
@@ -24,6 +17,8 @@ import no.nav.dagpenger.iverksett.kontrakter.dvh.VilkårDVH
 import no.nav.dagpenger.iverksett.kontrakter.dvh.VilkårsresultatDVH
 import no.nav.dagpenger.iverksett.kontrakter.dvh.VilkårsvurderingDVH
 import no.nav.dagpenger.iverksett.kontrakter.dvh.ÅrsakRevurderingDVH
+import no.nav.dagpenger.iverksett.kontrakter.felles.Barn
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.*
 import no.nav.dagpenger.kontrakter.utbetaling.StønadType
 import no.nav.dagpenger.kontrakter.utbetaling.tilKlassifisering
 import java.time.ZoneId
