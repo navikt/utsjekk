@@ -25,6 +25,13 @@
         <jackson.version>2.14.2</jackson.version>
     </properties>
 
+    <repositories>
+        <repository>
+            <id>github-dp</id>
+            <url>https://maven.pkg.github.com/navikt/dp-kontrakter</url>
+        </repository>
+    </repositories>
+
     <dependencies>
         <!-- Kotlin -->
         <dependency>

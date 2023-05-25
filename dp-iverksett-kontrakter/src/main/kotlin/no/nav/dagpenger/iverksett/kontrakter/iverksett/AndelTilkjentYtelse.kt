@@ -1,7 +1,7 @@
 package no.nav.dagpenger.iverksett.kontrakter.iverksett
 
 import no.nav.dagpenger.iverksett.kontrakter.felles.Datoperiode
-import no.nav.dagpenger.kontrakter.utbetaling.Ferietilllegg
+import no.nav.dagpenger.kontrakter.utbetaling.Ferietillegg
 import no.nav.dagpenger.kontrakter.utbetaling.StønadType
 import no.nav.dagpenger.kontrakter.utbetaling.tilKlassifisering
 import java.util.UUID
@@ -12,7 +12,7 @@ data class AndelTilkjentYtelse(
     val periode: Datoperiode,
     val inntekt: Int,
     val stønadstype: StønadType,
-    val ferietilllegg: Ferietilllegg?,
+    val ferietillegg: Ferietillegg?,
     val samordningsfradrag: Int,
     val inntektsreduksjon: Int,
     val periodeId: Long? = null,
@@ -57,4 +57,4 @@ data class AndelTilkjentYtelse(
     }
 }
 
-fun AndelTilkjentYtelse.tilKlassifisering(): String = this.stønadstype.tilKlassifisering(this.ferietilllegg)
+fun AndelTilkjentYtelse.tilKlassifisering(): String = this.stønadstype.tilKlassifisering(this.ferietillegg)
