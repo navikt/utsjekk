@@ -1,10 +1,10 @@
 package no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag
 
-import no.nav.dagpenger.iverksett.api.domene.AndelTilkjentYtelse
-import no.nav.dagpenger.iverksett.api.domene.AndelTilkjentYtelse.Companion.disjunkteAndeler
-import no.nav.dagpenger.iverksett.api.domene.AndelTilkjentYtelse.Companion.snittAndeler
-import no.nav.dagpenger.iverksett.api.domene.TilkjentYtelse
-import no.nav.dagpenger.iverksett.api.domene.TilkjentYtelseMedMetaData
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.AndelTilkjentYtelse
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.AndelTilkjentYtelse.Companion.disjunkteAndeler
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.AndelTilkjentYtelse.Companion.snittAndeler
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.TilkjentYtelse
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.TilkjentYtelseMedMetaData
 import no.nav.dagpenger.iverksett.kontrakter.felles.Datoperiode
 import no.nav.dagpenger.kontrakter.utbetaling.StønadType
 import no.nav.dagpenger.kontrakter.utbetaling.Utbetalingsperiode

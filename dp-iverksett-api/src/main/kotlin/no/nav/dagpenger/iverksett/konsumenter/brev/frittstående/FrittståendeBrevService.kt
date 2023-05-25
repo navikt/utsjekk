@@ -3,7 +3,7 @@ package no.nav.dagpenger.iverksett.konsumenter.brev.frittstående
 import no.nav.dagpenger.iverksett.infrastruktur.advice.ApiFeil
 import no.nav.dagpenger.iverksett.infrastruktur.transformer.toDomain
 import no.nav.dagpenger.iverksett.konsumenter.brev.JournalpostClient
-import no.nav.dagpenger.iverksett.konsumenter.brev.domain.Brevmottakere
+import no.nav.dagpenger.iverksett.kontrakter.brev.Brevmottakere
 import no.nav.dagpenger.iverksett.konsumenter.brev.domain.FrittståendeBrev
 import no.nav.dagpenger.iverksett.konsumenter.brev.stønadstypeTilDokumenttype
 import no.nav.dagpenger.iverksett.kontrakter.felles.FrittståendeBrevDto

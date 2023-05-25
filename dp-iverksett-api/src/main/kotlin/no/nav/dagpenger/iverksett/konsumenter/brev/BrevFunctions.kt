@@ -1,6 +1,6 @@
 package no.nav.dagpenger.iverksett.konsumenter.brev
 
-import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.IverksettDagpenger
 import no.nav.dagpenger.iverksett.kontrakter.felles.BehandlingType
 import no.nav.dagpenger.iverksett.kontrakter.felles.BehandlingÅrsak
 import no.nav.dagpenger.iverksett.kontrakter.felles.Vedtaksresultat

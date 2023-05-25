@@ -1,6 +1,7 @@
-package no.nav.dagpenger.iverksett.api.domene
+package no.nav.dagpenger.iverksett.kontrakter.iverksett
 
-import no.nav.dagpenger.iverksett.konsumenter.brev.domain.Brevmottakere
+import no.nav.dagpenger.iverksett.kontrakter.arbeidsoppfølging.Barn
+import no.nav.dagpenger.iverksett.kontrakter.brev.Brevmottakere
 import no.nav.dagpenger.iverksett.kontrakter.felles.AvslagÅrsak
 import no.nav.dagpenger.iverksett.kontrakter.felles.BehandlingType
 import no.nav.dagpenger.iverksett.kontrakter.felles.BehandlingÅrsak
@@ -14,9 +15,6 @@ import no.nav.dagpenger.iverksett.kontrakter.felles.VedtakType
 import no.nav.dagpenger.iverksett.kontrakter.felles.Vedtaksresultat
 import no.nav.dagpenger.iverksett.kontrakter.felles.VilkårType
 import no.nav.dagpenger.iverksett.kontrakter.felles.Vilkårsresultat
-import no.nav.dagpenger.iverksett.kontrakter.iverksett.AdressebeskyttelseGradering
-import no.nav.dagpenger.iverksett.kontrakter.iverksett.AktivitetType
-import no.nav.dagpenger.iverksett.kontrakter.iverksett.VedtaksperiodeType
 import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.Tilbakekrevingsvalg
 import no.nav.dagpenger.kontrakter.utbetaling.StønadType
 import java.math.BigDecimal

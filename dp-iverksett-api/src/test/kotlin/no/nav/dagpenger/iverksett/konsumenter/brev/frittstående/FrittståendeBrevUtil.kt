@@ -1,6 +1,6 @@
 package no.nav.dagpenger.iverksett.konsumenter.brev.frittstående
 
-import no.nav.dagpenger.iverksett.konsumenter.brev.domain.Brevmottakere
+import no.nav.dagpenger.iverksett.kontrakter.brev.Brevmottakere
 import no.nav.dagpenger.iverksett.konsumenter.brev.domain.FrittståendeBrev
 import no.nav.dagpenger.iverksett.kontrakter.felles.FrittståendeBrevType
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.Brevmottaker
@@ -16,13 +16,13 @@ object FrittståendeBrevUtil {
         stønadstype = StønadType.DAGPENGER_ARBEIDSSOKER_ORDINAER,
         mottakere = Brevmottakere(
             listOf(
-                no.nav.dagpenger.iverksett.konsumenter.brev.domain.Brevmottaker(
+                no.nav.dagpenger.iverksett.kontrakter.brev.Brevmottaker(
                     "11",
                     "navn1",
                     Brevmottaker.IdentType.PERSONIDENT,
                     Brevmottaker.MottakerRolle.BRUKER,
                 ),
-                no.nav.dagpenger.iverksett.konsumenter.brev.domain.Brevmottaker(
+                no.nav.dagpenger.iverksett.kontrakter.brev.Brevmottaker(
                     "22",
                     "navn2",
                     Brevmottaker.IdentType.PERSONIDENT,

@@ -2,12 +2,12 @@ package no.nav.dagpenger.iverksett.infrastruktur.configuration
 
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.fasterxml.jackson.module.kotlin.treeToValue
-import no.nav.dagpenger.iverksett.api.domene.Fagsakdetaljer
-import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.Fagsakdetaljer
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.IverksettDagpenger
 import no.nav.dagpenger.iverksett.api.domene.OppdragResultat
 import no.nav.dagpenger.iverksett.api.domene.TilbakekrevingResultat
-import no.nav.dagpenger.iverksett.api.domene.TilkjentYtelse
-import no.nav.dagpenger.iverksett.konsumenter.brev.domain.Brevmottakere
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.TilkjentYtelse
+import no.nav.dagpenger.iverksett.kontrakter.brev.Brevmottakere
 import no.nav.dagpenger.iverksett.konsumenter.brev.domain.DistribuerBrevResultatMap
 import no.nav.dagpenger.iverksett.konsumenter.brev.domain.JournalpostResultatMap
 import no.nav.dagpenger.iverksett.kontrakter.objectMapper

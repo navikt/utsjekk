@@ -1,7 +1,7 @@
 package no.nav.dagpenger.iverksett.konsumenter.tilbakekreving
 
-import no.nav.dagpenger.iverksett.api.domene.TilbakekrevingMedVarsel
-import no.nav.dagpenger.iverksett.api.domene.Tilbakekrevingsdetaljer
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.TilbakekrevingMedVarsel
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.Tilbakekrevingsdetaljer
 import no.nav.dagpenger.iverksett.beriketSimuleringsresultat
 import no.nav.dagpenger.iverksett.kontrakter.felles.Datoperiode
 import no.nav.dagpenger.iverksett.kontrakter.simulering.Simuleringsoppsummering

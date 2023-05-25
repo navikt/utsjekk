@@ -1,6 +1,6 @@
 package no.nav.dagpenger.iverksett.infrastruktur.util
 
-import no.nav.dagpenger.iverksett.api.domene.Vilkårsvurdering
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.Vilkårsvurdering
 import no.nav.dagpenger.iverksett.kontrakter.felles.RegelId
 import no.nav.dagpenger.iverksett.kontrakter.felles.SvarId
 import no.nav.dagpenger.iverksett.kontrakter.felles.VilkårType

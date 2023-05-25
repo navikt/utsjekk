@@ -1,5 +1,6 @@
 package no.nav.dagpenger.iverksett.konsumenter.brev.domain
 
+import no.nav.dagpenger.iverksett.kontrakter.brev.Brevmottakere
 import no.nav.dagpenger.iverksett.kontrakter.felles.FrittståendeBrevType
 import no.nav.dagpenger.kontrakter.utbetaling.StønadType
 import org.springframework.data.annotation.Id

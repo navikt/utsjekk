@@ -1,6 +1,6 @@
 package no.nav.dagpenger.iverksett.konsumenter.vedtakstatistikk
 
-import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.IverksettDagpenger
 import org.springframework.stereotype.Service
 
 @Service

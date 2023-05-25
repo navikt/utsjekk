@@ -2,7 +2,7 @@ package no.nav.dagpenger.iverksett.infrastruktur.json
 
 import com.fasterxml.jackson.module.kotlin.readValue
 import no.nav.dagpenger.iverksett.ResourceLoaderTestUtil
-import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.IverksettDagpenger
 import no.nav.dagpenger.iverksett.infrastruktur.transformer.toDomain
 import no.nav.dagpenger.iverksett.infrastruktur.util.ObjectMapperProvider.objectMapper
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.IverksettDagpengerdDto

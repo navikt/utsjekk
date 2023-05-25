@@ -9,7 +9,7 @@ import io.mockk.verify
 import no.nav.dagpenger.iverksett.api.IverksettingRepository
 import no.nav.dagpenger.iverksett.api.IverksettingService
 import no.nav.dagpenger.iverksett.api.domene.OppdragResultat
-import no.nav.dagpenger.iverksett.api.domene.TilkjentYtelse
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.TilkjentYtelse
 import no.nav.dagpenger.iverksett.api.tilstand.IverksettResultatService
 import no.nav.dagpenger.iverksett.infrastruktur.repository.findByIdOrThrow
 import no.nav.dagpenger.iverksett.infrastruktur.transformer.toDomain

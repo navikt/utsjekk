@@ -1,12 +1,12 @@
 package no.nav.dagpenger.iverksett.konsumenter.vedtakstatistikk
 
 import no.nav.dagpenger.iverksett.api.domene.Barn
-import no.nav.dagpenger.iverksett.api.domene.Behandlingsdetaljer
-import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
-import no.nav.dagpenger.iverksett.api.domene.Søker
-import no.nav.dagpenger.iverksett.api.domene.TilkjentYtelse
-import no.nav.dagpenger.iverksett.api.domene.VedtaksdetaljerDagpenger
-import no.nav.dagpenger.iverksett.api.domene.Vilkårsvurdering
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.Behandlingsdetaljer
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.IverksettDagpenger
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.Søker
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.TilkjentYtelse
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.VedtaksdetaljerDagpenger
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.Vilkårsvurdering
 import no.nav.dagpenger.iverksett.infrastruktur.util.VilkårsvurderingUtil
 import no.nav.dagpenger.iverksett.kontrakter.dvh.AdressebeskyttelseDVH
 import no.nav.dagpenger.iverksett.kontrakter.dvh.AktivitetTypeDVH

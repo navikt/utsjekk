@@ -1,6 +1,6 @@
 package no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag
 
-import no.nav.dagpenger.iverksett.api.domene.AndelTilkjentYtelse
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.AndelTilkjentYtelse
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.lagAndelTilkjentYtelse
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.ØkonomiUtils.utbetalingsperiodeForOpphør
 import no.nav.dagpenger.iverksett.util.opprettTilkjentYtelse

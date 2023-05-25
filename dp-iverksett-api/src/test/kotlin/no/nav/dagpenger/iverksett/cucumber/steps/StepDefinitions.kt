@@ -4,8 +4,8 @@ import io.cucumber.datatable.DataTable
 import io.cucumber.java.no.Gitt
 import io.cucumber.java.no.Når
 import io.cucumber.java.no.Så
-import no.nav.dagpenger.iverksett.api.domene.TilkjentYtelse
-import no.nav.dagpenger.iverksett.api.domene.TilkjentYtelseMedMetaData
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.TilkjentYtelse
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.TilkjentYtelseMedMetaData
 import no.nav.dagpenger.iverksett.cucumber.domeneparser.IdTIlUUIDHolder
 import no.nav.dagpenger.iverksett.cucumber.domeneparser.TilkjentYtelseParser
 import no.nav.dagpenger.iverksett.cucumber.domeneparser.parseDato

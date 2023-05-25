@@ -1,7 +1,7 @@
 package no.nav.dagpenger.iverksett.infrastruktur.transformer
 
-import no.nav.dagpenger.iverksett.api.domene.TilkjentYtelse
-import no.nav.dagpenger.iverksett.api.domene.TilkjentYtelseMedMetaData
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.TilkjentYtelse
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.TilkjentYtelseMedMetaData
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.TilkjentYtelseDto
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.UtbetalingDto
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.UtbetalingerMedMetadataDto

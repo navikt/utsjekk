@@ -3,7 +3,7 @@ package no.nav.dagpenger.iverksett.api
 import no.nav.dagpenger.iverksett.ServerTest
 import no.nav.dagpenger.iverksett.api.domene.OppdragResultat
 import no.nav.dagpenger.iverksett.api.domene.TilbakekrevingResultat
-import no.nav.dagpenger.iverksett.api.domene.TilkjentYtelse
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.TilkjentYtelse
 import no.nav.dagpenger.iverksett.api.tilstand.IverksettResultatService
 import no.nav.dagpenger.iverksett.konsumenter.tilbakekreving.tilOpprettTilbakekrevingRequest
 import no.nav.dagpenger.iverksett.kontrakter.felles.Enhet

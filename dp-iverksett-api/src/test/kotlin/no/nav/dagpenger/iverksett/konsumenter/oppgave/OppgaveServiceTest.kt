@@ -7,8 +7,8 @@ import io.mockk.slot
 import io.mockk.unmockkAll
 import io.mockk.verify
 import no.nav.dagpenger.iverksett.api.IverksettingRepository
-import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
-import no.nav.dagpenger.iverksett.api.domene.VedtaksperiodeDagpenger
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.IverksettDagpenger
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.VedtaksperiodeDagpenger
 import no.nav.dagpenger.iverksett.infrastruktur.FamilieIntegrasjonerClient
 import no.nav.dagpenger.iverksett.infrastruktur.repository.findByIdOrThrow
 import no.nav.dagpenger.iverksett.kontrakter.felles.BehandlingType

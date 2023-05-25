@@ -1,5 +1,9 @@
 package no.nav.dagpenger.iverksett.api.domene
 
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.AndelTilkjentYtelse
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.IverksettDagpenger
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.TilkjentYtelse
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.TilkjentYtelseMedMetaData
 import no.nav.dagpenger.kontrakter.utbetaling.StønadType
 import java.time.LocalDate
 import java.util.UUID

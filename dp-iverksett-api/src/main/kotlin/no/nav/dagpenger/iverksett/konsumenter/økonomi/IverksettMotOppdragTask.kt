@@ -1,7 +1,7 @@
 package no.nav.dagpenger.iverksett.konsumenter.økonomi
 
 import no.nav.dagpenger.iverksett.api.IverksettingRepository
-import no.nav.dagpenger.iverksett.api.domene.stemmerMed
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.stemmerMed
 import no.nav.dagpenger.iverksett.api.tilstand.IverksettResultatService
 import no.nav.dagpenger.iverksett.infrastruktur.repository.findByIdOrThrow
 import no.nav.dagpenger.iverksett.konsumenter.opprettNesteTask

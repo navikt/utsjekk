@@ -1,7 +1,7 @@
 package no.nav.dagpenger.iverksett.konsumenter.arbeidsoppfolging
 
-import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
-import no.nav.dagpenger.iverksett.api.domene.VedtaksdetaljerDagpenger
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.IverksettDagpenger
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.VedtaksdetaljerDagpenger
 import no.nav.dagpenger.iverksett.kontrakter.arbeidsoppfølging.Aktivitetstype
 import no.nav.dagpenger.iverksett.kontrakter.arbeidsoppfølging.Barn
 import no.nav.dagpenger.iverksett.kontrakter.arbeidsoppfølging.Periode

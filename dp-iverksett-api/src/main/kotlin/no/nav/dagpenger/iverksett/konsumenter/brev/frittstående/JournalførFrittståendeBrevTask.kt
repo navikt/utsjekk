@@ -2,11 +2,11 @@ package no.nav.dagpenger.iverksett.konsumenter.brev.frittstående
 
 import no.nav.dagpenger.iverksett.infrastruktur.repository.findByIdOrThrow
 import no.nav.dagpenger.iverksett.konsumenter.brev.JournalpostClient
-import no.nav.dagpenger.iverksett.konsumenter.brev.domain.Brevmottaker
+import no.nav.dagpenger.iverksett.kontrakter.brev.Brevmottaker
 import no.nav.dagpenger.iverksett.konsumenter.brev.domain.FrittståendeBrev
 import no.nav.dagpenger.iverksett.konsumenter.brev.domain.JournalpostResultat
 import no.nav.dagpenger.iverksett.konsumenter.brev.domain.JournalpostResultatMap
-import no.nav.dagpenger.iverksett.konsumenter.brev.domain.tilIdType
+import no.nav.dagpenger.iverksett.kontrakter.brev.tilIdType
 import no.nav.dagpenger.iverksett.konsumenter.brev.stønadstypeTilDokumenttype
 import no.nav.dagpenger.iverksett.kontrakter.journalføring.dokarkiv.ArkiverDokumentRequest
 import no.nav.dagpenger.iverksett.kontrakter.journalføring.dokarkiv.AvsenderMottaker

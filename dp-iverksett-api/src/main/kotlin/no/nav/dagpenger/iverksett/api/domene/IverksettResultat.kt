@@ -2,6 +2,7 @@ package no.nav.dagpenger.iverksett.api.domene
 
 import no.nav.dagpenger.iverksett.konsumenter.brev.domain.DistribuerBrevResultatMap
 import no.nav.dagpenger.iverksett.konsumenter.brev.domain.JournalpostResultatMap
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.TilkjentYtelse
 import no.nav.dagpenger.iverksett.kontrakter.oppdrag.OppdragStatus
 import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.OpprettTilbakekrevingRequest
 import org.springframework.data.annotation.Id

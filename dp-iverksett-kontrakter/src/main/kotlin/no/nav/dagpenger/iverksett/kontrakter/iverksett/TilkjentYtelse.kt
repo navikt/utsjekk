@@ -1,4 +1,4 @@
-package no.nav.dagpenger.iverksett.api.domene
+package no.nav.dagpenger.iverksett.kontrakter.iverksett
 
 import no.nav.dagpenger.iverksett.kontrakter.felles.TilkjentYtelseStatus
 import no.nav.dagpenger.kontrakter.utbetaling.StønadType

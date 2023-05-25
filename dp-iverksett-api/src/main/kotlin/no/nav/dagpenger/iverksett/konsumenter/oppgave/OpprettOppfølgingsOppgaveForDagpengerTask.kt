@@ -1,7 +1,7 @@
 package no.nav.dagpenger.iverksett.konsumenter.oppgave
 
 import no.nav.dagpenger.iverksett.api.IverksettingRepository
-import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.IverksettDagpenger
 import no.nav.dagpenger.iverksett.infrastruktur.repository.findByIdOrThrow
 import no.nav.dagpenger.iverksett.konsumenter.opprettNestePubliseringTask
 import no.nav.familie.prosessering.AsyncTaskStep

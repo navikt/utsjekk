@@ -8,7 +8,7 @@ import io.mockk.slot
 import io.mockk.verify
 import no.nav.dagpenger.iverksett.api.IverksettingRepository
 import no.nav.dagpenger.iverksett.api.domene.TilbakekrevingResultat
-import no.nav.dagpenger.iverksett.api.domene.Tilbakekrevingsdetaljer
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.Tilbakekrevingsdetaljer
 import no.nav.dagpenger.iverksett.api.tilstand.IverksettResultatService
 import no.nav.dagpenger.iverksett.beriketSimuleringsresultat
 import no.nav.dagpenger.iverksett.infrastruktur.FamilieIntegrasjonerClient

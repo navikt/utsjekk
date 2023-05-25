@@ -1,7 +1,7 @@
 package no.nav.dagpenger.iverksett.konsumenter.tilbakekreving
 
 import no.nav.dagpenger.iverksett.api.IverksettingRepository
-import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.IverksettDagpenger
 import no.nav.dagpenger.iverksett.api.domene.TilbakekrevingResultat
 import no.nav.dagpenger.iverksett.api.domene.tilSimulering
 import no.nav.dagpenger.iverksett.api.tilstand.IverksettResultatService

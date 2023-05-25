@@ -1,4 +1,4 @@
-package no.nav.dagpenger.iverksett.konsumenter.brev.domain
+package no.nav.dagpenger.iverksett.kontrakter.brev
 
 import no.nav.dagpenger.iverksett.kontrakter.felles.BrukerIdType
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.Brevmottaker.IdentType

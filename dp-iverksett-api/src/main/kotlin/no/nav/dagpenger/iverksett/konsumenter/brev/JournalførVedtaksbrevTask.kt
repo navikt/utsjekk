@@ -2,11 +2,11 @@ package no.nav.dagpenger.iverksett.konsumenter.brev
 
 import no.nav.dagpenger.iverksett.api.IverksettingRepository
 import no.nav.dagpenger.iverksett.api.domene.Iverksett
-import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.IverksettDagpenger
 import no.nav.dagpenger.iverksett.api.tilstand.IverksettResultatService
 import no.nav.dagpenger.iverksett.infrastruktur.repository.findByIdOrThrow
 import no.nav.dagpenger.iverksett.konsumenter.brev.domain.JournalpostResultat
-import no.nav.dagpenger.iverksett.konsumenter.brev.domain.tilIdType
+import no.nav.dagpenger.iverksett.kontrakter.brev.tilIdType
 import no.nav.dagpenger.iverksett.konsumenter.opprettNesteTask
 import no.nav.dagpenger.iverksett.kontrakter.felles.BrukerIdType
 import no.nav.dagpenger.iverksett.kontrakter.felles.Tema

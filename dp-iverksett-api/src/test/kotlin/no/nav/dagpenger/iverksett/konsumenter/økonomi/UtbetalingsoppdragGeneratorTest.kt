@@ -1,8 +1,8 @@
 package no.nav.dagpenger.iverksett.konsumenter.økonomi
 
-import no.nav.dagpenger.iverksett.api.domene.AndelTilkjentYtelse
-import no.nav.dagpenger.iverksett.api.domene.TilkjentYtelse
-import no.nav.dagpenger.iverksett.api.domene.TilkjentYtelseMedMetaData
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.AndelTilkjentYtelse
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.TilkjentYtelse
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.TilkjentYtelseMedMetaData
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.UtbetalingsoppdragGenerator.lagTilkjentYtelseMedUtbetalingsoppdrag
 import no.nav.dagpenger.iverksett.kontrakter.felles.TilkjentYtelseStatus
 import no.nav.dagpenger.kontrakter.utbetaling.StønadType

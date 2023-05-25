@@ -1,6 +1,6 @@
 package no.nav.dagpenger.iverksett.konsumenter.økonomi
 
-import no.nav.dagpenger.iverksett.api.domene.AndelTilkjentYtelse
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.AndelTilkjentYtelse
 import no.nav.dagpenger.iverksett.kontrakter.felles.Datoperiode
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.DatoperiodeDto
 import no.nav.dagpenger.iverksett.kontrakter.iverksett.UtbetalingDto

@@ -3,7 +3,7 @@ package no.nav.dagpenger.iverksett.api.tilstand
 import no.nav.dagpenger.iverksett.api.domene.IverksettResultat
 import no.nav.dagpenger.iverksett.api.domene.OppdragResultat
 import no.nav.dagpenger.iverksett.api.domene.TilbakekrevingResultat
-import no.nav.dagpenger.iverksett.api.domene.TilkjentYtelse
+import no.nav.dagpenger.iverksett.kontrakter.iverksett.TilkjentYtelse
 import no.nav.dagpenger.iverksett.infrastruktur.repository.findByIdOrThrow
 import no.nav.dagpenger.iverksett.konsumenter.brev.domain.DistribuerBrevResultat
 import no.nav.dagpenger.iverksett.konsumenter.brev.domain.JournalpostResultat
