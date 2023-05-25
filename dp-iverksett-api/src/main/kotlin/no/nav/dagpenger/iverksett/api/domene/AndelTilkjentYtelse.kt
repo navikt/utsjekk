@@ -1,7 +1,9 @@
 package no.nav.dagpenger.iverksett.api.domene
 
 import no.nav.dagpenger.iverksett.kontrakter.felles.Datoperiode
+import no.nav.dagpenger.kontrakter.utbetaling.Ferietilllegg
 import no.nav.dagpenger.kontrakter.utbetaling.StønadType
+import no.nav.dagpenger.kontrakter.utbetaling.tilKlassifisering
 import java.util.UUID
 import kotlin.math.roundToInt
 
@@ -10,6 +12,7 @@ data class AndelTilkjentYtelse(
     val periode: Datoperiode,
     val inntekt: Int,
     val stønadstype: StønadType,
+    val ferietilllegg: Ferietilllegg?,
     val samordningsfradrag: Int,
     val inntektsreduksjon: Int,
     val periodeId: Long? = null,
@@ -53,3 +56,5 @@ data class AndelTilkjentYtelse(
         }
     }
 }
+
+fun AndelTilkjentYtelse.tilKlassifisering(): String = this.stønadstype.tilKlassifisering(this.ferietilllegg)

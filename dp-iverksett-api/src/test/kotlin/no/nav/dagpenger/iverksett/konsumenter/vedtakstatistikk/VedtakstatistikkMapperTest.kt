@@ -160,6 +160,7 @@ internal class VedtakstatistikkMapperTest {
                     periodeId = 1,
                     forrigePeriodeId = null,
                     kildeBehandlingId = behandlingId,
+                    ferietilllegg = null,
                 ),
                 AndelTilkjentYtelse(
                     beløp = 10000,
@@ -171,6 +172,7 @@ internal class VedtakstatistikkMapperTest {
                     periodeId = 2,
                     forrigePeriodeId = 1,
                     kildeBehandlingId = behandlingId,
+                    ferietilllegg = null,
                 ),
             ),
             startdato = LocalDate.now(),

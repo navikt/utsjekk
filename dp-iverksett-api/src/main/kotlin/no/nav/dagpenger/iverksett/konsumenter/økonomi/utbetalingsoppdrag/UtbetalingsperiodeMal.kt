@@ -2,6 +2,7 @@ package no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag
 
 import no.nav.dagpenger.iverksett.api.domene.AndelTilkjentYtelse
 import no.nav.dagpenger.iverksett.api.domene.TilkjentYtelseMedMetaData
+import no.nav.dagpenger.iverksett.api.domene.tilKlassifisering
 import no.nav.dagpenger.kontrakter.utbetaling.Opphør
 import no.nav.dagpenger.kontrakter.utbetaling.StønadType
 import no.nav.dagpenger.kontrakter.utbetaling.Utbetalingsperiode
@@ -33,7 +34,7 @@ fun lagPeriodeFraAndel(
         forrigePeriodeId = andel.forrigePeriodeId,
         periodeId = andel.periodeId!!,
         datoForVedtak = vedtaksdato,
-        klassifisering = type.tilKlassifisering(),
+        klassifisering = andel.tilKlassifisering(),
         vedtakdatoFom = andel.periode.fom,
         vedtakdatoTom = andel.periode.tom,
         sats = BigDecimal(andel.beløp),

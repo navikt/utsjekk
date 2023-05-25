@@ -12,6 +12,7 @@ fun UtbetalingDto.toDomain(): AndelTilkjentYtelse {
             ?: this.periode?.let { Datoperiode(it.fom, it.tom ?: LocalDate.MAX) }
             ?: throw IllegalStateException("Verken fraOgMedDato eller periode har verdi. En av dem, helst fraOgMedDato, må være satt"),
         stønadstype = this.stønadstype,
+        ferietilllegg = this.ferietillegg,
         inntekt = this.inntekt ?: 0,
         samordningsfradrag = this.samordningsfradrag ?: 0,
         inntektsreduksjon = this.inntektsreduksjon ?: 0,

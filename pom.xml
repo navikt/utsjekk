@@ -22,7 +22,7 @@
     </modules>
 
     <properties>
-        <dp-kontrakter.version>1.0_20230523105402_5cd73b8</dp-kontrakter.version>
+        <dp-kontrakter.version>1.0_20230524172549_61f700b</dp-kontrakter.version>
     </properties>
 
     <repositories>

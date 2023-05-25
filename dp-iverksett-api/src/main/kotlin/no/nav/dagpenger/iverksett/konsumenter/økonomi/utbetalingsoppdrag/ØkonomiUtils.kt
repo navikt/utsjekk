@@ -23,6 +23,7 @@ fun nullAndelTilkjentYtelse(kildeBehandlingId: UUID, periodeId: PeriodeId?): And
         beløp = 0,
         periode = Datoperiode(LocalDate.MIN, LocalDate.MIN),
         stønadstype = StønadType.DAGPENGER_ARBEIDSSOKER_ORDINAER,
+        ferietilllegg = null,
         inntekt = 0,
         samordningsfradrag = 0,
         inntektsreduksjon = 0,
