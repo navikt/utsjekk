@@ -8,7 +8,6 @@
         <version>1.0.0</version>
     </parent>
 
-    <groupId>no.nav.dagpenger</groupId>
     <artifactId>dp-iverksett-kontrakter</artifactId>
     <version>${revision}${sha1}${changelist}</version>
     <packaging>jar</packaging>
@@ -31,14 +30,6 @@
             <url>https://maven.pkg.github.com/navikt/dp-kontrakter</url>
         </repository>
     </repositories>
-
-    <distributionManagement>
-        <repository>
-            <id>github</id>
-            <name>GitHub navikt Apache Maven Packages</name>
-            <url>https://maven.pkg.github.com/navikt/dp-iverksett-kontrakter</url>
-        </repository>
-    </distributionManagement>
 
     <dependencies>
         <!-- Kotlin -->

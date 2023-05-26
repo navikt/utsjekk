@@ -41,7 +41,7 @@
         <repository>
             <id>github</id>
             <name>GitHub navikt Apache Maven Packages</name>
-            <url>https://maven.pkg.github.com/navikt/dp-iverksett-kontrakter</url>
+            <url>https://maven.pkg.github.com/navikt/dp-iverksett</url>
         </repository>
     </distributionManagement>
 

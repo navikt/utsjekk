@@ -8,7 +8,6 @@
         <version>1.0.0</version>
     </parent>
 
-    <groupId>no.nav.dagpenger</groupId>
     <artifactId>dp-iverksett-api</artifactId>
     <version>${revision}${sha1}${changelist}</version>
 
