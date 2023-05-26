@@ -26,6 +26,14 @@ jobs:
           distribution: 'temurin'
           java-version: 17
           cache: 'maven'
+      - name: Cache Maven dependencies
+        uses: actions/cache@preview
+        id: cache
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
       - name: Bygg og last opp image
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
