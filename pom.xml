@@ -23,6 +23,7 @@
 
     <properties>
         <dp-kontrakter.version>1.0_20230524175217_84a9e19</dp-kontrakter.version>
+        <maven.deploy.skip>true</maven.deploy.skip>
     </properties>
 
     <repositories>
