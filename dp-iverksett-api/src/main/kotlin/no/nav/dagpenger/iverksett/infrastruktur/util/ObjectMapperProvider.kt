@@ -11,7 +11,7 @@ import java.time.ZonedDateTime
 object ObjectMapperProvider {
 
     val objectMapper: ObjectMapper =
-        no.nav.dagpenger.iverksett.kontrakter.objectMapper
+        no.nav.dagpenger.kontrakter.iverksett.objectMapper
             .registerModule(
                 SimpleModule().addDeserializer(
                     ZonedDateTime::class.java,

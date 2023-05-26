@@ -1,8 +1,8 @@
 package no.nav.dagpenger.iverksett.konsumenter.vedtak
 
 import no.nav.dagpenger.iverksett.infrastruktur.service.KafkaProducerService
-import no.nav.dagpenger.iverksett.kontrakter.objectMapper
-import no.nav.dagpenger.iverksett.kontrakter.samordning.DagpengerVedtakhendelse
+import no.nav.dagpenger.kontrakter.iverksett.objectMapper
+import no.nav.dagpenger.kontrakter.iverksett.samordning.DagpengerVedtakhendelse
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 

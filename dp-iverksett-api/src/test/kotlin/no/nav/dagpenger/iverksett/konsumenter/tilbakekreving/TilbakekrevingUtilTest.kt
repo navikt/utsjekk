@@ -3,13 +3,13 @@ package no.nav.dagpenger.iverksett.konsumenter.tilbakekreving
 import no.nav.dagpenger.iverksett.api.domene.TilbakekrevingMedVarsel
 import no.nav.dagpenger.iverksett.api.domene.Tilbakekrevingsdetaljer
 import no.nav.dagpenger.iverksett.beriketSimuleringsresultat
-import no.nav.dagpenger.iverksett.kontrakter.felles.Datoperiode
-import no.nav.dagpenger.iverksett.kontrakter.simulering.Simuleringsoppsummering
-import no.nav.dagpenger.iverksett.kontrakter.simulering.Simuleringsperiode
-import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.Tilbakekrevingsvalg
 import no.nav.dagpenger.iverksett.medFeilutbetaling
 import no.nav.dagpenger.iverksett.util.opprettIverksettDagpenger
 import no.nav.dagpenger.iverksett.util.opprettTilbakekrevingMedVarsel
+import no.nav.dagpenger.kontrakter.iverksett.felles.Datoperiode
+import no.nav.dagpenger.kontrakter.iverksett.simulering.Simuleringsoppsummering
+import no.nav.dagpenger.kontrakter.iverksett.simulering.Simuleringsperiode
+import no.nav.dagpenger.kontrakter.iverksett.tilbakekreving.Tilbakekrevingsvalg
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.math.BigDecimal

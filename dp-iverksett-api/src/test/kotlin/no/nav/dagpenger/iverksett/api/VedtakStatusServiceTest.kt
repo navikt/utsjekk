@@ -2,11 +2,11 @@ package no.nav.dagpenger.iverksett.api
 
 import io.mockk.every
 import io.mockk.mockk
-import no.nav.dagpenger.iverksett.kontrakter.felles.BehandlingType
-import no.nav.dagpenger.iverksett.kontrakter.felles.Vedtaksresultat
-import no.nav.dagpenger.iverksett.kontrakter.iverksett.IverksettStatus
 import no.nav.dagpenger.iverksett.lagIverksett
 import no.nav.dagpenger.iverksett.lagIverksettData
+import no.nav.dagpenger.kontrakter.iverksett.felles.BehandlingType
+import no.nav.dagpenger.kontrakter.iverksett.felles.Vedtaksresultat
+import no.nav.dagpenger.kontrakter.iverksett.iverksett.IverksettStatus
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test

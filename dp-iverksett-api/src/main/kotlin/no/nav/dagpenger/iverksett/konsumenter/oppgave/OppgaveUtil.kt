@@ -1,12 +1,12 @@
 package no.nav.dagpenger.iverksett.konsumenter.oppgave
 
-import no.nav.dagpenger.iverksett.kontrakter.felles.Behandlingstema
-import no.nav.dagpenger.iverksett.kontrakter.felles.Enhet
-import no.nav.dagpenger.iverksett.kontrakter.felles.Tema
-import no.nav.dagpenger.iverksett.kontrakter.oppgave.IdentGruppe
-import no.nav.dagpenger.iverksett.kontrakter.oppgave.OppgaveIdentV2
-import no.nav.dagpenger.iverksett.kontrakter.oppgave.Oppgavetype
-import no.nav.dagpenger.iverksett.kontrakter.oppgave.OpprettOppgaveRequest
+import no.nav.dagpenger.kontrakter.iverksett.felles.Behandlingstema
+import no.nav.dagpenger.kontrakter.iverksett.felles.Enhet
+import no.nav.dagpenger.kontrakter.iverksett.felles.Tema
+import no.nav.dagpenger.kontrakter.iverksett.oppgave.IdentGruppe
+import no.nav.dagpenger.kontrakter.iverksett.oppgave.OppgaveIdentV2
+import no.nav.dagpenger.kontrakter.iverksett.oppgave.Oppgavetype
+import no.nav.dagpenger.kontrakter.iverksett.oppgave.OpprettOppgaveRequest
 import no.nav.dagpenger.kontrakter.utbetaling.StønadType
 import java.time.DayOfWeek
 import java.time.LocalDate

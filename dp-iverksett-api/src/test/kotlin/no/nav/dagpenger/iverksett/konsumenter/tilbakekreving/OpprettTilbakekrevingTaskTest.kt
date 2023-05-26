@@ -15,13 +15,13 @@ import no.nav.dagpenger.iverksett.infrastruktur.FamilieIntegrasjonerClient
 import no.nav.dagpenger.iverksett.infrastruktur.repository.findByIdOrThrow
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.IverksettMotOppdragTask
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.simulering.SimuleringService
-import no.nav.dagpenger.iverksett.kontrakter.felles.Enhet
-import no.nav.dagpenger.iverksett.kontrakter.simulering.BeriketSimuleringsresultat
-import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.Tilbakekrevingsvalg
 import no.nav.dagpenger.iverksett.lagIverksett
 import no.nav.dagpenger.iverksett.util.opprettIverksettDagpenger
 import no.nav.dagpenger.iverksett.util.opprettTilbakekrevingMedVarsel
 import no.nav.dagpenger.iverksett.util.opprettTilbakekrevingsdetaljer
+import no.nav.dagpenger.kontrakter.iverksett.felles.Enhet
+import no.nav.dagpenger.kontrakter.iverksett.simulering.BeriketSimuleringsresultat
+import no.nav.dagpenger.kontrakter.iverksett.tilbakekreving.Tilbakekrevingsvalg
 import no.nav.familie.prosessering.domene.Task
 import no.nav.familie.prosessering.internal.TaskService
 import org.assertj.core.api.Assertions.assertThat

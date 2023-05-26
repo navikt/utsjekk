@@ -13,12 +13,12 @@ import no.nav.dagpenger.iverksett.api.domene.TilkjentYtelse
 import no.nav.dagpenger.iverksett.api.tilstand.IverksettResultatService
 import no.nav.dagpenger.iverksett.infrastruktur.repository.findByIdOrThrow
 import no.nav.dagpenger.iverksett.infrastruktur.transformer.toDomain
-import no.nav.dagpenger.iverksett.kontrakter.felles.BehandlingÅrsak
-import no.nav.dagpenger.iverksett.kontrakter.felles.TilkjentYtelseStatus
-import no.nav.dagpenger.iverksett.kontrakter.oppdrag.OppdragStatus
 import no.nav.dagpenger.iverksett.lagIverksett
 import no.nav.dagpenger.iverksett.util.mockFeatureToggleService
 import no.nav.dagpenger.iverksett.util.opprettIverksettDto
+import no.nav.dagpenger.kontrakter.iverksett.felles.BehandlingÅrsak
+import no.nav.dagpenger.kontrakter.iverksett.felles.TilkjentYtelseStatus
+import no.nav.dagpenger.kontrakter.iverksett.oppdrag.OppdragStatus
 import no.nav.dagpenger.kontrakter.utbetaling.Fagsystem
 import no.nav.dagpenger.kontrakter.utbetaling.Utbetalingsoppdrag
 import no.nav.dagpenger.kontrakter.utbetaling.Utbetalingsoppdrag.KodeEndring.NY

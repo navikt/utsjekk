@@ -2,7 +2,7 @@ package no.nav.dagpenger.iverksett.konsumenter.brev
 
 import io.swagger.v3.oas.annotations.tags.Tag
 import no.nav.dagpenger.iverksett.konsumenter.brev.frittstående.FrittståendeBrevService
-import no.nav.dagpenger.iverksett.kontrakter.felles.FrittståendeBrevDto
+import no.nav.dagpenger.kontrakter.iverksett.felles.FrittståendeBrevDto
 import no.nav.security.token.support.core.api.ProtectedWithClaims
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping

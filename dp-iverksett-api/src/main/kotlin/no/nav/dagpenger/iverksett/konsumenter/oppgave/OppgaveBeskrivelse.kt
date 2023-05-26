@@ -1,7 +1,7 @@
 package no.nav.dagpenger.iverksett.konsumenter.oppgave
 
 import no.nav.dagpenger.iverksett.api.domene.VedtaksperiodeDagpenger
-import no.nav.dagpenger.iverksett.kontrakter.iverksett.AktivitetType
+import no.nav.dagpenger.kontrakter.iverksett.iverksett.AktivitetType
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale

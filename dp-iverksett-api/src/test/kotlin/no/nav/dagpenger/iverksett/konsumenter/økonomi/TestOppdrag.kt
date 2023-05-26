@@ -7,7 +7,7 @@ import no.nav.dagpenger.iverksett.api.domene.TilkjentYtelseMedMetaData
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.PeriodeId
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.UtbetalingsoppdragGenerator
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.nullAndelTilkjentYtelse
-import no.nav.dagpenger.iverksett.kontrakter.objectMapper
+import no.nav.dagpenger.kontrakter.iverksett.objectMapper
 import no.nav.dagpenger.kontrakter.utbetaling.Fagsystem
 import no.nav.dagpenger.kontrakter.utbetaling.Opphør
 import no.nav.dagpenger.kontrakter.utbetaling.StønadType

@@ -4,13 +4,6 @@ import no.nav.dagpenger.iverksett.august
 import no.nav.dagpenger.iverksett.februar
 import no.nav.dagpenger.iverksett.januar
 import no.nav.dagpenger.iverksett.juli
-import no.nav.dagpenger.iverksett.kontrakter.simulering.BetalingType.DEBIT
-import no.nav.dagpenger.iverksett.kontrakter.simulering.BetalingType.KREDIT
-import no.nav.dagpenger.iverksett.kontrakter.simulering.PosteringType
-import no.nav.dagpenger.iverksett.kontrakter.simulering.PosteringType.FEILUTBETALING
-import no.nav.dagpenger.iverksett.kontrakter.simulering.PosteringType.MOTP
-import no.nav.dagpenger.iverksett.kontrakter.simulering.PosteringType.YTELSE
-import no.nav.dagpenger.iverksett.kontrakter.simulering.SimulertPostering
 import no.nav.dagpenger.iverksett.mai
 import no.nav.dagpenger.iverksett.november
 import no.nav.dagpenger.iverksett.posteringer
@@ -18,6 +11,13 @@ import no.nav.dagpenger.iverksett.september
 import no.nav.dagpenger.iverksett.tilDetaljertSimuleringsresultat
 import no.nav.dagpenger.iverksett.tilSimuleringMottakere
 import no.nav.dagpenger.iverksett.tilSimuleringsperioder
+import no.nav.dagpenger.kontrakter.iverksett.simulering.BetalingType.DEBIT
+import no.nav.dagpenger.kontrakter.iverksett.simulering.BetalingType.KREDIT
+import no.nav.dagpenger.kontrakter.iverksett.simulering.PosteringType
+import no.nav.dagpenger.kontrakter.iverksett.simulering.PosteringType.FEILUTBETALING
+import no.nav.dagpenger.kontrakter.iverksett.simulering.PosteringType.MOTP
+import no.nav.dagpenger.kontrakter.iverksett.simulering.PosteringType.YTELSE
+import no.nav.dagpenger.kontrakter.iverksett.simulering.SimulertPostering
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test

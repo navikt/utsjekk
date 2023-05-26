@@ -50,13 +50,8 @@
     <dependencies>
         <!-- Kontrakter -->
         <dependency>
-            <groupId>no.nav.dagpenger</groupId>
-            <artifactId>dp-iverksett-kontrakter</artifactId>
-            <version>${revision}${sha1}${changelist}</version>
-        </dependency>
-        <dependency>
-            <groupId>no.nav.dagpenger</groupId>
-            <artifactId>dp-kontrakter</artifactId>
+            <groupId>no.nav.dagpenger.kontrakter</groupId>
+            <artifactId>iverksett</artifactId>
         </dependency>
 
         <!-- Spring -->

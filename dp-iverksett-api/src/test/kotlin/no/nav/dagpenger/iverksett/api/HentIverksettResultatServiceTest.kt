@@ -6,11 +6,11 @@ import no.nav.dagpenger.iverksett.api.domene.TilbakekrevingResultat
 import no.nav.dagpenger.iverksett.api.domene.TilkjentYtelse
 import no.nav.dagpenger.iverksett.api.tilstand.IverksettResultatService
 import no.nav.dagpenger.iverksett.konsumenter.tilbakekreving.tilOpprettTilbakekrevingRequest
-import no.nav.dagpenger.iverksett.kontrakter.felles.Enhet
-import no.nav.dagpenger.iverksett.kontrakter.oppdrag.OppdragStatus
 import no.nav.dagpenger.iverksett.util.IverksettResultatMockBuilder
 import no.nav.dagpenger.iverksett.util.opprettIverksettDagpenger
 import no.nav.dagpenger.iverksett.util.opprettTilkjentYtelse
+import no.nav.dagpenger.kontrakter.iverksett.felles.Enhet
+import no.nav.dagpenger.kontrakter.iverksett.oppdrag.OppdragStatus
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.BeforeEach

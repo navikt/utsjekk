@@ -1,10 +1,10 @@
 package no.nav.dagpenger.iverksett.konsumenter.tilbakekreving
 
-import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.Behandling
-import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.FinnesBehandlingResponse
-import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.ForhåndsvisVarselbrevRequest
-import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.OpprettTilbakekrevingRequest
-import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.Ytelsestype
+import no.nav.dagpenger.kontrakter.iverksett.tilbakekreving.Behandling
+import no.nav.dagpenger.kontrakter.iverksett.tilbakekreving.FinnesBehandlingResponse
+import no.nav.dagpenger.kontrakter.iverksett.tilbakekreving.ForhåndsvisVarselbrevRequest
+import no.nav.dagpenger.kontrakter.iverksett.tilbakekreving.OpprettTilbakekrevingRequest
+import no.nav.dagpenger.kontrakter.iverksett.tilbakekreving.Ytelsestype
 import no.nav.dagpenger.kontrakter.utbetaling.Fagsystem
 import no.nav.familie.http.client.AbstractRestClient
 import no.nav.familie.kontrakter.felles.Ressurs

@@ -1,8 +1,8 @@
 package no.nav.dagpenger.iverksett.infrastruktur.transformer
 
 import no.nav.dagpenger.iverksett.api.domene.AndelTilkjentYtelse
-import no.nav.dagpenger.iverksett.kontrakter.felles.Datoperiode
-import no.nav.dagpenger.iverksett.kontrakter.iverksett.UtbetalingDto
+import no.nav.dagpenger.kontrakter.iverksett.felles.Datoperiode
+import no.nav.dagpenger.kontrakter.iverksett.iverksett.UtbetalingDto
 import java.time.LocalDate
 
 fun UtbetalingDto.toDomain(): AndelTilkjentYtelse {

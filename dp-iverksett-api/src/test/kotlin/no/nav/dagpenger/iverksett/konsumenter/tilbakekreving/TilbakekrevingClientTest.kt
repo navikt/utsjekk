@@ -1,12 +1,12 @@
 package no.nav.dagpenger.iverksett.konsumenter.tilbakekreving
 
 import no.nav.dagpenger.iverksett.ServerTest
-import no.nav.dagpenger.iverksett.kontrakter.felles.Språkkode
-import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.Behandling
-import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.FeilutbetaltePerioderDto
-import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.ForhåndsvisVarselbrevRequest
-import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.Periode
-import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.Ytelsestype
+import no.nav.dagpenger.kontrakter.iverksett.felles.Språkkode
+import no.nav.dagpenger.kontrakter.iverksett.tilbakekreving.Behandling
+import no.nav.dagpenger.kontrakter.iverksett.tilbakekreving.FeilutbetaltePerioderDto
+import no.nav.dagpenger.kontrakter.iverksett.tilbakekreving.ForhåndsvisVarselbrevRequest
+import no.nav.dagpenger.kontrakter.iverksett.tilbakekreving.Periode
+import no.nav.dagpenger.kontrakter.iverksett.tilbakekreving.Ytelsestype
 import no.nav.dagpenger.kontrakter.utbetaling.Fagsystem
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test

@@ -2,18 +2,18 @@ package no.nav.dagpenger.iverksett.konsumenter.tilbakekreving
 
 import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
 import no.nav.dagpenger.iverksett.api.domene.Tilbakekrevingsdetaljer
-import no.nav.dagpenger.iverksett.kontrakter.felles.BehandlingÅrsak
-import no.nav.dagpenger.iverksett.kontrakter.felles.Enhet
-import no.nav.dagpenger.iverksett.kontrakter.felles.Språkkode
-import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.Behandlingstype
-import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.Faktainfo
-import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.HentFagsystemsbehandling
-import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.HentFagsystemsbehandlingRespons
-import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.OpprettTilbakekrevingRequest
-import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.Periode
-import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.Tilbakekrevingsvalg
-import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.Varsel
-import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.Ytelsestype
+import no.nav.dagpenger.kontrakter.iverksett.felles.BehandlingÅrsak
+import no.nav.dagpenger.kontrakter.iverksett.felles.Enhet
+import no.nav.dagpenger.kontrakter.iverksett.felles.Språkkode
+import no.nav.dagpenger.kontrakter.iverksett.tilbakekreving.Behandlingstype
+import no.nav.dagpenger.kontrakter.iverksett.tilbakekreving.Faktainfo
+import no.nav.dagpenger.kontrakter.iverksett.tilbakekreving.HentFagsystemsbehandling
+import no.nav.dagpenger.kontrakter.iverksett.tilbakekreving.HentFagsystemsbehandlingRespons
+import no.nav.dagpenger.kontrakter.iverksett.tilbakekreving.OpprettTilbakekrevingRequest
+import no.nav.dagpenger.kontrakter.iverksett.tilbakekreving.Periode
+import no.nav.dagpenger.kontrakter.iverksett.tilbakekreving.Tilbakekrevingsvalg
+import no.nav.dagpenger.kontrakter.iverksett.tilbakekreving.Varsel
+import no.nav.dagpenger.kontrakter.iverksett.tilbakekreving.Ytelsestype
 import no.nav.dagpenger.kontrakter.utbetaling.Fagsystem
 
 const val ENHETSNAVN_BREV = "NAV Arbeid og ytelser"

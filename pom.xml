@@ -17,13 +17,11 @@
     <name>Iverksett Parent</name>
 
     <modules>
-        <module>dp-iverksett-kontrakter</module>
         <module>dp-iverksett-api</module>
     </modules>
 
     <properties>
-        <dp-kontrakter.version>1.0_20230524175217_84a9e19</dp-kontrakter.version>
-        <maven.deploy.skip>true</maven.deploy.skip>
+        <dp-kontrakter.version>1.0_20230526155451_0b0fbb0</dp-kontrakter.version>
     </properties>
 
     <repositories>
@@ -48,8 +46,8 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>no.nav.dagpenger</groupId>
-                <artifactId>dp-kontrakter</artifactId>
+                <groupId>no.nav.dagpenger.kontrakter</groupId>
+                <artifactId>iverksett</artifactId>
                 <version>${dp-kontrakter.version}</version>
             </dependency>
         </dependencies>

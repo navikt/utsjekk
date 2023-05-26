@@ -3,7 +3,7 @@ package no.nav.dagpenger.iverksett.konsumenter.vedtak
 import no.nav.dagpenger.iverksett.api.IverksettingRepository
 import no.nav.dagpenger.iverksett.infrastruktur.repository.findByIdOrThrow
 import no.nav.dagpenger.iverksett.konsumenter.opprettNestePubliseringTask
-import no.nav.dagpenger.iverksett.kontrakter.samordning.DagpengerVedtakhendelse
+import no.nav.dagpenger.kontrakter.iverksett.samordning.DagpengerVedtakhendelse
 import no.nav.familie.prosessering.AsyncTaskStep
 import no.nav.familie.prosessering.TaskStepBeskrivelse
 import no.nav.familie.prosessering.domene.Task

@@ -2,12 +2,12 @@ package no.nav.dagpenger.iverksett.konsumenter.arbeidsoppfolging
 
 import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
 import no.nav.dagpenger.iverksett.api.domene.VedtaksdetaljerDagpenger
-import no.nav.dagpenger.iverksett.kontrakter.arbeidsoppfølging.Aktivitetstype
-import no.nav.dagpenger.iverksett.kontrakter.arbeidsoppfølging.Barn
-import no.nav.dagpenger.iverksett.kontrakter.arbeidsoppfølging.Periode
-import no.nav.dagpenger.iverksett.kontrakter.arbeidsoppfølging.Periodetype
-import no.nav.dagpenger.iverksett.kontrakter.arbeidsoppfølging.VedtakDagpengerArbeidsoppfølging
-import no.nav.dagpenger.iverksett.kontrakter.arbeidsoppfølging.Vedtaksresultat
+import no.nav.dagpenger.kontrakter.iverksett.arbeidsoppfølging.Aktivitetstype
+import no.nav.dagpenger.kontrakter.iverksett.arbeidsoppfølging.Barn
+import no.nav.dagpenger.kontrakter.iverksett.arbeidsoppfølging.Periode
+import no.nav.dagpenger.kontrakter.iverksett.arbeidsoppfølging.Periodetype
+import no.nav.dagpenger.kontrakter.iverksett.arbeidsoppfølging.VedtakDagpengerArbeidsoppfølging
+import no.nav.dagpenger.kontrakter.iverksett.arbeidsoppfølging.Vedtaksresultat
 
 object ArbeidsoppfølgingMapper {
 

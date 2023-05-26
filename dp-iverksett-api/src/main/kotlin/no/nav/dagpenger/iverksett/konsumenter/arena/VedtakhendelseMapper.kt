@@ -1,8 +1,8 @@
 package no.nav.dagpenger.iverksett.konsumenter.arena
 
 import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
-import no.nav.dagpenger.iverksett.kontrakter.felles.Behandlingstema
-import no.nav.dagpenger.iverksett.kontrakter.felles.Vedtaksresultat
+import no.nav.dagpenger.kontrakter.iverksett.felles.Behandlingstema
+import no.nav.dagpenger.kontrakter.iverksett.felles.Vedtaksresultat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale

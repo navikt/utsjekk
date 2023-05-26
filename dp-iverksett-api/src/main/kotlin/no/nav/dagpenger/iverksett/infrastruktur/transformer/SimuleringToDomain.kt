@@ -1,7 +1,7 @@
 package no.nav.dagpenger.iverksett.infrastruktur.transformer
 
 import no.nav.dagpenger.iverksett.api.domene.Simulering
-import no.nav.dagpenger.iverksett.kontrakter.iverksett.SimuleringDto
+import no.nav.dagpenger.kontrakter.iverksett.iverksett.SimuleringDto
 
 fun SimuleringDto.toDomain(): Simulering {
     val andeler = this.utbetalinger.map { it.toDomain() }

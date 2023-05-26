@@ -1,25 +1,25 @@
 package no.nav.dagpenger.iverksett.konsumenter.vedtakstatistikk
 
-import no.nav.dagpenger.iverksett.kontrakter.dvh.VedtakresultatDVH
-import no.nav.dagpenger.iverksett.kontrakter.dvh.VilkårDVH
-import no.nav.dagpenger.iverksett.kontrakter.felles.BehandlingType
-import no.nav.dagpenger.iverksett.kontrakter.felles.BehandlingÅrsak
-import no.nav.dagpenger.iverksett.kontrakter.felles.Vedtaksresultat
-import no.nav.dagpenger.iverksett.kontrakter.felles.VilkårType
-import no.nav.dagpenger.iverksett.kontrakter.felles.Vilkårsresultat
-import no.nav.dagpenger.iverksett.kontrakter.iverksett.AdressebeskyttelseGradering
-import no.nav.dagpenger.iverksett.kontrakter.iverksett.AktivitetType
-import no.nav.dagpenger.iverksett.kontrakter.iverksett.VedtaksperiodeType
+import no.nav.dagpenger.kontrakter.iverksett.dvh.VedtakresultatDVH
+import no.nav.dagpenger.kontrakter.iverksett.dvh.VilkårDVH
+import no.nav.dagpenger.kontrakter.iverksett.felles.BehandlingType
+import no.nav.dagpenger.kontrakter.iverksett.felles.BehandlingÅrsak
+import no.nav.dagpenger.kontrakter.iverksett.felles.Vedtaksresultat
+import no.nav.dagpenger.kontrakter.iverksett.felles.VilkårType
+import no.nav.dagpenger.kontrakter.iverksett.felles.Vilkårsresultat
+import no.nav.dagpenger.kontrakter.iverksett.iverksett.AdressebeskyttelseGradering
+import no.nav.dagpenger.kontrakter.iverksett.iverksett.AktivitetType
+import no.nav.dagpenger.kontrakter.iverksett.iverksett.VedtaksperiodeType
 import org.junit.jupiter.api.Test
-import no.nav.dagpenger.iverksett.kontrakter.arbeidsoppfølging.Aktivitetstype as AktivitetstypeEkstern
-import no.nav.dagpenger.iverksett.kontrakter.arbeidsoppfølging.Periodetype as PeriodetypeEkstern
-import no.nav.dagpenger.iverksett.kontrakter.arbeidsoppfølging.Vedtaksresultat as VedtaksresultatEkstern
-import no.nav.dagpenger.iverksett.kontrakter.dvh.AdressebeskyttelseDVH as AdresseBeskyttelseEkstern
-import no.nav.dagpenger.iverksett.kontrakter.dvh.AktivitetTypeDVH as AktivitetTypeEkstern
-import no.nav.dagpenger.iverksett.kontrakter.dvh.BehandlingTypeDVH as BehandlingTypeEkstern
-import no.nav.dagpenger.iverksett.kontrakter.dvh.BehandlingÅrsakDVH as BehandlingÅrsakEkstern
-import no.nav.dagpenger.iverksett.kontrakter.dvh.VedtaksperiodeTypeDVH as VedtakPeriodeTypeEkstern
-import no.nav.dagpenger.iverksett.kontrakter.dvh.VilkårsresultatDVH as VilkårsresultatEkstern
+import no.nav.dagpenger.kontrakter.iverksett.arbeidsoppfølging.Aktivitetstype as AktivitetstypeEkstern
+import no.nav.dagpenger.kontrakter.iverksett.arbeidsoppfølging.Periodetype as PeriodetypeEkstern
+import no.nav.dagpenger.kontrakter.iverksett.arbeidsoppfølging.Vedtaksresultat as VedtaksresultatEkstern
+import no.nav.dagpenger.kontrakter.iverksett.dvh.AdressebeskyttelseDVH as AdresseBeskyttelseEkstern
+import no.nav.dagpenger.kontrakter.iverksett.dvh.AktivitetTypeDVH as AktivitetTypeEkstern
+import no.nav.dagpenger.kontrakter.iverksett.dvh.BehandlingTypeDVH as BehandlingTypeEkstern
+import no.nav.dagpenger.kontrakter.iverksett.dvh.BehandlingÅrsakDVH as BehandlingÅrsakEkstern
+import no.nav.dagpenger.kontrakter.iverksett.dvh.VedtaksperiodeTypeDVH as VedtakPeriodeTypeEkstern
+import no.nav.dagpenger.kontrakter.iverksett.dvh.VilkårsresultatDVH as VilkårsresultatEkstern
 
 class FellesTilEksterneKontrakterEnumTest {
 

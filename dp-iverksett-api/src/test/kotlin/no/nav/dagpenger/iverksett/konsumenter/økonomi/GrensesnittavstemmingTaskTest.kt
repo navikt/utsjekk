@@ -6,7 +6,7 @@ import io.mockk.slot
 import io.mockk.verify
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.grensesnitt.GrensesnittavstemmingPayload
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.grensesnitt.GrensesnittavstemmingTask
-import no.nav.dagpenger.iverksett.kontrakter.objectMapper
+import no.nav.dagpenger.kontrakter.iverksett.objectMapper
 import no.nav.dagpenger.kontrakter.utbetaling.GrensesnittavstemmingRequest
 import no.nav.dagpenger.kontrakter.utbetaling.StønadType
 import no.nav.dagpenger.kontrakter.utbetaling.tilFagsystem

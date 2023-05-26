@@ -7,11 +7,11 @@ import com.github.tomakehurst.wiremock.client.WireMock.okForContentType
 import com.github.tomakehurst.wiremock.client.WireMock.okJson
 import com.github.tomakehurst.wiremock.client.WireMock.post
 import com.github.tomakehurst.wiremock.client.WireMock.urlMatching
-import no.nav.dagpenger.iverksett.kontrakter.objectMapper
-import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.Behandling
-import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.Behandlingsstatus
-import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.Behandlingstype
-import no.nav.dagpenger.iverksett.kontrakter.tilbakekreving.FinnesBehandlingResponse
+import no.nav.dagpenger.kontrakter.iverksett.objectMapper
+import no.nav.dagpenger.kontrakter.iverksett.tilbakekreving.Behandling
+import no.nav.dagpenger.kontrakter.iverksett.tilbakekreving.Behandlingsstatus
+import no.nav.dagpenger.kontrakter.iverksett.tilbakekreving.Behandlingstype
+import no.nav.dagpenger.kontrakter.iverksett.tilbakekreving.FinnesBehandlingResponse
 import no.nav.dagpenger.kontrakter.utbetaling.Fagsystem
 import no.nav.familie.kontrakter.felles.Ressurs
 import no.nav.familie.kontrakter.felles.tilbakekreving.KanBehandlingOpprettesManueltRespons

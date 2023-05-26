@@ -1,14 +1,14 @@
 package no.nav.dagpenger.iverksett.util
 
-import no.nav.dagpenger.iverksett.kontrakter.felles.AvslagÅrsak
-import no.nav.dagpenger.iverksett.kontrakter.felles.BehandlingType
-import no.nav.dagpenger.iverksett.kontrakter.felles.BehandlingÅrsak
-import no.nav.dagpenger.iverksett.kontrakter.felles.Opplysningskilde
-import no.nav.dagpenger.iverksett.kontrakter.felles.Revurderingsårsak
-import no.nav.dagpenger.iverksett.kontrakter.iverksett.BehandlingMetode
-import no.nav.dagpenger.iverksett.kontrakter.iverksett.BehandlingsstatistikkDto
-import no.nav.dagpenger.iverksett.kontrakter.iverksett.Hendelse
-import no.nav.dagpenger.iverksett.kontrakter.iverksett.ÅrsakRevurderingDto
+import no.nav.dagpenger.kontrakter.iverksett.felles.AvslagÅrsak
+import no.nav.dagpenger.kontrakter.iverksett.felles.BehandlingType
+import no.nav.dagpenger.kontrakter.iverksett.felles.BehandlingÅrsak
+import no.nav.dagpenger.kontrakter.iverksett.felles.Opplysningskilde
+import no.nav.dagpenger.kontrakter.iverksett.felles.Revurderingsårsak
+import no.nav.dagpenger.kontrakter.iverksett.iverksett.BehandlingMetode
+import no.nav.dagpenger.kontrakter.iverksett.iverksett.BehandlingsstatistikkDto
+import no.nav.dagpenger.kontrakter.iverksett.iverksett.Hendelse
+import no.nav.dagpenger.kontrakter.iverksett.iverksett.ÅrsakRevurderingDto
 import no.nav.dagpenger.kontrakter.utbetaling.StønadType
 import java.time.LocalDate
 import java.time.LocalDateTime

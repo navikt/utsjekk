@@ -1,6 +1,6 @@
 package no.nav.dagpenger.iverksett.konsumenter.økonomi.grensesnitt
 
-import no.nav.dagpenger.iverksett.kontrakter.objectMapper
+import no.nav.dagpenger.kontrakter.iverksett.objectMapper
 import no.nav.dagpenger.kontrakter.utbetaling.StønadType
 import no.nav.familie.prosessering.domene.Task
 import java.time.LocalDate

@@ -3,10 +3,10 @@ package no.nav.dagpenger.iverksett.cucumber.domeneparser
 import io.cucumber.datatable.DataTable
 import no.nav.dagpenger.iverksett.cucumber.domeneparser.IdTIlUUIDHolder.behandlingIdTilUUID
 import no.nav.dagpenger.iverksett.cucumber.steps.TilkjentYtelseHolder
-import no.nav.dagpenger.iverksett.kontrakter.felles.Datoperiode
-import no.nav.dagpenger.iverksett.kontrakter.iverksett.DatoperiodeDto
-import no.nav.dagpenger.iverksett.kontrakter.iverksett.TilkjentYtelseDto
-import no.nav.dagpenger.iverksett.kontrakter.iverksett.UtbetalingDto
+import no.nav.dagpenger.kontrakter.iverksett.felles.Datoperiode
+import no.nav.dagpenger.kontrakter.iverksett.iverksett.DatoperiodeDto
+import no.nav.dagpenger.kontrakter.iverksett.iverksett.TilkjentYtelseDto
+import no.nav.dagpenger.kontrakter.iverksett.iverksett.UtbetalingDto
 import no.nav.dagpenger.kontrakter.utbetaling.Utbetalingsoppdrag.KodeEndring
 import no.nav.dagpenger.kontrakter.utbetaling.Utbetalingsperiode.SatsType
 import org.assertj.core.api.Assertions.assertThat

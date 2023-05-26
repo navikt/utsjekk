@@ -15,7 +15,7 @@ import no.nav.dagpenger.iverksett.konsumenter.brev.frittstående.DistribuerFritt
 import no.nav.dagpenger.iverksett.konsumenter.brev.frittstående.FrittståendeBrevRepository
 import no.nav.dagpenger.iverksett.konsumenter.brev.frittstående.FrittståendeBrevUtil.opprettFrittståendeBrev
 import no.nav.dagpenger.iverksett.konsumenter.vedtakstatistikk.toJson
-import no.nav.dagpenger.iverksett.kontrakter.journalføring.dokdist.Distribusjonstype
+import no.nav.dagpenger.kontrakter.iverksett.journalføring.dokdist.Distribusjonstype
 import no.nav.familie.http.client.RessursException
 import no.nav.familie.kontrakter.felles.Ressurs
 import no.nav.familie.prosessering.domene.Task

@@ -16,11 +16,11 @@ import no.nav.dagpenger.iverksett.infrastruktur.transformer.toDomain
 import no.nav.dagpenger.iverksett.infrastruktur.util.ObjectMapperProvider.objectMapper
 import no.nav.dagpenger.iverksett.konsumenter.brev.domain.Brevmottaker
 import no.nav.dagpenger.iverksett.konsumenter.brev.domain.Brevmottakere
-import no.nav.dagpenger.iverksett.kontrakter.iverksett.Brevmottaker.IdentType.PERSONIDENT
-import no.nav.dagpenger.iverksett.kontrakter.iverksett.Brevmottaker.MottakerRolle.BRUKER
-import no.nav.dagpenger.iverksett.kontrakter.iverksett.Brevmottaker.MottakerRolle.VERGE
-import no.nav.dagpenger.iverksett.kontrakter.iverksett.IverksettDagpengerdDto
 import no.nav.dagpenger.iverksett.util.opprettBrev
+import no.nav.dagpenger.kontrakter.iverksett.iverksett.Brevmottaker.IdentType.PERSONIDENT
+import no.nav.dagpenger.kontrakter.iverksett.iverksett.Brevmottaker.MottakerRolle.BRUKER
+import no.nav.dagpenger.kontrakter.iverksett.iverksett.Brevmottaker.MottakerRolle.VERGE
+import no.nav.dagpenger.kontrakter.iverksett.iverksett.IverksettDagpengerdDto
 import no.nav.familie.prosessering.domene.Task
 import no.nav.familie.prosessering.internal.TaskService
 import org.assertj.core.api.Assertions.assertThat

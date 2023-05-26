@@ -1,10 +1,10 @@
 package no.nav.dagpenger.iverksett.konsumenter.brev
 
 import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
-import no.nav.dagpenger.iverksett.kontrakter.felles.BehandlingType
-import no.nav.dagpenger.iverksett.kontrakter.felles.BehandlingÅrsak
-import no.nav.dagpenger.iverksett.kontrakter.felles.Vedtaksresultat
-import no.nav.dagpenger.iverksett.kontrakter.journalføring.dokarkiv.Dokumenttype
+import no.nav.dagpenger.kontrakter.iverksett.felles.BehandlingType
+import no.nav.dagpenger.kontrakter.iverksett.felles.BehandlingÅrsak
+import no.nav.dagpenger.kontrakter.iverksett.felles.Vedtaksresultat
+import no.nav.dagpenger.kontrakter.iverksett.journalføring.dokarkiv.Dokumenttype
 import no.nav.dagpenger.kontrakter.utbetaling.StønadType
 
 fun stønadstypeTilDokumenttype(stønadType: StønadType) =

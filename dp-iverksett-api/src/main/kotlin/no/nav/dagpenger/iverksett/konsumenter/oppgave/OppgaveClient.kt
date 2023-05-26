@@ -1,8 +1,8 @@
 package no.nav.dagpenger.iverksett.konsumenter.oppgave
 
 import no.nav.dagpenger.iverksett.infrastruktur.util.medContentTypeJsonUTF8
-import no.nav.dagpenger.iverksett.kontrakter.oppgave.OppgaveResponse
-import no.nav.dagpenger.iverksett.kontrakter.oppgave.OpprettOppgaveRequest
+import no.nav.dagpenger.kontrakter.iverksett.oppgave.OppgaveResponse
+import no.nav.dagpenger.kontrakter.iverksett.oppgave.OpprettOppgaveRequest
 import no.nav.familie.http.client.AbstractRestClient
 import no.nav.familie.kontrakter.felles.Ressurs
 import org.springframework.beans.factory.annotation.Qualifier

@@ -8,28 +8,28 @@ import no.nav.dagpenger.iverksett.api.domene.TilkjentYtelse
 import no.nav.dagpenger.iverksett.api.domene.VedtaksdetaljerDagpenger
 import no.nav.dagpenger.iverksett.api.domene.Vilkårsvurdering
 import no.nav.dagpenger.iverksett.infrastruktur.util.VilkårsvurderingUtil
-import no.nav.dagpenger.iverksett.kontrakter.dvh.AdressebeskyttelseDVH
-import no.nav.dagpenger.iverksett.kontrakter.dvh.AktivitetTypeDVH
-import no.nav.dagpenger.iverksett.kontrakter.dvh.AktivitetskravDVH
-import no.nav.dagpenger.iverksett.kontrakter.dvh.BehandlingTypeDVH
-import no.nav.dagpenger.iverksett.kontrakter.dvh.BehandlingÅrsakDVH
-import no.nav.dagpenger.iverksett.kontrakter.dvh.PersonDVH
-import no.nav.dagpenger.iverksett.kontrakter.dvh.UtbetalingDVH
-import no.nav.dagpenger.iverksett.kontrakter.dvh.UtbetalingsdetaljDVH
-import no.nav.dagpenger.iverksett.kontrakter.dvh.VedtakDagpengerDVH
-import no.nav.dagpenger.iverksett.kontrakter.dvh.VedtakresultatDVH
-import no.nav.dagpenger.iverksett.kontrakter.dvh.VedtaksperiodeDagpengerDVH
-import no.nav.dagpenger.iverksett.kontrakter.dvh.VedtaksperiodeTypeDVH
-import no.nav.dagpenger.iverksett.kontrakter.dvh.VilkårDVH
-import no.nav.dagpenger.iverksett.kontrakter.dvh.VilkårsresultatDVH
-import no.nav.dagpenger.iverksett.kontrakter.dvh.VilkårsvurderingDVH
-import no.nav.dagpenger.iverksett.kontrakter.dvh.ÅrsakRevurderingDVH
+import no.nav.dagpenger.kontrakter.iverksett.dvh.AdressebeskyttelseDVH
+import no.nav.dagpenger.kontrakter.iverksett.dvh.AktivitetTypeDVH
+import no.nav.dagpenger.kontrakter.iverksett.dvh.AktivitetskravDVH
+import no.nav.dagpenger.kontrakter.iverksett.dvh.BehandlingTypeDVH
+import no.nav.dagpenger.kontrakter.iverksett.dvh.BehandlingÅrsakDVH
+import no.nav.dagpenger.kontrakter.iverksett.dvh.PersonDVH
+import no.nav.dagpenger.kontrakter.iverksett.dvh.UtbetalingDVH
+import no.nav.dagpenger.kontrakter.iverksett.dvh.UtbetalingsdetaljDVH
+import no.nav.dagpenger.kontrakter.iverksett.dvh.VedtakDagpengerDVH
+import no.nav.dagpenger.kontrakter.iverksett.dvh.VedtakresultatDVH
+import no.nav.dagpenger.kontrakter.iverksett.dvh.VedtaksperiodeDagpengerDVH
+import no.nav.dagpenger.kontrakter.iverksett.dvh.VedtaksperiodeTypeDVH
+import no.nav.dagpenger.kontrakter.iverksett.dvh.VilkårDVH
+import no.nav.dagpenger.kontrakter.iverksett.dvh.VilkårsresultatDVH
+import no.nav.dagpenger.kontrakter.iverksett.dvh.VilkårsvurderingDVH
+import no.nav.dagpenger.kontrakter.iverksett.dvh.ÅrsakRevurderingDVH
 import no.nav.dagpenger.kontrakter.utbetaling.StønadType
 import no.nav.dagpenger.kontrakter.utbetaling.tilKlassifisering
 import java.time.ZoneId
 import java.util.UUID
-import no.nav.dagpenger.iverksett.kontrakter.dvh.BarnDVH as BarnEkstern
-import no.nav.dagpenger.iverksett.kontrakter.dvh.StønadTypeDVH as StønadTypeEkstern
+import no.nav.dagpenger.kontrakter.iverksett.dvh.BarnDVH as BarnEkstern
+import no.nav.dagpenger.kontrakter.iverksett.dvh.StønadTypeDVH as StønadTypeEkstern
 
 object VedtakstatistikkMapper {
     private fun mapÅrsakRevurdering(behandlingsdetaljer: Behandlingsdetaljer): ÅrsakRevurderingDVH? =

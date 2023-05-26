@@ -9,10 +9,10 @@ import no.nav.dagpenger.iverksett.infrastruktur.configuration.FeatureToggleConfi
 import no.nav.dagpenger.iverksett.infrastruktur.featuretoggle.FeatureToggleService
 import no.nav.dagpenger.iverksett.infrastruktur.transformer.toDomain
 import no.nav.dagpenger.iverksett.konsumenter.tilbakekreving.validerTilbakekreving
-import no.nav.dagpenger.iverksett.kontrakter.felles.VedtakType
-import no.nav.dagpenger.iverksett.kontrakter.felles.Vedtaksresultat
-import no.nav.dagpenger.iverksett.kontrakter.iverksett.IverksettDagpengerdDto
-import no.nav.dagpenger.iverksett.kontrakter.iverksett.IverksettStatus
+import no.nav.dagpenger.kontrakter.iverksett.felles.VedtakType
+import no.nav.dagpenger.kontrakter.iverksett.felles.Vedtaksresultat
+import no.nav.dagpenger.kontrakter.iverksett.iverksett.IverksettDagpengerdDto
+import no.nav.dagpenger.kontrakter.iverksett.iverksett.IverksettStatus
 import no.nav.security.token.support.core.api.ProtectedWithClaims
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType

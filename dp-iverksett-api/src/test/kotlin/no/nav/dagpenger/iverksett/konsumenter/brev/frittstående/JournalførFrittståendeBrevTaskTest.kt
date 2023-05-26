@@ -9,8 +9,8 @@ import no.nav.dagpenger.iverksett.konsumenter.brev.JournalpostClient
 import no.nav.dagpenger.iverksett.konsumenter.brev.domain.JournalpostResultat
 import no.nav.dagpenger.iverksett.konsumenter.brev.domain.JournalpostResultatMap
 import no.nav.dagpenger.iverksett.konsumenter.brev.frittstående.FrittståendeBrevUtil.opprettFrittståendeBrev
-import no.nav.dagpenger.iverksett.kontrakter.journalføring.dokarkiv.ArkiverDokumentRequest
-import no.nav.dagpenger.iverksett.kontrakter.journalføring.dokarkiv.ArkiverDokumentResponse
+import no.nav.dagpenger.kontrakter.iverksett.journalføring.dokarkiv.ArkiverDokumentRequest
+import no.nav.dagpenger.kontrakter.iverksett.journalføring.dokarkiv.ArkiverDokumentResponse
 import no.nav.familie.prosessering.domene.Task
 import no.nav.familie.prosessering.internal.TaskService
 import org.assertj.core.api.Assertions.assertThat

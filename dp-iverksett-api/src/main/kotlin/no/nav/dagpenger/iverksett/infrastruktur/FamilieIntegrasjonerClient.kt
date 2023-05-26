@@ -1,6 +1,6 @@
 package no.nav.dagpenger.iverksett.infrastruktur
 
-import no.nav.dagpenger.iverksett.kontrakter.felles.Enhet
+import no.nav.dagpenger.kontrakter.iverksett.felles.Enhet
 import no.nav.familie.http.client.AbstractRestClient
 import no.nav.familie.kontrakter.felles.Ressurs
 import no.nav.familie.kontrakter.felles.getDataOrThrow
