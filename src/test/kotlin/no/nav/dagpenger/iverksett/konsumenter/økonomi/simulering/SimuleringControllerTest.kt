@@ -12,8 +12,8 @@ import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.Utbeta
 import no.nav.dagpenger.iverksett.simuleringDto
 import no.nav.dagpenger.iverksett.util.opprettTilkjentYtelse
 import no.nav.dagpenger.iverksett.util.opprettTilkjentYtelseMedMetadata
-import no.nav.dagpenger.kontrakter.iverksett.simulering.BeriketSimuleringsresultat
-import no.nav.dagpenger.kontrakter.iverksett.simulering.DetaljertSimuleringResultat
+import no.nav.dagpenger.kontrakter.oppdrag.simulering.BeriketSimuleringsresultat
+import no.nav.dagpenger.kontrakter.oppdrag.simulering.DetaljertSimuleringResultat
 import no.nav.familie.kontrakter.felles.Ressurs
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach

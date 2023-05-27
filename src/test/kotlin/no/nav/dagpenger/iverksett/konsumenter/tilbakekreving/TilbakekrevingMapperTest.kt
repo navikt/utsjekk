@@ -4,11 +4,11 @@ import no.nav.dagpenger.iverksett.api.domene.TilbakekrevingMedVarsel
 import no.nav.dagpenger.iverksett.api.domene.Tilbakekrevingsdetaljer
 import no.nav.dagpenger.iverksett.util.opprettIverksettDagpenger
 import no.nav.dagpenger.iverksett.util.opprettTilbakekrevingsdetaljer
-import no.nav.dagpenger.kontrakter.iverksett.felles.Enhet
-import no.nav.dagpenger.kontrakter.iverksett.felles.Språkkode
-import no.nav.dagpenger.kontrakter.iverksett.objectMapper
+import no.nav.dagpenger.kontrakter.felles.Enhet
+import no.nav.dagpenger.kontrakter.felles.Språkkode
+import no.nav.dagpenger.kontrakter.felles.Tilbakekrevingsvalg
+import no.nav.dagpenger.kontrakter.felles.objectMapper
 import no.nav.dagpenger.kontrakter.iverksett.tilbakekreving.Behandlingstype
-import no.nav.dagpenger.kontrakter.iverksett.tilbakekreving.Tilbakekrevingsvalg
 import no.nav.dagpenger.kontrakter.iverksett.tilbakekreving.Ytelsestype
 import no.nav.dagpenger.kontrakter.utbetaling.Fagsystem
 import org.assertj.core.api.Assertions.assertThat

@@ -2,9 +2,9 @@ package no.nav.dagpenger.iverksett.infrastruktur.transformer
 
 import no.nav.dagpenger.iverksett.api.domene.TilkjentYtelse
 import no.nav.dagpenger.iverksett.api.domene.TilkjentYtelseMedMetaData
-import no.nav.dagpenger.kontrakter.iverksett.iverksett.TilkjentYtelseDto
-import no.nav.dagpenger.kontrakter.iverksett.iverksett.UtbetalingDto
-import no.nav.dagpenger.kontrakter.iverksett.iverksett.UtbetalingerMedMetadataDto
+import no.nav.dagpenger.kontrakter.iverksett.TilkjentYtelseDto
+import no.nav.dagpenger.kontrakter.iverksett.UtbetalingDto
+import no.nav.dagpenger.kontrakter.iverksett.UtbetalingerMedMetadataDto
 import java.time.LocalDate
 
 fun TilkjentYtelseDto.toDomain(): TilkjentYtelse {

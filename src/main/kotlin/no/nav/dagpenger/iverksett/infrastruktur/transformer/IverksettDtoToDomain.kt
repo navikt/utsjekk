@@ -14,25 +14,25 @@ import no.nav.dagpenger.iverksett.api.domene.Vurdering
 import no.nav.dagpenger.iverksett.api.domene.ÅrsakRevurdering
 import no.nav.dagpenger.iverksett.konsumenter.brev.domain.Brevmottaker
 import no.nav.dagpenger.iverksett.konsumenter.brev.domain.Brevmottakere
-import no.nav.dagpenger.kontrakter.iverksett.felles.BehandlingType
-import no.nav.dagpenger.kontrakter.iverksett.felles.BehandlingÅrsak
-import no.nav.dagpenger.kontrakter.iverksett.felles.Datoperiode
-import no.nav.dagpenger.kontrakter.iverksett.iverksett.AktivitetType
-import no.nav.dagpenger.kontrakter.iverksett.iverksett.BehandlingsdetaljerDto
-import no.nav.dagpenger.kontrakter.iverksett.iverksett.DelvilkårsvurderingDto
-import no.nav.dagpenger.kontrakter.iverksett.iverksett.FagsakdetaljerDto
-import no.nav.dagpenger.kontrakter.iverksett.iverksett.IverksettDagpengerdDto
-import no.nav.dagpenger.kontrakter.iverksett.iverksett.SakDto
-import no.nav.dagpenger.kontrakter.iverksett.iverksett.SøkerDto
-import no.nav.dagpenger.kontrakter.iverksett.iverksett.TilbakekrevingDto
-import no.nav.dagpenger.kontrakter.iverksett.iverksett.TilbakekrevingMedVarselDto
-import no.nav.dagpenger.kontrakter.iverksett.iverksett.VedtaksdetaljerDagpengerDto
-import no.nav.dagpenger.kontrakter.iverksett.iverksett.VedtaksperiodeDagpengerDto
-import no.nav.dagpenger.kontrakter.iverksett.iverksett.VilkårsvurderingDto
-import no.nav.dagpenger.kontrakter.iverksett.iverksett.VurderingDto
+import no.nav.dagpenger.kontrakter.felles.BehandlingType
+import no.nav.dagpenger.kontrakter.felles.BehandlingÅrsak
+import no.nav.dagpenger.kontrakter.felles.Datoperiode
+import no.nav.dagpenger.kontrakter.iverksett.AktivitetType
+import no.nav.dagpenger.kontrakter.iverksett.BehandlingsdetaljerDto
+import no.nav.dagpenger.kontrakter.iverksett.DelvilkårsvurderingDto
+import no.nav.dagpenger.kontrakter.iverksett.FagsakdetaljerDto
+import no.nav.dagpenger.kontrakter.iverksett.IverksettDagpengerdDto
+import no.nav.dagpenger.kontrakter.iverksett.SakDto
+import no.nav.dagpenger.kontrakter.iverksett.SøkerDto
+import no.nav.dagpenger.kontrakter.iverksett.TilbakekrevingDto
+import no.nav.dagpenger.kontrakter.iverksett.TilbakekrevingMedVarselDto
+import no.nav.dagpenger.kontrakter.iverksett.VedtaksdetaljerDagpengerDto
+import no.nav.dagpenger.kontrakter.iverksett.VedtaksperiodeDagpengerDto
+import no.nav.dagpenger.kontrakter.iverksett.VilkårsvurderingDto
+import no.nav.dagpenger.kontrakter.iverksett.VurderingDto
 import java.time.LocalDate
 import java.util.UUID
-import no.nav.dagpenger.kontrakter.iverksett.iverksett.Brevmottaker as BrevmottakerKontrakter
+import no.nav.dagpenger.kontrakter.felles.Brevmottaker as BrevmottakerDto
 
 fun VurderingDto.toDomain(): Vurdering {
     return Vurdering(this.regelId, this.svar, this.begrunnelse)
@@ -123,10 +123,10 @@ fun TilbakekrevingMedVarselDto.toDomain(): TilbakekrevingMedVarsel {
     )
 }
 
-fun List<BrevmottakerKontrakter>.toDomain(): Brevmottakere =
+fun List<BrevmottakerDto>.toDomain(): Brevmottakere =
     Brevmottakere(mottakere = this.map { it.toDomain() })
 
-fun BrevmottakerKontrakter.toDomain(): Brevmottaker = Brevmottaker(
+fun BrevmottakerDto.toDomain(): Brevmottaker = Brevmottaker(
     ident = this.ident,
     navn = this.navn,
     identType = this.identType,

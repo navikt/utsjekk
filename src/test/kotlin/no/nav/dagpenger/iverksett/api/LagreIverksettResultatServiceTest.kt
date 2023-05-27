@@ -9,8 +9,8 @@ import no.nav.dagpenger.iverksett.konsumenter.brev.domain.JournalpostResultat
 import no.nav.dagpenger.iverksett.konsumenter.tilbakekreving.tilOpprettTilbakekrevingRequest
 import no.nav.dagpenger.iverksett.util.opprettIverksettDagpenger
 import no.nav.dagpenger.iverksett.util.opprettTilkjentYtelse
-import no.nav.dagpenger.kontrakter.iverksett.felles.Enhet
-import no.nav.dagpenger.kontrakter.iverksett.oppdrag.OppdragStatus
+import no.nav.dagpenger.kontrakter.felles.Enhet
+import no.nav.dagpenger.kontrakter.oppdrag.OppdragStatus
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows

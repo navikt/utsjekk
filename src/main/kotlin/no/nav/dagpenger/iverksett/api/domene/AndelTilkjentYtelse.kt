@@ -1,6 +1,6 @@
 package no.nav.dagpenger.iverksett.api.domene
 
-import no.nav.dagpenger.kontrakter.iverksett.felles.Datoperiode
+import no.nav.dagpenger.kontrakter.felles.Datoperiode
 import no.nav.dagpenger.kontrakter.utbetaling.Ferietillegg
 import no.nav.dagpenger.kontrakter.utbetaling.StønadType
 import no.nav.dagpenger.kontrakter.utbetaling.tilKlassifisering

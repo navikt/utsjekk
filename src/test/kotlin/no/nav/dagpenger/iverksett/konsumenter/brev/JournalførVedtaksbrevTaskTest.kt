@@ -15,7 +15,7 @@ import no.nav.dagpenger.iverksett.infrastruktur.repository.findByIdOrThrow
 import no.nav.dagpenger.iverksett.infrastruktur.transformer.toDomain
 import no.nav.dagpenger.iverksett.konsumenter.brev.domain.JournalpostResultat
 import no.nav.dagpenger.iverksett.util.opprettIverksettDto
-import no.nav.dagpenger.kontrakter.iverksett.iverksett.Brevmottaker
+import no.nav.dagpenger.kontrakter.felles.Brevmottaker
 import no.nav.dagpenger.kontrakter.iverksett.journalføring.Journalpost
 import no.nav.dagpenger.kontrakter.iverksett.journalføring.Journalposttype
 import no.nav.dagpenger.kontrakter.iverksett.journalføring.Journalstatus

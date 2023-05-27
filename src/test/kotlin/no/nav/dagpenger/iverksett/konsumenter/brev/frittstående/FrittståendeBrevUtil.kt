@@ -2,8 +2,8 @@ package no.nav.dagpenger.iverksett.konsumenter.brev.frittstående
 
 import no.nav.dagpenger.iverksett.konsumenter.brev.domain.Brevmottakere
 import no.nav.dagpenger.iverksett.konsumenter.brev.domain.FrittståendeBrev
-import no.nav.dagpenger.kontrakter.iverksett.felles.FrittståendeBrevType
-import no.nav.dagpenger.kontrakter.iverksett.iverksett.Brevmottaker
+import no.nav.dagpenger.kontrakter.felles.Brevmottaker
+import no.nav.dagpenger.kontrakter.felles.FrittståendeBrevType
 import no.nav.dagpenger.kontrakter.utbetaling.StønadType
 
 object FrittståendeBrevUtil {

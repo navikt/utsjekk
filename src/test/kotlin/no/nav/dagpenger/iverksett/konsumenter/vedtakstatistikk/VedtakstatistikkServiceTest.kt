@@ -10,6 +10,10 @@ import no.nav.dagpenger.iverksett.ResourceLoaderTestUtil
 import no.nav.dagpenger.iverksett.infrastruktur.transformer.toDomain
 import no.nav.dagpenger.iverksett.infrastruktur.util.ObjectMapperProvider.objectMapper
 import no.nav.dagpenger.iverksett.util.opprettIverksettDagpenger
+import no.nav.dagpenger.kontrakter.felles.Opplysningskilde
+import no.nav.dagpenger.kontrakter.felles.Revurderingsårsak
+import no.nav.dagpenger.kontrakter.felles.VilkårType
+import no.nav.dagpenger.kontrakter.iverksett.IverksettDagpengerdDto
 import no.nav.dagpenger.kontrakter.iverksett.dvh.AdressebeskyttelseDVH
 import no.nav.dagpenger.kontrakter.iverksett.dvh.AktivitetTypeDVH
 import no.nav.dagpenger.kontrakter.iverksett.dvh.AktivitetskravDVH
@@ -28,10 +32,6 @@ import no.nav.dagpenger.kontrakter.iverksett.dvh.VilkårDVH
 import no.nav.dagpenger.kontrakter.iverksett.dvh.VilkårsresultatDVH
 import no.nav.dagpenger.kontrakter.iverksett.dvh.VilkårsvurderingDVH
 import no.nav.dagpenger.kontrakter.iverksett.dvh.ÅrsakRevurderingDVH
-import no.nav.dagpenger.kontrakter.iverksett.felles.Opplysningskilde
-import no.nav.dagpenger.kontrakter.iverksett.felles.Revurderingsårsak
-import no.nav.dagpenger.kontrakter.iverksett.felles.VilkårType
-import no.nav.dagpenger.kontrakter.iverksett.iverksett.IverksettDagpengerdDto
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.time.LocalDate

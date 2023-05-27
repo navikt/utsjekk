@@ -16,7 +16,7 @@
     <name>Iverksett</name>
 
     <properties>
-        <dp-kontrakter.version>1.0_20230526155451_0b0fbb0</dp-kontrakter.version>
+        <dp-kontrakter.version>1.0_20230527124317_a34ac77</dp-kontrakter.version>
         <revision>1.0</revision>
         <sha1/>
         <changelist>-SNAPSHOT</changelist>
@@ -24,7 +24,7 @@
         <java.version>17</java.version>
         <kotlin.version>1.8.10</kotlin.version>
         <springdoc.version>2.0.2</springdoc.version>
-        <felles.version>2.20230210162649_a258d57-SPRING_BOOT_3</felles.version>
+        <familie-felles.version>2.20230210162649_a258d57-SPRING_BOOT_3</familie-felles.version>
         <prosessering.version>2.20230214102837_4b63c2e-SPRING_BOOT_3</prosessering.version>
         <maven-surefire-plugin.version>3.0.0-M9</maven-surefire-plugin.version>
         <mockk.version>1.13.4</mockk.version>
@@ -41,7 +41,7 @@
     <repositories>
         <repository>
             <id>github</id>
-            <url>https://maven.pkg.github.com</url>
+            <url>https://maven.pkg.github.com/navikt/dp-kontrakter</url>
         </repository>
         <repository>
             <id>central</id>
@@ -51,29 +51,23 @@
             <id>confluent</id>
             <url>https://packages.confluent.io/maven/</url>
         </repository>
-        <repository>
-            <id>familie-felles</id>
-            <url>https://maven.pkg.github.com/navikt/familie-felles</url>
-        </repository>
-        <repository>
-            <id>dp-kontrakter</id>
-            <url>https://maven.pkg.github.com/navikt/dp-kontrakter</url>
-        </repository>
-    </repositories>
-
-    <distributionManagement>
-        <repository>
-            <id>github</id>
-            <name>GitHub navikt Apache Maven Packages</name>
-            <url>https://maven.pkg.github.com/navikt/dp-iverksett</url>
-        </repository>
-    </distributionManagement>
+     </repositories>
 
     <dependencies>
         <!-- Kontrakter -->
         <dependency>
             <groupId>no.nav.dagpenger.kontrakter</groupId>
+            <artifactId>oppdrag</artifactId>
+            <version>${dp-kontrakter.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>no.nav.dagpenger.kontrakter</groupId>
             <artifactId>iverksett</artifactId>
+            <version>${dp-kontrakter.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>no.nav.dagpenger.kontrakter</groupId>
+            <artifactId>iverksett-integrasjoner</artifactId>
             <version>${dp-kontrakter.version}</version>
         </dependency>
 
@@ -159,7 +153,7 @@
         <dependency>
             <groupId>no.nav.familie.felles</groupId>
             <artifactId>http-client</artifactId>
-            <version>${felles.version}</version>
+            <version>${familie-felles.version}</version>
         </dependency>
         <dependency>
             <groupId>no.nav.security</groupId>

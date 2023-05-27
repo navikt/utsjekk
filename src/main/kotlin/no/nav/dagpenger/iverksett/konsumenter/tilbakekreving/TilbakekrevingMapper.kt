@@ -2,16 +2,16 @@ package no.nav.dagpenger.iverksett.konsumenter.tilbakekreving
 
 import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
 import no.nav.dagpenger.iverksett.api.domene.Tilbakekrevingsdetaljer
-import no.nav.dagpenger.kontrakter.iverksett.felles.BehandlingÅrsak
-import no.nav.dagpenger.kontrakter.iverksett.felles.Enhet
-import no.nav.dagpenger.kontrakter.iverksett.felles.Språkkode
+import no.nav.dagpenger.kontrakter.felles.BehandlingÅrsak
+import no.nav.dagpenger.kontrakter.felles.Enhet
+import no.nav.dagpenger.kontrakter.felles.Språkkode
+import no.nav.dagpenger.kontrakter.felles.Tilbakekrevingsvalg
 import no.nav.dagpenger.kontrakter.iverksett.tilbakekreving.Behandlingstype
 import no.nav.dagpenger.kontrakter.iverksett.tilbakekreving.Faktainfo
 import no.nav.dagpenger.kontrakter.iverksett.tilbakekreving.HentFagsystemsbehandling
 import no.nav.dagpenger.kontrakter.iverksett.tilbakekreving.HentFagsystemsbehandlingRespons
 import no.nav.dagpenger.kontrakter.iverksett.tilbakekreving.OpprettTilbakekrevingRequest
 import no.nav.dagpenger.kontrakter.iverksett.tilbakekreving.Periode
-import no.nav.dagpenger.kontrakter.iverksett.tilbakekreving.Tilbakekrevingsvalg
 import no.nav.dagpenger.kontrakter.iverksett.tilbakekreving.Varsel
 import no.nav.dagpenger.kontrakter.iverksett.tilbakekreving.Ytelsestype
 import no.nav.dagpenger.kontrakter.utbetaling.Fagsystem

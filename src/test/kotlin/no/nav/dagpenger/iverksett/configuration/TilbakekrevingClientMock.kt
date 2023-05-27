@@ -7,7 +7,7 @@ import com.github.tomakehurst.wiremock.client.WireMock.okForContentType
 import com.github.tomakehurst.wiremock.client.WireMock.okJson
 import com.github.tomakehurst.wiremock.client.WireMock.post
 import com.github.tomakehurst.wiremock.client.WireMock.urlMatching
-import no.nav.dagpenger.kontrakter.iverksett.objectMapper
+import no.nav.dagpenger.kontrakter.felles.objectMapper
 import no.nav.dagpenger.kontrakter.iverksett.tilbakekreving.Behandling
 import no.nav.dagpenger.kontrakter.iverksett.tilbakekreving.Behandlingsstatus
 import no.nav.dagpenger.kontrakter.iverksett.tilbakekreving.Behandlingstype

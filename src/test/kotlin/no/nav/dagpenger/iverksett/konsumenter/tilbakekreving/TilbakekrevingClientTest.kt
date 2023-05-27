@@ -1,7 +1,7 @@
 package no.nav.dagpenger.iverksett.konsumenter.tilbakekreving
 
 import no.nav.dagpenger.iverksett.ServerTest
-import no.nav.dagpenger.kontrakter.iverksett.felles.Språkkode
+import no.nav.dagpenger.kontrakter.felles.Språkkode
 import no.nav.dagpenger.kontrakter.iverksett.tilbakekreving.Behandling
 import no.nav.dagpenger.kontrakter.iverksett.tilbakekreving.FeilutbetaltePerioderDto
 import no.nav.dagpenger.kontrakter.iverksett.tilbakekreving.ForhåndsvisVarselbrevRequest

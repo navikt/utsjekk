@@ -2,8 +2,8 @@ package no.nav.dagpenger.iverksett.infrastruktur.transformer
 
 import no.nav.dagpenger.iverksett.api.domene.Barn
 import no.nav.dagpenger.iverksett.api.domene.Person
-import no.nav.dagpenger.kontrakter.iverksett.iverksett.BarnDto
-import no.nav.dagpenger.kontrakter.iverksett.iverksett.PersonDto
+import no.nav.dagpenger.kontrakter.iverksett.BarnDto
+import no.nav.dagpenger.kontrakter.iverksett.PersonDto
 
 fun PersonDto.toDomain(): Person {
     return Person(this.personIdent)

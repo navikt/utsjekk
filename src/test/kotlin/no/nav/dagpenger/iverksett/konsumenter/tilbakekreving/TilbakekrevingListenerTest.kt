@@ -10,13 +10,13 @@ import no.nav.dagpenger.iverksett.api.IverksettingRepository
 import no.nav.dagpenger.iverksett.infrastruktur.FamilieIntegrasjonerClient
 import no.nav.dagpenger.iverksett.lagIverksett
 import no.nav.dagpenger.iverksett.util.opprettIverksettDagpenger
-import no.nav.dagpenger.kontrakter.iverksett.felles.Enhet
-import no.nav.dagpenger.kontrakter.iverksett.felles.Språkkode
-import no.nav.dagpenger.kontrakter.iverksett.objectMapper
+import no.nav.dagpenger.kontrakter.felles.Enhet
+import no.nav.dagpenger.kontrakter.felles.Språkkode
+import no.nav.dagpenger.kontrakter.felles.Tilbakekrevingsvalg
+import no.nav.dagpenger.kontrakter.felles.objectMapper
 import no.nav.dagpenger.kontrakter.iverksett.tilbakekreving.Faktainfo
 import no.nav.dagpenger.kontrakter.iverksett.tilbakekreving.HentFagsystemsbehandling
 import no.nav.dagpenger.kontrakter.iverksett.tilbakekreving.HentFagsystemsbehandlingRespons
-import no.nav.dagpenger.kontrakter.iverksett.tilbakekreving.Tilbakekrevingsvalg
 import no.nav.dagpenger.kontrakter.iverksett.tilbakekreving.Ytelsestype
 import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.assertj.core.api.Assertions.assertThat

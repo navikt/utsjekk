@@ -1,6 +1,6 @@
 package no.nav.dagpenger.iverksett.infrastruktur.advice
 
-import no.nav.dagpenger.kontrakter.iverksett.objectMapper
+import no.nav.dagpenger.kontrakter.felles.objectMapper
 import java.io.PrintWriter
 import java.io.StringWriter
 

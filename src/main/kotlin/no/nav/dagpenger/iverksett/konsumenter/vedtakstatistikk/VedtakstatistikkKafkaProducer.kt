@@ -1,9 +1,9 @@
 package no.nav.dagpenger.iverksett.konsumenter.vedtakstatistikk
 
 import no.nav.dagpenger.iverksett.infrastruktur.service.KafkaProducerService
+import no.nav.dagpenger.kontrakter.felles.objectMapper
 import no.nav.dagpenger.kontrakter.iverksett.dvh.StønadTypeDVH
 import no.nav.dagpenger.kontrakter.iverksett.dvh.VedtakDagpengerDVH
-import no.nav.dagpenger.kontrakter.iverksett.objectMapper
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service

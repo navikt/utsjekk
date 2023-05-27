@@ -19,9 +19,9 @@ import no.nav.dagpenger.iverksett.lagIverksett
 import no.nav.dagpenger.iverksett.util.opprettIverksettDagpenger
 import no.nav.dagpenger.iverksett.util.opprettTilbakekrevingMedVarsel
 import no.nav.dagpenger.iverksett.util.opprettTilbakekrevingsdetaljer
-import no.nav.dagpenger.kontrakter.iverksett.felles.Enhet
-import no.nav.dagpenger.kontrakter.iverksett.simulering.BeriketSimuleringsresultat
-import no.nav.dagpenger.kontrakter.iverksett.tilbakekreving.Tilbakekrevingsvalg
+import no.nav.dagpenger.kontrakter.felles.Enhet
+import no.nav.dagpenger.kontrakter.felles.Tilbakekrevingsvalg
+import no.nav.dagpenger.kontrakter.oppdrag.simulering.BeriketSimuleringsresultat
 import no.nav.familie.prosessering.domene.Task
 import no.nav.familie.prosessering.internal.TaskService
 import org.assertj.core.api.Assertions.assertThat

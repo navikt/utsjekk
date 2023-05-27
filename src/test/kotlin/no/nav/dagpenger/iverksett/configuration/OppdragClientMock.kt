@@ -5,7 +5,7 @@ import io.mockk.mockk
 import no.nav.dagpenger.iverksett.detaljertSimuleringResultat
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.OppdragClient
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.OppdragStatusMedMelding
-import no.nav.dagpenger.kontrakter.iverksett.oppdrag.OppdragStatus
+import no.nav.dagpenger.kontrakter.oppdrag.OppdragStatus
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Primary

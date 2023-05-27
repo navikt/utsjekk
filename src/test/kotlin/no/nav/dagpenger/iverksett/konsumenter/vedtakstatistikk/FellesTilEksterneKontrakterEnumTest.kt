@@ -1,15 +1,15 @@
 package no.nav.dagpenger.iverksett.konsumenter.vedtakstatistikk
 
+import no.nav.dagpenger.kontrakter.felles.BehandlingType
+import no.nav.dagpenger.kontrakter.felles.BehandlingÅrsak
+import no.nav.dagpenger.kontrakter.felles.Vedtaksresultat
+import no.nav.dagpenger.kontrakter.felles.VilkårType
+import no.nav.dagpenger.kontrakter.felles.Vilkårsresultat
+import no.nav.dagpenger.kontrakter.iverksett.AdressebeskyttelseGradering
+import no.nav.dagpenger.kontrakter.iverksett.AktivitetType
+import no.nav.dagpenger.kontrakter.iverksett.VedtaksperiodeType
 import no.nav.dagpenger.kontrakter.iverksett.dvh.VedtakresultatDVH
 import no.nav.dagpenger.kontrakter.iverksett.dvh.VilkårDVH
-import no.nav.dagpenger.kontrakter.iverksett.felles.BehandlingType
-import no.nav.dagpenger.kontrakter.iverksett.felles.BehandlingÅrsak
-import no.nav.dagpenger.kontrakter.iverksett.felles.Vedtaksresultat
-import no.nav.dagpenger.kontrakter.iverksett.felles.VilkårType
-import no.nav.dagpenger.kontrakter.iverksett.felles.Vilkårsresultat
-import no.nav.dagpenger.kontrakter.iverksett.iverksett.AdressebeskyttelseGradering
-import no.nav.dagpenger.kontrakter.iverksett.iverksett.AktivitetType
-import no.nav.dagpenger.kontrakter.iverksett.iverksett.VedtaksperiodeType
 import org.junit.jupiter.api.Test
 import no.nav.dagpenger.kontrakter.iverksett.arbeidsoppfølging.Aktivitetstype as AktivitetstypeEkstern
 import no.nav.dagpenger.kontrakter.iverksett.arbeidsoppfølging.Periodetype as PeriodetypeEkstern

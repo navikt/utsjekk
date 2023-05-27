@@ -6,7 +6,7 @@ import no.nav.dagpenger.iverksett.konsumenter.brev.JournalpostClient
 import no.nav.dagpenger.iverksett.konsumenter.brev.domain.Brevmottakere
 import no.nav.dagpenger.iverksett.konsumenter.brev.domain.FrittståendeBrev
 import no.nav.dagpenger.iverksett.konsumenter.brev.stønadstypeTilDokumenttype
-import no.nav.dagpenger.kontrakter.iverksett.felles.FrittståendeBrevDto
+import no.nav.dagpenger.kontrakter.felles.FrittståendeBrevDto
 import no.nav.dagpenger.kontrakter.iverksett.journalføring.dokarkiv.ArkiverDokumentRequest
 import no.nav.dagpenger.kontrakter.iverksett.journalføring.dokarkiv.Dokument
 import no.nav.dagpenger.kontrakter.iverksett.journalføring.dokarkiv.Filtype

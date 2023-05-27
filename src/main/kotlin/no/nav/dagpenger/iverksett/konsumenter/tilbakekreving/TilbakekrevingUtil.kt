@@ -3,9 +3,9 @@ package no.nav.dagpenger.iverksett.konsumenter.tilbakekreving
 import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
 import no.nav.dagpenger.iverksett.api.domene.Tilbakekrevingsdetaljer
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.simulering.hentSammenhengendePerioderMedFeilutbetaling
-import no.nav.dagpenger.kontrakter.iverksett.simulering.BeriketSimuleringsresultat
-import no.nav.dagpenger.kontrakter.iverksett.simulering.Simuleringsoppsummering
-import no.nav.dagpenger.kontrakter.iverksett.tilbakekreving.Tilbakekrevingsvalg
+import no.nav.dagpenger.kontrakter.felles.Tilbakekrevingsvalg
+import no.nav.dagpenger.kontrakter.oppdrag.simulering.BeriketSimuleringsresultat
+import no.nav.dagpenger.kontrakter.oppdrag.simulering.Simuleringsoppsummering
 import java.math.BigDecimal
 
 private val TILBAKEKREVING_UTEN_VARSEL =

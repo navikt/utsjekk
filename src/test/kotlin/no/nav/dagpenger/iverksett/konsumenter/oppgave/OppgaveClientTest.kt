@@ -5,8 +5,8 @@ import com.github.tomakehurst.wiremock.client.WireMock.aResponse
 import com.github.tomakehurst.wiremock.client.WireMock.post
 import com.github.tomakehurst.wiremock.client.WireMock.urlMatching
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration
-import no.nav.dagpenger.kontrakter.iverksett.felles.Behandlingstema
-import no.nav.dagpenger.kontrakter.iverksett.felles.Tema
+import no.nav.dagpenger.kontrakter.felles.Behandlingstema
+import no.nav.dagpenger.kontrakter.felles.Tema
 import no.nav.dagpenger.kontrakter.iverksett.oppgave.IdentGruppe
 import no.nav.dagpenger.kontrakter.iverksett.oppgave.OppgaveIdentV2
 import no.nav.dagpenger.kontrakter.iverksett.oppgave.Oppgavetype

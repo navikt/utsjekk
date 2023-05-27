@@ -16,9 +16,9 @@ import no.nav.dagpenger.iverksett.infrastruktur.transformer.toDomain
 import no.nav.dagpenger.iverksett.lagIverksett
 import no.nav.dagpenger.iverksett.util.mockFeatureToggleService
 import no.nav.dagpenger.iverksett.util.opprettIverksettDto
-import no.nav.dagpenger.kontrakter.iverksett.felles.BehandlingÅrsak
-import no.nav.dagpenger.kontrakter.iverksett.felles.TilkjentYtelseStatus
-import no.nav.dagpenger.kontrakter.iverksett.oppdrag.OppdragStatus
+import no.nav.dagpenger.kontrakter.felles.BehandlingÅrsak
+import no.nav.dagpenger.kontrakter.felles.TilkjentYtelseStatus
+import no.nav.dagpenger.kontrakter.oppdrag.OppdragStatus
 import no.nav.dagpenger.kontrakter.utbetaling.Fagsystem
 import no.nav.dagpenger.kontrakter.utbetaling.Utbetalingsoppdrag
 import no.nav.dagpenger.kontrakter.utbetaling.Utbetalingsoppdrag.KodeEndring.NY

@@ -9,8 +9,8 @@ import no.nav.dagpenger.iverksett.konsumenter.tilbakekreving.tilOpprettTilbakekr
 import no.nav.dagpenger.iverksett.util.IverksettResultatMockBuilder
 import no.nav.dagpenger.iverksett.util.opprettIverksettDagpenger
 import no.nav.dagpenger.iverksett.util.opprettTilkjentYtelse
-import no.nav.dagpenger.kontrakter.iverksett.felles.Enhet
-import no.nav.dagpenger.kontrakter.iverksett.oppdrag.OppdragStatus
+import no.nav.dagpenger.kontrakter.felles.Enhet
+import no.nav.dagpenger.kontrakter.oppdrag.OppdragStatus
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.BeforeEach

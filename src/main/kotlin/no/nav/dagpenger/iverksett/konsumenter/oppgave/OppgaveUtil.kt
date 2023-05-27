@@ -1,8 +1,8 @@
 package no.nav.dagpenger.iverksett.konsumenter.oppgave
 
-import no.nav.dagpenger.kontrakter.iverksett.felles.Behandlingstema
-import no.nav.dagpenger.kontrakter.iverksett.felles.Enhet
-import no.nav.dagpenger.kontrakter.iverksett.felles.Tema
+import no.nav.dagpenger.kontrakter.felles.Behandlingstema
+import no.nav.dagpenger.kontrakter.felles.Enhet
+import no.nav.dagpenger.kontrakter.felles.Tema
 import no.nav.dagpenger.kontrakter.iverksett.oppgave.IdentGruppe
 import no.nav.dagpenger.kontrakter.iverksett.oppgave.OppgaveIdentV2
 import no.nav.dagpenger.kontrakter.iverksett.oppgave.Oppgavetype

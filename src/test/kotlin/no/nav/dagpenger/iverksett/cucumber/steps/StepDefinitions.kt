@@ -11,7 +11,7 @@ import no.nav.dagpenger.iverksett.cucumber.domeneparser.TilkjentYtelseParser
 import no.nav.dagpenger.iverksett.cucumber.domeneparser.parseDato
 import no.nav.dagpenger.iverksett.infrastruktur.transformer.toDomain
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.UtbetalingsoppdragGenerator
-import no.nav.dagpenger.kontrakter.iverksett.iverksett.TilkjentYtelseDto
+import no.nav.dagpenger.kontrakter.iverksett.TilkjentYtelseDto
 import no.nav.dagpenger.kontrakter.iverksett.tilbakekreving.Ytelsestype
 import no.nav.dagpenger.kontrakter.utbetaling.StønadType
 import no.nav.dagpenger.kontrakter.utbetaling.Utbetalingsoppdrag

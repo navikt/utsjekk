@@ -8,8 +8,8 @@ import no.nav.dagpenger.iverksett.infrastruktur.repository.findByIdOrThrow
 import no.nav.dagpenger.iverksett.konsumenter.brev.domain.JournalpostResultat
 import no.nav.dagpenger.iverksett.konsumenter.brev.domain.tilIdType
 import no.nav.dagpenger.iverksett.konsumenter.opprettNesteTask
-import no.nav.dagpenger.kontrakter.iverksett.felles.BrukerIdType
-import no.nav.dagpenger.kontrakter.iverksett.felles.Tema
+import no.nav.dagpenger.kontrakter.felles.BrukerIdType
+import no.nav.dagpenger.kontrakter.felles.Tema
 import no.nav.dagpenger.kontrakter.iverksett.journalføring.Bruker
 import no.nav.dagpenger.kontrakter.iverksett.journalføring.JournalposterForBrukerRequest
 import no.nav.dagpenger.kontrakter.iverksett.journalføring.dokarkiv.ArkiverDokumentRequest

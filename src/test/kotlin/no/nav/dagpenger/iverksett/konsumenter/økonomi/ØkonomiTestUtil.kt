@@ -1,9 +1,9 @@
 package no.nav.dagpenger.iverksett.konsumenter.økonomi
 
 import no.nav.dagpenger.iverksett.api.domene.AndelTilkjentYtelse
-import no.nav.dagpenger.kontrakter.iverksett.felles.Datoperiode
-import no.nav.dagpenger.kontrakter.iverksett.iverksett.DatoperiodeDto
-import no.nav.dagpenger.kontrakter.iverksett.iverksett.UtbetalingDto
+import no.nav.dagpenger.kontrakter.felles.Datoperiode
+import no.nav.dagpenger.kontrakter.iverksett.DatoperiodeDto
+import no.nav.dagpenger.kontrakter.iverksett.UtbetalingDto
 import no.nav.dagpenger.kontrakter.utbetaling.Ferietillegg
 import no.nav.dagpenger.kontrakter.utbetaling.StønadType
 import java.time.LocalDate

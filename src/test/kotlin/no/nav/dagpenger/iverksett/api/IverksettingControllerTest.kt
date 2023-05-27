@@ -5,8 +5,8 @@ import no.nav.dagpenger.iverksett.konsumenter.brev.JournalførVedtaksbrevTask
 import no.nav.dagpenger.iverksett.konsumenter.tilbakekreving.OpprettTilbakekrevingTask
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.IverksettMotOppdragTask
 import no.nav.dagpenger.iverksett.util.opprettIverksettDto
-import no.nav.dagpenger.kontrakter.iverksett.felles.VedtakType
-import no.nav.dagpenger.kontrakter.iverksett.felles.Vedtaksresultat
+import no.nav.dagpenger.kontrakter.felles.VedtakType
+import no.nav.dagpenger.kontrakter.felles.Vedtaksresultat
 import no.nav.familie.http.client.MultipartBuilder
 import no.nav.familie.kontrakter.felles.Ressurs
 import no.nav.familie.prosessering.internal.TaskService

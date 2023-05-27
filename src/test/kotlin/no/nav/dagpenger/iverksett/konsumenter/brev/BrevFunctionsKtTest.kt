@@ -1,13 +1,13 @@
 package no.nav.dagpenger.iverksett.konsumenter.brev
 
 import no.nav.dagpenger.iverksett.lagIverksettData
-import no.nav.dagpenger.kontrakter.iverksett.felles.BehandlingType.FØRSTEGANGSBEHANDLING
-import no.nav.dagpenger.kontrakter.iverksett.felles.BehandlingType.REVURDERING
-import no.nav.dagpenger.kontrakter.iverksett.felles.BehandlingÅrsak.NYE_OPPLYSNINGER
-import no.nav.dagpenger.kontrakter.iverksett.felles.BehandlingÅrsak.SØKNAD
-import no.nav.dagpenger.kontrakter.iverksett.felles.Vedtaksresultat.AVSLÅTT
-import no.nav.dagpenger.kontrakter.iverksett.felles.Vedtaksresultat.INNVILGET
-import no.nav.dagpenger.kontrakter.iverksett.felles.Vedtaksresultat.OPPHØRT
+import no.nav.dagpenger.kontrakter.felles.BehandlingType.FØRSTEGANGSBEHANDLING
+import no.nav.dagpenger.kontrakter.felles.BehandlingType.REVURDERING
+import no.nav.dagpenger.kontrakter.felles.BehandlingÅrsak.NYE_OPPLYSNINGER
+import no.nav.dagpenger.kontrakter.felles.BehandlingÅrsak.SØKNAD
+import no.nav.dagpenger.kontrakter.felles.Vedtaksresultat.AVSLÅTT
+import no.nav.dagpenger.kontrakter.felles.Vedtaksresultat.INNVILGET
+import no.nav.dagpenger.kontrakter.felles.Vedtaksresultat.OPPHØRT
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
