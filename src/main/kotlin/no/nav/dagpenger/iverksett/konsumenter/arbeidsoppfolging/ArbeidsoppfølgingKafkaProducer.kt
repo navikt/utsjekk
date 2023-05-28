@@ -2,8 +2,8 @@ package no.nav.dagpenger.iverksett.konsumenter.arbeidsoppfolging
 
 import no.nav.dagpenger.iverksett.infrastruktur.service.KafkaProducerService
 import no.nav.dagpenger.iverksett.konsumenter.vedtakstatistikk.toJson
+import no.nav.dagpenger.kontrakter.felles.StønadType
 import no.nav.dagpenger.kontrakter.iverksett.arbeidsoppfølging.VedtakDagpengerArbeidsoppfølging
-import no.nav.dagpenger.kontrakter.utbetaling.StønadType
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component

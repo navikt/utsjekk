@@ -14,11 +14,12 @@ import no.nav.dagpenger.iverksett.api.domene.Vurdering
 import no.nav.dagpenger.iverksett.api.domene.ÅrsakRevurdering
 import no.nav.dagpenger.iverksett.konsumenter.brev.domain.Brevmottaker
 import no.nav.dagpenger.iverksett.konsumenter.brev.domain.Brevmottakere
-import no.nav.dagpenger.kontrakter.felles.BehandlingType
-import no.nav.dagpenger.kontrakter.felles.BehandlingÅrsak
+import no.nav.dagpenger.kontrakter.felles.BrevmottakerDto
 import no.nav.dagpenger.kontrakter.felles.Datoperiode
 import no.nav.dagpenger.kontrakter.iverksett.AktivitetType
+import no.nav.dagpenger.kontrakter.iverksett.BehandlingType
 import no.nav.dagpenger.kontrakter.iverksett.BehandlingsdetaljerDto
+import no.nav.dagpenger.kontrakter.iverksett.BehandlingÅrsak
 import no.nav.dagpenger.kontrakter.iverksett.DelvilkårsvurderingDto
 import no.nav.dagpenger.kontrakter.iverksett.FagsakdetaljerDto
 import no.nav.dagpenger.kontrakter.iverksett.IverksettDagpengerdDto
@@ -32,7 +33,6 @@ import no.nav.dagpenger.kontrakter.iverksett.VilkårsvurderingDto
 import no.nav.dagpenger.kontrakter.iverksett.VurderingDto
 import java.time.LocalDate
 import java.util.UUID
-import no.nav.dagpenger.kontrakter.felles.Brevmottaker as BrevmottakerDto
 
 fun VurderingDto.toDomain(): Vurdering {
     return Vurdering(this.regelId, this.svar, this.begrunnelse)

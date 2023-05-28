@@ -11,12 +11,13 @@ import no.nav.dagpenger.iverksett.konsumenter.økonomi.simulering.grupperPosteri
 import no.nav.dagpenger.iverksett.util.behandlingsdetaljer
 import no.nav.dagpenger.iverksett.util.opprettIverksettDagpenger
 import no.nav.dagpenger.iverksett.util.vedtaksdetaljerDagpenger
-import no.nav.dagpenger.kontrakter.felles.BehandlingType
-import no.nav.dagpenger.kontrakter.felles.BehandlingÅrsak
 import no.nav.dagpenger.kontrakter.felles.Datoperiode
-import no.nav.dagpenger.kontrakter.felles.Vedtaksresultat
+import no.nav.dagpenger.kontrakter.felles.StønadType
+import no.nav.dagpenger.kontrakter.iverksett.BehandlingType
+import no.nav.dagpenger.kontrakter.iverksett.BehandlingÅrsak
 import no.nav.dagpenger.kontrakter.iverksett.SimuleringDto
 import no.nav.dagpenger.kontrakter.iverksett.UtbetalingDto
+import no.nav.dagpenger.kontrakter.iverksett.Vedtaksresultat
 import no.nav.dagpenger.kontrakter.oppdrag.simulering.BeriketSimuleringsresultat
 import no.nav.dagpenger.kontrakter.oppdrag.simulering.BetalingType
 import no.nav.dagpenger.kontrakter.oppdrag.simulering.DetaljertSimuleringResultat
@@ -27,7 +28,6 @@ import no.nav.dagpenger.kontrakter.oppdrag.simulering.SimuleringMottaker
 import no.nav.dagpenger.kontrakter.oppdrag.simulering.Simuleringsoppsummering
 import no.nav.dagpenger.kontrakter.oppdrag.simulering.Simuleringsperiode
 import no.nav.dagpenger.kontrakter.oppdrag.simulering.SimulertPostering
-import no.nav.dagpenger.kontrakter.utbetaling.StønadType
 import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.LocalDateTime

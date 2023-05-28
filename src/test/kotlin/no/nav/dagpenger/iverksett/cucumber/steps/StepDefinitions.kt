@@ -11,11 +11,11 @@ import no.nav.dagpenger.iverksett.cucumber.domeneparser.TilkjentYtelseParser
 import no.nav.dagpenger.iverksett.cucumber.domeneparser.parseDato
 import no.nav.dagpenger.iverksett.infrastruktur.transformer.toDomain
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.UtbetalingsoppdragGenerator
+import no.nav.dagpenger.kontrakter.felles.StønadType
 import no.nav.dagpenger.kontrakter.iverksett.TilkjentYtelseDto
 import no.nav.dagpenger.kontrakter.iverksett.tilbakekreving.Ytelsestype
-import no.nav.dagpenger.kontrakter.utbetaling.StønadType
-import no.nav.dagpenger.kontrakter.utbetaling.Utbetalingsoppdrag
-import no.nav.dagpenger.kontrakter.utbetaling.Utbetalingsperiode
+import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsoppdrag
+import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsperiode
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
 import org.slf4j.Logger

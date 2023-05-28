@@ -2,12 +2,12 @@ package no.nav.dagpenger.iverksett.konsumenter.oppgave
 
 import no.nav.dagpenger.kontrakter.felles.Behandlingstema
 import no.nav.dagpenger.kontrakter.felles.Enhet
+import no.nav.dagpenger.kontrakter.felles.StønadType
 import no.nav.dagpenger.kontrakter.felles.Tema
 import no.nav.dagpenger.kontrakter.iverksett.oppgave.IdentGruppe
 import no.nav.dagpenger.kontrakter.iverksett.oppgave.OppgaveIdentV2
 import no.nav.dagpenger.kontrakter.iverksett.oppgave.Oppgavetype
 import no.nav.dagpenger.kontrakter.iverksett.oppgave.OpprettOppgaveRequest
-import no.nav.dagpenger.kontrakter.utbetaling.StønadType
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalDateTime

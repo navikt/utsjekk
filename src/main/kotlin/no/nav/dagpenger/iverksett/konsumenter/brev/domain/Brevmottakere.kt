@@ -1,7 +1,7 @@
 package no.nav.dagpenger.iverksett.konsumenter.brev.domain
 
-import no.nav.dagpenger.kontrakter.felles.Brevmottaker.IdentType
-import no.nav.dagpenger.kontrakter.felles.Brevmottaker.MottakerRolle
+import no.nav.dagpenger.kontrakter.felles.BrevmottakerDto.IdentType
+import no.nav.dagpenger.kontrakter.felles.BrevmottakerDto.MottakerRolle
 import no.nav.dagpenger.kontrakter.felles.BrukerIdType
 
 data class Brevmottakere(val mottakere: List<Brevmottaker>)

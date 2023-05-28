@@ -7,11 +7,11 @@ import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.Økono
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.ØkonomiUtils.andelerUtenNullVerdier
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.ØkonomiUtils.beståendeAndeler
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.ØkonomiUtils.utbetalingsperiodeForOpphør
-import no.nav.dagpenger.kontrakter.utbetaling.Utbetalingsoppdrag
-import no.nav.dagpenger.kontrakter.utbetaling.Utbetalingsoppdrag.KodeEndring.ENDR
-import no.nav.dagpenger.kontrakter.utbetaling.Utbetalingsoppdrag.KodeEndring.NY
-import no.nav.dagpenger.kontrakter.utbetaling.Utbetalingsperiode
-import no.nav.dagpenger.kontrakter.utbetaling.tilFagsystem
+import no.nav.dagpenger.kontrakter.felles.tilFagsystem
+import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsoppdrag
+import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsoppdrag.KodeEndring.ENDR
+import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsoppdrag.KodeEndring.NY
+import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsperiode
 import java.time.LocalDate
 import java.util.UUID
 

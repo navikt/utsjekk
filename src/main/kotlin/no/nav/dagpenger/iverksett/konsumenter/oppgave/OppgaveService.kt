@@ -12,10 +12,10 @@ import no.nav.dagpenger.iverksett.konsumenter.oppgave.OppgaveBeskrivelse.beskriv
 import no.nav.dagpenger.iverksett.konsumenter.oppgave.OppgaveBeskrivelse.beskrivelseRevurderingInnvilget
 import no.nav.dagpenger.iverksett.konsumenter.oppgave.OppgaveBeskrivelse.beskrivelseRevurderingOpphørt
 import no.nav.dagpenger.iverksett.konsumenter.oppgave.OppgaveBeskrivelse.tilTekst
-import no.nav.dagpenger.kontrakter.felles.BehandlingType
-import no.nav.dagpenger.kontrakter.felles.BehandlingÅrsak
-import no.nav.dagpenger.kontrakter.felles.Vedtaksresultat
+import no.nav.dagpenger.kontrakter.iverksett.BehandlingType
+import no.nav.dagpenger.kontrakter.iverksett.BehandlingÅrsak
 import no.nav.dagpenger.kontrakter.iverksett.VedtaksperiodeType
+import no.nav.dagpenger.kontrakter.iverksett.Vedtaksresultat
 import no.nav.dagpenger.kontrakter.iverksett.oppgave.Oppgavetype
 import org.springframework.stereotype.Service
 import java.time.LocalDate

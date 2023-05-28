@@ -7,8 +7,8 @@ import no.nav.dagpenger.kontrakter.felles.Datoperiode
 import no.nav.dagpenger.kontrakter.iverksett.DatoperiodeDto
 import no.nav.dagpenger.kontrakter.iverksett.TilkjentYtelseDto
 import no.nav.dagpenger.kontrakter.iverksett.UtbetalingDto
-import no.nav.dagpenger.kontrakter.utbetaling.Utbetalingsoppdrag.KodeEndring
-import no.nav.dagpenger.kontrakter.utbetaling.Utbetalingsperiode.SatsType
+import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsoppdrag.KodeEndring
+import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsperiode.SatsType
 import org.assertj.core.api.Assertions.assertThat
 import java.time.LocalDate
 import java.util.UUID

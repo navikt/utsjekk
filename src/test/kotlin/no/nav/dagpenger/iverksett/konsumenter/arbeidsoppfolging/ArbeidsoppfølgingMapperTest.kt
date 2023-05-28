@@ -1,12 +1,12 @@
 package no.nav.dagpenger.iverksett.konsumenter.arbeidsoppfolging
 
 import no.nav.dagpenger.iverksett.util.opprettIverksettDagpenger
+import no.nav.dagpenger.kontrakter.felles.StønadType
 import no.nav.dagpenger.kontrakter.iverksett.arbeidsoppfølging.Aktivitetstype
 import no.nav.dagpenger.kontrakter.iverksett.arbeidsoppfølging.Barn
 import no.nav.dagpenger.kontrakter.iverksett.arbeidsoppfølging.Periode
 import no.nav.dagpenger.kontrakter.iverksett.arbeidsoppfølging.Periodetype
 import no.nav.dagpenger.kontrakter.iverksett.arbeidsoppfølging.Vedtaksresultat
-import no.nav.dagpenger.kontrakter.utbetaling.StønadType
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import java.time.LocalDate

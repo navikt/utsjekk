@@ -3,13 +3,13 @@ package no.nav.dagpenger.iverksett.konsumenter.brev
 import no.nav.dagpenger.iverksett.infrastruktur.advice.Ressurs
 import no.nav.dagpenger.iverksett.infrastruktur.advice.getDataOrThrow
 import no.nav.dagpenger.iverksett.infrastruktur.util.medContentTypeJsonUTF8
+import no.nav.dagpenger.kontrakter.felles.Fagsystem
 import no.nav.dagpenger.kontrakter.iverksett.journalføring.Journalpost
 import no.nav.dagpenger.kontrakter.iverksett.journalføring.JournalposterForBrukerRequest
 import no.nav.dagpenger.kontrakter.iverksett.journalføring.dokarkiv.ArkiverDokumentRequest
 import no.nav.dagpenger.kontrakter.iverksett.journalføring.dokarkiv.ArkiverDokumentResponse
 import no.nav.dagpenger.kontrakter.iverksett.journalføring.dokdist.DistribuerJournalpostRequest
 import no.nav.dagpenger.kontrakter.iverksett.journalføring.dokdist.Distribusjonstype
-import no.nav.dagpenger.kontrakter.utbetaling.Fagsystem
 import no.nav.familie.http.client.AbstractPingableRestClient
 import no.nav.familie.kontrakter.felles.getDataOrThrow
 import no.nav.familie.log.NavHttpHeaders

@@ -6,10 +6,10 @@ import io.mockk.slot
 import io.mockk.verify
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.grensesnitt.GrensesnittavstemmingPayload
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.grensesnitt.GrensesnittavstemmingTask
+import no.nav.dagpenger.kontrakter.felles.StønadType
 import no.nav.dagpenger.kontrakter.felles.objectMapper
-import no.nav.dagpenger.kontrakter.utbetaling.GrensesnittavstemmingRequest
-import no.nav.dagpenger.kontrakter.utbetaling.StønadType
-import no.nav.dagpenger.kontrakter.utbetaling.tilFagsystem
+import no.nav.dagpenger.kontrakter.felles.tilFagsystem
+import no.nav.dagpenger.kontrakter.oppdrag.GrensesnittavstemmingRequest
 import no.nav.familie.prosessering.domene.Task
 import no.nav.familie.prosessering.internal.TaskService
 import org.assertj.core.api.Assertions.assertThat

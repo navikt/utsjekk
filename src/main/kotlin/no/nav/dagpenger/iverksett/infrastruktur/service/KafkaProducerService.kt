@@ -1,6 +1,6 @@
 package no.nav.dagpenger.iverksett.infrastruktur.service
 
-import no.nav.dagpenger.kontrakter.utbetaling.StønadType
+import no.nav.dagpenger.kontrakter.felles.StønadType
 import org.apache.kafka.clients.producer.ProducerRecord
 import org.apache.kafka.common.header.internals.RecordHeader
 import org.springframework.kafka.core.KafkaTemplate

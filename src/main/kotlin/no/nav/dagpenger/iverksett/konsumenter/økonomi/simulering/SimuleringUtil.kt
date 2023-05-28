@@ -3,6 +3,7 @@ package no.nav.dagpenger.iverksett.konsumenter.økonomi.simulering
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.simulering.SimuleringsperiodeEtterbetaling.etterbetaling
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.simulering.SimuleringsperiodeEtterbetaling.medEtterbetaling
 import no.nav.dagpenger.kontrakter.felles.Datoperiode
+import no.nav.dagpenger.kontrakter.felles.StønadType
 import no.nav.dagpenger.kontrakter.oppdrag.simulering.BeriketSimuleringsresultat
 import no.nav.dagpenger.kontrakter.oppdrag.simulering.DetaljertSimuleringResultat
 import no.nav.dagpenger.kontrakter.oppdrag.simulering.FagOmrådeKode
@@ -13,7 +14,6 @@ import no.nav.dagpenger.kontrakter.oppdrag.simulering.SimuleringMottaker
 import no.nav.dagpenger.kontrakter.oppdrag.simulering.Simuleringsoppsummering
 import no.nav.dagpenger.kontrakter.oppdrag.simulering.Simuleringsperiode
 import no.nav.dagpenger.kontrakter.oppdrag.simulering.SimulertPostering
-import no.nav.dagpenger.kontrakter.utbetaling.StønadType
 import java.math.BigDecimal
 import java.math.BigDecimal.ZERO
 import java.time.LocalDate

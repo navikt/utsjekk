@@ -10,7 +10,7 @@ import no.nav.dagpenger.iverksett.infrastruktur.repository.findByIdOrThrow
 import no.nav.dagpenger.iverksett.konsumenter.opprettNesteTask
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.simulering.SimuleringService
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.simulering.harFeilutbetaling
-import no.nav.dagpenger.kontrakter.felles.BehandlingType
+import no.nav.dagpenger.kontrakter.iverksett.BehandlingType
 import no.nav.dagpenger.kontrakter.iverksett.tilbakekreving.OpprettTilbakekrevingRequest
 import no.nav.dagpenger.kontrakter.oppdrag.simulering.BeriketSimuleringsresultat
 import no.nav.familie.prosessering.AsyncTaskStep

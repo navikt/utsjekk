@@ -2,11 +2,11 @@ package no.nav.dagpenger.iverksett.konsumenter.økonomi
 
 import no.nav.dagpenger.iverksett.infrastruktur.advice.Ressurs
 import no.nav.dagpenger.iverksett.infrastruktur.advice.getDataOrThrow
+import no.nav.dagpenger.kontrakter.oppdrag.GrensesnittavstemmingRequest
+import no.nav.dagpenger.kontrakter.oppdrag.OppdragId
 import no.nav.dagpenger.kontrakter.oppdrag.OppdragStatus
+import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsoppdrag
 import no.nav.dagpenger.kontrakter.oppdrag.simulering.DetaljertSimuleringResultat
-import no.nav.dagpenger.kontrakter.utbetaling.GrensesnittavstemmingRequest
-import no.nav.dagpenger.kontrakter.utbetaling.OppdragId
-import no.nav.dagpenger.kontrakter.utbetaling.Utbetalingsoppdrag
 import no.nav.familie.http.client.AbstractPingableRestClient
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value

@@ -7,7 +7,9 @@ import no.nav.dagpenger.iverksett.api.domene.Søker
 import no.nav.dagpenger.iverksett.api.domene.TilkjentYtelse
 import no.nav.dagpenger.iverksett.api.domene.VedtaksdetaljerDagpenger
 import no.nav.dagpenger.iverksett.api.domene.Vilkårsvurdering
+import no.nav.dagpenger.iverksett.api.domene.tilKlassifisering
 import no.nav.dagpenger.iverksett.infrastruktur.util.VilkårsvurderingUtil
+import no.nav.dagpenger.kontrakter.felles.StønadType
 import no.nav.dagpenger.kontrakter.iverksett.dvh.AdressebeskyttelseDVH
 import no.nav.dagpenger.kontrakter.iverksett.dvh.AktivitetTypeDVH
 import no.nav.dagpenger.kontrakter.iverksett.dvh.AktivitetskravDVH
@@ -24,8 +26,6 @@ import no.nav.dagpenger.kontrakter.iverksett.dvh.VilkårDVH
 import no.nav.dagpenger.kontrakter.iverksett.dvh.VilkårsresultatDVH
 import no.nav.dagpenger.kontrakter.iverksett.dvh.VilkårsvurderingDVH
 import no.nav.dagpenger.kontrakter.iverksett.dvh.ÅrsakRevurderingDVH
-import no.nav.dagpenger.kontrakter.utbetaling.StønadType
-import no.nav.dagpenger.kontrakter.utbetaling.tilKlassifisering
 import java.time.ZoneId
 import java.util.UUID
 import no.nav.dagpenger.kontrakter.iverksett.dvh.BarnDVH as BarnEkstern
@@ -64,7 +64,6 @@ object VedtakstatistikkMapper {
             utbetalinger = iverksett.vedtak.tilkjentYtelse?.let {
                 mapTilUtbetaling(
                     it,
-                    iverksett.fagsak.stønadstype,
                     iverksett.fagsak.fagsakId,
                     iverksett.søker,
                 )
@@ -92,7 +91,6 @@ object VedtakstatistikkMapper {
 
     private fun mapTilUtbetaling(
         tilkjentYtelse: TilkjentYtelse,
-        stønadsType: StønadType,
         sakId: UUID,
         søker: Søker,
     ): List<UtbetalingDVH> {
@@ -106,7 +104,7 @@ object VedtakstatistikkMapper {
                 tilOgMed = it.periode.tom,
                 UtbetalingsdetaljDVH(
                     gjelderPerson = mapTilPerson(personIdent = søker.personIdent),
-                    klassekode = stønadsType.tilKlassifisering(),
+                    klassekode = it.tilKlassifisering(),
                     delytelseId = sakId.toString() + (it.periodeId ?: ""),
                 ),
             )

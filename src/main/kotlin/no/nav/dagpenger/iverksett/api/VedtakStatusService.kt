@@ -1,7 +1,7 @@
 package no.nav.dagpenger.iverksett.api
 
 import no.nav.dagpenger.iverksett.api.domene.VedtaksdetaljerDagpenger
-import no.nav.dagpenger.kontrakter.felles.Vedtaksresultat
+import no.nav.dagpenger.kontrakter.iverksett.Vedtaksresultat
 import org.springframework.stereotype.Service
 
 @Service

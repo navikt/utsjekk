@@ -1,24 +1,24 @@
 package no.nav.dagpenger.iverksett.api.domene
 
 import no.nav.dagpenger.iverksett.konsumenter.brev.domain.Brevmottakere
-import no.nav.dagpenger.kontrakter.felles.AvslagÅrsak
-import no.nav.dagpenger.kontrakter.felles.BehandlingType
-import no.nav.dagpenger.kontrakter.felles.BehandlingÅrsak
 import no.nav.dagpenger.kontrakter.felles.Datoperiode
-import no.nav.dagpenger.kontrakter.felles.OpphørÅrsak
-import no.nav.dagpenger.kontrakter.felles.Opplysningskilde
-import no.nav.dagpenger.kontrakter.felles.RegelId
-import no.nav.dagpenger.kontrakter.felles.Revurderingsårsak
-import no.nav.dagpenger.kontrakter.felles.SvarId
+import no.nav.dagpenger.kontrakter.felles.StønadType
 import no.nav.dagpenger.kontrakter.felles.Tilbakekrevingsvalg
-import no.nav.dagpenger.kontrakter.felles.VedtakType
-import no.nav.dagpenger.kontrakter.felles.Vedtaksresultat
-import no.nav.dagpenger.kontrakter.felles.VilkårType
-import no.nav.dagpenger.kontrakter.felles.Vilkårsresultat
 import no.nav.dagpenger.kontrakter.iverksett.AdressebeskyttelseGradering
 import no.nav.dagpenger.kontrakter.iverksett.AktivitetType
+import no.nav.dagpenger.kontrakter.iverksett.AvslagÅrsak
+import no.nav.dagpenger.kontrakter.iverksett.BehandlingType
+import no.nav.dagpenger.kontrakter.iverksett.BehandlingÅrsak
+import no.nav.dagpenger.kontrakter.iverksett.OpphørÅrsak
+import no.nav.dagpenger.kontrakter.iverksett.Opplysningskilde
+import no.nav.dagpenger.kontrakter.iverksett.RegelId
+import no.nav.dagpenger.kontrakter.iverksett.Revurderingsårsak
+import no.nav.dagpenger.kontrakter.iverksett.SvarId
+import no.nav.dagpenger.kontrakter.iverksett.VedtakType
 import no.nav.dagpenger.kontrakter.iverksett.VedtaksperiodeType
-import no.nav.dagpenger.kontrakter.utbetaling.StønadType
+import no.nav.dagpenger.kontrakter.iverksett.Vedtaksresultat
+import no.nav.dagpenger.kontrakter.iverksett.VilkårType
+import no.nav.dagpenger.kontrakter.iverksett.Vilkårsresultat
 import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -66,6 +66,7 @@ data class VedtaksperiodeDagpenger(
     val aktivitet: AktivitetType,
     val periodeType: VedtaksperiodeType,
 ) : Vedtaksperiode()
+
 data class VedtaksdetaljerDagpenger(
     val vedtakstype: VedtakType = VedtakType.RAMMEVEDTAK,
     val vedtaksresultat: Vedtaksresultat,

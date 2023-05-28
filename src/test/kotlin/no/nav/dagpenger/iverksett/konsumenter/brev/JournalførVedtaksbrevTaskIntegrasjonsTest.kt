@@ -17,9 +17,9 @@ import no.nav.dagpenger.iverksett.infrastruktur.util.ObjectMapperProvider.object
 import no.nav.dagpenger.iverksett.konsumenter.brev.domain.Brevmottaker
 import no.nav.dagpenger.iverksett.konsumenter.brev.domain.Brevmottakere
 import no.nav.dagpenger.iverksett.util.opprettBrev
-import no.nav.dagpenger.kontrakter.felles.Brevmottaker.IdentType.PERSONIDENT
-import no.nav.dagpenger.kontrakter.felles.Brevmottaker.MottakerRolle.BRUKER
-import no.nav.dagpenger.kontrakter.felles.Brevmottaker.MottakerRolle.VERGE
+import no.nav.dagpenger.kontrakter.felles.BrevmottakerDto.IdentType.PERSONIDENT
+import no.nav.dagpenger.kontrakter.felles.BrevmottakerDto.MottakerRolle.BRUKER
+import no.nav.dagpenger.kontrakter.felles.BrevmottakerDto.MottakerRolle.VERGE
 import no.nav.dagpenger.kontrakter.iverksett.IverksettDagpengerdDto
 import no.nav.familie.prosessering.domene.Task
 import no.nav.familie.prosessering.internal.TaskService

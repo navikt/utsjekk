@@ -14,12 +14,12 @@ import no.nav.dagpenger.iverksett.infrastruktur.repository.findByIdOrThrow
 import no.nav.dagpenger.iverksett.lagIverksett
 import no.nav.dagpenger.iverksett.lagIverksettData
 import no.nav.dagpenger.iverksett.util.mockFeatureToggleService
-import no.nav.dagpenger.kontrakter.felles.BehandlingType
-import no.nav.dagpenger.kontrakter.felles.BehandlingÅrsak
 import no.nav.dagpenger.kontrakter.felles.Datoperiode
-import no.nav.dagpenger.kontrakter.felles.Vedtaksresultat
 import no.nav.dagpenger.kontrakter.iverksett.AktivitetType
+import no.nav.dagpenger.kontrakter.iverksett.BehandlingType
+import no.nav.dagpenger.kontrakter.iverksett.BehandlingÅrsak
 import no.nav.dagpenger.kontrakter.iverksett.VedtaksperiodeType
+import no.nav.dagpenger.kontrakter.iverksett.Vedtaksresultat
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach

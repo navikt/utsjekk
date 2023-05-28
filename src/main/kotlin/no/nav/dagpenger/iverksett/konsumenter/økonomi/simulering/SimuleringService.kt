@@ -8,10 +8,10 @@ import no.nav.dagpenger.iverksett.infrastruktur.configuration.FeatureToggleConfi
 import no.nav.dagpenger.iverksett.infrastruktur.featuretoggle.FeatureToggleService
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.OppdragClient
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.UtbetalingsoppdragGenerator
+import no.nav.dagpenger.kontrakter.felles.StønadType
+import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsoppdrag
 import no.nav.dagpenger.kontrakter.oppdrag.simulering.BeriketSimuleringsresultat
 import no.nav.dagpenger.kontrakter.oppdrag.simulering.DetaljertSimuleringResultat
-import no.nav.dagpenger.kontrakter.utbetaling.StønadType
-import no.nav.dagpenger.kontrakter.utbetaling.Utbetalingsoppdrag
 import no.nav.familie.http.client.RessursException
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service

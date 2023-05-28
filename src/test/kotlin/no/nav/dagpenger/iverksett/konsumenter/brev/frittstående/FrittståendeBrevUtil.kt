@@ -2,9 +2,9 @@ package no.nav.dagpenger.iverksett.konsumenter.brev.frittstående
 
 import no.nav.dagpenger.iverksett.konsumenter.brev.domain.Brevmottakere
 import no.nav.dagpenger.iverksett.konsumenter.brev.domain.FrittståendeBrev
-import no.nav.dagpenger.kontrakter.felles.Brevmottaker
+import no.nav.dagpenger.kontrakter.felles.BrevmottakerDto
 import no.nav.dagpenger.kontrakter.felles.FrittståendeBrevType
-import no.nav.dagpenger.kontrakter.utbetaling.StønadType
+import no.nav.dagpenger.kontrakter.felles.StønadType
 
 object FrittståendeBrevUtil {
 
@@ -19,14 +19,14 @@ object FrittståendeBrevUtil {
                 no.nav.dagpenger.iverksett.konsumenter.brev.domain.Brevmottaker(
                     "11",
                     "navn1",
-                    Brevmottaker.IdentType.PERSONIDENT,
-                    Brevmottaker.MottakerRolle.BRUKER,
+                    BrevmottakerDto.IdentType.PERSONIDENT,
+                    BrevmottakerDto.MottakerRolle.BRUKER,
                 ),
                 no.nav.dagpenger.iverksett.konsumenter.brev.domain.Brevmottaker(
                     "22",
                     "navn2",
-                    Brevmottaker.IdentType.PERSONIDENT,
-                    Brevmottaker.MottakerRolle.BRUKER,
+                    BrevmottakerDto.IdentType.PERSONIDENT,
+                    BrevmottakerDto.MottakerRolle.BRUKER,
                 ),
             ),
         ),

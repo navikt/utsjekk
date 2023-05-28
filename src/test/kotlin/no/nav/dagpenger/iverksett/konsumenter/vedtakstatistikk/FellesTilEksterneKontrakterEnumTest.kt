@@ -1,13 +1,13 @@
 package no.nav.dagpenger.iverksett.konsumenter.vedtakstatistikk
 
-import no.nav.dagpenger.kontrakter.felles.BehandlingType
-import no.nav.dagpenger.kontrakter.felles.BehandlingÅrsak
-import no.nav.dagpenger.kontrakter.felles.Vedtaksresultat
-import no.nav.dagpenger.kontrakter.felles.VilkårType
-import no.nav.dagpenger.kontrakter.felles.Vilkårsresultat
 import no.nav.dagpenger.kontrakter.iverksett.AdressebeskyttelseGradering
 import no.nav.dagpenger.kontrakter.iverksett.AktivitetType
+import no.nav.dagpenger.kontrakter.iverksett.BehandlingType
+import no.nav.dagpenger.kontrakter.iverksett.BehandlingÅrsak
 import no.nav.dagpenger.kontrakter.iverksett.VedtaksperiodeType
+import no.nav.dagpenger.kontrakter.iverksett.Vedtaksresultat
+import no.nav.dagpenger.kontrakter.iverksett.VilkårType
+import no.nav.dagpenger.kontrakter.iverksett.Vilkårsresultat
 import no.nav.dagpenger.kontrakter.iverksett.dvh.VedtakresultatDVH
 import no.nav.dagpenger.kontrakter.iverksett.dvh.VilkårDVH
 import org.junit.jupiter.api.Test

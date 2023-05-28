@@ -10,10 +10,10 @@ import no.nav.dagpenger.iverksett.ResourceLoaderTestUtil
 import no.nav.dagpenger.iverksett.infrastruktur.transformer.toDomain
 import no.nav.dagpenger.iverksett.infrastruktur.util.ObjectMapperProvider.objectMapper
 import no.nav.dagpenger.iverksett.util.opprettIverksettDagpenger
-import no.nav.dagpenger.kontrakter.felles.Opplysningskilde
-import no.nav.dagpenger.kontrakter.felles.Revurderingsårsak
-import no.nav.dagpenger.kontrakter.felles.VilkårType
 import no.nav.dagpenger.kontrakter.iverksett.IverksettDagpengerdDto
+import no.nav.dagpenger.kontrakter.iverksett.Opplysningskilde
+import no.nav.dagpenger.kontrakter.iverksett.Revurderingsårsak
+import no.nav.dagpenger.kontrakter.iverksett.VilkårType
 import no.nav.dagpenger.kontrakter.iverksett.dvh.AdressebeskyttelseDVH
 import no.nav.dagpenger.kontrakter.iverksett.dvh.AktivitetTypeDVH
 import no.nav.dagpenger.kontrakter.iverksett.dvh.AktivitetskravDVH

@@ -6,7 +6,7 @@ import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.Økono
 import no.nav.dagpenger.iverksett.util.opprettTilkjentYtelse
 import no.nav.dagpenger.iverksett.util.opprettTilkjentYtelseMedMetadata
 import no.nav.dagpenger.iverksett.util.startdato
-import no.nav.dagpenger.kontrakter.utbetaling.Utbetalingsperiode
+import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsperiode
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Nested

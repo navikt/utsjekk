@@ -2,10 +2,11 @@ package no.nav.dagpenger.iverksett.konsumenter.tilbakekreving
 
 import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
 import no.nav.dagpenger.iverksett.api.domene.Tilbakekrevingsdetaljer
-import no.nav.dagpenger.kontrakter.felles.BehandlingÅrsak
 import no.nav.dagpenger.kontrakter.felles.Enhet
+import no.nav.dagpenger.kontrakter.felles.Fagsystem
 import no.nav.dagpenger.kontrakter.felles.Språkkode
 import no.nav.dagpenger.kontrakter.felles.Tilbakekrevingsvalg
+import no.nav.dagpenger.kontrakter.iverksett.BehandlingÅrsak
 import no.nav.dagpenger.kontrakter.iverksett.tilbakekreving.Behandlingstype
 import no.nav.dagpenger.kontrakter.iverksett.tilbakekreving.Faktainfo
 import no.nav.dagpenger.kontrakter.iverksett.tilbakekreving.HentFagsystemsbehandling
@@ -14,7 +15,6 @@ import no.nav.dagpenger.kontrakter.iverksett.tilbakekreving.OpprettTilbakekrevin
 import no.nav.dagpenger.kontrakter.iverksett.tilbakekreving.Periode
 import no.nav.dagpenger.kontrakter.iverksett.tilbakekreving.Varsel
 import no.nav.dagpenger.kontrakter.iverksett.tilbakekreving.Ytelsestype
-import no.nav.dagpenger.kontrakter.utbetaling.Fagsystem
 
 const val ENHETSNAVN_BREV = "NAV Arbeid og ytelser"
 
