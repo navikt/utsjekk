@@ -135,10 +135,10 @@ class IverksettingService(
         )
     }
 
-    fun lagreGrensesnittavstemmingTask() {
+    fun lagreGrensesnittavstemmingTask(): Boolean {
         if (taskService.findAll().any { it.type == GrensesnittavstemmingTask.TYPE && it.erAktiv() }) {
             logger.info("Plukkbar task for grensesnittavstemming allerede opprettet - lager ikke ny task")
-            return
+            return false
         }
 
         val grensesnittavstemmingDto = GrensesnittavstemmingDto(
@@ -147,6 +147,7 @@ class IverksettingService(
             triggerTid = LocalDateTime.now(),
         )
         taskService.save(grensesnittavstemmingDto.tilTask())
+        return true
     }
 
     companion object {
@@ -154,4 +155,6 @@ class IverksettingService(
     }
 }
 
-fun Task.erAktiv() = this.status != Status.AVVIKSHÅNDTERT && this.status != Status.MANUELL_OPPFØLGING
+fun Task.erAktiv() = this.status != Status.AVVIKSHÅNDTERT
+        && this.status != Status.MANUELL_OPPFØLGING
+        && this.status != Status.FERDIG

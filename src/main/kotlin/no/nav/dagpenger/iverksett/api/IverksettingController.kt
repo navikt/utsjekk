@@ -77,8 +77,11 @@ class IverksettingController(
 
     @PostMapping("/start-grensesnittavstemming")
     fun startGrensesnittavstemming(): ResponseEntity<Void> {
-        iverksettingService.lagreGrensesnittavstemmingTask()
-        return ResponseEntity.accepted().build()
+        val opprettet = iverksettingService.lagreGrensesnittavstemmingTask()
+        return when(opprettet) {
+            true -> ResponseEntity.accepted().build()
+            false -> ResponseEntity.status(409).build()
+        }
     }
 
     private fun opprettBrev(fil: MultipartFile): Brev {
