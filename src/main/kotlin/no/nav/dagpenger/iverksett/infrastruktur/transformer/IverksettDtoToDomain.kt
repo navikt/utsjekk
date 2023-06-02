@@ -16,95 +16,41 @@ import no.nav.dagpenger.iverksett.konsumenter.brev.domain.Brevmottaker
 import no.nav.dagpenger.iverksett.konsumenter.brev.domain.Brevmottakere
 import no.nav.dagpenger.kontrakter.felles.BrevmottakerDto
 import no.nav.dagpenger.kontrakter.felles.Datoperiode
-import no.nav.dagpenger.kontrakter.iverksett.AktivitetType
+
 import no.nav.dagpenger.kontrakter.iverksett.BehandlingType
-import no.nav.dagpenger.kontrakter.iverksett.BehandlingsdetaljerDto
+
 import no.nav.dagpenger.kontrakter.iverksett.BehandlingÅrsak
-import no.nav.dagpenger.kontrakter.iverksett.DelvilkårsvurderingDto
-import no.nav.dagpenger.kontrakter.iverksett.FagsakdetaljerDto
 import no.nav.dagpenger.kontrakter.iverksett.IverksettDagpengerdDto
-import no.nav.dagpenger.kontrakter.iverksett.SakDto
-import no.nav.dagpenger.kontrakter.iverksett.SøkerDto
 import no.nav.dagpenger.kontrakter.iverksett.TilbakekrevingDto
 import no.nav.dagpenger.kontrakter.iverksett.TilbakekrevingMedVarselDto
-import no.nav.dagpenger.kontrakter.iverksett.VedtaksdetaljerDagpengerDto
-import no.nav.dagpenger.kontrakter.iverksett.VedtaksperiodeDagpengerDto
-import no.nav.dagpenger.kontrakter.iverksett.VilkårsvurderingDto
-import no.nav.dagpenger.kontrakter.iverksett.VurderingDto
+import no.nav.dagpenger.kontrakter.iverksett.VedtaksdetaljerDto
+import no.nav.dagpenger.kontrakter.iverksett.VedtaksperiodeDto
+import no.nav.dagpenger.kontrakter.iverksett.arbeidsoppfølging.Aktivitetstype
 import java.time.LocalDate
 import java.util.UUID
 
-fun VurderingDto.toDomain(): Vurdering {
-    return Vurdering(this.regelId, this.svar, this.begrunnelse)
-}
 
-fun DelvilkårsvurderingDto.toDomain(): Delvilkårsvurdering {
-    return Delvilkårsvurdering(this.resultat, this.vurderinger.map { it.toDomain() })
-}
 
-fun VilkårsvurderingDto.toDomain(): Vilkårsvurdering {
-    return Vilkårsvurdering(this.vilkårType, this.resultat, this.delvilkårsvurderinger.map { it.toDomain() })
-}
-
-fun FagsakdetaljerDto.toDomain(): Fagsakdetaljer {
-    return Fagsakdetaljer(
-        fagsakId = this.fagsakId,
-        stønadstype = this.stønadstype,
-    )
-}
-
-fun SakDto.toDomain(): Fagsakdetaljer {
-    return Fagsakdetaljer(
-        fagsakId = this.sakId,
-        stønadstype = this.stønadstype,
-    )
-}
-
-fun SøkerDto.toDomain(): Søker {
-    return Søker(
-        personIdent = this.personIdent,
-        barn = this.barn.map { it.toDomain() },
-        tilhørendeEnhet = this.tilhørendeEnhet,
-        adressebeskyttelse = this.adressebeskyttelse,
-    )
-}
-
-fun BehandlingsdetaljerDto.toDomain(): Behandlingsdetaljer {
-    return Behandlingsdetaljer(
-        behandlingId = this.behandlingId,
-        forrigeBehandlingId = this.forrigeBehandlingId,
-        behandlingType = this.behandlingType,
-        behandlingÅrsak = this.behandlingÅrsak,
-        vilkårsvurderinger = this.vilkårsvurderinger.map { it.toDomain() },
-        aktivitetspliktInntrefferDato = this.aktivitetspliktInntrefferDato,
-        kravMottatt = this.kravMottatt,
-        årsakRevurdering = this.årsakRevurdering?.let { ÅrsakRevurdering(it.opplysningskilde, it.årsak) },
-    )
-}
-
-fun VedtaksperiodeDagpengerDto.toDomain(): VedtaksperiodeDagpenger {
+fun VedtaksperiodeDto.toDomain(): VedtaksperiodeDagpenger {
     return VedtaksperiodeDagpenger(
-        aktivitet = this.aktivitet ?: AktivitetType.IKKE_AKTIVITETSPLIKT,
-        periode = this.fraOgMedDato?.let { Datoperiode(it, this.tilOgMedDato ?: LocalDate.MAX) }
-            ?: this.periode?.let { Datoperiode(it.fom, it.tom ?: LocalDate.MAX) }
-            ?: throw IllegalStateException("Verken fraOgMedDato eller periode har verdi. En av dem, helst fraOgMedDato, må være satt"),
-        periodeType = this.periodeType,
+        periode = Datoperiode(this.fraOgMedDato, this.tilOgMedDato ?: LocalDate.MAX),
+        periodeType = this.periodeType
     )
 }
 
-fun VedtaksdetaljerDagpengerDto.toDomain(): VedtaksdetaljerDagpenger {
+fun VedtaksdetaljerDto.toDomain(): VedtaksdetaljerDagpenger {
     return VedtaksdetaljerDagpenger(
         vedtakstype = this.vedtakstype,
         vedtaksresultat = this.resultat,
         vedtakstidspunkt = this.vedtakstidspunkt,
-        opphørÅrsak = this.opphørÅrsak,
+        opphørÅrsak = this.opphorAarsak,
         saksbehandlerId = this.saksbehandlerId,
         beslutterId = this.beslutterId,
         tilkjentYtelse = this.utbetalinger.tilTilkjentYtelse(),
         vedtaksperioder = this.vedtaksperioder.map { it.toDomain() },
         tilbakekreving = this.tilbakekreving?.toDomain(),
         brevmottakere = this.brevmottakere.toDomain(),
-        avslagÅrsak = this.avslagÅrsak,
+        avslagÅrsak = this.avslagAarsak,
     )
 }
 

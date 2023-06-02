@@ -93,7 +93,7 @@ class IverksettingService(
                 return IverksettStatus.OK
             }
             if (it.journalpostResultat.isNotEmpty()) {
-                return IverksettStatus.JOURNALFØRT
+                return IverksettStatus.JOURNALFORT
             }
             it.oppdragResultat?.let { oppdragResultat ->
                 return when (oppdragResultat.oppdragStatus) {
@@ -108,7 +108,7 @@ class IverksettingService(
                 }
                 return IverksettStatus.SENDT_TIL_OPPDRAG
             }
-            return IverksettStatus.IKKE_PÅBEGYNT
+            return IverksettStatus.IKKE_PAABEGYNT
         }
     }
 

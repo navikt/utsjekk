@@ -4,8 +4,6 @@ import no.nav.dagpenger.iverksett.konsumenter.brev.domain.Brevmottakere
 import no.nav.dagpenger.kontrakter.felles.Datoperiode
 import no.nav.dagpenger.kontrakter.felles.StønadType
 import no.nav.dagpenger.kontrakter.felles.Tilbakekrevingsvalg
-import no.nav.dagpenger.kontrakter.iverksett.AdressebeskyttelseGradering
-import no.nav.dagpenger.kontrakter.iverksett.AktivitetType
 import no.nav.dagpenger.kontrakter.iverksett.AvslagÅrsak
 import no.nav.dagpenger.kontrakter.iverksett.BehandlingType
 import no.nav.dagpenger.kontrakter.iverksett.BehandlingÅrsak
@@ -56,14 +54,12 @@ data class Søker(
     val personIdent: String,
     val barn: List<Barn> = ArrayList(),
     val tilhørendeEnhet: String,
-    val adressebeskyttelse: AdressebeskyttelseGradering? = null,
 )
 
 sealed class Vedtaksperiode
 
 data class VedtaksperiodeDagpenger(
     val periode: Datoperiode,
-    val aktivitet: AktivitetType,
     val periodeType: VedtaksperiodeType,
 ) : Vedtaksperiode()
 
