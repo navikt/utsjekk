@@ -58,7 +58,6 @@ private fun lagDefaultAndeler() =
         beløp = 15000,
         fraOgMed = LocalDate.of(2021, 1, 1),
         tilOgMed = LocalDate.of(2023, 12, 31),
-        kildeBehandlingId = UUID.randomUUID(),
     )
 
 fun detaljertSimuleringResultat(): DetaljertSimuleringResultat {

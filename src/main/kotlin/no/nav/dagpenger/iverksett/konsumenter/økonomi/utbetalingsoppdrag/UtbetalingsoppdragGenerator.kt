@@ -13,7 +13,6 @@ import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsoppdrag.KodeEndring.ENDR
 import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsoppdrag.KodeEndring.NY
 import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsperiode
 import java.time.LocalDate
-import java.util.UUID
 
 object UtbetalingsoppdragGenerator {
 
@@ -41,7 +40,6 @@ object UtbetalingsoppdragGenerator {
         val andelerTilOpprettelseMedPeriodeId = lagAndelerMedPeriodeId(
             andelerTilOpprettelse,
             sistePeriodeIdIForrigeKjede,
-            nyTilkjentYtelseMedMetaData.behandlingId,
         )
 
         val utbetalingsperioderSomOpprettes = lagUtbetalingsperioderForOpprettelse(
@@ -104,7 +102,7 @@ object UtbetalingsoppdragGenerator {
         sistePeriodeIdIForrigeKjede: PeriodeId?,
     ): List<AndelTilkjentYtelse> {
         return this.ifEmpty {
-            listOf(nullAndelTilkjentYtelse(nyTilkjentYtelseMedMetaData.behandlingId, sistePeriodeIdIForrigeKjede))
+            listOf(nullAndelTilkjentYtelse(sistePeriodeIdIForrigeKjede))
         }
     }
 
@@ -126,7 +124,6 @@ object UtbetalingsoppdragGenerator {
     private fun lagAndelerMedPeriodeId(
         andeler: List<AndelTilkjentYtelse>,
         sisteOffsetIKjedeOversikt: PeriodeId?,
-        kildeBehandlingId: UUID,
     ): List<AndelTilkjentYtelse> {
         val forrigePeriodeIdIKjede: Long? = sisteOffsetIKjedeOversikt?.gjeldende
         val nestePeriodeIdIKjede = forrigePeriodeIdIKjede?.plus(1) ?: 1
@@ -134,7 +131,6 @@ object UtbetalingsoppdragGenerator {
         return andeler.sortedBy { it.periode }.mapIndexed { index, andel ->
             andel.copy(
                 periodeId = nestePeriodeIdIKjede + index,
-                kildeBehandlingId = kildeBehandlingId,
                 forrigePeriodeId = if (index == 0) forrigePeriodeIdIKjede else nestePeriodeIdIKjede + index - 1,
             )
         }

@@ -12,7 +12,6 @@ import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
-import java.util.UUID
 
 internal class ØkonomiUtilsTest {
 
@@ -389,7 +388,7 @@ internal class ØkonomiUtilsTest {
 
         private fun leggTilPeriodeIdPåTidligereAndeler(tidligereAndeler: List<AndelTilkjentYtelse>): List<AndelTilkjentYtelse> {
             val utenNullandeler = tidligereAndeler.filterNot { it.erNull() }
-            if (utenNullandeler.isEmpty()) return listOf(nullAndelTilkjentYtelse(UUID.randomUUID(), PeriodeId(1)))
+            if (utenNullandeler.isEmpty()) return listOf(nullAndelTilkjentYtelse(PeriodeId(1)))
             return utenNullandeler
                 .sortedBy { it.periode }
                 .mapIndexed { index, andel ->

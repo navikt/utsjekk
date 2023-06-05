@@ -3,20 +3,14 @@ package no.nav.dagpenger.iverksett.api.domene
 import no.nav.dagpenger.kontrakter.felles.Datoperiode
 import no.nav.dagpenger.kontrakter.felles.StønadType
 import no.nav.dagpenger.kontrakter.iverksett.Ferietillegg
-import java.util.UUID
-import kotlin.math.roundToInt
 
 data class AndelTilkjentYtelse(
     val beløp: Int,
     val periode: Datoperiode,
-    val inntekt: Int,
     val stønadstype: StønadType,
     val ferietillegg: Ferietillegg?,
-    val samordningsfradrag: Int,
-    val inntektsreduksjon: Int,
     val periodeId: Long? = null,
     val forrigePeriodeId: Long? = null,
-    val kildeBehandlingId: UUID? = null,
 ) {
 
     private fun erTilsvarendeForUtbetaling(other: AndelTilkjentYtelse): Boolean {
@@ -27,9 +21,6 @@ data class AndelTilkjentYtelse(
     }
 
     fun erNull() = this.beløp == 0
-
-    fun utbetalingsgrad(): Int =
-        (100 * (this.beløp.toDouble() / (this.beløp + this.inntektsreduksjon + this.samordningsfradrag))).roundToInt()
 
     companion object {
 

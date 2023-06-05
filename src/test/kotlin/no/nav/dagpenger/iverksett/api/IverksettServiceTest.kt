@@ -75,7 +75,7 @@ internal class IverksettServiceTest {
             .build(behandlingsId, tilkjentYtelse)
 
         val status = iverksettStatusService.utledStatus(behandlingsId)
-        assertThat(status).isEqualTo(IverksettStatus.JOURNALFØRT)
+        assertThat(status).isEqualTo(IverksettStatus.JOURNALFORT)
     }
 
     @Test

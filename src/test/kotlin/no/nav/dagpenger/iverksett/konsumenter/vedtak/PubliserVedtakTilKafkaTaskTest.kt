@@ -32,7 +32,7 @@ internal class PubliserVedtakTilKafkaTaskTest {
     @BeforeEach
     internal fun setUp() {
         every { iverksettingRepository.findByIdOrThrow(any()) }
-            .returns(lagIverksett(opprettIverksettDto(behandlingId = UUID.randomUUID()).toDomain()))
+            .returns(lagIverksett(opprettIverksettDto(behandlingId = UUID.randomUUID(), sakId = UUID.randomUUID()).toDomain()))
         every { taskService.save(capture(taskSlot)) } answers { firstArg() }
     }
 

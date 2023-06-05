@@ -24,11 +24,12 @@ internal class VedtakstatistikkTaskTest {
     private val vedtakstatistikkTask =
         VedtakstatistikkTask(iverksettingRepository, vedtakstatistikkService)
     val behandlingId: UUID = UUID.randomUUID()
+    val sakId: UUID = UUID.randomUUID()
 
     @Test
     fun `skal sende vedtaksstatistikk til DVH`() {
         val behandlingIdString = behandlingId.toString()
-        val returnIverksetting = lagIverksett(opprettIverksettDto(behandlingId = behandlingId).toDomain())
+        val returnIverksetting = lagIverksett(opprettIverksettDto(behandlingId = behandlingId, sakId = sakId).toDomain())
 
         every { vedtakstatistikkService.sendTilKafka(returnIverksetting.data, null) } just Runs
         every { iverksettingRepository.findByIdOrThrow(behandlingId) }

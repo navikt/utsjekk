@@ -145,7 +145,6 @@ class StepDefinitions {
         assertThat(beregnetTilkjentYtelse.andelerTilkjentYtelse.first().periode.fom).isEqualTo(LocalDate.MIN)
         assertThat(beregnetTilkjentYtelse.andelerTilkjentYtelse.first().periode.tom).isEqualTo(LocalDate.MIN)
         assertThat(beregnetTilkjentYtelse.andelerTilkjentYtelse.first().periodeId).isNull()
-        assertThat(beregnetTilkjentYtelse.andelerTilkjentYtelse.first().kildeBehandlingId).isEqualTo(behandlingId)
     }
 
     private fun assertTilkjentYtelse(
@@ -159,9 +158,6 @@ class StepDefinitions {
             assertThat(andel.beløp).isEqualTo(forventetAndel.beløp)
             assertThat(andel.periodeId).isEqualTo(forventetAndel.periodeId)
             assertThat(andel.forrigePeriodeId).isEqualTo(forventetAndel.forrigePeriodeId)
-            if (forventetAndel.kildeBehandlingId != null) {
-                assertThat(andel.kildeBehandlingId).isEqualTo(forventetAndel.kildeBehandlingId)
-            }
         }
         assertThat(beregnetTilkjentYtelse.startdato).isEqualTo(forventetTilkjentYtelse.startdato)
         assertThat(beregnetTilkjentYtelse.andelerTilkjentYtelse).hasSize(forventetTilkjentYtelse.andeler.size)

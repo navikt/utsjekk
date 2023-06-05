@@ -16,8 +16,6 @@ import no.nav.dagpenger.iverksett.api.domene.ÅrsakRevurdering
 import no.nav.dagpenger.iverksett.konsumenter.brev.domain.Brevmottakere
 import no.nav.dagpenger.kontrakter.felles.Datoperiode
 import no.nav.dagpenger.kontrakter.felles.StønadType
-import no.nav.dagpenger.kontrakter.iverksett.AdressebeskyttelseGradering
-import no.nav.dagpenger.kontrakter.iverksett.AktivitetType
 import no.nav.dagpenger.kontrakter.iverksett.AvslagÅrsak
 import no.nav.dagpenger.kontrakter.iverksett.BehandlingType
 import no.nav.dagpenger.kontrakter.iverksett.BehandlingÅrsak
@@ -38,7 +36,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.YearMonth
 import java.time.ZoneId
-import java.util.UUID
+import java.util.*
 
 internal class VedtakstatistikkMapperTest {
 
@@ -73,9 +71,6 @@ internal class VedtakstatistikkMapperTest {
         assertThat(vedtakDagpengerDVH.utbetalinger).hasSize(2)
         assertThat(vedtakDagpengerDVH.utbetalinger.first().fraOgMed).isEqualTo(LocalDate.of(2021, 1, 1))
         assertThat(vedtakDagpengerDVH.utbetalinger.first().tilOgMed).isEqualTo(LocalDate.of(2021, 5, 31))
-        assertThat(vedtakDagpengerDVH.utbetalinger.first().inntekt).isEqualTo(300000)
-        assertThat(vedtakDagpengerDVH.utbetalinger.first().inntektsreduksjon).isEqualTo(11000)
-        assertThat(vedtakDagpengerDVH.utbetalinger.first().samordningsfradrag).isEqualTo(1000)
         assertThat(vedtakDagpengerDVH.utbetalinger.first().beløp).isEqualTo(9000)
         assertThat(vedtakDagpengerDVH.utbetalinger.first().utbetalingsdetalj.delytelseId).isEqualTo("${fagsakId}1")
         assertThat(vedtakDagpengerDVH.utbetalinger.first().utbetalingsdetalj.klassekode).isEqualTo("DPORAS")
@@ -84,7 +79,6 @@ internal class VedtakstatistikkMapperTest {
         assertThat(vedtakDagpengerDVH.vedtaksperioder).hasSize(2)
         assertThat(vedtakDagpengerDVH.vedtaksperioder.first().fraOgMed).isEqualTo(LocalDate.of(2021, 2, 1))
         assertThat(vedtakDagpengerDVH.vedtaksperioder.first().tilOgMed).isEqualTo(LocalDate.of(2021, 3, 31))
-        assertThat(vedtakDagpengerDVH.vedtaksperioder.first().aktivitet.name).isEqualTo(AktivitetType.IKKE_AKTIVITETSPLIKT.name)
         assertThat(vedtakDagpengerDVH.vedtaksperioder.first().periodeType.name).isEqualTo(VedtaksperiodeType.SANKSJON.name)
         assertThat(vedtakDagpengerDVH.vilkårsvurderinger).hasSize(10)
         assertThat(vedtakDagpengerDVH.vilkårsvurderinger.first().vilkår.name).isEqualTo(VilkårType.FORUTGÅENDE_MEDLEMSKAP.name)
@@ -120,7 +114,6 @@ internal class VedtakstatistikkMapperTest {
                 Barn(termindato = termindato),
             ),
             tilhørendeEnhet = "4489",
-            adressebeskyttelse = AdressebeskyttelseGradering.STRENGT_FORTROLIG,
         ),
         vedtak = vedtaksdetaljerDagpenger(),
     )
@@ -154,24 +147,16 @@ internal class VedtakstatistikkMapperTest {
                     beløp = 9000,
                     periode = Datoperiode(YearMonth.of(2021, 1), YearMonth.of(2021, 5)),
                     stønadstype = StønadType.DAGPENGER_ARBEIDSSOKER_ORDINAER,
-                    inntekt = 300000,
-                    samordningsfradrag = 1000,
-                    inntektsreduksjon = 11000,
                     periodeId = 1,
                     forrigePeriodeId = null,
-                    kildeBehandlingId = behandlingId,
                     ferietillegg = null,
                 ),
                 AndelTilkjentYtelse(
                     beløp = 10000,
                     periode = Datoperiode(YearMonth.of(2021, 6), YearMonth.of(2021, 10)),
                     stønadstype = StønadType.DAGPENGER_ARBEIDSSOKER_ORDINAER,
-                    inntekt = 300000,
-                    samordningsfradrag = 0,
-                    inntektsreduksjon = 11000,
                     periodeId = 2,
                     forrigePeriodeId = 1,
-                    kildeBehandlingId = behandlingId,
                     ferietillegg = null,
                 ),
             ),
@@ -193,12 +178,10 @@ internal class VedtakstatistikkMapperTest {
             tilkjentYtelse = tilkjentYtelse(),
             vedtaksperioder = listOf(
                 VedtaksperiodeDagpenger(
-                    aktivitet = AktivitetType.IKKE_AKTIVITETSPLIKT,
                     periode = Datoperiode(YearMonth.of(2021, 2), YearMonth.of(2021, 3)),
                     periodeType = VedtaksperiodeType.SANKSJON,
                 ),
                 VedtaksperiodeDagpenger(
-                    aktivitet = AktivitetType.FORSØRGER_I_ARBEID,
                     periode = Datoperiode(YearMonth.of(2021, 6), YearMonth.of(2021, 10)),
                     periodeType = VedtaksperiodeType.HOVEDPERIODE,
                 ),

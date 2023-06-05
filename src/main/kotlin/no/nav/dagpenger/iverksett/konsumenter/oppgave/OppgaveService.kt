@@ -78,7 +78,6 @@ class OppgaveService(
         return when (iverksett.vedtak.vedtaksresultat) {
             Vedtaksresultat.INNVILGET -> beskrivelseFørstegangsbehandlingInnvilget(
                 iverksett.totalVedtaksperiode(),
-                iverksett.gjeldendeVedtak(),
             )
 
             Vedtaksresultat.AVSLÅTT -> beskrivelseFørstegangsbehandlingAvslått(iverksett.vedtak.vedtakstidspunkt.toLocalDate())
@@ -97,7 +96,6 @@ class OppgaveService(
                 iverksett.behandling.forrigeBehandlingId?.let {
                     beskrivelseRevurderingInnvilget(
                         iverksett.totalVedtaksperiode(),
-                        iverksett.gjeldendeVedtak(),
                     )
                 } ?: finnBeskrivelseForFørstegangsbehandlingAvVedtaksresultat(iverksett)
             }
@@ -124,14 +122,7 @@ class OppgaveService(
         if (forrigeBehandling.gjeldendeVedtak().periodeType == VedtaksperiodeType.MIGRERING) {
             return false
         }
-        return harEndretAktivitet(iverksett, forrigeBehandling) || harEndretPeriode(iverksett, forrigeBehandling)
-    }
-
-    private fun harEndretAktivitet(
-        iverksett: IverksettDagpenger,
-        forrigeBehandling: IverksettDagpenger,
-    ): Boolean {
-        return iverksett.gjeldendeVedtak().aktivitet != forrigeBehandling.gjeldendeVedtak().aktivitet
+        return harEndretPeriode(iverksett, forrigeBehandling)
     }
 
     private fun harEndretPeriode(

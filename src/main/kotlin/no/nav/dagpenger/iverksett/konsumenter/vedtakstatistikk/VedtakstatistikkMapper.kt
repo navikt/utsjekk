@@ -48,9 +48,7 @@ object VedtakstatistikkMapper {
             fagsakId = iverksett.fagsak.fagsakId,
             behandlingId = iverksett.behandling.behandlingId,
             relatertBehandlingId = forrigeIverksettBehandlingId,
-            adressebeskyttelse = iverksett.søker.adressebeskyttelse?.let {
-                AdressebeskyttelseDVH.valueOf(it.name)
-            },
+            adressebeskyttelse = AdressebeskyttelseDVH.UGRADERT, // TODO
             tidspunktVedtak = iverksett.vedtak.vedtakstidspunkt.atZone(ZoneId.of("Europe/Oslo")),
             vilkårsvurderinger = iverksett.behandling.vilkårsvurderinger.map {
                 mapTilVilkårsvurderinger(it)
@@ -94,15 +92,16 @@ object VedtakstatistikkMapper {
         sakId: UUID,
         søker: Søker,
     ): List<UtbetalingDVH> {
+        // TODO inntekt osv
         return tilkjentYtelse.andelerTilkjentYtelse.map {
             UtbetalingDVH(
                 beløp = it.beløp,
-                samordningsfradrag = it.samordningsfradrag,
-                inntekt = it.inntekt,
-                inntektsreduksjon = it.inntektsreduksjon,
+                samordningsfradrag = 0,
+                inntekt = 0,
+                inntektsreduksjon = 0,
                 fraOgMed = it.periode.fom,
                 tilOgMed = it.periode.tom,
-                UtbetalingsdetaljDVH(
+                utbetalingsdetalj = UtbetalingsdetaljDVH(
                     gjelderPerson = mapTilPerson(personIdent = søker.personIdent),
                     klassekode = it.tilKlassifisering(),
                     delytelseId = sakId.toString() + (it.periodeId ?: ""),
@@ -131,7 +130,7 @@ object VedtakstatistikkMapper {
             VedtaksperiodeDagpengerDVH(
                 it.periode.fom,
                 it.periode.tom,
-                AktivitetTypeDVH.valueOf(it.aktivitet.name),
+                AktivitetTypeDVH.BARN_UNDER_ETT_ÅR, // TODO
                 VedtaksperiodeTypeDVH.valueOf(it.periodeType.name),
             )
         }

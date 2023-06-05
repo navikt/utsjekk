@@ -155,6 +155,6 @@ class IverksettingService(
     }
 }
 
-fun Task.erAktiv() = this.status != Status.AVVIKSHÅNDTERT
-        && this.status != Status.MANUELL_OPPFØLGING
-        && this.status != Status.FERDIG
+fun Task.erAktiv() = this.status != Status.AVVIKSHÅNDTERT &&
+    this.status != Status.MANUELL_OPPFØLGING &&
+    this.status != Status.FERDIG

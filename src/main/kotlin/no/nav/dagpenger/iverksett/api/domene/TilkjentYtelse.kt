@@ -49,10 +49,7 @@ private fun TilkjentYtelse?.lagNormaliserteAndeler(): List<AndelTilkjentYtelse> 
             AndelTilkjentYtelse(
                 beløp = it.beløp,
                 periode = it.periode,
-                inntekt = it.inntekt,
                 stønadstype = it.stønadstype,
-                samordningsfradrag = it.samordningsfradrag,
-                inntektsreduksjon = it.inntektsreduksjon,
                 ferietillegg = it.ferietillegg,
             )
         } ?: emptyList()
