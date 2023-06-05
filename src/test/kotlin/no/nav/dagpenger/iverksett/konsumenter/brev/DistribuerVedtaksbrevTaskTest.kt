@@ -8,7 +8,7 @@ import io.mockk.verify
 import no.nav.dagpenger.iverksett.api.tilstand.IverksettResultatService
 import no.nav.dagpenger.iverksett.konsumenter.brev.domain.DistribuerBrevResultat
 import no.nav.dagpenger.iverksett.konsumenter.brev.domain.JournalpostResultat
-import no.nav.dagpenger.iverksett.konsumenter.vedtakstatistikk.toJson
+import no.nav.dagpenger.kontrakter.felles.objectMapper
 import no.nav.familie.http.client.RessursException
 import no.nav.familie.kontrakter.felles.Ressurs
 import no.nav.familie.prosessering.domene.Loggtype
@@ -261,7 +261,7 @@ internal class DistribuerVedtaksbrevTaskTest {
             HttpStatus.CONFLICT,
             "",
             HttpHeaders(),
-            DistribuerJournalpostResponseTo(bestillingsId).toJson().toByteArray(),
+            objectMapper.writeValueAsBytes(DistribuerJournalpostResponseTo(bestillingsId)),
             null,
         )
 
