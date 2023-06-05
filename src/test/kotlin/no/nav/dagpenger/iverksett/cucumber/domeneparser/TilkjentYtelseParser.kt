@@ -4,7 +4,6 @@ import io.cucumber.datatable.DataTable
 import no.nav.dagpenger.iverksett.cucumber.domeneparser.IdTIlUUIDHolder.behandlingIdTilUUID
 import no.nav.dagpenger.iverksett.cucumber.steps.TilkjentYtelseHolder
 import no.nav.dagpenger.kontrakter.felles.Datoperiode
-import no.nav.dagpenger.kontrakter.iverksett.DatoperiodeDto
 import no.nav.dagpenger.kontrakter.iverksett.TilkjentYtelseDto
 import no.nav.dagpenger.kontrakter.iverksett.UtbetalingDto
 import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsoppdrag.KodeEndring
@@ -41,8 +40,6 @@ object TilkjentYtelseParser {
                 startdatoer[behandlingId]
                     ?: andeler.minOfOrNull {
                         it.fraOgMedDato
-                            ?: it.periode?.fom
-                            ?: throw IllegalStateException("Verken fraOgMedDato eller periode har verdi. En av dem, helst fraOgMedDato, må være satt")
                     }
                     ?: error("Mangler startdato eller andel for behandling=$behandlingIdInt")
                 )
@@ -118,16 +115,8 @@ object TilkjentYtelseParser {
 
     private fun mapAndelTilkjentYtelse(rad: MutableMap<String, String>) = UtbetalingDto(
         beløp = parseInt(TilkjentYtelseDomenebegrep.BELØP, rad),
-        inntekt = parseValgfriInt(TilkjentYtelseDomenebegrep.INNTEKT, rad) ?: 0,
-        inntektsreduksjon = parseValgfriInt(TilkjentYtelseDomenebegrep.INNTEKTSREDUKSJON, rad) ?: 0,
-        samordningsfradrag = parseValgfriInt(TilkjentYtelseDomenebegrep.INNTEKT, rad) ?: 0,
-        periode = DatoperiodeDto(
-            parseDato(Domenebegrep.FRA_DATO, rad),
-            parseDato(Domenebegrep.TIL_DATO, rad),
-        ),
         fraOgMedDato = parseDato(Domenebegrep.FRA_DATO, rad),
         tilOgMedDato = parseDato(Domenebegrep.TIL_DATO, rad),
-        kildeBehandlingId = null, // ikke i bruk i iverksett
     )
 
     /**

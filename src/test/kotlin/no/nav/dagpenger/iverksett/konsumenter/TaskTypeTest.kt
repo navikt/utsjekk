@@ -7,7 +7,6 @@ import no.nav.dagpenger.iverksett.konsumenter.brev.JournalførVedtaksbrevTask
 import no.nav.dagpenger.iverksett.konsumenter.oppgave.OpprettOppfølgingsOppgaveForDagpengerTask
 import no.nav.dagpenger.iverksett.konsumenter.tilbakekreving.OpprettTilbakekrevingTask
 import no.nav.dagpenger.iverksett.konsumenter.vedtak.PubliserVedtakTilKafkaTask
-import no.nav.dagpenger.iverksett.konsumenter.vedtakstatistikk.VedtakstatistikkTask
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.IverksettMotOppdragTask
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.VentePåStatusFraØkonomiTask
 import no.nav.familie.prosessering.domene.Task
@@ -59,10 +58,6 @@ class TaskTypeTest {
         val opprettOppgaveTask = sendVedtakTilArbeidsoppfølgingTask.opprettNestePubliseringTask()
         assertThat(opprettOppgaveTask.type).isEqualTo(OpprettOppfølgingsOppgaveForDagpengerTask.TYPE)
         assertThat(opprettOppgaveTask.triggerTid).isBefore(LocalDateTime.now().plusMinutes(1))
-
-        val vedtaksstatistikkTask = opprettOppgaveTask.opprettNestePubliseringTask()
-        assertThat(vedtaksstatistikkTask.type).isEqualTo(VedtakstatistikkTask.TYPE)
-        assertThat(vedtaksstatistikkTask.triggerTid).isBefore(LocalDateTime.now().plusMinutes(1))
     }
 
     @Test

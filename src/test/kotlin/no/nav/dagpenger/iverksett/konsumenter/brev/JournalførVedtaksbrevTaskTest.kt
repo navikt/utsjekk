@@ -48,13 +48,14 @@ internal class JournalførVedtaksbrevTaskTest {
             iverksettResultatService,
         )
     private val behandlingId: UUID = UUID.randomUUID()
+    private val sakId: UUID = UUID.randomUUID()
     private val behandlingIdString = behandlingId.toString()
     private val journalpostId = "123456789"
     private val arkiverDokumentRequestSlot = mutableListOf<ArkiverDokumentRequest>()
     private val journalpostResultatSlot = slot<JournalpostResultat>()
     private val taskSlot = slot<Task>()
 
-    private val iverksettDto = opprettIverksettDto(behandlingId = behandlingId)
+    private val iverksettDto = opprettIverksettDto(behandlingId = behandlingId, sakId = sakId)
 
     val iverksettDagpenger = iverksettDto.toDomain()
     private val iverksett = Iverksett(
@@ -120,7 +121,7 @@ internal class JournalførVedtaksbrevTaskTest {
             verge,
             fullmektig,
         )
-        val iverksettMedBrevmottakere = opprettIverksettDto(behandlingId).let {
+        val iverksettMedBrevmottakere = opprettIverksettDto(behandlingId, sakId).let {
             it.copy(vedtak = it.vedtak.copy(brevmottakere = brevmottakere)).toDomain()
         }
 

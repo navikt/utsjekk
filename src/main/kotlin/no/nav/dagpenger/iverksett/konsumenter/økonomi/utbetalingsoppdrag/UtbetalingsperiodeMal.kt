@@ -40,7 +40,6 @@ fun lagPeriodeFraAndel(
         satsType = mapSatstype(type),
         utbetalesTil = personIdent,
         behandlingId = behandlingId,
-        utbetalingsgrad = andel.utbetalingsgrad(),
     )
 
 fun lagUtbetalingsperiodeForOpphør(

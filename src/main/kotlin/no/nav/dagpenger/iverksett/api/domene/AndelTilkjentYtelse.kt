@@ -3,20 +3,14 @@ package no.nav.dagpenger.iverksett.api.domene
 import no.nav.dagpenger.kontrakter.felles.Datoperiode
 import no.nav.dagpenger.kontrakter.felles.StønadType
 import no.nav.dagpenger.kontrakter.iverksett.Ferietillegg
-import java.util.UUID
-import kotlin.math.roundToInt
 
 data class AndelTilkjentYtelse(
     val beløp: Int,
     val periode: Datoperiode,
-    val inntekt: Int,
     val stønadstype: StønadType,
     val ferietillegg: Ferietillegg?,
-    val samordningsfradrag: Int,
-    val inntektsreduksjon: Int,
     val periodeId: Long? = null,
     val forrigePeriodeId: Long? = null,
-    val kildeBehandlingId: UUID? = null,
 ) {
 
     private fun erTilsvarendeForUtbetaling(other: AndelTilkjentYtelse): Boolean {
@@ -27,9 +21,6 @@ data class AndelTilkjentYtelse(
     }
 
     fun erNull() = this.beløp == 0
-
-    fun utbetalingsgrad(): Int =
-        (100 * (this.beløp.toDouble() / (this.beløp + this.inntektsreduksjon + this.samordningsfradrag))).roundToInt()
 
     companion object {
 
@@ -57,23 +48,23 @@ data class AndelTilkjentYtelse(
 }
 fun AndelTilkjentYtelse.tilKlassifisering() = when (this.stønadstype) {
     StønadType.DAGPENGER_ARBEIDSSOKER_ORDINAER -> when (ferietillegg) {
-        Ferietillegg.VANLIG -> "DPORASFE"
-        Ferietillegg.AVDØD -> "DPORASFE-IOP"
+        Ferietillegg.ORDINAER -> "DPORASFE"
+        Ferietillegg.AVDOD -> "DPORASFE-IOP"
         null -> "DPORAS"
     }
     StønadType.DAGPENGER_PERMITTERING_ORDINAER -> when (ferietillegg) {
-        Ferietillegg.VANLIG -> "DPPEASFE1"
-        Ferietillegg.AVDØD -> "DPPEASFE1-IOP"
+        Ferietillegg.ORDINAER -> "DPPEASFE1"
+        Ferietillegg.AVDOD -> "DPPEASFE1-IOP"
         null -> "DPPEAS"
     }
     StønadType.DAGPENGER_PERMITTERING_FISKEINDUSTRI -> when (ferietillegg) {
-        Ferietillegg.VANLIG -> "DPPEFIFE1"
-        Ferietillegg.AVDØD -> "DPPEFIFE1-IOP"
+        Ferietillegg.ORDINAER -> "DPPEFIFE1"
+        Ferietillegg.AVDOD -> "DPPEFIFE1-IOP"
         null -> "DPPEFI"
     }
     StønadType.DAGPENGER_EOS -> when (ferietillegg) {
-        Ferietillegg.VANLIG -> "DPFEASISP"
-        Ferietillegg.AVDØD -> throw IllegalArgumentException("Eksport-gruppen har ingen egen kode for ferietillegg til avdød")
+        Ferietillegg.ORDINAER -> "DPFEASISP"
+        Ferietillegg.AVDOD -> throw IllegalArgumentException("Eksport-gruppen har ingen egen kode for ferietillegg til avdød")
         null -> "DPDPASISP1"
     }
 }

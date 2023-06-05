@@ -15,7 +15,6 @@ import no.nav.dagpenger.iverksett.lagIverksett
 import no.nav.dagpenger.iverksett.lagIverksettData
 import no.nav.dagpenger.iverksett.util.mockFeatureToggleService
 import no.nav.dagpenger.kontrakter.felles.Datoperiode
-import no.nav.dagpenger.kontrakter.iverksett.AktivitetType
 import no.nav.dagpenger.kontrakter.iverksett.BehandlingType
 import no.nav.dagpenger.kontrakter.iverksett.BehandlingÅrsak
 import no.nav.dagpenger.kontrakter.iverksett.VedtaksperiodeType
@@ -84,30 +83,12 @@ internal class OppgaveServiceTest {
     }
 
     @Test
-    internal fun `revurdering innvilget med kun aktivitetsendring, forvent skalOpprette true`() {
-        val iverksett = lagIverksettData(
-            UUID.randomUUID(),
-            BehandlingType.REVURDERING,
-            Vedtaksresultat.INNVILGET,
-            listOf(vedtaksPeriode(aktivitet = AktivitetType.FORSØRGER_I_ARBEID)),
-        )
-        val forrigeBehandlingIverksett = lagIverksettData(
-            UUID.randomUUID(),
-            BehandlingType.REVURDERING,
-            Vedtaksresultat.INNVILGET,
-            listOf(vedtaksPeriode(aktivitet = AktivitetType.IKKE_AKTIVITETSPLIKT)),
-        )
-        every { iverksettRepository.findByIdOrThrow(any()) } returns lagIverksett(forrigeBehandlingIverksett)
-        assertThat(oppgaveService.skalOppretteVurderHenvendelseOppgave(iverksett)).isTrue()
-    }
-
-    @Test
     internal fun `revurdering innvilget, forrige er opphørt skal opprette opppgave`() {
         val iverksett = lagIverksettData(
             UUID.randomUUID(),
             BehandlingType.REVURDERING,
             Vedtaksresultat.INNVILGET,
-            listOf(vedtaksPeriode(aktivitet = AktivitetType.FORSØRGER_I_ARBEID)),
+            listOf(vedtaksPeriode()),
         )
         val forrigeBehandlingIverksett = lagIverksettData(
             UUID.randomUUID(),
@@ -125,13 +106,13 @@ internal class OppgaveServiceTest {
             UUID.randomUUID(),
             BehandlingType.REVURDERING,
             Vedtaksresultat.INNVILGET,
-            listOf(vedtaksPeriode(aktivitet = AktivitetType.FORSØRGER_I_ARBEID)),
+            listOf(vedtaksPeriode()),
         )
         val forrigeBehandlingIverksett = lagIverksettData(
             UUID.randomUUID(),
             BehandlingType.REVURDERING,
             Vedtaksresultat.OPPHØRT,
-            listOf(vedtaksPeriode(aktivitet = AktivitetType.FORSØRGER_I_ARBEID)),
+            listOf(vedtaksPeriode()),
         )
         every { iverksettRepository.findByIdOrThrow(any()) } returns lagIverksett(forrigeBehandlingIverksett)
         assertThat(oppgaveService.skalOppretteVurderHenvendelseOppgave(iverksett)).isTrue()
@@ -143,7 +124,7 @@ internal class OppgaveServiceTest {
             null,
             BehandlingType.REVURDERING,
             Vedtaksresultat.INNVILGET,
-            listOf(vedtaksPeriode(aktivitet = AktivitetType.IKKE_AKTIVITETSPLIKT)),
+            listOf(vedtaksPeriode()),
         )
         every { iverksettRepository.findByIdOrThrow(any()) } returns lagIverksett(iverksettData)
         assertThat(oppgaveService.skalOppretteVurderHenvendelseOppgave(iverksettData)).isTrue()
@@ -155,12 +136,12 @@ internal class OppgaveServiceTest {
             null,
             BehandlingType.REVURDERING,
             Vedtaksresultat.INNVILGET,
-            listOf(vedtaksPeriode(aktivitet = AktivitetType.IKKE_AKTIVITETSPLIKT)),
+            listOf(vedtaksPeriode()),
         )
 
         oppgaveService.opprettVurderHenvendelseOppgave(iverksett)
-        verify { OppgaveBeskrivelse.beskrivelseFørstegangsbehandlingInnvilget(any(), any()) }
-        verify(exactly = 0) { OppgaveBeskrivelse.beskrivelseRevurderingInnvilget(any(), any()) }
+        verify { OppgaveBeskrivelse.beskrivelseFørstegangsbehandlingInnvilget(any()) }
+        verify(exactly = 0) { OppgaveBeskrivelse.beskrivelseRevurderingInnvilget(any()) }
     }
 
     @Test
@@ -169,7 +150,7 @@ internal class OppgaveServiceTest {
             UUID.randomUUID(),
             BehandlingType.REVURDERING,
             Vedtaksresultat.INNVILGET,
-            listOf(vedtaksPeriode(aktivitet = AktivitetType.FORSØRGER_I_ARBEID)),
+            listOf(vedtaksPeriode()),
         )
         val forrigeBehandlingIverksett = lagIverksettData(
             UUID.randomUUID(),
@@ -177,7 +158,6 @@ internal class OppgaveServiceTest {
             Vedtaksresultat.INNVILGET,
             listOf(
                 vedtaksPeriode(
-                    aktivitet = AktivitetType.IKKE_AKTIVITETSPLIKT,
                     fraOgMed = LocalDate.now().plusMonths(2),
                     tilOgMed = LocalDate.now().plusMonths(3),
                 ),
@@ -198,7 +178,7 @@ internal class OppgaveServiceTest {
             UUID.randomUUID(),
             BehandlingType.REVURDERING,
             Vedtaksresultat.INNVILGET,
-            listOf(vedtaksPeriode(aktivitet = AktivitetType.FORSØRGER_I_ARBEID)),
+            listOf(vedtaksPeriode()),
         )
         val forrigeBehandlingIverksett = lagIverksettData(
             UUID.randomUUID(),
@@ -206,7 +186,6 @@ internal class OppgaveServiceTest {
             Vedtaksresultat.INNVILGET,
             listOf(
                 vedtaksPeriode(
-                    aktivitet = AktivitetType.FORSØRGER_I_ARBEID,
                     fraOgMed = LocalDate.now().plusMonths(2),
                     tilOgMed = LocalDate.now().plusMonths(3),
                 ),
@@ -222,7 +201,7 @@ internal class OppgaveServiceTest {
             UUID.randomUUID(),
             BehandlingType.REVURDERING,
             Vedtaksresultat.INNVILGET,
-            listOf(vedtaksPeriode(aktivitet = AktivitetType.FORSØRGER_I_ARBEID)),
+            listOf(vedtaksPeriode()),
         )
         val forrigeBehandlingIverksett = lagIverksettData(
             UUID.randomUUID(),
@@ -230,7 +209,6 @@ internal class OppgaveServiceTest {
             Vedtaksresultat.INNVILGET,
             listOf(
                 vedtaksPeriode(
-                    aktivitet = AktivitetType.FORSØRGER_I_ARBEID,
                     fraOgMed = LocalDate.now().minusMonths(3),
                 ),
             ),
@@ -245,11 +223,11 @@ internal class OppgaveServiceTest {
             UUID.randomUUID(),
             BehandlingType.FØRSTEGANGSBEHANDLING,
             Vedtaksresultat.INNVILGET,
-            listOf(vedtaksPeriode(aktivitet = AktivitetType.FORSØRGER_I_ARBEID)),
+            listOf(vedtaksPeriode()),
         )
 
         oppgaveService.opprettVurderHenvendelseOppgave(iverksett)
-        verify { OppgaveBeskrivelse.beskrivelseFørstegangsbehandlingInnvilget(any(), any()) }
+        verify { OppgaveBeskrivelse.beskrivelseFørstegangsbehandlingInnvilget(any()) }
     }
 
     @Test
@@ -258,7 +236,7 @@ internal class OppgaveServiceTest {
             UUID.randomUUID(),
             BehandlingType.FØRSTEGANGSBEHANDLING,
             Vedtaksresultat.AVSLÅTT,
-            listOf(vedtaksPeriode(aktivitet = AktivitetType.FORSØRGER_I_ARBEID)),
+            listOf(vedtaksPeriode()),
         )
 
         oppgaveService.opprettVurderHenvendelseOppgave(iverksett)
@@ -271,11 +249,11 @@ internal class OppgaveServiceTest {
             UUID.randomUUID(),
             BehandlingType.REVURDERING,
             Vedtaksresultat.INNVILGET,
-            listOf(vedtaksPeriode(aktivitet = AktivitetType.FORSØRGER_I_ARBEID)),
+            listOf(vedtaksPeriode()),
         )
 
         oppgaveService.opprettVurderHenvendelseOppgave(iverksett)
-        verify { OppgaveBeskrivelse.beskrivelseRevurderingInnvilget(any(), any()) }
+        verify { OppgaveBeskrivelse.beskrivelseRevurderingInnvilget(any()) }
     }
 
     @Test
@@ -294,7 +272,7 @@ internal class OppgaveServiceTest {
             UUID.randomUUID(),
             BehandlingType.REVURDERING,
             Vedtaksresultat.OPPHØRT,
-            listOf(vedtaksPeriode(aktivitet = AktivitetType.FORSØRGER_I_ARBEID)),
+            listOf(vedtaksPeriode()),
             andelsdatoer = listOf(LocalDate.now()),
         )
 
@@ -309,7 +287,7 @@ internal class OppgaveServiceTest {
             UUID.randomUUID(),
             BehandlingType.REVURDERING,
             Vedtaksresultat.OPPHØRT,
-            listOf(vedtaksPeriode(aktivitet = AktivitetType.FORSØRGER_I_ARBEID)),
+            listOf(vedtaksPeriode()),
             andelsdatoer = listOf(LocalDate.now().minusMonths(2), LocalDate.now(), LocalDate.now().minusMonths(1)),
         )
 
@@ -321,7 +299,7 @@ internal class OppgaveServiceTest {
     @Test
     internal fun `av migreringssak, revurdering opphør, forvent at skalOppretteVurderHendelseOppgave er lik true`() {
         val forrigeBehandlingId = UUID.randomUUID()
-        val vedtaksperioder = listOf(vedtaksPeriode(aktivitet = AktivitetType.FORSØRGER_I_ARBEID))
+        val vedtaksperioder = listOf(vedtaksPeriode())
         val iverksett = lagIverksettData(
             forrigeBehandlingId,
             BehandlingType.REVURDERING,
@@ -342,12 +320,11 @@ internal class OppgaveServiceTest {
     @Test
     internal fun `revurdering, forrige behandling er gOmregnet, periodetype migrering, forvent skalOppretteVurderHendelseOppgave lik false`() {
         val forrigeBehandlingId = UUID.randomUUID()
-        val vedtaksperioder = listOf(vedtaksPeriode(aktivitet = AktivitetType.FORSØRGER_I_ARBEID))
+        val vedtaksperioder = listOf(vedtaksPeriode())
         val forrigeVedtaksperioder = listOf(
             vedtaksPeriode(
                 fraOgMed = LocalDate.of(LocalDate.now().year, 5, 1),
                 tilOgMed = LocalDate.of(LocalDate.now().year.plus(2), 10, 31),
-                aktivitet = AktivitetType.MIGRERING,
                 periodeType = VedtaksperiodeType.MIGRERING,
             ),
         )
@@ -371,12 +348,11 @@ internal class OppgaveServiceTest {
     @Test
     internal fun `revurdering, forrige behandling er gOmregnet, periodetype ikke migrering, forvent skalOppretteVurderHendelseOppgave lik true`() {
         val forrigeBehandlingId = UUID.randomUUID()
-        val vedtaksperioder = listOf(vedtaksPeriode(aktivitet = AktivitetType.FORSØRGER_I_ARBEID))
+        val vedtaksperioder = listOf(vedtaksPeriode())
         val forrigeVedtaksperioder = listOf(
             vedtaksPeriode(
                 fraOgMed = LocalDate.of(LocalDate.now().year, 5, 1),
                 tilOgMed = LocalDate.of(LocalDate.now().year.plus(2), 10, 31),
-                aktivitet = AktivitetType.FORSØRGER_I_ARBEID,
                 periodeType = VedtaksperiodeType.HOVEDPERIODE,
             ),
         )
@@ -402,7 +378,7 @@ internal class OppgaveServiceTest {
             UUID.randomUUID(),
             BehandlingType.REVURDERING,
             Vedtaksresultat.INNVILGET,
-            listOf(vedtaksPeriode(aktivitet = AktivitetType.FORSØRGER_I_ARBEID)),
+            listOf(vedtaksPeriode()),
             andelsdatoer = listOf(LocalDate.now().minusMonths(2), LocalDate.now(), LocalDate.now().minusMonths(1)),
         )
         val forrigeBehandlingIverksett = lagMigreringsIverksetting()
@@ -426,7 +402,6 @@ internal class OppgaveServiceTest {
         Vedtaksresultat.INNVILGET,
         listOf(
             vedtaksPeriode(
-                aktivitet = AktivitetType.FORSØRGER_I_ARBEID,
                 fraOgMed = LocalDate.now().minusMonths(3),
                 periodeType = VedtaksperiodeType.MIGRERING,
             ),
@@ -438,7 +413,6 @@ internal class OppgaveServiceTest {
         val vedtaksPeriode = VedtaksperiodeDagpenger(
             periode = datoperiode,
             periodeType = VedtaksperiodeType.SANKSJON,
-            aktivitet = AktivitetType.IKKE_AKTIVITETSPLIKT,
         )
         val andeler = listOf(sanksjonsdato.minusMonths(1), sanksjonsdato.plusMonths(1))
         return lagIverksettData(
@@ -452,14 +426,12 @@ internal class OppgaveServiceTest {
     }
 
     private fun vedtaksPeriode(
-        aktivitet: AktivitetType,
         fraOgMed: LocalDate = LocalDate.now(),
         tilOgMed: LocalDate = LocalDate.now(),
         periodeType: VedtaksperiodeType = VedtaksperiodeType.HOVEDPERIODE,
     ): VedtaksperiodeDagpenger {
         return VedtaksperiodeDagpenger(
             periode = Datoperiode(fraOgMed, tilOgMed),
-            aktivitet = aktivitet,
             periodeType = periodeType,
         )
     }

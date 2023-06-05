@@ -32,31 +32,22 @@ import no.nav.dagpenger.kontrakter.felles.FrittståendeBrevDto
 import no.nav.dagpenger.kontrakter.felles.FrittståendeBrevType
 import no.nav.dagpenger.kontrakter.felles.StønadType
 import no.nav.dagpenger.kontrakter.felles.Tilbakekrevingsvalg
-import no.nav.dagpenger.kontrakter.iverksett.AdressebeskyttelseGradering
-import no.nav.dagpenger.kontrakter.iverksett.AktivitetType
 import no.nav.dagpenger.kontrakter.iverksett.BehandlingType
-import no.nav.dagpenger.kontrakter.iverksett.BehandlingsdetaljerDto
 import no.nav.dagpenger.kontrakter.iverksett.BehandlingÅrsak
-import no.nav.dagpenger.kontrakter.iverksett.DelvilkårsvurderingDto
-import no.nav.dagpenger.kontrakter.iverksett.FagsakdetaljerDto
 import no.nav.dagpenger.kontrakter.iverksett.IverksettDagpengerdDto
 import no.nav.dagpenger.kontrakter.iverksett.OpphørÅrsak
 import no.nav.dagpenger.kontrakter.iverksett.Opplysningskilde
 import no.nav.dagpenger.kontrakter.iverksett.RegelId
 import no.nav.dagpenger.kontrakter.iverksett.Revurderingsårsak
 import no.nav.dagpenger.kontrakter.iverksett.SvarId
-import no.nav.dagpenger.kontrakter.iverksett.SøkerDto
 import no.nav.dagpenger.kontrakter.iverksett.TilkjentYtelseDto
 import no.nav.dagpenger.kontrakter.iverksett.TilkjentYtelseStatus
 import no.nav.dagpenger.kontrakter.iverksett.VedtakType
-import no.nav.dagpenger.kontrakter.iverksett.VedtaksdetaljerDagpengerDto
+import no.nav.dagpenger.kontrakter.iverksett.VedtaksdetaljerDto
 import no.nav.dagpenger.kontrakter.iverksett.VedtaksperiodeType
 import no.nav.dagpenger.kontrakter.iverksett.Vedtaksresultat
 import no.nav.dagpenger.kontrakter.iverksett.VilkårType
 import no.nav.dagpenger.kontrakter.iverksett.Vilkårsresultat
-import no.nav.dagpenger.kontrakter.iverksett.VilkårsvurderingDto
-import no.nav.dagpenger.kontrakter.iverksett.VurderingDto
-import no.nav.dagpenger.kontrakter.iverksett.ÅrsakRevurderingDto
 import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -66,6 +57,7 @@ import java.util.UUID
 
 fun opprettIverksettDto(
     behandlingId: UUID,
+    sakId: UUID,
     behandlingÅrsak: BehandlingÅrsak = BehandlingÅrsak.SØKNAD,
     andelsbeløp: Int = 5000,
     stønadType: StønadType = StønadType.DAGPENGER_ARBEIDSSOKER_ORDINAER,
@@ -74,55 +66,19 @@ fun opprettIverksettDto(
         beløp = andelsbeløp,
         fraOgMed = LocalDate.of(2021, 1, 1),
         tilOgMed = LocalDate.of(2021, 12, 31),
-        kildeBehandlingId = UUID.randomUUID(),
     )
     val tilkjentYtelse = TilkjentYtelseDto(
         utbetalinger = listOf(andelTilkjentYtelse),
-        startdato = andelTilkjentYtelse.fraOgMedDato
-            ?: andelTilkjentYtelse.periode?.fom
-            ?: throw IllegalStateException("Verken fraOgMedDato eller periode har verdi. En av dem, helst fraOgMedDato, må være satt"),
+        startdato = andelTilkjentYtelse.fraOgMedDato,
     )
 
     return IverksettDagpengerdDto(
-        fagsak = FagsakdetaljerDto(fagsakId = UUID.randomUUID(), eksternId = 1L, stønadstype = stønadType),
-        behandling = BehandlingsdetaljerDto(
-            behandlingId = behandlingId,
-            forrigeBehandlingId = null,
-            eksternId = 9L,
-            behandlingType = BehandlingType.FØRSTEGANGSBEHANDLING,
-            behandlingÅrsak = behandlingÅrsak,
-            vilkårsvurderinger = listOf(
-                VilkårsvurderingDto(
-                    vilkårType = VilkårType.SAGT_OPP_ELLER_REDUSERT,
-                    resultat = Vilkårsresultat.OPPFYLT,
-                    delvilkårsvurderinger = listOf(
-                        DelvilkårsvurderingDto(
-                            resultat = Vilkårsresultat.OPPFYLT,
-                            vurderinger = listOf(
-                                VurderingDto(
-                                    regelId = RegelId.SAGT_OPP_ELLER_REDUSERT,
-                                    svar = SvarId.JA,
-                                    begrunnelse = "Nei",
-                                ),
-                            ),
-                        ),
-                    ),
-                ),
-            ),
-            kravMottatt = LocalDate.of(2021, 3, 3),
-            årsakRevurdering = ÅrsakRevurderingDto(Opplysningskilde.MELDING_MODIA, Revurderingsårsak.ENDRING_INNTEKT),
-        ),
+        behandlingId = behandlingId,
+        sakId = sakId,
         personIdent = "12345678910",
-        søker = SøkerDto(
-            personIdent = "12345678910",
-            barn = emptyList(),
-            tilhørendeEnhet = "4489",
-            adressebeskyttelse = AdressebeskyttelseGradering.UGRADERT,
-        ),
-        vedtak = VedtaksdetaljerDagpengerDto(
+        vedtak = VedtaksdetaljerDto(
             resultat = Vedtaksresultat.INNVILGET,
             vedtakstidspunkt = LocalDateTime.of(2021, 5, 12, 0, 0),
-            opphørÅrsak = OpphørÅrsak.PERIODE_UTLØPT,
             saksbehandlerId = "A12345",
             beslutterId = "B23456",
             utbetalinger = tilkjentYtelse.utbetalinger,
@@ -139,9 +95,6 @@ fun opprettAndelTilkjentYtelse(
     beløp = beløp,
     fraOgMed = fra,
     tilOgMed = til,
-    inntekt = 100,
-    samordningsfradrag = 2,
-    inntektsreduksjon = 5,
 )
 
 private val eksternIdGenerator = Random()
@@ -216,7 +169,6 @@ fun behandlingsdetaljer(
 fun vedtaksperioderDagpenger() =
     VedtaksperiodeDagpenger(
         periode = Datoperiode(YearMonth.now().atDay(1), YearMonth.now().atEndOfMonth()),
-        aktivitet = AktivitetType.BARNET_ER_SYKT,
         periodeType = VedtaksperiodeType.HOVEDPERIODE,
     )
 
@@ -266,7 +218,6 @@ fun opprettIverksettDagpenger(
             personIdent = "12345678910",
             barn = emptyList(),
             tilhørendeEnhet = "4489",
-            adressebeskyttelse = AdressebeskyttelseGradering.UGRADERT,
         ),
         vedtak = vedtaksdetaljer,
     )
@@ -288,7 +239,6 @@ fun opprettIverksettDagpenger(
             personIdent = "12345678910",
             barn = listOf(Barn("01010199999"), Barn(null, LocalDate.of(2023, 1, 1))),
             tilhørendeEnhet = "4489",
-            adressebeskyttelse = AdressebeskyttelseGradering.UGRADERT,
         ),
         vedtak = vedtaksdetaljerDagpenger(
             vedtaksresultat = Vedtaksresultat.INNVILGET,

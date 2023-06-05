@@ -29,6 +29,7 @@ internal class IverksettMotOppdragTaskTest {
     val iverksettingRepository = mockk<IverksettingRepository>()
     val iverksettResultatService = mockk<IverksettResultatService>()
     val behandlingId: UUID = UUID.randomUUID()
+    val sakId: UUID = UUID.randomUUID()
     private val iverksettMotOppdragTask =
         IverksettMotOppdragTask(
             iverksettingRepository = iverksettingRepository,
@@ -39,7 +40,7 @@ internal class IverksettMotOppdragTaskTest {
 
     @BeforeEach
     internal fun setUp() {
-        every { iverksettingRepository.findByIdOrThrow(any()) } returns lagIverksett(opprettIverksettDto(behandlingId).toDomain())
+        every { iverksettingRepository.findByIdOrThrow(any()) } returns lagIverksett(opprettIverksettDto(behandlingId, sakId).toDomain())
     }
 
     @Test
@@ -60,7 +61,7 @@ internal class IverksettMotOppdragTaskTest {
         every { iverksettResultatService.oppdaterTilkjentYtelseForUtbetaling(behandlingId, any()) } just runs
         every { iverksettResultatService.hentTilkjentYtelse(any<UUID>()) } returns null
         every { iverksettingRepository.findByIdOrThrow(any()) }
-            .returns(lagIverksett(opprettIverksettDto(behandlingId, andelsbeløp = 0).toDomain()))
+            .returns(lagIverksett(opprettIverksettDto(behandlingId, sakId, andelsbeløp = 0).toDomain()))
         iverksettMotOppdragTask.doTask(Task(IverksettMotOppdragTask.TYPE, behandlingId.toString(), Properties()))
         verify(exactly = 1) { iverksettResultatService.oppdaterTilkjentYtelseForUtbetaling(behandlingId, any()) }
         verify(exactly = 0) { oppdragClient.iverksettOppdrag(any()) }

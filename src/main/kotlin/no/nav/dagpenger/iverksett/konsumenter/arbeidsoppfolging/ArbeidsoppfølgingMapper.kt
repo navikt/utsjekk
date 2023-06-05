@@ -30,7 +30,7 @@ object ArbeidsoppfølgingMapper {
                 it.periode.fom,
                 it.periode.tom,
                 Periodetype.valueOf(it.periodeType.name),
-                Aktivitetstype.valueOf(it.aktivitet.name),
+                Aktivitetstype.BARNET_ER_SYKT, // TODO Denne må bort
             )
         }
     }

@@ -25,6 +25,7 @@ import java.util.UUID
 class IverksettingControllerTest : ServerTest() {
 
     private val behandlingId = UUID.randomUUID()
+    private val sakId = UUID.randomUUID()
 
     @Autowired
     lateinit var taskService: TaskService
@@ -37,7 +38,7 @@ class IverksettingControllerTest : ServerTest() {
 
     @Test
     internal fun `starte iverksetting gir 202 Accepted`() {
-        val iverksettJson = opprettIverksettDto(behandlingId = behandlingId)
+        val iverksettJson = opprettIverksettDto(behandlingId = behandlingId, sakId = sakId)
         val request = MultipartBuilder()
             .withJson("data", iverksettJson)
             .withByteArray("fil", "1", byteArrayOf(12))
@@ -56,7 +57,7 @@ class IverksettingControllerTest : ServerTest() {
 
     @Test
     internal fun `starte iverksetting for avslag ytelse gir 202 Accepted`() {
-        val iverksettJson = opprettIverksettDto(behandlingId = behandlingId)
+        val iverksettJson = opprettIverksettDto(behandlingId = behandlingId, sakId = sakId)
         // Copy skal legges inn som egen metode i egen PR
         val iverksettJsonMedAvslag =
             iverksettJson.copy(vedtak = iverksettJson.vedtak.copy(utbetalinger = emptyList(), resultat = Vedtaksresultat.AVSLÅTT))
@@ -78,7 +79,7 @@ class IverksettingControllerTest : ServerTest() {
 
     @Test
     internal fun `Innvilget utbetalingsvedtak uten tilkjent ytelse gir 400-feil`() {
-        val iverksettJson = opprettIverksettDto(behandlingId = behandlingId)
+        val iverksettJson = opprettIverksettDto(behandlingId = behandlingId, sakId = sakId)
         val iverksettJsonUtenTilkjentYtelse = iverksettJson.copy(
             vedtak = iverksettJson.vedtak.copy(
                 vedtakstype = VedtakType.UTBETALINGSVEDTAK,
@@ -100,7 +101,7 @@ class IverksettingControllerTest : ServerTest() {
 
     @Test
     internal fun `Innvilget rammevedtak uten tilkjent ytelse gir 202 Accepted`() {
-        val iverksettJson = opprettIverksettDto(behandlingId = behandlingId)
+        val iverksettJson = opprettIverksettDto(behandlingId = behandlingId, sakId = sakId)
         val iverksettJsonUtenTilkjentYtelse = iverksettJson.copy(
             vedtak = iverksettJson.vedtak.copy(
                 vedtakstype = VedtakType.RAMMEVEDTAK,
@@ -122,7 +123,7 @@ class IverksettingControllerTest : ServerTest() {
 
     @Test
     internal fun `mangler brev, forvent 400`() {
-        val iverksettJson = opprettIverksettDto(behandlingId = behandlingId)
+        val iverksettJson = opprettIverksettDto(behandlingId = behandlingId, sakId = sakId)
         val request = MultipartBuilder()
             .withJson("data", iverksettJson)
             .build()

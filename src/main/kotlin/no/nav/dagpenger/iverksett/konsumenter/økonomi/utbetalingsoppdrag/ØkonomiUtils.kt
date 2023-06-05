@@ -9,7 +9,6 @@ import no.nav.dagpenger.kontrakter.felles.Datoperiode
 import no.nav.dagpenger.kontrakter.felles.StønadType
 import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsperiode
 import java.time.LocalDate
-import java.util.UUID
 
 data class PeriodeId(
     val gjeldende: Long?,
@@ -18,17 +17,13 @@ data class PeriodeId(
 
 fun AndelTilkjentYtelse.tilPeriodeId(): PeriodeId = PeriodeId(this.periodeId, this.forrigePeriodeId)
 
-fun nullAndelTilkjentYtelse(kildeBehandlingId: UUID, periodeId: PeriodeId?): AndelTilkjentYtelse =
+fun nullAndelTilkjentYtelse(periodeId: PeriodeId?): AndelTilkjentYtelse =
     AndelTilkjentYtelse(
         beløp = 0,
         periode = Datoperiode(LocalDate.MIN, LocalDate.MIN),
         stønadstype = StønadType.DAGPENGER_ARBEIDSSOKER_ORDINAER,
         ferietillegg = null,
-        inntekt = 0,
-        samordningsfradrag = 0,
-        inntektsreduksjon = 0,
         periodeId = periodeId?.gjeldende,
-        kildeBehandlingId = kildeBehandlingId,
         forrigePeriodeId = periodeId?.forrige,
     )
 

@@ -14,7 +14,7 @@ import no.nav.dagpenger.iverksett.konsumenter.brev.domain.JournalpostResultatMap
 import no.nav.dagpenger.iverksett.konsumenter.brev.frittstående.DistribuerFrittståendeBrevTask
 import no.nav.dagpenger.iverksett.konsumenter.brev.frittstående.FrittståendeBrevRepository
 import no.nav.dagpenger.iverksett.konsumenter.brev.frittstående.FrittståendeBrevUtil.opprettFrittståendeBrev
-import no.nav.dagpenger.iverksett.konsumenter.vedtakstatistikk.toJson
+import no.nav.dagpenger.kontrakter.felles.objectMapper
 import no.nav.dagpenger.kontrakter.iverksett.journalføring.dokdist.Distribusjonstype
 import no.nav.familie.http.client.RessursException
 import no.nav.familie.kontrakter.felles.Ressurs
@@ -224,7 +224,7 @@ internal class DistribuerFrittståendeBrevTaskTest {
             HttpStatus.CONFLICT,
             "",
             HttpHeaders(),
-            DistribuerJournalpostResponseTo(bestillingsId).toJson().toByteArray(),
+            objectMapper.writeValueAsBytes(DistribuerJournalpostResponseTo(bestillingsId)),
             null,
         )
 

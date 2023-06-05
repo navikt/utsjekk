@@ -61,12 +61,10 @@ data class TestOppdrag(
                 fraOgMed = startPeriode,
                 tilOgMed = sluttPeriode,
                 periodeId = linjeId,
-                kildeBehandlingId = if (TestOppdragType.Output == type) oppdragId else null,
                 forrigePeriodeId = forrigeLinjeId,
             )
         } else if (TestOppdragType.Output == type && beløp == null && startPeriode == null && sluttPeriode == null) {
             nullAndelTilkjentYtelse(
-                kildeBehandlingId = oppdragId ?: error("Må ha satt OppdragId på Output"),
                 periodeId = PeriodeId(linjeId, forrigeLinjeId),
             )
         } else {

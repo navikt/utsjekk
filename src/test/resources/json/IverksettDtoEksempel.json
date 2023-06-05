@@ -1,108 +1,28 @@
 {
   "sakId": "234bed7c-b1d3-11eb-9999-0242ac130003",
-  "sak": {
-    "sakId": "234bed7c-b1d3-11eb-9999-0242ac130003",
-    "stønadstype": "DAGPENGER_ARBEIDSSOKER_ORDINAER"
-  },
-  "fagsak": {
-    "fagsakId": "234bed7c-b1d3-11eb-9999-0242ac130003",
-    "eksternId": 12,
-    "stønadstype": "DAGPENGER_ARBEIDSSOKER_ORDINAER"
-  },
   "behandlingId": "234bed7c-b1d3-11eb-8529-0242ac130003",
-  "behandling": {
-    "behandlingId": "234bed7c-b1d3-11eb-8529-0242ac130003",
-    "forrigeBehandlingId": "999abcde-fabc-11eb-8529-0242ac130003",
-    "eksternId": 14,
-    "behandlingType": "FØRSTEGANGSBEHANDLING",
-    "behandlingÅrsak": "NYE_OPPLYSNINGER",
-    "vilkårsvurderinger": [
-      {
-        "vilkårType": "AKTIVITET",
-        "resultat": "IKKE_AKTUELL",
-        "delvilkårsvurderinger": [
-          {
-            "resultat": "IKKE_AKTUELL",
-            "vurderinger": [
-              {
-                "regelId": "BOR_OG_OPPHOLDER_SEG_I_NORGE",
-                "svar": "ANDRE_FORELDER_MEDLEM_MINST_5_ÅR_AVBRUDD_MINDRE_ENN_10_ÅR",
-                "begrunnelse": "string"
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "vilkårType": "SAGT_OPP_ELLER_REDUSERT",
-        "resultat": "OPPFYLT",
-        "delvilkårsvurderinger": [
-          {
-            "resultat": "OPPFYLT",
-            "vurderinger": [
-              {
-                "regelId": "SAGT_OPP_ELLER_REDUSERT",
-                "svar": "JA",
-                "begrunnelse": "string"
-              }
-            ]
-          }
-        ]
-      }
-    ],
-    "aktivitetspliktInntrefferDato": null,
-    "kravMottatt": null,
-    "årsakRevurdering": {
-      "opplysningskilde": "MELDING_MODIA",
-      "årsak": "ENDRING_INNTEKT"
-    }
-  },
   "personIdent": "12345678901",
-  "søker": {
-    "personIdent": "12345678901",
-    "barn": [
-      {
-        "personIdent": "1234567910",
-        "termindato": null
-      }
-    ],
-    "tilhørendeEnhet": "4489",
-    "adressebeskyttelse": "STRENGT_FORTROLIG"
-  },
   "vedtak": {
     "vedtakstype": "RAMMEVEDTAK",
     "vedtakstidspunkt": "2021-05-10T01:00:00",
     "resultat": "AVSLÅTT",
     "saksbehandlerId": "A123456",
     "beslutterId": "B123456",
-    "opphørÅrsak": "PERIODE_UTLØPT",
-    "avslagÅrsak": null,
+    "opphorAarsak": "PERIODE_UTLØPT",
+    "avslagAarsak": null,
     "utbetalinger": [
       {
         "beløp": 0,
         "fraOgMedDato": "2021-05-01",
         "tilOgMedDato": "2021-05-31",
         "stønadstype":"DAGPENGER_ARBEIDSSOKER_ORDINAER",
-        "ferietillegg": "VANLIG",
-        "periode": {
-          "fom": "2021-05-01",
-          "tom": "2021-05-31"
-        },
-        "inntekt": 0,
-        "inntektsreduksjon": 0,
-        "samordningsfradrag": 0,
-        "kildeBehandlingId": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+        "ferietillegg": "ORDINAER"
       }
     ],
     "vedtaksperioder": [
       {
-        "fraOgMedDato": null,
+        "fraOgMedDato": "2021-06-01",
         "tilOgMedDato": null,
-        "periode": {
-          "fom": "2021-06-01",
-          "tom": "2021-06-30"
-        },
-        "aktivitet": "BARNET_ER_SYKT",
         "periodeType": "HOVEDPERIODE"
       }
     ],
@@ -116,5 +36,5 @@
     },
     "brevmottakere": []
   },
-  "forrigeVedtak": null
+  "utbetalingerPaaForrigeVedtak": []
 }

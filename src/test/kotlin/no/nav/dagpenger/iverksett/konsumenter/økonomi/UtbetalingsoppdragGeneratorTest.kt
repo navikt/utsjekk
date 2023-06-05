@@ -75,19 +75,16 @@ internal class UtbetalingsoppdragGeneratorTest {
             andelTilkjentYtelse = utbetalingsoppdragB.andelerTilkjentYtelse[0],
             expectedPeriodeId = 1,
             expectedForrigePeriodeId = null,
-            expectedKildeBehandlingId = behandlingA,
         )
         assertAndel(
             andelTilkjentYtelse = utbetalingsoppdragB.andelerTilkjentYtelse[1],
             expectedPeriodeId = 3,
             expectedForrigePeriodeId = 2,
-            expectedKildeBehandlingId = behandlingB,
         )
         assertAndel(
             andelTilkjentYtelse = utbetalingsoppdragB.andelerTilkjentYtelse[2],
             expectedPeriodeId = 4,
             expectedForrigePeriodeId = 3,
-            expectedKildeBehandlingId = behandlingB,
         )
     }
 
@@ -99,13 +96,11 @@ internal class UtbetalingsoppdragGeneratorTest {
             andelTilkjentYtelse = førsteTilkjentYtelse.andelerTilkjentYtelse[0],
             expectedPeriodeId = 1,
             expectedForrigePeriodeId = null,
-            expectedKildeBehandlingId = behandlingA,
         )
         assertAndel(
             andelTilkjentYtelse = førsteTilkjentYtelse.andelerTilkjentYtelse[1],
             expectedPeriodeId = 2,
             expectedForrigePeriodeId = 1,
-            expectedKildeBehandlingId = behandlingA,
         )
     }
 
@@ -113,11 +108,9 @@ internal class UtbetalingsoppdragGeneratorTest {
         andelTilkjentYtelse: AndelTilkjentYtelse,
         expectedPeriodeId: Long?,
         expectedForrigePeriodeId: Long?,
-        expectedKildeBehandlingId: UUID?,
     ) {
         assertThat(andelTilkjentYtelse.periodeId).isEqualTo(expectedPeriodeId)
         assertThat(andelTilkjentYtelse.forrigePeriodeId).isEqualTo(expectedForrigePeriodeId)
-        assertThat(andelTilkjentYtelse.kildeBehandlingId).isEqualTo(expectedKildeBehandlingId)
     }
 
     private fun opprettAndel(beløp: Int, stønadFom: LocalDate, stønadTom: LocalDate) =
@@ -127,7 +120,6 @@ internal class UtbetalingsoppdragGeneratorTest {
             tilOgMed = stønadTom,
             periodeId = 100, // overskreves
             forrigePeriodeId = 100, // overskreves
-            kildeBehandlingId = UUID.randomUUID(),
         ) // overskreves
 
     private fun opprettTilkjentYtelseMedMetadata(

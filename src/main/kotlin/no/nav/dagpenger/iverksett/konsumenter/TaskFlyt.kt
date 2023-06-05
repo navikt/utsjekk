@@ -7,7 +7,6 @@ import no.nav.dagpenger.iverksett.konsumenter.brev.JournalførVedtaksbrevTask
 import no.nav.dagpenger.iverksett.konsumenter.oppgave.OpprettOppfølgingsOppgaveForDagpengerTask
 import no.nav.dagpenger.iverksett.konsumenter.tilbakekreving.OpprettTilbakekrevingTask
 import no.nav.dagpenger.iverksett.konsumenter.vedtak.PubliserVedtakTilKafkaTask
-import no.nav.dagpenger.iverksett.konsumenter.vedtakstatistikk.VedtakstatistikkTask
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.IverksettMotOppdragTask
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.VentePåStatusFraØkonomiTask
 import no.nav.familie.prosessering.domene.Task
@@ -32,7 +31,6 @@ fun publiseringsflyt() = listOf(
     TaskType(PubliserVedtakTilKafkaTask.TYPE),
     TaskType(SendVedtakTilArbeidsoppfølgingTask.TYPE),
     TaskType(OpprettOppfølgingsOppgaveForDagpengerTask.TYPE),
-    TaskType(VedtakstatistikkTask.TYPE),
 )
 
 fun TaskType.nesteHovedflytTask() = hovedflyt().zipWithNext().first { this.type == it.first.type }.second

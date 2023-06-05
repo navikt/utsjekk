@@ -9,9 +9,6 @@ import no.nav.dagpenger.iverksett.infrastruktur.configuration.FeatureToggleConfi
 import no.nav.dagpenger.iverksett.infrastruktur.featuretoggle.FeatureToggleService
 import no.nav.dagpenger.iverksett.konsumenter.brev.JournalførVedtaksbrevTask
 import no.nav.dagpenger.iverksett.konsumenter.hovedflyt
-import no.nav.dagpenger.iverksett.konsumenter.oppgave.OpprettOppfølgingsOppgaveForDagpengerTask
-import no.nav.dagpenger.iverksett.konsumenter.publiseringsflyt
-import no.nav.dagpenger.iverksett.konsumenter.vedtakstatistikk.VedtakstatistikkTask
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.OppdragClient
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.grensesnitt.GrensesnittavstemmingDto
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.grensesnitt.GrensesnittavstemmingTask
@@ -72,12 +69,6 @@ class IverksettingService(
         )
     }
 
-    private fun førstePubliseringsflytTask(iverksett: IverksettDagpenger) = when {
-        iverksett.erGOmregning() || iverksett.erSatsendring() -> VedtakstatistikkTask.TYPE
-        erIverksettingUtenVedtaksperioder(iverksett) -> OpprettOppfølgingsOppgaveForDagpengerTask.TYPE
-        else -> publiseringsflyt().first().type
-    }
-
     private fun førsteHovedflytTask(iverksett: IverksettDagpenger) = when {
         erIverksettingUtenVedtaksperioder(iverksett) -> JournalførVedtaksbrevTask.TYPE
         else -> hovedflyt().first().type
@@ -93,7 +84,7 @@ class IverksettingService(
                 return IverksettStatus.OK
             }
             if (it.journalpostResultat.isNotEmpty()) {
-                return IverksettStatus.JOURNALFØRT
+                return IverksettStatus.JOURNALFORT
             }
             it.oppdragResultat?.let { oppdragResultat ->
                 return when (oppdragResultat.oppdragStatus) {
@@ -108,7 +99,7 @@ class IverksettingService(
                 }
                 return IverksettStatus.SENDT_TIL_OPPDRAG
             }
-            return IverksettStatus.IKKE_PÅBEGYNT
+            return IverksettStatus.IKKE_PAABEGYNT
         }
     }
 
@@ -155,6 +146,6 @@ class IverksettingService(
     }
 }
 
-fun Task.erAktiv() = this.status != Status.AVVIKSHÅNDTERT
-        && this.status != Status.MANUELL_OPPFØLGING
-        && this.status != Status.FERDIG
+fun Task.erAktiv() = this.status != Status.AVVIKSHÅNDTERT &&
+    this.status != Status.MANUELL_OPPFØLGING &&
+    this.status != Status.FERDIG

@@ -3,11 +3,9 @@ package no.nav.dagpenger.iverksett.konsumenter.oppgave
 import no.nav.dagpenger.iverksett.api.IverksettingRepository
 import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
 import no.nav.dagpenger.iverksett.infrastruktur.repository.findByIdOrThrow
-import no.nav.dagpenger.iverksett.konsumenter.opprettNestePubliseringTask
 import no.nav.familie.prosessering.AsyncTaskStep
 import no.nav.familie.prosessering.TaskStepBeskrivelse
 import no.nav.familie.prosessering.domene.Task
-import no.nav.familie.prosessering.internal.TaskService
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import java.util.UUID
@@ -20,7 +18,6 @@ import java.util.UUID
 class OpprettOppfølgingsOppgaveForDagpengerTask(
     private val oppgaveService: OppgaveService,
     private val iverksettingRepository: IverksettingRepository,
-    private val taskService: TaskService,
 ) : AsyncTaskStep {
 
     private val logger = LoggerFactory.getLogger(javaClass)
@@ -40,10 +37,6 @@ class OpprettOppfølgingsOppgaveForDagpengerTask(
             val oppgaveId = oppgaveService.opprettVurderHenvendelseOppgave(iverksett.data)
             logger.info("Opprettet oppgave for behandling=$behandlingId oppgaveID=$oppgaveId")
         }
-    }
-
-    override fun onCompletion(task: Task) {
-        taskService.save(task.opprettNestePubliseringTask())
     }
 
     companion object {
