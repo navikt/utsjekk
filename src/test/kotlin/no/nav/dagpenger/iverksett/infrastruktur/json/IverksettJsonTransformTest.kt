@@ -6,7 +6,7 @@ import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
 import no.nav.dagpenger.iverksett.infrastruktur.transformer.toDomain
 import no.nav.dagpenger.iverksett.infrastruktur.util.ObjectMapperProvider.objectMapper
 import no.nav.dagpenger.iverksett.util.opprettIverksettDagpenger
-import no.nav.dagpenger.kontrakter.iverksett.IverksettDagpengerdDto
+import no.nav.dagpenger.kontrakter.iverksett.IverksettDto
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.util.UUID
@@ -20,10 +20,10 @@ class IverksettJsonTransformTest {
     @Test
     fun `deserialiser dagpenger JSON til IverksettDtoJson, kall toDomain, forvent likhet`() {
         val json: String = ResourceLoaderTestUtil.readResource("json/IverksettDtoEksempel.json")
-        val iverksettDto = objectMapper.readValue<IverksettDagpengerdDto>(json)
+        val iverksettDto = objectMapper.readValue<IverksettDto>(json)
         val iverksett = iverksettDto.toDomain()
 
-        assertThat(iverksettDto).isInstanceOf(IverksettDagpengerdDto::class.java)
+        assertThat(iverksettDto).isInstanceOf(IverksettDto::class.java)
         assertThat(iverksett).isInstanceOf(IverksettDagpenger::class.java)
 
         assertThat(iverksett).isNotNull

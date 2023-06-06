@@ -20,7 +20,7 @@ import no.nav.dagpenger.iverksett.util.opprettBrev
 import no.nav.dagpenger.kontrakter.felles.BrevmottakerDto.IdentType.PERSONIDENT
 import no.nav.dagpenger.kontrakter.felles.BrevmottakerDto.MottakerRolle.BRUKER
 import no.nav.dagpenger.kontrakter.felles.BrevmottakerDto.MottakerRolle.VERGE
-import no.nav.dagpenger.kontrakter.iverksett.IverksettDagpengerdDto
+import no.nav.dagpenger.kontrakter.iverksett.IverksettDto
 import no.nav.familie.prosessering.domene.Task
 import no.nav.familie.prosessering.internal.TaskService
 import org.assertj.core.api.Assertions.assertThat
@@ -210,6 +210,6 @@ class JournalførVedtaksbrevTaskIntegrasjonsTest : ServerTest() {
 
     companion object {
         val json: String = ResourceLoaderTestUtil.readResource("json/IverksettDtoEksempel.json")
-        val iverksett: IverksettDagpenger = objectMapper.readValue<IverksettDagpengerdDto>(json).toDomain()
+        val iverksett: IverksettDagpenger = objectMapper.readValue<IverksettDto>(json).toDomain()
     }
 }

@@ -14,7 +14,7 @@ import no.nav.dagpenger.kontrakter.felles.BrevmottakerDto
 import no.nav.dagpenger.kontrakter.felles.Datoperiode
 import no.nav.dagpenger.kontrakter.iverksett.BehandlingType
 import no.nav.dagpenger.kontrakter.iverksett.BehandlingÅrsak
-import no.nav.dagpenger.kontrakter.iverksett.IverksettDagpengerdDto
+import no.nav.dagpenger.kontrakter.iverksett.IverksettDto
 import no.nav.dagpenger.kontrakter.iverksett.TilbakekrevingDto
 import no.nav.dagpenger.kontrakter.iverksett.TilbakekrevingMedVarselDto
 import no.nav.dagpenger.kontrakter.iverksett.VedtaksdetaljerDto
@@ -70,26 +70,21 @@ fun BrevmottakerDto.toDomain(): Brevmottaker = Brevmottaker(
     mottakerRolle = this.mottakerRolle,
 )
 
-fun IverksettDagpengerdDto.toDomain(): IverksettDagpenger {
+fun IverksettDto.toDomain(): IverksettDagpenger {
     return IverksettDagpenger(
-        fagsak = this.sakId.tilSak()
-            ?: throw IllegalStateException("sakId, sak eller fagsak må ha verdi"),
-        søker = this.personIdent.tilSøker()
-            ?: throw IllegalStateException("personIdent eller søker må ha verdi"),
-        behandling = this.behandlingId?.tilBehandling()
-            ?: throw IllegalStateException("behandlingId eller behandling må ha verdi"),
+        fagsak = this.sakId.tilSak(),
+        søker = this.personIdent.tilSøker(),
+        behandling = this.behandlingId.tilBehandling(),
         vedtak = this.vedtak.toDomain(),
         forrigeVedtak = this.utbetalingerPaaForrigeVedtak.tilVedtaksdetaljer(),
     )
 }
 
-fun UUID?.tilSak(): Fagsakdetaljer? = this?.let { Fagsakdetaljer(it) }
-fun String?.tilSøker(): Søker? = this?.let { Søker(personIdent = it, tilhørendeEnhet = "") }
+fun UUID.tilSak(): Fagsakdetaljer = Fagsakdetaljer(this)
+fun String.tilSøker(): Søker = Søker(personIdent = this, tilhørendeEnhet = "")
 
-fun UUID?.tilBehandling(): Behandlingsdetaljer? = this?.let {
-    Behandlingsdetaljer(
-        behandlingId = it,
-        behandlingType = BehandlingType.FØRSTEGANGSBEHANDLING,
-        behandlingÅrsak = BehandlingÅrsak.SØKNAD,
-    )
-}
+fun UUID.tilBehandling(): Behandlingsdetaljer = Behandlingsdetaljer(
+    behandlingId = this,
+    behandlingType = BehandlingType.FØRSTEGANGSBEHANDLING,
+    behandlingÅrsak = BehandlingÅrsak.SØKNAD,
+)

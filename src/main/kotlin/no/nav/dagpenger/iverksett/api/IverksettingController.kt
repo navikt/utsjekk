@@ -9,7 +9,7 @@ import no.nav.dagpenger.iverksett.infrastruktur.configuration.FeatureToggleConfi
 import no.nav.dagpenger.iverksett.infrastruktur.featuretoggle.FeatureToggleService
 import no.nav.dagpenger.iverksett.infrastruktur.transformer.toDomain
 import no.nav.dagpenger.iverksett.konsumenter.tilbakekreving.validerTilbakekreving
-import no.nav.dagpenger.kontrakter.iverksett.IverksettDagpengerdDto
+import no.nav.dagpenger.kontrakter.iverksett.IverksettDto
 import no.nav.dagpenger.kontrakter.iverksett.IverksettStatus
 import no.nav.dagpenger.kontrakter.iverksett.VedtakType
 import no.nav.dagpenger.kontrakter.iverksett.Vedtaksresultat
@@ -42,7 +42,7 @@ class IverksettingController(
     @ApiResponse(responseCode = "202", description = "iverksetting er mottatt")
     @ApiResponse(responseCode = "400", description = "ugyldig iverksetting")
     fun iverksettUtenBrev(
-        @RequestBody iverksettDto: IverksettDagpengerdDto,
+        @RequestBody iverksettDto: IverksettDto,
     ): ResponseEntity<Void> {
         val iverksett = iverksettDto.toDomain()
         valider(iverksett)
@@ -56,7 +56,7 @@ class IverksettingController(
     @ApiResponse(responseCode = "202", description = "iverksetting er mottatt")
     @ApiResponse(responseCode = "400", description = "ugyldig iverksetting")
     fun iverksett(
-        @RequestPart("data") iverksettDto: IverksettDagpengerdDto,
+        @RequestPart("data") iverksettDto: IverksettDto,
         @RequestPart("fil", required = false) fil: MultipartFile?,
     ): ResponseEntity<Void> {
         val brev = fil?.let { opprettBrev(it) }

@@ -9,7 +9,7 @@ import no.nav.dagpenger.iverksett.infrastruktur.transformer.toDomain
 import no.nav.dagpenger.iverksett.infrastruktur.util.ObjectMapperProvider.objectMapper
 import no.nav.dagpenger.iverksett.lagIverksett
 import no.nav.dagpenger.iverksett.util.opprettBrev
-import no.nav.dagpenger.kontrakter.iverksett.IverksettDagpengerdDto
+import no.nav.dagpenger.kontrakter.iverksett.IverksettDto
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -25,7 +25,7 @@ class IverksettingRepositoryTest : ServerTest() {
     @Test
     fun `lagre og hent iverksett dagpenger, forvent likhet`() {
         val json: String = ResourceLoaderTestUtil.readResource("json/IverksettDtoEksempel.json")
-        val iverksettData: IverksettDagpenger = objectMapper.readValue<IverksettDagpengerdDto>(json).toDomain()
+        val iverksettData: IverksettDagpenger = objectMapper.readValue<IverksettDto>(json).toDomain()
         val iverksett = iverksettingRepository.insert(lagIverksett(iverksettData, opprettBrev()))
 
         val iverksettResultat = iverksettingRepository.findByIdOrThrow(iverksett.behandlingId)
@@ -35,7 +35,7 @@ class IverksettingRepositoryTest : ServerTest() {
     @Test
     fun `lagre og hent iverksett på personId, forvent likhet`() {
         val json: String = ResourceLoaderTestUtil.readResource("json/IverksettDtoEksempel.json")
-        val iverksettData: IverksettDagpenger = objectMapper.readValue<IverksettDagpengerdDto>(json).toDomain()
+        val iverksettData: IverksettDagpenger = objectMapper.readValue<IverksettDto>(json).toDomain()
         val iverksett = iverksettingRepository.insert(lagIverksett(iverksettData))
 
         val iverksettResultat = iverksettingRepository.findByPersonId(iverksettData.søker.personIdent).first()
@@ -46,7 +46,7 @@ class IverksettingRepositoryTest : ServerTest() {
     @Test
     fun `lagre to iverksettinger på samme person, forvent å få begge`() {
         val json: String = ResourceLoaderTestUtil.readResource("json/IverksettDtoEksempel.json")
-        val iverksettData: IverksettDagpenger = objectMapper.readValue<IverksettDagpengerdDto>(json).toDomain()
+        val iverksettData: IverksettDagpenger = objectMapper.readValue<IverksettDto>(json).toDomain()
         val iverksettData2 = iverksettData.copy(
             behandling = iverksettData.behandling.copy(
                 behandlingId = UUID.randomUUID(),

@@ -34,7 +34,7 @@ import no.nav.dagpenger.kontrakter.felles.StønadType
 import no.nav.dagpenger.kontrakter.felles.Tilbakekrevingsvalg
 import no.nav.dagpenger.kontrakter.iverksett.BehandlingType
 import no.nav.dagpenger.kontrakter.iverksett.BehandlingÅrsak
-import no.nav.dagpenger.kontrakter.iverksett.IverksettDagpengerdDto
+import no.nav.dagpenger.kontrakter.iverksett.IverksettDto
 import no.nav.dagpenger.kontrakter.iverksett.OpphørÅrsak
 import no.nav.dagpenger.kontrakter.iverksett.Opplysningskilde
 import no.nav.dagpenger.kontrakter.iverksett.RegelId
@@ -61,7 +61,7 @@ fun opprettIverksettDto(
     behandlingÅrsak: BehandlingÅrsak = BehandlingÅrsak.SØKNAD,
     andelsbeløp: Int = 5000,
     stønadType: StønadType = StønadType.DAGPENGER_ARBEIDSSOKER_ORDINAER,
-): IverksettDagpengerdDto {
+): IverksettDto {
     val andelTilkjentYtelse = lagAndelTilkjentYtelseDto(
         beløp = andelsbeløp,
         fraOgMed = LocalDate.of(2021, 1, 1),
@@ -72,7 +72,7 @@ fun opprettIverksettDto(
         startdato = andelTilkjentYtelse.fraOgMedDato,
     )
 
-    return IverksettDagpengerdDto(
+    return IverksettDto(
         behandlingId = behandlingId,
         sakId = sakId,
         personIdent = "12345678910",
