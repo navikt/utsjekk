@@ -7,6 +7,7 @@ import no.nav.dagpenger.iverksett.util.opprettBrev
 import no.nav.dagpenger.iverksett.util.opprettIverksettDagpenger
 import no.nav.familie.prosessering.internal.TaskService
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatIllegalStateException
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -63,7 +64,7 @@ class IverksettMotOppdragIntegrasjonsTest : ServerTest() {
                     tilOgMed = LocalDate.now().plusMonths(1),
                 ),
             ),
-            forrigeVedtak = iverksett.vedtak,
+            forrigeIverksetting = iverksett,
         )
 
         taskService.deleteAll(taskService.findAll())
@@ -91,7 +92,7 @@ class IverksettMotOppdragIntegrasjonsTest : ServerTest() {
                     tilOgMed = LocalDate.now().plusMonths(1),
                 ),
             ),
-            forrigeVedtak = iverksett.vedtak,
+            forrigeIverksetting = iverksett,
         )
 
         taskService.deleteAll(taskService.findAll())
@@ -115,7 +116,7 @@ class IverksettMotOppdragIntegrasjonsTest : ServerTest() {
                 behandlingid,
                 emptyList(),
                 startdato = startdato,
-                forrigeVedtak = iverksett.vedtak,
+                forrigeIverksetting = iverksett,
             )
 
         taskService.deleteAll(taskService.findAll())
@@ -128,6 +129,43 @@ class IverksettMotOppdragIntegrasjonsTest : ServerTest() {
         assertThat(tilkjentYtelse.andelerTilkjentYtelse.first().beløp).isEqualTo(0)
         assertThat(tilkjentYtelse.andelerTilkjentYtelse.first().periode.fom).isEqualTo(LocalDate.MIN)
         assertThat(tilkjentYtelse.andelerTilkjentYtelse.first().periode.tom).isEqualTo(LocalDate.MIN)
+    }
+
+    @Test
+    internal fun `iverksetting med feil forrige iverksetting skal gi exception`() {
+        val opphørBehandlingId = UUID.randomUUID()
+        val startdato = førsteAndel.periode.fom
+
+        val feilFørsteAndel = førsteAndel.copy(beløp = førsteAndel.beløp + 1)
+        val feilForrigeIverksetting =
+            opprettIverksettDagpenger(
+                behandlingid,
+                andeler = listOf(feilFørsteAndel),
+                startdato = feilFørsteAndel.periode.fom,
+            )
+
+        val iverksettMedFeilForrige =
+            opprettIverksettDagpenger(
+                opphørBehandlingId,
+                behandlingid,
+                listOf(
+                    førsteAndel,
+                    lagAndelTilkjentYtelse(
+                        beløp = 1000,
+                        fraOgMed = LocalDate.now(),
+                        tilOgMed = LocalDate.now().plusMonths(1),
+                    ),
+                ),
+                startdato = startdato,
+                forrigeIverksetting = feilForrigeIverksetting,
+            )
+
+        taskService.deleteAll(taskService.findAll())
+        iverksettingService.startIverksetting(iverksettMedFeilForrige, opprettBrev())
+
+        assertThatIllegalStateException().isThrownBy {
+            iverksettMotOppdrag()
+        }.withMessage("Lagret forrige tilkjent ytelse stemmer ikke med mottatt forrige tilkjent ytelse")
     }
 
     private fun iverksettMotOppdrag() {

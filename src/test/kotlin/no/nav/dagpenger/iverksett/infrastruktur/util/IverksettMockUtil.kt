@@ -228,7 +228,7 @@ fun opprettIverksettDagpenger(
     andeler: List<AndelTilkjentYtelse> = listOf(opprettAndelTilkjentYtelse()),
     tilbakekreving: Tilbakekrevingsdetaljer? = null,
     startdato: LocalDate = startdato(andeler),
-    forrigeVedtak: VedtaksdetaljerDagpenger? = null,
+    forrigeIverksetting: IverksettDagpenger? = null,
     fagsakId: UUID = UUID.randomUUID(),
 ): IverksettDagpenger {
     val behandlingType = forrigeBehandlingId?.let { BehandlingType.REVURDERING } ?: BehandlingType.FØRSTEGANGSBEHANDLING
@@ -246,7 +246,7 @@ fun opprettIverksettDagpenger(
             tilbakekreving = tilbakekreving,
             startdato = startdato,
         ),
-        forrigeVedtak = forrigeVedtak,
+        forrigeIverksetting = forrigeIverksetting,
     )
 }
 

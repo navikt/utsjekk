@@ -3,6 +3,7 @@ package no.nav.dagpenger.iverksett.infrastruktur.transformer
 import no.nav.dagpenger.iverksett.api.domene.TilkjentYtelse
 import no.nav.dagpenger.iverksett.api.domene.TilkjentYtelseMedMetaData
 import no.nav.dagpenger.iverksett.api.domene.VedtaksdetaljerDagpenger
+import no.nav.dagpenger.kontrakter.iverksett.ForrigeIverksettingDto
 import no.nav.dagpenger.kontrakter.iverksett.TilkjentYtelseDto
 import no.nav.dagpenger.kontrakter.iverksett.UtbetalingDto
 import no.nav.dagpenger.kontrakter.iverksett.UtbetalingerMedMetadataDto
@@ -40,7 +41,7 @@ fun Iterable<UtbetalingDto>.tilTilkjentYtelse(): TilkjentYtelse? {
     }
 }
 
-fun Iterable<UtbetalingDto>.tilVedtaksdetaljer(): VedtaksdetaljerDagpenger {
+fun ForrigeIverksettingDto.tilVedtaksdetaljer(): VedtaksdetaljerDagpenger {
     return VedtaksdetaljerDagpenger(
         vedtakstype = VedtakType.UTBETALINGSVEDTAK,
         vedtaksresultat = Vedtaksresultat.INNVILGET,
@@ -48,7 +49,7 @@ fun Iterable<UtbetalingDto>.tilVedtaksdetaljer(): VedtaksdetaljerDagpenger {
         opphørÅrsak = null,
         saksbehandlerId = "A123456",
         beslutterId = "B123456",
-        tilkjentYtelse = this.tilTilkjentYtelse(),
+        tilkjentYtelse = this.utbetalinger.tilTilkjentYtelse(),
     )
 }
 

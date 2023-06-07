@@ -37,7 +37,7 @@ class IverksettMotOppdragTask(
                 ?: error("Kunne ikke finne tilkjent ytelse for behandlingId=$it")
         }
 
-        val forrigeTilkjentYtelseMottatt = iverksett.forrigeVedtak?.tilkjentYtelse
+        val forrigeTilkjentYtelseMottatt = iverksett.forrigeIverksetting?.vedtak?.tilkjentYtelse
 
         if (!forrigeTilkjentYtelseLagret.stemmerMed(forrigeTilkjentYtelseMottatt)) {
             error("Lagret forrige tilkjent ytelse stemmer ikke med mottatt forrige tilkjent ytelse")
