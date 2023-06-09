@@ -14,6 +14,7 @@ import no.nav.dagpenger.kontrakter.felles.BrevmottakerDto
 import no.nav.dagpenger.kontrakter.felles.Datoperiode
 import no.nav.dagpenger.kontrakter.iverksett.BehandlingType
 import no.nav.dagpenger.kontrakter.iverksett.BehandlingÅrsak
+import no.nav.dagpenger.kontrakter.iverksett.ForrigeIverksettingDto
 import no.nav.dagpenger.kontrakter.iverksett.IverksettDto
 import no.nav.dagpenger.kontrakter.iverksett.TilbakekrevingDto
 import no.nav.dagpenger.kontrakter.iverksett.TilbakekrevingMedVarselDto
@@ -74,17 +75,37 @@ fun IverksettDto.toDomain(): IverksettDagpenger {
     return IverksettDagpenger(
         fagsak = this.sakId.tilSak(),
         søker = this.personIdent.tilSøker(),
-        behandling = this.behandlingId.tilBehandling(),
+        behandling = this.tilBehandling(),
         vedtak = this.vedtak.toDomain(),
-        forrigeVedtak = this.utbetalingerPaaForrigeVedtak.tilVedtaksdetaljer(),
+        forrigeIverksetting = this.tilForrigeIverksetting(),
     )
 }
 
 fun UUID.tilSak(): Fagsakdetaljer = Fagsakdetaljer(this)
 fun String.tilSøker(): Søker = Søker(personIdent = this, tilhørendeEnhet = "")
 
-fun UUID.tilBehandling(): Behandlingsdetaljer = Behandlingsdetaljer(
-    behandlingId = this,
+fun IverksettDto.tilBehandling(): Behandlingsdetaljer = Behandlingsdetaljer(
+    behandlingId = this.behandlingId,
+    forrigeBehandlingId = this.forrigeIverksetting?.behandlingId,
     behandlingType = BehandlingType.FØRSTEGANGSBEHANDLING,
     behandlingÅrsak = BehandlingÅrsak.SØKNAD,
 )
+
+fun ForrigeIverksettingDto.tilBehandling(): Behandlingsdetaljer = Behandlingsdetaljer(
+    behandlingId = this.behandlingId,
+    behandlingType = BehandlingType.FØRSTEGANGSBEHANDLING,
+    behandlingÅrsak = BehandlingÅrsak.SØKNAD,
+)
+
+fun IverksettDto.tilForrigeIverksetting(): IverksettDagpenger? {
+    return when (this.forrigeIverksetting) {
+        null -> null
+        else -> IverksettDagpenger(
+            fagsak = this.sakId.tilSak(),
+            søker = this.personIdent.tilSøker(),
+            behandling = this.forrigeIverksetting!!.tilBehandling(),
+            vedtak = this.forrigeIverksetting!!.tilVedtaksdetaljer(),
+            forrigeIverksetting = null,
+        )
+    }
+}
