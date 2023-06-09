@@ -4,7 +4,11 @@ import no.nav.dagpenger.iverksett.api.domene.Tilbakekrevingsdetaljer
 import no.nav.dagpenger.iverksett.api.domene.VedtaksperiodeDagpenger
 import no.nav.dagpenger.iverksett.konsumenter.brev.domain.Brevmottakere
 import no.nav.dagpenger.kontrakter.felles.BrevmottakerDto
-import no.nav.dagpenger.kontrakter.iverksett.*
+import no.nav.dagpenger.kontrakter.iverksett.TilbakekrevingDto
+import no.nav.dagpenger.kontrakter.iverksett.TilbakekrevingMedVarselDto
+import no.nav.dagpenger.kontrakter.iverksett.VedtaksdetaljerDto
+import no.nav.dagpenger.kontrakter.iverksett.VedtaksperiodeDto
+import no.nav.dagpenger.kontrakter.iverksett.Vedtaksresultat
 import org.springframework.stereotype.Service
 
 @Service
