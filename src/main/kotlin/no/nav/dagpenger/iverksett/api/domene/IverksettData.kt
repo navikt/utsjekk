@@ -27,7 +27,7 @@ data class IverksettDagpenger(
     val behandling: Behandlingsdetaljer,
     val søker: Søker,
     val vedtak: VedtaksdetaljerDagpenger,
-    val forrigeVedtak: VedtaksdetaljerDagpenger? = null,
+    val forrigeIverksetting: IverksettDagpenger? = null,
 ) {
     fun erGOmregning() = behandling.behandlingÅrsak == BehandlingÅrsak.G_OMREGNING
 
