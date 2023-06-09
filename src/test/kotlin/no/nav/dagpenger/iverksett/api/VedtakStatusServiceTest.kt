@@ -2,21 +2,24 @@ package no.nav.dagpenger.iverksett.api
 
 import io.mockk.every
 import io.mockk.mockk
+import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
+import no.nav.dagpenger.iverksett.api.domene.VedtaksperiodeDagpenger
+import no.nav.dagpenger.iverksett.konsumenter.brev.domain.Brevmottaker
+import no.nav.dagpenger.iverksett.konsumenter.brev.domain.Brevmottakere
 import no.nav.dagpenger.iverksett.lagIverksett
 import no.nav.dagpenger.iverksett.lagIverksettData
-import no.nav.dagpenger.kontrakter.iverksett.BehandlingType
-import no.nav.dagpenger.kontrakter.iverksett.IverksettStatus
-import no.nav.dagpenger.kontrakter.iverksett.Vedtaksresultat
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNotNull
+import no.nav.dagpenger.kontrakter.felles.BrevmottakerDto
+import no.nav.dagpenger.kontrakter.felles.Datoperiode
+import no.nav.dagpenger.kontrakter.iverksett.*
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
+import java.time.LocalDate
 import java.time.LocalDateTime
 
 class VedtakStatusServiceTest {
 
     private val iverksettingRepositoryMock: IverksettingRepository = mockk()
-    private val iverksettingServiceMock: IverksettingService = mockk()
-    private val vedtakStatusService: VedtakStatusService = VedtakStatusService(iverksettingRepositoryMock, iverksettingServiceMock)
+    private val vedtakStatusService: VedtakStatusService = VedtakStatusService(iverksettingRepositoryMock)
 
     @Test
     fun `skal hente vedtak som er iverksatt OK`() {
@@ -26,7 +29,7 @@ class VedtakStatusServiceTest {
 
         val vedtak = vedtakStatusService.getVedtakStatus("12345678910")
 
-        assertNotNull(vedtak)
+        assertVedtak(iverksettDataFørsteVedtak, vedtak)
     }
 
     @Test
@@ -38,7 +41,7 @@ class VedtakStatusServiceTest {
 
         val vedtak = vedtakStatusService.getVedtakStatus("12345678910")
 
-        assertEquals(iverksettDataSisteVedtak.vedtak, vedtak)
+        assertVedtak(iverksettDataSisteVedtak, vedtak)
     }
 
     @Test
@@ -48,12 +51,9 @@ class VedtakStatusServiceTest {
             lagIverksett(iverksettDataSisteVedtakAvslått),
         )
 
-        every { iverksettingServiceMock.utledStatus(iverksettDataFørsteVedtak.behandling.behandlingId) } returns IverksettStatus.SENDT_TIL_OPPDRAG
-        every { iverksettingServiceMock.utledStatus(iverksettDataSisteVedtak.behandling.behandlingId) } returns IverksettStatus.FEILET_MOT_OPPDRAG
-
         val vedtak = vedtakStatusService.getVedtakStatus("12345678910")
 
-        assertEquals(iverksettDataFørsteVedtak.vedtak, vedtak)
+        assertVedtak(iverksettDataFørsteVedtak, vedtak)
     }
 
     companion object {
@@ -61,16 +61,77 @@ class VedtakStatusServiceTest {
             behandlingType = BehandlingType.FØRSTEGANGSBEHANDLING,
             vedtaksresultat = Vedtaksresultat.INNVILGET,
             vedtakstidspunkt = LocalDateTime.now().minusMonths(2),
+            brevmottakere = Brevmottakere(
+                listOf(
+                    Brevmottaker(
+                        ident = "01020312345",
+                        navn = "Test Testesen",
+                        mottakerRolle = BrevmottakerDto.MottakerRolle.BRUKER,
+                        identType = BrevmottakerDto.IdentType.PERSONIDENT,
+                    ),
+                    Brevmottaker(
+                        ident = "987654321",
+                        navn = "NAV",
+                        mottakerRolle = BrevmottakerDto.MottakerRolle.FULLMEKTIG,
+                        identType = BrevmottakerDto.IdentType.ORGANISASJONSNUMMER,
+                    ),
+                ),
+            ),
         )
         private val iverksettDataSisteVedtak = lagIverksettData(
             behandlingType = BehandlingType.REVURDERING,
             vedtaksresultat = Vedtaksresultat.INNVILGET,
             vedtakstidspunkt = LocalDateTime.now(),
+            vedtaksperioder = listOf(
+                VedtaksperiodeDagpenger(
+                    periode = Datoperiode(LocalDate.now(), LocalDate.now()),
+                    periodeType = VedtaksperiodeType.HOVEDPERIODE,
+                ),
+            ),
         )
         private val iverksettDataSisteVedtakAvslått = lagIverksettData(
             behandlingType = BehandlingType.REVURDERING,
             vedtaksresultat = Vedtaksresultat.AVSLÅTT,
             vedtakstidspunkt = LocalDateTime.now(),
         )
+    }
+
+    private fun assertVedtak(riktigIverksettData: IverksettDagpenger, returnertVedtak: VedtaksdetaljerDto?) {
+        val riktigVedtak = riktigIverksettData.vedtak
+
+        assertEquals(riktigVedtak.vedtakstype, returnertVedtak?.vedtakstype)
+        assertEquals(riktigVedtak.vedtakstidspunkt, returnertVedtak?.vedtakstidspunkt)
+        assertEquals(riktigVedtak.vedtaksresultat, returnertVedtak?.resultat)
+        assertEquals(riktigVedtak.saksbehandlerId, returnertVedtak?.saksbehandlerId)
+        assertEquals(riktigVedtak.beslutterId, returnertVedtak?.beslutterId)
+        assertEquals(riktigVedtak.opphørÅrsak, returnertVedtak?.opphorAarsak)
+        assertEquals(riktigVedtak.avslagÅrsak, returnertVedtak?.avslagAarsak)
+        assertEquals(emptyList<UtbetalingDto>(), returnertVedtak?.utbetalinger)
+
+        assertEquals(riktigVedtak.vedtaksperioder.size, returnertVedtak?.vedtaksperioder?.size)
+        riktigVedtak.vedtaksperioder.forEachIndexed { index, riktigPeriod ->
+            val returnertPeriod = returnertVedtak?.vedtaksperioder?.get(index)
+            assertEquals(riktigPeriod.periode.fom, returnertPeriod?.fraOgMedDato)
+            assertEquals(riktigPeriod.periode.tom, returnertPeriod?.tilOgMedDato)
+            assertEquals(riktigPeriod.periodeType, returnertPeriod?.periodeType)
+        }
+
+        val riktigTilbakekreving = riktigVedtak.tilbakekreving
+        val riktigTilbakekrevingVarsel = riktigTilbakekreving?.tilbakekrevingMedVarsel
+        val returnertTilbakekreving = returnertVedtak?.tilbakekreving
+        val returnertTilbakekrevingVarsel = returnertTilbakekreving?.tilbakekrevingMedVarsel
+        assertEquals(riktigTilbakekreving?.tilbakekrevingsvalg, returnertTilbakekreving?.tilbakekrevingsvalg)
+        assertEquals(riktigTilbakekrevingVarsel?.varseltekst, returnertTilbakekrevingVarsel?.varseltekst)
+        assertEquals(riktigTilbakekrevingVarsel?.sumFeilutbetaling, returnertTilbakekrevingVarsel?.sumFeilutbetaling)
+        assertEquals(riktigTilbakekrevingVarsel?.perioder, returnertTilbakekrevingVarsel?.fellesperioder)
+
+        assertEquals(riktigVedtak.brevmottakere?.mottakere?.size, returnertVedtak?.brevmottakere?.size)
+        riktigVedtak.brevmottakere?.mottakere?.forEachIndexed { index, riktigMottaker ->
+            val returnertMottaker = returnertVedtak?.brevmottakere?.get(index)
+            assertEquals(riktigMottaker.ident, returnertMottaker?.ident)
+            assertEquals(riktigMottaker.navn, returnertMottaker?.navn)
+            assertEquals(riktigMottaker.mottakerRolle, returnertMottaker?.mottakerRolle)
+            assertEquals(riktigMottaker.identType, returnertMottaker?.identType)
+        }
     }
 }
