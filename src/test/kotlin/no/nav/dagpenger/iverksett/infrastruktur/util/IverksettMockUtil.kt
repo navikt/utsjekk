@@ -221,7 +221,7 @@ fun vedtaksdetaljerDto(
             BrevmottakerDto.MottakerRolle.BRUKER,
             BrevmottakerDto.IdentType.PERSONIDENT,
         ),
-        ),
+    ),
 ): VedtaksdetaljerDto {
     return VedtaksdetaljerDto(
         vedtakstype = vedtakstype,
