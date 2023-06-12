@@ -12,11 +12,8 @@ class VedtakStatusService(
 ) {
 
     fun getVedtakStatus(personId: String): VedtaksdetaljerDto? {
-        return iverksettingRepository.findByPersonId(personId)
-            .sortedByDescending { it.data.vedtak.vedtakstidspunkt }
-            .firstOrNull {
-                Vedtaksresultat.INNVILGET == it.data.vedtak.vedtaksresultat
-            }?.data?.vedtak?.let {
+        return iverksettingRepository.findByPersonIdAndResult(personId, Vedtaksresultat.INNVILGET.name)
+            .maxByOrNull { it.data.vedtak.vedtakstidspunkt }?.data?.vedtak?.let {
                 VedtaksdetaljerDto(
                     vedtakstype = it.vedtakstype,
                     vedtakstidspunkt = it.vedtakstidspunkt,

@@ -27,7 +27,7 @@ class VedtakStatusServiceTest {
 
     @Test
     fun `skal hente vedtak som er iverksatt OK`() {
-        every { iverksettingRepositoryMock.findByPersonId(any()) } returns listOf(
+        every { iverksettingRepositoryMock.findByPersonIdAndResult("12345678910", "INNVILGET") } returns listOf(
             lagIverksett(iverksettDataFørsteVedtak),
         )
 
@@ -38,7 +38,7 @@ class VedtakStatusServiceTest {
 
     @Test
     fun `skal hente siste vedtak som er iverksatt OK når det finnes flere`() {
-        every { iverksettingRepositoryMock.findByPersonId(any()) } returns listOf(
+        every { iverksettingRepositoryMock.findByPersonIdAndResult("12345678910", "INNVILGET") } returns listOf(
             lagIverksett(iverksettDataFørsteVedtak),
             lagIverksett(iverksettDataSisteVedtak),
         )
@@ -46,18 +46,6 @@ class VedtakStatusServiceTest {
         val vedtak = vedtakStatusService.getVedtakStatus("12345678910")
 
         assertVedtak(iverksettDataSisteVedtak, vedtak)
-    }
-
-    @Test
-    fun `skal hente vedtak som er innvilget når det også finnes vedtak som er avslått`() {
-        every { iverksettingRepositoryMock.findByPersonId(any()) } returns listOf(
-            lagIverksett(iverksettDataFørsteVedtak),
-            lagIverksett(iverksettDataSisteVedtakAvslått),
-        )
-
-        val vedtak = vedtakStatusService.getVedtakStatus("12345678910")
-
-        assertVedtak(iverksettDataFørsteVedtak, vedtak)
     }
 
     companion object {
