@@ -106,10 +106,10 @@ class VedtakStatusServiceTest {
         assertEquals(riktigVedtak.vedtakstype, returnertVedtak?.vedtakstype)
         assertEquals(riktigVedtak.vedtakstidspunkt, returnertVedtak?.vedtakstidspunkt)
         assertEquals(riktigVedtak.vedtaksresultat, returnertVedtak?.resultat)
-        assertEquals(riktigVedtak.saksbehandlerId, returnertVedtak?.saksbehandlerId)
-        assertEquals(riktigVedtak.beslutterId, returnertVedtak?.beslutterId)
-        assertEquals(riktigVedtak.opphørÅrsak, returnertVedtak?.opphorAarsak)
-        assertEquals(riktigVedtak.avslagÅrsak, returnertVedtak?.avslagAarsak)
+        assertEquals("", returnertVedtak?.saksbehandlerId)
+        assertEquals("", returnertVedtak?.beslutterId)
+        assertEquals(null, returnertVedtak?.opphorAarsak)
+        assertEquals(null, returnertVedtak?.avslagAarsak)
         assertEquals(emptyList<UtbetalingDto>(), returnertVedtak?.utbetalinger)
 
         assertEquals(riktigVedtak.vedtaksperioder.size, returnertVedtak?.vedtaksperioder?.size)
@@ -120,22 +120,7 @@ class VedtakStatusServiceTest {
             assertEquals(riktigPeriod.periodeType, returnertPeriod?.periodeType)
         }
 
-        val riktigTilbakekreving = riktigVedtak.tilbakekreving
-        val riktigTilbakekrevingVarsel = riktigTilbakekreving?.tilbakekrevingMedVarsel
-        val returnertTilbakekreving = returnertVedtak?.tilbakekreving
-        val returnertTilbakekrevingVarsel = returnertTilbakekreving?.tilbakekrevingMedVarsel
-        assertEquals(riktigTilbakekreving?.tilbakekrevingsvalg, returnertTilbakekreving?.tilbakekrevingsvalg)
-        assertEquals(riktigTilbakekrevingVarsel?.varseltekst, returnertTilbakekrevingVarsel?.varseltekst)
-        assertEquals(riktigTilbakekrevingVarsel?.sumFeilutbetaling, returnertTilbakekrevingVarsel?.sumFeilutbetaling)
-        assertEquals(riktigTilbakekrevingVarsel?.perioder, returnertTilbakekrevingVarsel?.fellesperioder)
-
-        assertEquals(riktigVedtak.brevmottakere?.mottakere?.size, returnertVedtak?.brevmottakere?.size)
-        riktigVedtak.brevmottakere?.mottakere?.forEachIndexed { index, riktigMottaker ->
-            val returnertMottaker = returnertVedtak?.brevmottakere?.get(index)
-            assertEquals(riktigMottaker.ident, returnertMottaker?.ident)
-            assertEquals(riktigMottaker.navn, returnertMottaker?.navn)
-            assertEquals(riktigMottaker.mottakerRolle, returnertMottaker?.mottakerRolle)
-            assertEquals(riktigMottaker.identType, returnertMottaker?.identType)
-        }
+        assertEquals(null, riktigVedtak.tilbakekreving)
+        assertEquals(emptyList<BrevmottakerDto>(), returnertVedtak?.brevmottakere)
     }
 }

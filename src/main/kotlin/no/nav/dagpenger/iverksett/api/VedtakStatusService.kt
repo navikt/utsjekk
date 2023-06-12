@@ -1,13 +1,6 @@
 package no.nav.dagpenger.iverksett.api
 
-import no.nav.dagpenger.iverksett.api.domene.Tilbakekrevingsdetaljer
-import no.nav.dagpenger.iverksett.api.domene.TilkjentYtelse
 import no.nav.dagpenger.iverksett.api.domene.VedtaksperiodeDagpenger
-import no.nav.dagpenger.iverksett.konsumenter.brev.domain.Brevmottakere
-import no.nav.dagpenger.kontrakter.felles.BrevmottakerDto
-import no.nav.dagpenger.kontrakter.iverksett.TilbakekrevingDto
-import no.nav.dagpenger.kontrakter.iverksett.TilbakekrevingMedVarselDto
-import no.nav.dagpenger.kontrakter.iverksett.UtbetalingDto
 import no.nav.dagpenger.kontrakter.iverksett.VedtaksdetaljerDto
 import no.nav.dagpenger.kontrakter.iverksett.VedtaksperiodeDto
 import no.nav.dagpenger.kontrakter.iverksett.Vedtaksresultat
@@ -28,32 +21,11 @@ class VedtakStatusService(
                     vedtakstype = it.vedtakstype,
                     vedtakstidspunkt = it.vedtakstidspunkt,
                     resultat = it.vedtaksresultat,
-                    saksbehandlerId = it.saksbehandlerId,
-                    beslutterId = it.beslutterId,
-                    opphorAarsak = it.opphørÅrsak,
-                    avslagAarsak = it.avslagÅrsak,
-                    utbetalinger = mapUtbetalinger(it.tilkjentYtelse),
+                    saksbehandlerId = "",
+                    beslutterId = "",
                     vedtaksperioder = mapVedtaksperioder(it.vedtaksperioder),
-                    tilbakekreving = mapTilbakekreving(it.tilbakekreving),
-                    brevmottakere = mapBrevmottakere(it.brevmottakere),
                 )
             }
-    }
-
-    private fun mapUtbetalinger(inn: TilkjentYtelse?): List<UtbetalingDto> {
-        return if (inn?.andelerTilkjentYtelse != null) {
-            inn.andelerTilkjentYtelse.map { ytelse ->
-                UtbetalingDto(
-                    belopPerDag = ytelse.beløp,
-                    fraOgMedDato = ytelse.periode.fom,
-                    tilOgMedDato = ytelse.periode.tom,
-                    stonadstype = ytelse.stønadstype,
-                    ferietillegg = ytelse.ferietillegg
-                )
-            }
-        } else {
-            emptyList()
-        }
     }
 
     private fun mapVedtaksperioder(inn: List<VedtaksperiodeDagpenger>): List<VedtaksperiodeDto> {
@@ -63,36 +35,6 @@ class VedtakStatusService(
                 tilOgMedDato = vedtaksperiode.periode.tom,
                 periodeType = vedtaksperiode.periodeType,
             )
-        }
-    }
-
-    private fun mapTilbakekreving(inn: Tilbakekrevingsdetaljer?): TilbakekrevingDto? {
-        return inn?.let { tilbakekrevingsdetaljer ->
-            TilbakekrevingDto(
-                tilbakekrevingsvalg = tilbakekrevingsdetaljer.tilbakekrevingsvalg,
-                tilbakekrevingMedVarsel = tilbakekrevingsdetaljer.tilbakekrevingMedVarsel?.let {
-                    TilbakekrevingMedVarselDto(
-                        varseltekst = it.varseltekst,
-                        sumFeilutbetaling = it.sumFeilutbetaling,
-                        fellesperioder = it.perioder ?: emptyList(),
-                    )
-                },
-            )
-        }
-    }
-
-    private fun mapBrevmottakere(inn: Brevmottakere?): List<BrevmottakerDto> {
-        return if (inn?.mottakere != null) {
-            inn.mottakere.map { value ->
-                BrevmottakerDto(
-                    ident = value.ident,
-                    navn = value.navn,
-                    mottakerRolle = value.mottakerRolle,
-                    identType = value.identType,
-                )
-            }
-        } else {
-            emptyList()
         }
     }
 }
