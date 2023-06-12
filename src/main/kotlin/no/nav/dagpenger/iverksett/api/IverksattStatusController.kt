@@ -1,7 +1,7 @@
 package no.nav.dagpenger.iverksett.api
 
 import io.swagger.v3.oas.annotations.tags.Tag
-import no.nav.dagpenger.iverksett.api.domene.VedtaksdetaljerDagpenger
+import no.nav.dagpenger.kontrakter.iverksett.VedtaksdetaljerDto
 import no.nav.security.token.support.core.api.Unprotected
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
@@ -22,7 +22,7 @@ class IverksattStatusController(
 ) {
     @GetMapping("/{personId}", produces = ["application/json"])
     @Tag(name = "Status")
-    fun hentStatusForPerson(@PathVariable personId: String): ResponseEntity<VedtaksdetaljerDagpenger> {
+    fun hentStatusForPerson(@PathVariable personId: String): ResponseEntity<VedtaksdetaljerDto> {
         val status = vedtakStatusService.getVedtakStatus(personId)
         return status?.let { ResponseEntity(status, HttpStatus.OK) } ?: ResponseEntity(null, HttpStatus.NOT_FOUND)
     }

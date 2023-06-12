@@ -5,6 +5,7 @@ import no.nav.dagpenger.iverksett.api.domene.Iverksett
 import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
 import no.nav.dagpenger.iverksett.api.domene.Tilbakekrevingsdetaljer
 import no.nav.dagpenger.iverksett.api.domene.VedtaksperiodeDagpenger
+import no.nav.dagpenger.iverksett.konsumenter.brev.domain.Brevmottakere
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.lagAndelTilkjentYtelse
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.lagAndelTilkjentYtelseDto
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.simulering.grupperPosteringerEtterDato
@@ -178,6 +179,7 @@ fun lagIverksettData(
     andelsdatoer: List<LocalDate> = emptyList(),
     årsak: BehandlingÅrsak = BehandlingÅrsak.SØKNAD,
     vedtakstidspunkt: LocalDateTime = LocalDateTime.of(2021, 5, 12, 0, 0),
+    brevmottakere: Brevmottakere = Brevmottakere(emptyList()),
 ): IverksettDagpenger {
     val behandlingÅrsak = if (erMigrering) BehandlingÅrsak.MIGRERING else årsak
     return opprettIverksettDagpenger(
@@ -194,6 +196,7 @@ fun lagIverksettData(
             },
             startdato = andelsdatoer.minByOrNull { it } ?: LocalDate.now(),
             vedtakstidspunkt = vedtakstidspunkt,
+            brevmottakere = brevmottakere,
         ),
     )
 }

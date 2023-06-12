@@ -27,11 +27,13 @@ import no.nav.dagpenger.iverksett.konsumenter.brev.domain.JournalpostResultat
 import no.nav.dagpenger.iverksett.konsumenter.brev.domain.JournalpostResultatMap
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.lagAndelTilkjentYtelse
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.lagAndelTilkjentYtelseDto
+import no.nav.dagpenger.kontrakter.felles.BrevmottakerDto
 import no.nav.dagpenger.kontrakter.felles.Datoperiode
 import no.nav.dagpenger.kontrakter.felles.FrittståendeBrevDto
 import no.nav.dagpenger.kontrakter.felles.FrittståendeBrevType
 import no.nav.dagpenger.kontrakter.felles.StønadType
 import no.nav.dagpenger.kontrakter.felles.Tilbakekrevingsvalg
+import no.nav.dagpenger.kontrakter.iverksett.AvslagÅrsak
 import no.nav.dagpenger.kontrakter.iverksett.BehandlingType
 import no.nav.dagpenger.kontrakter.iverksett.BehandlingÅrsak
 import no.nav.dagpenger.kontrakter.iverksett.IverksettDto
@@ -40,10 +42,13 @@ import no.nav.dagpenger.kontrakter.iverksett.Opplysningskilde
 import no.nav.dagpenger.kontrakter.iverksett.RegelId
 import no.nav.dagpenger.kontrakter.iverksett.Revurderingsårsak
 import no.nav.dagpenger.kontrakter.iverksett.SvarId
+import no.nav.dagpenger.kontrakter.iverksett.TilbakekrevingDto
 import no.nav.dagpenger.kontrakter.iverksett.TilkjentYtelseDto
 import no.nav.dagpenger.kontrakter.iverksett.TilkjentYtelseStatus
+import no.nav.dagpenger.kontrakter.iverksett.UtbetalingDto
 import no.nav.dagpenger.kontrakter.iverksett.VedtakType
 import no.nav.dagpenger.kontrakter.iverksett.VedtaksdetaljerDto
+import no.nav.dagpenger.kontrakter.iverksett.VedtaksperiodeDto
 import no.nav.dagpenger.kontrakter.iverksett.VedtaksperiodeType
 import no.nav.dagpenger.kontrakter.iverksett.Vedtaksresultat
 import no.nav.dagpenger.kontrakter.iverksett.VilkårType
@@ -179,6 +184,7 @@ fun vedtaksdetaljerDagpenger(
     vedtakstidspunkt: LocalDateTime = LocalDateTime.of(2021, 5, 12, 0, 0),
     startdato: LocalDate = startdato(andeler),
     vedtaksperioder: List<VedtaksperiodeDagpenger> = listOf(vedtaksperioderDagpenger()),
+    brevmottakere: Brevmottakere = Brevmottakere(emptyList()),
 ): VedtaksdetaljerDagpenger {
     val tilkjentYtelse = lagTilkjentYtelse(andeler, startdato)
     return VedtaksdetaljerDagpenger(
@@ -191,7 +197,44 @@ fun vedtaksdetaljerDagpenger(
         tilkjentYtelse = tilkjentYtelse,
         vedtaksperioder = vedtaksperioder,
         tilbakekreving = tilbakekreving,
-        brevmottakere = Brevmottakere(emptyList()),
+        brevmottakere = brevmottakere,
+    )
+}
+
+fun vedtaksdetaljerDto(
+    vedtakstype: VedtakType = VedtakType.RAMMEVEDTAK,
+    vedtakstidspunkt: LocalDateTime = LocalDateTime.of(2021, 5, 12, 0, 0),
+    resultat: Vedtaksresultat = Vedtaksresultat.INNVILGET,
+    saksbehandlerId: String = "A12345",
+    beslutterId: String = "B23456",
+    opphorAarsak: OpphørÅrsak? = OpphørÅrsak.PERIODE_UTLØPT,
+    avslagAarsak: AvslagÅrsak? = AvslagÅrsak.MANGLENDE_OPPLYSNINGER,
+    utbetalinger: List<UtbetalingDto> = emptyList(),
+    vedtaksperioder: List<VedtaksperiodeDto> = listOf(
+        VedtaksperiodeDto(LocalDate.now(), LocalDate.now().plusDays(7), VedtaksperiodeType.HOVEDPERIODE),
+    ),
+    tilbakekreving: TilbakekrevingDto? = null,
+    brevmottakere: List<BrevmottakerDto> = listOf(
+        BrevmottakerDto(
+            "01020312345",
+            "Test Testesen",
+            BrevmottakerDto.MottakerRolle.BRUKER,
+            BrevmottakerDto.IdentType.PERSONIDENT,
+        ),
+    ),
+): VedtaksdetaljerDto {
+    return VedtaksdetaljerDto(
+        vedtakstype = vedtakstype,
+        vedtakstidspunkt = vedtakstidspunkt,
+        resultat = resultat,
+        saksbehandlerId = saksbehandlerId,
+        beslutterId = beslutterId,
+        opphorAarsak = opphorAarsak,
+        avslagAarsak = avslagAarsak,
+        utbetalinger = utbetalinger,
+        vedtaksperioder = vedtaksperioder,
+        tilbakekreving = tilbakekreving,
+        brevmottakere = brevmottakere,
     )
 }
 
