@@ -81,11 +81,6 @@ class VedtakStatusServiceTest {
                 ),
             ),
         )
-        private val iverksettDataSisteVedtakAvslått = lagIverksettData(
-            behandlingType = BehandlingType.REVURDERING,
-            vedtaksresultat = Vedtaksresultat.AVSLÅTT,
-            vedtakstidspunkt = LocalDateTime.now(),
-        )
     }
 
     private fun assertVedtak(riktigIverksettData: IverksettDagpenger, returnertVedtak: VedtaksdetaljerDto?) {
