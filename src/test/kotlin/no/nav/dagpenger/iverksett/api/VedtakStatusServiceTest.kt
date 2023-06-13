@@ -11,10 +11,9 @@ import no.nav.dagpenger.iverksett.lagIverksettData
 import no.nav.dagpenger.kontrakter.felles.BrevmottakerDto
 import no.nav.dagpenger.kontrakter.felles.Datoperiode
 import no.nav.dagpenger.kontrakter.iverksett.BehandlingType
-import no.nav.dagpenger.kontrakter.iverksett.UtbetalingDto
-import no.nav.dagpenger.kontrakter.iverksett.VedtaksdetaljerDto
 import no.nav.dagpenger.kontrakter.iverksett.VedtaksperiodeType
 import no.nav.dagpenger.kontrakter.iverksett.Vedtaksresultat
+import no.nav.dagpenger.kontrakter.iverksett.VedtaksstatusDto
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
@@ -83,17 +82,12 @@ class VedtakStatusServiceTest {
         )
     }
 
-    private fun assertVedtak(riktigIverksettData: IverksettDagpenger, returnertVedtak: VedtaksdetaljerDto?) {
+    private fun assertVedtak(riktigIverksettData: IverksettDagpenger, returnertVedtak: VedtaksstatusDto?) {
         val riktigVedtak = riktigIverksettData.vedtak
 
         assertEquals(riktigVedtak.vedtakstype, returnertVedtak?.vedtakstype)
         assertEquals(riktigVedtak.vedtakstidspunkt, returnertVedtak?.vedtakstidspunkt)
         assertEquals(riktigVedtak.vedtaksresultat, returnertVedtak?.resultat)
-        assertEquals("", returnertVedtak?.saksbehandlerId)
-        assertEquals("", returnertVedtak?.beslutterId)
-        assertEquals(null, returnertVedtak?.opphorAarsak)
-        assertEquals(null, returnertVedtak?.avslagAarsak)
-        assertEquals(emptyList<UtbetalingDto>(), returnertVedtak?.utbetalinger)
 
         assertEquals(riktigVedtak.vedtaksperioder.size, returnertVedtak?.vedtaksperioder?.size)
         riktigVedtak.vedtaksperioder.forEachIndexed { index, riktigPeriod ->
@@ -102,8 +96,5 @@ class VedtakStatusServiceTest {
             assertEquals(riktigPeriod.periode.tom, returnertPeriod?.tilOgMedDato)
             assertEquals(riktigPeriod.periodeType, returnertPeriod?.periodeType)
         }
-
-        assertEquals(null, riktigVedtak.tilbakekreving)
-        assertEquals(emptyList<BrevmottakerDto>(), returnertVedtak?.brevmottakere)
     }
 }

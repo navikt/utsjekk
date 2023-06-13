@@ -2,7 +2,7 @@ package no.nav.dagpenger.iverksett.api
 
 import io.mockk.every
 import io.mockk.mockk
-import no.nav.dagpenger.iverksett.util.vedtaksdetaljerDto
+import no.nav.dagpenger.iverksett.util.vedtaksstatusDto
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
@@ -23,7 +23,7 @@ class IverksattStatusControllerTest {
 
     @Test
     fun `skal svare med 200 når person har iverksatt vedtak`() {
-        val vedtaksdetaljerDto = vedtaksdetaljerDto()
+        val vedtaksdetaljerDto = vedtaksstatusDto()
         every { vedtakStatusServiceMock.getVedtakStatus(any()) } returns vedtaksdetaljerDto
 
         val response = iverksattStatusController.hentStatusForPerson("12345678910")

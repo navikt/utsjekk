@@ -51,6 +51,7 @@ import no.nav.dagpenger.kontrakter.iverksett.VedtaksdetaljerDto
 import no.nav.dagpenger.kontrakter.iverksett.VedtaksperiodeDto
 import no.nav.dagpenger.kontrakter.iverksett.VedtaksperiodeType
 import no.nav.dagpenger.kontrakter.iverksett.Vedtaksresultat
+import no.nav.dagpenger.kontrakter.iverksett.VedtaksstatusDto
 import no.nav.dagpenger.kontrakter.iverksett.VilkårType
 import no.nav.dagpenger.kontrakter.iverksett.Vilkårsresultat
 import java.math.BigDecimal
@@ -168,7 +169,7 @@ fun behandlingsdetaljer(
         kravMottatt = LocalDate.of(2021, 3, 3),
         årsakRevurdering = ÅrsakRevurdering(Opplysningskilde.MELDING_MODIA, Revurderingsårsak.ENDRING_INNTEKT),
 
-    )
+        )
 }
 
 fun vedtaksperioderDagpenger() =
@@ -235,6 +236,22 @@ fun vedtaksdetaljerDto(
         vedtaksperioder = vedtaksperioder,
         tilbakekreving = tilbakekreving,
         brevmottakere = brevmottakere,
+    )
+}
+
+fun vedtaksstatusDto(
+    vedtakstype: VedtakType = VedtakType.RAMMEVEDTAK,
+    vedtakstidspunkt: LocalDateTime = LocalDateTime.of(2021, 5, 12, 0, 0),
+    resultat: Vedtaksresultat = Vedtaksresultat.INNVILGET,
+    vedtaksperioder: List<VedtaksperiodeDto> = listOf(
+        VedtaksperiodeDto(LocalDate.now(), LocalDate.now().plusDays(7), VedtaksperiodeType.HOVEDPERIODE),
+    ),
+): VedtaksstatusDto {
+    return VedtaksstatusDto(
+        vedtakstype = vedtakstype,
+        vedtakstidspunkt = vedtakstidspunkt,
+        resultat = resultat,
+        vedtaksperioder = vedtaksperioder,
     )
 }
 
