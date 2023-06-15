@@ -50,6 +50,7 @@ spec:
         - application: dp-prosessering #frontend for task-rammeverket
         - application: dp-ekstern-integrasjon #Tilgang til vedtaksdata via maskinporten
         - application: dp-datadeling
+        - application: dp-saksbehandling-frontend
     outbound:
       rules:
         - application: dp-tilbake
