@@ -67,4 +67,5 @@ fun AndelTilkjentYtelse.tilKlassifisering() = when (this.stønadstype) {
         Ferietillegg.AVDOD -> throw IllegalArgumentException("Eksport-gruppen har ingen egen kode for ferietillegg til avdød")
         null -> "DPDPASISP1"
     }
+    StønadType.TILTAKSPENGER -> "TPTPTILTAK"
 }

@@ -71,6 +71,7 @@ fun fagområdeKoderForPosteringer(stønadType: StønadType): Set<FagOmrådeKode>
     StønadType.DAGPENGER_PERMITTERING_ORDINAER,
     StønadType.DAGPENGER_PERMITTERING_FISKEINDUSTRI,
     StønadType.DAGPENGER_EOS,
+    StønadType.TILTAKSPENGER, // TODO: Det er IKKE riktig at dette er Dagpenger.Trengs ny fagområdekode
     -> setOf(FagOmrådeKode.DAGPENGER)
 }
 

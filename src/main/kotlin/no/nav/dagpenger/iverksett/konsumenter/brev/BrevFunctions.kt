@@ -13,6 +13,7 @@ fun stønadstypeTilDokumenttype(stønadType: StønadType) =
         StønadType.DAGPENGER_PERMITTERING_ORDINAER,
         StønadType.DAGPENGER_PERMITTERING_FISKEINDUSTRI,
         StønadType.DAGPENGER_EOS,
+        StønadType.TILTAKSPENGER,
         -> Dokumenttype.DAGPENGER_FRITTSTÅENDE_BREV
     }
 
@@ -22,6 +23,7 @@ fun vedtaksbrevForStønadType(stønadType: StønadType): Dokumenttype =
         StønadType.DAGPENGER_PERMITTERING_ORDINAER,
         StønadType.DAGPENGER_PERMITTERING_FISKEINDUSTRI,
         StønadType.DAGPENGER_EOS,
+        StønadType.TILTAKSPENGER,
         -> Dokumenttype.VEDTAKSBREV_DAGPENGER
     }
 
@@ -31,6 +33,7 @@ fun lagStønadtypeTekst(stønadstype: StønadType): String =
         StønadType.DAGPENGER_PERMITTERING_ORDINAER,
         StønadType.DAGPENGER_PERMITTERING_FISKEINDUSTRI,
         StønadType.DAGPENGER_EOS,
+        StønadType.TILTAKSPENGER,
         -> "dagpenger"
     }
 

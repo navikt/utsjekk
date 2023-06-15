@@ -14,13 +14,13 @@ class VedtakStatusService(
     fun getVedtakStatus(personId: String): VedtaksstatusDto? {
         return iverksettingRepository.findByPersonIdAndResult(personId, Vedtaksresultat.INNVILGET.name)
             .maxByOrNull { it.data.vedtak.vedtakstidspunkt }?.data?.vedtak?.let {
-                VedtaksstatusDto(
-                    vedtakstype = it.vedtakstype,
-                    vedtakstidspunkt = it.vedtakstidspunkt,
-                    resultat = it.vedtaksresultat,
-                    vedtaksperioder = mapVedtaksperioder(it.vedtaksperioder),
-                )
-            }
+            VedtaksstatusDto(
+                vedtakstype = it.vedtakstype,
+                vedtakstidspunkt = it.vedtakstidspunkt,
+                resultat = it.vedtaksresultat,
+                vedtaksperioder = mapVedtaksperioder(it.vedtaksperioder),
+            )
+        }
     }
 
     private fun mapVedtaksperioder(inn: List<VedtaksperiodeDagpenger>): List<VedtaksperiodeDto> {

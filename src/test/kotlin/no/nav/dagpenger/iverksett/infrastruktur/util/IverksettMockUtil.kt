@@ -169,7 +169,7 @@ fun behandlingsdetaljer(
         kravMottatt = LocalDate.of(2021, 3, 3),
         årsakRevurdering = ÅrsakRevurdering(Opplysningskilde.MELDING_MODIA, Revurderingsårsak.ENDRING_INNTEKT),
 
-        )
+    )
 }
 
 fun vedtaksperioderDagpenger() =

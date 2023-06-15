@@ -158,6 +158,7 @@ class DatabaseConfiguration : AbstractJdbcConfiguration() {
                 StønadType.DAGPENGER_PERMITTERING_ORDINAER,
                 StønadType.DAGPENGER_PERMITTERING_FISKEINDUSTRI,
                 StønadType.DAGPENGER_EOS,
+                StønadType.TILTAKSPENGER,
                 -> no.nav.familie.kontrakter.felles.objectMapper
                     .readValue(pGobject.value, IverksettDagpenger::class.java)
             }

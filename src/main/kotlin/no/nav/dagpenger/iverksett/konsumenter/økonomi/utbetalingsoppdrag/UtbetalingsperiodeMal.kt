@@ -63,5 +63,6 @@ fun mapSatstype(stønadstype: StønadType) = when (stønadstype) {
     StønadType.DAGPENGER_PERMITTERING_ORDINAER,
     StønadType.DAGPENGER_PERMITTERING_FISKEINDUSTRI,
     StønadType.DAGPENGER_EOS,
+    StønadType.TILTAKSPENGER,
     -> Utbetalingsperiode.SatsType.DAG
 }

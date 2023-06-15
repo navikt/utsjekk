@@ -19,12 +19,12 @@ interface IverksettingRepository : RepositoryInterface<Iverksett, UUID>, InsertU
 
     @Query(
         "select behandling_id, data " +
-                "from iverksett " +
-                "where data -> 'søker' ->> 'personIdent' = :personId " +
-                "and data -> 'vedtak' ->> 'vedtaksresultat' = :vedtaksresultat"
+            "from iverksett " +
+            "where data -> 'søker' ->> 'personIdent' = :personId " +
+            "and data -> 'vedtak' ->> 'vedtaksresultat' = :vedtaksresultat",
     )
     fun findByPersonIdAndResult(
         @Param("personId") personId: String,
-        @Param("vedtaksresultat") vedtaksresultat: String
+        @Param("vedtaksresultat") vedtaksresultat: String,
     ): List<Iverksett>
 }
