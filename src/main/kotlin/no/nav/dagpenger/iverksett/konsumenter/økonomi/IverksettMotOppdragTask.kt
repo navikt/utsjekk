@@ -32,14 +32,12 @@ class IverksettMotOppdragTask(
     override fun doTask(task: Task) {
         val behandlingId = UUID.fromString(task.payload)
         val iverksett = iverksettingRepository.findByIdOrThrow(behandlingId).data
-        val forrigeTilkjentYtelseLagret = iverksett.behandling.forrigeBehandlingId?.let {
-            iverksettResultatService.hentTilkjentYtelse(it)
-                ?: error("Kunne ikke finne tilkjent ytelse for behandlingId=$it")
+        val forrigeIverksettResultat = iverksett.behandling.forrigeBehandlingId?.let {
+            iverksettResultatService.hentIverksettResultat(it)
+                ?: error("Kunne ikke finne iverksettresultat for behandlingId=$it")
         }
 
-        val forrigeTilkjentYtelseMottatt = iverksett.forrigeIverksetting?.vedtak?.tilkjentYtelse
-
-        if (!forrigeTilkjentYtelseLagret.stemmerMed(forrigeTilkjentYtelseMottatt)) {
+        if (!forrigeIverksettResultat.stemmerMed(iverksett.forrigeIverksetting)) {
             error("Lagret forrige tilkjent ytelse stemmer ikke med mottatt forrige tilkjent ytelse")
         }
 
@@ -53,7 +51,7 @@ class IverksettMotOppdragTask(
         )?.let { tilkjentYtelseMedMetaData ->
             lagTilkjentYtelseMedUtbetalingsoppdrag(
                 tilkjentYtelseMedMetaData,
-                forrigeTilkjentYtelseLagret,
+                forrigeIverksettResultat?.tilkjentYtelseForUtbetaling,
                 iverksett.erGOmregning(),
             )
         }?.also { tilkjentYtelseMedUtbetalingsoppdrag ->

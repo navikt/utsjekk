@@ -36,6 +36,7 @@ import no.nav.dagpenger.kontrakter.felles.Tilbakekrevingsvalg
 import no.nav.dagpenger.kontrakter.iverksett.AvslagÅrsak
 import no.nav.dagpenger.kontrakter.iverksett.BehandlingType
 import no.nav.dagpenger.kontrakter.iverksett.BehandlingÅrsak
+import no.nav.dagpenger.kontrakter.iverksett.ForrigeIverksettingDto
 import no.nav.dagpenger.kontrakter.iverksett.IverksettDto
 import no.nav.dagpenger.kontrakter.iverksett.OpphørÅrsak
 import no.nav.dagpenger.kontrakter.iverksett.Opplysningskilde
@@ -393,3 +394,20 @@ class IverksettResultatMockBuilder private constructor(
             )
     }
 }
+
+fun lagForrigeIverksetting(
+    forrigeBehandlingId: UUID = UUID.randomUUID(),
+    belopPerDag: Int = 400,
+    fraOgMedDato: LocalDate = LocalDate.now(),
+    tilOgMedDato: LocalDate = fraOgMedDato.plusDays(14),
+    utbetalinger: List<UtbetalingDto> = listOf(
+        UtbetalingDto(
+            fraOgMedDato = fraOgMedDato,
+            tilOgMedDato = tilOgMedDato,
+            belopPerDag = belopPerDag,
+        ),
+    ),
+) = ForrigeIverksettingDto(
+    behandlingId = forrigeBehandlingId,
+    utbetalinger = utbetalinger,
+)

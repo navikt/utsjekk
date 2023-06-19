@@ -35,9 +35,9 @@ data class TilkjentYtelse(
     }
 }
 
-fun TilkjentYtelse?.stemmerMed(annenTilkjentYtelse: TilkjentYtelse?): Boolean {
-    val andeler = lagNormaliserteAndeler()
-    val andreAndeler = annenTilkjentYtelse.lagNormaliserteAndeler()
+fun IverksettResultat?.stemmerMed(forrigeIverksetting: IverksettDagpenger?): Boolean {
+    val andeler = this?.tilkjentYtelseForUtbetaling?.lagNormaliserteAndeler()
+    val andreAndeler = forrigeIverksetting?.vedtak?.tilkjentYtelse?.lagNormaliserteAndeler()
 
     return andeler == andreAndeler
 }
