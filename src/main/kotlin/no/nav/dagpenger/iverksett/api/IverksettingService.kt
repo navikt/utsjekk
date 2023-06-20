@@ -30,6 +30,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.Properties
 import java.util.UUID
+import kotlin.jvm.optionals.getOrNull
 
 @Service
 class IverksettingService(
@@ -68,6 +69,18 @@ class IverksettingService(
             ),
         )
     }
+
+    fun hentIverksetting(behandlingId: UUID): IverksettDagpenger? {
+        return iverksettingRepository.findById(behandlingId).getOrNull()?.data
+    }
+
+    fun hentForrigeIverksett(iverksettDagpenger: IverksettDagpenger): IverksettDagpenger? =
+        iverksettDagpenger.behandling.forrigeBehandlingId?.let {
+            hentIverksetting(it) ?: throw IllegalStateException(
+                "Fant ikke forrige iverksetting med behandlingId ${iverksettDagpenger.behandling.behandlingId} " +
+                    "og forrige behandlingId $it",
+            )
+        }
 
     private fun førsteHovedflytTask(iverksett: IverksettDagpenger) = when {
         erIverksettingUtenVedtaksperioder(iverksett) -> JournalførVedtaksbrevTask.TYPE
