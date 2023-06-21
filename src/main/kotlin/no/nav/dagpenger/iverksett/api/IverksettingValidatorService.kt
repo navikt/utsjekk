@@ -44,71 +44,6 @@ class IverksettingValidatorService(
         validerTilbakekreving(iverksett)
     }
 
-    private fun validerAtDetFinnesKlassifiseringForStønadstypeOgFerietillegg(iverksett: IverksettDagpenger) {
-        val alleHarGyldigKlassifisering = iverksett.vedtak.tilkjentYtelse?.andelerTilkjentYtelse?.all {
-            try {
-                it.tilKlassifisering()
-                true
-            } catch (e: IllegalArgumentException) {
-                false
-            }
-        } ?: true
-
-        if (!alleHarGyldigKlassifisering) {
-            throw ApiFeil(
-                "Klarte ikke å finne klassifisering for kombinasjonen av stønadstype og ferietillegg",
-                HttpStatus.BAD_REQUEST,
-            )
-        }
-    }
-
-    private fun validerAtUtbetalingerBareHarPositiveBeløp(iverksett: IverksettDagpenger) {
-        val alleBeløpErPositive = iverksett.vedtak.tilkjentYtelse?.andelerTilkjentYtelse
-            ?.all { it.beløp > 0 } ?: true
-
-        if (!alleBeløpErPositive) {
-            throw ApiFeil(
-                "Det finnes utbetalinger ikke har positivt belopPerDag",
-                HttpStatus.BAD_REQUEST,
-            )
-        }
-    }
-
-    private fun validerAtUtbetalingsperioderIkkeOverlapperITid(iverksett: IverksettDagpenger) {
-        validerAtFraOgMedKommerFørTilOgMedIUtbetalingsperioder(iverksett)
-
-        val allePerioderErUavhengige = iverksett.vedtak.tilkjentYtelse?.andelerTilkjentYtelse
-            ?.sortedBy { it.periode.fom }
-            ?.windowed(2, 1, false) {
-                val førstePeriode = it.first().periode
-                val sistePeriode = it.last().periode
-
-                førstePeriode.tom.isBefore(sistePeriode.fom)
-            }?.all { it } ?: true
-
-        if (!allePerioderErUavhengige) {
-            throw ApiFeil(
-                "Utbetalinger inneholder perioder som overlapper i tid",
-                HttpStatus.BAD_REQUEST,
-            )
-        }
-    }
-
-    private fun validerAtFraOgMedKommerFørTilOgMedIUtbetalingsperioder(iverksett: IverksettDagpenger) {
-        val alleErOk = iverksett.vedtak.tilkjentYtelse?.andelerTilkjentYtelse?.all {
-            val fom = it.periode.fom
-            val tom = it.periode.tom
-            !tom.isBefore(fom)
-        } ?: true
-
-        if (!alleErOk) {
-            throw ApiFeil(
-                "Utbetalinger inneholder perioder der tilOgMedDato er før fraOgMedDato",
-                HttpStatus.BAD_REQUEST,
-            )
-        }
-    }
-
     fun validerBrev(iverksettData: IverksettDagpenger, brev: Brev?) {
         when (brev) {
             null -> validerUtenBrev(iverksettData)
@@ -128,7 +63,72 @@ class IverksettingValidatorService(
         }
     }
 
-    private fun validerAtInnvilgetUtbetalingsvedtakHarUtbetalinger(iverksett: IverksettDagpenger) {
+    internal fun validerAtDetFinnesKlassifiseringForStønadstypeOgFerietillegg(iverksett: IverksettDagpenger) {
+        val alleHarGyldigKlassifisering = iverksett.vedtak.tilkjentYtelse?.andelerTilkjentYtelse?.all {
+            try {
+                it.tilKlassifisering()
+                true
+            } catch (e: IllegalArgumentException) {
+                false
+            }
+        } ?: true
+
+        if (!alleHarGyldigKlassifisering) {
+            throw ApiFeil(
+                "Klarte ikke å finne klassifisering for kombinasjonen av stønadstype og ferietillegg",
+                HttpStatus.BAD_REQUEST,
+            )
+        }
+    }
+
+    internal fun validerAtUtbetalingerBareHarPositiveBeløp(iverksett: IverksettDagpenger) {
+        val alleBeløpErPositive = iverksett.vedtak.tilkjentYtelse?.andelerTilkjentYtelse
+            ?.all { it.beløp > 0 } ?: true
+
+        if (!alleBeløpErPositive) {
+            throw ApiFeil(
+                "Det finnes utbetalinger ikke har positivt belopPerDag",
+                HttpStatus.BAD_REQUEST,
+            )
+        }
+    }
+
+    internal fun validerAtUtbetalingsperioderIkkeOverlapperITid(iverksett: IverksettDagpenger) {
+        validerAtFraOgMedKommerFørTilOgMedIUtbetalingsperioder(iverksett)
+
+        val allePerioderErUavhengige = iverksett.vedtak.tilkjentYtelse?.andelerTilkjentYtelse
+            ?.sortedBy { it.periode.fom }
+            ?.windowed(2, 1, false) {
+                val førstePeriode = it.first().periode
+                val sistePeriode = it.last().periode
+
+                førstePeriode.tom.isBefore(sistePeriode.fom)
+            }?.all { it } ?: true
+
+        if (!allePerioderErUavhengige) {
+            throw ApiFeil(
+                "Utbetalinger inneholder perioder som overlapper i tid",
+                HttpStatus.BAD_REQUEST,
+            )
+        }
+    }
+
+    internal fun validerAtFraOgMedKommerFørTilOgMedIUtbetalingsperioder(iverksett: IverksettDagpenger) {
+        val alleErOk = iverksett.vedtak.tilkjentYtelse?.andelerTilkjentYtelse?.all {
+            val fom = it.periode.fom
+            val tom = it.periode.tom
+            !tom.isBefore(fom)
+        } ?: true
+
+        if (!alleErOk) {
+            throw ApiFeil(
+                "Utbetalinger inneholder perioder der tilOgMedDato er før fraOgMedDato",
+                HttpStatus.BAD_REQUEST,
+            )
+        }
+    }
+
+    internal fun validerAtInnvilgetUtbetalingsvedtakHarUtbetalinger(iverksett: IverksettDagpenger) {
         if (iverksett.vedtak.tilkjentYtelse == null &&
             iverksett.vedtak.vedtaksresultat == Vedtaksresultat.INNVILGET &&
             iverksett.vedtak.vedtakstype == VedtakType.UTBETALINGSVEDTAK
@@ -140,7 +140,7 @@ class IverksettingValidatorService(
         }
     }
 
-    private fun validerAtAvslåttVedtakIkkeHarUtbetalinger(iverksett: IverksettDagpenger) {
+    internal fun validerAtAvslåttVedtakIkkeHarUtbetalinger(iverksett: IverksettDagpenger) {
         if (iverksett.vedtak.tilkjentYtelse != null &&
             iverksett.vedtak.vedtaksresultat == Vedtaksresultat.AVSLÅTT
         ) {
@@ -151,13 +151,7 @@ class IverksettingValidatorService(
         }
     }
 
-    private fun validerTilbakekreving(iverksett: IverksettDagpenger) {
-        if (!iverksett.vedtak.tilbakekreving.validerTilbakekreving()) {
-            throw ApiFeil("Tilbakekreving er ikke gyldig", HttpStatus.BAD_REQUEST)
-        }
-    }
-
-    private fun validerKonsistensMellomVedtak(iverksett: IverksettDagpenger) {
+    internal fun validerKonsistensMellomVedtak(iverksett: IverksettDagpenger) {
         val forrigeIverksettResultat = iverksett.behandling.forrigeBehandlingId?.let {
             iverksettResultatService.hentIverksettResultat(it) ?: throw ApiFeil(
                 "Forrige behandling med id $it er ikke mottatt for iverksetting",
@@ -173,7 +167,7 @@ class IverksettingValidatorService(
         }
     }
 
-    private fun validerSkalHaBrev(iverksettData: IverksettDagpenger) {
+    internal fun validerSkalHaBrev(iverksettData: IverksettDagpenger) {
         if (featureToggleService.isEnabled(FeatureToggleConfig.SKAL_SENDE_BREV, false) &&
             iverksettData.skalIkkeSendeBrev()
         ) {
@@ -184,7 +178,7 @@ class IverksettingValidatorService(
         }
     }
 
-    private fun validerAtIverksettingErForSammeSakOgPersonSomForrige(iverksett: IverksettDagpenger) {
+    internal fun validerAtIverksettingErForSammeSakOgPersonSomForrige(iverksett: IverksettDagpenger) {
         val forrigeIverksett = try {
             iverksettingService.hentForrigeIverksett(iverksett)
         } catch (e: IllegalStateException) {
@@ -208,7 +202,7 @@ class IverksettingValidatorService(
         }
     }
 
-    private fun validerAtForrigeBehandlingErFerdigIverksatt(iverksett: IverksettDagpenger?) {
+    internal fun validerAtForrigeBehandlingErFerdigIverksatt(iverksett: IverksettDagpenger?) {
         iverksett?.behandling?.forrigeBehandlingId?.apply {
             if (iverksettingService.utledStatus(this) != IverksettStatus.OK) {
                 throw ApiFeil("Forrige iverksetting  er ikke ferdig", HttpStatus.CONFLICT)
@@ -216,12 +210,18 @@ class IverksettingValidatorService(
         }
     }
 
-    private fun validerAtBehandlingIkkeAlleredeErMottatt(iverksett: IverksettDagpenger) {
+    internal fun validerAtBehandlingIkkeAlleredeErMottatt(iverksett: IverksettDagpenger) {
         if (iverksettingService.hentIverksetting(iverksett.behandling.behandlingId) != null) {
             throw ApiFeil(
                 "Behandling med id ${iverksett.behandling.behandlingId} er allerede mottattt",
                 HttpStatus.CONFLICT,
             )
+        }
+    }
+
+    internal fun validerTilbakekreving(iverksett: IverksettDagpenger) {
+        if (!iverksett.vedtak.tilbakekreving.validerTilbakekreving()) {
+            throw ApiFeil("Tilbakekreving er ikke gyldig", HttpStatus.BAD_REQUEST)
         }
     }
 }

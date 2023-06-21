@@ -293,7 +293,7 @@ internal class OppgaveServiceTest {
 
         oppgaveService.opprettVurderHenvendelseOppgave(iverksett)
         verify { OppgaveBeskrivelse.beskrivelseRevurderingOpphørt(capture(opphørsdato)) }
-        assertThat(opphørsdato.captured).isEqualTo(LocalDate.now().minusMonths(1))
+        assertThat(opphørsdato.captured).isEqualTo(LocalDate.now())
     }
 
     @Test
