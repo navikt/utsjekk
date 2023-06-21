@@ -114,7 +114,7 @@ object TilkjentYtelseParser {
     }
 
     private fun mapAndelTilkjentYtelse(rad: MutableMap<String, String>) = UtbetalingDto(
-        beløp = parseInt(TilkjentYtelseDomenebegrep.BELØP, rad),
+        belopPerDag = parseInt(TilkjentYtelseDomenebegrep.BELØP, rad),
         fraOgMedDato = parseDato(Domenebegrep.FRA_DATO, rad),
         tilOgMedDato = parseDato(Domenebegrep.TIL_DATO, rad),
     )

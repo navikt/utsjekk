@@ -31,7 +31,7 @@ fun lagAndelTilkjentYtelseDto(
     tilOgMed: LocalDate = LocalDate.of(2021, 1, 31),
 ) =
     UtbetalingDto(
-        beløp = beløp,
+        belopPerDag = beløp,
         fraOgMedDato = fraOgMed,
         tilOgMedDato = tilOgMed,
     )
