@@ -7,7 +7,7 @@ import no.nav.dagpenger.iverksett.api.tilstand.IverksettResultatService
 import no.nav.dagpenger.iverksett.beriketSimuleringsresultat
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.OppdragClient
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.lagAndelTilkjentYtelse
-import no.nav.dagpenger.iverksett.konsumenter.økonomi.lagAndelTilkjentYtelseDto
+import no.nav.dagpenger.iverksett.konsumenter.økonomi.lagUtbetalingDto
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.UtbetalingsoppdragGenerator.lagTilkjentYtelseMedUtbetalingsoppdrag
 import no.nav.dagpenger.iverksett.simuleringDto
 import no.nav.dagpenger.iverksett.util.opprettTilkjentYtelse
@@ -76,7 +76,7 @@ class SimuleringControllerTest : ServerTest() {
 
     @Test
     internal fun `simulering av førstegangsbehandling med kun 0 beløp skal gi tomt svar`() {
-        val request = simuleringDto(andeler = listOf(lagAndelTilkjentYtelseDto(beløp = 0)), forrigeBehandlingId = null)
+        val request = simuleringDto(andeler = listOf(lagUtbetalingDto(beløp = 0)), forrigeBehandlingId = null)
         val respons = restTemplate
             .exchange<Ressurs<BeriketSimuleringsresultat>>(
                 localhostUrl("/api/simulering"),
@@ -96,7 +96,7 @@ class SimuleringControllerTest : ServerTest() {
         lagFørstegangsbehandlingUtenBeløp(behandlingId)
 
         val revurdering =
-            simuleringDto(andeler = listOf(lagAndelTilkjentYtelseDto(beløp = 1000)), forrigeBehandlingId = behandlingId)
+            simuleringDto(andeler = listOf(lagUtbetalingDto(beløp = 1000)), forrigeBehandlingId = behandlingId)
 
         val response = restTemplate.exchange<Ressurs<BeriketSimuleringsresultat>>(
             localhostUrl("/api/simulering"),
@@ -114,7 +114,7 @@ class SimuleringControllerTest : ServerTest() {
         lagFørstegangsbehandlingUtenBeløp(behandlingId)
 
         val revurdering =
-            simuleringDto(andeler = listOf(lagAndelTilkjentYtelseDto(beløp = 0)), forrigeBehandlingId = behandlingId)
+            simuleringDto(andeler = listOf(lagUtbetalingDto(beløp = 0)), forrigeBehandlingId = behandlingId)
 
         val respons = restTemplate.exchange<Ressurs<BeriketSimuleringsresultat>>(
             localhostUrl("/api/simulering"),
@@ -131,7 +131,7 @@ class SimuleringControllerTest : ServerTest() {
             lagAndelTilkjentYtelse(0, fraOgMed = LocalDate.of(2021, 1, 1), tilOgMed = LocalDate.of(2021, 1, 31))
         val tilkjentYtelse = opprettTilkjentYtelse(behandlingId, andeler = listOf(andelTilkjentYtelse))
         val tilkjentYtelseMedUtbetalingsoppdrag =
-            lagTilkjentYtelseMedUtbetalingsoppdrag(opprettTilkjentYtelseMedMetadata(behandlingId, 1L, tilkjentYtelse))
+            lagTilkjentYtelseMedUtbetalingsoppdrag(opprettTilkjentYtelseMedMetadata(behandlingId, tilkjentYtelse))
 
         iverksettResultatService.opprettTomtResultat(behandlingId)
         iverksettResultatService.oppdaterTilkjentYtelseForUtbetaling(behandlingId, tilkjentYtelseMedUtbetalingsoppdrag)

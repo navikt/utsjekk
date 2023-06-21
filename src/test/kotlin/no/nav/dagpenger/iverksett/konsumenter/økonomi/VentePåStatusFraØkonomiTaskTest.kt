@@ -17,7 +17,6 @@ import no.nav.dagpenger.iverksett.lagIverksett
 import no.nav.dagpenger.iverksett.util.mockFeatureToggleService
 import no.nav.dagpenger.iverksett.util.opprettIverksettDto
 import no.nav.dagpenger.kontrakter.felles.Fagsystem
-import no.nav.dagpenger.kontrakter.iverksett.BehandlingÅrsak
 import no.nav.dagpenger.kontrakter.iverksett.TilkjentYtelseStatus
 import no.nav.dagpenger.kontrakter.oppdrag.OppdragStatus
 import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsoppdrag
@@ -103,7 +102,7 @@ internal class VentePåStatusFraØkonomiTaskTest {
     @Disabled
     internal fun `migrering - skal ikke opprette task for journalføring av vedtaksbrev`() {
         // TODO hvorfor feiler denne
-        val opprettIverksettDto = opprettIverksettDto(behandlingId, sakId, behandlingÅrsak = BehandlingÅrsak.MIGRERING)
+        val opprettIverksettDto = opprettIverksettDto(behandlingId, sakId)
         every { iverksettingRepository.findByIdOrThrow(any()) } returns lagIverksett(opprettIverksettDto.toDomain())
         every { iverksettResultatService.hentTilkjentYtelse(behandlingId) } returns tilkjentYtelse(
             listOf(

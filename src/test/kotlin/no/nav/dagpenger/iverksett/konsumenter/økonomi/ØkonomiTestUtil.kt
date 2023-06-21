@@ -25,7 +25,7 @@ fun lagAndelTilkjentYtelse(
         ferietillegg = ferietillegg,
     )
 
-fun lagAndelTilkjentYtelseDto(
+fun lagUtbetalingDto(
     beløp: Int,
     fraOgMed: LocalDate = LocalDate.of(2021, 1, 1),
     tilOgMed: LocalDate = LocalDate.of(2021, 1, 31),
