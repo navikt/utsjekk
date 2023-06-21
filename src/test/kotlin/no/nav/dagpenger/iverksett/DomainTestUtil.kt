@@ -152,6 +152,9 @@ fun Tilbakekrevingsdetaljer.medFeilutbetaling(feilutbetaling: BigDecimal, period
 
 fun Int.januar(år: Int) = LocalDate.of(år, 1, this)
 fun Int.februar(år: Int) = LocalDate.of(år, 2, this)
+
+fun Int.mai(år: Int) = LocalDate.of(år, 5, this)
+
 fun Int.august(år: Int) = LocalDate.of(år, 8, this)
 fun Int.november(år: Int) = LocalDate.of(år, 11, this)
 
@@ -172,13 +175,14 @@ fun List<SimulertPostering>.tilDetaljertSimuleringsresultat() =
 
 fun lagIverksettData(
     forrigeBehandlingId: UUID? = null,
-    behandlingType: BehandlingType,
-    vedtaksresultat: Vedtaksresultat,
+    behandlingType: BehandlingType = BehandlingType.FØRSTEGANGSBEHANDLING,
+    vedtaksresultat: Vedtaksresultat = Vedtaksresultat.INNVILGET,
     vedtaksperioder: List<VedtaksperiodeDagpenger> = emptyList(),
     erMigrering: Boolean = false,
     andelsdatoer: List<LocalDate> = emptyList(),
+    beløp: Int = 0,
     årsak: BehandlingÅrsak = BehandlingÅrsak.SØKNAD,
-    vedtakstidspunkt: LocalDateTime = LocalDateTime.of(2021, 5, 12, 0, 0),
+    vedtakstidspunkt: LocalDateTime = LocalDateTime.now(),
     brevmottakere: Brevmottakere = Brevmottakere(emptyList()),
 ): IverksettDagpenger {
     val behandlingÅrsak = if (erMigrering) BehandlingÅrsak.MIGRERING else årsak
@@ -192,7 +196,7 @@ fun lagIverksettData(
             vedtaksresultat = vedtaksresultat,
             vedtaksperioder = vedtaksperioder,
             andeler = andelsdatoer.map {
-                lagAndelTilkjentYtelse(beløp = 0, fraOgMed = it.minusMonths(1), tilOgMed = it)
+                lagAndelTilkjentYtelse(beløp = beløp, fraOgMed = it, tilOgMed = it)
             },
             startdato = andelsdatoer.minByOrNull { it } ?: LocalDate.now(),
             vedtakstidspunkt = vedtakstidspunkt,
