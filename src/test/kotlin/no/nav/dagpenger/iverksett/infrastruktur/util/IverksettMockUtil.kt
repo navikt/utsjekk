@@ -36,6 +36,7 @@ import no.nav.dagpenger.kontrakter.felles.Tilbakekrevingsvalg
 import no.nav.dagpenger.kontrakter.iverksett.AvslagÅrsak
 import no.nav.dagpenger.kontrakter.iverksett.BehandlingType
 import no.nav.dagpenger.kontrakter.iverksett.BehandlingÅrsak
+import no.nav.dagpenger.kontrakter.iverksett.Ferietillegg
 import no.nav.dagpenger.kontrakter.iverksett.ForrigeIverksettingDto
 import no.nav.dagpenger.kontrakter.iverksett.IverksettDto
 import no.nav.dagpenger.kontrakter.iverksett.OpphørÅrsak
@@ -63,16 +64,20 @@ import java.util.Random
 import java.util.UUID
 
 fun opprettIverksettDto(
-    behandlingId: UUID,
-    sakId: UUID,
+    behandlingId: UUID = UUID.randomUUID(),
+    sakId: UUID = UUID.randomUUID(),
     behandlingÅrsak: BehandlingÅrsak = BehandlingÅrsak.SØKNAD,
     andelsbeløp: Int = 5000,
+    vedtaksresultat: Vedtaksresultat = Vedtaksresultat.INNVILGET,
     stønadType: StønadType = StønadType.DAGPENGER_ARBEIDSSOKER_ORDINAER,
+    ferietillegg: Ferietillegg? = null,
 ): IverksettDto {
     val andelTilkjentYtelse = lagAndelTilkjentYtelseDto(
         beløp = andelsbeløp,
         fraOgMed = LocalDate.of(2021, 1, 1),
         tilOgMed = LocalDate.of(2021, 12, 31),
+        stønadstype = stønadType,
+        ferietillegg = ferietillegg,
     )
     val tilkjentYtelse = TilkjentYtelseDto(
         utbetalinger = listOf(andelTilkjentYtelse),
@@ -84,7 +89,7 @@ fun opprettIverksettDto(
         sakId = sakId,
         personIdent = "12345678910",
         vedtak = VedtaksdetaljerDto(
-            resultat = Vedtaksresultat.INNVILGET,
+            resultat = vedtaksresultat,
             vedtakstidspunkt = LocalDateTime.of(2021, 5, 12, 0, 0),
             saksbehandlerId = "A12345",
             beslutterId = "B23456",
