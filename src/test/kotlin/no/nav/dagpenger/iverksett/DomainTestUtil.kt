@@ -7,7 +7,7 @@ import no.nav.dagpenger.iverksett.api.domene.Tilbakekrevingsdetaljer
 import no.nav.dagpenger.iverksett.api.domene.VedtaksperiodeDagpenger
 import no.nav.dagpenger.iverksett.konsumenter.brev.domain.Brevmottakere
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.lagAndelTilkjentYtelse
-import no.nav.dagpenger.iverksett.konsumenter.økonomi.lagAndelTilkjentYtelseDto
+import no.nav.dagpenger.iverksett.konsumenter.økonomi.lagUtbetalingDto
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.simulering.grupperPosteringerEtterDato
 import no.nav.dagpenger.iverksett.util.behandlingsdetaljer
 import no.nav.dagpenger.iverksett.util.opprettIverksettDagpenger
@@ -55,7 +55,7 @@ fun simuleringDto(
 }
 
 private fun lagDefaultAndeler() =
-    lagAndelTilkjentYtelseDto(
+    lagUtbetalingDto(
         beløp = 15000,
         fraOgMed = LocalDate.of(2021, 1, 1),
         tilOgMed = LocalDate.of(2023, 12, 31),

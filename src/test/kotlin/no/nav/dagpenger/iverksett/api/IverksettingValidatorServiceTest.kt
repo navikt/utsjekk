@@ -3,7 +3,7 @@ package no.nav.dagpenger.iverksett.api
 import io.mockk.mockk
 import no.nav.dagpenger.iverksett.api.tilstand.IverksettResultatService
 import no.nav.dagpenger.iverksett.infrastruktur.advice.ApiFeil
-import no.nav.dagpenger.iverksett.konsumenter.økonomi.lagAndelTilkjentYtelseDto
+import no.nav.dagpenger.iverksett.konsumenter.økonomi.lagUtbetalingDto
 import no.nav.dagpenger.iverksett.util.opprettIverksettDto
 import no.nav.dagpenger.kontrakter.felles.StønadType
 import no.nav.dagpenger.kontrakter.iverksett.Ferietillegg
@@ -59,7 +59,7 @@ class IverksettingValidatorServiceTest {
         val iverksettDto = tmpIverksettDto.copy(
             vedtak = tmpIverksettDto.vedtak.copy(
                 utbetalinger = listOf(
-                    lagAndelTilkjentYtelseDto(
+                    lagUtbetalingDto(
                         beløp = 100,
                         fraOgMed = LocalDate.of(2023, 5, 15),
                         tilOgMed = LocalDate.of(2023, 5, 5),
@@ -79,12 +79,12 @@ class IverksettingValidatorServiceTest {
         val iverksettDto = tmpIverksettDto.copy(
             vedtak = tmpIverksettDto.vedtak.copy(
                 utbetalinger = listOf(
-                    lagAndelTilkjentYtelseDto(
+                    lagUtbetalingDto(
                         beløp = 100,
                         fraOgMed = LocalDate.of(2023, 5, 15),
                         tilOgMed = LocalDate.of(2023, 5, 30),
                     ),
-                    lagAndelTilkjentYtelseDto(
+                    lagUtbetalingDto(
                         beløp = 100,
                         fraOgMed = LocalDate.of(2023, 5, 20),
                         tilOgMed = LocalDate.of(2023, 6, 3),
