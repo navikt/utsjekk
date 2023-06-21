@@ -1,7 +1,10 @@
 package no.nav.dagpenger.iverksett.api
 
-import io.mockk.mockk
-import no.nav.dagpenger.iverksett.api.tilstand.IverksettResultatService
+import no.nav.dagpenger.iverksett.api.IverksettDtoValidator.validerAtAvslåttVedtakIkkeHarUtbetalinger
+import no.nav.dagpenger.iverksett.api.IverksettDtoValidator.validerAtFraOgMedKommerFørTilOgMedIUtbetalingsperioder
+import no.nav.dagpenger.iverksett.api.IverksettDtoValidator.validerAtIngenUtbetalingsperioderHarStønadstypeEØSOgFerietilleggTilAvdød
+import no.nav.dagpenger.iverksett.api.IverksettDtoValidator.validerAtUtbetalingerBareHarPositiveBeløp
+import no.nav.dagpenger.iverksett.api.IverksettDtoValidator.validerAtUtbetalingsperioderIkkeOverlapperITid
 import no.nav.dagpenger.iverksett.infrastruktur.advice.ApiFeil
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.lagUtbetalingDto
 import no.nav.dagpenger.iverksett.util.opprettIverksettDto
@@ -10,28 +13,11 @@ import no.nav.dagpenger.kontrakter.iverksett.Ferietillegg
 import no.nav.dagpenger.kontrakter.iverksett.Vedtaksresultat
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.fail
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
 import java.time.LocalDate
 
-class IverksettingValidatorServiceTest {
-
-    lateinit var iverksettService: IverksettingService
-    lateinit var iverksettResultatService: IverksettResultatService
-    lateinit var validatorService: IverksettingValidatorService
-
-    @BeforeEach
-    fun init() {
-        iverksettResultatService = mockk()
-        iverksettService = mockk()
-
-        validatorService = IverksettingValidatorService(
-            iverksettResultatService = iverksettResultatService,
-            iverksettingService = iverksettService,
-            featureToggleService = mockk(relaxed = true),
-        )
-    }
+class IverksettDtoValidatorTest {
 
     @Test
     fun `Skal få BAD_REQUEST hvis vedtaksresultatet er avslått og det finnes utbetalinger`() {
@@ -40,7 +26,7 @@ class IverksettingValidatorServiceTest {
         )
 
         assertApiFeil(HttpStatus.BAD_REQUEST) {
-            validatorService.validerAtAvslåttVedtakIkkeHarUtbetalinger(iverksettingDto)
+            validerAtAvslåttVedtakIkkeHarUtbetalinger(iverksettingDto)
         }
     }
 
@@ -49,7 +35,7 @@ class IverksettingValidatorServiceTest {
         val iverksettDto = opprettIverksettDto(andelsbeløp = -5)
 
         assertApiFeil(HttpStatus.BAD_REQUEST) {
-            validatorService.validerAtUtbetalingerBareHarPositiveBeløp(iverksettDto)
+            validerAtUtbetalingerBareHarPositiveBeløp(iverksettDto)
         }
     }
 
@@ -69,7 +55,7 @@ class IverksettingValidatorServiceTest {
         )
 
         assertApiFeil(HttpStatus.BAD_REQUEST) {
-            validatorService.validerAtFraOgMedKommerFørTilOgMedIUtbetalingsperioder(iverksettDto)
+            validerAtFraOgMedKommerFørTilOgMedIUtbetalingsperioder(iverksettDto)
         }
     }
 
@@ -94,7 +80,7 @@ class IverksettingValidatorServiceTest {
         )
 
         assertApiFeil(HttpStatus.BAD_REQUEST) {
-            validatorService.validerAtUtbetalingsperioderIkkeOverlapperITid(iverksettDto)
+            validerAtUtbetalingsperioderIkkeOverlapperITid(iverksettDto)
         }
     }
 
@@ -103,7 +89,7 @@ class IverksettingValidatorServiceTest {
         val iverksettDto = opprettIverksettDto(stønadType = StønadType.DAGPENGER_EOS, ferietillegg = Ferietillegg.AVDOD)
 
         assertApiFeil(HttpStatus.BAD_REQUEST) {
-            validatorService.validerAtIngenUtbetalingsperioderHarStønadstypeEØSOgFerietilleggTilAvdød(iverksettDto)
+            validerAtIngenUtbetalingsperioderHarStønadstypeEØSOgFerietilleggTilAvdød(iverksettDto)
         }
     }
 }

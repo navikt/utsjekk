@@ -2,6 +2,7 @@ package no.nav.dagpenger.iverksett.api
 
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.tags.Tag
+import no.nav.dagpenger.iverksett.api.IverksettDtoValidator.valider
 import no.nav.dagpenger.iverksett.api.domene.Brev
 import no.nav.dagpenger.iverksett.infrastruktur.transformer.toDomain
 import no.nav.dagpenger.kontrakter.iverksett.IverksettDto
@@ -37,7 +38,7 @@ class IverksettingController(
     fun iverksettUtenBrev(
         @RequestBody iverksettDto: IverksettDto,
     ): ResponseEntity<Void> {
-        validatorService.validerDto(iverksettDto)
+        iverksettDto.valider()
         val iverksett = iverksettDto.toDomain()
         validatorService.valider(iverksett)
         validatorService.validerUtenBrev(iverksett)
@@ -54,7 +55,7 @@ class IverksettingController(
         @RequestPart("fil", required = false) fil: MultipartFile?,
     ): ResponseEntity<Void> {
         val brev = fil?.let { Brev(it.bytes) }
-        validatorService.validerDto(iverksettDto)
+        iverksettDto.valider()
         val iverksett = iverksettDto.toDomain()
         validatorService.valider(iverksett)
         validatorService.validerBrev(iverksett, brev)
