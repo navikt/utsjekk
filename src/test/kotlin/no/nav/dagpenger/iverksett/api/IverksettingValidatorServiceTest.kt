@@ -3,9 +3,8 @@ package no.nav.dagpenger.iverksett.api
 import io.mockk.mockk
 import no.nav.dagpenger.iverksett.api.tilstand.IverksettResultatService
 import no.nav.dagpenger.iverksett.infrastruktur.advice.ApiFeil
-import no.nav.dagpenger.iverksett.konsumenter.økonomi.lagAndelTilkjentYtelse
-import no.nav.dagpenger.iverksett.lagIverksettData
-import no.nav.dagpenger.iverksett.mai
+import no.nav.dagpenger.iverksett.konsumenter.økonomi.lagAndelTilkjentYtelseDto
+import no.nav.dagpenger.iverksett.util.opprettIverksettDto
 import no.nav.dagpenger.kontrakter.felles.StønadType
 import no.nav.dagpenger.kontrakter.iverksett.Ferietillegg
 import no.nav.dagpenger.kontrakter.iverksett.Vedtaksresultat
@@ -36,97 +35,75 @@ class IverksettingValidatorServiceTest {
 
     @Test
     fun `Skal få BAD_REQUEST hvis vedtaksresultatet er avslått og det finnes utbetalinger`() {
-        val iverksetting = lagIverksettData(
-            beløp = 345,
-            andelsdatoer = listOf(1.mai(2021)),
+        val iverksettingDto = opprettIverksettDto(
             vedtaksresultat = Vedtaksresultat.AVSLÅTT,
         )
 
         assertApiFeil(HttpStatus.BAD_REQUEST) {
-            validatorService.validerAtAvslåttVedtakIkkeHarUtbetalinger(iverksetting)
+            validatorService.validerAtAvslåttVedtakIkkeHarUtbetalinger(iverksettingDto)
         }
     }
 
     @Test
     fun `skal få BAD_REQUEST hvis beløp på utbetaling er negativt`() {
-        val iverksetting = lagIverksettData(
-            beløp = -5,
-            andelsdatoer = listOf(1.mai(2023)),
-        )
+        val iverksettDto = opprettIverksettDto(andelsbeløp = -5)
 
         assertApiFeil(HttpStatus.BAD_REQUEST) {
-            validatorService.validerAtUtbetalingerBareHarPositiveBeløp(iverksetting)
+            validatorService.validerAtUtbetalingerBareHarPositiveBeløp(iverksettDto)
         }
     }
 
     @Test
     fun `skal få BAD_REQUEST hvis tom kommer før fom i utbetalingsperiode`() {
-        // TODO dette valideres allerede når andelene opprettes - fører til en IllegalArgumentException ved feil
-        val tmp = lagIverksettData()
-        val tilkjentYtelse = tmp.vedtak.tilkjentYtelse?.copy(
-            andelerTilkjentYtelse = listOf(
-                lagAndelTilkjentYtelse(
-                    beløp = 345,
-                    fraOgMed = LocalDate.of(2023, 5, 15),
-                    tilOgMed = LocalDate.of(2023, 5, 10),
+        val tmpIverksettDto = opprettIverksettDto()
+        val iverksettDto = tmpIverksettDto.copy(
+            vedtak = tmpIverksettDto.vedtak.copy(
+                utbetalinger = listOf(
+                    lagAndelTilkjentYtelseDto(
+                        beløp = 100,
+                        fraOgMed = LocalDate.of(2023, 5, 15),
+                        tilOgMed = LocalDate.of(2023, 5, 5),
+                    ),
                 ),
             ),
         )
-        val iverksetting = tmp.copy(
-            vedtak = tmp.vedtak.copy(tilkjentYtelse = tilkjentYtelse),
-        )
 
         assertApiFeil(HttpStatus.BAD_REQUEST) {
-            validatorService.validerAtFraOgMedKommerFørTilOgMedIUtbetalingsperioder(iverksetting)
+            validatorService.validerAtFraOgMedKommerFørTilOgMedIUtbetalingsperioder(iverksettDto)
         }
     }
 
     @Test
     fun `Utbetalingsperioder som overlapper skal gi BAD_REQUEST`() {
-        val tmp = lagIverksettData()
-        val tilkjentYtelse = tmp.vedtak.tilkjentYtelse?.copy(
-            andelerTilkjentYtelse = listOf(
-                lagAndelTilkjentYtelse(
-                    beløp = 345,
-                    fraOgMed = LocalDate.of(2023, 5, 15),
-                    tilOgMed = LocalDate.of(2023, 5, 30),
-                ),
-                lagAndelTilkjentYtelse(
-                    beløp = 500,
-                    fraOgMed = LocalDate.of(2023, 5, 20),
-                    tilOgMed = LocalDate.of(2023, 6, 3),
+        val tmpIverksettDto = opprettIverksettDto()
+        val iverksettDto = tmpIverksettDto.copy(
+            vedtak = tmpIverksettDto.vedtak.copy(
+                utbetalinger = listOf(
+                    lagAndelTilkjentYtelseDto(
+                        beløp = 100,
+                        fraOgMed = LocalDate.of(2023, 5, 15),
+                        tilOgMed = LocalDate.of(2023, 5, 30),
+                    ),
+                    lagAndelTilkjentYtelseDto(
+                        beløp = 100,
+                        fraOgMed = LocalDate.of(2023, 5, 20),
+                        tilOgMed = LocalDate.of(2023, 6, 3),
+                    ),
                 ),
             ),
         )
-        val iverksetting = tmp.copy(
-            vedtak = tmp.vedtak.copy(tilkjentYtelse = tilkjentYtelse),
-        )
 
         assertApiFeil(HttpStatus.BAD_REQUEST) {
-            validatorService.validerAtUtbetalingsperioderIkkeOverlapperITid(iverksetting)
+            validatorService.validerAtUtbetalingsperioderIkkeOverlapperITid(iverksettDto)
         }
     }
 
     @Test
     fun `Ferietillegg til avdød for stønadstype EØS skal gi BAD_REQUEST`() {
-        val tmp = lagIverksettData()
-        val tilkjentYtelse = tmp.vedtak.tilkjentYtelse?.copy(
-            andelerTilkjentYtelse = listOf(
-                lagAndelTilkjentYtelse(
-                    beløp = 345,
-                    fraOgMed = LocalDate.of(2023, 5, 15),
-                    tilOgMed = LocalDate.of(2023, 5, 30),
-                    stønadstype = StønadType.DAGPENGER_EOS,
-                    ferietillegg = Ferietillegg.AVDOD,
-                ),
-            ),
-        )
-        val iverksetting = tmp.copy(
-            vedtak = tmp.vedtak.copy(tilkjentYtelse = tilkjentYtelse),
-        )
+        val iverksettDto = opprettIverksettDto(stønadType = StønadType.DAGPENGER_EOS, ferietillegg = Ferietillegg.AVDOD)
 
         assertApiFeil(HttpStatus.BAD_REQUEST) {
-            validatorService.validerAtDetFinnesKlassifiseringForStønadstypeOgFerietillegg(iverksetting)
+            validatorService.validerAtIngenUtbetalingsperioderHarStønadstypeEØSOgFerietilleggTilAvdød(iverksettDto)
         }
     }
 }

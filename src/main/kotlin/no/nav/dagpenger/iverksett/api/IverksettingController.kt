@@ -37,6 +37,7 @@ class IverksettingController(
     fun iverksettUtenBrev(
         @RequestBody iverksettDto: IverksettDto,
     ): ResponseEntity<Void> {
+        validatorService.validerDto(iverksettDto)
         val iverksett = iverksettDto.toDomain()
         validatorService.valider(iverksett)
         validatorService.validerUtenBrev(iverksett)
@@ -53,7 +54,7 @@ class IverksettingController(
         @RequestPart("fil", required = false) fil: MultipartFile?,
     ): ResponseEntity<Void> {
         val brev = fil?.let { Brev(it.bytes) }
-
+        validatorService.validerDto(iverksettDto)
         val iverksett = iverksettDto.toDomain()
         validatorService.valider(iverksett)
         validatorService.validerBrev(iverksett, brev)

@@ -5,12 +5,14 @@ import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
 import no.nav.dagpenger.iverksett.api.domene.erKonsistentMed
 import no.nav.dagpenger.iverksett.api.domene.personIdent
 import no.nav.dagpenger.iverksett.api.domene.sakId
-import no.nav.dagpenger.iverksett.api.domene.tilKlassifisering
 import no.nav.dagpenger.iverksett.api.tilstand.IverksettResultatService
 import no.nav.dagpenger.iverksett.infrastruktur.advice.ApiFeil
 import no.nav.dagpenger.iverksett.infrastruktur.configuration.FeatureToggleConfig
 import no.nav.dagpenger.iverksett.infrastruktur.featuretoggle.FeatureToggleService
 import no.nav.dagpenger.iverksett.konsumenter.tilbakekreving.validerTilbakekreving
+import no.nav.dagpenger.kontrakter.felles.StønadType
+import no.nav.dagpenger.kontrakter.iverksett.Ferietillegg
+import no.nav.dagpenger.kontrakter.iverksett.IverksettDto
 import no.nav.dagpenger.kontrakter.iverksett.IverksettStatus
 import no.nav.dagpenger.kontrakter.iverksett.VedtakType
 import no.nav.dagpenger.kontrakter.iverksett.Vedtaksresultat
@@ -27,14 +29,6 @@ class IverksettingValidatorService(
 ) {
 
     fun valider(iverksett: IverksettDagpenger) {
-        /* Uten DB-oppslag */
-        validerAtInnvilgetUtbetalingsvedtakHarUtbetalinger(iverksett)
-        validerAtAvslåttVedtakIkkeHarUtbetalinger(iverksett)
-        validerAtFraOgMedKommerFørTilOgMedIUtbetalingsperioder(iverksett)
-        validerAtUtbetalingsperioderIkkeOverlapperITid(iverksett)
-        validerAtUtbetalingerBareHarPositiveBeløp(iverksett)
-        validerAtDetFinnesKlassifiseringForStønadstypeOgFerietillegg(iverksett)
-
         /* Med DB-oppslag */
         validerAtBehandlingIkkeAlleredeErMottatt(iverksett)
         validerKonsistensMellomVedtak(iverksett)
@@ -42,6 +36,16 @@ class IverksettingValidatorService(
         validerAtForrigeBehandlingErFerdigIverksatt(iverksett)
 
         validerTilbakekreving(iverksett)
+    }
+
+    fun validerDto(iverksettDto: IverksettDto) {
+        /* Uten DB-oppslag */
+        validerAtInnvilgetUtbetalingsvedtakHarUtbetalinger(iverksettDto)
+        validerAtAvslåttVedtakIkkeHarUtbetalinger(iverksettDto)
+        validerAtFraOgMedKommerFørTilOgMedIUtbetalingsperioder(iverksettDto)
+        validerAtUtbetalingsperioderIkkeOverlapperITid(iverksettDto)
+        validerAtUtbetalingerBareHarPositiveBeløp(iverksettDto)
+        validerAtIngenUtbetalingsperioderHarStønadstypeEØSOgFerietilleggTilAvdød(iverksettDto)
     }
 
     fun validerBrev(iverksettData: IverksettDagpenger, brev: Brev?) {
@@ -63,27 +67,24 @@ class IverksettingValidatorService(
         }
     }
 
-    internal fun validerAtDetFinnesKlassifiseringForStønadstypeOgFerietillegg(iverksett: IverksettDagpenger) {
-        val alleHarGyldigKlassifisering = iverksett.vedtak.tilkjentYtelse?.andelerTilkjentYtelse?.all {
-            try {
-                it.tilKlassifisering()
-                true
-            } catch (e: IllegalArgumentException) {
-                false
-            }
-        } ?: true
+    internal fun validerAtIngenUtbetalingsperioderHarStønadstypeEØSOgFerietilleggTilAvdød(iverksettDto: IverksettDto) {
+        val ugyldigKombinasjon = iverksettDto.vedtak.utbetalinger.any {
+            it.stonadstype == StønadType.DAGPENGER_EOS && it.ferietillegg == Ferietillegg.AVDOD
+        }
 
-        if (!alleHarGyldigKlassifisering) {
+        if (ugyldigKombinasjon) {
             throw ApiFeil(
-                "Klarte ikke å finne klassifisering for kombinasjonen av stønadstype og ferietillegg",
+                "Ferietillegg til avdød er ikke tillatt for stønadstypen ${StønadType.DAGPENGER_EOS}",
                 HttpStatus.BAD_REQUEST,
             )
         }
     }
 
-    internal fun validerAtUtbetalingerBareHarPositiveBeløp(iverksett: IverksettDagpenger) {
-        val alleBeløpErPositive = iverksett.vedtak.tilkjentYtelse?.andelerTilkjentYtelse
-            ?.all { it.beløp > 0 } ?: true
+    internal fun validerAtUtbetalingerBareHarPositiveBeløp(iverksettDto: IverksettDto) {
+        val alleBeløpErPositive = iverksettDto.vedtak.utbetalinger.all {
+            val belop = it.belopPerDag ?: it.beløp ?: throw IllegalArgumentException("Fant hverken belopPerDag eller beløp")
+            belop > 0
+        }
 
         if (!alleBeløpErPositive) {
             throw ApiFeil(
@@ -93,17 +94,17 @@ class IverksettingValidatorService(
         }
     }
 
-    internal fun validerAtUtbetalingsperioderIkkeOverlapperITid(iverksett: IverksettDagpenger) {
-        validerAtFraOgMedKommerFørTilOgMedIUtbetalingsperioder(iverksett)
+    internal fun validerAtUtbetalingsperioderIkkeOverlapperITid(iverksettDto: IverksettDto) {
+        validerAtFraOgMedKommerFørTilOgMedIUtbetalingsperioder(iverksettDto)
 
-        val allePerioderErUavhengige = iverksett.vedtak.tilkjentYtelse?.andelerTilkjentYtelse
-            ?.sortedBy { it.periode.fom }
-            ?.windowed(2, 1, false) {
-                val førstePeriode = it.first().periode
-                val sistePeriode = it.last().periode
+        val allePerioderErUavhengige = iverksettDto.vedtak.utbetalinger
+            .sortedBy { it.fraOgMedDato }
+            .windowed(2, 1, false) {
+                val førstePeriodeTom = it.first().tilOgMedDato
+                val sistePeriodeFom = it.last().fraOgMedDato
 
-                førstePeriode.tom.isBefore(sistePeriode.fom)
-            }?.all { it } ?: true
+                førstePeriodeTom.isBefore(sistePeriodeFom)
+            }.all { it }
 
         if (!allePerioderErUavhengige) {
             throw ApiFeil(
@@ -113,12 +114,12 @@ class IverksettingValidatorService(
         }
     }
 
-    internal fun validerAtFraOgMedKommerFørTilOgMedIUtbetalingsperioder(iverksett: IverksettDagpenger) {
-        val alleErOk = iverksett.vedtak.tilkjentYtelse?.andelerTilkjentYtelse?.all {
-            val fom = it.periode.fom
-            val tom = it.periode.tom
+    internal fun validerAtFraOgMedKommerFørTilOgMedIUtbetalingsperioder(iverksettDto: IverksettDto) {
+        val alleErOk = iverksettDto.vedtak.utbetalinger.all {
+            val fom = it.fraOgMedDato
+            val tom = it.tilOgMedDato
             !tom.isBefore(fom)
-        } ?: true
+        }
 
         if (!alleErOk) {
             throw ApiFeil(
@@ -128,10 +129,10 @@ class IverksettingValidatorService(
         }
     }
 
-    internal fun validerAtInnvilgetUtbetalingsvedtakHarUtbetalinger(iverksett: IverksettDagpenger) {
-        if (iverksett.vedtak.tilkjentYtelse == null &&
-            iverksett.vedtak.vedtaksresultat == Vedtaksresultat.INNVILGET &&
-            iverksett.vedtak.vedtakstype == VedtakType.UTBETALINGSVEDTAK
+    internal fun validerAtInnvilgetUtbetalingsvedtakHarUtbetalinger(iverksettDto: IverksettDto) {
+        if (iverksettDto.vedtak.utbetalinger.isEmpty() &&
+            iverksettDto.vedtak.resultat == Vedtaksresultat.INNVILGET &&
+            iverksettDto.vedtak.vedtakstype == VedtakType.UTBETALINGSVEDTAK
         ) {
             throw ApiFeil(
                 "Kan ikke ha iverksetting av utbertaliingsvedtak uten utbetalinger",
@@ -140,9 +141,9 @@ class IverksettingValidatorService(
         }
     }
 
-    internal fun validerAtAvslåttVedtakIkkeHarUtbetalinger(iverksett: IverksettDagpenger) {
-        if (iverksett.vedtak.tilkjentYtelse != null &&
-            iverksett.vedtak.vedtaksresultat == Vedtaksresultat.AVSLÅTT
+    internal fun validerAtAvslåttVedtakIkkeHarUtbetalinger(iverksettDto: IverksettDto) {
+        if (iverksettDto.vedtak.utbetalinger.isNotEmpty() &&
+            iverksettDto.vedtak.resultat == Vedtaksresultat.AVSLÅTT
         ) {
             throw ApiFeil(
                 "Kan ikke ha iverksetting med utbetalinger når vedtaket er avslått",
