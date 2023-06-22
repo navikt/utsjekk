@@ -6,9 +6,9 @@ import no.nav.dagpenger.kontrakter.iverksett.UtbetalingDto
 
 fun UtbetalingDto.toDomain(): AndelTilkjentYtelse {
     return AndelTilkjentYtelse(
-        beløp = this.beløp ?: this.belopPerDag ?: throw IllegalStateException("Mangler feltet belopPerDag"),
+        beløp = this.belopPerDag,
         periode = Datoperiode(this.fraOgMedDato, this.tilOgMedDato),
-        stønadstype = this.stønadstype ?: stonadstype,
+        stønadstype = stonadstype,
         ferietillegg = this.ferietillegg,
     )
 }

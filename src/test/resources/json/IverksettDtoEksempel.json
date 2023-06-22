@@ -12,12 +12,10 @@
     "avslagAarsak": null,
     "utbetalinger": [
       {
-        "belopPerDag": 0,
-        "beløp": null,
+        "belopPerDag": 10,
         "fraOgMedDato": "2021-05-01",
         "tilOgMedDato": "2021-05-31",
         "stonadstype": "DAGPENGER_ARBEIDSSOKER_ORDINAER",
-        "stønadstype": null,
         "ferietillegg": "ORDINAER"
       }
     ],

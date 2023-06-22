@@ -33,7 +33,7 @@ fun lagUtbetalingDto(
     ferietillegg: Ferietillegg? = null,
 ) =
     UtbetalingDto(
-        beløp = beløp,
+        belopPerDag = beløp,
         fraOgMedDato = fraOgMed,
         tilOgMedDato = tilOgMed,
         stonadstype = stønadstype,
