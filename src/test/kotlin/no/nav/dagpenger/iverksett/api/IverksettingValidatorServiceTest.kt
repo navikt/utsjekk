@@ -21,7 +21,7 @@ class IverksettingValidatorServiceTest {
         iverksettingValidatorService = IverksettingValidatorService(
             iverksettResultatServiceMock,
             iverksettingServiceMock,
-            featureToggleServiceMock
+            featureToggleServiceMock,
         )
     }
 
@@ -29,7 +29,7 @@ class IverksettingValidatorServiceTest {
     fun `skal få BAD_REQUEST når forrige iverksetting er knyttet til en annen sak`() {
         val forrigeIverksetting = lagIverksettData()
         val nåværendeIverksetting = lagIverksettData(
-            forrigeBehandlingId = forrigeIverksetting.behandling.behandlingId
+            forrigeBehandlingId = forrigeIverksetting.behandling.behandlingId,
         )
         every { iverksettingServiceMock.hentForrigeIverksett(nåværendeIverksetting) } returns forrigeIverksetting
 
@@ -45,7 +45,7 @@ class IverksettingValidatorServiceTest {
         val nåværendeIverksetting = iverksettingTmp.copy(
             fagsak = forrigeIverksetting.fagsak,
             forrigeIverksetting = forrigeIverksetting,
-            søker = iverksettingTmp.søker.copy(personIdent = "12345678911")
+            søker = iverksettingTmp.søker.copy(personIdent = "12345678911"),
         )
         every { iverksettingServiceMock.hentForrigeIverksett(nåværendeIverksetting) } returns forrigeIverksetting
 

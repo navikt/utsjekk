@@ -7,7 +7,6 @@ import no.nav.dagpenger.kontrakter.iverksett.IverksettDto
 import no.nav.dagpenger.kontrakter.iverksett.VedtakType
 import no.nav.dagpenger.kontrakter.iverksett.Vedtaksresultat
 import org.springframework.http.HttpStatus
-import java.lang.IllegalArgumentException
 
 object IverksettDtoValidator {
 
@@ -80,7 +79,7 @@ object IverksettDtoValidator {
 
     internal fun utbetalingerHarKunPositiveBeløp(iverksettDto: IverksettDto) {
         val alleBeløpErPositive = iverksettDto.vedtak.utbetalinger.all {
-            val belop = it.belopPerDag ?: it.beløp ?: throw IllegalArgumentException("Fant hverken belopPerDag eller beløp")
+            val belop = it.belopPerDag
             belop > 0
         }
 
