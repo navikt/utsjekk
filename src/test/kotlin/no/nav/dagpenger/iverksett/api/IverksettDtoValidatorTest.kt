@@ -1,10 +1,10 @@
 package no.nav.dagpenger.iverksett.api
 
-import no.nav.dagpenger.iverksett.api.IverksettDtoValidator.validerAtAvslåttVedtakIkkeHarUtbetalinger
-import no.nav.dagpenger.iverksett.api.IverksettDtoValidator.validerAtFraOgMedKommerFørTilOgMedIUtbetalingsperioder
-import no.nav.dagpenger.iverksett.api.IverksettDtoValidator.validerAtIngenUtbetalingsperioderHarStønadstypeEØSOgFerietilleggTilAvdød
-import no.nav.dagpenger.iverksett.api.IverksettDtoValidator.validerAtUtbetalingerBareHarPositiveBeløp
-import no.nav.dagpenger.iverksett.api.IverksettDtoValidator.validerAtUtbetalingsperioderIkkeOverlapperITid
+import no.nav.dagpenger.iverksett.api.IverksettDtoValidator.avslåttVedtakHarIkkeUtbetalinger
+import no.nav.dagpenger.iverksett.api.IverksettDtoValidator.fraOgMedKommerFørTilOgMedIUtbetalingsperioder
+import no.nav.dagpenger.iverksett.api.IverksettDtoValidator.ingenUtbetalingsperioderHarStønadstypeEØSOgFerietilleggTilAvdød
+import no.nav.dagpenger.iverksett.api.IverksettDtoValidator.utbetalingerHarKunPositiveBeløp
+import no.nav.dagpenger.iverksett.api.IverksettDtoValidator.utbetalingsperioderOverlapperIkkeITid
 import no.nav.dagpenger.iverksett.infrastruktur.advice.ApiFeil
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.lagUtbetalingDto
 import no.nav.dagpenger.iverksett.util.opprettIverksettDto
@@ -26,7 +26,7 @@ class IverksettDtoValidatorTest {
         )
 
         assertApiFeil(HttpStatus.BAD_REQUEST) {
-            validerAtAvslåttVedtakIkkeHarUtbetalinger(iverksettingDto)
+            avslåttVedtakHarIkkeUtbetalinger(iverksettingDto)
         }
     }
 
@@ -35,7 +35,7 @@ class IverksettDtoValidatorTest {
         val iverksettDto = opprettIverksettDto(andelsbeløp = -5)
 
         assertApiFeil(HttpStatus.BAD_REQUEST) {
-            validerAtUtbetalingerBareHarPositiveBeløp(iverksettDto)
+            utbetalingerHarKunPositiveBeløp(iverksettDto)
         }
     }
 
@@ -55,7 +55,7 @@ class IverksettDtoValidatorTest {
         )
 
         assertApiFeil(HttpStatus.BAD_REQUEST) {
-            validerAtFraOgMedKommerFørTilOgMedIUtbetalingsperioder(iverksettDto)
+            fraOgMedKommerFørTilOgMedIUtbetalingsperioder(iverksettDto)
         }
     }
 
@@ -80,7 +80,7 @@ class IverksettDtoValidatorTest {
         )
 
         assertApiFeil(HttpStatus.BAD_REQUEST) {
-            validerAtUtbetalingsperioderIkkeOverlapperITid(iverksettDto)
+            utbetalingsperioderOverlapperIkkeITid(iverksettDto)
         }
     }
 
@@ -89,7 +89,7 @@ class IverksettDtoValidatorTest {
         val iverksettDto = opprettIverksettDto(stønadType = StønadType.DAGPENGER_EOS, ferietillegg = Ferietillegg.AVDOD)
 
         assertApiFeil(HttpStatus.BAD_REQUEST) {
-            validerAtIngenUtbetalingsperioderHarStønadstypeEØSOgFerietilleggTilAvdød(iverksettDto)
+            ingenUtbetalingsperioderHarStønadstypeEØSOgFerietilleggTilAvdød(iverksettDto)
         }
     }
 }

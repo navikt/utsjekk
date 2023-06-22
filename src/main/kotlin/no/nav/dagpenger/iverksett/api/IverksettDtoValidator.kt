@@ -12,15 +12,15 @@ import java.lang.IllegalArgumentException
 object IverksettDtoValidator {
 
     fun IverksettDto.valider() {
-        validerAtInnvilgetUtbetalingsvedtakHarUtbetalinger(this)
-        validerAtAvslåttVedtakIkkeHarUtbetalinger(this)
-        validerAtFraOgMedKommerFørTilOgMedIUtbetalingsperioder(this)
-        validerAtUtbetalingsperioderIkkeOverlapperITid(this)
-        validerAtUtbetalingerBareHarPositiveBeløp(this)
-        validerAtIngenUtbetalingsperioderHarStønadstypeEØSOgFerietilleggTilAvdød(this)
+        innvilgetUtbetalingsvedtakHarUtbetalinger(this)
+        avslåttVedtakHarIkkeUtbetalinger(this)
+        fraOgMedKommerFørTilOgMedIUtbetalingsperioder(this)
+        utbetalingsperioderOverlapperIkkeITid(this)
+        utbetalingerHarKunPositiveBeløp(this)
+        ingenUtbetalingsperioderHarStønadstypeEØSOgFerietilleggTilAvdød(this)
     }
 
-    internal fun validerAtInnvilgetUtbetalingsvedtakHarUtbetalinger(iverksettDto: IverksettDto) {
+    internal fun innvilgetUtbetalingsvedtakHarUtbetalinger(iverksettDto: IverksettDto) {
         if (iverksettDto.vedtak.utbetalinger.isEmpty() &&
             iverksettDto.vedtak.resultat == Vedtaksresultat.INNVILGET &&
             iverksettDto.vedtak.vedtakstype == VedtakType.UTBETALINGSVEDTAK
@@ -32,7 +32,7 @@ object IverksettDtoValidator {
         }
     }
 
-    internal fun validerAtAvslåttVedtakIkkeHarUtbetalinger(iverksettDto: IverksettDto) {
+    internal fun avslåttVedtakHarIkkeUtbetalinger(iverksettDto: IverksettDto) {
         if (iverksettDto.vedtak.utbetalinger.isNotEmpty() &&
             iverksettDto.vedtak.resultat == Vedtaksresultat.AVSLÅTT
         ) {
@@ -43,7 +43,7 @@ object IverksettDtoValidator {
         }
     }
 
-    internal fun validerAtFraOgMedKommerFørTilOgMedIUtbetalingsperioder(iverksettDto: IverksettDto) {
+    internal fun fraOgMedKommerFørTilOgMedIUtbetalingsperioder(iverksettDto: IverksettDto) {
         val alleErOk = iverksettDto.vedtak.utbetalinger.all {
             val fom = it.fraOgMedDato
             val tom = it.tilOgMedDato
@@ -58,8 +58,8 @@ object IverksettDtoValidator {
         }
     }
 
-    internal fun validerAtUtbetalingsperioderIkkeOverlapperITid(iverksettDto: IverksettDto) {
-        validerAtFraOgMedKommerFørTilOgMedIUtbetalingsperioder(iverksettDto)
+    internal fun utbetalingsperioderOverlapperIkkeITid(iverksettDto: IverksettDto) {
+        fraOgMedKommerFørTilOgMedIUtbetalingsperioder(iverksettDto)
 
         val allePerioderErUavhengige = iverksettDto.vedtak.utbetalinger
             .sortedBy { it.fraOgMedDato }
@@ -78,7 +78,7 @@ object IverksettDtoValidator {
         }
     }
 
-    internal fun validerAtUtbetalingerBareHarPositiveBeløp(iverksettDto: IverksettDto) {
+    internal fun utbetalingerHarKunPositiveBeløp(iverksettDto: IverksettDto) {
         val alleBeløpErPositive = iverksettDto.vedtak.utbetalinger.all {
             val belop = it.belopPerDag ?: it.beløp ?: throw IllegalArgumentException("Fant hverken belopPerDag eller beløp")
             belop > 0
@@ -92,7 +92,7 @@ object IverksettDtoValidator {
         }
     }
 
-    internal fun validerAtIngenUtbetalingsperioderHarStønadstypeEØSOgFerietilleggTilAvdød(iverksettDto: IverksettDto) {
+    internal fun ingenUtbetalingsperioderHarStønadstypeEØSOgFerietilleggTilAvdød(iverksettDto: IverksettDto) {
         val ugyldigKombinasjon = iverksettDto.vedtak.utbetalinger.any {
             it.stonadstype == StønadType.DAGPENGER_EOS && it.ferietillegg == Ferietillegg.AVDOD
         }
