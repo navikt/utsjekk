@@ -25,7 +25,7 @@ object IverksettDtoValidator {
             iverksettDto.vedtak.vedtakstype == VedtakType.UTBETALINGSVEDTAK
         ) {
             throw ApiFeil(
-                "Kan ikke ha iverksetting av utbertaliingsvedtak uten utbetalinger",
+                "Kan ikke ha iverksetting av utbetalingsvedtak uten utbetalinger",
                 HttpStatus.BAD_REQUEST,
             )
         }
@@ -85,7 +85,7 @@ object IverksettDtoValidator {
 
         if (!alleBeløpErPositive) {
             throw ApiFeil(
-                "Det finnes utbetalinger ikke har positivt belopPerDag",
+                "Det finnes utbetalinger som ikke har positivt belopPerDag",
                 HttpStatus.BAD_REQUEST,
             )
         }
