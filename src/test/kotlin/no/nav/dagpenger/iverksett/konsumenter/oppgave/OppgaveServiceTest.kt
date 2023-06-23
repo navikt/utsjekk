@@ -9,6 +9,7 @@ import io.mockk.verify
 import no.nav.dagpenger.iverksett.api.IverksettingRepository
 import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
 import no.nav.dagpenger.iverksett.api.domene.VedtaksperiodeDagpenger
+import no.nav.dagpenger.iverksett.api.domene.behandlingId
 import no.nav.dagpenger.iverksett.infrastruktur.FamilieIntegrasjonerClient
 import no.nav.dagpenger.iverksett.infrastruktur.repository.findByIdOrThrow
 import no.nav.dagpenger.iverksett.lagIverksett
@@ -73,10 +74,9 @@ internal class OppgaveServiceTest {
     @Test
     internal fun `revurdering avslått, forvent skalOpprette false`() {
         val iverksettData = lagIverksettData(
-            UUID.randomUUID(),
-            BehandlingType.REVURDERING,
-            Vedtaksresultat.AVSLÅTT,
-            emptyList(),
+            behandlingType = BehandlingType.REVURDERING,
+            vedtaksresultat = Vedtaksresultat.AVSLÅTT,
+            vedtaksperioder = emptyList(),
         )
         every { iverksettRepository.findByIdOrThrow(any()) } returns lagIverksett(iverksettData)
         assertThat(oppgaveService.skalOppretteVurderHenvendelseOppgave(iverksettData)).isFalse
@@ -84,17 +84,16 @@ internal class OppgaveServiceTest {
 
     @Test
     internal fun `revurdering innvilget, forrige er opphørt skal opprette opppgave`() {
-        val iverksett = lagIverksettData(
-            UUID.randomUUID(),
-            BehandlingType.REVURDERING,
-            Vedtaksresultat.INNVILGET,
-            listOf(vedtaksPeriode()),
-        )
         val forrigeBehandlingIverksett = lagIverksettData(
-            UUID.randomUUID(),
-            BehandlingType.REVURDERING,
-            Vedtaksresultat.OPPHØRT,
-            emptyList(),
+            behandlingType = BehandlingType.REVURDERING,
+            vedtaksresultat = Vedtaksresultat.OPPHØRT,
+            vedtaksperioder = emptyList(),
+        )
+        val iverksett = lagIverksettData(
+            forrigeIverksetting = forrigeBehandlingIverksett,
+            behandlingType = BehandlingType.REVURDERING,
+            vedtaksresultat = Vedtaksresultat.INNVILGET,
+            vedtaksperioder = listOf(vedtaksPeriode()),
         )
         every { iverksettRepository.findByIdOrThrow(any()) } returns lagIverksett(forrigeBehandlingIverksett)
         assertThat(oppgaveService.skalOppretteVurderHenvendelseOppgave(iverksett)).isTrue()
@@ -102,18 +101,18 @@ internal class OppgaveServiceTest {
 
     @Test
     internal fun `revurdering innvilget, forrige behandling opphørt og uten perioder, forvent skalOpprette true`() {
-        val iverksett = lagIverksettData(
-            UUID.randomUUID(),
-            BehandlingType.REVURDERING,
-            Vedtaksresultat.INNVILGET,
-            listOf(vedtaksPeriode()),
-        )
         val forrigeBehandlingIverksett = lagIverksettData(
-            UUID.randomUUID(),
-            BehandlingType.REVURDERING,
-            Vedtaksresultat.OPPHØRT,
-            listOf(vedtaksPeriode()),
+            behandlingType = BehandlingType.REVURDERING,
+            vedtaksresultat = Vedtaksresultat.OPPHØRT,
+            vedtaksperioder = listOf(vedtaksPeriode()),
         )
+        val iverksett = lagIverksettData(
+            forrigeIverksetting = forrigeBehandlingIverksett,
+            behandlingType = BehandlingType.REVURDERING,
+            vedtaksresultat = Vedtaksresultat.INNVILGET,
+            vedtaksperioder = listOf(vedtaksPeriode()),
+        )
+
         every { iverksettRepository.findByIdOrThrow(any()) } returns lagIverksett(forrigeBehandlingIverksett)
         assertThat(oppgaveService.skalOppretteVurderHenvendelseOppgave(iverksett)).isTrue()
     }
@@ -121,10 +120,9 @@ internal class OppgaveServiceTest {
     @Test
     internal fun `revurdering innvilget, men avslått f-behandling, forvent skalOpprette true`() {
         val iverksettData = lagIverksettData(
-            null,
-            BehandlingType.REVURDERING,
-            Vedtaksresultat.INNVILGET,
-            listOf(vedtaksPeriode()),
+            behandlingType = BehandlingType.REVURDERING,
+            vedtaksresultat = Vedtaksresultat.INNVILGET,
+            vedtaksperioder = listOf(vedtaksPeriode()),
         )
         every { iverksettRepository.findByIdOrThrow(any()) } returns lagIverksett(iverksettData)
         assertThat(oppgaveService.skalOppretteVurderHenvendelseOppgave(iverksettData)).isTrue()
@@ -133,10 +131,9 @@ internal class OppgaveServiceTest {
     @Test
     internal fun `revurdering innvilget, men avslått f-behandling, forvent kall til beskrivelseFørstegangsbehandlingInnvilget`() {
         val iverksett = lagIverksettData(
-            null,
-            BehandlingType.REVURDERING,
-            Vedtaksresultat.INNVILGET,
-            listOf(vedtaksPeriode()),
+            behandlingType = BehandlingType.REVURDERING,
+            vedtaksresultat = Vedtaksresultat.INNVILGET,
+            vedtaksperioder = listOf(vedtaksPeriode()),
         )
 
         oppgaveService.opprettVurderHenvendelseOppgave(iverksett)
@@ -146,23 +143,23 @@ internal class OppgaveServiceTest {
 
     @Test
     internal fun `revurdering innvilget med aktivitetsendring og periodeendring, forvent skalOpprette true`() {
-        val iverksett = lagIverksettData(
-            UUID.randomUUID(),
-            BehandlingType.REVURDERING,
-            Vedtaksresultat.INNVILGET,
-            listOf(vedtaksPeriode()),
-        )
         val forrigeBehandlingIverksett = lagIverksettData(
-            UUID.randomUUID(),
-            BehandlingType.REVURDERING,
-            Vedtaksresultat.INNVILGET,
-            listOf(
+            behandlingType = BehandlingType.REVURDERING,
+            vedtaksresultat = Vedtaksresultat.INNVILGET,
+            vedtaksperioder = listOf(
                 vedtaksPeriode(
                     fraOgMed = LocalDate.now().plusMonths(2),
                     tilOgMed = LocalDate.now().plusMonths(3),
                 ),
             ),
         )
+        val iverksett = lagIverksettData(
+            forrigeIverksetting = forrigeBehandlingIverksett,
+            behandlingType = BehandlingType.REVURDERING,
+            vedtaksresultat = Vedtaksresultat.INNVILGET,
+            vedtaksperioder = listOf(vedtaksPeriode()),
+        )
+
         val forrigeBehandlingId = iverksett.behandling.forrigeBehandlingId!!
         every { iverksettRepository.findByIdOrThrow(forrigeBehandlingId) } returns lagIverksett(
             forrigeBehandlingIverksett,
@@ -174,45 +171,45 @@ internal class OppgaveServiceTest {
 
     @Test
     internal fun `revurdering innvilget med kun periodeendring, forvent skalOpprette true`() {
-        val iverksett = lagIverksettData(
-            UUID.randomUUID(),
-            BehandlingType.REVURDERING,
-            Vedtaksresultat.INNVILGET,
-            listOf(vedtaksPeriode()),
-        )
         val forrigeBehandlingIverksett = lagIverksettData(
-            UUID.randomUUID(),
-            BehandlingType.REVURDERING,
-            Vedtaksresultat.INNVILGET,
-            listOf(
+            behandlingType = BehandlingType.REVURDERING,
+            vedtaksresultat = Vedtaksresultat.INNVILGET,
+            vedtaksperioder = listOf(
                 vedtaksPeriode(
                     fraOgMed = LocalDate.now().plusMonths(2),
                     tilOgMed = LocalDate.now().plusMonths(3),
                 ),
             ),
         )
+        val iverksett = lagIverksettData(
+            forrigeIverksetting = forrigeBehandlingIverksett,
+            behandlingType = BehandlingType.REVURDERING,
+            vedtaksresultat = Vedtaksresultat.INNVILGET,
+            vedtaksperioder = listOf(vedtaksPeriode()),
+        )
+
         every { iverksettRepository.findByIdOrThrow(any()) } returns lagIverksett(forrigeBehandlingIverksett)
         assertThat(oppgaveService.skalOppretteVurderHenvendelseOppgave(iverksett)).isTrue()
     }
 
     @Test
     internal fun `revurdering innvilget med kun endring i fom dato, forvent skalOpprette false`() {
-        val iverksett = lagIverksettData(
-            UUID.randomUUID(),
-            BehandlingType.REVURDERING,
-            Vedtaksresultat.INNVILGET,
-            listOf(vedtaksPeriode()),
-        )
         val forrigeBehandlingIverksett = lagIverksettData(
-            UUID.randomUUID(),
-            BehandlingType.REVURDERING,
-            Vedtaksresultat.INNVILGET,
-            listOf(
+            behandlingType = BehandlingType.REVURDERING,
+            vedtaksresultat = Vedtaksresultat.INNVILGET,
+            vedtaksperioder = listOf(
                 vedtaksPeriode(
                     fraOgMed = LocalDate.now().minusMonths(3),
                 ),
             ),
         )
+        val iverksett = lagIverksettData(
+            forrigeIverksetting = forrigeBehandlingIverksett,
+            behandlingType = BehandlingType.REVURDERING,
+            vedtaksresultat = Vedtaksresultat.INNVILGET,
+            vedtaksperioder = listOf(vedtaksPeriode()),
+        )
+
         every { iverksettRepository.findByIdOrThrow(any()) } returns lagIverksett(forrigeBehandlingIverksett)
         assertThat(oppgaveService.skalOppretteVurderHenvendelseOppgave(iverksett)).isFalse()
     }
@@ -220,10 +217,9 @@ internal class OppgaveServiceTest {
     @Test
     internal fun `innvilget førstegangsbehandling, forvent kall til beskrivelseFørstegangsbehandlingInnvilget`() {
         val iverksett = lagIverksettData(
-            UUID.randomUUID(),
-            BehandlingType.FØRSTEGANGSBEHANDLING,
-            Vedtaksresultat.INNVILGET,
-            listOf(vedtaksPeriode()),
+            behandlingType = BehandlingType.FØRSTEGANGSBEHANDLING,
+            vedtaksresultat = Vedtaksresultat.INNVILGET,
+            vedtaksperioder = listOf(vedtaksPeriode()),
         )
 
         oppgaveService.opprettVurderHenvendelseOppgave(iverksett)
@@ -233,10 +229,9 @@ internal class OppgaveServiceTest {
     @Test
     internal fun `avslått førstegangsbehandling, forvent kall til beskrivelseFørstegangsbehandlingAvslått`() {
         val iverksett = lagIverksettData(
-            UUID.randomUUID(),
-            BehandlingType.FØRSTEGANGSBEHANDLING,
-            Vedtaksresultat.AVSLÅTT,
-            listOf(vedtaksPeriode()),
+            behandlingType = BehandlingType.FØRSTEGANGSBEHANDLING,
+            vedtaksresultat = Vedtaksresultat.AVSLÅTT,
+            vedtaksperioder = listOf(vedtaksPeriode()),
         )
 
         oppgaveService.opprettVurderHenvendelseOppgave(iverksett)
@@ -246,10 +241,10 @@ internal class OppgaveServiceTest {
     @Test
     internal fun `innvilget revurdering, forvent kall til beskrivelseRevurderingInnvilget`() {
         val iverksett = lagIverksettData(
-            UUID.randomUUID(),
-            BehandlingType.REVURDERING,
-            Vedtaksresultat.INNVILGET,
-            listOf(vedtaksPeriode()),
+            forrigeBehandlingId = UUID.randomUUID(),
+            behandlingType = BehandlingType.REVURDERING,
+            vedtaksresultat = Vedtaksresultat.INNVILGET,
+            vedtaksperioder = listOf(vedtaksPeriode()),
         )
 
         oppgaveService.opprettVurderHenvendelseOppgave(iverksett)
@@ -269,10 +264,9 @@ internal class OppgaveServiceTest {
     @Test
     internal fun `opphørt revurdering, forvent kall til beskrivelseRevurderingOpphørt`() {
         val iverksett = lagIverksettData(
-            UUID.randomUUID(),
-            BehandlingType.REVURDERING,
-            Vedtaksresultat.OPPHØRT,
-            listOf(vedtaksPeriode()),
+            behandlingType = BehandlingType.REVURDERING,
+            vedtaksresultat = Vedtaksresultat.OPPHØRT,
+            vedtaksperioder = listOf(vedtaksPeriode()),
             andelsdatoer = listOf(LocalDate.now()),
         )
 
@@ -284,10 +278,9 @@ internal class OppgaveServiceTest {
     internal fun `revurdering opphør, forvent at andel med maks tom dato blir sendt som arg til beskrivelse`() {
         val opphørsdato = slot<LocalDate>()
         val iverksett = lagIverksettData(
-            UUID.randomUUID(),
-            BehandlingType.REVURDERING,
-            Vedtaksresultat.OPPHØRT,
-            listOf(vedtaksPeriode()),
+            behandlingType = BehandlingType.REVURDERING,
+            vedtaksresultat = Vedtaksresultat.OPPHØRT,
+            vedtaksperioder = listOf(vedtaksPeriode()),
             andelsdatoer = listOf(LocalDate.now().minusMonths(2), LocalDate.now(), LocalDate.now().minusMonths(1)),
         )
 
@@ -300,26 +293,25 @@ internal class OppgaveServiceTest {
     internal fun `av migreringssak, revurdering opphør, forvent at skalOppretteVurderHendelseOppgave er lik true`() {
         val forrigeBehandlingId = UUID.randomUUID()
         val vedtaksperioder = listOf(vedtaksPeriode())
-        val iverksett = lagIverksettData(
-            forrigeBehandlingId,
-            BehandlingType.REVURDERING,
-            Vedtaksresultat.OPPHØRT,
-            vedtaksperioder,
-        )
         val forrigeIverksett = lagIverksettData(
-            null,
-            BehandlingType.FØRSTEGANGSBEHANDLING,
-            Vedtaksresultat.INNVILGET,
-            vedtaksperioder,
+            behandlingType = BehandlingType.FØRSTEGANGSBEHANDLING,
+            vedtaksresultat = Vedtaksresultat.INNVILGET,
+            vedtaksperioder = vedtaksperioder,
             erMigrering = true,
         )
+        val iverksett = lagIverksettData(
+            forrigeIverksetting = forrigeIverksett,
+            behandlingType = BehandlingType.REVURDERING,
+            vedtaksresultat = Vedtaksresultat.OPPHØRT,
+            vedtaksperioder = vedtaksperioder,
+        )
+
         every { iverksettRepository.findByIdOrThrow(forrigeBehandlingId) } returns lagIverksett(forrigeIverksett)
         assertThat(oppgaveService.skalOppretteVurderHenvendelseOppgave(iverksett)).isTrue()
     }
 
     @Test
     internal fun `revurdering, forrige behandling er gOmregnet, periodetype migrering, forvent skalOppretteVurderHendelseOppgave lik false`() {
-        val forrigeBehandlingId = UUID.randomUUID()
         val vedtaksperioder = listOf(vedtaksPeriode())
         val forrigeVedtaksperioder = listOf(
             vedtaksPeriode(
@@ -328,26 +320,25 @@ internal class OppgaveServiceTest {
                 periodeType = VedtaksperiodeType.MIGRERING,
             ),
         )
-        val iverksett = lagIverksettData(
-            forrigeBehandlingId,
-            BehandlingType.REVURDERING,
-            Vedtaksresultat.INNVILGET,
-            vedtaksperioder = vedtaksperioder,
-        )
         val forrigeIverksett = lagIverksettData(
-            null,
-            BehandlingType.FØRSTEGANGSBEHANDLING,
-            Vedtaksresultat.INNVILGET,
+            behandlingType = BehandlingType.FØRSTEGANGSBEHANDLING,
+            vedtaksresultat = Vedtaksresultat.INNVILGET,
             vedtaksperioder = forrigeVedtaksperioder,
             årsak = BehandlingÅrsak.G_OMREGNING,
         )
-        every { iverksettRepository.findByIdOrThrow(forrigeBehandlingId) } returns lagIverksett(forrigeIverksett)
+        val iverksett = lagIverksettData(
+            forrigeIverksetting = forrigeIverksett,
+            behandlingType = BehandlingType.REVURDERING,
+            vedtaksresultat = Vedtaksresultat.INNVILGET,
+            vedtaksperioder = vedtaksperioder,
+        )
+
+        every { iverksettRepository.findByIdOrThrow(forrigeIverksett.behandlingId) } returns lagIverksett(forrigeIverksett)
         assertThat(oppgaveService.skalOppretteVurderHenvendelseOppgave(iverksett)).isFalse()
     }
 
     @Test
     internal fun `revurdering, forrige behandling er gOmregnet, periodetype ikke migrering, forvent skalOppretteVurderHendelseOppgave lik true`() {
-        val forrigeBehandlingId = UUID.randomUUID()
         val vedtaksperioder = listOf(vedtaksPeriode())
         val forrigeVedtaksperioder = listOf(
             vedtaksPeriode(
@@ -356,32 +347,33 @@ internal class OppgaveServiceTest {
                 periodeType = VedtaksperiodeType.HOVEDPERIODE,
             ),
         )
-        val iverksett = lagIverksettData(
-            forrigeBehandlingId,
-            BehandlingType.REVURDERING,
-            Vedtaksresultat.INNVILGET,
-            vedtaksperioder = vedtaksperioder,
-        )
         val forrigeIverksett = lagIverksettData(
-            null,
-            BehandlingType.FØRSTEGANGSBEHANDLING,
-            Vedtaksresultat.INNVILGET,
+            behandlingType = BehandlingType.FØRSTEGANGSBEHANDLING,
+            vedtaksresultat = Vedtaksresultat.INNVILGET,
             vedtaksperioder = forrigeVedtaksperioder,
         )
-        every { iverksettRepository.findByIdOrThrow(forrigeBehandlingId) } returns lagIverksett(forrigeIverksett)
+        val iverksett = lagIverksettData(
+            forrigeIverksetting = forrigeIverksett,
+            behandlingType = BehandlingType.REVURDERING,
+            vedtaksresultat = Vedtaksresultat.INNVILGET,
+            vedtaksperioder = vedtaksperioder,
+        )
+
+        every { iverksettRepository.findByIdOrThrow(forrigeIverksett.behandlingId) } returns lagIverksett(forrigeIverksett)
         assertThat(oppgaveService.skalOppretteVurderHenvendelseOppgave(iverksett)).isTrue()
     }
 
     @Test
     internal fun `av migreringssak, revurdering innvilget, forvent at skalOppretteVurderHendelseOppgave er lik false`() {
+        val forrigeBehandlingIverksett = lagMigreringsIverksetting()
         val iverksett = lagIverksettData(
-            UUID.randomUUID(),
-            BehandlingType.REVURDERING,
-            Vedtaksresultat.INNVILGET,
-            listOf(vedtaksPeriode()),
+            forrigeIverksetting = forrigeBehandlingIverksett,
+            behandlingType = BehandlingType.REVURDERING,
+            vedtaksresultat = Vedtaksresultat.INNVILGET,
+            vedtaksperioder = listOf(vedtaksPeriode()),
             andelsdatoer = listOf(LocalDate.now().minusMonths(2), LocalDate.now(), LocalDate.now().minusMonths(1)),
         )
-        val forrigeBehandlingIverksett = lagMigreringsIverksetting()
+
         every { iverksettRepository.findByIdOrThrow(any()) } returns lagIverksett(forrigeBehandlingIverksett)
         assertThat(oppgaveService.skalOppretteVurderHenvendelseOppgave(iverksett)).isFalse()
     }
@@ -397,10 +389,9 @@ internal class OppgaveServiceTest {
     }
 
     private fun lagMigreringsIverksetting() = lagIverksettData(
-        UUID.randomUUID(),
-        BehandlingType.REVURDERING,
-        Vedtaksresultat.INNVILGET,
-        listOf(
+        behandlingType = BehandlingType.REVURDERING,
+        vedtaksresultat = Vedtaksresultat.INNVILGET,
+        vedtaksperioder = listOf(
             vedtaksPeriode(
                 fraOgMed = LocalDate.now().minusMonths(3),
                 periodeType = VedtaksperiodeType.MIGRERING,
@@ -416,10 +407,9 @@ internal class OppgaveServiceTest {
         )
         val andeler = listOf(sanksjonsdato.minusMonths(1), sanksjonsdato.plusMonths(1))
         return lagIverksettData(
-            UUID.randomUUID(),
-            BehandlingType.REVURDERING,
-            Vedtaksresultat.INNVILGET,
-            listOf(vedtaksPeriode),
+            behandlingType = BehandlingType.REVURDERING,
+            vedtaksresultat = Vedtaksresultat.INNVILGET,
+            vedtaksperioder = listOf(vedtaksPeriode),
             andelsdatoer = andeler,
             årsak = BehandlingÅrsak.SANKSJON_1_MND,
         )
