@@ -6,6 +6,7 @@ import no.nav.dagpenger.iverksett.api.domene.behandlingId
 import no.nav.dagpenger.iverksett.api.tilstand.IverksettResultatService
 import no.nav.dagpenger.iverksett.infrastruktur.featuretoggle.FeatureToggleService
 import no.nav.dagpenger.iverksett.lagIverksettData
+import no.nav.dagpenger.kontrakter.iverksett.IverksettStatus
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
@@ -66,4 +67,19 @@ class IverksettingValidatorServiceTest {
             iverksettingValidatorService.validerAtBehandlingIkkeAlleredeErMottatt(iverksetting)
         }
     }
+
+    @Test
+    fun `skal få CONFLICT når forrige iverksetting ikke er ferdig og OK mot oppdrag`() {
+        val forrigeIverksetting = lagIverksettData()
+        val nåværendeIverksetting = lagIverksettData(
+            forrigeBehandlingId = forrigeIverksetting.behandlingId,
+        )
+
+        every { iverksettingServiceMock.utledStatus(forrigeIverksetting.behandlingId) } returns IverksettStatus.IKKE_PAABEGYNT
+
+        assertApiFeil(HttpStatus.CONFLICT) {
+            iverksettingValidatorService.validerAtForrigeBehandlingErFerdigIverksattMotOppdrag(nåværendeIverksetting)
+        }
+    }
+
 }

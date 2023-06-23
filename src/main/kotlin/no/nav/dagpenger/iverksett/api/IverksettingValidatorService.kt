@@ -26,7 +26,7 @@ class IverksettingValidatorService(
         validerAtBehandlingIkkeAlleredeErMottatt(iverksett)
         validerKonsistensMellomVedtak(iverksett)
         validerAtIverksettingErForSammeSakOgPersonSomForrige(iverksett)
-        validerAtForrigeBehandlingErFerdigIverksatt(iverksett)
+        validerAtForrigeBehandlingErFerdigIverksattMotOppdrag(iverksett)
 
         validerTilbakekreving(iverksett)
     }
@@ -101,10 +101,11 @@ class IverksettingValidatorService(
         }
     }
 
-    internal fun validerAtForrigeBehandlingErFerdigIverksatt(iverksett: IverksettDagpenger?) {
+    internal fun validerAtForrigeBehandlingErFerdigIverksattMotOppdrag(iverksett: IverksettDagpenger?) {
         iverksett?.behandling?.forrigeBehandlingId?.apply {
-            if (iverksettingService.utledStatus(this) != IverksettStatus.OK) {
-                throw ApiFeil("Forrige iverksetting  er ikke ferdig", HttpStatus.CONFLICT)
+            val status = iverksettingService.utledStatus(this)
+            if (status!=null && !status.erIverksattMotOppdrag()) {
+                throw ApiFeil("Forrige iverksetting  er ikke ferdig iverksatt mot oppdrag", HttpStatus.CONFLICT)
             }
         }
     }
@@ -124,3 +125,10 @@ class IverksettingValidatorService(
         }
     }
 }
+
+fun IverksettStatus.erIverksattMotOppdrag() =
+    listOf(
+        IverksettStatus.OK_MOT_OPPDRAG,
+        IverksettStatus.JOURNALFORT,
+        IverksettStatus.OK
+    ).contains(this)
