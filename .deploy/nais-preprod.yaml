@@ -46,6 +46,7 @@ spec:
       rules:
         - application: dp-iverksett # For testing; kan finne bruken token for app'en til å kalle seg selv
         - application: dp-vedtak
+        - application: dp-vedtak-iverksett
         - application: dp-sak-lokal # TODO Navnet på vedtaksløsningen
         - application: dp-prosessering #frontend for task-rammeverket
         - application: dp-ekstern-integrasjon #Tilgang til vedtaksdata via maskinporten
