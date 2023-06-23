@@ -121,3 +121,8 @@ data class TilbakekrevingMedVarsel(
     val sumFeilutbetaling: BigDecimal?,
     val perioder: List<Datoperiode>?,
 )
+
+val IverksettDagpenger.sakId get() = this.fagsak.fagsakId
+val IverksettDagpenger.personIdent get() = this.søker.personIdent
+
+val IverksettDagpenger.behandlingId get() = this.behandling.behandlingId

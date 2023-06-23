@@ -1,9 +1,8 @@
 package no.nav.dagpenger.iverksett.konsumenter.økonomi
 
-import no.nav.dagpenger.iverksett.api.IverksettingRepository
-import no.nav.dagpenger.iverksett.api.domene.stemmerMed
+import no.nav.dagpenger.iverksett.api.IverksettingService
+import no.nav.dagpenger.iverksett.api.domene.erKonsistentMed
 import no.nav.dagpenger.iverksett.api.tilstand.IverksettResultatService
-import no.nav.dagpenger.iverksett.infrastruktur.repository.findByIdOrThrow
 import no.nav.dagpenger.iverksett.konsumenter.opprettNesteTask
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.UtbetalingsoppdragGenerator.lagTilkjentYtelseMedUtbetalingsoppdrag
 import no.nav.familie.prosessering.AsyncTaskStep
@@ -21,7 +20,7 @@ import java.util.UUID
     beskrivelse = "Utfører iverksetting av utbetalning mot økonomi.",
 )
 class IverksettMotOppdragTask(
-    private val iverksettingRepository: IverksettingRepository,
+    private val iverksettingService: IverksettingService,
     private val oppdragClient: OppdragClient,
     private val taskService: TaskService,
     private val iverksettResultatService: IverksettResultatService,
@@ -31,13 +30,15 @@ class IverksettMotOppdragTask(
 
     override fun doTask(task: Task) {
         val behandlingId = UUID.fromString(task.payload)
-        val iverksett = iverksettingRepository.findByIdOrThrow(behandlingId).data
+        val iverksett = iverksettingService.hentIverksetting(behandlingId)
+            ?: error("Fant ikke iverksetting for behandlingId $behandlingId")
+
         val forrigeIverksettResultat = iverksett.behandling.forrigeBehandlingId?.let {
             iverksettResultatService.hentIverksettResultat(it)
                 ?: error("Kunne ikke finne iverksettresultat for behandlingId=$it")
         }
 
-        if (!forrigeIverksettResultat.stemmerMed(iverksett.forrigeIverksetting)) {
+        if (!forrigeIverksettResultat.erKonsistentMed(iverksett.forrigeIverksetting)) {
             error("Lagret forrige tilkjent ytelse stemmer ikke med mottatt forrige tilkjent ytelse")
         }
 

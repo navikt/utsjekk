@@ -25,13 +25,17 @@ fun lagAndelTilkjentYtelse(
         ferietillegg = ferietillegg,
     )
 
-fun lagAndelTilkjentYtelseDto(
+fun lagUtbetalingDto(
     beløp: Int,
     fraOgMed: LocalDate = LocalDate.of(2021, 1, 1),
     tilOgMed: LocalDate = LocalDate.of(2021, 1, 31),
+    stønadstype: StønadType = StønadType.DAGPENGER_ARBEIDSSOKER_ORDINAER,
+    ferietillegg: Ferietillegg? = null,
 ) =
     UtbetalingDto(
         belopPerDag = beløp,
         fraOgMedDato = fraOgMed,
         tilOgMedDato = tilOgMed,
+        stonadstype = stønadstype,
+        ferietillegg = ferietillegg,
     )

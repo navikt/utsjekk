@@ -26,16 +26,13 @@ import no.nav.dagpenger.iverksett.konsumenter.brev.domain.DistribuerBrevResultat
 import no.nav.dagpenger.iverksett.konsumenter.brev.domain.JournalpostResultat
 import no.nav.dagpenger.iverksett.konsumenter.brev.domain.JournalpostResultatMap
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.lagAndelTilkjentYtelse
-import no.nav.dagpenger.iverksett.konsumenter.økonomi.lagAndelTilkjentYtelseDto
-import no.nav.dagpenger.kontrakter.felles.BrevmottakerDto
+import no.nav.dagpenger.iverksett.konsumenter.økonomi.lagUtbetalingDto
 import no.nav.dagpenger.kontrakter.felles.Datoperiode
-import no.nav.dagpenger.kontrakter.felles.FrittståendeBrevDto
-import no.nav.dagpenger.kontrakter.felles.FrittståendeBrevType
 import no.nav.dagpenger.kontrakter.felles.StønadType
 import no.nav.dagpenger.kontrakter.felles.Tilbakekrevingsvalg
-import no.nav.dagpenger.kontrakter.iverksett.AvslagÅrsak
 import no.nav.dagpenger.kontrakter.iverksett.BehandlingType
 import no.nav.dagpenger.kontrakter.iverksett.BehandlingÅrsak
+import no.nav.dagpenger.kontrakter.iverksett.Ferietillegg
 import no.nav.dagpenger.kontrakter.iverksett.ForrigeIverksettingDto
 import no.nav.dagpenger.kontrakter.iverksett.IverksettDto
 import no.nav.dagpenger.kontrakter.iverksett.OpphørÅrsak
@@ -43,7 +40,6 @@ import no.nav.dagpenger.kontrakter.iverksett.Opplysningskilde
 import no.nav.dagpenger.kontrakter.iverksett.RegelId
 import no.nav.dagpenger.kontrakter.iverksett.Revurderingsårsak
 import no.nav.dagpenger.kontrakter.iverksett.SvarId
-import no.nav.dagpenger.kontrakter.iverksett.TilbakekrevingDto
 import no.nav.dagpenger.kontrakter.iverksett.TilkjentYtelseDto
 import no.nav.dagpenger.kontrakter.iverksett.TilkjentYtelseStatus
 import no.nav.dagpenger.kontrakter.iverksett.UtbetalingDto
@@ -63,16 +59,19 @@ import java.util.Random
 import java.util.UUID
 
 fun opprettIverksettDto(
-    behandlingId: UUID,
-    sakId: UUID,
-    behandlingÅrsak: BehandlingÅrsak = BehandlingÅrsak.SØKNAD,
+    behandlingId: UUID = UUID.randomUUID(),
+    sakId: UUID = UUID.randomUUID(),
     andelsbeløp: Int = 5000,
+    vedtaksresultat: Vedtaksresultat = Vedtaksresultat.INNVILGET,
     stønadType: StønadType = StønadType.DAGPENGER_ARBEIDSSOKER_ORDINAER,
+    ferietillegg: Ferietillegg? = null,
 ): IverksettDto {
-    val andelTilkjentYtelse = lagAndelTilkjentYtelseDto(
+    val andelTilkjentYtelse = lagUtbetalingDto(
         beløp = andelsbeløp,
         fraOgMed = LocalDate.of(2021, 1, 1),
         tilOgMed = LocalDate.of(2021, 12, 31),
+        stønadstype = stønadType,
+        ferietillegg = ferietillegg,
     )
     val tilkjentYtelse = TilkjentYtelseDto(
         utbetalinger = listOf(andelTilkjentYtelse),
@@ -84,7 +83,7 @@ fun opprettIverksettDto(
         sakId = sakId,
         personIdent = "12345678910",
         vedtak = VedtaksdetaljerDto(
-            resultat = Vedtaksresultat.INNVILGET,
+            resultat = vedtaksresultat,
             vedtakstidspunkt = LocalDateTime.of(2021, 5, 12, 0, 0),
             saksbehandlerId = "A12345",
             beslutterId = "B23456",
@@ -108,7 +107,6 @@ private val eksternIdGenerator = Random()
 
 fun opprettTilkjentYtelseMedMetadata(
     behandlingId: UUID = UUID.randomUUID(),
-    eksternId: Long = eksternIdGenerator.nextLong(10_000),
     tilkjentYtelse: TilkjentYtelse = opprettTilkjentYtelse(behandlingId),
 ): TilkjentYtelseMedMetaData {
     return TilkjentYtelseMedMetaData(
@@ -203,43 +201,6 @@ fun vedtaksdetaljerDagpenger(
     )
 }
 
-fun vedtaksdetaljerDto(
-    vedtakstype: VedtakType = VedtakType.RAMMEVEDTAK,
-    vedtakstidspunkt: LocalDateTime = LocalDateTime.of(2021, 5, 12, 0, 0),
-    resultat: Vedtaksresultat = Vedtaksresultat.INNVILGET,
-    saksbehandlerId: String = "A12345",
-    beslutterId: String = "B23456",
-    opphorAarsak: OpphørÅrsak? = OpphørÅrsak.PERIODE_UTLØPT,
-    avslagAarsak: AvslagÅrsak? = AvslagÅrsak.MANGLENDE_OPPLYSNINGER,
-    utbetalinger: List<UtbetalingDto> = emptyList(),
-    vedtaksperioder: List<VedtaksperiodeDto> = listOf(
-        VedtaksperiodeDto(LocalDate.now(), LocalDate.now().plusDays(7), VedtaksperiodeType.HOVEDPERIODE),
-    ),
-    tilbakekreving: TilbakekrevingDto? = null,
-    brevmottakere: List<BrevmottakerDto> = listOf(
-        BrevmottakerDto(
-            "01020312345",
-            "Test Testesen",
-            BrevmottakerDto.MottakerRolle.BRUKER,
-            BrevmottakerDto.IdentType.PERSONIDENT,
-        ),
-    ),
-): VedtaksdetaljerDto {
-    return VedtaksdetaljerDto(
-        vedtakstype = vedtakstype,
-        vedtakstidspunkt = vedtakstidspunkt,
-        resultat = resultat,
-        saksbehandlerId = saksbehandlerId,
-        beslutterId = beslutterId,
-        opphorAarsak = opphorAarsak,
-        avslagAarsak = avslagAarsak,
-        utbetalinger = utbetalinger,
-        vedtaksperioder = vedtaksperioder,
-        tilbakekreving = tilbakekreving,
-        brevmottakere = brevmottakere,
-    )
-}
-
 fun vedtaksstatusDto(
     vedtakstype: VedtakType = VedtakType.RAMMEVEDTAK,
     vedtakstidspunkt: LocalDateTime = LocalDateTime.of(2021, 5, 12, 0, 0),
@@ -318,18 +279,6 @@ fun opprettBrev(): Brev {
     return Brev(ByteArray(256))
 }
 
-fun opprettFrittståendeBrevDto(): FrittståendeBrevDto {
-    return FrittståendeBrevDto(
-        personIdent = "12345678910",
-        eksternFagsakId = 1,
-        brevtype = FrittståendeBrevType.INFORMASJONSBREV,
-        fil = "fil.pdf".toByteArray(),
-        journalførendeEnhet = "4489",
-        saksbehandlerIdent = "saksbehandlerIdent",
-        stønadType = StønadType.DAGPENGER_ARBEIDSSOKER_ORDINAER,
-    )
-}
-
 fun opprettTilbakekrevingsdetaljer(): Tilbakekrevingsdetaljer =
     Tilbakekrevingsdetaljer(
         tilbakekrevingsvalg = Tilbakekrevingsvalg.OPPRETT_TILBAKEKREVING_MED_VARSEL,
@@ -351,11 +300,7 @@ fun opprettTilbakekrevingMedVarsel(
 )
 
 class IverksettResultatMockBuilder private constructor(
-
     val tilkjentYtelse: TilkjentYtelse,
-    val oppdragResultat: OppdragResultat,
-    val journalpostResultat: Map<String, JournalpostResultat>,
-    val vedtaksbrevResultat: Map<String, DistribuerBrevResultat>,
 ) {
 
     data class Builder(
@@ -379,9 +324,6 @@ class IverksettResultatMockBuilder private constructor(
                         ),
                     )
             }
-
-        fun tilbakekrevingResultat(tilbakekrevingResultat: TilbakekrevingResultat?) =
-            apply { this.tilbakekrevingResultat = tilbakekrevingResultat }
 
         fun build(behandlingId: UUID, tilkjentYtelse: TilkjentYtelse?) =
             IverksettResultat(

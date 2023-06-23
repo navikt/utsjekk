@@ -4,11 +4,16 @@ import no.nav.dagpenger.iverksett.api.domene.Brev
 import no.nav.dagpenger.iverksett.api.domene.Iverksett
 import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
 import no.nav.dagpenger.iverksett.api.domene.Tilbakekrevingsdetaljer
+import no.nav.dagpenger.iverksett.api.domene.TilkjentYtelse
 import no.nav.dagpenger.iverksett.api.domene.VedtaksperiodeDagpenger
+import no.nav.dagpenger.iverksett.api.domene.behandlingId
+import no.nav.dagpenger.iverksett.api.domene.personIdent
+import no.nav.dagpenger.iverksett.api.domene.sakId
 import no.nav.dagpenger.iverksett.konsumenter.brev.domain.Brevmottakere
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.lagAndelTilkjentYtelse
-import no.nav.dagpenger.iverksett.konsumenter.økonomi.lagAndelTilkjentYtelseDto
+import no.nav.dagpenger.iverksett.konsumenter.økonomi.lagUtbetalingDto
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.simulering.grupperPosteringerEtterDato
+import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.UtbetalingsoppdragGenerator
 import no.nav.dagpenger.iverksett.util.behandlingsdetaljer
 import no.nav.dagpenger.iverksett.util.opprettIverksettDagpenger
 import no.nav.dagpenger.iverksett.util.vedtaksdetaljerDagpenger
@@ -55,7 +60,7 @@ fun simuleringDto(
 }
 
 private fun lagDefaultAndeler() =
-    lagAndelTilkjentYtelseDto(
+    lagUtbetalingDto(
         beløp = 15000,
         fraOgMed = LocalDate.of(2021, 1, 1),
         tilOgMed = LocalDate.of(2023, 12, 31),
@@ -152,6 +157,9 @@ fun Tilbakekrevingsdetaljer.medFeilutbetaling(feilutbetaling: BigDecimal, period
 
 fun Int.januar(år: Int) = LocalDate.of(år, 1, this)
 fun Int.februar(år: Int) = LocalDate.of(år, 2, this)
+
+fun Int.mai(år: Int) = LocalDate.of(år, 5, this)
+
 fun Int.august(år: Int) = LocalDate.of(år, 8, this)
 fun Int.november(år: Int) = LocalDate.of(år, 11, this)
 
@@ -171,14 +179,16 @@ fun List<SimulertPostering>.tilDetaljertSimuleringsresultat() =
     DetaljertSimuleringResultat(this.tilSimuleringMottakere())
 
 fun lagIverksettData(
-    forrigeBehandlingId: UUID? = null,
-    behandlingType: BehandlingType,
-    vedtaksresultat: Vedtaksresultat,
+    forrigeIverksetting: IverksettDagpenger? = null,
+    forrigeBehandlingId: UUID? = forrigeIverksetting?.behandlingId,
+    behandlingType: BehandlingType = BehandlingType.FØRSTEGANGSBEHANDLING,
+    vedtaksresultat: Vedtaksresultat = Vedtaksresultat.INNVILGET,
     vedtaksperioder: List<VedtaksperiodeDagpenger> = emptyList(),
     erMigrering: Boolean = false,
     andelsdatoer: List<LocalDate> = emptyList(),
+    beløp: Int = 0,
     årsak: BehandlingÅrsak = BehandlingÅrsak.SØKNAD,
-    vedtakstidspunkt: LocalDateTime = LocalDateTime.of(2021, 5, 12, 0, 0),
+    vedtakstidspunkt: LocalDateTime = LocalDateTime.now(),
     brevmottakere: Brevmottakere = Brevmottakere(emptyList()),
 ): IverksettDagpenger {
     val behandlingÅrsak = if (erMigrering) BehandlingÅrsak.MIGRERING else årsak
@@ -192,7 +202,7 @@ fun lagIverksettData(
             vedtaksresultat = vedtaksresultat,
             vedtaksperioder = vedtaksperioder,
             andeler = andelsdatoer.map {
-                lagAndelTilkjentYtelse(beløp = 0, fraOgMed = it.minusMonths(1), tilOgMed = it)
+                lagAndelTilkjentYtelse(beløp = beløp, fraOgMed = it, tilOgMed = it)
             },
             startdato = andelsdatoer.minByOrNull { it } ?: LocalDate.now(),
             vedtakstidspunkt = vedtakstidspunkt,
@@ -206,3 +216,18 @@ fun lagIverksett(iverksettData: IverksettDagpenger, brev: Brev? = null) = Iverks
     iverksettData,
     brev,
 )
+
+fun IverksettDagpenger.tilTilkjentYtelseMedMetadata() = this.vedtak.tilkjentYtelse?.toMedMetadata(
+    saksbehandlerId = this.vedtak.saksbehandlerId,
+    stønadType = this.fagsak.stønadstype,
+    sakId = this.sakId,
+    personIdent = this.personIdent,
+    behandlingId = this.behandlingId,
+    vedtaksdato = this.vedtak.vedtakstidspunkt.toLocalDate(),
+
+)
+
+fun IverksettDagpenger.tilTilkjentYtelseMedUtbetalingsoppdrag(): TilkjentYtelse? =
+    this.tilTilkjentYtelseMedMetadata()?.let {
+        UtbetalingsoppdragGenerator.lagTilkjentYtelseMedUtbetalingsoppdrag(it)
+    }
