@@ -3,11 +3,14 @@ package no.nav.dagpenger.iverksett.api
 import io.mockk.every
 import io.mockk.mockk
 import no.nav.dagpenger.iverksett.api.domene.IverksettResultat
+import no.nav.dagpenger.iverksett.api.domene.OppdragResultat
 import no.nav.dagpenger.iverksett.api.domene.behandlingId
 import no.nav.dagpenger.iverksett.api.tilstand.IverksettResultatService
 import no.nav.dagpenger.iverksett.infrastruktur.featuretoggle.FeatureToggleService
 import no.nav.dagpenger.iverksett.lagIverksettData
-import no.nav.dagpenger.kontrakter.iverksett.IverksettStatus
+import no.nav.dagpenger.iverksett.mai
+import no.nav.dagpenger.iverksett.tilTilkjentYtelseMedUtbetalingsoppdrag
+import no.nav.dagpenger.kontrakter.oppdrag.OppdragStatus
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
@@ -71,12 +74,21 @@ class IverksettingValidatorServiceTest {
 
     @Test
     fun `skal få CONFLICT når forrige iverksetting ikke er ferdig og OK mot oppdrag`() {
-        val forrigeIverksetting = lagIverksettData()
+        val forrigeIverksetting = lagIverksettData(
+            andelsdatoer = listOf(1.mai(2023), 2.mai(2023)),
+            beløp = 300,
+        )
         val nåværendeIverksetting = lagIverksettData(
-            forrigeBehandlingId = forrigeIverksetting.behandlingId,
+            forrigeIverksetting = forrigeIverksetting,
         )
 
-        every { iverksettingServiceMock.utledStatus(forrigeIverksetting.behandlingId) } returns IverksettStatus.IKKE_PAABEGYNT
+        val forrigeIverksettResultat = IverksettResultat(
+            behandlingId = forrigeIverksetting.behandlingId,
+            tilkjentYtelseForUtbetaling = forrigeIverksetting.tilTilkjentYtelseMedUtbetalingsoppdrag()!!,
+            oppdragResultat = OppdragResultat(OppdragStatus.LAGT_PAA_KOE),
+        )
+
+        every { iverksettResultatServiceMock.hentIverksettResultat(forrigeIverksettResultat.behandlingId) } returns forrigeIverksettResultat
 
         assertApiFeil(HttpStatus.CONFLICT) {
             iverksettingValidatorService.validerAtForrigeBehandlingErFerdigIverksattMotOppdrag(nåværendeIverksetting)

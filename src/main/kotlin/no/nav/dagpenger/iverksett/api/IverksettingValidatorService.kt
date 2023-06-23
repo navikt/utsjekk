@@ -10,7 +10,7 @@ import no.nav.dagpenger.iverksett.infrastruktur.advice.ApiFeil
 import no.nav.dagpenger.iverksett.infrastruktur.configuration.FeatureToggleConfig
 import no.nav.dagpenger.iverksett.infrastruktur.featuretoggle.FeatureToggleService
 import no.nav.dagpenger.iverksett.konsumenter.tilbakekreving.validerTilbakekreving
-import no.nav.dagpenger.kontrakter.iverksett.IverksettStatus
+import no.nav.dagpenger.kontrakter.oppdrag.OppdragStatus
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 
@@ -103,9 +103,16 @@ class IverksettingValidatorService(
 
     internal fun validerAtForrigeBehandlingErFerdigIverksattMotOppdrag(iverksett: IverksettDagpenger?) {
         iverksett?.behandling?.forrigeBehandlingId?.apply {
-            val status = iverksettingService.utledStatus(this)
-            if (status != null && !status.erIverksattMotOppdrag()) {
-                throw ApiFeil("Forrige iverksetting  er ikke ferdig iverksatt mot oppdrag", HttpStatus.CONFLICT)
+            val forrigeResultat = iverksettResultatService.hentIverksettResultat(this)
+
+            val forrigeErUtenUtbetalingsoppdrag =
+                forrigeResultat?.tilkjentYtelseForUtbetaling?.utbetalingsoppdrag == null
+            val forrigeErKvittertOk =
+                forrigeResultat?.oppdragResultat?.oppdragStatus == OppdragStatus.KVITTERT_OK
+
+            val forrigeErOkMotOppdrag = forrigeErUtenUtbetalingsoppdrag || forrigeErKvittertOk
+            if (!forrigeErOkMotOppdrag) {
+                throw ApiFeil("Forrige iverksetting  er ikke ferdig håndtert mhp oppdrag", HttpStatus.CONFLICT)
             }
         }
     }
@@ -125,10 +132,3 @@ class IverksettingValidatorService(
         }
     }
 }
-
-fun IverksettStatus.erIverksattMotOppdrag() =
-    listOf(
-        IverksettStatus.OK_MOT_OPPDRAG,
-        IverksettStatus.JOURNALFORT,
-        IverksettStatus.OK,
-    ).contains(this)
