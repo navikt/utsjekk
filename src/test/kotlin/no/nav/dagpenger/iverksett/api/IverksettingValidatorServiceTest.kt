@@ -2,6 +2,7 @@ package no.nav.dagpenger.iverksett.api
 
 import io.mockk.every
 import io.mockk.mockk
+import no.nav.dagpenger.iverksett.api.domene.IverksettResultat
 import no.nav.dagpenger.iverksett.api.domene.behandlingId
 import no.nav.dagpenger.iverksett.api.tilstand.IverksettResultatService
 import no.nav.dagpenger.iverksett.infrastruktur.featuretoggle.FeatureToggleService
@@ -82,4 +83,28 @@ class IverksettingValidatorServiceTest {
         }
     }
 
+    @Test
+    fun `skal få BAD_REQUEST når forrige tilkjent ytelse hos oss ikke stemmer med forrige iverksetting som sendes`() {
+        val forrigeIverksetting = lagIverksettData()
+        val iverksettingTmp = lagIverksettData()
+        val nåværendeIverksetting = iverksettingTmp.copy(
+            fagsak = forrigeIverksetting.fagsak,
+            forrigeIverksetting = forrigeIverksetting.copy(
+                vedtak = forrigeIverksetting.vedtak.copy(
+                    tilkjentYtelse = forrigeIverksetting.vedtak.tilkjentYtelse?.copy(
+                        andelerTilkjentYtelse = emptyList(),
+                    ),
+                ),
+            ),
+        )
+        every { iverksettResultatServiceMock.hentIverksettResultat(forrigeIverksetting.behandling.behandlingId) } returns
+            IverksettResultat(
+                behandlingId = forrigeIverksetting.behandling.behandlingId,
+                tilkjentYtelseForUtbetaling = forrigeIverksetting.vedtak.tilkjentYtelse,
+            )
+
+        assertApiFeil(HttpStatus.BAD_REQUEST) {
+            iverksettingValidatorService.validerKonsistensMellomVedtak(nåværendeIverksetting)
+        }
+    }
 }
