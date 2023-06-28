@@ -13,7 +13,7 @@ import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsperiode
 import java.time.LocalDate
 import java.util.UUID
 
-class Utbetalingsgenerator {
+object Utbetalingsgenerator {
 
     /**
      * Generer utbetalingsoppdrag som sendes til oppdrag

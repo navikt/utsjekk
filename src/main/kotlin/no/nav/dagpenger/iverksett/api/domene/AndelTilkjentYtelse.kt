@@ -1,5 +1,7 @@
 package no.nav.dagpenger.iverksett.api.domene
 
+import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.ny.domene.AndelData
+import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.ny.domene.StønadTypeOgFerietillegg
 import no.nav.dagpenger.kontrakter.felles.Datoperiode
 import no.nav.dagpenger.kontrakter.felles.StønadType
 import no.nav.dagpenger.kontrakter.iverksett.Ferietillegg
@@ -69,3 +71,11 @@ fun AndelTilkjentYtelse.tilKlassifisering() = when (this.stønadstype) {
     }
     StønadType.TILTAKSPENGER -> "TPTPTILTAK"
 }
+
+fun AndelTilkjentYtelse.tilAndelData() = AndelData(
+    id = this.hashCode().toString(), // TODO
+    fom = this.periode.fom,
+    tom = this.periode.tom,
+    beløp = this.beløp,
+    type = StønadTypeOgFerietillegg(this.stønadstype, this.ferietillegg)
+)

@@ -13,6 +13,15 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import java.util.UUID
+import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
+import no.nav.dagpenger.iverksett.api.domene.IverksettResultat
+import no.nav.dagpenger.iverksett.api.domene.behandlingId
+import no.nav.dagpenger.iverksett.api.domene.lagAndelData
+import no.nav.dagpenger.iverksett.api.domene.personIdent
+import no.nav.dagpenger.iverksett.api.domene.sakId
+import no.nav.dagpenger.iverksett.api.domene.tilAndelData
+import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.ny.Utbetalingsgenerator
+import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.ny.domene.Behandlingsinformasjon
 
 @Service
 @TaskStepBeskrivelse(
@@ -42,6 +51,45 @@ class IverksettMotOppdragTask(
             error("Lagret forrige tilkjent ytelse stemmer ikke med mottatt forrige tilkjent ytelse")
         }
 
+        lagOgSendUtbetalingsoppdragOgOppdaterTilkjentYtelse(iverksett, forrigeIverksettResultat, behandlingId)
+    }
+
+    private fun nyLagOgSendUtbetalingsoppdragOgOppdaterTilkjentYtelse(
+        iverksett: IverksettDagpenger,
+        forrigeIverksettResultat: IverksettResultat?,
+        behandlingId: UUID
+    ) {
+        val behandlingsinformasjon = Behandlingsinformasjon(
+            saksbehandlerId = iverksett.vedtak.saksbehandlerId,
+            fagsakId = iverksett.sakId.toString(),
+            behandlingId = iverksett.behandlingId.toString(),
+            personIdent = iverksett.personIdent,
+            vedtaksdato = iverksett.vedtak.vedtakstidspunkt.toLocalDate(),
+            opphørFra = null,
+        )
+
+        val nyeAndeler = iverksett.vedtak.tilkjentYtelse.lagAndelData()
+        val forrigeAndeler = forrigeIverksettResultat?.tilkjentYtelseForUtbetaling.lagAndelData()
+        val sisteAndelPerKjede =
+            iverksett.vedtak.tilkjentYtelse?.sisteAndelPerKjede?.mapValues { it.value.tilAndelData() } ?: emptyMap()
+
+        val beregnetUtbetalingsoppdrag = Utbetalingsgenerator.lagUtbetalingsoppdrag(
+            behandlingsinformasjon = behandlingsinformasjon,
+            nyeAndeler = nyeAndeler,
+            forrigeAndeler = forrigeAndeler,
+            sisteAndelPerKjede = sisteAndelPerKjede
+        )
+
+        // TODO det gjenstår å finne nye sisteAndelPerKjede basert på resultatet, oppdatere tilkjentytelse og iverksette.
+        // Vi tror sisteAndelPerKjede kan løses ved en dobbel sortering på periodeId først, så tom.
+
+    }
+
+    private fun lagOgSendUtbetalingsoppdragOgOppdaterTilkjentYtelse(
+        iverksett: IverksettDagpenger,
+        forrigeIverksettResultat: IverksettResultat?,
+        behandlingId: UUID
+    ) {
         iverksett.vedtak.tilkjentYtelse?.toMedMetadata(
             saksbehandlerId = iverksett.vedtak.saksbehandlerId,
             stønadType = iverksett.fagsak.stønadstype,

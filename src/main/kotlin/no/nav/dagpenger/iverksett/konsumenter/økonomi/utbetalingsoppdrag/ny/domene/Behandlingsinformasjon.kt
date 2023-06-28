@@ -15,6 +15,6 @@ data class Behandlingsinformasjon(
     val behandlingId: String,
     val personIdent: String,
     val vedtaksdato: LocalDate,
-    val opphørFra: LocalDate?,
+    val opphørFra: LocalDate?, // TODO tror denne er spesifikk for migrering. Kan nok fjernes
     val erGOmregning: Boolean = false,
 )
