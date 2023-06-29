@@ -2,10 +2,21 @@ package no.nav.dagpenger.iverksett.konsumenter.økonomi
 
 import no.nav.dagpenger.iverksett.api.IverksettingService
 import no.nav.dagpenger.iverksett.api.domene.AndelTilkjentYtelse
+import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
+import no.nav.dagpenger.iverksett.api.domene.IverksettResultat
+import no.nav.dagpenger.iverksett.api.domene.TilkjentYtelse
+import no.nav.dagpenger.iverksett.api.domene.behandlingId
 import no.nav.dagpenger.iverksett.api.domene.erKonsistentMed
+import no.nav.dagpenger.iverksett.api.domene.lagAndelData
+import no.nav.dagpenger.iverksett.api.domene.personIdent
+import no.nav.dagpenger.iverksett.api.domene.sakId
+import no.nav.dagpenger.iverksett.api.domene.tilAndelData
 import no.nav.dagpenger.iverksett.api.tilstand.IverksettResultatService
 import no.nav.dagpenger.iverksett.konsumenter.opprettNesteTask
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.UtbetalingsoppdragGenerator.lagTilkjentYtelseMedUtbetalingsoppdrag
+import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.ny.Utbetalingsgenerator
+import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.ny.domene.Behandlingsinformasjon
+import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.ny.domene.StønadTypeOgFerietillegg
 import no.nav.familie.prosessering.AsyncTaskStep
 import no.nav.familie.prosessering.TaskStepBeskrivelse
 import no.nav.familie.prosessering.domene.Task
@@ -14,17 +25,6 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import java.util.UUID
-import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
-import no.nav.dagpenger.iverksett.api.domene.IverksettResultat
-import no.nav.dagpenger.iverksett.api.domene.TilkjentYtelse
-import no.nav.dagpenger.iverksett.api.domene.behandlingId
-import no.nav.dagpenger.iverksett.api.domene.lagAndelData
-import no.nav.dagpenger.iverksett.api.domene.personIdent
-import no.nav.dagpenger.iverksett.api.domene.sakId
-import no.nav.dagpenger.iverksett.api.domene.tilAndelData
-import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.ny.Utbetalingsgenerator
-import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.ny.domene.Behandlingsinformasjon
-import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.ny.domene.StønadTypeOgFerietillegg
 
 @Service
 @TaskStepBeskrivelse(
@@ -55,8 +55,8 @@ class IverksettMotOppdragTask(
         }
 
         lagOgSendUtbetalingsoppdragOgOppdaterTilkjentYtelse(iverksett, forrigeIverksettResultat, behandlingId)
+        // nyLagOgSendUtbetalingsoppdragOgOppdaterTilkjentYtelse(iverksett, forrigeIverksettResultat, behandlingId)
     }
-
 
     private fun nyLagOgSendUtbetalingsoppdragOgOppdaterTilkjentYtelse(
         iverksett: IverksettDagpenger,
@@ -81,39 +81,39 @@ class IverksettMotOppdragTask(
             behandlingsinformasjon = behandlingsinformasjon,
             nyeAndeler = nyeAndeler,
             forrigeAndeler = forrigeAndeler,
-            sisteAndelPerKjede = sisteAndelPerKjede
+            sisteAndelPerKjede = sisteAndelPerKjede,
         )
 
-        val nyeAndelerMedPeriodeId = iverksett.vedtak.tilkjentYtelse?.andelerTilkjentYtelse?.map {
-            val andelData = it.tilAndelData()
-            val andelDataMedPeriodeId = beregnetUtbetalingsoppdrag.andeler.find { andelData.id == it.id }
-                ?: throw IllegalStateException("Fant ikke andel med id ${andelData.id}")
+        iverksett.vedtak.tilkjentYtelse?.let {
+            val nyeAndelerMedPeriodeId = it.andelerTilkjentYtelse.map { andel ->
+                val andelData = andel.tilAndelData()
+                val andelDataMedPeriodeId = beregnetUtbetalingsoppdrag.andeler.find { a -> andelData.id == a.id }
+                    ?: throw IllegalStateException("Fant ikke andel med id ${andelData.id}")
 
-            it.copy(
-                periodeId = andelDataMedPeriodeId.periodeId,
-                forrigePeriodeId = andelDataMedPeriodeId.forrigePeriodeId
+                andel.copy(
+                    periodeId = andelDataMedPeriodeId.periodeId,
+                    forrigePeriodeId = andelDataMedPeriodeId.forrigePeriodeId,
+                )
+            }
+            val nyTilkjentYtelse = it.copy(
+                andelerTilkjentYtelse = nyeAndelerMedPeriodeId,
+                utbetalingsoppdrag = beregnetUtbetalingsoppdrag.utbetalingsoppdrag,
             )
-        } ?: emptyList()
-
-        val nyTilkjentYtelse = iverksett.vedtak.tilkjentYtelse?.copy(
-            andelerTilkjentYtelse = nyeAndelerMedPeriodeId,
-        )
-
-        if(nyTilkjentYtelse!=null) {
             val nyTilkjentYtelseMedSisteAndelIKjede = lagTilkjentYtelseMedSisteAndelPerKjede(nyTilkjentYtelse)
+
             iverksettResultatService.oppdaterTilkjentYtelseForUtbetaling(
                 behandlingId = behandlingId,
-                tilkjentYtelseForUtbetaling = nyTilkjentYtelseMedSisteAndelIKjede
+                tilkjentYtelseForUtbetaling = nyTilkjentYtelseMedSisteAndelIKjede,
             )
-            
-        }
 
-
-        // TODO det gjenstår å finne nye sisteAndelPerKjede basert på resultatet, oppdatere tilkjentytelse og iverksette.
-        val sisteAndelIKjeder: Map<StønadTypeOgFerietillegg, AndelTilkjentYtelse> = beregnetUtbetalingsoppdrag.andeler.
-
-        // Vi tror sisteAndelPerKjede kan løses ved en dobbel sortering på periodeId først, så tom.
-
+            nyTilkjentYtelseMedSisteAndelIKjede.utbetalingsoppdrag?.let { utbetalingsoppdrag ->
+                if (utbetalingsoppdrag.utbetalingsperiode.isNotEmpty()) {
+                    oppdragClient.iverksettOppdrag(utbetalingsoppdrag)
+                } else {
+                    log.warn("Iverksetter ikke noe mot oppdrag. Ingen utbetalingsperioder i utbetalingsoppdraget. behandlingId=$behandlingId")
+                }
+            }
+        } ?: log.warn("Iverksetter ikke noe mot oppdrag. Ikke utbetalingsoppdrag. behandlingId=$behandlingId")
     }
 
     private fun lagTilkjentYtelseMedSisteAndelPerKjede(tilkjentYtelse: TilkjentYtelse): TilkjentYtelse {
@@ -129,7 +129,7 @@ class IverksettMotOppdragTask(
             finnSisteAndelPerKjede(beregnetSisteAndePerKjede, forrigeSisteAndelPerKjede)
 
         return tilkjentYtelse.copy(
-            sisteAndelPerKjede = nySisteAndelerPerKjede
+            sisteAndelPerKjede = nySisteAndelerPerKjede,
         )
     }
 
@@ -143,7 +143,7 @@ class IverksettMotOppdragTask(
      */
     private fun finnSisteAndelPerKjede(
         nySisteAndePerKjede: Map<StønadTypeOgFerietillegg, AndelTilkjentYtelse>,
-        forrigeSisteAndelPerKjede: Map<StønadTypeOgFerietillegg, AndelTilkjentYtelse>
+        forrigeSisteAndelPerKjede: Map<StønadTypeOgFerietillegg, AndelTilkjentYtelse>,
     ) = (nySisteAndePerKjede.asSequence() + forrigeSisteAndelPerKjede.asSequence())
         .groupBy({ it.key }, { it.value })
         .mapValues {
@@ -151,11 +151,10 @@ class IverksettMotOppdragTask(
                 .last()
         }
 
-
     private fun lagOgSendUtbetalingsoppdragOgOppdaterTilkjentYtelse(
         iverksett: IverksettDagpenger,
         forrigeIverksettResultat: IverksettResultat?,
-        behandlingId: UUID
+        behandlingId: UUID,
     ) {
         iverksett.vedtak.tilkjentYtelse?.toMedMetadata(
             saksbehandlerId = iverksett.vedtak.saksbehandlerId,
