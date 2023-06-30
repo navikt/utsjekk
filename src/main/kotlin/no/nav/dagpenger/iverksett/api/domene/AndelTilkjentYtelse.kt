@@ -1,11 +1,11 @@
 package no.nav.dagpenger.iverksett.api.domene
 
-import java.util.UUID
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.ny.domene.AndelData
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.ny.domene.StønadTypeOgFerietillegg
 import no.nav.dagpenger.kontrakter.felles.Datoperiode
 import no.nav.dagpenger.kontrakter.felles.StønadType
 import no.nav.dagpenger.kontrakter.iverksett.Ferietillegg
+import java.util.UUID
 
 data class AndelTilkjentYtelse(
     val id: UUID = UUID.randomUUID(),
@@ -81,5 +81,5 @@ fun AndelTilkjentYtelse.tilAndelData() = AndelData(
     beløp = this.beløp,
     type = StønadTypeOgFerietillegg(this.stønadstype, this.ferietillegg),
     periodeId = this.periodeId,
-    forrigePeriodeId = this.forrigePeriodeId
+    forrigePeriodeId = this.forrigePeriodeId,
 )

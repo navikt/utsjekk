@@ -54,7 +54,7 @@ class IverksettMotOppdragTask(
             error("Lagret forrige tilkjent ytelse stemmer ikke med mottatt forrige tilkjent ytelse")
         }
 
-        //lagOgSendUtbetalingsoppdragOgOppdaterTilkjentYtelse(iverksett, forrigeIverksettResultat, behandlingId)
+        // lagOgSendUtbetalingsoppdragOgOppdaterTilkjentYtelse(iverksett, forrigeIverksettResultat, behandlingId)
         nyLagOgSendUtbetalingsoppdragOgOppdaterTilkjentYtelse(iverksett, forrigeIverksettResultat, behandlingId)
     }
 
@@ -74,8 +74,9 @@ class IverksettMotOppdragTask(
 
         val nyeAndeler = iverksett.vedtak.tilkjentYtelse.lagAndelData()
         val forrigeAndeler = forrigeIverksettResultat?.tilkjentYtelseForUtbetaling.lagAndelData()
-        val sisteAndelPerKjede =
-            iverksett.vedtak.tilkjentYtelse?.sisteAndelPerKjede?.mapValues { it.value.tilAndelData() } ?: emptyMap()
+        val sisteAndelPerKjede = forrigeIverksettResultat?.tilkjentYtelseForUtbetaling?.sisteAndelPerKjede
+            ?.mapValues { it.value.tilAndelData() }
+            ?: emptyMap()
 
         val beregnetUtbetalingsoppdrag = Utbetalingsgenerator.lagUtbetalingsoppdrag(
             behandlingsinformasjon = behandlingsinformasjon,

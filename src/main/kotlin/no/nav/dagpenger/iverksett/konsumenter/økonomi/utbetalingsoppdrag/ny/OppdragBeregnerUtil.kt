@@ -10,13 +10,16 @@ internal object OppdragBeregnerUtil {
         forrige: List<AndelData>,
         nye: List<AndelData>,
     ) {
-        val forrigeUtenNullbeløp = forrige.filter { it.beløp != 0 }
-        val idn = forrigeUtenNullbeløp.map { it.id } + nye.map { it.id }
+        if ((forrige + nye).any { it.beløp == 0 }) {
+            error("Andeler inneholder 0-beløp")
+        }
+
+        val idn = forrige.map { it.id } + nye.map { it.id }
         if (idn.size != idn.toSet().size) {
             error("Inneholder duplikat av id'er")
         }
 
-        forrigeUtenNullbeløp.find { it.periodeId == null }
+        forrige.find { it.periodeId == null }
             ?.let { error("Tidligere andel=${it.id} mangler periodeId") }
 
         nye.find { it.periodeId != null || it.forrigePeriodeId != null }

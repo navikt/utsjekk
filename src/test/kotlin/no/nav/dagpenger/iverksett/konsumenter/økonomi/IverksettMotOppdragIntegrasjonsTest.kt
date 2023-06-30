@@ -47,7 +47,7 @@ class IverksettMotOppdragIntegrasjonsTest : ServerTest() {
     internal fun `start iverksetting, forvent at andelerTilkjentYtelse er lik 1 og har periodeId 1`() {
         val tilkjentYtelse = iverksettResultatService.hentTilkjentYtelse(behandlingid)!!
         assertThat(tilkjentYtelse.andelerTilkjentYtelse).hasSize(1)
-        assertThat(tilkjentYtelse.andelerTilkjentYtelse.first().periodeId).isEqualTo(1)
+        assertThat(tilkjentYtelse.andelerTilkjentYtelse.first().periodeId).isEqualTo(0)
     }
 
     @Test
@@ -57,7 +57,38 @@ class IverksettMotOppdragIntegrasjonsTest : ServerTest() {
             behandlingIdRevurdering,
             behandlingid,
             listOf(
-                førsteAndel.copy(id = UUID.randomUUID()),
+                førsteAndel.copy(id = UUID.randomUUID()), // TODO Trengs ny ID?
+                lagAndelTilkjentYtelse(
+                    beløp = 1000,
+                    fraOgMed = LocalDate.now(),
+                    tilOgMed = LocalDate.now().plusMonths(1),
+                ),
+            ),
+            forrigeIverksetting = iverksett,
+        )
+
+        taskService.deleteAll(taskService.findAll())
+        iverksettingService.startIverksetting(iverksettRevurdering, opprettBrev())
+        iverksettMotOppdrag()
+
+        val tilkjentYtelse = iverksettResultatService.hentTilkjentYtelse(behandlingIdRevurdering)!!
+        assertThat(tilkjentYtelse.andelerTilkjentYtelse).hasSize(2)
+        assertThat(tilkjentYtelse.andelerTilkjentYtelse.first().periodeId).isEqualTo(0)
+        assertThat(tilkjentYtelse.andelerTilkjentYtelse[1].periodeId).isEqualTo(1)
+        assertThat(tilkjentYtelse.andelerTilkjentYtelse[1].forrigePeriodeId).isEqualTo(0)
+    }
+
+    @Test
+    internal fun `revurdering der beløpet på den første endres, og en ny legges til, forvent at den første perioden erstattes`() {
+        val behandlingIdRevurdering = UUID.randomUUID()
+        val iverksettRevurdering = opprettIverksettDagpenger(
+            behandlingId = behandlingIdRevurdering,
+            forrigeBehandlingId = behandlingid,
+            andeler = listOf(
+                førsteAndel.copy(
+                    id = UUID.randomUUID(),
+                    beløp = 299,
+                ),
                 lagAndelTilkjentYtelse(
                     beløp = 1000,
                     fraOgMed = LocalDate.now(),
@@ -79,35 +110,7 @@ class IverksettMotOppdragIntegrasjonsTest : ServerTest() {
     }
 
     @Test
-    internal fun `revurdering der beløpet på den første endres, og en ny legges til, forvent at den første perioden erstattes`() {
-        val behandlingIdRevurdering = UUID.randomUUID()
-        val iverksettRevurdering = opprettIverksettDagpenger(
-            behandlingId = behandlingIdRevurdering,
-            forrigeBehandlingId = behandlingid,
-            andeler = listOf(
-                førsteAndel.copy(beløp = 299),
-                lagAndelTilkjentYtelse(
-                    beløp = 1000,
-                    fraOgMed = LocalDate.now(),
-                    tilOgMed = LocalDate.now().plusMonths(1),
-                ),
-            ),
-            forrigeIverksetting = iverksett,
-        )
-
-        taskService.deleteAll(taskService.findAll())
-        iverksettingService.startIverksetting(iverksettRevurdering, opprettBrev())
-        iverksettMotOppdrag()
-
-        val tilkjentYtelse = iverksettResultatService.hentTilkjentYtelse(behandlingIdRevurdering)!!
-        assertThat(tilkjentYtelse.andelerTilkjentYtelse).hasSize(2)
-        assertThat(tilkjentYtelse.andelerTilkjentYtelse.first().periodeId).isEqualTo(2)
-        assertThat(tilkjentYtelse.andelerTilkjentYtelse[1].periodeId).isEqualTo(3)
-        assertThat(tilkjentYtelse.andelerTilkjentYtelse[1].forrigePeriodeId).isEqualTo(2)
-    }
-
-    @Test
-    internal fun `iverksett med opphør, forventer beløp lik 0 og dato lik LocalDate MIN`() {
+    internal fun `iverksett med opphør, forventer ingen andeler`() {
         val opphørBehandlingId = UUID.randomUUID()
         val startdato = førsteAndel.periode.fom
         val iverksettMedOpphør =
@@ -124,11 +127,7 @@ class IverksettMotOppdragIntegrasjonsTest : ServerTest() {
         iverksettMotOppdrag()
 
         val tilkjentYtelse = iverksettResultatService.hentTilkjentYtelse(opphørBehandlingId)!!
-        assertThat(tilkjentYtelse.andelerTilkjentYtelse).hasSize(1)
-        assertThat(tilkjentYtelse.andelerTilkjentYtelse.first().periodeId).isEqualTo(1)
-        assertThat(tilkjentYtelse.andelerTilkjentYtelse.first().beløp).isEqualTo(0)
-        assertThat(tilkjentYtelse.andelerTilkjentYtelse.first().periode.fom).isEqualTo(LocalDate.MIN)
-        assertThat(tilkjentYtelse.andelerTilkjentYtelse.first().periode.tom).isEqualTo(LocalDate.MIN)
+        assertThat(tilkjentYtelse.andelerTilkjentYtelse).hasSize(0)
     }
 
     @Test
