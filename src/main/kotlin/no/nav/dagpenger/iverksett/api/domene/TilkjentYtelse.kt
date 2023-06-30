@@ -1,6 +1,7 @@
 package no.nav.dagpenger.iverksett.api.domene
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.ny.domene.AndelData
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.ny.domene.StønadTypeOgFerietillegg
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.ny.domene.StønadTypeOgFerietilleggKeyDeserializer
@@ -9,6 +10,7 @@ import no.nav.dagpenger.kontrakter.iverksett.TilkjentYtelseStatus
 import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsoppdrag
 import java.time.LocalDate
 import java.util.UUID
+import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.ny.domene.StønadTypeOgFerietilleggKeySerializer
 
 data class TilkjentYtelse(
     val id: UUID = UUID.randomUUID(),
@@ -16,7 +18,7 @@ data class TilkjentYtelse(
     val status: TilkjentYtelseStatus = TilkjentYtelseStatus.IKKE_KLAR,
     val andelerTilkjentYtelse: List<AndelTilkjentYtelse>,
     val sisteAndelIKjede: AndelTilkjentYtelse? = null,
-    // @JsonSerialize(keyUsing = StønadTypeOgFerietilleggKeySerializer::class) TODO Kanskje vi kommer til å trenge denne når vi skal lagre ned TilkjentYtelse med et map
+    @JsonSerialize(keyUsing = StønadTypeOgFerietilleggKeySerializer::class)
     @JsonDeserialize(keyUsing = StønadTypeOgFerietilleggKeyDeserializer::class)
     val sisteAndelPerKjede: Map<StønadTypeOgFerietillegg, AndelTilkjentYtelse> = sisteAndelIKjede?.let {
         mapOf(
@@ -61,6 +63,7 @@ private fun TilkjentYtelse?.lagNormaliserteAndeler(): List<AndelTilkjentYtelse> 
         ?.sortedBy { it.periode.fom }
         ?.map {
             AndelTilkjentYtelse(
+                id = it.id,
                 beløp = it.beløp,
                 periode = it.periode,
                 stønadstype = it.stønadstype,

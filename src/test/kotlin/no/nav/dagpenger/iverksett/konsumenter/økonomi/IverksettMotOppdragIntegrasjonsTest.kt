@@ -57,7 +57,7 @@ class IverksettMotOppdragIntegrasjonsTest : ServerTest() {
             behandlingIdRevurdering,
             behandlingid,
             listOf(
-                førsteAndel,
+                førsteAndel.copy(id = UUID.randomUUID()),
                 lagAndelTilkjentYtelse(
                     beløp = 1000,
                     fraOgMed = LocalDate.now(),

@@ -54,8 +54,8 @@ class IverksettMotOppdragTask(
             error("Lagret forrige tilkjent ytelse stemmer ikke med mottatt forrige tilkjent ytelse")
         }
 
-        lagOgSendUtbetalingsoppdragOgOppdaterTilkjentYtelse(iverksett, forrigeIverksettResultat, behandlingId)
-        // nyLagOgSendUtbetalingsoppdragOgOppdaterTilkjentYtelse(iverksett, forrigeIverksettResultat, behandlingId)
+        //lagOgSendUtbetalingsoppdragOgOppdaterTilkjentYtelse(iverksett, forrigeIverksettResultat, behandlingId)
+        nyLagOgSendUtbetalingsoppdragOgOppdaterTilkjentYtelse(iverksett, forrigeIverksettResultat, behandlingId)
     }
 
     private fun nyLagOgSendUtbetalingsoppdragOgOppdaterTilkjentYtelse(
