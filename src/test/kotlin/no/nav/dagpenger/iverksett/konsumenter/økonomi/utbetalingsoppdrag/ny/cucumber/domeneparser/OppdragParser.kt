@@ -76,9 +76,9 @@ object OppdragParser {
             sats = parseInt(DomenebegrepUtbetalingsoppdrag.BELØP, it),
             ytelse = parseValgfriEnum<StønadType>(DomenebegrepUtbetalingsoppdrag.YTELSE_TYPE, it)
                 ?: StønadType.DAGPENGER_ARBEIDSSOKER_ORDINAER,
-            fom = parseÅrMåned(Domenebegrep.FRA_DATO, it).atDay(1),
-            tom = parseÅrMåned(Domenebegrep.TIL_DATO, it).atEndOfMonth(),
-            opphør = parseValgfriÅrMåned(DomenebegrepUtbetalingsoppdrag.OPPHØRSDATO, it)?.atDay(1),
+            fom = parseDato(Domenebegrep.FRA_DATO, it),
+            tom = parseDato(Domenebegrep.TIL_DATO, it),
+            opphør = parseValgfriDato(DomenebegrepUtbetalingsoppdrag.OPPHØRSDATO, it),
             kildebehandlingId = parseValgfriLong(DomenebegrepAndeler.KILDEBEHANDLING_ID, it),
             satstype = parseValgfriEnum<Utbetalingsperiode.SatsType>(DomenebegrepAndeler.SATSTYPE, it)
                 ?: Utbetalingsperiode.SatsType.MND,
