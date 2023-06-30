@@ -61,7 +61,7 @@ class IverksettMotOppdragTask(
     private fun nyLagOgSendUtbetalingsoppdragOgOppdaterTilkjentYtelse(
         iverksett: IverksettDagpenger,
         forrigeIverksettResultat: IverksettResultat?,
-        behandlingId: UUID
+        behandlingId: UUID,
     ) {
         val behandlingsinformasjon = Behandlingsinformasjon(
             saksbehandlerId = iverksett.vedtak.saksbehandlerId,

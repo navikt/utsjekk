@@ -1,12 +1,14 @@
 package no.nav.dagpenger.iverksett.api.domene
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.ny.domene.AndelData
+import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.ny.domene.StønadTypeOgFerietillegg
+import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.ny.domene.StønadTypeOgFerietilleggKeyDeserializer
 import no.nav.dagpenger.kontrakter.felles.StønadType
 import no.nav.dagpenger.kontrakter.iverksett.TilkjentYtelseStatus
 import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsoppdrag
 import java.time.LocalDate
 import java.util.UUID
-import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.ny.domene.AndelData
-import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.ny.domene.StønadTypeOgFerietillegg
 
 data class TilkjentYtelse(
     val id: UUID = UUID.randomUUID(),
@@ -14,12 +16,14 @@ data class TilkjentYtelse(
     val status: TilkjentYtelseStatus = TilkjentYtelseStatus.IKKE_KLAR,
     val andelerTilkjentYtelse: List<AndelTilkjentYtelse>,
     val sisteAndelIKjede: AndelTilkjentYtelse? = null,
+    // @JsonSerialize(keyUsing = StønadTypeOgFerietilleggKeySerializer::class) TODO Kanskje vi kommer til å trenge denne når vi skal lagre ned TilkjentYtelse med et map
+    @JsonDeserialize(keyUsing = StønadTypeOgFerietilleggKeyDeserializer::class)
     val sisteAndelPerKjede: Map<StønadTypeOgFerietillegg, AndelTilkjentYtelse> = sisteAndelIKjede?.let {
         mapOf(
             StønadTypeOgFerietillegg(
                 it.stønadstype,
-                it.ferietillegg
-            ) to it
+                it.ferietillegg,
+            ) to it,
         )
     } ?: emptyMap(),
     val startdato: LocalDate,
