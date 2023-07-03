@@ -67,7 +67,7 @@ internal class UtbetalingsoppdragGeneratorTest {
             .joinToString("\n")
 
     private fun assertThatPeriodeIdOgForrigePeriodeIdBlirSattKorrekt(
-        utbetalingsoppdragB: TilkjentYtelse
+        utbetalingsoppdragB: TilkjentYtelse,
     ) {
         assertAndel(
             andelTilkjentYtelse = utbetalingsoppdragB.andelerTilkjentYtelse[0],

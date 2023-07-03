@@ -1,7 +1,5 @@
 package no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.ny
 
-import java.time.LocalDate
-import java.time.YearMonth
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.ny.OppdragBeregnerUtil.validerAndeler
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.ny.cucumber.FAGSAK_ID
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.ny.domene.AndelData
@@ -11,6 +9,8 @@ import no.nav.dagpenger.kontrakter.felles.StønadType
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import java.time.LocalDate
+import java.time.YearMonth
 
 class OppdragBeregnerUtilTest {
 
