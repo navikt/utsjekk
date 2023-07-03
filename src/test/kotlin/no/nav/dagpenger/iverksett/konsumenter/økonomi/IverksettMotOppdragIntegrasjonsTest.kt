@@ -57,7 +57,7 @@ class IverksettMotOppdragIntegrasjonsTest : ServerTest() {
             behandlingIdRevurdering,
             behandlingid,
             listOf(
-                førsteAndel.copy(id = UUID.randomUUID()), // TODO Trengs ny ID?
+                førsteAndel,
                 lagAndelTilkjentYtelse(
                     beløp = 1000,
                     fraOgMed = LocalDate.now(),
@@ -86,7 +86,6 @@ class IverksettMotOppdragIntegrasjonsTest : ServerTest() {
             forrigeBehandlingId = behandlingid,
             andeler = listOf(
                 førsteAndel.copy(
-                    id = UUID.randomUUID(),
                     beløp = 299,
                 ),
                 lagAndelTilkjentYtelse(

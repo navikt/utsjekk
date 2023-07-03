@@ -8,7 +8,6 @@ import no.nav.dagpenger.kontrakter.iverksett.Ferietillegg
 import java.util.UUID
 
 data class AndelTilkjentYtelse(
-    val id: UUID = UUID.randomUUID(),
     val beløp: Int,
     val periode: Datoperiode,
     val stønadstype: StønadType,
@@ -16,6 +15,20 @@ data class AndelTilkjentYtelse(
     val periodeId: Long? = null,
     val forrigePeriodeId: Long? = null,
 ) {
+
+    var id: UUID = UUID.randomUUID()
+
+    constructor(
+        id: UUID,
+        beløp: Int,
+        periode: Datoperiode,
+        stønadstype: StønadType,
+        ferietillegg: Ferietillegg?,
+        periodeId: Long? = null,
+        forrigePeriodeId: Long? = null,
+    ) : this(beløp, periode, stønadstype, ferietillegg, periodeId, forrigePeriodeId) {
+        this.id = id
+    }
 
     private fun erTilsvarendeForUtbetaling(other: AndelTilkjentYtelse): Boolean {
         return (
