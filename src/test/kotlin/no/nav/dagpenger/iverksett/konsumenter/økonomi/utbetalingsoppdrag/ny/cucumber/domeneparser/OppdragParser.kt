@@ -81,7 +81,6 @@ object OppdragParser {
             fom = parseDato(Domenebegrep.FRA_DATO, it),
             tom = parseDato(Domenebegrep.TIL_DATO, it),
             opphør = parseValgfriDato(DomenebegrepUtbetalingsoppdrag.OPPHØRSDATO, it),
-            kildebehandlingId = parseValgfriLong(DomenebegrepAndeler.KILDEBEHANDLING_ID, it),
             satstype = parseValgfriEnum<Utbetalingsperiode.SatsType>(DomenebegrepAndeler.SATSTYPE, it)
                 ?: Utbetalingsperiode.SatsType.DAG,
         )
@@ -139,6 +138,5 @@ data class ForventetUtbetalingsperiode(
     val fom: LocalDate,
     val tom: LocalDate,
     val opphør: LocalDate?,
-    val kildebehandlingId: Long?,
     val satstype: Utbetalingsperiode.SatsType,
 )

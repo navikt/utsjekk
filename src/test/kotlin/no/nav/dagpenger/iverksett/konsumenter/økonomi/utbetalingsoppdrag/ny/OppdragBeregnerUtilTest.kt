@@ -1,17 +1,16 @@
 package no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.ny
 
+import java.time.LocalDate
+import java.time.YearMonth
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.ny.OppdragBeregnerUtil.validerAndeler
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.ny.cucumber.FAGSAK_ID
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.ny.domene.AndelData
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.ny.domene.Behandlingsinformasjon
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.ny.domene.StønadTypeOgFerietillegg
 import no.nav.dagpenger.kontrakter.felles.StønadType
-import no.nav.familie.kontrakter.felles.tilbakekreving.Ytelsestype
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import java.time.LocalDate
-import java.time.YearMonth
 
 class OppdragBeregnerUtilTest {
 
@@ -31,7 +30,7 @@ class OppdragBeregnerUtilTest {
         fun `forrige inneholer en andel og nye er tom liste`() {
             validerAndeler(
                 lagBehandlingsinformasjon(),
-                forrige = listOf(lagAndel(periodeId = 1, forrigePeriodeId = 0, kildeBehandlingId = "1")),
+                forrige = listOf(lagAndel(periodeId = 1, forrigePeriodeId = 0)),
                 nye = listOf(),
             )
         }
@@ -55,8 +54,8 @@ class OppdragBeregnerUtilTest {
                 validerAndeler(
                     lagBehandlingsinformasjon(),
                     forrige = listOf(
-                        lagAndel(id = "1", periodeId = 1, forrigePeriodeId = null, kildeBehandlingId = "1"),
-                        lagAndel(id = "1", periodeId = 2, forrigePeriodeId = null, kildeBehandlingId = "1"),
+                        lagAndel(id = "1", periodeId = 1, forrigePeriodeId = null),
+                        lagAndel(id = "1", periodeId = 2, forrigePeriodeId = null),
                     ),
                     nye = listOf(),
                 )
@@ -79,7 +78,7 @@ class OppdragBeregnerUtilTest {
             assertThatThrownBy {
                 validerAndeler(
                     lagBehandlingsinformasjon(),
-                    forrige = listOf(lagAndel(id = "1", periodeId = 1, forrigePeriodeId = null, kildeBehandlingId = "1")),
+                    forrige = listOf(lagAndel(id = "1", periodeId = 1, forrigePeriodeId = null)),
                     nye = listOf(lagAndel(id = "1")),
                 )
             }.hasMessageContaining("Inneholder duplikat av id'er")
@@ -94,7 +93,7 @@ class OppdragBeregnerUtilTest {
             assertThatThrownBy {
                 validerAndeler(
                     lagBehandlingsinformasjon(),
-                    forrige = listOf(lagAndel(periodeId = null, forrigePeriodeId = null, kildeBehandlingId = "1")),
+                    forrige = listOf(lagAndel(periodeId = null, forrigePeriodeId = null)),
                     nye = listOf(),
                 )
             }.hasMessageContaining("mangler periodeId")
@@ -110,7 +109,7 @@ class OppdragBeregnerUtilTest {
                 validerAndeler(
                     lagBehandlingsinformasjon(),
                     forrige = listOf(),
-                    nye = listOf(lagAndel(id = "1", periodeId = 1, forrigePeriodeId = null, kildeBehandlingId = "1")),
+                    nye = listOf(lagAndel(id = "1", periodeId = 1, forrigePeriodeId = null)),
                 )
             }.hasMessageContaining("inneholder periodeId/forrigePeriodeId")
         }
@@ -121,7 +120,7 @@ class OppdragBeregnerUtilTest {
                 validerAndeler(
                     lagBehandlingsinformasjon(),
                     forrige = listOf(),
-                    nye = listOf(lagAndel(id = "1", periodeId = null, forrigePeriodeId = 1, kildeBehandlingId = "1")),
+                    nye = listOf(lagAndel(id = "1", periodeId = null, forrigePeriodeId = 1)),
                 )
             }.hasMessageContaining("inneholder periodeId/forrigePeriodeId")
         }
@@ -134,7 +133,7 @@ class OppdragBeregnerUtilTest {
         fun `kan sende inn opphørFra som er før forrige første periode`() {
             validerAndeler(
                 lagBehandlingsinformasjon(opphørFra = YearMonth.now().minusMonths(1)),
-                forrige = listOf(lagAndel(id = "1", periodeId = 1, forrigePeriodeId = null, kildeBehandlingId = "1")),
+                forrige = listOf(lagAndel(id = "1", periodeId = 1, forrigePeriodeId = null)),
                 nye = listOf(),
             )
         }
@@ -153,7 +152,7 @@ class OppdragBeregnerUtilTest {
             assertThatThrownBy {
                 validerAndeler(
                     lagBehandlingsinformasjon(opphørFra = YearMonth.now().plusMonths(1)),
-                    forrige = listOf(lagAndel(id = "1", periodeId = 1, forrigePeriodeId = null, kildeBehandlingId = "1")),
+                    forrige = listOf(lagAndel(id = "1", periodeId = 1, forrigePeriodeId = null)),
                     nye = listOf(),
                 )
             }.hasMessageContaining("Ugyldig opphørFra")
@@ -165,7 +164,6 @@ class OppdragBeregnerUtilTest {
         ytelseType: StønadType = StønadType.DAGPENGER_ARBEIDSSOKER_ORDINAER,
         periodeId: Long? = null,
         forrigePeriodeId: Long? = null,
-        kildeBehandlingId: String? = null,
         beløp: Int = 1,
     ) = AndelData(
         id = id,
@@ -178,7 +176,6 @@ class OppdragBeregnerUtilTest {
     )
 
     private fun lagBehandlingsinformasjon(
-        ytelse: Ytelsestype = Ytelsestype.OVERGANGSSTØNAD,
         opphørFra: YearMonth? = null,
     ) = Behandlingsinformasjon(
         fagsakId = FAGSAK_ID,

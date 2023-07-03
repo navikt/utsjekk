@@ -76,11 +76,11 @@ Egenskap: Opphør
     Når beregner utbetalingsoppdrag
 
     Så forvent følgende utbetalingsoppdrag 2
-      | BehandlingId | Fra dato   | Til dato   | Opphørsdato | Beløp | Kode endring | Er endring | Periode id | Forrige periode id | Kildebehandling |
-      | 1            | 01.03.2021 | 01.03.2021 |             | 700   | NY           | Nei        | 0          |                    |                 |
-      | 1            | 01.04.2021 | 01.04.2021 |             | 700   | NY           | Nei        | 1          | 0                  |                 |
-      | 2            | 01.04.2021 | 01.04.2021 | 01.03.2021  | 700   | ENDR         | Ja         | 1          | 0                  |                 |
-      | 2            | 01.04.2021 | 01.04.2021 |             | 700   | ENDR         | Nei        | 2          | 1                  |                 |
+      | BehandlingId | Fra dato   | Til dato   | Opphørsdato | Beløp | Kode endring | Er endring | Periode id | Forrige periode id |
+      | 1            | 01.03.2021 | 01.03.2021 |             | 700   | NY           | Nei        | 0          |                    |
+      | 1            | 01.04.2021 | 01.04.2021 |             | 700   | NY           | Nei        | 1          | 0                  |
+      | 2            | 01.04.2021 | 01.04.2021 | 01.03.2021  | 700   | ENDR         | Ja         | 1          | 0                  |
+      | 2            | 01.04.2021 | 01.04.2021 |             | 700   | ENDR         | Nei        | 2          | 1                  |
 
   Scenario: Endrer en tidligere periode til 0-utbetaling
 
@@ -158,9 +158,9 @@ Egenskap: Opphør
       | 3            | 01.04.2021 | 01.08.2021 | 01.04.2021  | 700   | ENDR         | Ja         | 1          | 0                  |
 
     Så forvent følgende andeler med periodeId
-      | BehandlingId | Id | Periode id | Forrige periode id | Kildebehandling |
-      | 1            | 0  | 0          |                    | 1               |
-      | 1            | 1  | 1          | 0                  | 1               |
-      | 2            | 2  | 0          |                    | 1               |
-      | 2            | 3  | 1          | 0                  | 1               |
-      | 3            | 4  | 0          |                    | 1               |
+      | BehandlingId | Id | Periode id | Forrige periode id |
+      | 1            | 0  | 0          |                    |
+      | 1            | 1  | 1          | 0                  |
+      | 2            | 2  | 0          |                    |
+      | 2            | 3  | 1          | 0                  |
+      | 3            | 4  | 0          |                    |

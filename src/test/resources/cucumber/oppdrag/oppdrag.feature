@@ -79,10 +79,10 @@ Egenskap: Vedtak for førstegangsbehandling
     Når beregner utbetalingsoppdrag
 
     Så forvent følgende utbetalingsoppdrag 2
-      | BehandlingId | Fra dato   | Til dato   | Opphørsdato | Beløp | Kode endring | Er endring | Periode id | Forrige periode id | Kildebehandling |
-      | 1            | 01.03.2021 | 01.03.2021 |             | 700   | NY           | Nei        | 0          |                    | 1               |
-      | 2            | 01.04.2021 | 01.04.2021 |             | 800   | ENDR         | Nei        | 1          | 0                  | 2               |
-      | 3            | 01.05.2021 | 01.05.2021 |             | 900   | ENDR         | Nei        | 2          | 1                  | 3               |
+      | BehandlingId | Fra dato   | Til dato   | Opphørsdato | Beløp | Kode endring | Er endring | Periode id | Forrige periode id |
+      | 1            | 01.03.2021 | 01.03.2021 |             | 700   | NY           | Nei        | 0          |                    |
+      | 2            | 01.04.2021 | 01.04.2021 |             | 800   | ENDR         | Nei        | 1          | 0                  |
+      | 3            | 01.05.2021 | 01.05.2021 |             | 900   | ENDR         | Nei        | 2          | 1                  |
 
 
   Scenario: Endrer beløp fra 2. mars
@@ -96,9 +96,9 @@ Egenskap: Vedtak for førstegangsbehandling
     Når beregner utbetalingsoppdrag
 
     Så forvent følgende utbetalingsoppdrag 2
-      | BehandlingId | Fra dato   | Til dato   | Opphørsdato | Beløp | Kode endring | Er endring | Periode id | Forrige periode id | Kildebehandling |
-      | 1            | 01.03.2021 | 01.06.2021 |             | 700   | NY           | Nei        | 0          |                    | 1               |
-      | 2            | 02.03.2021 | 01.06.2021 |             | 800   | ENDR         | Nei        | 1          | 0                  | 2               |
+      | BehandlingId | Fra dato   | Til dato   | Opphørsdato | Beløp | Kode endring | Er endring | Periode id | Forrige periode id |
+      | 1            | 01.03.2021 | 01.06.2021 |             | 700   | NY           | Nei        | 0          |                    |
+      | 2            | 02.03.2021 | 01.06.2021 |             | 800   | ENDR         | Nei        | 1          | 0                  |
 
 
   Scenario: Første perioden blir avkortet, og den andre er lik
@@ -113,11 +113,11 @@ Egenskap: Vedtak for førstegangsbehandling
     Når beregner utbetalingsoppdrag
 
     Så forvent følgende utbetalingsoppdrag 2
-      | BehandlingId | Fra dato   | Til dato   | Opphørsdato | Beløp | Kode endring | Er endring | Periode id | Forrige periode id | Kildebehandling |
-      | 1            | 01.03.2021 | 01.04.2021 |             | 700   | NY           | Nei        | 0          |                    | 1               |
-      | 1            | 01.05.2021 | 01.07.2021 |             | 700   | NY           | Nei        | 1          | 0                  | 1               |
-      | 2            | 01.05.2021 | 01.07.2021 | 16.03.2021  | 700   | ENDR         | Ja         | 1          | 0                  | 2               |
-      | 2            | 01.05.2021 | 01.07.2021 |             | 700   | ENDR         | Nei        | 2          | 1                  | 2               |
+      | BehandlingId | Fra dato   | Til dato   | Opphørsdato | Beløp | Kode endring | Er endring | Periode id | Forrige periode id |
+      | 1            | 01.03.2021 | 01.04.2021 |             | 700   | NY           | Nei        | 0          |                    |
+      | 1            | 01.05.2021 | 01.07.2021 |             | 700   | NY           | Nei        | 1          | 0                  |
+      | 2            | 01.05.2021 | 01.07.2021 | 16.03.2021  | 700   | ENDR         | Ja         | 1          | 0                  |
+      | 2            | 01.05.2021 | 01.07.2021 |             | 700   | ENDR         | Nei        | 2          | 1                  |
 
   Scenario: Endrer beløp fra start
 
@@ -136,10 +136,10 @@ Egenskap: Vedtak for førstegangsbehandling
       | 2            | 01.04.2021 | 01.06.2021 |             | 700   | ENDR         | Nei        | 2          | 1                  |
 
     Så forvent følgende andeler med periodeId
-      | BehandlingId | Id | Periode id | Forrige periode id | Kildebehandling |
-      | 1            | 0  | 0          |                    | 1               |
-      | 2            | 1  | 1          | 0                  | 2               |
-      | 2            | 2  | 2          | 1                  | 2               |
+      | BehandlingId | Id | Periode id | Forrige periode id |
+      | 1            | 0  | 0          |                    |
+      | 2            | 1  | 1          | 0                  |
+      | 2            | 2  | 2          | 1                  |
 
   Scenario: Opphør alle perioder for å sen iverksette på nytt, verifiserer at man fortsatt sender ENDR
 

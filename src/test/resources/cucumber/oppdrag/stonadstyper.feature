@@ -36,7 +36,7 @@ Egenskap: Ulike stønadstyper på andelene
       | 1            | 01.03.2021 | 01.05.2021 |             | 800   | DAGPENGER_PERMITTERING_ORDINAER | NY           | Nei        | 1          |                    |
       | 2            | 01.04.2021 | 01.05.2021 |             | 900   | DAGPENGER_PERMITTERING_ORDINAER | ENDR         | Nei        | 2          | 1                  |
 
-  Scenario: Søker har flere stønadstyper som alle blir egne kjeder. Øker hvert beløp med 100kr i revurderingen for å verifisere at det fortsatt blir 4 ulike kjeder
+  Scenario: Søker har flere stønadstyper som alle blir egne kjeder. Øker hvert beløp med 100kr i revurderingen for å verifisere at det fortsatt blir 3 ulike kjeder
 
     Gitt følgende tilkjente ytelser
       | BehandlingId | Fra dato   | Til dato   | Beløp | Ytelse                          |
