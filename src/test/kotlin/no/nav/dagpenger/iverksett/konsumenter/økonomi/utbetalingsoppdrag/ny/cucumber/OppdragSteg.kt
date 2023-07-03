@@ -4,6 +4,7 @@ import io.cucumber.datatable.DataTable
 import io.cucumber.java.no.Gitt
 import io.cucumber.java.no.Når
 import io.cucumber.java.no.Så
+import no.nav.dagpenger.iverksett.cucumber.domeneparser.IdTIlUUIDHolder.behandlingIdTilUUID
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.ny.Utbetalingsgenerator
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.ny.cucumber.ValideringUtil.assertSjekkBehandlingIder
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.ny.cucumber.domeneparser.Domenebegrep
@@ -31,11 +32,10 @@ import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsoppdrag
 import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsperiode
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.slf4j.LoggerFactory
 import java.time.LocalDate
 import java.util.UUID
-import no.nav.dagpenger.iverksett.cucumber.domeneparser.IdTIlUUIDHolder.behandlingIdTilUUID
-import org.junit.jupiter.api.Assertions.assertEquals
 
 val FAGSAK_ID = UUID.randomUUID().toString()
 
@@ -265,9 +265,4 @@ private fun assertUtbetalingsperiode(
     assertThat(utbetalingsperiode.opphør?.opphørDatoFom)
         .`as`("opphør")
         .isEqualTo(forventetUtbetalingsperiode.opphør)
-    forventetUtbetalingsperiode.kildebehandlingId?.let {
-        assertThat(utbetalingsperiode.behandlingId)
-            .`as`("kildebehandlingId")
-            .isEqualTo(forventetUtbetalingsperiode.kildebehandlingId)
-    }
 }

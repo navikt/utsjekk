@@ -36,7 +36,7 @@ Egenskap: Håndtering av 0-beløp
       | BehandlingId | Fra dato   | Til dato   | Opphørsdato | Beløp | Kode endring | Er endring | Periode id | Forrige periode id |
       | 1            | 01.03.2021 | 01.04.2021 |             | 700   | NY           | Nei        | 0          |                    |
       | 1            | 01.05.2021 | 01.06.2021 |             | 800   | NY           | Nei        | 1          | 0                  |
-      | 2            | 01.05.2021 | 01.06.2021 | 01.04.2021  | 800   | ENDR         | Ja         | 1          | 0                  |
+      | 2            | 01.05.2021 | 01.06.2021 | 02.03.2021  | 800   | ENDR         | Ja         | 1          | 0                  |
       | 2            | 01.05.2021 | 01.06.2021 |             | 800   | ENDR         | Nei        | 2          | 1                  |
 
   Scenario: 0-beløp beholdes, og får en ny andel

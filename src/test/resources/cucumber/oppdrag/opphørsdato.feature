@@ -8,7 +8,7 @@ Egenskap: Sender med opphørFra
 
     Gitt følgende behandlingsinformasjon
       | BehandlingId | Opphør fra |
-      | 2            | 01.2021    |
+      | 2            | 01.01.2021 |
 
     Gitt følgende tilkjente ytelser
       | BehandlingId | Fra dato   | Til dato   | Beløp |
@@ -20,7 +20,7 @@ Egenskap: Sender med opphørFra
     Så forvent følgende utbetalingsoppdrag 2
       | BehandlingId | Fra dato   | Til dato   | Opphørsdato | Beløp | Kode endring | Er endring | Periode id | Forrige periode id |
       | 1            | 01.03.2021 | 01.03.2021 |             | 700   | NY           | Nei        | 0          |                    |
-      | 2            | 01.03.2021 | 01.03.2021 | 01.2021     | 700   | ENDR         | Ja         | 0          |                    |
+      | 2            | 01.03.2021 | 01.03.2021 | 01.01.2021  | 700   | ENDR         | Ja         | 0          |                    |
       | 2            | 01.05.2021 | 01.05.2021 |             | 700   | ENDR         | Nei        | 1          | 0                  |
 
   Scenario: Kan ikke sende inn opphørFra på en førstegangsbehandling

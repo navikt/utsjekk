@@ -14,7 +14,7 @@ Egenskap: Vedtak for førstegangsbehandling
 
     Så forvent følgende utbetalingsoppdrag 2
       | BehandlingId | Fra dato   | Til dato   | Opphørsdato | Beløp | Kode endring | Er endring | Periode id | Forrige periode id | Satstype |
-      | 1            | 01.03.2021 | 01.03.2021 |             | 700   | NY           | Nei        | 0          |                    | MND      |
+      | 1            | 01.03.2021 | 01.03.2021 |             | 700   | NY           | Nei        | 0          |                    | DAG      |
 
 
   Scenario: Revurdering uten endring av andeler
@@ -85,20 +85,20 @@ Egenskap: Vedtak for førstegangsbehandling
       | 3            | 01.05.2021 | 01.05.2021 |             | 900   | ENDR         | Nei        | 2          | 1                  | 3               |
 
 
-  Scenario: Endrer beløp fra april
+  Scenario: Endrer beløp fra 2. mars
 
     Gitt følgende tilkjente ytelser
       | BehandlingId | Fra dato   | Til dato   | Beløp |
       | 1            | 01.03.2021 | 01.06.2021 | 700   |
       | 2            | 01.03.2021 | 01.03.2021 | 700   |
-      | 2            | 01.04.2021 | 01.06.2021 | 800   |
+      | 2            | 02.03.2021 | 01.06.2021 | 800   |
 
     Når beregner utbetalingsoppdrag
 
     Så forvent følgende utbetalingsoppdrag 2
       | BehandlingId | Fra dato   | Til dato   | Opphørsdato | Beløp | Kode endring | Er endring | Periode id | Forrige periode id | Kildebehandling |
       | 1            | 01.03.2021 | 01.06.2021 |             | 700   | NY           | Nei        | 0          |                    | 1               |
-      | 2            | 01.04.2021 | 01.06.2021 |             | 800   | ENDR         | Nei        | 1          | 0                  | 2               |
+      | 2            | 02.03.2021 | 01.06.2021 |             | 800   | ENDR         | Nei        | 1          | 0                  | 2               |
 
 
   Scenario: Første perioden blir avkortet, og den andre er lik
@@ -106,18 +106,18 @@ Egenskap: Vedtak for førstegangsbehandling
     Gitt følgende tilkjente ytelser
       | BehandlingId | Fra dato   | Til dato   | Beløp |
       | 1            | 01.03.2021 | 01.04.2021 | 700   |
-      | 1            | 01.05.2021 | 07.2021    | 700   |
-      | 2            | 01.03.2021 | 01.03.2021 | 700   |
-      | 2            | 01.05.2021 | 07.2021    | 700   |
+      | 1            | 01.05.2021 | 01.07.2021 | 700   |
+      | 2            | 01.03.2021 | 15.03.2021 | 700   |
+      | 2            | 01.05.2021 | 01.07.2021 | 700   |
 
     Når beregner utbetalingsoppdrag
 
     Så forvent følgende utbetalingsoppdrag 2
       | BehandlingId | Fra dato   | Til dato   | Opphørsdato | Beløp | Kode endring | Er endring | Periode id | Forrige periode id | Kildebehandling |
       | 1            | 01.03.2021 | 01.04.2021 |             | 700   | NY           | Nei        | 0          |                    | 1               |
-      | 1            | 01.05.2021 | 07.2021    |             | 700   | NY           | Nei        | 1          | 0                  | 1               |
-      | 2            | 01.05.2021 | 07.2021    | 01.04.2021  | 700   | ENDR         | Ja         | 1          | 0                  | 2               |
-      | 2            | 01.05.2021 | 07.2021    |             | 700   | ENDR         | Nei        | 2          | 1                  | 2               |
+      | 1            | 01.05.2021 | 01.07.2021 |             | 700   | NY           | Nei        | 1          | 0                  | 1               |
+      | 2            | 01.05.2021 | 01.07.2021 | 16.03.2021  | 700   | ENDR         | Ja         | 1          | 0                  | 2               |
+      | 2            | 01.05.2021 | 01.07.2021 |             | 700   | ENDR         | Nei        | 2          | 1                  | 2               |
 
   Scenario: Endrer beløp fra start
 
@@ -156,19 +156,3 @@ Egenskap: Vedtak for førstegangsbehandling
       | 1            | 01.03.2021 | 01.03.2021 |             | 700   | NY           | Nei        | 0          |                    |
       | 2            | 01.03.2021 | 01.03.2021 | 01.03.2021  | 700   | ENDR         | Ja         | 0          |                    |
       | 3            | 01.03.2021 | 01.03.2021 |             | 700   | ENDR         | Nei        | 1          | 0                  |
-
-  Scenario: Skolepenger skal bruke engangsutbetaling
-
-    Gitt følgende behandlingsinformasjon
-      | BehandlingId | Ytelse      |
-      | 1            | SKOLEPENGER |
-
-    Gitt følgende tilkjente ytelser
-      | BehandlingId | Fra dato   | Til dato   | Beløp | Ytelse      |
-      | 1            | 01.03.2021 | 01.03.2021 | 700   | SKOLEPENGER |
-
-    Når beregner utbetalingsoppdrag
-
-    Så forvent følgende utbetalingsoppdrag 2
-      | BehandlingId | Fra dato   | Til dato   | Opphørsdato | Beløp | Kode endring | Er endring | Periode id | Forrige periode id | Satstype | Ytelse      |
-      | 1            | 01.03.2021 | 01.03.2021 |             | 700   | NY           | Nei        | 0          |                    | ENG      | SKOLEPENGER |
