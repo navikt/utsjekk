@@ -34,6 +34,8 @@ import org.assertj.core.api.Assertions.catchThrowable
 import org.slf4j.LoggerFactory
 import java.time.LocalDate
 import java.util.UUID
+import no.nav.dagpenger.iverksett.cucumber.domeneparser.IdTIlUUIDHolder.behandlingIdTilUUID
+import org.junit.jupiter.api.Assertions.assertEquals
 
 val FAGSAK_ID = UUID.randomUUID().toString()
 
@@ -41,9 +43,9 @@ class OppdragSteg {
 
     private val logger = LoggerFactory.getLogger(javaClass)
 
-    private var behandlingsinformasjon = mutableMapOf<Long, Behandlingsinformasjon>()
-    private var andelerPerBehandlingId = mapOf<Long, List<AndelData>>()
-    private var beregnetUtbetalingsoppdrag = mutableMapOf<Long, BeregnetUtbetalingsoppdrag>()
+    private var behandlingsinformasjon = mutableMapOf<UUID, Behandlingsinformasjon>()
+    private var andelerPerBehandlingId = mapOf<UUID, List<AndelData>>()
+    private var beregnetUtbetalingsoppdrag = mutableMapOf<UUID, BeregnetUtbetalingsoppdrag>()
 
     @Gitt("følgende behandlingsinformasjon")
     fun følgendeBehandlinger(dataTable: DataTable) {
@@ -64,7 +66,7 @@ class OppdragSteg {
 
     @Når("beregner utbetalingsoppdrag")
     fun `beregner utbetalingsoppdrag`() {
-        andelerPerBehandlingId.entries.fold(emptyList<Pair<Long, List<AndelData>>>()) { acc, andelPåBehandlingId ->
+        andelerPerBehandlingId.entries.fold(emptyList<Pair<UUID, List<AndelData>>>()) { acc, andelPåBehandlingId ->
             val behandlingId = andelPåBehandlingId.key
             try {
                 val beregnUtbetalingsoppdrag = beregnUtbetalingsoppdrag(acc, andelPåBehandlingId)
@@ -103,7 +105,7 @@ class OppdragSteg {
     fun `forvent følgende andeler med periodeId`(dataTable: DataTable) {
         val groupByBehandlingId = dataTable.groupByBehandlingId()
         groupByBehandlingId.forEach { (behandlingId, rader) ->
-            val beregnedeAndeler = beregnetUtbetalingsoppdrag.getValue(behandlingId).andeler
+            val beregnedeAndeler = beregnetUtbetalingsoppdrag.getValue(behandlingIdTilUUID[behandlingId.toInt()]!!).andeler
             val forventedeAndeler = rader.map { rad ->
                 AndelMedPeriodeId(
                     id = parseString(Domenebegrep.ID, rad),
@@ -120,9 +122,9 @@ class OppdragSteg {
     private fun opprettBehandlingsinformasjon(dataTable: DataTable) {
         dataTable.groupByBehandlingId().map { (behandlingId, rader) ->
             val rad = rader.single()
-
-            behandlingsinformasjon[behandlingId] = lagBehandlingsinformasjon(
-                behandlingId = behandlingId.toString(),
+            val behandlingIdAsUUID = behandlingIdTilUUID[behandlingId.toInt()]!!
+            behandlingsinformasjon[behandlingIdAsUUID] = lagBehandlingsinformasjon(
+                behandlingId = behandlingIdAsUUID.toString(),
                 opphørFra = parseValgfriDato(DomenebegrepBehandlingsinformasjon.OPPHØR_FRA, rad),
                 ytelse = parseValgfriEnum<StønadType>(DomenebegrepBehandlingsinformasjon.YTELSE, rad),
             )
@@ -131,8 +133,9 @@ class OppdragSteg {
 
     private fun genererBehandlingsinformasjonForDeSomMangler(dataTable: DataTable) {
         dataTable.groupByBehandlingId().forEach { (behandlingId, _) ->
-            if (!behandlingsinformasjon.containsKey(behandlingId)) {
-                behandlingsinformasjon[behandlingId] = lagBehandlingsinformasjon(behandlingId.toString())
+            val behandlingIdAsUUID = behandlingIdTilUUID[behandlingId.toInt()]!!
+            if (!behandlingsinformasjon.containsKey(behandlingIdAsUUID)) {
+                behandlingsinformasjon[behandlingIdAsUUID] = lagBehandlingsinformasjon(behandlingIdAsUUID.toString())
             }
         }
     }
@@ -151,8 +154,8 @@ class OppdragSteg {
     )
 
     private fun beregnUtbetalingsoppdrag(
-        acc: List<Pair<Long, List<AndelData>>>,
-        andeler: Map.Entry<Long, List<AndelData>>,
+        acc: List<Pair<UUID, List<AndelData>>>,
+        andeler: Map.Entry<UUID, List<AndelData>>,
     ): BeregnetUtbetalingsoppdrag {
         val forrigeKjeder = acc.lastOrNull()?.second ?: emptyList()
         val behandlingId = andeler.key
@@ -170,7 +173,7 @@ class OppdragSteg {
      * Når vi henter forrige offset for en kjede så må vi hente max periodeId, men den første hendelsen av den typen
      * Dette då vi i noen tilfeller opphører en peride, som beholder den samme periodeId'n
      */
-    private fun gjeldendeForrigeOffsetForKjede(forrigeKjeder: List<Pair<Long, List<AndelData>>>): Map<StønadTypeOgFerietillegg, AndelData> {
+    private fun gjeldendeForrigeOffsetForKjede(forrigeKjeder: List<Pair<UUID, List<AndelData>>>): Map<StønadTypeOgFerietillegg, AndelData> {
         return forrigeKjeder.flatMap { it.second }
             .uten0beløp()
             .groupBy { it.type }
@@ -179,7 +182,7 @@ class OppdragSteg {
 
     private fun oppdaterAndelerMedPeriodeId(
         beregnUtbetalingsoppdrag: BeregnetUtbetalingsoppdrag,
-        andelPåBehandlingId: Map.Entry<Long, List<AndelData>>,
+        andelPåBehandlingId: Map.Entry<UUID, List<AndelData>>,
     ): List<AndelData> {
         val andelerPerId = beregnUtbetalingsoppdrag.andeler.associateBy { it.id }
         return andelPåBehandlingId.value.map {
@@ -197,11 +200,11 @@ class OppdragSteg {
 
     private fun validerForventetUtbetalingsoppdrag(
         dataTable: DataTable,
-        beregnetUtbetalingsoppdrag: MutableMap<Long, BeregnetUtbetalingsoppdrag>,
+        beregnetUtbetalingsoppdrag: MutableMap<UUID, BeregnetUtbetalingsoppdrag>,
     ) {
         val forventedeUtbetalingsoppdrag = OppdragParser.mapForventetUtbetalingsoppdrag(dataTable)
         forventedeUtbetalingsoppdrag.forEach { forventetUtbetalingsoppdrag ->
-            val behandlingId = forventetUtbetalingsoppdrag.behandlingId
+            val behandlingId = behandlingIdTilUUID[forventetUtbetalingsoppdrag.behandlingId.toInt()]
             val utbetalingsoppdrag = beregnetUtbetalingsoppdrag[behandlingId]
                 ?: error("Mangler utbetalingsoppdrag for $behandlingId")
             try {
@@ -217,7 +220,7 @@ class OppdragSteg {
         forventetUtbetalingsoppdrag: ForventetUtbetalingsoppdrag,
         utbetalingsoppdrag: Utbetalingsoppdrag,
     ) {
-        assertThat(utbetalingsoppdrag.kodeEndring).isEqualTo(forventetUtbetalingsoppdrag.kodeEndring)
+        assertEquals(utbetalingsoppdrag.kodeEndring, forventetUtbetalingsoppdrag.kodeEndring)
         forventetUtbetalingsoppdrag.utbetalingsperiode.forEachIndexed { index, forventetUtbetalingsperiode ->
             val utbetalingsperiode = utbetalingsoppdrag.utbetalingsperiode[index]
             try {

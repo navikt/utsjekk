@@ -5,19 +5,21 @@ import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.ny.cuc
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.ny.domene.AndelData
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.ny.domene.StønadTypeOgFerietillegg
 import no.nav.dagpenger.kontrakter.felles.StønadType
-import no.nav.familie.kontrakter.felles.oppdrag.Utbetalingsoppdrag
-import no.nav.familie.kontrakter.felles.oppdrag.Utbetalingsperiode
 import org.assertj.core.api.Assertions.assertThat
 import java.time.LocalDate
+import java.util.UUID
+import no.nav.dagpenger.iverksett.cucumber.domeneparser.IdTIlUUIDHolder.behandlingIdTilUUID
+import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsoppdrag
+import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsperiode
 
 object OppdragParser {
 
-    fun mapAndeler(dataTable: DataTable): Map<Long, List<AndelData>> {
+    fun mapAndeler(dataTable: DataTable): Map<UUID, List<AndelData>> {
         var index = 0L
         return dataTable.groupByBehandlingId().map { (behandlingId, rader) ->
             val andeler = parseAndelder(rader, index)
             index += andeler.size
-            behandlingId to andeler
+            behandlingIdTilUUID[behandlingId.toInt()]!! to andeler
         }.toMap()
     }
 
@@ -81,7 +83,7 @@ object OppdragParser {
             opphør = parseValgfriDato(DomenebegrepUtbetalingsoppdrag.OPPHØRSDATO, it),
             kildebehandlingId = parseValgfriLong(DomenebegrepAndeler.KILDEBEHANDLING_ID, it),
             satstype = parseValgfriEnum<Utbetalingsperiode.SatsType>(DomenebegrepAndeler.SATSTYPE, it)
-                ?: Utbetalingsperiode.SatsType.MND,
+                ?: Utbetalingsperiode.SatsType.DAG,
         )
 
     private fun validerAlleKodeEndringerLike(rader: List<Map<String, String>>) {
