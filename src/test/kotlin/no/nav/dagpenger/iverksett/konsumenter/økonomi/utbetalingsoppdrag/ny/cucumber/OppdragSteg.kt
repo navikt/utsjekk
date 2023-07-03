@@ -177,7 +177,7 @@ class OppdragSteg {
         return forrigeKjeder.flatMap { it.second }
             .uten0beløp()
             .groupBy { it.type }
-            .mapValues { it.value.sortedWith(compareByDescending<AndelData> { it.periodeId!! }.thenBy { it.id }).first() }
+            .mapValues { it.value.sortedWith(compareByDescending<AndelData> { it.periodeId!! }.thenByDescending { it.tom }).first() }
     }
 
     private fun oppdaterAndelerMedPeriodeId(

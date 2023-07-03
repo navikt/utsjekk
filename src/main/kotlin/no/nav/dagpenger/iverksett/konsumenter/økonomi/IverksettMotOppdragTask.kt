@@ -100,7 +100,10 @@ class IverksettMotOppdragTask(
                 andelerTilkjentYtelse = nyeAndelerMedPeriodeId,
                 utbetalingsoppdrag = beregnetUtbetalingsoppdrag.utbetalingsoppdrag,
             )
-            val nyTilkjentYtelseMedSisteAndelIKjede = lagTilkjentYtelseMedSisteAndelPerKjede(nyTilkjentYtelse)
+            val forrigeSisteAndelPerKjede = forrigeIverksettResultat?.tilkjentYtelseForUtbetaling?.sisteAndelPerKjede
+                ?: emptyMap()
+            val nyTilkjentYtelseMedSisteAndelIKjede =
+                lagTilkjentYtelseMedSisteAndelPerKjede(nyTilkjentYtelse, forrigeSisteAndelPerKjede)
 
             iverksettResultatService.oppdaterTilkjentYtelseForUtbetaling(
                 behandlingId = behandlingId,
@@ -117,14 +120,15 @@ class IverksettMotOppdragTask(
         } ?: log.warn("Iverksetter ikke noe mot oppdrag. Ikke utbetalingsoppdrag. behandlingId=$behandlingId")
     }
 
-    private fun lagTilkjentYtelseMedSisteAndelPerKjede(tilkjentYtelse: TilkjentYtelse): TilkjentYtelse {
+    private fun lagTilkjentYtelseMedSisteAndelPerKjede(
+        tilkjentYtelse: TilkjentYtelse,
+        forrigeSisteAndelPerKjede: Map<StønadTypeOgFerietillegg, AndelTilkjentYtelse>,
+    ): TilkjentYtelse {
         val beregnetSisteAndePerKjede = tilkjentYtelse.andelerTilkjentYtelse.groupBy {
             StønadTypeOgFerietillegg(it.stønadstype, it.ferietillegg)
         }.mapValues {
             it.value.maxBy { it.periodeId!! }
         }
-
-        val forrigeSisteAndelPerKjede = tilkjentYtelse.sisteAndelPerKjede
 
         val nySisteAndelerPerKjede: Map<StønadTypeOgFerietillegg, AndelTilkjentYtelse> =
             finnSisteAndelPerKjede(beregnetSisteAndePerKjede, forrigeSisteAndelPerKjede)
@@ -148,8 +152,9 @@ class IverksettMotOppdragTask(
     ) = (nySisteAndePerKjede.asSequence() + forrigeSisteAndelPerKjede.asSequence())
         .groupBy({ it.key }, { it.value })
         .mapValues {
-            it.value.sortedWith(compareBy<AndelTilkjentYtelse> { it.periodeId }.thenBy { it.periode.tom })
-                .last()
+            it.value.sortedWith(
+                compareByDescending<AndelTilkjentYtelse> { it.periodeId }.thenByDescending { it.periode.tom },
+            ).first()
         }
 
     private fun lagOgSendUtbetalingsoppdragOgOppdaterTilkjentYtelse(
