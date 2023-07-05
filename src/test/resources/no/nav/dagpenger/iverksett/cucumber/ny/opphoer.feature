@@ -164,3 +164,19 @@ Egenskap: Opphør
       | 2            | 2  | 0          |                    |
       | 2            | 3  | 1          | 0                  |
       | 3            | 4  | 0          |                    |
+
+  Scenario: Forkorter en enkelt periode flere ganger. Oppdragslinjen fra første behandling skal da opphøres flere ganger.
+
+    Gitt følgende tilkjente ytelser
+      | BehandlingId | Fra dato   | Til dato   | Beløp |
+      | 1            | 02.06.2023 | 15.08.2023 | 700   |
+      | 2            | 02.06.2023 | 15.07.2023 | 700   |
+      | 3            | 02.06.2023 | 15.06.2023 | 700   |
+
+    Når beregner utbetalingsoppdrag
+
+    Så forvent følgende utbetalingsoppdrag 2
+      | BehandlingId | Fra dato   | Til dato   | Opphørsdato | Beløp | Kode endring | Er endring | Periode id | Forrige periode id |
+      | 1            | 02.06.2023 | 15.08.2023 |             | 700   | NY           | Nei        | 0          |                    |
+      | 2            | 02.06.2023 | 15.08.2023 | 16.07.2023  | 700   | ENDR         | Ja         | 0          |                    |
+      | 3            | 02.06.2023 | 15.08.2023 | 16.06.2023  | 700   | ENDR         | Ja         | 0          |                    |
