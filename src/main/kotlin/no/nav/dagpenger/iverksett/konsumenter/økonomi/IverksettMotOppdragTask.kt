@@ -1,6 +1,5 @@
 package no.nav.dagpenger.iverksett.konsumenter.økonomi
 
-import java.util.UUID
 import no.nav.dagpenger.iverksett.api.IverksettingService
 import no.nav.dagpenger.iverksett.api.domene.AndelTilkjentYtelse
 import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
@@ -16,6 +15,7 @@ import no.nav.dagpenger.iverksett.api.tilstand.IverksettResultatService
 import no.nav.dagpenger.iverksett.konsumenter.opprettNesteTask
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.ny.Utbetalingsgenerator
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.ny.domene.Behandlingsinformasjon
+import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.ny.domene.BeregnetUtbetalingsoppdrag
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.ny.domene.StønadTypeOgFerietillegg
 import no.nav.familie.prosessering.AsyncTaskStep
 import no.nav.familie.prosessering.TaskStepBeskrivelse
@@ -24,6 +24,7 @@ import no.nav.familie.prosessering.internal.TaskService
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
+import java.util.UUID
 
 @Service
 @TaskStepBeskrivelse(
@@ -84,38 +85,47 @@ class IverksettMotOppdragTask(
         )
 
         iverksett.vedtak.tilkjentYtelse?.let {
-            val nyeAndelerMedPeriodeId = it.andelerTilkjentYtelse.map { andel ->
-                val andelData = andel.tilAndelData()
-                val andelDataMedPeriodeId = beregnetUtbetalingsoppdrag.andeler.find { a -> andelData.id == a.id }
-                    ?: throw IllegalStateException("Fant ikke andel med id ${andelData.id}")
-
-                andel.copy(
-                    periodeId = andelDataMedPeriodeId.periodeId,
-                    forrigePeriodeId = andelDataMedPeriodeId.forrigePeriodeId,
-                )
-            }
-            val nyTilkjentYtelse = it.copy(
-                andelerTilkjentYtelse = nyeAndelerMedPeriodeId,
-                utbetalingsoppdrag = beregnetUtbetalingsoppdrag.utbetalingsoppdrag,
-            )
-            val forrigeSisteAndelPerKjede = forrigeIverksettResultat?.tilkjentYtelseForUtbetaling?.sisteAndelPerKjede
-                ?: emptyMap()
-            val nyTilkjentYtelseMedSisteAndelIKjede =
-                lagTilkjentYtelseMedSisteAndelPerKjede(nyTilkjentYtelse, forrigeSisteAndelPerKjede)
-
-            iverksettResultatService.oppdaterTilkjentYtelseForUtbetaling(
-                behandlingId = behandlingId,
-                tilkjentYtelseForUtbetaling = nyTilkjentYtelseMedSisteAndelIKjede,
-            )
-
-            nyTilkjentYtelseMedSisteAndelIKjede.utbetalingsoppdrag?.let { utbetalingsoppdrag ->
-                if (utbetalingsoppdrag.utbetalingsperiode.isNotEmpty()) {
-                    oppdragClient.iverksettOppdrag(utbetalingsoppdrag)
-                } else {
-                    log.warn("Iverksetter ikke noe mot oppdrag. Ingen utbetalingsperioder i utbetalingsoppdraget. behandlingId=$behandlingId")
-                }
-            }
+            oppdaterTilkjentYtelseOgIverksettOppdrag(it, beregnetUtbetalingsoppdrag, forrigeIverksettResultat, behandlingId)
         } ?: log.warn("Iverksetter ikke noe mot oppdrag. Ikke utbetalingsoppdrag. behandlingId=$behandlingId")
+    }
+
+    private fun oppdaterTilkjentYtelseOgIverksettOppdrag(
+        tilkjentYtelse: TilkjentYtelse,
+        beregnetUtbetalingsoppdrag: BeregnetUtbetalingsoppdrag,
+        forrigeIverksettResultat: IverksettResultat?,
+        behandlingId: UUID,
+    ) {
+        val nyeAndelerMedPeriodeId = tilkjentYtelse.andelerTilkjentYtelse.map { andel ->
+            val andelData = andel.tilAndelData()
+            val andelDataMedPeriodeId = beregnetUtbetalingsoppdrag.andeler.find { a -> andelData.id == a.id }
+                ?: throw IllegalStateException("Fant ikke andel med id ${andelData.id}")
+
+            andel.copy(
+                periodeId = andelDataMedPeriodeId.periodeId,
+                forrigePeriodeId = andelDataMedPeriodeId.forrigePeriodeId,
+            )
+        }
+        val nyTilkjentYtelse = tilkjentYtelse.copy(
+            andelerTilkjentYtelse = nyeAndelerMedPeriodeId,
+            utbetalingsoppdrag = beregnetUtbetalingsoppdrag.utbetalingsoppdrag,
+        )
+        val forrigeSisteAndelPerKjede = forrigeIverksettResultat?.tilkjentYtelseForUtbetaling?.sisteAndelPerKjede
+            ?: emptyMap()
+        val nyTilkjentYtelseMedSisteAndelIKjede =
+            lagTilkjentYtelseMedSisteAndelPerKjede(nyTilkjentYtelse, forrigeSisteAndelPerKjede)
+
+        iverksettResultatService.oppdaterTilkjentYtelseForUtbetaling(
+            behandlingId = behandlingId,
+            tilkjentYtelseForUtbetaling = nyTilkjentYtelseMedSisteAndelIKjede,
+        )
+
+        nyTilkjentYtelseMedSisteAndelIKjede.utbetalingsoppdrag?.let { utbetalingsoppdrag ->
+            if (utbetalingsoppdrag.utbetalingsperiode.isNotEmpty()) {
+                oppdragClient.iverksettOppdrag(utbetalingsoppdrag)
+            } else {
+                log.warn("Iverksetter ikke noe mot oppdrag. Ingen utbetalingsperioder i utbetalingsoppdraget. behandlingId=$behandlingId")
+            }
+        }
     }
 
     private fun lagTilkjentYtelseMedSisteAndelPerKjede(
