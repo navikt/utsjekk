@@ -1,5 +1,6 @@
 package no.nav.dagpenger.iverksett.konsumenter.økonomi
 
+import java.util.UUID
 import no.nav.dagpenger.iverksett.api.IverksettingService
 import no.nav.dagpenger.iverksett.api.domene.AndelTilkjentYtelse
 import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
@@ -13,7 +14,6 @@ import no.nav.dagpenger.iverksett.api.domene.sakId
 import no.nav.dagpenger.iverksett.api.domene.tilAndelData
 import no.nav.dagpenger.iverksett.api.tilstand.IverksettResultatService
 import no.nav.dagpenger.iverksett.konsumenter.opprettNesteTask
-import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.UtbetalingsoppdragGenerator.lagTilkjentYtelseMedUtbetalingsoppdrag
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.ny.Utbetalingsgenerator
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.ny.domene.Behandlingsinformasjon
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.ny.domene.StønadTypeOgFerietillegg
@@ -24,7 +24,6 @@ import no.nav.familie.prosessering.internal.TaskService
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
-import java.util.UUID
 
 @Service
 @TaskStepBeskrivelse(
@@ -54,7 +53,6 @@ class IverksettMotOppdragTask(
             error("Lagret forrige tilkjent ytelse stemmer ikke med mottatt forrige tilkjent ytelse")
         }
 
-        // lagOgSendUtbetalingsoppdragOgOppdaterTilkjentYtelse(iverksett, forrigeIverksettResultat, behandlingId)
         nyLagOgSendUtbetalingsoppdragOgOppdaterTilkjentYtelse(iverksett, forrigeIverksettResultat, behandlingId)
     }
 
@@ -156,39 +154,6 @@ class IverksettMotOppdragTask(
                 compareByDescending<AndelTilkjentYtelse> { it.periodeId }.thenByDescending { it.periode.tom },
             ).first()
         }
-
-    private fun lagOgSendUtbetalingsoppdragOgOppdaterTilkjentYtelse(
-        iverksett: IverksettDagpenger,
-        forrigeIverksettResultat: IverksettResultat?,
-        behandlingId: UUID,
-    ) {
-        iverksett.vedtak.tilkjentYtelse?.toMedMetadata(
-            saksbehandlerId = iverksett.vedtak.saksbehandlerId,
-            stønadType = iverksett.fagsak.stønadstype,
-            sakId = iverksett.fagsak.fagsakId,
-            personIdent = iverksett.søker.personIdent,
-            behandlingId = iverksett.behandling.behandlingId,
-            vedtaksdato = iverksett.vedtak.vedtakstidspunkt.toLocalDate(),
-        )?.let { tilkjentYtelseMedMetaData ->
-            lagTilkjentYtelseMedUtbetalingsoppdrag(
-                tilkjentYtelseMedMetaData,
-                forrigeIverksettResultat?.tilkjentYtelseForUtbetaling,
-                iverksett.erGOmregning(),
-            )
-        }?.also { tilkjentYtelseMedUtbetalingsoppdrag ->
-            iverksettResultatService.oppdaterTilkjentYtelseForUtbetaling(
-                behandlingId = behandlingId,
-                tilkjentYtelseForUtbetaling = tilkjentYtelseMedUtbetalingsoppdrag,
-            )
-            tilkjentYtelseMedUtbetalingsoppdrag.utbetalingsoppdrag?.let { utbetalingsoppdrag ->
-                if (utbetalingsoppdrag.utbetalingsperiode.isNotEmpty()) {
-                    oppdragClient.iverksettOppdrag(utbetalingsoppdrag)
-                } else {
-                    log.warn("Iverksetter ikke noe mot oppdrag. Ingen utbetalingsperioder i utbetalingsoppdraget. behandlingId=$behandlingId")
-                }
-            }
-        } ?: log.warn("Iverksetter ikke noe mot oppdrag. Ikke utbetalingsoppdrag. behandlingId=$behandlingId")
-    }
 
     override fun onCompletion(task: Task) {
         taskService.save(task.opprettNesteTask())
