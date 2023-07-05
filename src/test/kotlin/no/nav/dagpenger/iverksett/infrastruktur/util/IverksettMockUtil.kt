@@ -320,7 +320,7 @@ class IverksettResultatMockBuilder private constructor(
             apply {
                 this.vedtaksbrevResultat =
                     mapOf(
-                        this.journalpostResultat!!.entries.first().value.journalpostId to DistribuerBrevResultat(
+                        this.journalpostResultat.entries.first().value.journalpostId to DistribuerBrevResultat(
                             bestillingId = behandlingId.toString(),
                         ),
                     )
