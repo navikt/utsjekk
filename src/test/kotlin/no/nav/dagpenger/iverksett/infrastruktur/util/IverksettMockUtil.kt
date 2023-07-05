@@ -65,6 +65,7 @@ fun opprettIverksettDto(
     vedtaksresultat: Vedtaksresultat = Vedtaksresultat.INNVILGET,
     stønadType: StønadType = StønadType.DAGPENGER_ARBEIDSSOKER_ORDINAER,
     ferietillegg: Ferietillegg? = null,
+    vedtaksperioder: List<VedtaksperiodeDto> = emptyList(),
 ): IverksettDto {
     val andelTilkjentYtelse = lagUtbetalingDto(
         beløp = andelsbeløp,
@@ -88,7 +89,7 @@ fun opprettIverksettDto(
             saksbehandlerId = "A12345",
             beslutterId = "B23456",
             utbetalinger = tilkjentYtelse.utbetalinger,
-            vedtaksperioder = emptyList(),
+            vedtaksperioder = vedtaksperioder,
         ),
     )
 }
