@@ -4,19 +4,15 @@ import no.nav.dagpenger.iverksett.api.domene.Brev
 import no.nav.dagpenger.iverksett.api.domene.Iverksett
 import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
 import no.nav.dagpenger.iverksett.api.domene.Tilbakekrevingsdetaljer
-import no.nav.dagpenger.iverksett.api.domene.TilkjentYtelse
 import no.nav.dagpenger.iverksett.api.domene.VedtaksperiodeDagpenger
 import no.nav.dagpenger.iverksett.api.domene.behandlingId
-import no.nav.dagpenger.iverksett.api.domene.personIdent
-import no.nav.dagpenger.iverksett.api.domene.sakId
+import no.nav.dagpenger.iverksett.infrastruktur.util.behandlingsdetaljer
+import no.nav.dagpenger.iverksett.infrastruktur.util.opprettIverksettDagpenger
+import no.nav.dagpenger.iverksett.infrastruktur.util.vedtaksdetaljerDagpenger
 import no.nav.dagpenger.iverksett.konsumenter.brev.domain.Brevmottakere
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.lagAndelTilkjentYtelse
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.lagUtbetalingDto
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.simulering.grupperPosteringerEtterDato
-import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.UtbetalingsoppdragGenerator
-import no.nav.dagpenger.iverksett.infrastruktur.util.behandlingsdetaljer
-import no.nav.dagpenger.iverksett.infrastruktur.util.opprettIverksettDagpenger
-import no.nav.dagpenger.iverksett.infrastruktur.util.vedtaksdetaljerDagpenger
 import no.nav.dagpenger.kontrakter.felles.Datoperiode
 import no.nav.dagpenger.kontrakter.felles.StønadType
 import no.nav.dagpenger.kontrakter.iverksett.BehandlingType
@@ -186,7 +182,7 @@ fun lagIverksettData(
     vedtaksperioder: List<VedtaksperiodeDagpenger> = emptyList(),
     erMigrering: Boolean = false,
     andelsdatoer: List<LocalDate> = emptyList(),
-    beløp: Int = 0,
+    beløp: Int = 100,
     årsak: BehandlingÅrsak = BehandlingÅrsak.SØKNAD,
     vedtakstidspunkt: LocalDateTime = LocalDateTime.now(),
     brevmottakere: Brevmottakere = Brevmottakere(emptyList()),
@@ -216,18 +212,3 @@ fun lagIverksett(iverksettData: IverksettDagpenger, brev: Brev? = null) = Iverks
     iverksettData,
     brev,
 )
-
-fun IverksettDagpenger.tilTilkjentYtelseMedMetadata() = this.vedtak.tilkjentYtelse?.toMedMetadata(
-    saksbehandlerId = this.vedtak.saksbehandlerId,
-    stønadType = this.fagsak.stønadstype,
-    sakId = this.sakId,
-    personIdent = this.personIdent,
-    behandlingId = this.behandlingId,
-    vedtaksdato = this.vedtak.vedtakstidspunkt.toLocalDate(),
-
-)
-
-fun IverksettDagpenger.tilTilkjentYtelseMedUtbetalingsoppdrag(): TilkjentYtelse? =
-    this.tilTilkjentYtelseMedMetadata()?.let {
-        UtbetalingsoppdragGenerator.lagTilkjentYtelseMedUtbetalingsoppdrag(it)
-    }

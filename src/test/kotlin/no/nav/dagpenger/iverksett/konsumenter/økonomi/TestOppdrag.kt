@@ -4,9 +4,9 @@ import com.github.doyaaaaaken.kotlincsv.dsl.csvReader
 import no.nav.dagpenger.iverksett.api.domene.AndelTilkjentYtelse
 import no.nav.dagpenger.iverksett.api.domene.TilkjentYtelse
 import no.nav.dagpenger.iverksett.api.domene.TilkjentYtelseMedMetaData
-import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.PeriodeId
-import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.UtbetalingsoppdragGenerator
-import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.nullAndelTilkjentYtelse
+import no.nav.dagpenger.iverksett.api.domene.tilAndelData
+import no.nav.dagpenger.iverksett.api.domene.tilBehandlingsinformasjon
+import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.ny.Utbetalingsgenerator
 import no.nav.dagpenger.kontrakter.felles.Fagsystem
 import no.nav.dagpenger.kontrakter.felles.StønadType
 import no.nav.dagpenger.kontrakter.felles.objectMapper
@@ -62,10 +62,6 @@ data class TestOppdrag(
                 tilOgMed = sluttPeriode,
                 periodeId = linjeId,
                 forrigePeriodeId = forrigeLinjeId,
-            )
-        } else if (TestOppdragType.Output == type && beløp == null && startPeriode == null && sluttPeriode == null) {
-            nullAndelTilkjentYtelse(
-                periodeId = PeriodeId(linjeId, forrigeLinjeId),
             )
         } else {
             null
@@ -322,10 +318,14 @@ object TestOppdragRunner {
     private fun lagTilkjentYtelseMedUtbetalingsoppdrag(
         nyTilkjentYtelse: TilkjentYtelseMedMetaData,
         forrigeTilkjentYtelse: TilkjentYtelse? = null,
-    ) =
-        UtbetalingsoppdragGenerator
-            .lagTilkjentYtelseMedUtbetalingsoppdrag(
-                nyTilkjentYtelse,
-                forrigeTilkjentYtelse,
-            )
+    ): TilkjentYtelse {
+        val beregnetUtbetalingsoppdrag = Utbetalingsgenerator.lagUtbetalingsoppdrag(
+            behandlingsinformasjon = nyTilkjentYtelse.tilBehandlingsinformasjon(),
+            nyeAndeler = nyTilkjentYtelse.tilkjentYtelse.andelerTilkjentYtelse.map { it.tilAndelData() },
+            forrigeAndeler = forrigeTilkjentYtelse?.andelerTilkjentYtelse?.map { it.tilAndelData() } ?: emptyList(),
+            sisteAndelPerKjede = forrigeTilkjentYtelse?.sisteAndelPerKjede?.mapValues { it.value.tilAndelData() }
+                ?: emptyMap(),
+        )
+        return nyTilkjentYtelse.tilkjentYtelse.copy(utbetalingsoppdrag = beregnetUtbetalingsoppdrag.utbetalingsoppdrag)
+    }
 }

@@ -1,13 +1,14 @@
 package no.nav.dagpenger.iverksett.konsumenter.økonomi.simulering
 
 import no.nav.dagpenger.iverksett.api.domene.Simulering
-import no.nav.dagpenger.iverksett.api.domene.tilTilkjentYtelseMedMetadata
+import no.nav.dagpenger.iverksett.api.domene.tilAndelData
+import no.nav.dagpenger.iverksett.api.domene.tilBehandlingsinformasjon
 import no.nav.dagpenger.iverksett.api.tilstand.IverksettResultatService
 import no.nav.dagpenger.iverksett.infrastruktur.advice.ApiFeil
 import no.nav.dagpenger.iverksett.infrastruktur.configuration.FeatureToggleConfig
 import no.nav.dagpenger.iverksett.infrastruktur.featuretoggle.FeatureToggleService
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.OppdragClient
-import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.UtbetalingsoppdragGenerator
+import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.ny.Utbetalingsgenerator
 import no.nav.dagpenger.kontrakter.felles.StønadType
 import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsoppdrag
 import no.nav.dagpenger.kontrakter.oppdrag.simulering.BeriketSimuleringsresultat
@@ -34,11 +35,15 @@ class SimuleringService(
                 iverksettResultatService.hentTilkjentYtelse(simulering.forrigeBehandlingId)
             }
 
-            val tilkjentYtelseMedUtbetalingsoppdrag =
-                UtbetalingsoppdragGenerator.lagTilkjentYtelseMedUtbetalingsoppdrag(
-                    simulering.tilTilkjentYtelseMedMetadata(),
-                    forrigeTilkjentYtelse,
-                )
+            val beregnetUtbetalingsoppdrag = Utbetalingsgenerator.lagUtbetalingsoppdrag(
+                behandlingsinformasjon = simulering.tilBehandlingsinformasjon(),
+                nyeAndeler = simulering.andelerTilkjentYtelse.map { it.tilAndelData() },
+                forrigeAndeler = forrigeTilkjentYtelse?.andelerTilkjentYtelse?.map { it.tilAndelData() } ?: emptyList(),
+                sisteAndelPerKjede = simulering.tilkjentYtelse.sisteAndelPerKjede.mapValues { it.value.tilAndelData() },
+            )
+            val tilkjentYtelseMedUtbetalingsoppdrag = simulering.tilkjentYtelse.copy(
+                utbetalingsoppdrag = beregnetUtbetalingsoppdrag.utbetalingsoppdrag,
+            )
 
             val utbetalingsoppdrag = tilkjentYtelseMedUtbetalingsoppdrag.utbetalingsoppdrag
                 ?: error("Utbetalingsoppdraget finnes ikke for tilkjent ytelse")

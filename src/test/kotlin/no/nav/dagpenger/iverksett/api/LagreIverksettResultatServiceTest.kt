@@ -4,11 +4,11 @@ import no.nav.dagpenger.iverksett.ServerTest
 import no.nav.dagpenger.iverksett.api.domene.OppdragResultat
 import no.nav.dagpenger.iverksett.api.domene.TilbakekrevingResultat
 import no.nav.dagpenger.iverksett.api.tilstand.IverksettResultatService
+import no.nav.dagpenger.iverksett.infrastruktur.util.opprettIverksettDagpenger
+import no.nav.dagpenger.iverksett.infrastruktur.util.opprettTilkjentYtelse
 import no.nav.dagpenger.iverksett.konsumenter.brev.domain.DistribuerBrevResultat
 import no.nav.dagpenger.iverksett.konsumenter.brev.domain.JournalpostResultat
 import no.nav.dagpenger.iverksett.konsumenter.tilbakekreving.tilOpprettTilbakekrevingRequest
-import no.nav.dagpenger.iverksett.infrastruktur.util.opprettIverksettDagpenger
-import no.nav.dagpenger.iverksett.infrastruktur.util.opprettTilkjentYtelse
 import no.nav.dagpenger.kontrakter.felles.Enhet
 import no.nav.dagpenger.kontrakter.oppdrag.OppdragStatus
 import org.junit.jupiter.api.BeforeEach

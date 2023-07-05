@@ -1,5 +1,6 @@
 package no.nav.dagpenger.iverksett.api.domene
 
+import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.ny.domene.Behandlingsinformasjon
 import no.nav.dagpenger.kontrakter.felles.StønadType
 import java.time.LocalDate
 import java.util.UUID
@@ -12,4 +13,13 @@ data class TilkjentYtelseMedMetaData(
     val personIdent: String,
     val behandlingId: UUID,
     val vedtaksdato: LocalDate,
+)
+
+fun TilkjentYtelseMedMetaData.tilBehandlingsinformasjon() = Behandlingsinformasjon(
+    saksbehandlerId = this.saksbehandlerId,
+    fagsakId = this.sakId.toString(),
+    behandlingId = this.behandlingId.toString(),
+    personIdent = this.personIdent.toString(),
+    vedtaksdato = this.vedtaksdato,
+    opphørFra = null,
 )

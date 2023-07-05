@@ -56,9 +56,9 @@ class IverksattStatusControllerTest : ServerTest() {
                 VedtaksperiodeDto(
                     fraOgMedDato = LocalDate.now(),
                     tilOgMedDato = LocalDate.now().plusDays(14),
-                    periodeType = VedtaksperiodeType.HOVEDPERIODE
-                )
-            )
+                    periodeType = VedtaksperiodeType.HOVEDPERIODE,
+                ),
+            ),
         )
 
         val iverksettRequest = MultipartBuilder()

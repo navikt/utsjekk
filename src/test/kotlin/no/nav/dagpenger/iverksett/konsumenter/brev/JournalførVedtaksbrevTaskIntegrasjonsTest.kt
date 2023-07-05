@@ -14,9 +14,9 @@ import no.nav.dagpenger.iverksett.api.tilstand.IverksettResultatService
 import no.nav.dagpenger.iverksett.config.JournalpostClientMock
 import no.nav.dagpenger.iverksett.infrastruktur.transformer.toDomain
 import no.nav.dagpenger.iverksett.infrastruktur.util.ObjectMapperProvider.objectMapper
+import no.nav.dagpenger.iverksett.infrastruktur.util.opprettBrev
 import no.nav.dagpenger.iverksett.konsumenter.brev.domain.Brevmottaker
 import no.nav.dagpenger.iverksett.konsumenter.brev.domain.Brevmottakere
-import no.nav.dagpenger.iverksett.infrastruktur.util.opprettBrev
 import no.nav.dagpenger.kontrakter.felles.BrevmottakerDto.IdentType.PERSONIDENT
 import no.nav.dagpenger.kontrakter.felles.BrevmottakerDto.MottakerRolle.BRUKER
 import no.nav.dagpenger.kontrakter.felles.BrevmottakerDto.MottakerRolle.VERGE

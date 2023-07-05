@@ -1,5 +1,6 @@
 package no.nav.dagpenger.iverksett.api.domene
 
+import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.ny.domene.Behandlingsinformasjon
 import no.nav.dagpenger.kontrakter.felles.StønadType
 import java.time.LocalDate
 import java.util.UUID
@@ -38,6 +39,16 @@ fun Simulering.tilTilkjentYtelseMedMetadata(): TilkjentYtelseMedMetaData =
         personIdent = this.personIdent,
         vedtaksdato = this.vedtaksdato,
 
+    )
+
+fun Simulering.tilBehandlingsinformasjon(): Behandlingsinformasjon =
+    Behandlingsinformasjon(
+        saksbehandlerId = this.saksbehandlerId,
+        fagsakId = this.sakId.toString(),
+        behandlingId = this.behandlingId.toString(),
+        personIdent = this.personIdent,
+        vedtaksdato = this.vedtaksdato,
+        opphørFra = null,
     )
 
 fun Iterable<AndelTilkjentYtelse>.tilTilkjentYtelse() = TilkjentYtelse(

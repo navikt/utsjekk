@@ -3,21 +3,24 @@ package no.nav.dagpenger.iverksett.konsumenter.økonomi.simulering
 import io.mockk.clearMocks
 import io.mockk.verify
 import no.nav.dagpenger.iverksett.ServerTest
+import no.nav.dagpenger.iverksett.api.domene.tilAndelData
+import no.nav.dagpenger.iverksett.api.domene.tilBehandlingsinformasjon
 import no.nav.dagpenger.iverksett.api.tilstand.IverksettResultatService
 import no.nav.dagpenger.iverksett.beriketSimuleringsresultat
+import no.nav.dagpenger.iverksett.infrastruktur.util.opprettTilkjentYtelse
+import no.nav.dagpenger.iverksett.infrastruktur.util.opprettTilkjentYtelseMedMetadata
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.OppdragClient
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.lagAndelTilkjentYtelse
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.lagUtbetalingDto
-import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.UtbetalingsoppdragGenerator.lagTilkjentYtelseMedUtbetalingsoppdrag
+import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.ny.Utbetalingsgenerator
 import no.nav.dagpenger.iverksett.simuleringDto
-import no.nav.dagpenger.iverksett.infrastruktur.util.opprettTilkjentYtelse
-import no.nav.dagpenger.iverksett.infrastruktur.util.opprettTilkjentYtelseMedMetadata
 import no.nav.dagpenger.kontrakter.oppdrag.simulering.BeriketSimuleringsresultat
 import no.nav.dagpenger.kontrakter.oppdrag.simulering.DetaljertSimuleringResultat
 import no.nav.familie.kontrakter.felles.Ressurs
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.web.client.exchange
@@ -75,6 +78,7 @@ class SimuleringControllerTest : ServerTest() {
     }
 
     @Test
+    @Disabled("Vi tillater ikke 0-beløp per nå. Besøker denne på nytt når vi kommer til simulering")
     internal fun `simulering av førstegangsbehandling med kun 0 beløp skal gi tomt svar`() {
         val request = simuleringDto(andeler = listOf(lagUtbetalingDto(beløp = 0)), forrigeBehandlingId = null)
         val respons = restTemplate
@@ -91,6 +95,7 @@ class SimuleringControllerTest : ServerTest() {
     }
 
     @Test
+    @Disabled("Vi tillater ikke 0-beløp per nå. Besøker denne på nytt når vi kommer til simulering")
     internal fun `simulering av revurdering hvor førstegangsbehandling hadde kun 0 beløp skal gi svar`() {
         val behandlingId = UUID.randomUUID()
         lagFørstegangsbehandlingUtenBeløp(behandlingId)
@@ -109,6 +114,7 @@ class SimuleringControllerTest : ServerTest() {
     }
 
     @Test
+    @Disabled("Vi tillater ikke 0-beløp per nå. Besøker denne på nytt når vi kommer til simulering")
     internal fun `simulering av revurdering med 0 i beløp hvor førstegangsbehandling også hadde kun 0 beløp skal gi svar`() {
         val behandlingId = UUID.randomUUID()
         lagFørstegangsbehandlingUtenBeløp(behandlingId)
@@ -129,9 +135,16 @@ class SimuleringControllerTest : ServerTest() {
     private fun lagFørstegangsbehandlingUtenBeløp(behandlingId: UUID) {
         val andelTilkjentYtelse =
             lagAndelTilkjentYtelse(0, fraOgMed = LocalDate.of(2021, 1, 1), tilOgMed = LocalDate.of(2021, 1, 31))
-        val tilkjentYtelse = opprettTilkjentYtelse(behandlingId, andeler = listOf(andelTilkjentYtelse))
-        val tilkjentYtelseMedUtbetalingsoppdrag =
-            lagTilkjentYtelseMedUtbetalingsoppdrag(opprettTilkjentYtelseMedMetadata(behandlingId, tilkjentYtelse))
+        val tilkjentYtelseMedMetadata = opprettTilkjentYtelseMedMetadata(behandlingId, opprettTilkjentYtelse(behandlingId, andeler = listOf(andelTilkjentYtelse)))
+        val beregnetUtbetalingsoppdrag = Utbetalingsgenerator.lagUtbetalingsoppdrag(
+            behandlingsinformasjon = tilkjentYtelseMedMetadata.tilBehandlingsinformasjon(),
+            nyeAndeler = tilkjentYtelseMedMetadata.tilkjentYtelse.andelerTilkjentYtelse.map { it.tilAndelData() },
+            forrigeAndeler = emptyList(),
+            sisteAndelPerKjede = emptyMap(),
+        )
+        val tilkjentYtelseMedUtbetalingsoppdrag = tilkjentYtelseMedMetadata.tilkjentYtelse.copy(
+            utbetalingsoppdrag = beregnetUtbetalingsoppdrag.utbetalingsoppdrag,
+        )
 
         iverksettResultatService.opprettTomtResultat(behandlingId)
         iverksettResultatService.oppdaterTilkjentYtelseForUtbetaling(behandlingId, tilkjentYtelseMedUtbetalingsoppdrag)

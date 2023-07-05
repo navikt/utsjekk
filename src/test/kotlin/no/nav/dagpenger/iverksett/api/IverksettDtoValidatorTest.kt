@@ -7,8 +7,8 @@ import no.nav.dagpenger.iverksett.api.IverksettDtoValidator.innvilgetUtbetalings
 import no.nav.dagpenger.iverksett.api.IverksettDtoValidator.utbetalingerHarKunPositiveBeløp
 import no.nav.dagpenger.iverksett.api.IverksettDtoValidator.utbetalingsperioderOverlapperIkkeITid
 import no.nav.dagpenger.iverksett.infrastruktur.advice.ApiFeil
-import no.nav.dagpenger.iverksett.konsumenter.økonomi.lagUtbetalingDto
 import no.nav.dagpenger.iverksett.infrastruktur.util.opprettIverksettDto
+import no.nav.dagpenger.iverksett.konsumenter.økonomi.lagUtbetalingDto
 import no.nav.dagpenger.kontrakter.felles.StønadType
 import no.nav.dagpenger.kontrakter.iverksett.Ferietillegg
 import no.nav.dagpenger.kontrakter.iverksett.VedtakType

@@ -5,8 +5,8 @@ import io.mockk.mockk
 import io.mockk.verify
 import no.nav.dagpenger.iverksett.api.IverksettingRepository
 import no.nav.dagpenger.iverksett.infrastruktur.repository.findByIdOrThrow
-import no.nav.dagpenger.iverksett.lagIverksett
 import no.nav.dagpenger.iverksett.infrastruktur.util.opprettIverksettDagpenger
+import no.nav.dagpenger.iverksett.lagIverksett
 import no.nav.familie.prosessering.domene.Task
 import org.junit.jupiter.api.Test
 import java.util.UUID

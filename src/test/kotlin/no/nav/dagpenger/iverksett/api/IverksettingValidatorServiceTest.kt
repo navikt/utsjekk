@@ -2,14 +2,20 @@ package no.nav.dagpenger.iverksett.api
 
 import io.mockk.every
 import io.mockk.mockk
+import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
 import no.nav.dagpenger.iverksett.api.domene.IverksettResultat
 import no.nav.dagpenger.iverksett.api.domene.OppdragResultat
 import no.nav.dagpenger.iverksett.api.domene.behandlingId
+import no.nav.dagpenger.iverksett.api.domene.personIdent
+import no.nav.dagpenger.iverksett.api.domene.sakId
+import no.nav.dagpenger.iverksett.api.domene.tilAndelData
 import no.nav.dagpenger.iverksett.api.tilstand.IverksettResultatService
 import no.nav.dagpenger.iverksett.infrastruktur.featuretoggle.FeatureToggleService
+import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.ny.Utbetalingsgenerator
+import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.ny.domene.Behandlingsinformasjon
+import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.ny.domene.BeregnetUtbetalingsoppdrag
 import no.nav.dagpenger.iverksett.lagIverksettData
 import no.nav.dagpenger.iverksett.mai
-import no.nav.dagpenger.iverksett.tilTilkjentYtelseMedUtbetalingsoppdrag
 import no.nav.dagpenger.kontrakter.oppdrag.OppdragStatus
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -82,9 +88,11 @@ class IverksettingValidatorServiceTest {
             forrigeIverksetting = forrigeIverksetting,
         )
 
+        val beregnetUtbetalingsoppdrag = beregnUtbetalingsoppdrag(forrigeIverksetting)
         val forrigeIverksettResultat = IverksettResultat(
             behandlingId = forrigeIverksetting.behandlingId,
-            tilkjentYtelseForUtbetaling = forrigeIverksetting.tilTilkjentYtelseMedUtbetalingsoppdrag()!!,
+            tilkjentYtelseForUtbetaling = forrigeIverksetting.vedtak.tilkjentYtelse
+                ?.copy(utbetalingsoppdrag = beregnetUtbetalingsoppdrag.utbetalingsoppdrag),
             oppdragResultat = OppdragResultat(OppdragStatus.LAGT_PAA_KOE),
         )
 
@@ -118,5 +126,25 @@ class IverksettingValidatorServiceTest {
         assertApiFeil(HttpStatus.BAD_REQUEST) {
             iverksettingValidatorService.validerKonsistensMellomVedtak(nåværendeIverksetting)
         }
+    }
+
+    private fun beregnUtbetalingsoppdrag(iverksettData: IverksettDagpenger): BeregnetUtbetalingsoppdrag {
+        val behandlingsinformasjon = Behandlingsinformasjon(
+            saksbehandlerId = iverksettData.vedtak.saksbehandlerId,
+            fagsakId = iverksettData.sakId.toString(),
+            behandlingId = iverksettData.behandlingId.toString(),
+            personIdent = iverksettData.personIdent,
+            vedtaksdato = iverksettData.vedtak.vedtakstidspunkt.toLocalDate(),
+            opphørFra = null,
+        )
+
+        return Utbetalingsgenerator.lagUtbetalingsoppdrag(
+            behandlingsinformasjon = behandlingsinformasjon,
+            nyeAndeler = iverksettData.vedtak.tilkjentYtelse?.andelerTilkjentYtelse?.map { it.tilAndelData() }
+                ?: emptyList(),
+            forrigeAndeler = emptyList(),
+            sisteAndelPerKjede = iverksettData.vedtak.tilkjentYtelse?.sisteAndelPerKjede?.mapValues { it.value.tilAndelData() }
+                ?: emptyMap(),
+        )
     }
 }
