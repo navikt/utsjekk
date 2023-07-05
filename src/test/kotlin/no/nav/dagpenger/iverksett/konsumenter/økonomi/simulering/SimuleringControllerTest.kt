@@ -10,8 +10,8 @@ import no.nav.dagpenger.iverksett.konsumenter.økonomi.lagAndelTilkjentYtelse
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.lagUtbetalingDto
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.UtbetalingsoppdragGenerator.lagTilkjentYtelseMedUtbetalingsoppdrag
 import no.nav.dagpenger.iverksett.simuleringDto
-import no.nav.dagpenger.iverksett.util.opprettTilkjentYtelse
-import no.nav.dagpenger.iverksett.util.opprettTilkjentYtelseMedMetadata
+import no.nav.dagpenger.iverksett.infrastruktur.util.opprettTilkjentYtelse
+import no.nav.dagpenger.iverksett.infrastruktur.util.opprettTilkjentYtelseMedMetadata
 import no.nav.dagpenger.kontrakter.oppdrag.simulering.BeriketSimuleringsresultat
 import no.nav.dagpenger.kontrakter.oppdrag.simulering.DetaljertSimuleringResultat
 import no.nav.familie.kontrakter.felles.Ressurs

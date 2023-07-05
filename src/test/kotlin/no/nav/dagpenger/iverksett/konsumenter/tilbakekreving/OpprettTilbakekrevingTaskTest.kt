@@ -16,9 +16,9 @@ import no.nav.dagpenger.iverksett.infrastruktur.repository.findByIdOrThrow
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.IverksettMotOppdragTask
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.simulering.SimuleringService
 import no.nav.dagpenger.iverksett.lagIverksett
-import no.nav.dagpenger.iverksett.util.opprettIverksettDagpenger
-import no.nav.dagpenger.iverksett.util.opprettTilbakekrevingMedVarsel
-import no.nav.dagpenger.iverksett.util.opprettTilbakekrevingsdetaljer
+import no.nav.dagpenger.iverksett.infrastruktur.util.opprettIverksettDagpenger
+import no.nav.dagpenger.iverksett.infrastruktur.util.opprettTilbakekrevingMedVarsel
+import no.nav.dagpenger.iverksett.infrastruktur.util.opprettTilbakekrevingsdetaljer
 import no.nav.dagpenger.kontrakter.felles.Enhet
 import no.nav.dagpenger.kontrakter.felles.Tilbakekrevingsvalg
 import no.nav.dagpenger.kontrakter.oppdrag.simulering.BeriketSimuleringsresultat

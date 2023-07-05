@@ -1,6 +1,6 @@
 package no.nav.dagpenger.iverksett.konsumenter.arbeidsoppfolging
 
-import no.nav.dagpenger.iverksett.util.opprettIverksettDagpenger
+import no.nav.dagpenger.iverksett.infrastruktur.util.opprettIverksettDagpenger
 import no.nav.dagpenger.kontrakter.felles.StønadType
 import no.nav.dagpenger.kontrakter.iverksett.arbeidsoppfølging.Aktivitetstype
 import no.nav.dagpenger.kontrakter.iverksett.arbeidsoppfølging.Barn

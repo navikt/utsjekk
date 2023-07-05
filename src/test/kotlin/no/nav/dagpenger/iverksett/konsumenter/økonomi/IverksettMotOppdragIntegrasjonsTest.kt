@@ -3,8 +3,8 @@ package no.nav.dagpenger.iverksett.konsumenter.økonomi
 import no.nav.dagpenger.iverksett.ServerTest
 import no.nav.dagpenger.iverksett.api.IverksettingService
 import no.nav.dagpenger.iverksett.api.tilstand.IverksettResultatService
-import no.nav.dagpenger.iverksett.util.opprettBrev
-import no.nav.dagpenger.iverksett.util.opprettIverksettDagpenger
+import no.nav.dagpenger.iverksett.infrastruktur.util.opprettBrev
+import no.nav.dagpenger.iverksett.infrastruktur.util.opprettIverksettDagpenger
 import no.nav.familie.prosessering.internal.TaskService
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatIllegalStateException

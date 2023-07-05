@@ -14,9 +14,9 @@ import no.nav.dagpenger.iverksett.konsumenter.økonomi.lagAndelTilkjentYtelse
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.lagUtbetalingDto
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.simulering.grupperPosteringerEtterDato
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.UtbetalingsoppdragGenerator
-import no.nav.dagpenger.iverksett.util.behandlingsdetaljer
-import no.nav.dagpenger.iverksett.util.opprettIverksettDagpenger
-import no.nav.dagpenger.iverksett.util.vedtaksdetaljerDagpenger
+import no.nav.dagpenger.iverksett.infrastruktur.util.behandlingsdetaljer
+import no.nav.dagpenger.iverksett.infrastruktur.util.opprettIverksettDagpenger
+import no.nav.dagpenger.iverksett.infrastruktur.util.vedtaksdetaljerDagpenger
 import no.nav.dagpenger.kontrakter.felles.Datoperiode
 import no.nav.dagpenger.kontrakter.felles.StønadType
 import no.nav.dagpenger.kontrakter.iverksett.BehandlingType

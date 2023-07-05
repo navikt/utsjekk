@@ -5,7 +5,7 @@ import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.slot
-import no.nav.dagpenger.iverksett.util.opprettIverksettDagpenger
+import no.nav.dagpenger.iverksett.infrastruktur.util.opprettIverksettDagpenger
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.jms.core.JmsTemplate

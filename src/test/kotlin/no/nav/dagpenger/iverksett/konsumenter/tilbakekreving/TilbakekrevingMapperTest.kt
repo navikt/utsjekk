@@ -2,8 +2,8 @@ package no.nav.dagpenger.iverksett.konsumenter.tilbakekreving
 
 import no.nav.dagpenger.iverksett.api.domene.TilbakekrevingMedVarsel
 import no.nav.dagpenger.iverksett.api.domene.Tilbakekrevingsdetaljer
-import no.nav.dagpenger.iverksett.util.opprettIverksettDagpenger
-import no.nav.dagpenger.iverksett.util.opprettTilbakekrevingsdetaljer
+import no.nav.dagpenger.iverksett.infrastruktur.util.opprettIverksettDagpenger
+import no.nav.dagpenger.iverksett.infrastruktur.util.opprettTilbakekrevingsdetaljer
 import no.nav.dagpenger.kontrakter.felles.Enhet
 import no.nav.dagpenger.kontrakter.felles.Fagsystem
 import no.nav.dagpenger.kontrakter.felles.Språkkode

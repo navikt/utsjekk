@@ -9,7 +9,7 @@ import io.mockk.verify
 import no.nav.dagpenger.iverksett.api.IverksettingRepository
 import no.nav.dagpenger.iverksett.infrastruktur.FamilieIntegrasjonerClient
 import no.nav.dagpenger.iverksett.lagIverksett
-import no.nav.dagpenger.iverksett.util.opprettIverksettDagpenger
+import no.nav.dagpenger.iverksett.infrastruktur.util.opprettIverksettDagpenger
 import no.nav.dagpenger.kontrakter.felles.Enhet
 import no.nav.dagpenger.kontrakter.felles.Språkkode
 import no.nav.dagpenger.kontrakter.felles.Tilbakekrevingsvalg

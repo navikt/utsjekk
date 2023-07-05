@@ -15,7 +15,7 @@ import no.nav.dagpenger.iverksett.infrastruktur.repository.findByIdOrThrow
 import no.nav.dagpenger.iverksett.infrastruktur.transformer.toDomain
 import no.nav.dagpenger.iverksett.lagIverksett
 import no.nav.dagpenger.iverksett.util.mockFeatureToggleService
-import no.nav.dagpenger.iverksett.util.opprettIverksettDto
+import no.nav.dagpenger.iverksett.infrastruktur.util.opprettIverksettDto
 import no.nav.dagpenger.kontrakter.felles.Fagsystem
 import no.nav.dagpenger.kontrakter.iverksett.TilkjentYtelseStatus
 import no.nav.dagpenger.kontrakter.oppdrag.OppdragStatus

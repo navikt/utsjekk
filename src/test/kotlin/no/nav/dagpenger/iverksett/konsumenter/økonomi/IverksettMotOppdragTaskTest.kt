@@ -10,8 +10,8 @@ import no.nav.dagpenger.iverksett.api.IverksettingService
 import no.nav.dagpenger.iverksett.api.domene.IverksettResultat
 import no.nav.dagpenger.iverksett.api.tilstand.IverksettResultatService
 import no.nav.dagpenger.iverksett.infrastruktur.transformer.toDomain
-import no.nav.dagpenger.iverksett.util.lagForrigeIverksetting
-import no.nav.dagpenger.iverksett.util.opprettIverksettDto
+import no.nav.dagpenger.iverksett.infrastruktur.util.lagForrigeIverksetting
+import no.nav.dagpenger.iverksett.infrastruktur.util.opprettIverksettDto
 import no.nav.dagpenger.kontrakter.felles.Fagsystem
 import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsoppdrag
 import no.nav.familie.prosessering.domene.Task

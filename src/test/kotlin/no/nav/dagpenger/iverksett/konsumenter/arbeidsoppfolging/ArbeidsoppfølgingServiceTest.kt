@@ -3,7 +3,7 @@ package no.nav.dagpenger.iverksett.konsumenter.arbeidsoppfolging
 import io.mockk.justRun
 import io.mockk.mockk
 import io.mockk.verify
-import no.nav.dagpenger.iverksett.util.opprettIverksettDagpenger
+import no.nav.dagpenger.iverksett.infrastruktur.util.opprettIverksettDagpenger
 import org.junit.Test
 
 class ArbeidsoppfølgingServiceTest {

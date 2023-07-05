@@ -1,7 +1,7 @@
 package no.nav.dagpenger.iverksett.api
 
 import no.nav.dagpenger.iverksett.ServerTest
-import no.nav.dagpenger.iverksett.util.opprettIverksettDto
+import no.nav.dagpenger.iverksett.infrastruktur.util.opprettIverksettDto
 import no.nav.dagpenger.kontrakter.iverksett.VedtaksperiodeDto
 import no.nav.dagpenger.kontrakter.iverksett.VedtaksperiodeType
 import no.nav.dagpenger.kontrakter.iverksett.Vedtaksresultat

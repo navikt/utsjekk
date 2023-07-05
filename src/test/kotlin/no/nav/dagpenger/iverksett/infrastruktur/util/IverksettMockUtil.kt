@@ -1,4 +1,4 @@
-package no.nav.dagpenger.iverksett.util
+package no.nav.dagpenger.iverksett.infrastruktur.util
 
 import no.nav.dagpenger.iverksett.api.domene.AndelTilkjentYtelse
 import no.nav.dagpenger.iverksett.api.domene.Barn
