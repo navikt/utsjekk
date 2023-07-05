@@ -23,7 +23,7 @@ internal class UtbetalingsoppdragGeneratorTest {
             2,
             LocalDate.of(2020, 1, 1),
             LocalDate.of(2020, 12, 31),
-        ) // endres ikke, beholder kildeBehandlingId
+        )
         val andel2 = opprettAndel(2, LocalDate.of(2021, 1, 1), LocalDate.of(2021, 12, 31)) // endres i behandling b
         val andel3 = opprettAndel(2, LocalDate.of(2022, 1, 1), LocalDate.of(2022, 12, 31)) // ny i behandling b
         val førsteTilkjentYtelse =
@@ -47,7 +47,7 @@ internal class UtbetalingsoppdragGeneratorTest {
         )
         val utbetalingsoppdragB = lagTilkjentYtelseMedUtbetalingsoppdrag(nyePerioder, førsteTilkjentYtelse)
 
-        assertThatAndreBehandlingIkkeEndrerPåKildeBehandlingIdPåAndel1(utbetalingsoppdragB, behandlingA, behandlingB)
+        assertThatPeriodeIdOgForrigePeriodeIdBlirSattKorrekt(utbetalingsoppdragB)
     }
 
     private fun assertExpectedOgActualErLikeUtenomFeltSomFeiler(
@@ -66,10 +66,8 @@ internal class UtbetalingsoppdragGeneratorTest {
             .filterNot { it.contains(feltSomSkalFiltreres) }
             .joinToString("\n")
 
-    private fun assertThatAndreBehandlingIkkeEndrerPåKildeBehandlingIdPåAndel1(
+    private fun assertThatPeriodeIdOgForrigePeriodeIdBlirSattKorrekt(
         utbetalingsoppdragB: TilkjentYtelse,
-        behandlingA: UUID?,
-        behandlingB: UUID?,
     ) {
         assertAndel(
             andelTilkjentYtelse = utbetalingsoppdragB.andelerTilkjentYtelse[0],

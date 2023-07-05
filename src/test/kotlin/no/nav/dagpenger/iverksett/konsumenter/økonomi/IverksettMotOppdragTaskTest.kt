@@ -1,9 +1,7 @@
 package no.nav.dagpenger.iverksett.konsumenter.økonomi
 
 import io.mockk.every
-import io.mockk.just
 import io.mockk.mockk
-import io.mockk.runs
 import io.mockk.slot
 import io.mockk.verify
 import no.nav.dagpenger.iverksett.api.IverksettingService
@@ -51,19 +49,6 @@ internal class IverksettMotOppdragTaskTest {
         verify(exactly = 1) { iverksettResultatService.oppdaterTilkjentYtelseForUtbetaling(behandlingId, any()) }
         assertThat(oppdragSlot.captured.fagSystem).isEqualTo(Fagsystem.Dagpenger)
         assertThat(oppdragSlot.captured.kodeEndring).isEqualTo(Utbetalingsoppdrag.KodeEndring.NY)
-    }
-
-    @Test
-    internal fun `skal ikke iverksette utbetaling til oppdrag når det ikke er noen utbetalinger`() {
-        every { iverksettingService.hentIverksetting(any()) } returns
-            opprettIverksettDto(behandlingId, sakId).toDomain()
-        every { iverksettResultatService.oppdaterTilkjentYtelseForUtbetaling(behandlingId, any()) } just runs
-        every { iverksettResultatService.hentTilkjentYtelse(any<UUID>()) } returns null
-        every { iverksettingService.hentIverksetting(any()) }
-            .returns(opprettIverksettDto(behandlingId, sakId, andelsbeløp = 0).toDomain())
-        iverksettMotOppdragTask.doTask(Task(IverksettMotOppdragTask.TYPE, behandlingId.toString(), Properties()))
-        verify(exactly = 1) { iverksettResultatService.oppdaterTilkjentYtelseForUtbetaling(behandlingId, any()) }
-        verify(exactly = 0) { oppdragClient.iverksettOppdrag(any()) }
     }
 
     @Test

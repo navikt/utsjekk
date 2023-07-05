@@ -1,5 +1,11 @@
 package no.nav.dagpenger.iverksett.api.domene
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
+import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.ny.domene.AndelData
+import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.ny.domene.StønadTypeOgFerietillegg
+import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.ny.domene.StønadTypeOgFerietilleggKeyDeserializer
+import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.ny.domene.StønadTypeOgFerietilleggKeySerializer
 import no.nav.dagpenger.kontrakter.felles.StønadType
 import no.nav.dagpenger.kontrakter.iverksett.TilkjentYtelseStatus
 import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsoppdrag
@@ -12,6 +18,16 @@ data class TilkjentYtelse(
     val status: TilkjentYtelseStatus = TilkjentYtelseStatus.IKKE_KLAR,
     val andelerTilkjentYtelse: List<AndelTilkjentYtelse>,
     val sisteAndelIKjede: AndelTilkjentYtelse? = null,
+    @JsonSerialize(keyUsing = StønadTypeOgFerietilleggKeySerializer::class)
+    @JsonDeserialize(keyUsing = StønadTypeOgFerietilleggKeyDeserializer::class)
+    val sisteAndelPerKjede: Map<StønadTypeOgFerietillegg, AndelTilkjentYtelse> = sisteAndelIKjede?.let {
+        mapOf(
+            StønadTypeOgFerietillegg(
+                it.stønadstype,
+                it.ferietillegg,
+            ) to it,
+        )
+    } ?: emptyMap(),
     val startdato: LocalDate,
 ) {
 
@@ -47,6 +63,7 @@ private fun TilkjentYtelse?.lagNormaliserteAndeler(): List<AndelTilkjentYtelse> 
         ?.sortedBy { it.periode.fom }
         ?.map {
             AndelTilkjentYtelse(
+                id = it.id,
                 beløp = it.beløp,
                 periode = it.periode,
                 stønadstype = it.stønadstype,
@@ -54,3 +71,8 @@ private fun TilkjentYtelse?.lagNormaliserteAndeler(): List<AndelTilkjentYtelse> 
             )
         } ?: emptyList()
 }
+
+fun TilkjentYtelse?.lagAndelData(): List<AndelData> =
+    this?.andelerTilkjentYtelse?.map {
+        it.tilAndelData()
+    } ?: emptyList()

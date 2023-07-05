@@ -10,10 +10,9 @@ data class AndelData(
     val fom: LocalDate,
     val tom: LocalDate,
     val beløp: Int,
-    val personIdent: String,
     val type: StønadTypeOgFerietillegg,
-    val periodeId: Long?,
-    val forrigePeriodeId: Long?,
+    val periodeId: Long? = null,
+    val forrigePeriodeId: Long? = null,
 )
 
 internal fun List<AndelData>.uten0beløp(): List<AndelData> = this.filter { it.beløp != 0 }
