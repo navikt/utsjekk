@@ -12,7 +12,7 @@ import no.nav.dagpenger.iverksett.infrastruktur.util.opprettTilkjentYtelseMedMet
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.OppdragClient
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.lagAndelTilkjentYtelse
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.lagUtbetalingDto
-import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.ny.Utbetalingsgenerator
+import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.Utbetalingsgenerator
 import no.nav.dagpenger.iverksett.simuleringDto
 import no.nav.dagpenger.kontrakter.oppdrag.simulering.BeriketSimuleringsresultat
 import no.nav.dagpenger.kontrakter.oppdrag.simulering.DetaljertSimuleringResultat

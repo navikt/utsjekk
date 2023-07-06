@@ -1,4 +1,4 @@
-package no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.ny.domene
+package no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene
 
 import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.core.JsonProcessingException

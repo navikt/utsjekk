@@ -12,7 +12,7 @@ import no.nav.dagpenger.iverksett.cucumber.domeneparser.IdTIlUUIDHolder
 import no.nav.dagpenger.iverksett.cucumber.domeneparser.TilkjentYtelseParser
 import no.nav.dagpenger.iverksett.cucumber.domeneparser.parseDato
 import no.nav.dagpenger.iverksett.infrastruktur.transformer.toDomain
-import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.ny.Utbetalingsgenerator
+import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.Utbetalingsgenerator
 import no.nav.dagpenger.kontrakter.felles.StønadType
 import no.nav.dagpenger.kontrakter.iverksett.TilkjentYtelseDto
 import no.nav.dagpenger.kontrakter.iverksett.tilbakekreving.Ytelsestype

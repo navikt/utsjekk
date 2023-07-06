@@ -1,6 +1,6 @@
-package no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.ny
+package no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag
 
-import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.ny.domene.AndelData
+import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene.AndelData
 import java.time.LocalDate
 
 internal data class ResultatForKjede(

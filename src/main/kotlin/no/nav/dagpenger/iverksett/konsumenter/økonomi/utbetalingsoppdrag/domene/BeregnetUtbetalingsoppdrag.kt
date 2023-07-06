@@ -1,4 +1,4 @@
-package no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.ny.domene
+package no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene
 
 import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsoppdrag
 

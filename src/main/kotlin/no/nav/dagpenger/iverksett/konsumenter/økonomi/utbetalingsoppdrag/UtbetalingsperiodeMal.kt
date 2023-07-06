@@ -1,8 +1,8 @@
-package no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.ny
+package no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag
 
-import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.ny.domene.AndelData
-import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.ny.domene.Behandlingsinformasjon
-import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.ny.domene.tilKlassifisering
+import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene.AndelData
+import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene.Behandlingsinformasjon
+import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene.tilKlassifisering
 import no.nav.dagpenger.kontrakter.oppdrag.Opphør
 import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsperiode
 import java.math.BigDecimal

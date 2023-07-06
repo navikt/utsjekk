@@ -1,4 +1,4 @@
-package no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.ny.cucumber.domeneparser
+package no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.cucumber.domeneparser
 
 import java.time.LocalDate
 import java.time.YearMonth
