@@ -4,7 +4,6 @@ import io.cucumber.datatable.DataTable
 import io.cucumber.java.no.Gitt
 import io.cucumber.java.no.Når
 import io.cucumber.java.no.Så
-import no.nav.dagpenger.iverksett.cucumber.domeneparser.IdTIlUUIDHolder.behandlingIdTilUUID
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.Utbetalingsgenerator
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.cucumber.ValideringUtil.assertSjekkBehandlingIder
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.cucumber.domeneparser.Domenebegrep
@@ -13,6 +12,7 @@ import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.cucumb
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.cucumber.domeneparser.DomeneparserUtil.groupByBehandlingId
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.cucumber.domeneparser.ForventetUtbetalingsoppdrag
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.cucumber.domeneparser.ForventetUtbetalingsperiode
+import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.cucumber.domeneparser.IdTIlUUIDHolder.behandlingIdTilUUID
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.cucumber.domeneparser.OppdragParser
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.cucumber.domeneparser.OppdragParser.mapAndeler
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.cucumber.domeneparser.parseLong

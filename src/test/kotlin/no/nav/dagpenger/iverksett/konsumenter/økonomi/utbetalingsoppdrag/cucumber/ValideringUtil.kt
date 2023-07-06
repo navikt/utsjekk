@@ -1,8 +1,8 @@
 package no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.cucumber
 
 import io.cucumber.datatable.DataTable
-import no.nav.dagpenger.iverksett.cucumber.domeneparser.IdTIlUUIDHolder.behandlingIdTilUUID
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.cucumber.domeneparser.Domenebegrep
+import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.cucumber.domeneparser.IdTIlUUIDHolder.behandlingIdTilUUID
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.cucumber.domeneparser.parseLong
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene.BeregnetUtbetalingsoppdrag
 import java.util.UUID
