@@ -1,5 +1,6 @@
 package no.nav.dagpenger.iverksett.api
 
+import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.tags.Tag
 import no.nav.dagpenger.iverksett.api.IverksettDtoValidator.valider
@@ -37,7 +38,7 @@ class IverksettingController(
     @ApiResponse(responseCode = "202", description = "iverksetting er mottatt")
     @ApiResponse(responseCode = "400", description = "ugyldig iverksetting")
     fun iverksettUtenBrev(
-        @RequestHeader("Authorization") bearerToken: String,
+        @Parameter(required = false, hidden = true) @RequestHeader("Authorization") bearerToken: String,
         @RequestBody iverksettDto: IverksettDto,
     ): ResponseEntity<Void> {
         iverksettDto.valider()
@@ -53,7 +54,7 @@ class IverksettingController(
     @ApiResponse(responseCode = "202", description = "iverksetting er mottatt")
     @ApiResponse(responseCode = "400", description = "ugyldig iverksetting")
     fun iverksett(
-        @RequestHeader("Authorization") bearerToken: String,
+        @Parameter(required = false, hidden = true) @RequestHeader("Authorization") bearerToken: String,
         @RequestPart("data") iverksettDto: IverksettDto,
         @RequestPart("fil", required = false) fil: MultipartFile?,
     ): ResponseEntity<Void> {
