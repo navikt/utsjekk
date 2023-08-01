@@ -13,6 +13,7 @@ import no.nav.dagpenger.iverksett.infrastruktur.featuretoggle.FeatureToggleServi
 import no.nav.dagpenger.iverksett.konsumenter.tilbakekreving.validerTilbakekreving
 import no.nav.dagpenger.kontrakter.iverksett.VedtakType
 import no.nav.dagpenger.kontrakter.oppdrag.OppdragStatus
+import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 
@@ -22,6 +23,7 @@ class IverksettingValidatorService(
     private val iverksettingService: IverksettingService,
     private val featureToggleService: FeatureToggleService,
 ) {
+    private val logger = LoggerFactory.getLogger(this::class.java)
 
     fun valider(iverksett: IverksettDagpenger, bearerToken: String) {
         /* Med DB-oppslag */
@@ -165,9 +167,15 @@ class IverksettingValidatorService(
     }
 
     private fun getTokenRoles(bearerToken: String): Array<String> {
-        val tokenString = bearerToken.replace("Bearer ", "")
-        val jwt = JWTParser.parse(tokenString)
-        return jwt.jwtClaimsSet.getStringArrayClaim("roles")
+        try {
+            val tokenString = bearerToken.replace("Bearer ", "")
+            val jwt = JWTParser.parse(tokenString)
+            return jwt.jwtClaimsSet.getStringArrayClaim("roles")
+        } catch (e: Exception) {
+            logger.info(e.message)
+        }
+
+        return emptyArray()
     }
 
     private fun getBeslutterRolle(): String? {
