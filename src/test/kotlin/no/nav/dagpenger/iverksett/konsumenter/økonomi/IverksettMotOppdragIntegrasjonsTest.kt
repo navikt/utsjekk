@@ -35,7 +35,7 @@ class IverksettMotOppdragIntegrasjonsTest : ServerTest() {
         tilOgMed = LocalDate.of(2021, 1, 31),
     )
     private val iverksett =
-        opprettIverksettDagpenger(behandlingid, andeler = listOf(førsteAndel), startdato = førsteAndel.periode.fom)
+        opprettIverksettDagpenger(behandlingid, andeler = listOf(førsteAndel))
 
     @BeforeEach
     internal fun setUp() {
@@ -111,13 +111,11 @@ class IverksettMotOppdragIntegrasjonsTest : ServerTest() {
     @Test
     internal fun `iverksett med opphør, forventer ingen andeler`() {
         val opphørBehandlingId = UUID.randomUUID()
-        val startdato = førsteAndel.periode.fom
         val iverksettMedOpphør =
             opprettIverksettDagpenger(
                 opphørBehandlingId,
                 behandlingid,
                 emptyList(),
-                startdato = startdato,
                 forrigeIverksetting = iverksett,
             )
 
@@ -132,14 +130,12 @@ class IverksettMotOppdragIntegrasjonsTest : ServerTest() {
     @Test
     internal fun `iverksetting med feil forrige iverksetting skal gi exception`() {
         val opphørBehandlingId = UUID.randomUUID()
-        val startdato = førsteAndel.periode.fom
 
         val feilFørsteAndel = førsteAndel.copy(beløp = førsteAndel.beløp + 1)
         val feilForrigeIverksetting =
             opprettIverksettDagpenger(
                 behandlingid,
                 andeler = listOf(feilFørsteAndel),
-                startdato = feilFørsteAndel.periode.fom,
             )
 
         val iverksettMedFeilForrige =
@@ -154,7 +150,6 @@ class IverksettMotOppdragIntegrasjonsTest : ServerTest() {
                         tilOgMed = LocalDate.now().plusMonths(1),
                     ),
                 ),
-                startdato = startdato,
                 forrigeIverksetting = feilForrigeIverksetting,
             )
 

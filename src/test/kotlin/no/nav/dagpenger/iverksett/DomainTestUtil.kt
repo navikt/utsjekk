@@ -200,7 +200,6 @@ fun lagIverksettData(
             andeler = andelsdatoer.map {
                 lagAndelTilkjentYtelse(beløp = beløp, fraOgMed = it, tilOgMed = it)
             },
-            startdato = andelsdatoer.minByOrNull { it } ?: LocalDate.now(),
             vedtakstidspunkt = vedtakstidspunkt,
             brevmottakere = brevmottakere,
         ),
