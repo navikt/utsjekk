@@ -95,8 +95,8 @@ class OppdragSteg {
         }
     }
 
-    @Så("forvent følgende utbetalingsoppdrag 2")
-    fun `forvent følgende utbetalingsoppdrag 2`(dataTable: DataTable) {
+    @Så("forvent følgende utbetalingsoppdrag")
+    fun `forvent følgende utbetalingsoppdrag`(dataTable: DataTable) {
         validerForventetUtbetalingsoppdrag(dataTable, beregnetUtbetalingsoppdrag)
         assertSjekkBehandlingIder(dataTable, beregnetUtbetalingsoppdrag)
     }

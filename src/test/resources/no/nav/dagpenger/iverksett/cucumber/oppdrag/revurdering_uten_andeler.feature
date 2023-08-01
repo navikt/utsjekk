@@ -14,7 +14,7 @@ Egenskap: Revurdering uten andeler beholder periodeId til neste behandling med p
 
     Når beregner utbetalingsoppdrag
 
-    Så forvent følgende utbetalingsoppdrag 2
+    Så forvent følgende utbetalingsoppdrag
       | BehandlingId | Fra dato   | Til dato   | Opphørsdato | Beløp | Kode endring | Er endring | Periode id | Forrige periode id |
       | 1            | 01.02.2021 | 01.02.2021 |             | 700   | NY           | Nei        | 0          |                    |
       | 2            | 01.02.2021 | 01.02.2021 | 01.02.2021  | 700   | ENDR         | Ja         | 0          |                    |

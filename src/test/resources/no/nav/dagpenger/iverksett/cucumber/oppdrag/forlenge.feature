@@ -12,7 +12,7 @@ Egenskap: Forlenge periode
 
     Når beregner utbetalingsoppdrag
 
-    Så forvent følgende utbetalingsoppdrag 2
+    Så forvent følgende utbetalingsoppdrag
       | BehandlingId | Fra dato   | Til dato   | Opphørsdato | Beløp | Kode endring | Er endring | Periode id | Forrige periode id |
       | 1            | 02.06.2023 | 15.07.2023 |             | 800   | NY           | Nei        | 0          |                    |
       | 2            | 02.06.2023 | 15.08.2023 |             | 800   | ENDR         | Nei        | 1          | 0                  |
