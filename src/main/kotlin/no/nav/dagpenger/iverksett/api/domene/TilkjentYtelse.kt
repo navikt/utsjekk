@@ -6,7 +6,6 @@ import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene.StønadTypeOgFerietillegg
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene.StønadTypeOgFerietilleggKeyDeserializer
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene.StønadTypeOgFerietilleggKeySerializer
-import no.nav.dagpenger.kontrakter.felles.StønadType
 import no.nav.dagpenger.kontrakter.iverksett.TilkjentYtelseStatus
 import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsoppdrag
 import java.time.LocalDate
@@ -29,27 +28,7 @@ data class TilkjentYtelse(
         )
     } ?: emptyMap(),
     val startdato: LocalDate,
-) {
-
-    fun toMedMetadata(
-        saksbehandlerId: String,
-        stønadType: StønadType,
-        sakId: UUID,
-        personIdent: String,
-        behandlingId: UUID,
-        vedtaksdato: LocalDate,
-    ): TilkjentYtelseMedMetaData {
-        return TilkjentYtelseMedMetaData(
-            tilkjentYtelse = this,
-            saksbehandlerId = saksbehandlerId,
-            stønadstype = stønadType,
-            sakId = sakId,
-            personIdent = personIdent,
-            behandlingId = behandlingId,
-            vedtaksdato = vedtaksdato,
-        )
-    }
-}
+)
 
 fun IverksettResultat?.erKonsistentMed(forrigeIverksetting: IverksettDagpenger?): Boolean {
     val andeler = this?.tilkjentYtelseForUtbetaling?.lagNormaliserteAndeler()

@@ -14,7 +14,6 @@ import no.nav.dagpenger.iverksett.api.domene.TilbakekrevingMedVarsel
 import no.nav.dagpenger.iverksett.api.domene.TilbakekrevingResultat
 import no.nav.dagpenger.iverksett.api.domene.Tilbakekrevingsdetaljer
 import no.nav.dagpenger.iverksett.api.domene.TilkjentYtelse
-import no.nav.dagpenger.iverksett.api.domene.TilkjentYtelseMedMetaData
 import no.nav.dagpenger.iverksett.api.domene.VedtaksdetaljerDagpenger
 import no.nav.dagpenger.iverksett.api.domene.VedtaksperiodeDagpenger
 import no.nav.dagpenger.iverksett.api.domene.Vilkårsvurdering
@@ -27,6 +26,7 @@ import no.nav.dagpenger.iverksett.konsumenter.brev.domain.JournalpostResultat
 import no.nav.dagpenger.iverksett.konsumenter.brev.domain.JournalpostResultatMap
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.lagAndelTilkjentYtelse
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.lagUtbetalingDto
+import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene.Behandlingsinformasjon
 import no.nav.dagpenger.kontrakter.felles.Datoperiode
 import no.nav.dagpenger.kontrakter.felles.StønadType
 import no.nav.dagpenger.kontrakter.felles.Tilbakekrevingsvalg
@@ -106,18 +106,16 @@ fun opprettAndelTilkjentYtelse(
 
 private val eksternIdGenerator = Random()
 
-fun opprettTilkjentYtelseMedMetadata(
+fun opprettBehandlingsinformasjon(
     behandlingId: UUID = UUID.randomUUID(),
-    tilkjentYtelse: TilkjentYtelse = opprettTilkjentYtelse(behandlingId),
-): TilkjentYtelseMedMetaData {
-    return TilkjentYtelseMedMetaData(
-        tilkjentYtelse = tilkjentYtelse,
+): Behandlingsinformasjon {
+    return Behandlingsinformasjon(
         saksbehandlerId = "saksbehandlerId",
-        stønadstype = StønadType.DAGPENGER_ARBEIDSSOKER_ORDINAER,
-        sakId = UUID.randomUUID(),
+        fagsakId = UUID.randomUUID().toString(),
+        behandlingId = behandlingId.toString(),
         personIdent = "12345678910",
-        behandlingId = behandlingId,
         vedtaksdato = LocalDate.of(2021, 1, 1),
+        opphørFra = null,
     )
 }
 
