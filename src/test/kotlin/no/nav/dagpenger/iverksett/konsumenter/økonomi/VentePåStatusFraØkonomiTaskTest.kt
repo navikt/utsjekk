@@ -150,7 +150,6 @@ internal class VentePåStatusFraØkonomiTaskTest {
             ),
             status = TilkjentYtelseStatus.SENDT_TIL_IVERKSETTING,
             andelerTilkjentYtelse = listOf(),
-            startdato = LocalDate.now(),
         )
     }
 }

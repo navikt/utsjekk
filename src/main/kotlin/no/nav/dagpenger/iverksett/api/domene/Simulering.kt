@@ -38,8 +38,3 @@ fun Simulering.tilBehandlingsinformasjon(): Behandlingsinformasjon =
         vedtaksdato = this.vedtaksdato,
         opphørFra = null,
     )
-
-fun Iterable<AndelTilkjentYtelse>.tilTilkjentYtelse() = TilkjentYtelse(
-    andelerTilkjentYtelse = this.toList(),
-    startdato = this.minOfOrNull { it.periode.fom } ?: LocalDate.now(),
-)

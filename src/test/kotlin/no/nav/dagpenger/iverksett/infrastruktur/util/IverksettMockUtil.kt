@@ -122,14 +122,12 @@ fun opprettBehandlingsinformasjon(
 fun opprettTilkjentYtelse(
     behandlingId: UUID = UUID.randomUUID(),
     andeler: List<AndelTilkjentYtelse> = listOf(opprettAndelTilkjentYtelse()),
-    startdato: LocalDate = startdato(andeler),
     sisteAndelIKjede: AndelTilkjentYtelse? = null,
 ): TilkjentYtelse {
     return TilkjentYtelse(
         id = behandlingId,
         utbetalingsoppdrag = null,
         andelerTilkjentYtelse = andeler,
-        startdato = startdato,
         sisteAndelIKjede = sisteAndelIKjede,
     )
 }
@@ -181,11 +179,10 @@ fun vedtaksdetaljerDagpenger(
     andeler: List<AndelTilkjentYtelse> = listOf(opprettAndelTilkjentYtelse()),
     tilbakekreving: Tilbakekrevingsdetaljer? = null,
     vedtakstidspunkt: LocalDateTime = LocalDateTime.of(2021, 5, 12, 0, 0),
-    startdato: LocalDate = startdato(andeler),
     vedtaksperioder: List<VedtaksperiodeDagpenger> = listOf(vedtaksperioderDagpenger()),
     brevmottakere: Brevmottakere = Brevmottakere(emptyList()),
 ): VedtaksdetaljerDagpenger {
-    val tilkjentYtelse = lagTilkjentYtelse(andeler, startdato)
+    val tilkjentYtelse = lagTilkjentYtelse(andeler)
     return VedtaksdetaljerDagpenger(
         vedtakstype = VedtakType.UTBETALINGSVEDTAK,
         vedtaksresultat = vedtaksresultat,
@@ -218,14 +215,12 @@ fun vedtaksstatusDto(
 
 private fun lagTilkjentYtelse(
     andeler: List<AndelTilkjentYtelse>,
-    startdato: LocalDate,
 ): TilkjentYtelse =
     TilkjentYtelse(
         id = UUID.randomUUID(),
         utbetalingsoppdrag = null,
         status = TilkjentYtelseStatus.AKTIV,
         andelerTilkjentYtelse = andeler,
-        startdato = startdato,
     )
 
 fun opprettIverksettDagpenger(
@@ -248,7 +243,6 @@ fun opprettIverksettDagpenger(
     forrigeBehandlingId: UUID? = null,
     andeler: List<AndelTilkjentYtelse> = listOf(opprettAndelTilkjentYtelse()),
     tilbakekreving: Tilbakekrevingsdetaljer? = null,
-    startdato: LocalDate = startdato(andeler),
     forrigeIverksetting: IverksettDagpenger? = null,
     fagsakId: UUID = UUID.randomUUID(),
 ): IverksettDagpenger {
@@ -265,14 +259,10 @@ fun opprettIverksettDagpenger(
             vedtaksresultat = Vedtaksresultat.INNVILGET,
             andeler = andeler,
             tilbakekreving = tilbakekreving,
-            startdato = startdato,
         ),
         forrigeIverksetting = forrigeIverksetting,
     )
 }
-
-fun startdato(andeler: List<AndelTilkjentYtelse>) =
-    andeler.minOfOrNull { it.periode.fom } ?: error("Trenger å sette startdato hvs det ikke finnes andeler")
 
 fun opprettBrev(): Brev {
     return Brev(ByteArray(256))
