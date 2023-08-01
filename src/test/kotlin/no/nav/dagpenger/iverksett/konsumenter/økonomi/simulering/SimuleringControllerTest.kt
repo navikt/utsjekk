@@ -4,11 +4,11 @@ import io.mockk.clearMocks
 import io.mockk.verify
 import no.nav.dagpenger.iverksett.ServerTest
 import no.nav.dagpenger.iverksett.api.domene.tilAndelData
-import no.nav.dagpenger.iverksett.api.domene.tilBehandlingsinformasjon
 import no.nav.dagpenger.iverksett.api.tilstand.IverksettResultatService
 import no.nav.dagpenger.iverksett.beriketSimuleringsresultat
 import no.nav.dagpenger.iverksett.infrastruktur.util.opprettTilkjentYtelse
 import no.nav.dagpenger.iverksett.infrastruktur.util.opprettTilkjentYtelseMedMetadata
+import no.nav.dagpenger.iverksett.infrastruktur.util.tilBehandlingsinformasjon
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.OppdragClient
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.lagAndelTilkjentYtelse
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.lagUtbetalingDto

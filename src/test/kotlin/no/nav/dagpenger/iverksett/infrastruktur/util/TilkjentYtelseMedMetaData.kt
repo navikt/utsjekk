@@ -1,5 +1,6 @@
-package no.nav.dagpenger.iverksett.api.domene
+package no.nav.dagpenger.iverksett.infrastruktur.util
 
+import no.nav.dagpenger.iverksett.api.domene.TilkjentYtelse
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene.Behandlingsinformasjon
 import no.nav.dagpenger.kontrakter.felles.StønadType
 import java.time.LocalDate

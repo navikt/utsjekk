@@ -3,9 +3,9 @@ package no.nav.dagpenger.iverksett.konsumenter.økonomi
 import com.github.doyaaaaaken.kotlincsv.dsl.csvReader
 import no.nav.dagpenger.iverksett.api.domene.AndelTilkjentYtelse
 import no.nav.dagpenger.iverksett.api.domene.TilkjentYtelse
-import no.nav.dagpenger.iverksett.api.domene.TilkjentYtelseMedMetaData
 import no.nav.dagpenger.iverksett.api.domene.tilAndelData
-import no.nav.dagpenger.iverksett.api.domene.tilBehandlingsinformasjon
+import no.nav.dagpenger.iverksett.infrastruktur.util.TilkjentYtelseMedMetaData
+import no.nav.dagpenger.iverksett.infrastruktur.util.tilBehandlingsinformasjon
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.Utbetalingsgenerator
 import no.nav.dagpenger.kontrakter.felles.Fagsystem
 import no.nav.dagpenger.kontrakter.felles.StønadType
