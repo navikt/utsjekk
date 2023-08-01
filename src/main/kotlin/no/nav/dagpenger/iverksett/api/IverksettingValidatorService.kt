@@ -1,5 +1,6 @@
 package no.nav.dagpenger.iverksett.api
 
+import com.nimbusds.jwt.JWTParser
 import no.nav.dagpenger.iverksett.api.domene.Brev
 import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
 import no.nav.dagpenger.iverksett.api.domene.erKonsistentMed
@@ -10,6 +11,7 @@ import no.nav.dagpenger.iverksett.infrastruktur.advice.ApiFeil
 import no.nav.dagpenger.iverksett.infrastruktur.configuration.FeatureToggleConfig
 import no.nav.dagpenger.iverksett.infrastruktur.featuretoggle.FeatureToggleService
 import no.nav.dagpenger.iverksett.konsumenter.tilbakekreving.validerTilbakekreving
+import no.nav.dagpenger.kontrakter.iverksett.VedtakType
 import no.nav.dagpenger.kontrakter.oppdrag.OppdragStatus
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
@@ -21,12 +23,14 @@ class IverksettingValidatorService(
     private val featureToggleService: FeatureToggleService,
 ) {
 
-    fun valider(iverksett: IverksettDagpenger) {
+    fun valider(iverksett: IverksettDagpenger, bearerToken: String) {
         /* Med DB-oppslag */
         validerAtBehandlingIkkeAlleredeErMottatt(iverksett)
         validerKonsistensMellomVedtak(iverksett)
         validerAtIverksettingErForSammeSakOgPersonSomForrige(iverksett)
         validerAtForrigeBehandlingErFerdigIverksattMotOppdrag(iverksett)
+        validerAtRammevedtakSendesAvBeslutter(iverksett, bearerToken)
+        validerAtDetFinnesIverksattRammevedtak(iverksett)
 
         validerTilbakekreving(iverksett)
     }
@@ -112,7 +116,7 @@ class IverksettingValidatorService(
 
             val forrigeErOkMotOppdrag = forrigeErUtenUtbetalingsoppdrag || forrigeErKvittertOk
             if (!forrigeErOkMotOppdrag) {
-                throw ApiFeil("Forrige iverksetting  er ikke ferdig håndtert mhp oppdrag", HttpStatus.CONFLICT)
+                throw ApiFeil("Forrige iverksetting er ikke ferdig håndtert mhp oppdrag", HttpStatus.CONFLICT)
             }
         }
     }
@@ -130,5 +134,43 @@ class IverksettingValidatorService(
         if (!iverksett.vedtak.tilbakekreving.validerTilbakekreving()) {
             throw ApiFeil("Tilbakekreving er ikke gyldig", HttpStatus.BAD_REQUEST)
         }
+    }
+
+    internal fun validerAtRammevedtakSendesAvBeslutter(iverksett: IverksettDagpenger, bearerToken: String) {
+        if (iverksett.vedtak.vedtakstype == VedtakType.RAMMEVEDTAK) {
+            val tokenRoles = getTokenRoles(bearerToken)
+            val beslutterRole = getBeslutterRolle()
+
+            if (beslutterRole.isNullOrBlank() || !tokenRoles.contains(beslutterRole)) {
+                throw ApiFeil("Rammevedtak må sendes av en ansatt med beslutter-rolle", HttpStatus.BAD_REQUEST)
+            }
+        }
+    }
+
+    internal fun validerAtDetFinnesIverksattRammevedtak(iverksett: IverksettDagpenger) {
+        // Utbetalingsvedtak skal avvises dersom stønadsmottaker ikke har iverksatt rammevedtak av beslutter
+        // Vi kan bare sjekke at det finnes rammevedtak fordi alle rammevedtak må sendes av beslutter
+        if (iverksett.vedtak.vedtakstype == VedtakType.UTBETALINGSVEDTAK) {
+            var iverksetting = iverksett
+            var forrigeIverksetting = iverksett.forrigeIverksetting
+            while (forrigeIverksetting != null) {
+                iverksetting = forrigeIverksetting
+                forrigeIverksetting = forrigeIverksetting.forrigeIverksetting
+            }
+
+            if (iverksetting.vedtak.vedtakstype != VedtakType.RAMMEVEDTAK) {
+                throw ApiFeil("Stønadsmottaker har ikke iverksatt rammevedtak", HttpStatus.CONFLICT)
+            }
+        }
+    }
+
+    private fun getTokenRoles(bearerToken: String): Array<String> {
+        val tokenString = bearerToken.replace("Bearer ", "")
+        val jwt = JWTParser.parse(tokenString)
+        return jwt.jwtClaimsSet.getStringArrayClaim("roles")
+    }
+
+    private fun getBeslutterRolle(): String? {
+        return System.getProperty("BESLUTTER_ROLLE", System.getenv("BESLUTTER_ROLLE"))
     }
 }

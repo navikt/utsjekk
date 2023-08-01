@@ -36,6 +36,8 @@
 #  env:
 #    - name: SPRING_PROFILES_ACTIVE
 #      value: prod
+#    - name: BESLUTTER_ROLLE
+#      value: "70d54cad-53a3-4788-bbe3-565096f01da7"
 #  envFrom:
 #    - secret: dp-iverksett
 #  azure:
