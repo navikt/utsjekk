@@ -167,15 +167,17 @@ class IverksettingValidatorService(
     }
 
     private fun getTokenRoles(bearerToken: String): Array<String> {
+        var roles = emptyArray<String>()
+
         try {
             val tokenString = bearerToken.replace("Bearer ", "")
             val jwt = JWTParser.parse(tokenString)
-            return jwt.jwtClaimsSet.getStringArrayClaim("roles")
+            jwt.jwtClaimsSet.getStringArrayClaim("roles")?.let { roles = it }
         } catch (e: Exception) {
             logger.info(e.message)
         }
 
-        return emptyArray()
+        return roles
     }
 
     private fun getBeslutterRolle(): String? {
