@@ -1,5 +1,7 @@
 package no.nav.dagpenger.iverksett.api
 
+import com.nimbusds.jwt.JWTClaimsSet
+import com.nimbusds.jwt.PlainJWT
 import io.mockk.every
 import io.mockk.mockk
 import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
@@ -20,6 +22,7 @@ import no.nav.dagpenger.kontrakter.iverksett.VedtakType
 import no.nav.dagpenger.kontrakter.oppdrag.OppdragStatus
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertDoesNotThrow
 import org.springframework.http.HttpStatus
 
 class IverksettingValidatorServiceTest {
@@ -152,6 +155,35 @@ class IverksettingValidatorServiceTest {
 
         assertApiFeil(HttpStatus.BAD_REQUEST) {
             iverksettingValidatorService.validerAtRammevedtakSendesAvBeslutter(nåværendeIverksetting, "")
+        }
+    }
+
+    @Test
+    fun `skal få OK når rammevedtak sendes av beslutter`() {
+        val forrigeIverksetting = lagIverksettData()
+        val iverksettingTmp = lagIverksettData()
+        val nåværendeIverksetting = iverksettingTmp.copy(
+            vedtak = iverksettingTmp.vedtak.copy(vedtakstype = VedtakType.RAMMEVEDTAK),
+            fagsak = forrigeIverksetting.fagsak,
+            forrigeIverksetting = forrigeIverksetting.copy(
+                vedtak = forrigeIverksetting.vedtak.copy(
+                    tilkjentYtelse = forrigeIverksetting.vedtak.tilkjentYtelse?.copy(
+                        andelerTilkjentYtelse = emptyList(),
+                    ),
+                ),
+            ),
+        )
+        every { iverksettResultatServiceMock.hentIverksettResultat(forrigeIverksetting.behandling.behandlingId) } returns
+                IverksettResultat(
+                    behandlingId = forrigeIverksetting.behandling.behandlingId,
+                    tilkjentYtelseForUtbetaling = forrigeIverksetting.vedtak.tilkjentYtelse,
+                )
+
+        val beslutterRolle = "0000-GA-Beslutter"
+        System.setProperty("BESLUTTER_ROLLE", beslutterRolle)
+        val token = PlainJWT(JWTClaimsSet.Builder().claim("roles", arrayOf(beslutterRolle)).build())
+        assertDoesNotThrow {
+            iverksettingValidatorService.validerAtRammevedtakSendesAvBeslutter(nåværendeIverksetting, token.serialize())
         }
     }
 
