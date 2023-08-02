@@ -70,9 +70,7 @@ abstract class ServerTest {
         return "http://localhost:" + getPort() + uri
     }
 
-    protected val lokalTestToken: String
-        get() {
-            @Suppress("SpringJavaInjectionPointsAutowiringInspection")
-            return TokenUtil.onBehalfOfToken(mockOAuth2Server, saksbehandler = "julenissen")
-        }
+    protected fun lokalTestToken(saksbehandler: String = "julenissen", roles: List<String> = emptyList()): String {
+        return TokenUtil.onBehalfOfToken(mockOAuth2Server, saksbehandler, roles)
+    }
 }

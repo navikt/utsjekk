@@ -16,10 +16,8 @@ import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene.BeregnetUtbetalingsoppdrag
 import no.nav.dagpenger.iverksett.lagIverksettData
 import no.nav.dagpenger.iverksett.mai
-import no.nav.dagpenger.iverksett.util.TokenUtil
 import no.nav.dagpenger.kontrakter.iverksett.VedtakType
 import no.nav.dagpenger.kontrakter.oppdrag.OppdragStatus
-import no.nav.security.token.support.core.jwt.JwtToken
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
@@ -147,10 +145,10 @@ class IverksettingValidatorServiceTest {
             ),
         )
         every { iverksettResultatServiceMock.hentIverksettResultat(forrigeIverksetting.behandling.behandlingId) } returns
-                IverksettResultat(
-                    behandlingId = forrigeIverksetting.behandling.behandlingId,
-                    tilkjentYtelseForUtbetaling = forrigeIverksetting.vedtak.tilkjentYtelse,
-                )
+            IverksettResultat(
+                behandlingId = forrigeIverksetting.behandling.behandlingId,
+                tilkjentYtelseForUtbetaling = forrigeIverksetting.vedtak.tilkjentYtelse,
+            )
 
         assertApiFeil(HttpStatus.BAD_REQUEST) {
             iverksettingValidatorService.validerAtRammevedtakSendesAvBeslutter(nåværendeIverksetting, "")

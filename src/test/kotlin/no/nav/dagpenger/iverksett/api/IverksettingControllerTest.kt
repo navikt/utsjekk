@@ -32,7 +32,9 @@ class IverksettingControllerTest : ServerTest() {
 
     @BeforeEach
     fun setUp() {
-        headers.setBearerAuth(lokalTestToken)
+        val BESLUTTER_ROLLE = "0000-GA-Beslutter"
+        System.setProperty("BESLUTTER_ROLLE", BESLUTTER_ROLLE)
+        headers.setBearerAuth(lokalTestToken(roles = listOf(BESLUTTER_ROLLE)))
         headers.set(HttpHeaders.CONTENT_TYPE, MediaType.MULTIPART_FORM_DATA_VALUE)
     }
 
