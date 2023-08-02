@@ -1,20 +1,19 @@
 # language: no
 # encoding: UTF-8
 
-Egenskap: Korrigere beløp tilbake i tid
+Egenskap: Endre og forlenge eksisterende periode
 
-  Scenario: Beløp endres tilbake i tid. Da skal vi ikke sende opphør, kun endret periode med nytt beløp som vil skrive
-  over den eksisterende oppdragslinjen
+  Scenario: Endrer beløp og forlenger periode i revurdering
 
     Gitt følgende tilkjente ytelser
       | BehandlingId | Fra dato   | Til dato   | Beløp |
       | 1            | 02.06.2023 | 15.08.2023 | 800   |
-      | 2            | 02.06.2023 | 15.07.2023 | 800   |
-      | 2            | 16.07.2023 | 15.08.2023 | 400   |
+      | 2            | 02.06.2023 | 02.07.2023 | 800   |
+      | 2            | 03.07.2023 | 04.09.2023 | 400   |
 
     Når beregner utbetalingsoppdrag
 
     Så forvent følgende utbetalingsoppdrag
       | BehandlingId | Fra dato   | Til dato   | Opphørsdato | Beløp | Kode endring | Er endring | Periode id | Forrige periode id |
       | 1            | 02.06.2023 | 15.08.2023 |             | 800   | NY           | Nei        | 0          |                    |
-      | 2            | 16.07.2023 | 15.08.2023 |             | 400   | ENDR         | Nei        | 1          | 0                  |
+      | 2            | 03.07.2023 | 04.09.2023 |             | 400   | ENDR         | Nei        | 1          | 0                  |

@@ -29,18 +29,6 @@ fun IverksettDagpenger.tilSimulering() = Simulering(
     forrigeBehandlingId = this.behandling.forrigeBehandlingId,
 )
 
-fun Simulering.tilTilkjentYtelseMedMetadata(): TilkjentYtelseMedMetaData =
-    TilkjentYtelseMedMetaData(
-        tilkjentYtelse = this.andelerTilkjentYtelse.tilTilkjentYtelse(),
-        saksbehandlerId = this.saksbehandlerId,
-        stønadstype = this.stønadstype,
-        sakId = this.sakId,
-        behandlingId = this.behandlingId,
-        personIdent = this.personIdent,
-        vedtaksdato = this.vedtaksdato,
-
-    )
-
 fun Simulering.tilBehandlingsinformasjon(): Behandlingsinformasjon =
     Behandlingsinformasjon(
         saksbehandlerId = this.saksbehandlerId,
@@ -50,8 +38,3 @@ fun Simulering.tilBehandlingsinformasjon(): Behandlingsinformasjon =
         vedtaksdato = this.vedtaksdato,
         opphørFra = null,
     )
-
-fun Iterable<AndelTilkjentYtelse>.tilTilkjentYtelse() = TilkjentYtelse(
-    andelerTilkjentYtelse = this.toList(),
-    startdato = this.minOfOrNull { it.periode.fom } ?: LocalDate.now(),
-)

@@ -4,11 +4,10 @@ import io.mockk.clearMocks
 import io.mockk.verify
 import no.nav.dagpenger.iverksett.ServerTest
 import no.nav.dagpenger.iverksett.api.domene.tilAndelData
-import no.nav.dagpenger.iverksett.api.domene.tilBehandlingsinformasjon
 import no.nav.dagpenger.iverksett.api.tilstand.IverksettResultatService
 import no.nav.dagpenger.iverksett.beriketSimuleringsresultat
+import no.nav.dagpenger.iverksett.infrastruktur.util.opprettBehandlingsinformasjon
 import no.nav.dagpenger.iverksett.infrastruktur.util.opprettTilkjentYtelse
-import no.nav.dagpenger.iverksett.infrastruktur.util.opprettTilkjentYtelseMedMetadata
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.OppdragClient
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.lagAndelTilkjentYtelse
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.lagUtbetalingDto
@@ -135,14 +134,14 @@ class SimuleringControllerTest : ServerTest() {
     private fun lagFørstegangsbehandlingUtenBeløp(behandlingId: UUID) {
         val andelTilkjentYtelse =
             lagAndelTilkjentYtelse(0, fraOgMed = LocalDate.of(2021, 1, 1), tilOgMed = LocalDate.of(2021, 1, 31))
-        val tilkjentYtelseMedMetadata = opprettTilkjentYtelseMedMetadata(behandlingId, opprettTilkjentYtelse(behandlingId, andeler = listOf(andelTilkjentYtelse)))
+        val tilkjentYtelse = opprettTilkjentYtelse(behandlingId, andeler = listOf(andelTilkjentYtelse))
         val beregnetUtbetalingsoppdrag = Utbetalingsgenerator.lagUtbetalingsoppdrag(
-            behandlingsinformasjon = tilkjentYtelseMedMetadata.tilBehandlingsinformasjon(),
-            nyeAndeler = tilkjentYtelseMedMetadata.tilkjentYtelse.andelerTilkjentYtelse.map { it.tilAndelData() },
+            behandlingsinformasjon = opprettBehandlingsinformasjon(behandlingId),
+            nyeAndeler = tilkjentYtelse.andelerTilkjentYtelse.map { it.tilAndelData() },
             forrigeAndeler = emptyList(),
             sisteAndelPerKjede = emptyMap(),
         )
-        val tilkjentYtelseMedUtbetalingsoppdrag = tilkjentYtelseMedMetadata.tilkjentYtelse.copy(
+        val tilkjentYtelseMedUtbetalingsoppdrag = tilkjentYtelse.copy(
             utbetalingsoppdrag = beregnetUtbetalingsoppdrag.utbetalingsoppdrag,
         )
 

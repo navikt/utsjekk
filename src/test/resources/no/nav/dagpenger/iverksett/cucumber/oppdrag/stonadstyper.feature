@@ -13,7 +13,7 @@ Egenskap: Ulike stønadstyper på andelene
 
     Når beregner utbetalingsoppdrag
 
-    Så forvent følgende utbetalingsoppdrag 2
+    Så forvent følgende utbetalingsoppdrag
       | BehandlingId | Fra dato   | Til dato   | Opphørsdato | Beløp | Ytelse                          | Kode endring | Er endring | Periode id | Forrige periode id |
       | 1            | 01.03.2021 | 01.03.2021 |             | 700   | DAGPENGER_ARBEIDSSOKER_ORDINAER | NY           | Nei        | 0          |                    |
       | 1            | 01.03.2021 | 01.03.2021 |             | 800   | DAGPENGER_PERMITTERING_ORDINAER | NY           | Nei        | 1          |                    |
@@ -30,7 +30,7 @@ Egenskap: Ulike stønadstyper på andelene
 
     Når beregner utbetalingsoppdrag
 
-    Så forvent følgende utbetalingsoppdrag 2
+    Så forvent følgende utbetalingsoppdrag
       | BehandlingId | Fra dato   | Til dato   | Opphørsdato | Beløp | Ytelse                          | Kode endring | Er endring | Periode id | Forrige periode id |
       | 1            | 01.03.2021 | 01.05.2021 |             | 700   | DAGPENGER_ARBEIDSSOKER_ORDINAER | NY           | Nei        | 0          |                    |
       | 1            | 01.03.2021 | 01.05.2021 |             | 800   | DAGPENGER_PERMITTERING_ORDINAER | NY           | Nei        | 1          |                    |
@@ -49,7 +49,7 @@ Egenskap: Ulike stønadstyper på andelene
 
     Når beregner utbetalingsoppdrag
 
-    Så forvent følgende utbetalingsoppdrag 2
+    Så forvent følgende utbetalingsoppdrag
       | BehandlingId | Fra dato   | Til dato   | Opphørsdato | Beløp | Ytelse                          | Kode endring | Er endring | Periode id | Forrige periode id |
       | 1            | 01.03.2021 | 01.03.2021 |             | 100   | DAGPENGER_ARBEIDSSOKER_ORDINAER | NY           | Nei        | 0          |                    |
       | 1            | 01.03.2021 | 01.03.2021 |             | 200   | DAGPENGER_PERMITTERING_ORDINAER | NY           | Nei        | 1          |                    |
