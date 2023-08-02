@@ -38,7 +38,9 @@ class IverksettingController(
     @ApiResponse(responseCode = "202", description = "iverksetting er mottatt")
     @ApiResponse(responseCode = "400", description = "ugyldig iverksetting")
     fun iverksettUtenBrev(
-        @Parameter(required = false, hidden = true) @RequestHeader("Authorization") bearerToken: String,
+        @Parameter(required = false, hidden = true)
+        @RequestHeader("Authorization")
+        bearerToken: String,
         @RequestBody iverksettDto: IverksettDto,
     ): ResponseEntity<Void> {
         iverksettDto.valider()
@@ -54,7 +56,9 @@ class IverksettingController(
     @ApiResponse(responseCode = "202", description = "iverksetting er mottatt")
     @ApiResponse(responseCode = "400", description = "ugyldig iverksetting")
     fun iverksett(
-        @Parameter(required = false, hidden = true) @RequestHeader("Authorization") bearerToken: String,
+        @Parameter(required = false, hidden = true)
+        @RequestHeader("Authorization")
+        bearerToken: String,
         @RequestPart("data") iverksettDto: IverksettDto,
         @RequestPart("fil", required = false) fil: MultipartFile?,
     ): ResponseEntity<Void> {
