@@ -22,7 +22,11 @@ object TokenUtil {
         ).serialize()
     }
 
-    fun onBehalfOfToken(mockOAuth2Server: MockOAuth2Server, saksbehandler: String): String {
+    fun onBehalfOfToken(
+        mockOAuth2Server: MockOAuth2Server,
+        saksbehandler: String,
+        roles: List<String> = emptyList()
+    ): String {
         val thisId = UUID.randomUUID().toString()
         val clientId = UUID.randomUUID().toString()
 
@@ -31,6 +35,7 @@ object TokenUtil {
             "azp" to clientId,
             "name" to saksbehandler,
             "NAVident" to saksbehandler,
+            "roles" to roles
         )
 
         return mockOAuth2Server.issueToken(
