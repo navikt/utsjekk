@@ -9,6 +9,8 @@ import no.nav.dagpenger.iverksett.infrastruktur.transformer.toDomain
 import no.nav.dagpenger.kontrakter.iverksett.IverksettDto
 import no.nav.dagpenger.kontrakter.iverksett.IverksettStatus
 import no.nav.security.token.support.core.api.ProtectedWithClaims
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
@@ -33,6 +35,8 @@ class IverksettingController(
     private val iverksettingService: IverksettingService,
     private val validatorService: IverksettingValidatorService,
 ) {
+    val logger: Logger = LoggerFactory.getLogger(this::class.java)
+
     @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE])
     @Tag(name = "Iverksetting")
     @ApiResponse(responseCode = "202", description = "iverksetting er mottatt")
@@ -43,6 +47,7 @@ class IverksettingController(
         bearerToken: String,
         @RequestBody iverksettDto: IverksettDto,
     ): ResponseEntity<Void> {
+        logger.info(bearerToken)
         iverksettDto.valider()
         val iverksett = iverksettDto.toDomain()
         validatorService.valider(iverksett, bearerToken)
@@ -62,6 +67,7 @@ class IverksettingController(
         @RequestPart("data") iverksettDto: IverksettDto,
         @RequestPart("fil", required = false) fil: MultipartFile?,
     ): ResponseEntity<Void> {
+        logger.info(bearerToken)
         val brev = fil?.let { Brev(it.bytes) }
         iverksettDto.valider()
         val iverksett = iverksettDto.toDomain()
