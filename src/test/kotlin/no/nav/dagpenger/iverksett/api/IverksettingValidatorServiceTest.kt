@@ -139,13 +139,7 @@ class IverksettingValidatorServiceTest {
         val nåværendeIverksetting = iverksettingTmp.copy(
             vedtak = iverksettingTmp.vedtak.copy(vedtakstype = VedtakType.RAMMEVEDTAK),
             fagsak = forrigeIverksetting.fagsak,
-            forrigeIverksetting = forrigeIverksetting.copy(
-                vedtak = forrigeIverksetting.vedtak.copy(
-                    tilkjentYtelse = forrigeIverksetting.vedtak.tilkjentYtelse?.copy(
-                        andelerTilkjentYtelse = emptyList(),
-                    ),
-                ),
-            ),
+            forrigeIverksetting = null,
         )
         every { iverksettResultatServiceMock.hentIverksettResultat(forrigeIverksetting.behandling.behandlingId) } returns
             IverksettResultat(
@@ -165,13 +159,7 @@ class IverksettingValidatorServiceTest {
         val nåværendeIverksetting = iverksettingTmp.copy(
             vedtak = iverksettingTmp.vedtak.copy(vedtakstype = VedtakType.RAMMEVEDTAK),
             fagsak = forrigeIverksetting.fagsak,
-            forrigeIverksetting = forrigeIverksetting.copy(
-                vedtak = forrigeIverksetting.vedtak.copy(
-                    tilkjentYtelse = forrigeIverksetting.vedtak.tilkjentYtelse?.copy(
-                        andelerTilkjentYtelse = emptyList(),
-                    ),
-                ),
-            ),
+            forrigeIverksetting = null,
         )
         every { iverksettResultatServiceMock.hentIverksettResultat(forrigeIverksetting.behandling.behandlingId) } returns
                 IverksettResultat(
@@ -184,6 +172,54 @@ class IverksettingValidatorServiceTest {
         val token = PlainJWT(JWTClaimsSet.Builder().claim("groups", arrayOf(beslutterGruppe)).build())
         assertDoesNotThrow {
             iverksettingValidatorService.validerAtRammevedtakSendesAvBeslutter(nåværendeIverksetting, token.serialize())
+        }
+    }
+
+    @Test
+    fun `skal få BAD_REQUEST når utbetaingsvedtak sendes uten rammevedtak`() {
+        val forrigeIverksetting = lagIverksettData()
+        val iverksettingTmp = lagIverksettData()
+        val nåværendeIverksetting = iverksettingTmp.copy(
+            vedtak = iverksettingTmp.vedtak.copy(vedtakstype = VedtakType.UTBETALINGSVEDTAK),
+            fagsak = forrigeIverksetting.fagsak,
+            forrigeIverksetting = forrigeIverksetting.copy(
+                vedtak = forrigeIverksetting.vedtak.copy(
+                    vedtakstype = VedtakType.UTBETALINGSVEDTAK
+                ),
+            ),
+        )
+        every { iverksettResultatServiceMock.hentIverksettResultat(forrigeIverksetting.behandling.behandlingId) } returns
+                IverksettResultat(
+                    behandlingId = forrigeIverksetting.behandling.behandlingId,
+                    tilkjentYtelseForUtbetaling = forrigeIverksetting.vedtak.tilkjentYtelse,
+                )
+
+        assertApiFeil(HttpStatus.CONFLICT) {
+            iverksettingValidatorService.validerAtDetFinnesIverksattRammevedtak(nåværendeIverksetting)
+        }
+    }
+
+    @Test
+    fun `skal få OK når utbetaingsvedtak sendes med rammevedtak`() {
+        val forrigeIverksetting = lagIverksettData()
+        val iverksettingTmp = lagIverksettData()
+        val nåværendeIverksetting = iverksettingTmp.copy(
+            vedtak = iverksettingTmp.vedtak.copy(vedtakstype = VedtakType.UTBETALINGSVEDTAK),
+            fagsak = forrigeIverksetting.fagsak,
+            forrigeIverksetting = forrigeIverksetting.copy(
+                vedtak = forrigeIverksetting.vedtak.copy(
+                    vedtakstype = VedtakType.RAMMEVEDTAK
+                ),
+            ),
+        )
+        every { iverksettResultatServiceMock.hentIverksettResultat(forrigeIverksetting.behandling.behandlingId) } returns
+                IverksettResultat(
+                    behandlingId = forrigeIverksetting.behandling.behandlingId,
+                    tilkjentYtelseForUtbetaling = forrigeIverksetting.vedtak.tilkjentYtelse,
+                )
+
+        assertDoesNotThrow {
+            iverksettingValidatorService.validerAtDetFinnesIverksattRammevedtak(nåværendeIverksetting)
         }
     }
 
