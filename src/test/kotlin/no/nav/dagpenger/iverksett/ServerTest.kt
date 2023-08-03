@@ -70,7 +70,7 @@ abstract class ServerTest {
         return "http://localhost:" + getPort() + uri
     }
 
-    protected fun lokalTestToken(saksbehandler: String = "julenissen", roles: List<String> = emptyList()): String {
-        return TokenUtil.onBehalfOfToken(mockOAuth2Server, saksbehandler, roles)
+    protected fun lokalTestToken(saksbehandler: String = "julenissen", grupper: List<String> = emptyList()): String {
+        return TokenUtil.onBehalfOfToken(mockOAuth2Server, saksbehandler, grupper)
     }
 }

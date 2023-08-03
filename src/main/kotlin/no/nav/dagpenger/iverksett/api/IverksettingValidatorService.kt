@@ -140,10 +140,10 @@ class IverksettingValidatorService(
 
     internal fun validerAtRammevedtakSendesAvBeslutter(iverksett: IverksettDagpenger, bearerToken: String) {
         if (iverksett.vedtak.vedtakstype == VedtakType.RAMMEVEDTAK) {
-            val tokenRoles = getTokenRoles(bearerToken)
-            val beslutterRole = getBeslutterRolle()
+            val tokenGrupper = hentTokenGrupper(bearerToken)
+            val beslutterGruppe = hentBeslutterGruppe()
 
-            if (beslutterRole.isNullOrBlank() || !tokenRoles.contains(beslutterRole)) {
+            if (beslutterGruppe.isNullOrBlank() || !tokenGrupper.contains(beslutterGruppe)) {
                 throw ApiFeil("Rammevedtak må sendes av en ansatt med beslutter-rolle", HttpStatus.BAD_REQUEST)
             }
         }
@@ -166,21 +166,21 @@ class IverksettingValidatorService(
         }
     }
 
-    private fun getTokenRoles(bearerToken: String): Array<String> {
-        var roles = emptyArray<String>()
+    private fun hentTokenGrupper(bearerToken: String): Array<String> {
+        var grupper = emptyArray<String>()
 
         try {
             val tokenString = bearerToken.replace("Bearer ", "")
             val jwt = JWTParser.parse(tokenString)
-            jwt.jwtClaimsSet.getStringArrayClaim("roles")?.let { roles = it }
+            jwt.jwtClaimsSet.getStringArrayClaim("groups")?.let { grupper = it }
         } catch (e: Exception) {
             logger.info(e.message)
         }
 
-        return roles
+        return grupper
     }
 
-    private fun getBeslutterRolle(): String? {
-        return System.getProperty("BESLUTTER_ROLLE", System.getenv("BESLUTTER_ROLLE"))
+    private fun hentBeslutterGruppe(): String? {
+        return System.getProperty("BESLUTTER_GRUPPE", System.getenv("BESLUTTER_GRUPPE"))
     }
 }

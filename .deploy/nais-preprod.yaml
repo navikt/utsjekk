@@ -35,7 +35,7 @@ spec:
   env:
     - name: SPRING_PROFILES_ACTIVE
       value: dev
-    - name: BESLUTTER_ROLLE
+    - name: BESLUTTER_GRUPPE
       value: "11b8475a-fb12-41aa-b1f6-8497c1b5385b"
   azure:
     application:

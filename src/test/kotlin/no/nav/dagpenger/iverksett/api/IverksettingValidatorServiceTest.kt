@@ -179,9 +179,9 @@ class IverksettingValidatorServiceTest {
                     tilkjentYtelseForUtbetaling = forrigeIverksetting.vedtak.tilkjentYtelse,
                 )
 
-        val beslutterRolle = "0000-GA-Beslutter"
-        System.setProperty("BESLUTTER_ROLLE", beslutterRolle)
-        val token = PlainJWT(JWTClaimsSet.Builder().claim("roles", arrayOf(beslutterRolle)).build())
+        val beslutterGruppe = "0000-GA-Beslutter"
+        System.setProperty("BESLUTTER_GRUPPE", beslutterGruppe)
+        val token = PlainJWT(JWTClaimsSet.Builder().claim("groups", arrayOf(beslutterGruppe)).build())
         assertDoesNotThrow {
             iverksettingValidatorService.validerAtRammevedtakSendesAvBeslutter(nåværendeIverksetting, token.serialize())
         }
