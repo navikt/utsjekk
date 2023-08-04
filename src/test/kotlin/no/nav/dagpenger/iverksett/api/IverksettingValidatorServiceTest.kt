@@ -1,7 +1,5 @@
 package no.nav.dagpenger.iverksett.api
 
-import com.nimbusds.jwt.JWTClaimsSet
-import com.nimbusds.jwt.PlainJWT
 import io.mockk.every
 import io.mockk.mockk
 import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
@@ -18,11 +16,9 @@ import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene.BeregnetUtbetalingsoppdrag
 import no.nav.dagpenger.iverksett.lagIverksettData
 import no.nav.dagpenger.iverksett.mai
-import no.nav.dagpenger.kontrakter.iverksett.VedtakType
 import no.nav.dagpenger.kontrakter.oppdrag.OppdragStatus
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertDoesNotThrow
 import org.springframework.http.HttpStatus
 
 class IverksettingValidatorServiceTest {
@@ -129,97 +125,6 @@ class IverksettingValidatorServiceTest {
 
         assertApiFeil(HttpStatus.BAD_REQUEST) {
             iverksettingValidatorService.validerKonsistensMellomVedtak(nåværendeIverksetting)
-        }
-    }
-
-    @Test
-    fun `skal få BAD_REQUEST når rammevedtak sendes av ikke beslutter`() {
-        val forrigeIverksetting = lagIverksettData()
-        val iverksettingTmp = lagIverksettData()
-        val nåværendeIverksetting = iverksettingTmp.copy(
-            vedtak = iverksettingTmp.vedtak.copy(vedtakstype = VedtakType.RAMMEVEDTAK),
-            fagsak = forrigeIverksetting.fagsak,
-            forrigeIverksetting = null,
-        )
-        every { iverksettResultatServiceMock.hentIverksettResultat(forrigeIverksetting.behandling.behandlingId) } returns
-            IverksettResultat(
-                behandlingId = forrigeIverksetting.behandling.behandlingId,
-                tilkjentYtelseForUtbetaling = forrigeIverksetting.vedtak.tilkjentYtelse,
-            )
-
-        assertApiFeil(HttpStatus.BAD_REQUEST) {
-            iverksettingValidatorService.validerAtRammevedtakSendesAvBeslutter(nåværendeIverksetting, "")
-        }
-    }
-
-    @Test
-    fun `skal få OK når rammevedtak sendes av beslutter`() {
-        val forrigeIverksetting = lagIverksettData()
-        val iverksettingTmp = lagIverksettData()
-        val nåværendeIverksetting = iverksettingTmp.copy(
-            vedtak = iverksettingTmp.vedtak.copy(vedtakstype = VedtakType.RAMMEVEDTAK),
-            fagsak = forrigeIverksetting.fagsak,
-            forrigeIverksetting = null,
-        )
-        every { iverksettResultatServiceMock.hentIverksettResultat(forrigeIverksetting.behandling.behandlingId) } returns
-                IverksettResultat(
-                    behandlingId = forrigeIverksetting.behandling.behandlingId,
-                    tilkjentYtelseForUtbetaling = forrigeIverksetting.vedtak.tilkjentYtelse,
-                )
-
-        val beslutterGruppe = "0000-GA-Beslutter"
-        System.setProperty("BESLUTTER_GRUPPE", beslutterGruppe)
-        val token = PlainJWT(JWTClaimsSet.Builder().claim("groups", arrayOf(beslutterGruppe)).build())
-        assertDoesNotThrow {
-            iverksettingValidatorService.validerAtRammevedtakSendesAvBeslutter(nåværendeIverksetting, token.serialize())
-        }
-    }
-
-    @Test
-    fun `skal få BAD_REQUEST når utbetaingsvedtak sendes uten rammevedtak`() {
-        val forrigeIverksetting = lagIverksettData()
-        val iverksettingTmp = lagIverksettData()
-        val nåværendeIverksetting = iverksettingTmp.copy(
-            vedtak = iverksettingTmp.vedtak.copy(vedtakstype = VedtakType.UTBETALINGSVEDTAK),
-            fagsak = forrigeIverksetting.fagsak,
-            forrigeIverksetting = forrigeIverksetting.copy(
-                vedtak = forrigeIverksetting.vedtak.copy(
-                    vedtakstype = VedtakType.UTBETALINGSVEDTAK
-                ),
-            ),
-        )
-        every { iverksettResultatServiceMock.hentIverksettResultat(forrigeIverksetting.behandling.behandlingId) } returns
-                IverksettResultat(
-                    behandlingId = forrigeIverksetting.behandling.behandlingId,
-                    tilkjentYtelseForUtbetaling = forrigeIverksetting.vedtak.tilkjentYtelse,
-                )
-
-        assertApiFeil(HttpStatus.CONFLICT) {
-            iverksettingValidatorService.validerAtDetFinnesIverksattRammevedtak(nåværendeIverksetting)
-        }
-    }
-
-    @Test
-    fun `skal få OK når utbetaingsvedtak sendes med rammevedtak`() {
-        val forrigeIverksetting = lagIverksettData()
-        val iverksettingTmp = lagIverksettData()
-        val nåværendeIverksetting = iverksettingTmp.copy(
-            vedtak = iverksettingTmp.vedtak.copy(vedtakstype = VedtakType.UTBETALINGSVEDTAK),
-            fagsak = forrigeIverksetting.fagsak,
-            forrigeIverksetting = forrigeIverksetting.copy(
-                vedtak = forrigeIverksetting.vedtak.copy(
-                    vedtakstype = VedtakType.RAMMEVEDTAK
-                ),
-            ),
-        )
-        every { iverksettResultatServiceMock.hentIverksettResultat(forrigeIverksetting.behandling.behandlingId) } returns
-                IverksettResultat(
-                    behandlingId = forrigeIverksetting.behandling.behandlingId,
-                    tilkjentYtelseForUtbetaling = forrigeIverksetting.vedtak.tilkjentYtelse,
-                )
-
-        assertDoesNotThrow {
-            iverksettingValidatorService.validerAtDetFinnesIverksattRammevedtak(nåværendeIverksetting)
         }
     }
 

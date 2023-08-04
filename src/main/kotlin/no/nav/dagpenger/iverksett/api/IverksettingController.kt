@@ -32,6 +32,7 @@ import java.util.UUID
 class IverksettingController(
     private val iverksettingService: IverksettingService,
     private val validatorService: IverksettingValidatorService,
+    private val tilgangskontrollService: IverksettingTilgangskontrollService,
 ) {
     @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE])
     @Tag(name = "Iverksetting")
@@ -43,11 +44,15 @@ class IverksettingController(
         bearerToken: String,
         @RequestBody iverksettDto: IverksettDto,
     ): ResponseEntity<Void> {
+
         iverksettDto.valider()
         val iverksett = iverksettDto.toDomain()
-        validatorService.valider(iverksett, bearerToken)
+
+        tilgangskontrollService.valider(iverksett, bearerToken)
+        validatorService.valider(iverksett)
         validatorService.validerUtenBrev(iverksett)
         iverksettingService.startIverksetting(iverksett, null)
+
         return ResponseEntity.accepted().build()
     }
 
@@ -65,9 +70,12 @@ class IverksettingController(
         val brev = fil?.let { Brev(it.bytes) }
         iverksettDto.valider()
         val iverksett = iverksettDto.toDomain()
-        validatorService.valider(iverksett, bearerToken)
+
+        tilgangskontrollService.valider(iverksett, bearerToken)
+        validatorService.valider(iverksett)
         validatorService.validerBrev(iverksett, brev)
         iverksettingService.startIverksetting(iverksett, brev)
+
         return ResponseEntity.accepted().build()
     }
 
