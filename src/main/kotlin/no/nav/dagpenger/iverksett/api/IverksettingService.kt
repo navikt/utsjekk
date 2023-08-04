@@ -16,6 +16,7 @@ import no.nav.dagpenger.iverksett.konsumenter.økonomi.grensesnitt.tilTask
 import no.nav.dagpenger.kontrakter.felles.StønadType
 import no.nav.dagpenger.kontrakter.felles.tilFagsystem
 import no.nav.dagpenger.kontrakter.iverksett.IverksettStatus
+import no.nav.dagpenger.kontrakter.iverksett.VedtakType
 import no.nav.dagpenger.kontrakter.iverksett.Vedtaksresultat
 import no.nav.dagpenger.kontrakter.oppdrag.OppdragId
 import no.nav.dagpenger.kontrakter.oppdrag.OppdragStatus
@@ -81,6 +82,18 @@ class IverksettingService(
                     "og forrige behandlingId $it",
             )
         }
+
+    fun hentRammevedtak(iverksettDagpenger: IverksettDagpenger): Iverksett {
+        val fagsakId = iverksettDagpenger.fagsak.fagsakId
+        val rammevedtakList = iverksettingRepository.findByFagsakId(fagsakId)
+            .filter { it.data.vedtak.vedtakstype == VedtakType.RAMMEVEDTAK }
+
+        if (rammevedtakList.size != 1) {
+            throw IllegalStateException("Fant ikke rammevedtak med fagsakId $fagsakId")
+        }
+
+        return rammevedtakList[0]
+    }
 
     private fun førsteHovedflytTask(iverksett: IverksettDagpenger) = when {
         erIverksettingUtenVedtaksperioder(iverksett) -> JournalførVedtaksbrevTask.TYPE
