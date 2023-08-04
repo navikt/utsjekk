@@ -9,7 +9,9 @@ import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 
 @Service
-class IverksettingTilgangskontrollService {
+class IverksettingTilgangskontrollService(
+    private val iverksettingService: IverksettingService,
+) {
     private val logger = LoggerFactory.getLogger(this::class.java)
 
     fun valider(iverksett: IverksettDagpenger, bearerToken: String) {
@@ -32,14 +34,9 @@ class IverksettingTilgangskontrollService {
         // Utbetalingsvedtak skal avvises dersom stønadsmottaker ikke har iverksatt rammevedtak av beslutter
         // Vi kan bare sjekke at det finnes rammevedtak fordi alle rammevedtak må sendes av beslutter
         if (iverksett.vedtak.vedtakstype == VedtakType.UTBETALINGSVEDTAK) {
-            var iverksetting = iverksett
-            var forrigeIverksetting = iverksett.forrigeIverksetting
-            while (forrigeIverksetting != null) {
-                iverksetting = forrigeIverksetting
-                forrigeIverksetting = forrigeIverksetting.forrigeIverksetting
-            }
-
-            if (iverksetting.vedtak.vedtakstype != VedtakType.RAMMEVEDTAK) {
+            try {
+                iverksettingService.hentRammevedtak(iverksett)
+            } catch (e: IllegalStateException) {
                 throw ApiFeil("Stønadsmottaker har ikke iverksatt rammevedtak", HttpStatus.CONFLICT)
             }
         }
