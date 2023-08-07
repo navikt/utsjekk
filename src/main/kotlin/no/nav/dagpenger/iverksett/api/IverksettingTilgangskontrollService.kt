@@ -20,8 +20,8 @@ class IverksettingTilgangskontrollService(
     fun valider(iverksett: IverksettDto, bearerToken: String) {
         if (featureToggleService.isEnabled(FeatureToggleConfig.TILGANGSKONTROLL, false)) {
             validerAtRammevedtakSendesAvBeslutter(iverksett, bearerToken)
-            validerAtDetFinnesIverksattRammevedtak(iverksett)
         }
+        validerAtDetFinnesIverksattRammevedtak(iverksett)
     }
 
     internal fun validerAtRammevedtakSendesAvBeslutter(iverksett: IverksettDto, bearerToken: String) {
