@@ -36,7 +36,7 @@ class IverksettingTilgangskontrollService(
         if (iverksett.vedtak.vedtakstype == VedtakType.UTBETALINGSVEDTAK) {
             try {
                 iverksettingService.hentRammevedtak(iverksett)
-            } catch (e: IllegalStateException) {
+            } catch (e: NoSuchElementException) {
                 throw ApiFeil("Stønadsmottaker har ikke iverksatt rammevedtak", HttpStatus.CONFLICT)
             }
         }

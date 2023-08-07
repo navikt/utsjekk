@@ -90,7 +90,7 @@ class IverksettingService(
             .filter { it.data.vedtak.vedtakstype == VedtakType.RAMMEVEDTAK }
 
         if (rammevedtakList.size != 1) {
-            throw IllegalStateException("Fant ikke rammevedtak med fagsakId $fagsakId")
+            throw NoSuchElementException("Fant ikke rammevedtak med fagsakId $fagsakId")
         }
 
         return rammevedtakList[0]
