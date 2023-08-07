@@ -63,7 +63,7 @@ class IverksettingTilgangskontrollServiceTest {
         assertDoesNotThrow {
             iverksettingTilgangskontrollService.validerAtRammevedtakSendesAvBeslutter(
                 nåværendeIverksetting,
-                token.serialize()
+                token.serialize(),
             )
         }
     }
@@ -77,7 +77,7 @@ class IverksettingTilgangskontrollServiceTest {
             fagsak = forrigeIverksetting.fagsak,
             forrigeIverksetting = forrigeIverksetting.copy(
                 vedtak = forrigeIverksetting.vedtak.copy(
-                    vedtakstype = VedtakType.UTBETALINGSVEDTAK
+                    vedtakstype = VedtakType.UTBETALINGSVEDTAK,
                 ),
             ),
         )
@@ -94,7 +94,7 @@ class IverksettingTilgangskontrollServiceTest {
         val iverksettingTmp = lagIverksettData()
         val forrigeIverksetting = iverksettingTmp.copy(
             vedtak = iverksettingTmp.vedtak.copy(
-                vedtakstype = VedtakType.RAMMEVEDTAK
+                vedtakstype = VedtakType.RAMMEVEDTAK,
             ),
         )
         val nåværendeIverksetting = iverksettingTmp.copy(

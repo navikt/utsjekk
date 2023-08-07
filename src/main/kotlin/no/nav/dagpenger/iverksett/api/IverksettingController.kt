@@ -44,7 +44,6 @@ class IverksettingController(
         bearerToken: String,
         @RequestBody iverksettDto: IverksettDto,
     ): ResponseEntity<Void> {
-
         iverksettDto.valider()
         val iverksett = iverksettDto.toDomain()
 
