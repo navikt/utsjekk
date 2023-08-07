@@ -44,10 +44,11 @@ class IverksettingController(
         bearerToken: String,
         @RequestBody iverksettDto: IverksettDto,
     ): ResponseEntity<Void> {
+        tilgangskontrollService.valider(iverksettDto, bearerToken)
+
         iverksettDto.valider()
         val iverksett = iverksettDto.toDomain()
 
-        tilgangskontrollService.valider(iverksett, bearerToken)
         validatorService.valider(iverksett)
         validatorService.validerUtenBrev(iverksett)
         iverksettingService.startIverksetting(iverksett, null)
@@ -66,11 +67,12 @@ class IverksettingController(
         @RequestPart("data") iverksettDto: IverksettDto,
         @RequestPart("fil", required = false) fil: MultipartFile?,
     ): ResponseEntity<Void> {
+        tilgangskontrollService.valider(iverksettDto, bearerToken)
+
         val brev = fil?.let { Brev(it.bytes) }
         iverksettDto.valider()
         val iverksett = iverksettDto.toDomain()
 
-        tilgangskontrollService.valider(iverksett, bearerToken)
         validatorService.valider(iverksett)
         validatorService.validerBrev(iverksett, brev)
         iverksettingService.startIverksetting(iverksett, brev)

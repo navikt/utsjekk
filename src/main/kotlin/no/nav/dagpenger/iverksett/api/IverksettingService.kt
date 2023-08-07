@@ -15,6 +15,7 @@ import no.nav.dagpenger.iverksett.konsumenter.økonomi.grensesnitt.Grensesnittav
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.grensesnitt.tilTask
 import no.nav.dagpenger.kontrakter.felles.StønadType
 import no.nav.dagpenger.kontrakter.felles.tilFagsystem
+import no.nav.dagpenger.kontrakter.iverksett.IverksettDto
 import no.nav.dagpenger.kontrakter.iverksett.IverksettStatus
 import no.nav.dagpenger.kontrakter.iverksett.VedtakType
 import no.nav.dagpenger.kontrakter.iverksett.Vedtaksresultat
@@ -83,8 +84,8 @@ class IverksettingService(
             )
         }
 
-    fun hentRammevedtak(iverksettDagpenger: IverksettDagpenger): Iverksett {
-        val fagsakId = iverksettDagpenger.fagsak.fagsakId
+    fun hentRammevedtak(iverksettDagpenger: IverksettDto): Iverksett {
+        val fagsakId = iverksettDagpenger.sakId
         val rammevedtakList = iverksettingRepository.findByFagsakId(fagsakId)
             .filter { it.data.vedtak.vedtakstype == VedtakType.RAMMEVEDTAK }
 

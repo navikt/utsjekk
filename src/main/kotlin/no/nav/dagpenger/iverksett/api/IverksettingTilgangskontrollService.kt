@@ -1,8 +1,8 @@
 package no.nav.dagpenger.iverksett.api
 
 import com.nimbusds.jwt.JWTParser
-import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
 import no.nav.dagpenger.iverksett.infrastruktur.advice.ApiFeil
+import no.nav.dagpenger.kontrakter.iverksett.IverksettDto
 import no.nav.dagpenger.kontrakter.iverksett.VedtakType
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
@@ -14,12 +14,12 @@ class IverksettingTilgangskontrollService(
 ) {
     private val logger = LoggerFactory.getLogger(this::class.java)
 
-    fun valider(iverksett: IverksettDagpenger, bearerToken: String) {
+    fun valider(iverksett: IverksettDto, bearerToken: String) {
         validerAtRammevedtakSendesAvBeslutter(iverksett, bearerToken)
         validerAtDetFinnesIverksattRammevedtak(iverksett)
     }
 
-    internal fun validerAtRammevedtakSendesAvBeslutter(iverksett: IverksettDagpenger, bearerToken: String) {
+    internal fun validerAtRammevedtakSendesAvBeslutter(iverksett: IverksettDto, bearerToken: String) {
         if (iverksett.vedtak.vedtakstype == VedtakType.RAMMEVEDTAK) {
             val tokenGrupper = hentTokenGrupper(bearerToken)
             val beslutterGruppe = hentBeslutterGruppe()
@@ -30,7 +30,7 @@ class IverksettingTilgangskontrollService(
         }
     }
 
-    internal fun validerAtDetFinnesIverksattRammevedtak(iverksett: IverksettDagpenger) {
+    internal fun validerAtDetFinnesIverksattRammevedtak(iverksett: IverksettDto) {
         // Utbetalingsvedtak skal avvises dersom stønadsmottaker ikke har iverksatt rammevedtak av beslutter
         // Vi kan bare sjekke at det finnes rammevedtak fordi alle rammevedtak må sendes av beslutter
         if (iverksett.vedtak.vedtakstype == VedtakType.UTBETALINGSVEDTAK) {

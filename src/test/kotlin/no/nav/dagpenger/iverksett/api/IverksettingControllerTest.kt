@@ -80,47 +80,43 @@ class IverksettingControllerTest : ServerTest() {
     }
 
     @Test
-    internal fun `Innvilget utbetalingsvedtak uten tilkjent ytelse gir 400-feil`() {
+    internal fun `Innvilget rammevedtak uten tilkjent ytelse gir 202 Accepted, men utbetalingsvedtak uten tilkjent ytelse gir 400-feil`() {
         val iverksettJson = opprettIverksettDto(behandlingId = behandlingId, sakId = sakId)
-        val iverksettJsonUtenTilkjentYtelse = iverksettJson.copy(
-            vedtak = iverksettJson.vedtak.copy(
-                vedtakstype = VedtakType.UTBETALINGSVEDTAK,
-                utbetalinger = emptyList(),
-            ),
-        )
-        val request = MultipartBuilder()
-            .withJson("data", iverksettJsonUtenTilkjentYtelse)
-            .withByteArray("fil", "1", byteArrayOf(12))
-            .build()
-
-        val respons: ResponseEntity<Ressurs<Nothing>> = restTemplate.exchange(
-            localhostUrl("/api/iverksetting"),
-            HttpMethod.POST,
-            HttpEntity(request, headers),
-        )
-        assertThat(respons.statusCode.value()).isEqualTo(400)
-    }
-
-    @Test
-    internal fun `Innvilget rammevedtak uten tilkjent ytelse gir 202 Accepted`() {
-        val iverksettJson = opprettIverksettDto(behandlingId = behandlingId, sakId = sakId)
-        val iverksettJsonUtenTilkjentYtelse = iverksettJson.copy(
+        val rammevedtak = iverksettJson.copy(
             vedtak = iverksettJson.vedtak.copy(
                 vedtakstype = VedtakType.RAMMEVEDTAK,
                 utbetalinger = emptyList(),
             ),
         )
-        val request = MultipartBuilder()
-            .withJson("data", iverksettJsonUtenTilkjentYtelse)
+        val requestRammevedtak = MultipartBuilder()
+            .withJson("data", rammevedtak)
             .withByteArray("fil", "1", byteArrayOf(12))
             .build()
 
-        val respons: ResponseEntity<Ressurs<Nothing>> = restTemplate.exchange(
+        val responsRammevedtak: ResponseEntity<Ressurs<Nothing>> = restTemplate.exchange(
             localhostUrl("/api/iverksetting"),
             HttpMethod.POST,
-            HttpEntity(request, headers),
+            HttpEntity(requestRammevedtak, headers),
         )
-        assertThat(respons.statusCode.value()).isEqualTo(202)
+        assertThat(responsRammevedtak.statusCode.value()).isEqualTo(202)
+
+        val utbetalingsvedtak = iverksettJson.copy(
+            vedtak = iverksettJson.vedtak.copy(
+                vedtakstype = VedtakType.UTBETALINGSVEDTAK,
+                utbetalinger = emptyList(),
+            ),
+        )
+        val requestUtbetalingsvedtak = MultipartBuilder()
+            .withJson("data", utbetalingsvedtak)
+            .withByteArray("fil", "1", byteArrayOf(12))
+            .build()
+
+        val responsUtbetalingsvedtak: ResponseEntity<Ressurs<Nothing>> = restTemplate.exchange(
+            localhostUrl("/api/iverksetting"),
+            HttpMethod.POST,
+            HttpEntity(requestUtbetalingsvedtak, headers),
+        )
+        assertThat(responsUtbetalingsvedtak.statusCode.value()).isEqualTo(400)
     }
 
     @Test

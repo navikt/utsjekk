@@ -5,6 +5,7 @@ import com.nimbusds.jwt.PlainJWT
 import io.mockk.every
 import io.mockk.mockk
 import no.nav.dagpenger.iverksett.api.tilstand.IverksettResultatService
+import no.nav.dagpenger.iverksett.infrastruktur.util.opprettIverksettDto
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.OppdragClient
 import no.nav.dagpenger.iverksett.lagIverksett
 import no.nav.dagpenger.iverksett.lagIverksettData
@@ -37,11 +38,10 @@ class IverksettingTilgangskontrollServiceTest {
     }
 
     @Test
-    fun `skal få BAD_REQUEST når rammevedtak sendes av ikke beslutter`() {
-        val iverksettingTmp = lagIverksettData()
-        val nåværendeIverksetting = iverksettingTmp.copy(
-            vedtak = iverksettingTmp.vedtak.copy(vedtakstype = VedtakType.RAMMEVEDTAK),
-            forrigeIverksetting = null,
+    fun `skal få FORBIDDEN når rammevedtak sendes av ikke beslutter`() {
+        val iverksettDtoTmp = opprettIverksettDto()
+        val nåværendeIverksetting = iverksettDtoTmp.copy(
+            vedtak = iverksettDtoTmp.vedtak.copy(vedtakstype = VedtakType.RAMMEVEDTAK),
         )
 
         assertApiFeil(HttpStatus.FORBIDDEN) {
@@ -51,10 +51,9 @@ class IverksettingTilgangskontrollServiceTest {
 
     @Test
     fun `skal få OK når rammevedtak sendes av beslutter`() {
-        val iverksettingTmp = lagIverksettData()
-        val nåværendeIverksetting = iverksettingTmp.copy(
-            vedtak = iverksettingTmp.vedtak.copy(vedtakstype = VedtakType.RAMMEVEDTAK),
-            forrigeIverksetting = null,
+        val iverksettDtoTmp = opprettIverksettDto()
+        val nåværendeIverksetting = iverksettDtoTmp.copy(
+            vedtak = iverksettDtoTmp.vedtak.copy(vedtakstype = VedtakType.RAMMEVEDTAK),
         )
 
         val beslutterGruppe = "0000-GA-Beslutter"
@@ -69,20 +68,13 @@ class IverksettingTilgangskontrollServiceTest {
     }
 
     @Test
-    fun `skal få BAD_REQUEST når utbetaingsvedtak sendes uten rammevedtak`() {
-        val forrigeIverksetting = lagIverksettData()
-        val iverksettingTmp = lagIverksettData()
-        val nåværendeIverksetting = iverksettingTmp.copy(
-            vedtak = iverksettingTmp.vedtak.copy(vedtakstype = VedtakType.UTBETALINGSVEDTAK),
-            fagsak = forrigeIverksetting.fagsak,
-            forrigeIverksetting = forrigeIverksetting.copy(
-                vedtak = forrigeIverksetting.vedtak.copy(
-                    vedtakstype = VedtakType.UTBETALINGSVEDTAK,
-                ),
-            ),
+    fun `skal få CONFLICT når utbetaingsvedtak sendes uten rammevedtak`() {
+        val iverksettDtoTmp = opprettIverksettDto()
+        val nåværendeIverksetting = iverksettDtoTmp.copy(
+            vedtak = iverksettDtoTmp.vedtak.copy(vedtakstype = VedtakType.UTBETALINGSVEDTAK),
         )
 
-        every { iverksettingRepository.findByFagsakId(nåværendeIverksetting.fagsak.fagsakId) } returns emptyList()
+        every { iverksettingRepository.findByFagsakId(nåværendeIverksetting.sakId) } returns emptyList()
 
         assertApiFeil(HttpStatus.CONFLICT) {
             iverksettingTilgangskontrollService.validerAtDetFinnesIverksattRammevedtak(nåværendeIverksetting)
@@ -97,14 +89,14 @@ class IverksettingTilgangskontrollServiceTest {
                 vedtakstype = VedtakType.RAMMEVEDTAK,
             ),
         )
-        val nåværendeIverksetting = iverksettingTmp.copy(
-            vedtak = iverksettingTmp.vedtak.copy(vedtakstype = VedtakType.UTBETALINGSVEDTAK),
-            fagsak = forrigeIverksetting.fagsak,
-            forrigeIverksetting = forrigeIverksetting,
+
+        val iverksettDtoTmp = opprettIverksettDto()
+        val nåværendeIverksetting = iverksettDtoTmp.copy(
+            vedtak = iverksettDtoTmp.vedtak.copy(vedtakstype = VedtakType.UTBETALINGSVEDTAK),
         )
 
         val iverksettListe = listOf(lagIverksett(forrigeIverksetting))
-        every { iverksettingRepository.findByFagsakId(nåværendeIverksetting.fagsak.fagsakId) } returns iverksettListe
+        every { iverksettingRepository.findByFagsakId(nåværendeIverksetting.sakId) } returns iverksettListe
 
         assertDoesNotThrow {
             iverksettingTilgangskontrollService.validerAtDetFinnesIverksattRammevedtak(nåværendeIverksetting)
