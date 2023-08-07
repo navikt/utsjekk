@@ -36,6 +36,8 @@
 #  env:
 #    - name: SPRING_PROFILES_ACTIVE
 #      value: prod
+#    - name: BESLUTTER_GRUPPE
+#      value: "70d54cad-53a3-4788-bbe3-565096f01da7"
 #  envFrom:
 #    - secret: dp-iverksett
 #  azure:
@@ -44,8 +46,8 @@
 #      claims:
 #        groups:
 #          - id: "87190cf3-b278-457d-8ab7-1a5c55a9edd7" # Group_87190cf3-b278-457d-8ab7-1a5c55a9edd7 gir tilgang til prosessering
-#          - id: "6406aba2-b930-41d3-a85b-dd13731bc974" # 0000-GA-Enslig-Forsorger-Saksbehandler
-#          - id: "5fcc0e1d-a4c2-49f0-93dc-27c9fea41e54" # 0000-GA-Enslig-Forsorger-Beslutter
+#          - id: "2e9c63d8-322e-4c1f-b500-a0abb812761c" # 0000-GA-Dagpenger-Saksbehandler
+#          - id: "70d54cad-53a3-4788-bbe3-565096f01da7" # 0000-GA-Dagpenger-Beslutter
 #  accessPolicy:
 #    inbound:
 #      rules:

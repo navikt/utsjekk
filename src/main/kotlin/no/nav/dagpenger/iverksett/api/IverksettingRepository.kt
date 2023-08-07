@@ -27,4 +27,7 @@ interface IverksettingRepository : RepositoryInterface<Iverksett, UUID>, InsertU
         @Param("personId") personId: String,
         @Param("vedtaksresultat") vedtaksresultat: String,
     ): List<Iverksett>
+
+    @Query("select behandling_id, data from iverksett where data -> 'fagsak' ->> 'fagsakId' = :fagsakId::text")
+    fun findByFagsakId(@Param("fagsakId") fagsakId: UUID): List<Iverksett>
 }

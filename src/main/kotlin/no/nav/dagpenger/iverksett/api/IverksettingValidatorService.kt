@@ -112,7 +112,7 @@ class IverksettingValidatorService(
 
             val forrigeErOkMotOppdrag = forrigeErUtenUtbetalingsoppdrag || forrigeErKvittertOk
             if (!forrigeErOkMotOppdrag) {
-                throw ApiFeil("Forrige iverksetting  er ikke ferdig håndtert mhp oppdrag", HttpStatus.CONFLICT)
+                throw ApiFeil("Forrige iverksetting er ikke ferdig håndtert mhp oppdrag", HttpStatus.CONFLICT)
             }
         }
     }

@@ -34,7 +34,7 @@ class IverksattStatusControllerTest : ServerTest() {
 
     @Test
     fun `skal svare med 404 når person ikke har noen vedtak`() {
-        headers.setBearerAuth(lokalTestToken)
+        headers.setBearerAuth(lokalTestToken())
 
         val response: ResponseEntity<VedtaksstatusDto> = restTemplate.exchange(
             localhostUrl("/api/vedtakstatus/12345678910"),
@@ -48,7 +48,9 @@ class IverksattStatusControllerTest : ServerTest() {
     @Test
     fun `skal svare med 200 når person har iverksatt vedtak`() {
         // Opprett testdata
-        headers.setBearerAuth(lokalTestToken)
+        val beslutterGruppe = "0000-GA-Beslutter"
+        System.setProperty("BESLUTTER_GRUPPE", beslutterGruppe)
+        headers.setBearerAuth(lokalTestToken(grupper = listOf(beslutterGruppe)))
         headers.set(HttpHeaders.CONTENT_TYPE, MediaType.MULTIPART_FORM_DATA_VALUE)
 
         val iverksettJson = opprettIverksettDto(
@@ -75,7 +77,7 @@ class IverksattStatusControllerTest : ServerTest() {
 
         // Sjekk
         headers.clear()
-        headers.setBearerAuth(lokalTestToken)
+        headers.setBearerAuth(lokalTestToken())
 
         val statusResponse: ResponseEntity<VedtaksstatusDto> = restTemplate.exchange(
             localhostUrl("/api/vedtakstatus/12345678910"),

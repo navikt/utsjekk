@@ -1,4 +1,4 @@
-package no.nav.dagpenger.iverksett.util
+package no.nav.dagpenger.iverksett.infrastruktur.util
 
 import no.nav.security.mock.oauth2.MockOAuth2Server
 import java.util.UUID
@@ -22,7 +22,11 @@ object TokenUtil {
         ).serialize()
     }
 
-    fun onBehalfOfToken(mockOAuth2Server: MockOAuth2Server, saksbehandler: String): String {
+    fun onBehalfOfToken(
+        mockOAuth2Server: MockOAuth2Server,
+        saksbehandler: String,
+        grupper: List<String> = emptyList(),
+    ): String {
         val thisId = UUID.randomUUID().toString()
         val clientId = UUID.randomUUID().toString()
 
@@ -31,6 +35,7 @@ object TokenUtil {
             "azp" to clientId,
             "name" to saksbehandler,
             "NAVident" to saksbehandler,
+            "groups" to grupper,
         )
 
         return mockOAuth2Server.issueToken(

@@ -1,5 +1,6 @@
 package no.nav.dagpenger.iverksett.api
 
+import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.tags.Tag
 import no.nav.dagpenger.iverksett.api.IverksettDtoValidator.valider
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestPart
 import org.springframework.web.bind.annotation.RestController
@@ -30,19 +32,27 @@ import java.util.UUID
 class IverksettingController(
     private val iverksettingService: IverksettingService,
     private val validatorService: IverksettingValidatorService,
+    private val tilgangskontrollService: IverksettingTilgangskontrollService,
 ) {
     @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE])
     @Tag(name = "Iverksetting")
     @ApiResponse(responseCode = "202", description = "iverksetting er mottatt")
     @ApiResponse(responseCode = "400", description = "ugyldig iverksetting")
     fun iverksettUtenBrev(
+        @Parameter(required = false, hidden = true)
+        @RequestHeader("Authorization")
+        bearerToken: String,
         @RequestBody iverksettDto: IverksettDto,
     ): ResponseEntity<Void> {
+        tilgangskontrollService.valider(iverksettDto, bearerToken)
+
         iverksettDto.valider()
         val iverksett = iverksettDto.toDomain()
+
         validatorService.valider(iverksett)
         validatorService.validerUtenBrev(iverksett)
         iverksettingService.startIverksetting(iverksett, null)
+
         return ResponseEntity.accepted().build()
     }
 
@@ -51,15 +61,22 @@ class IverksettingController(
     @ApiResponse(responseCode = "202", description = "iverksetting er mottatt")
     @ApiResponse(responseCode = "400", description = "ugyldig iverksetting")
     fun iverksett(
+        @Parameter(required = false, hidden = true)
+        @RequestHeader("Authorization")
+        bearerToken: String,
         @RequestPart("data") iverksettDto: IverksettDto,
         @RequestPart("fil", required = false) fil: MultipartFile?,
     ): ResponseEntity<Void> {
+        tilgangskontrollService.valider(iverksettDto, bearerToken)
+
         val brev = fil?.let { Brev(it.bytes) }
         iverksettDto.valider()
         val iverksett = iverksettDto.toDomain()
+
         validatorService.valider(iverksett)
         validatorService.validerBrev(iverksett, brev)
         iverksettingService.startIverksetting(iverksett, brev)
+
         return ResponseEntity.accepted().build()
     }
 
@@ -72,8 +89,7 @@ class IverksettingController(
 
     @PostMapping("/start-grensesnittavstemming")
     fun startGrensesnittavstemming(): ResponseEntity<Void> {
-        val opprettet = iverksettingService.lagreGrensesnittavstemmingTask()
-        return when (opprettet) {
+        return when (iverksettingService.lagreGrensesnittavstemmingTask()) {
             true -> ResponseEntity.accepted().build()
             false -> ResponseEntity.status(409).build()
         }
