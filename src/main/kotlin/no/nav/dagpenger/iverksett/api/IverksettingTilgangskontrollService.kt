@@ -50,7 +50,7 @@ class IverksettingTilgangskontrollService(
             val jwt = JWTParser.parse(tokenString)
             jwt.jwtClaimsSet.getStringArrayClaim("groups")?.let { grupper = it }
         } catch (e: Exception) {
-            logger.info(e.message)
+            logger.error("Kunne ikke få grupper fra token. " + e.message)
         }
 
         return grupper
