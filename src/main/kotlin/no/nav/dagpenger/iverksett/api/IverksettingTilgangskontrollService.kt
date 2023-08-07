@@ -2,6 +2,8 @@ package no.nav.dagpenger.iverksett.api
 
 import com.nimbusds.jwt.JWTParser
 import no.nav.dagpenger.iverksett.infrastruktur.advice.ApiFeil
+import no.nav.dagpenger.iverksett.infrastruktur.configuration.FeatureToggleConfig
+import no.nav.dagpenger.iverksett.infrastruktur.featuretoggle.FeatureToggleService
 import no.nav.dagpenger.kontrakter.iverksett.IverksettDto
 import no.nav.dagpenger.kontrakter.iverksett.VedtakType
 import org.slf4j.LoggerFactory
@@ -11,12 +13,15 @@ import org.springframework.stereotype.Service
 @Service
 class IverksettingTilgangskontrollService(
     private val iverksettingService: IverksettingService,
+    private val featureToggleService: FeatureToggleService,
 ) {
     private val logger = LoggerFactory.getLogger(this::class.java)
 
     fun valider(iverksett: IverksettDto, bearerToken: String) {
-        validerAtRammevedtakSendesAvBeslutter(iverksett, bearerToken)
-        validerAtDetFinnesIverksattRammevedtak(iverksett)
+        if (featureToggleService.isEnabled(FeatureToggleConfig.TILGANGSKONTROLL, false)) {
+            validerAtRammevedtakSendesAvBeslutter(iverksett, bearerToken)
+            validerAtDetFinnesIverksattRammevedtak(iverksett)
+        }
     }
 
     internal fun validerAtRammevedtakSendesAvBeslutter(iverksett: IverksettDto, bearerToken: String) {

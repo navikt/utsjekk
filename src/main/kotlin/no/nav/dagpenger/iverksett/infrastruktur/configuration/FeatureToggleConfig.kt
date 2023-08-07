@@ -79,5 +79,6 @@ class FeatureToggleConfig(
     companion object {
         const val SKAL_SENDE_BREV = "dp.iverksett.skal-sende-brev"
         const val STOPP_IVERKSETTING = "dp.iverksett.stopp-iverksetting"
+        const val TILGANGSKONTROLL = "dp.iverksett.tilgangskontroll"
     }
 }

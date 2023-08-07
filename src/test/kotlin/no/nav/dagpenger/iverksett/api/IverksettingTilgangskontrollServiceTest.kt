@@ -5,6 +5,7 @@ import com.nimbusds.jwt.PlainJWT
 import io.mockk.every
 import io.mockk.mockk
 import no.nav.dagpenger.iverksett.api.tilstand.IverksettResultatService
+import no.nav.dagpenger.iverksett.infrastruktur.featuretoggle.FeatureToggleService
 import no.nav.dagpenger.iverksett.infrastruktur.util.opprettIverksettDto
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.OppdragClient
 import no.nav.dagpenger.iverksett.lagIverksett
@@ -19,10 +20,11 @@ import org.springframework.http.HttpStatus
 
 class IverksettingTilgangskontrollServiceTest {
 
-    private val iverksettResultatService = mockk<IverksettResultatService>()
     private val taskService = mockk<TaskService>()
+    private val iverksettResultatService = mockk<IverksettResultatService>()
     private val iverksettingRepository = mockk<IverksettingRepository>()
     private val oppdragClient = mockk<OppdragClient>()
+    private val featureToggleServiceMock = mockk<FeatureToggleService>()
     private val iverksettingServiceMock = IverksettingService(
         taskService = taskService,
         iverksettResultatService = iverksettResultatService,
@@ -34,7 +36,10 @@ class IverksettingTilgangskontrollServiceTest {
 
     @BeforeEach
     fun setup() {
-        iverksettingTilgangskontrollService = IverksettingTilgangskontrollService(iverksettingServiceMock)
+        iverksettingTilgangskontrollService = IverksettingTilgangskontrollService(
+            iverksettingServiceMock,
+            featureToggleServiceMock
+        )
     }
 
     @Test
