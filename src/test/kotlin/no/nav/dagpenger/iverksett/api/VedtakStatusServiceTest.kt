@@ -23,28 +23,79 @@ class VedtakStatusServiceTest {
 
     private val iverksettingRepositoryMock: IverksettingRepository = mockk()
     private val vedtakStatusService: VedtakStatusService = VedtakStatusService(iverksettingRepositoryMock)
+    private val personId = "12345678910"
 
     @Test
     fun `skal hente vedtak som er iverksatt OK`() {
-        every { iverksettingRepositoryMock.findByPersonIdAndResult("12345678910", "INNVILGET") } returns listOf(
+        every { iverksettingRepositoryMock.findByPersonIdAndResult(personId, "INNVILGET") } returns listOf(
             lagIverksett(iverksettDataFørsteVedtak),
         )
 
-        val vedtak = vedtakStatusService.getVedtakStatus("12345678910")
+        val vedtak = vedtakStatusService.getVedtakStatus(personId)
 
         assertVedtak(iverksettDataFørsteVedtak, vedtak)
     }
 
     @Test
     fun `skal hente siste vedtak som er iverksatt OK når det finnes flere`() {
-        every { iverksettingRepositoryMock.findByPersonIdAndResult("12345678910", "INNVILGET") } returns listOf(
+        every { iverksettingRepositoryMock.findByPersonIdAndResult(personId, "INNVILGET") } returns listOf(
             lagIverksett(iverksettDataFørsteVedtak),
             lagIverksett(iverksettDataSisteVedtak),
         )
 
-        val vedtak = vedtakStatusService.getVedtakStatus("12345678910")
+        val vedtak = vedtakStatusService.getVedtakStatus(personId)
 
         assertVedtak(iverksettDataSisteVedtak, vedtak)
+    }
+
+    @Test
+    fun `skal hente iverksettinger som har overlapende perioder`() {
+        every { iverksettingRepositoryMock.findByPersonIdAndResult(personId, "INNVILGET") } returns listOf(
+            lagIverksett(iverksettDataFørsteVedtak),
+            lagIverksett(iverksettDataSisteVedtak),
+        )
+
+        // Perioder:  |-------|  |-------|
+        // Request:              |-------|
+        val iverksettingsListe1 = vedtakStatusService.hentIverksettingerForPersonOgPeriode(
+            VedtakStatusService.VedtakRequest(personId, LocalDate.now(), LocalDate.now().plusDays(14))
+        )
+        assertEquals(1, iverksettingsListe1.size)
+
+        // Perioder:  |-------|  |-------|
+        // Request:            |-----------
+        val iverksettingsListe2 = vedtakStatusService.hentIverksettingerForPersonOgPeriode(
+            VedtakStatusService.VedtakRequest(personId, LocalDate.now().minusDays(1), null)
+        )
+        assertEquals(1, iverksettingsListe2.size)
+
+        // Perioder:  |-------|  |-------|
+        // Request:           |-----------
+        val iverksettingsListe3 = vedtakStatusService.hentIverksettingerForPersonOgPeriode(
+            VedtakStatusService.VedtakRequest(personId, LocalDate.now().minusDays(2), null)
+        )
+        assertEquals(2, iverksettingsListe3.size)
+
+        // Perioder:  |-------|  |-------|
+        // Request:  |--------------------
+        val iverksettingsListe4 = vedtakStatusService.hentIverksettingerForPersonOgPeriode(
+            VedtakStatusService.VedtakRequest(personId, LocalDate.now().minusDays(20), null)
+        )
+        assertEquals(2, iverksettingsListe4.size)
+
+        // Perioder:  |-------|  |-------|
+        // Request:    |----|
+        val iverksettingsListe5 = vedtakStatusService.hentIverksettingerForPersonOgPeriode(
+            VedtakStatusService.VedtakRequest(personId, LocalDate.now().minusDays(15), LocalDate.now().minusDays(10))
+        )
+        assertEquals(1, iverksettingsListe5.size)
+
+        // Perioder:  |-------|  |-------|
+        // Request:                        |----
+        val iverksettingsListe6 = vedtakStatusService.hentIverksettingerForPersonOgPeriode(
+            VedtakStatusService.VedtakRequest(personId, LocalDate.now().plusDays(20), null)
+        )
+        assertEquals(0, iverksettingsListe6.size)
     }
 
     companion object {
@@ -52,6 +103,12 @@ class VedtakStatusServiceTest {
             behandlingType = BehandlingType.FØRSTEGANGSBEHANDLING,
             vedtaksresultat = Vedtaksresultat.INNVILGET,
             vedtakstidspunkt = LocalDateTime.now().minusMonths(2),
+            vedtaksperioder = listOf(
+                VedtaksperiodeDagpenger(
+                    periode = Datoperiode(LocalDate.now().minusDays(16), LocalDate.now().minusDays(2)),
+                    periodeType = VedtaksperiodeType.HOVEDPERIODE,
+                ),
+            ),
             brevmottakere = Brevmottakere(
                 listOf(
                     Brevmottaker(
@@ -75,7 +132,7 @@ class VedtakStatusServiceTest {
             vedtakstidspunkt = LocalDateTime.now(),
             vedtaksperioder = listOf(
                 VedtaksperiodeDagpenger(
-                    periode = Datoperiode(LocalDate.now(), LocalDate.now()),
+                    periode = Datoperiode(LocalDate.now(), LocalDate.now().plusDays(14)),
                     periodeType = VedtaksperiodeType.HOVEDPERIODE,
                 ),
             ),
