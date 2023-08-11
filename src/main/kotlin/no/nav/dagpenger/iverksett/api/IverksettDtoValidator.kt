@@ -16,6 +16,7 @@ object IverksettDtoValidator {
         fraOgMedKommerFørTilOgMedIUtbetalingsperioder(this)
         utbetalingsperioderOverlapperIkkeITid(this)
         utbetalingerHarKunPositiveBeløp(this)
+        utbetalingerHarIngenBeløpOverMaksgrense(this)
         ingenUtbetalingsperioderHarStønadstypeEØSOgFerietilleggTilAvdød(this)
     }
 
@@ -86,6 +87,20 @@ object IverksettDtoValidator {
         if (!alleBeløpErPositive) {
             throw ApiFeil(
                 "Det finnes utbetalinger som ikke har positivt belopPerDag",
+                HttpStatus.BAD_REQUEST,
+            )
+        }
+    }
+
+    internal fun utbetalingerHarIngenBeløpOverMaksgrense(iverksettDto: IverksettDto) {
+        val maksgrense = 5000
+        val alleBeløpErUnderMaksgrense = iverksettDto.vedtak.utbetalinger.all {
+            it.belopPerDag < maksgrense
+        }
+
+        if (!alleBeløpErUnderMaksgrense) {
+            throw ApiFeil(
+                "Det finnes utbetalinger med beløp over maksgrensen på $maksgrense kr per dag",
                 HttpStatus.BAD_REQUEST,
             )
         }
