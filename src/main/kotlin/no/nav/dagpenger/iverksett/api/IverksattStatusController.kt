@@ -1,7 +1,8 @@
 package no.nav.dagpenger.iverksett.api
 
 import io.swagger.v3.oas.annotations.tags.Tag
-import no.nav.dagpenger.kontrakter.iverksett.IverksettDto
+import no.nav.dagpenger.kontrakter.datadeling.DatadelingRequest
+import no.nav.dagpenger.kontrakter.datadeling.DatadelingResponse
 import no.nav.dagpenger.kontrakter.iverksett.VedtaksstatusDto
 import no.nav.security.token.support.core.api.ProtectedWithClaims
 import org.springframework.http.HttpStatus
@@ -32,8 +33,8 @@ class IverksattStatusController(
 
     @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE], produces = [MediaType.APPLICATION_JSON_VALUE])
     @Tag(name = "Iverksettinger for person og periode")
-    fun hentVedtakForPersonOgPeriode(@RequestBody vedtakRequest: VedtakStatusService.VedtakRequest): ResponseEntity<List<IverksettDto>> {
-        val iverksettinger = vedtakStatusService.hentIverksettingerForPersonOgPeriode(vedtakRequest)
-        return ResponseEntity(iverksettinger, HttpStatus.OK)
+    fun hentVedtaksperioderForPersonOgPeriode(@RequestBody request: DatadelingRequest): ResponseEntity<DatadelingResponse> {
+        val response = vedtakStatusService.hentVedtaksperioderForPersonOgPeriode(request)
+        return ResponseEntity(response, HttpStatus.OK)
     }
 }

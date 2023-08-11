@@ -2,6 +2,8 @@ package no.nav.dagpenger.iverksett.api
 
 import no.nav.dagpenger.iverksett.ServerTest
 import no.nav.dagpenger.iverksett.infrastruktur.util.opprettIverksettDto
+import no.nav.dagpenger.kontrakter.datadeling.DatadelingRequest
+import no.nav.dagpenger.kontrakter.datadeling.DatadelingResponse
 import no.nav.dagpenger.kontrakter.iverksett.IverksettDto
 import no.nav.dagpenger.kontrakter.iverksett.VedtaksperiodeDto
 import no.nav.dagpenger.kontrakter.iverksett.VedtaksperiodeType
@@ -133,40 +135,40 @@ class IverksattStatusControllerTest : ServerTest() {
 
         // Iverksetting:  |-------|
         // Request:     |----------
-        val statusResponse1: ResponseEntity<List<IverksettDto>> = restTemplate.exchange(
+        val response1: ResponseEntity<DatadelingResponse> = restTemplate.exchange(
             localhostUrl("/api/vedtakstatus"),
             HttpMethod.POST,
-            HttpEntity(VedtakStatusService.VedtakRequest(personId, LocalDate.now().minusDays(5), null), headers),
+            HttpEntity(DatadelingRequest(personId, LocalDate.now().minusDays(5), null), headers),
         )
-        assertEquals(HttpStatus.OK, statusResponse1.statusCode)
-        val iverksettingsListe1: List<IverksettDto> = statusResponse1.body!!
-        assertEquals(1, iverksettingsListe1.size)
+        assertEquals(HttpStatus.OK, response1.statusCode)
+        val datadelingResponse1 = response1.body!!
+        assertEquals(1, datadelingResponse1.perioder.size)
 
         // Iverksetting:  |-------|
         // Request:         |---|
-        val statusResponse2: ResponseEntity<List<IverksettDto>> = restTemplate.exchange(
+        val response2: ResponseEntity<DatadelingResponse> = restTemplate.exchange(
             localhostUrl("/api/vedtakstatus"),
             HttpMethod.POST,
             HttpEntity(
-                VedtakStatusService.VedtakRequest(
+                DatadelingRequest(
                     personId,
                     LocalDate.now().plusDays(3),
                     LocalDate.now().plusDays(10)
                 ), headers
             ),
         )
-        assertEquals(HttpStatus.OK, statusResponse2.statusCode)
-        val iverksettingsListe2: List<IverksettDto> = statusResponse2.body!!
-        assertEquals(1, iverksettingsListe2.size)
+        assertEquals(HttpStatus.OK, response2.statusCode)
+        val datadelingResponse2 = response2.body!!
+        assertEquals(1, datadelingResponse2.perioder.size)
 
         // En annen ID
-        val statusResponse3: ResponseEntity<List<IverksettDto>> = restTemplate.exchange(
+        val response3: ResponseEntity<DatadelingResponse> = restTemplate.exchange(
             localhostUrl("/api/vedtakstatus"),
             HttpMethod.POST,
-            HttpEntity(VedtakStatusService.VedtakRequest("01020312345", LocalDate.now().minusDays(5), null), headers),
+            HttpEntity(DatadelingRequest("01020312345", LocalDate.now().minusDays(5), null), headers),
         )
-        assertEquals(HttpStatus.OK, statusResponse3.statusCode)
-        val iverksettingsListe3: List<IverksettDto> = statusResponse3.body!!
-        assertEquals(0, iverksettingsListe3.size)
+        assertEquals(HttpStatus.OK, response3.statusCode)
+        val datadelingResponse = response3.body!!
+        assertEquals(0, datadelingResponse.perioder.size)
     }
 }
