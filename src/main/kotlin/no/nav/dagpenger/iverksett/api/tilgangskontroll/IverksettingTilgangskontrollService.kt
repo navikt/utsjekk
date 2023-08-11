@@ -1,6 +1,7 @@
-package no.nav.dagpenger.iverksett.api
+package no.nav.dagpenger.iverksett.api.tilgangskontroll
 
 import com.nimbusds.jwt.JWTParser
+import no.nav.dagpenger.iverksett.api.IverksettingService
 import no.nav.dagpenger.iverksett.infrastruktur.advice.ApiFeil
 import no.nav.dagpenger.iverksett.infrastruktur.configuration.FeatureToggleConfig
 import no.nav.dagpenger.iverksett.infrastruktur.featuretoggle.FeatureToggleService
@@ -16,6 +17,12 @@ class IverksettingTilgangskontrollService(
     private val featureToggleService: FeatureToggleService,
 ) {
     private val logger = LoggerFactory.getLogger(this::class.java)
+
+    fun validerBeslutterkontekst() {
+        if (!TokenContext.erBeslutter()) {
+            throw ApiFeil("Varsel om rammevedtak kommer ikke fra beslutter", HttpStatus.FORBIDDEN)
+        }
+    }
 
     fun valider(iverksett: IverksettDto, bearerToken: String) {
         if (featureToggleService.isEnabled(FeatureToggleConfig.TILGANGSKONTROLL, false)) {
