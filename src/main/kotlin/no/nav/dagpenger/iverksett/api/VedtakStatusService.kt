@@ -29,36 +29,33 @@ class VedtakStatusService(
     }
 
     fun hentVedtaksperioderForPersonOgPeriode(request: DatadelingRequest): DatadelingResponse {
-        // Finn alle iverksettinger som har vedtaksperioder som overlapper med fom-tom
+        // Finn alle iverksettinger for denne personen
+        // Returner kun de vedtaksperiodene som overlapper med fom-tom i request
         // TODO: Skal vi sjekke kun INNVILGET? Hva skjer med historiske vedtak? Blir disse OPPHØRT?
+        val liste = iverksettingRepository.findByPersonIdAndResult(request.personIdent, Vedtaksresultat.INNVILGET.name)
+
         return DatadelingResponse(
             personIdent = request.personIdent,
-            perioder = mapPerioder(request)
+            perioder = liste.flatMap { mapPerioder(it, request) }
         )
     }
 
-    private fun mapPerioder(request: DatadelingRequest): List<Periode> {
-        return iverksettingRepository.findByPersonIdAndResult(request.personIdent, Vedtaksresultat.INNVILGET.name)
-            .filter { iverksett ->
-                iverksett.data.vedtak.vedtaksperioder.any {
-                    (request.tilOgMedDato == null || request.tilOgMedDato!! >= it.periode.fom) && request.fraOgMedDato <= it.periode.tom
-                }
-            }
-            .flatMap { mapPeriod(it) }
-    }
-
-    private fun mapPeriod(iverksett: Iverksett): List<Periode> {
+    private fun mapPerioder(iverksett: Iverksett, request: DatadelingRequest): List<Periode> {
         val vedtak = iverksett.data.vedtak
         val yt = vedtak.tilkjentYtelse?.sisteAndelIKjede?.stønadstype ?: StønadType.DAGPENGER_ARBEIDSSOKER_ORDINAER
 
-        return vedtak.vedtaksperioder.map {
-            Periode(
-                fraOgMedDato = it.periode.fom,
-                tilOgMedDato = it.periode.tom,
-                ytelseType = yt,
-                gjenståendeDager = 0
-            )
-        }
+        return vedtak.vedtaksperioder
+            .filter {
+                (request.tilOgMedDato == null || request.tilOgMedDato!! >= it.periode.fom) && request.fraOgMedDato <= it.periode.tom
+            }
+            .map {
+                Periode(
+                    fraOgMedDato = it.periode.fom,
+                    tilOgMedDato = it.periode.tom,
+                    ytelseType = yt,
+                    gjenståendeDager = 0
+                )
+            }
     }
 
     private fun mapVedtaksperioder(inn: List<VedtaksperiodeDagpenger>): List<VedtaksperiodeDto> {
@@ -70,5 +67,4 @@ class VedtakStatusService(
             )
         }
     }
-
 }
