@@ -38,7 +38,7 @@ class IverksettingTilgangskontrollServiceTest {
     fun setup() {
         iverksettingTilgangskontrollService = IverksettingTilgangskontrollService(
             iverksettingServiceMock,
-            featureToggleServiceMock
+            featureToggleServiceMock,
         )
     }
 

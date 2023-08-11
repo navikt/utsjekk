@@ -4,6 +4,7 @@ import no.nav.dagpenger.iverksett.api.IverksettDtoValidator.avslåttVedtakHarIkk
 import no.nav.dagpenger.iverksett.api.IverksettDtoValidator.fraOgMedKommerFørTilOgMedIUtbetalingsperioder
 import no.nav.dagpenger.iverksett.api.IverksettDtoValidator.ingenUtbetalingsperioderHarStønadstypeEØSOgFerietilleggTilAvdød
 import no.nav.dagpenger.iverksett.api.IverksettDtoValidator.innvilgetUtbetalingsvedtakHarUtbetalinger
+import no.nav.dagpenger.iverksett.api.IverksettDtoValidator.utbetalingerHarIngenBeløpOverMaksgrense
 import no.nav.dagpenger.iverksett.api.IverksettDtoValidator.utbetalingerHarKunPositiveBeløp
 import no.nav.dagpenger.iverksett.api.IverksettDtoValidator.utbetalingsperioderOverlapperIkkeITid
 import no.nav.dagpenger.iverksett.infrastruktur.advice.ApiFeil
@@ -53,6 +54,24 @@ class IverksettDtoValidatorTest {
 
         assertApiFeil(HttpStatus.BAD_REQUEST) {
             utbetalingerHarKunPositiveBeløp(iverksettDto)
+        }
+    }
+
+    @Test
+    fun `skal få BAD_REQUEST hvis beløp på utbetaling er null`() {
+        val iverksettDto = opprettIverksettDto(andelsbeløp = 0)
+
+        assertApiFeil(HttpStatus.BAD_REQUEST) {
+            utbetalingerHarKunPositiveBeløp(iverksettDto)
+        }
+    }
+
+    @Test
+    fun `skal få BAD_REQUEST hvis beløp på utbetaling er over maksgrense`() {
+        val iverksettDto = opprettIverksettDto(andelsbeløp = 20000)
+
+        assertApiFeil(HttpStatus.BAD_REQUEST) {
+            utbetalingerHarIngenBeløpOverMaksgrense(iverksettDto)
         }
     }
 

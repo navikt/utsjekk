@@ -61,7 +61,7 @@ import java.util.UUID
 fun opprettIverksettDto(
     behandlingId: UUID = UUID.randomUUID(),
     sakId: UUID = UUID.randomUUID(),
-    andelsbeløp: Int = 5000,
+    andelsbeløp: Int = 500,
     vedtaksresultat: Vedtaksresultat = Vedtaksresultat.INNVILGET,
     stønadType: StønadType = StønadType.DAGPENGER_ARBEIDSSOKER_ORDINAER,
     ferietillegg: Ferietillegg? = null,
