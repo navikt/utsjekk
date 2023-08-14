@@ -53,7 +53,7 @@ class VedtakStatusService(
                     fraOgMedDato = it.periode.fom,
                     tilOgMedDato = it.periode.tom,
                     ytelseType = yt,
-                    gjenståendeDager = 0
+                    gjenståendeDager = 0  // TODO: Hvordan kan vi få dette?
                 )
             }
     }

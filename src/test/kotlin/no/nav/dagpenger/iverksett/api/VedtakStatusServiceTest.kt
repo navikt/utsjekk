@@ -62,6 +62,14 @@ class VedtakStatusServiceTest {
             DatadelingRequest(personId, LocalDate.now(), LocalDate.now().plusDays(14))
         )
         assertEquals(1, response1.perioder.size)
+    }
+
+    @Test
+    fun `skal hente iverksettinger som starter etter fom dato 1`() {
+        every { iverksettingRepositoryMock.findByPersonIdAndResult(personId, "INNVILGET") } returns listOf(
+            lagIverksett(iverksettDataFørsteVedtak),
+            lagIverksett(iverksettDataSisteVedtak),
+        )
 
         // Perioder:  |-------|  |-------|
         // Request:            |-----------
@@ -69,6 +77,14 @@ class VedtakStatusServiceTest {
             DatadelingRequest(personId, LocalDate.now().minusDays(1), null)
         )
         assertEquals(1, response2.perioder.size)
+    }
+
+    @Test
+    fun `skal hente iverksettinger som inneholder fom dato`() {
+        every { iverksettingRepositoryMock.findByPersonIdAndResult(personId, "INNVILGET") } returns listOf(
+            lagIverksett(iverksettDataFørsteVedtak),
+            lagIverksett(iverksettDataSisteVedtak),
+        )
 
         // Perioder:  |-------|  |-------|
         // Request:           |-----------
@@ -76,6 +92,14 @@ class VedtakStatusServiceTest {
             DatadelingRequest(personId, LocalDate.now().minusDays(2), null)
         )
         assertEquals(2, response3.perioder.size)
+    }
+
+    @Test
+    fun `skal hente iverksettinger som starter etter fom dato 2`() {
+        every { iverksettingRepositoryMock.findByPersonIdAndResult(personId, "INNVILGET") } returns listOf(
+            lagIverksett(iverksettDataFørsteVedtak),
+            lagIverksett(iverksettDataSisteVedtak),
+        )
 
         // Perioder:  |-------|  |-------|
         // Request:  |--------------------
@@ -83,6 +107,14 @@ class VedtakStatusServiceTest {
             DatadelingRequest(personId, LocalDate.now().minusDays(20), null)
         )
         assertEquals(2, response4.perioder.size)
+    }
+
+    @Test
+    fun `skal hente iverksettinger som har inneholder både fom og tom datoer`() {
+        every { iverksettingRepositoryMock.findByPersonIdAndResult(personId, "INNVILGET") } returns listOf(
+            lagIverksett(iverksettDataFørsteVedtak),
+            lagIverksett(iverksettDataSisteVedtak),
+        )
 
         // Perioder:  |-------|  |-------|
         // Request:    |----|
@@ -90,6 +122,14 @@ class VedtakStatusServiceTest {
             DatadelingRequest(personId, LocalDate.now().minusDays(15), LocalDate.now().minusDays(10))
         )
         assertEquals(1, response5.perioder.size)
+    }
+
+    @Test
+    fun `skal ikke hente iverksettinger som er før fom dato`() {
+        every { iverksettingRepositoryMock.findByPersonIdAndResult(personId, "INNVILGET") } returns listOf(
+            lagIverksett(iverksettDataFørsteVedtak),
+            lagIverksett(iverksettDataSisteVedtak),
+        )
 
         // Perioder:  |-------|  |-------|
         // Request:                        |----
