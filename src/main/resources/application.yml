@@ -150,3 +150,5 @@ prosessering:
   delete:
     after:
       weeks: 16
+
+BESLUTTER_GRUPPE: ${BESLUTTER_GRUPPE}
