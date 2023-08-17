@@ -40,6 +40,7 @@ class IverksettingTilgangskontrollServiceTest {
         iverksettingTilgangskontrollService = IverksettingTilgangskontrollService(
             iverksettingServiceMock,
             featureToggleServiceMock,
+            beslutterGruppe,
         )
     }
 
@@ -62,7 +63,6 @@ class IverksettingTilgangskontrollServiceTest {
             vedtak = iverksettDtoTmp.vedtak.copy(vedtakstype = VedtakType.RAMMEVEDTAK),
         )
 
-        val beslutterGruppe = "0000-GA-Beslutter"
         System.setProperty("BESLUTTER_GRUPPE", beslutterGruppe)
         val token = PlainJWT(JWTClaimsSet.Builder().claim("groups", arrayOf(beslutterGruppe)).build())
         assertDoesNotThrow {
@@ -107,5 +107,9 @@ class IverksettingTilgangskontrollServiceTest {
         assertDoesNotThrow {
             iverksettingTilgangskontrollService.validerAtDetFinnesIverksattRammevedtak(nåværendeIverksetting)
         }
+    }
+
+    companion object {
+        private val beslutterGruppe = "0000-GA-Beslutter"
     }
 }

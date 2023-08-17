@@ -14,6 +14,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.web.client.exchange
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
@@ -30,10 +31,11 @@ class IverksettingControllerTest : ServerTest() {
     @Autowired
     lateinit var taskService: TaskService
 
+    @Value("\${BESLUTTER_GRUPPE}")
+    private lateinit var beslutterGruppe: String
+
     @BeforeEach
     fun setUp() {
-        val beslutterGruppe = "0000-GA-Beslutter"
-        System.setProperty("BESLUTTER_GRUPPE", beslutterGruppe)
         headers.setBearerAuth(lokalTestToken(grupper = listOf(beslutterGruppe)))
         headers.set(HttpHeaders.CONTENT_TYPE, MediaType.MULTIPART_FORM_DATA_VALUE)
     }

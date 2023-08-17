@@ -17,12 +17,7 @@ object TokenContext {
             )
     }
 
-    fun erBeslutter(): Boolean {
-        val beslutterRolle = System.getenv("BESLUTTER_GRUPPE")
-        return hentGrupper().contains(beslutterRolle)
-    }
-
-    private fun hentGrupper(): List<String> {
+    fun hentGrupper(): List<String> {
         return Result.runCatching { SpringTokenValidationContextHolder().tokenValidationContext }
             .fold(
                 onSuccess = {

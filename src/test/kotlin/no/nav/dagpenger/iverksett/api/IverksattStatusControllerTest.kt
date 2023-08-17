@@ -12,6 +12,7 @@ import no.nav.dagpenger.kontrakter.iverksett.VedtaksstatusDto
 import no.nav.familie.http.client.MultipartBuilder
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.web.client.exchange
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
@@ -22,6 +23,9 @@ import org.springframework.http.ResponseEntity
 import java.time.LocalDate
 
 class IverksattStatusControllerTest : ServerTest() {
+
+    @Value("\${BESLUTTER_GRUPPE}")
+    private lateinit var beslutterGruppe: String
 
     @Test
     fun `skal svare med 401 uten token`() {
