@@ -86,12 +86,14 @@ class IverksettingService(
         }
 
     fun hentRammevedtak(iverksettDto: IverksettDto): Iverksett {
-        val fagsakId = iverksettDto.tilSakIdentifikator().fagsakId
-        val rammevedtakList = iverksettingRepository.findByFagsakId(fagsakId.toIdString())
+        val rammevedtakList = iverksettingRepository
+            .findBySakIdentifikator(
+                iverksettDto.tilSakIdentifikator()
+            )
             .filter { it.data.vedtak.vedtakstype == VedtakType.RAMMEVEDTAK }
 
         if (rammevedtakList.size != 1) {
-            throw NoSuchElementException("Fant ikke rammevedtak med fagsakId $fagsakId")
+            throw NoSuchElementException("Fant ikke rammevedtak med fagsakId ${iverksettDto.tilSakIdentifikator()}")
         }
 
         return rammevedtakList[0]

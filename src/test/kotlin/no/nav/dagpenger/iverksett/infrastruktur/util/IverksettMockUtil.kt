@@ -230,7 +230,7 @@ fun opprettIverksettDagpenger(
     vedtaksdetaljer: VedtaksdetaljerDagpenger = vedtaksdetaljerDagpenger(),
 ) =
     IverksettDagpenger(
-        fagsak = Fagsakdetaljer(fagsakId = SakIdentifikator(UUID.randomUUID()), stønadstype = StønadType.DAGPENGER_ARBEIDSSOKER_ORDINAER),
+        fagsak = Fagsakdetaljer(fagsakId = UUID.randomUUID(), stønadstype = StønadType.DAGPENGER_ARBEIDSSOKER_ORDINAER),
         behandling = behandlingsdetaljer,
         søker = Søker(
             personIdent = "12345678910",
@@ -250,7 +250,7 @@ fun opprettIverksettDagpenger(
 ): IverksettDagpenger {
     val behandlingType = forrigeBehandlingId?.let { BehandlingType.REVURDERING } ?: BehandlingType.FØRSTEGANGSBEHANDLING
     return IverksettDagpenger(
-        fagsak = Fagsakdetaljer(fagsakId = SakIdentifikator(fagsakId), stønadstype = StønadType.DAGPENGER_ARBEIDSSOKER_ORDINAER),
+        fagsak = Fagsakdetaljer(fagsakId = fagsakId, stønadstype = StønadType.DAGPENGER_ARBEIDSSOKER_ORDINAER),
         behandling = behandlingsdetaljer(behandlingId, forrigeBehandlingId, behandlingType),
         søker = Søker(
             personIdent = "12345678910",

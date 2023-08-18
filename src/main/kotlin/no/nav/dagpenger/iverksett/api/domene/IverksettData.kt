@@ -46,9 +46,12 @@ data class IverksettDagpenger(
 }
 
 data class Fagsakdetaljer(
-    val fagsakId: SakIdentifikator,
+    val fagsakId: UUID? = null,
+    val saksreferanse: String? = null,
     val stønadstype: StønadType = StønadType.DAGPENGER_ARBEIDSSOKER_ORDINAER,
-)
+) {
+    fun toIdString() = SakIdentifikator(fagsakId, saksreferanse).toIdString()
+}
 
 data class Søker(
     val personIdent: String,

@@ -3,6 +3,7 @@ package no.nav.dagpenger.iverksett.konsumenter.oppgave
 import no.nav.dagpenger.iverksett.api.IverksettingRepository
 import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
 import no.nav.dagpenger.iverksett.api.domene.VedtaksperiodeDagpenger
+import no.nav.dagpenger.iverksett.api.domene.personIdent
 import no.nav.dagpenger.iverksett.infrastruktur.FamilieIntegrasjonerClient
 import no.nav.dagpenger.iverksett.infrastruktur.configuration.FeatureToggleConfig
 import no.nav.dagpenger.iverksett.infrastruktur.featuretoggle.FeatureToggleService
@@ -55,8 +56,8 @@ class OppgaveService(
         val beskrivelse = lagOppgavebeskrivelse(iverksett)
         val opprettOppgaveRequest =
             OppgaveUtil.opprettOppgaveRequest(
-                iverksett.fagsak.fagsakId.toIdString(),
-                iverksett.søker.personIdent,
+                iverksett.fagsak.toIdString(),
+                iverksett.personIdent,
                 iverksett.fagsak.stønadstype,
                 enhet,
                 Oppgavetype.VurderHenvendelse,

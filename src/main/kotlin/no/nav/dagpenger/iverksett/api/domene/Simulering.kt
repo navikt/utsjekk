@@ -10,19 +10,25 @@ data class Simulering(
     val tilkjentYtelse: TilkjentYtelse,
     val saksbehandlerId: String,
     val stønadstype: StønadType,
-    val sakId: String,
+    val sakId: UUID? = null,
+    val saksreferanse: String? = null,
     val personIdent: String,
     val behandlingId: UUID,
     val vedtaksdato: LocalDate,
     val forrigeBehandlingId: UUID?,
-)
+) {
+    init {
+        SakIdentifikator(sakId, saksreferanse)
+    }
+}
 
 fun IverksettDagpenger.tilSimulering() = Simulering(
     andelerTilkjentYtelse = this.vedtak.tilkjentYtelse!!.andelerTilkjentYtelse,
     tilkjentYtelse = this.vedtak.tilkjentYtelse!!,
     saksbehandlerId = this.vedtak.saksbehandlerId,
     stønadstype = this.fagsak.stønadstype,
-    sakId = this.fagsak.fagsakId.toIdString(),
+    sakId = this.fagsak.fagsakId,
+    saksreferanse = this.fagsak.saksreferanse,
     personIdent = this.søker.personIdent,
     behandlingId = this.behandling.behandlingId,
     vedtaksdato = this.vedtak.vedtakstidspunkt.toLocalDate(),

@@ -74,10 +74,10 @@ class TilbakekrevingListener(
         // TODO Trenger håndtere sakidentifikator som både kan være UUID og String.
         // Sånn det er nå kan det skje en subtil bug
         val sakIdForRequest = SakIdentifikator(request.sakId, request.saksreferanse)
-        if (iverksett.fagsak.fagsakId != sakIdForRequest) {
+        if (iverksett.fagsak.toIdString() != sakIdForRequest.toIdString()) {
             error(
                 "Inkonsistens. FagsakID mellom iverksatt behandling (fagsakID=" +
-                    "${iverksett.fagsak.fagsakId.toIdString()}) og request (ekstern fagsakID=${sakIdForRequest.toIdString()}) er ulike, " +
+                    "${iverksett.fagsak.toIdString()}) og request (ekstern fagsakID=${sakIdForRequest.toIdString()}) er ulike, " +
                     "med behandlingID=${request.behandlingId}",
             )
         }

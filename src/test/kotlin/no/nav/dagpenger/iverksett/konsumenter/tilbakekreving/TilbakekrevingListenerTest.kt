@@ -60,7 +60,7 @@ internal class TilbakekrevingListenerTest {
             .returns(
                 Optional.of(
                     lagIverksett(
-                        behandling.copy(fagsak = behandling.fagsak.copy(fagsakId = SakIdentifikator(UUID.randomUUID()))),
+                        behandling.copy(fagsak = behandling.fagsak.copy(fagsakId = UUID.randomUUID())),
                     ),
                 ),
             )

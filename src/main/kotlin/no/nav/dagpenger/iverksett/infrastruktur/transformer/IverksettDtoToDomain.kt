@@ -73,7 +73,7 @@ fun BrevmottakerDto.toDomain(): Brevmottaker = Brevmottaker(
 
 fun IverksettDto.toDomain(): IverksettDagpenger {
     return IverksettDagpenger(
-        fagsak = this.tilSakIdentifikator(),
+        fagsak = this.tilFagsak(),
         søker = this.personIdent.tilSøker(),
         behandling = this.tilBehandling(),
         vedtak = this.vedtak.toDomain(),
@@ -81,9 +81,17 @@ fun IverksettDto.toDomain(): IverksettDagpenger {
     )
 }
 
-fun IverksettDto.tilSakIdentifikator(): Fagsakdetaljer {
-    return Fagsakdetaljer(SakIdentifikator(this.sakId, this.saksreferanse))
+fun IverksettDto.tilFagsak(): Fagsakdetaljer {
+    return Fagsakdetaljer(
+        fagsakId = this.sakId,
+        saksreferanse = this.saksreferanse
+    )
 }
+
+fun IverksettDto.tilSakIdentifikator(): SakIdentifikator {
+    return SakIdentifikator(this.sakId, this.saksreferanse)
+}
+
 
 fun String.tilSøker(): Søker = Søker(personIdent = this, tilhørendeEnhet = "")
 
@@ -104,7 +112,7 @@ fun IverksettDto.tilForrigeIverksetting(): IverksettDagpenger? {
     return when (this.forrigeIverksetting) {
         null -> null
         else -> IverksettDagpenger(
-            fagsak = this.tilSakIdentifikator(),
+            fagsak = this.tilFagsak(),
             søker = this.personIdent.tilSøker(),
             behandling = this.forrigeIverksetting!!.tilBehandling(),
             vedtak = this.forrigeIverksetting!!.tilVedtaksdetaljer(),
