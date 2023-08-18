@@ -12,6 +12,7 @@ import no.nav.dagpenger.kontrakter.iverksett.VedtaksstatusDto
 import no.nav.familie.http.client.MultipartBuilder
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.web.client.exchange
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
@@ -22,6 +23,9 @@ import org.springframework.http.ResponseEntity
 import java.time.LocalDate
 
 class IverksattStatusControllerTest : ServerTest() {
+
+    @Value("\${BESLUTTER_GRUPPE}")
+    private lateinit var beslutterGruppe: String
 
     @Test
     fun `skal svare med 401 uten token`() {
@@ -75,6 +79,8 @@ class IverksattStatusControllerTest : ServerTest() {
         val personId = "12345678910"
 
         opprettTestData()
+
+        println(beslutterGruppe)
 
         // Sjekk
         headers.clear()
@@ -152,8 +158,6 @@ class IverksattStatusControllerTest : ServerTest() {
     }
 
     private fun opprettTestData(): IverksettDto {
-        val beslutterGruppe = "0000-GA-Beslutter"
-        System.setProperty("BESLUTTER_GRUPPE", beslutterGruppe)
         headers.setBearerAuth(lokalTestToken(grupper = listOf(beslutterGruppe)))
         headers.set(HttpHeaders.CONTENT_TYPE, MediaType.MULTIPART_FORM_DATA_VALUE)
 

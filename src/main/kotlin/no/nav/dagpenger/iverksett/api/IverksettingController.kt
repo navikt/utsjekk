@@ -5,10 +5,13 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.tags.Tag
 import no.nav.dagpenger.iverksett.api.IverksettDtoValidator.valider
 import no.nav.dagpenger.iverksett.api.domene.Brev
+import no.nav.dagpenger.iverksett.api.tilgangskontroll.IverksettingTilgangskontrollService
+import no.nav.dagpenger.iverksett.api.tilgangskontroll.TokenContext
 import no.nav.dagpenger.iverksett.infrastruktur.transformer.toDomain
 import no.nav.dagpenger.kontrakter.iverksett.IverksettDto
 import no.nav.dagpenger.kontrakter.iverksett.IverksettStatus
 import no.nav.security.token.support.core.api.ProtectedWithClaims
+import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
@@ -34,6 +37,9 @@ class IverksettingController(
     private val validatorService: IverksettingValidatorService,
     private val tilgangskontrollService: IverksettingTilgangskontrollService,
 ) {
+
+    private val secureLogger = LoggerFactory.getLogger("secureLogger")
+
     @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE])
     @Tag(name = "Iverksetting")
     @ApiResponse(responseCode = "202", description = "iverksetting er mottatt")
@@ -44,6 +50,7 @@ class IverksettingController(
         bearerToken: String,
         @RequestBody iverksettDto: IverksettDto,
     ): ResponseEntity<Void> {
+        secureLogger.info("Saksbehandler-token: $bearerToken")
         tilgangskontrollService.valider(iverksettDto, bearerToken)
 
         iverksettDto.valider()
@@ -78,6 +85,13 @@ class IverksettingController(
         iverksettingService.startIverksetting(iverksett, brev)
 
         return ResponseEntity.accepted().build()
+    }
+
+    @GetMapping("/rammevedtak", produces = ["application/json"])
+    @ProtectedWithClaims(issuer = "azuread")
+    fun varselOmRammevedtak(): ResponseEntity<String> {
+        tilgangskontrollService.validerBeslutterkontekst()
+        return ResponseEntity.ok(TokenContext.hentSaksbehandlerIdent())
     }
 
     @GetMapping("{behandlingId}/status", produces = ["application/json"])

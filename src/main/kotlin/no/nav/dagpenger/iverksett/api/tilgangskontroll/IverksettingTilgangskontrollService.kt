@@ -1,12 +1,14 @@
-package no.nav.dagpenger.iverksett.api
+package no.nav.dagpenger.iverksett.api.tilgangskontroll
 
 import com.nimbusds.jwt.JWTParser
+import no.nav.dagpenger.iverksett.api.IverksettingService
 import no.nav.dagpenger.iverksett.infrastruktur.advice.ApiFeil
 import no.nav.dagpenger.iverksett.infrastruktur.configuration.FeatureToggleConfig
 import no.nav.dagpenger.iverksett.infrastruktur.featuretoggle.FeatureToggleService
 import no.nav.dagpenger.kontrakter.iverksett.IverksettDto
 import no.nav.dagpenger.kontrakter.iverksett.VedtakType
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 
@@ -14,8 +16,15 @@ import org.springframework.stereotype.Service
 class IverksettingTilgangskontrollService(
     private val iverksettingService: IverksettingService,
     private val featureToggleService: FeatureToggleService,
+    @Value("\${BESLUTTER_GRUPPE}") private val beslutterGruppe: String,
 ) {
     private val logger = LoggerFactory.getLogger(this::class.java)
+
+    fun validerBeslutterkontekst() {
+        if (!erBeslutter()) {
+            throw ApiFeil("Varsel om rammevedtak kommer ikke fra beslutter", HttpStatus.FORBIDDEN)
+        }
+    }
 
     fun valider(iverksett: IverksettDto, bearerToken: String) {
         if (featureToggleService.isEnabled(FeatureToggleConfig.TILGANGSKONTROLL, false)) {
@@ -27,9 +36,8 @@ class IverksettingTilgangskontrollService(
     internal fun validerAtRammevedtakSendesAvBeslutter(iverksett: IverksettDto, bearerToken: String) {
         if (iverksett.vedtak.vedtakstype == VedtakType.RAMMEVEDTAK) {
             val tokenGrupper = hentTokenGrupper(bearerToken)
-            val beslutterGruppe = hentBeslutterGruppe()
 
-            if (beslutterGruppe.isNullOrBlank() || !tokenGrupper.contains(beslutterGruppe)) {
+            if (beslutterGruppe.isBlank() || !tokenGrupper.contains(beslutterGruppe)) {
                 throw ApiFeil("Rammevedtak må sendes av en ansatt med beslutter-rolle", HttpStatus.FORBIDDEN)
             }
         }
@@ -61,7 +69,7 @@ class IverksettingTilgangskontrollService(
         return grupper
     }
 
-    private fun hentBeslutterGruppe(): String? {
-        return System.getProperty("BESLUTTER_GRUPPE", System.getenv("BESLUTTER_GRUPPE"))
+    private fun erBeslutter(): Boolean {
+        return TokenContext.hentGrupper().contains(beslutterGruppe)
     }
 }

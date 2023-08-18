@@ -4,6 +4,7 @@ import com.nimbusds.jwt.JWTClaimsSet
 import com.nimbusds.jwt.PlainJWT
 import io.mockk.every
 import io.mockk.mockk
+import no.nav.dagpenger.iverksett.api.tilgangskontroll.IverksettingTilgangskontrollService
 import no.nav.dagpenger.iverksett.api.tilstand.IverksettResultatService
 import no.nav.dagpenger.iverksett.infrastruktur.featuretoggle.FeatureToggleService
 import no.nav.dagpenger.iverksett.infrastruktur.util.opprettIverksettDto
@@ -39,6 +40,7 @@ class IverksettingTilgangskontrollServiceTest {
         iverksettingTilgangskontrollService = IverksettingTilgangskontrollService(
             iverksettingServiceMock,
             featureToggleServiceMock,
+            beslutterGruppe,
         )
     }
 
@@ -61,7 +63,6 @@ class IverksettingTilgangskontrollServiceTest {
             vedtak = iverksettDtoTmp.vedtak.copy(vedtakstype = VedtakType.RAMMEVEDTAK),
         )
 
-        val beslutterGruppe = "0000-GA-Beslutter"
         System.setProperty("BESLUTTER_GRUPPE", beslutterGruppe)
         val token = PlainJWT(JWTClaimsSet.Builder().claim("groups", arrayOf(beslutterGruppe)).build())
         assertDoesNotThrow {
@@ -106,5 +107,9 @@ class IverksettingTilgangskontrollServiceTest {
         assertDoesNotThrow {
             iverksettingTilgangskontrollService.validerAtDetFinnesIverksattRammevedtak(nåværendeIverksetting)
         }
+    }
+
+    companion object {
+        private val beslutterGruppe = "0000-GA-Beslutter"
     }
 }
