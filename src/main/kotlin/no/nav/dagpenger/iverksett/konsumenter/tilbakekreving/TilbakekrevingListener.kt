@@ -69,7 +69,9 @@ class TilbakekrevingListener(
     }
 
     private fun sjekkFagsakIdKonsistens(iverksett: IverksettDagpenger, request: HentFagsystemsbehandlingRequest) {
-        if (iverksett.fagsak.fagsakId != request.fagsakId) {
+        // TODO Trenger håndtere sakidentifikator som både kan være UUID og String.
+        // Sånn det er nå kan det skje en subtil bug
+        if (iverksett.fagsak.fagsakId != request.fagsakId.toString()) {
             error(
                 "Inkonsistens. FagsakID mellom iverksatt behandling (fagsakID=" +
                     "${iverksett.fagsak.fagsakId}) og request (ekstern fagsakID=${request.fagsakId}) er ulike, " +

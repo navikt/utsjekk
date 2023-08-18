@@ -2,6 +2,7 @@ package no.nav.dagpenger.iverksett.infrastruktur.transformer
 
 import no.nav.dagpenger.iverksett.api.domene.Behandlingsdetaljer
 import no.nav.dagpenger.iverksett.api.domene.Fagsakdetaljer
+import no.nav.dagpenger.iverksett.api.domene.Iverksett
 import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
 import no.nav.dagpenger.iverksett.api.domene.Søker
 import no.nav.dagpenger.iverksett.api.domene.TilbakekrevingMedVarsel
@@ -73,7 +74,7 @@ fun BrevmottakerDto.toDomain(): Brevmottaker = Brevmottaker(
 
 fun IverksettDto.toDomain(): IverksettDagpenger {
     return IverksettDagpenger(
-        fagsak = this.sakId.tilSak(),
+        fagsak = this.tilSak(),
         søker = this.personIdent.tilSøker(),
         behandling = this.tilBehandling(),
         vedtak = this.vedtak.toDomain(),
@@ -81,7 +82,13 @@ fun IverksettDto.toDomain(): IverksettDagpenger {
     )
 }
 
-fun UUID.tilSak(): Fagsakdetaljer = Fagsakdetaljer(this)
+fun IverksettDto.tilSak(): Fagsakdetaljer {
+    val saksidentifikator =
+        this.sakId?.toString() ?: this.saksreferanse
+        ?: throw IllegalStateException("sakId eller saksreferanse må være satt")
+    return Fagsakdetaljer(saksidentifikator)
+}
+
 fun String.tilSøker(): Søker = Søker(personIdent = this, tilhørendeEnhet = "")
 
 fun IverksettDto.tilBehandling(): Behandlingsdetaljer = Behandlingsdetaljer(
@@ -101,7 +108,7 @@ fun IverksettDto.tilForrigeIverksetting(): IverksettDagpenger? {
     return when (this.forrigeIverksetting) {
         null -> null
         else -> IverksettDagpenger(
-            fagsak = this.sakId.tilSak(),
+            fagsak = this.tilSak(),
             søker = this.personIdent.tilSøker(),
             behandling = this.forrigeIverksetting!!.tilBehandling(),
             vedtak = this.forrigeIverksetting!!.tilVedtaksdetaljer(),

@@ -15,6 +15,7 @@ import no.nav.dagpenger.kontrakter.iverksett.tilbakekreving.OpprettTilbakekrevin
 import no.nav.dagpenger.kontrakter.iverksett.tilbakekreving.Periode
 import no.nav.dagpenger.kontrakter.iverksett.tilbakekreving.Varsel
 import no.nav.dagpenger.kontrakter.iverksett.tilbakekreving.Ytelsestype
+import java.util.UUID
 
 const val ENHETSNAVN_BREV = "NAV Arbeid og ytelser"
 
@@ -50,7 +51,7 @@ fun IverksettDagpenger.tilFagsystembehandling(enhet: Enhet) =
     HentFagsystemsbehandlingRespons(
         hentFagsystemsbehandling =
         HentFagsystemsbehandling(
-            fagsakId = this.fagsak.fagsakId,
+            fagsakId = UUID.fromString(this.fagsak.fagsakId),// TODO Vil krasje hvis fagsakIden ikke er en stringifisert UUID
             behandlingId = this.behandling.behandlingId,
             ytelsestype = Ytelsestype.valueOf(this.fagsak.stønadstype.name),
             personIdent = this.søker.personIdent,

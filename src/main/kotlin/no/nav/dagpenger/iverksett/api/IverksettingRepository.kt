@@ -29,5 +29,5 @@ interface IverksettingRepository : RepositoryInterface<Iverksett, UUID>, InsertU
     ): List<Iverksett>
 
     @Query("select behandling_id, data from iverksett where data -> 'fagsak' ->> 'fagsakId' = :fagsakId::text")
-    fun findByFagsakId(@Param("fagsakId") fagsakId: UUID): List<Iverksett>
+    fun findByFagsakId(@Param("fagsakId") fagsakId: String): List<Iverksett>
 }

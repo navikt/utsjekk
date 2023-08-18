@@ -10,7 +10,7 @@ data class Simulering(
     val tilkjentYtelse: TilkjentYtelse,
     val saksbehandlerId: String,
     val stønadstype: StønadType,
-    val sakId: UUID,
+    val sakId: String,
     val personIdent: String,
     val behandlingId: UUID,
     val vedtaksdato: LocalDate,

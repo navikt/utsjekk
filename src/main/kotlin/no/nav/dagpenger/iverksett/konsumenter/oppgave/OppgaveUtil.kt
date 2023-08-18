@@ -27,7 +27,7 @@ object OppgaveUtil {
     }
 
     fun opprettOppgaveRequest(
-        sakId: UUID,
+        sakId: String,
         personIdent: String,
         stønadstype: StønadType,
         enhetsnummer: Enhet,
@@ -38,7 +38,7 @@ object OppgaveUtil {
     ): OpprettOppgaveRequest {
         return OpprettOppgaveRequest(
             ident = OppgaveIdentV2(ident = personIdent, gruppe = IdentGruppe.FOLKEREGISTERIDENT),
-            saksId = sakId.toString(),
+            saksId = sakId,
             tema = Tema.DP,
             oppgavetype = oppgavetype,
             fristFerdigstillelse = fristFerdigstillelse(fristFerdigstillelse),
