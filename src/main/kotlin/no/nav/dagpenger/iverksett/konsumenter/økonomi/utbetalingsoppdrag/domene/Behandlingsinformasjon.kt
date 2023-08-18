@@ -1,6 +1,8 @@
 package no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene
 
+import no.nav.dagpenger.kontrakter.felles.SakIdentifikator
 import java.time.LocalDate
+import java.util.UUID
 
 /**
  * @param opphørFra Kan brukes når man ønsker å oppøre bak i tiden, før man selv var master,
@@ -11,10 +13,15 @@ import java.time.LocalDate
  */
 data class Behandlingsinformasjon(
     val saksbehandlerId: String,
-    val fagsakId: String,
+    val fagsakId: UUID? = null,
+    val saksreferanse: String? = null,
     val behandlingId: String,
     val personIdent: String,
     val vedtaksdato: LocalDate,
     val opphørFra: LocalDate?, // TODO tror denne er spesifikk for migrering. Kan nok fjernes
     val erGOmregning: Boolean = false,
-)
+) {
+    init {
+        SakIdentifikator.valider(fagsakId, saksreferanse)
+    }
+}

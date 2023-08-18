@@ -39,7 +39,8 @@ fun IverksettDagpenger.tilSimulering() = Simulering(
 fun Simulering.tilBehandlingsinformasjon(): Behandlingsinformasjon =
     Behandlingsinformasjon(
         saksbehandlerId = this.saksbehandlerId,
-        fagsakId = this.sakId.toString(),
+        fagsakId = this.sakId,
+        saksreferanse = this.saksreferanse,
         behandlingId = this.behandlingId.toString(),
         personIdent = this.personIdent,
         vedtaksdato = this.vedtaksdato,

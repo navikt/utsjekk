@@ -112,7 +112,7 @@ fun opprettBehandlingsinformasjon(
 ): Behandlingsinformasjon {
     return Behandlingsinformasjon(
         saksbehandlerId = "saksbehandlerId",
-        fagsakId = UUID.randomUUID().toString(),
+        fagsakId = UUID.randomUUID(),
         behandlingId = behandlingId.toString(),
         personIdent = "12345678910",
         vedtaksdato = LocalDate.of(2021, 1, 1),

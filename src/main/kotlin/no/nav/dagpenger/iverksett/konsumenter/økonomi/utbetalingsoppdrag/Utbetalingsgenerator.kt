@@ -11,7 +11,6 @@ import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene
 import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsoppdrag
 import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsperiode
 import java.time.LocalDate
-import java.util.UUID
 
 object Utbetalingsgenerator {
 
@@ -60,7 +59,8 @@ object Utbetalingsgenerator {
         val utbetalingsoppdrag = Utbetalingsoppdrag(
             saksbehandlerId = behandlingsinformasjon.saksbehandlerId,
             kodeEndring = kodeEndring(sisteAndelPerKjede),
-            saksnummer = UUID.fromString(behandlingsinformasjon.fagsakId), // TODO Denne feiler med saksreferanse
+            saksnummer = behandlingsinformasjon.fagsakId,
+            saksreferanse = behandlingsinformasjon.saksreferanse,
             aktoer = behandlingsinformasjon.personIdent,
             utbetalingsperiode = utbetalingsperioder(behandlingsinformasjon, nyeKjeder),
             gOmregning = behandlingsinformasjon.erGOmregning,
