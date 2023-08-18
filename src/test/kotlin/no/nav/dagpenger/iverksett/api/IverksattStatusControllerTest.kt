@@ -80,6 +80,8 @@ class IverksattStatusControllerTest : ServerTest() {
 
         opprettTestData()
 
+        println(beslutterGruppe)
+
         // Sjekk
         headers.clear()
         headers.setBearerAuth(lokalTestToken())
@@ -156,8 +158,6 @@ class IverksattStatusControllerTest : ServerTest() {
     }
 
     private fun opprettTestData(): IverksettDto {
-        val beslutterGruppe = "0000-GA-Beslutter"
-        System.setProperty("BESLUTTER_GRUPPE", beslutterGruppe)
         headers.setBearerAuth(lokalTestToken(grupper = listOf(beslutterGruppe)))
         headers.set(HttpHeaders.CONTENT_TYPE, MediaType.MULTIPART_FORM_DATA_VALUE)
 
