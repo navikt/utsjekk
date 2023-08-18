@@ -57,6 +57,7 @@ import java.time.LocalDateTime
 import java.time.YearMonth
 import java.util.Random
 import java.util.UUID
+import no.nav.dagpenger.iverksett.api.domene.SakIdentifikator
 
 fun opprettIverksettDto(
     behandlingId: UUID = UUID.randomUUID(),
@@ -90,6 +91,7 @@ fun opprettIverksettDto(
             beslutterId = "B23456",
             utbetalinger = tilkjentYtelse.utbetalinger,
             vedtaksperioder = vedtaksperioder,
+            vedtakstype = VedtakType.RAMMEVEDTAK
         ),
     )
 }
@@ -228,7 +230,7 @@ fun opprettIverksettDagpenger(
     vedtaksdetaljer: VedtaksdetaljerDagpenger = vedtaksdetaljerDagpenger(),
 ) =
     IverksettDagpenger(
-        fagsak = Fagsakdetaljer(fagsakId = UUID.randomUUID(), stønadstype = StønadType.DAGPENGER_ARBEIDSSOKER_ORDINAER),
+        fagsak = Fagsakdetaljer(fagsakId = SakIdentifikator(UUID.randomUUID()), stønadstype = StønadType.DAGPENGER_ARBEIDSSOKER_ORDINAER),
         behandling = behandlingsdetaljer,
         søker = Søker(
             personIdent = "12345678910",
@@ -248,7 +250,7 @@ fun opprettIverksettDagpenger(
 ): IverksettDagpenger {
     val behandlingType = forrigeBehandlingId?.let { BehandlingType.REVURDERING } ?: BehandlingType.FØRSTEGANGSBEHANDLING
     return IverksettDagpenger(
-        fagsak = Fagsakdetaljer(fagsakId = fagsakId, stønadstype = StønadType.DAGPENGER_ARBEIDSSOKER_ORDINAER),
+        fagsak = Fagsakdetaljer(fagsakId = SakIdentifikator(fagsakId), stønadstype = StønadType.DAGPENGER_ARBEIDSSOKER_ORDINAER),
         behandling = behandlingsdetaljer(behandlingId, forrigeBehandlingId, behandlingType),
         søker = Søker(
             personIdent = "12345678910",

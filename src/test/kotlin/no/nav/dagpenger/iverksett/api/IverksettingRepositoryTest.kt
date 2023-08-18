@@ -84,12 +84,12 @@ class IverksettingRepositoryTest : ServerTest() {
         val json: String = ResourceLoaderTestUtil.readResource("json/IverksettDtoEksempel.json")
         val iverksettData: IverksettDagpenger = objectMapper.readValue<IverksettDto>(json).toDomain()
 
-        val iverksettListe1 = iverksettingRepository.findByFagsakId(iverksettData.fagsak.fagsakId)
+        val iverksettListe1 = iverksettingRepository.findByFagsakId(iverksettData.fagsak.fagsakId.toIdString())
         assertEquals(0, iverksettListe1.size)
 
         val iverksett = iverksettingRepository.insert(lagIverksett(iverksettData))
 
-        val iverksettListe2 = iverksettingRepository.findByFagsakId(iverksettData.fagsak.fagsakId)
+        val iverksettListe2 = iverksettingRepository.findByFagsakId(iverksettData.fagsak.fagsakId.toIdString())
         assertEquals(1, iverksettListe2.size)
         assertThat(iverksett).usingRecursiveComparison().isEqualTo(iverksettListe2[0])
     }

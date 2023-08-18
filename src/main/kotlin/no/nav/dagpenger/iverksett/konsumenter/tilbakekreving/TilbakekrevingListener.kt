@@ -1,6 +1,7 @@
 package no.nav.dagpenger.iverksett.konsumenter.tilbakekreving
 
 import com.fasterxml.jackson.module.kotlin.readValue
+import java.lang.IllegalStateException
 import no.nav.dagpenger.iverksett.api.IverksettingRepository
 import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
 import no.nav.dagpenger.iverksett.infrastruktur.FamilieIntegrasjonerClient
@@ -14,6 +15,7 @@ import org.slf4j.MDC
 import org.springframework.kafka.listener.ConsumerSeekAware
 import org.springframework.stereotype.Component
 import java.util.UUID
+import no.nav.dagpenger.iverksett.api.domene.SakIdentifikator
 
 @Component
 class TilbakekrevingListener(
@@ -71,10 +73,11 @@ class TilbakekrevingListener(
     private fun sjekkFagsakIdKonsistens(iverksett: IverksettDagpenger, request: HentFagsystemsbehandlingRequest) {
         // TODO Trenger håndtere sakidentifikator som både kan være UUID og String.
         // Sånn det er nå kan det skje en subtil bug
-        if (iverksett.fagsak.fagsakId != request.fagsakId.toString()) {
+        val sakIdForRequest = SakIdentifikator(request.sakId, request.saksreferanse)
+        if (iverksett.fagsak.fagsakId != sakIdForRequest) {
             error(
                 "Inkonsistens. FagsakID mellom iverksatt behandling (fagsakID=" +
-                    "${iverksett.fagsak.fagsakId}) og request (ekstern fagsakID=${request.fagsakId}) er ulike, " +
+                    "${iverksett.fagsak.fagsakId.toIdString()}) og request (ekstern fagsakID=${sakIdForRequest.toIdString()}) er ulike, " +
                     "med behandlingID=${request.behandlingId}",
             )
         }

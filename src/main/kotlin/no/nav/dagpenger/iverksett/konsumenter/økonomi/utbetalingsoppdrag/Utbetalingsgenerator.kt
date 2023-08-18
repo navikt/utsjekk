@@ -60,7 +60,7 @@ object Utbetalingsgenerator {
         val utbetalingsoppdrag = Utbetalingsoppdrag(
             saksbehandlerId = behandlingsinformasjon.saksbehandlerId,
             kodeEndring = kodeEndring(sisteAndelPerKjede),
-            saksnummer = UUID.fromString(behandlingsinformasjon.fagsakId),
+            saksnummer = UUID.fromString(behandlingsinformasjon.fagsakId), // TODO Denne feiler med saksreferanse
             aktoer = behandlingsinformasjon.personIdent,
             utbetalingsperiode = utbetalingsperioder(behandlingsinformasjon, nyeKjeder),
             gOmregning = behandlingsinformasjon.erGOmregning,

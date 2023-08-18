@@ -40,7 +40,7 @@ class TilbakekrevingClient(
         .build()
         .toUri()
 
-    private fun finnesÅpenBehandlingUri(fagsakId: UUID) = UriComponentsBuilder.fromUri(familieTilbakeUri)
+    private fun finnesÅpenBehandlingUri(fagsakId: String) = UriComponentsBuilder.fromUri(familieTilbakeUri)
         .pathSegment("api/fagsystem/${Fagsystem.Dagpenger.kode}/fagsak/$fagsakId/finnesApenBehandling/v1")
         .build()
         .toUri()
@@ -70,7 +70,7 @@ class TilbakekrevingClient(
         postForEntity<Ressurs<String>>(opprettTilbakekrevingUri, opprettTilbakekrevingRequest)
     }
 
-    fun finnesÅpenBehandling(fagsakId: UUID): Boolean {
+    fun finnesÅpenBehandling(fagsakId: String): Boolean {
         val response: Ressurs<FinnesBehandlingResponse> = getForEntity(finnesÅpenBehandlingUri(fagsakId))
         return response.getDataOrThrow().finnesÅpenBehandling
     }

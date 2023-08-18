@@ -7,7 +7,7 @@ import no.nav.dagpenger.iverksett.api.domene.OppdragResultat
 import no.nav.dagpenger.iverksett.api.tilstand.IverksettResultatService
 import no.nav.dagpenger.iverksett.infrastruktur.configuration.FeatureToggleConfig
 import no.nav.dagpenger.iverksett.infrastruktur.featuretoggle.FeatureToggleService
-import no.nav.dagpenger.iverksett.infrastruktur.transformer.tilSak
+import no.nav.dagpenger.iverksett.infrastruktur.transformer.tilSakIdentifikator
 import no.nav.dagpenger.iverksett.konsumenter.brev.JournalførVedtaksbrevTask
 import no.nav.dagpenger.iverksett.konsumenter.hovedflyt
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.OppdragClient
@@ -86,8 +86,8 @@ class IverksettingService(
         }
 
     fun hentRammevedtak(iverksettDto: IverksettDto): Iverksett {
-        val fagsakId = iverksettDto.tilSak().fagsakId
-        val rammevedtakList = iverksettingRepository.findByFagsakId(fagsakId)
+        val fagsakId = iverksettDto.tilSakIdentifikator().fagsakId
+        val rammevedtakList = iverksettingRepository.findByFagsakId(fagsakId.toIdString())
             .filter { it.data.vedtak.vedtakstype == VedtakType.RAMMEVEDTAK }
 
         if (rammevedtakList.size != 1) {

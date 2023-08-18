@@ -46,7 +46,7 @@ data class IverksettDagpenger(
 }
 
 data class Fagsakdetaljer(
-    val fagsakId: String,
+    val fagsakId: SakIdentifikator,
     val stønadstype: StønadType = StønadType.DAGPENGER_ARBEIDSSOKER_ORDINAER,
 )
 

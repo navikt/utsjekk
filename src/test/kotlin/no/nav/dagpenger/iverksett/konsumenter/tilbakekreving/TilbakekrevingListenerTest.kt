@@ -25,6 +25,7 @@ import org.junit.jupiter.api.Test
 import java.time.LocalDate
 import java.util.Optional
 import java.util.UUID
+import no.nav.dagpenger.iverksett.api.domene.SakIdentifikator
 
 internal class TilbakekrevingListenerTest {
 
@@ -59,7 +60,7 @@ internal class TilbakekrevingListenerTest {
             .returns(
                 Optional.of(
                     lagIverksett(
-                        behandling.copy(fagsak = behandling.fagsak.copy(fagsakId = UUID.randomUUID())),
+                        behandling.copy(fagsak = behandling.fagsak.copy(fagsakId = SakIdentifikator(UUID.randomUUID()))),
                     ),
                 ),
             )
@@ -70,7 +71,7 @@ internal class TilbakekrevingListenerTest {
     private fun record(ytelsestype: Ytelsestype): ConsumerRecord<String, String> {
         val behandling = objectMapper.writeValueAsString(
             HentFagsystemsbehandling(
-                fagsakId = UUID.randomUUID(),
+                sakId = UUID.randomUUID(),
                 behandlingId = UUID.randomUUID(),
                 ytelsestype = ytelsestype,
                 personIdent = "12345678910",
