@@ -57,7 +57,6 @@ import java.time.LocalDateTime
 import java.time.YearMonth
 import java.util.Random
 import java.util.UUID
-import no.nav.dagpenger.iverksett.api.domene.SakIdentifikator
 
 fun opprettIverksettDto(
     behandlingId: UUID = UUID.randomUUID(),

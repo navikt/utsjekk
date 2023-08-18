@@ -12,6 +12,7 @@ import no.nav.dagpenger.iverksett.konsumenter.brev.domain.Brevmottaker
 import no.nav.dagpenger.iverksett.konsumenter.brev.domain.Brevmottakere
 import no.nav.dagpenger.kontrakter.felles.BrevmottakerDto
 import no.nav.dagpenger.kontrakter.felles.Datoperiode
+import no.nav.dagpenger.kontrakter.felles.SakIdentifikator
 import no.nav.dagpenger.kontrakter.iverksett.BehandlingType
 import no.nav.dagpenger.kontrakter.iverksett.BehandlingÅrsak
 import no.nav.dagpenger.kontrakter.iverksett.ForrigeIverksettingDto
@@ -21,7 +22,6 @@ import no.nav.dagpenger.kontrakter.iverksett.TilbakekrevingMedVarselDto
 import no.nav.dagpenger.kontrakter.iverksett.VedtaksdetaljerDto
 import no.nav.dagpenger.kontrakter.iverksett.VedtaksperiodeDto
 import java.time.LocalDate
-import no.nav.dagpenger.iverksett.api.domene.SakIdentifikator
 
 fun VedtaksperiodeDto.toDomain(): VedtaksperiodeDagpenger {
     return VedtaksperiodeDagpenger(

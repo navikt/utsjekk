@@ -25,8 +25,6 @@ import org.junit.jupiter.api.Test
 import java.time.LocalDate
 import java.util.Optional
 import java.util.UUID
-import no.nav.dagpenger.iverksett.api.domene.SakIdentifikator
-
 internal class TilbakekrevingListenerTest {
 
     private val iverksettingRepository = mockk<IverksettingRepository>()

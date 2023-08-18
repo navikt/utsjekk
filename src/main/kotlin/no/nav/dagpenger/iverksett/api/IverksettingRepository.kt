@@ -1,9 +1,9 @@
 package no.nav.dagpenger.iverksett.api
 
 import no.nav.dagpenger.iverksett.api.domene.Iverksett
-import no.nav.dagpenger.iverksett.api.domene.SakIdentifikator
 import no.nav.dagpenger.iverksett.infrastruktur.repository.InsertUpdateRepository
 import no.nav.dagpenger.iverksett.infrastruktur.repository.RepositoryInterface
+import no.nav.dagpenger.kontrakter.felles.SakIdentifikator
 import org.springframework.data.jdbc.repository.query.Query
 import org.springframework.data.repository.query.Param
 import org.springframework.stereotype.Repository
@@ -47,7 +47,7 @@ fun IverksettingRepository.findBySakIdentifikator(
     sakIdentifikator: SakIdentifikator
 ): List<Iverksett> {
     return if (sakIdentifikator.sakId != null) {
-        this.findByFagsakId(sakIdentifikator.sakId)
+        this.findByFagsakId(sakIdentifikator.sakId!!)
     } else {
         this.findBySaksreferanse(sakIdentifikator.saksreferanse!!)
     }

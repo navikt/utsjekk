@@ -1,6 +1,7 @@
 package no.nav.dagpenger.iverksett.api.domene
 
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene.Behandlingsinformasjon
+import no.nav.dagpenger.kontrakter.felles.SakIdentifikator
 import no.nav.dagpenger.kontrakter.felles.StønadType
 import java.time.LocalDate
 import java.util.UUID
@@ -18,7 +19,7 @@ data class Simulering(
     val forrigeBehandlingId: UUID?,
 ) {
     init {
-        SakIdentifikator(sakId, saksreferanse)
+        SakIdentifikator.valider(sakId, saksreferanse)
     }
 }
 

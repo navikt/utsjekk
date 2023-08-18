@@ -1,6 +1,5 @@
 package no.nav.dagpenger.iverksett.konsumenter.tilbakekreving
 
-import no.nav.dagpenger.iverksett.api.domene.SakIdentifikator
 import no.nav.dagpenger.kontrakter.felles.Fagsystem
 import no.nav.dagpenger.kontrakter.iverksett.tilbakekreving.Behandling
 import no.nav.dagpenger.kontrakter.iverksett.tilbakekreving.FinnesBehandlingResponse
