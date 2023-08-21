@@ -1,7 +1,7 @@
 package no.nav.dagpenger.iverksett.konsumenter.tilbakekreving
 
 import com.fasterxml.jackson.module.kotlin.readValue
-import java.lang.IllegalStateException
+import java.util.UUID
 import no.nav.dagpenger.iverksett.api.IverksettingRepository
 import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
 import no.nav.dagpenger.iverksett.infrastruktur.FamilieIntegrasjonerClient
@@ -15,7 +15,6 @@ import org.slf4j.LoggerFactory
 import org.slf4j.MDC
 import org.springframework.kafka.listener.ConsumerSeekAware
 import org.springframework.stereotype.Component
-import java.util.UUID
 
 @Component
 class TilbakekrevingListener(
@@ -71,8 +70,6 @@ class TilbakekrevingListener(
     }
 
     private fun sjekkFagsakIdKonsistens(iverksett: IverksettDagpenger, request: HentFagsystemsbehandlingRequest) {
-        // TODO Trenger håndtere sakidentifikator som både kan være UUID og String.
-        // Sånn det er nå kan det skje en subtil bug
         val sakIdForRequest = SakIdentifikator(request.sakId, request.saksreferanse)
         if (iverksett.fagsak.sakIdentifikator != sakIdForRequest) {
             error(
