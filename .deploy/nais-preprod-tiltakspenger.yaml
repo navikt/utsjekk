@@ -35,6 +35,8 @@ spec:
   env:
     - name: SPRING_PROFILES_ACTIVE
       value: dev
+    - name: BESLUTTER_GRUPPE
+      value: "TODO" #Riktig beslutter-gruppe i AAD for tiltakspenger må settes her
   azure:
     application:
       enabled: true
