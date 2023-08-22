@@ -51,7 +51,7 @@ class IverksettingController(
         @RequestBody iverksettDto: IverksettDto,
     ): ResponseEntity<Void> {
         secureLogger.info("Saksbehandler-token: $bearerToken")
-        tilgangskontrollService.valider(iverksettDto, bearerToken)
+        tilgangskontrollService.valider(iverksettDto)
 
         iverksettDto.valider()
         val iverksett = iverksettDto.toDomain()
@@ -74,7 +74,7 @@ class IverksettingController(
         @RequestPart("data") iverksettDto: IverksettDto,
         @RequestPart("fil", required = false) fil: MultipartFile?,
     ): ResponseEntity<Void> {
-        tilgangskontrollService.valider(iverksettDto, bearerToken)
+        tilgangskontrollService.valider(iverksettDto)
 
         val brev = fil?.let { Brev(it.bytes) }
         iverksettDto.valider()

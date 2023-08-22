@@ -14,6 +14,7 @@ import no.nav.dagpenger.iverksett.konsumenter.økonomi.OppdragClient
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.grensesnitt.GrensesnittavstemmingDto
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.grensesnitt.GrensesnittavstemmingTask
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.grensesnitt.tilTask
+import no.nav.dagpenger.kontrakter.felles.SakIdentifikator
 import no.nav.dagpenger.kontrakter.felles.StønadType
 import no.nav.dagpenger.kontrakter.felles.tilFagsystem
 import no.nav.dagpenger.kontrakter.iverksett.IverksettDto
@@ -169,6 +170,13 @@ class IverksettingService(
         )
         taskService.save(grensesnittavstemmingDto.tilTask())
         return true
+    }
+
+    fun erFørsteVedtakPåSak(sakId: SakIdentifikator): Boolean {
+        val vedtakForSak = iverksettingRepository
+            .findBySakIdentifikator(sakId)
+
+        return vedtakForSak.isEmpty()
     }
 
     companion object {
