@@ -1,10 +1,12 @@
 package no.nav.dagpenger.iverksett.api
 
-import com.nimbusds.jwt.JWTClaimsSet
-import com.nimbusds.jwt.PlainJWT
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkObject
+import io.mockk.mockkStatic
+import io.mockk.unmockkObject
 import no.nav.dagpenger.iverksett.api.tilgangskontroll.IverksettingTilgangskontrollService
+import no.nav.dagpenger.iverksett.api.tilgangskontroll.TokenContext
 import no.nav.dagpenger.iverksett.api.tilstand.IverksettResultatService
 import no.nav.dagpenger.iverksett.infrastruktur.featuretoggle.FeatureToggleService
 import no.nav.dagpenger.iverksett.infrastruktur.util.opprettIverksettDto
@@ -42,74 +44,69 @@ class IverksettingTilgangskontrollServiceTest {
             featureToggleServiceMock,
             beslutterGruppe,
         )
-    }
 
-    @Test
-    fun `skal få FORBIDDEN når rammevedtak sendes av ikke beslutter`() {
-        val iverksettDtoTmp = opprettIverksettDto()
-        val nåværendeIverksetting = iverksettDtoTmp.copy(
-            vedtak = iverksettDtoTmp.vedtak.copy(vedtakstype = VedtakType.RAMMEVEDTAK),
-        )
+        every { featureToggleServiceMock.isEnabled(any(),any()) } returns true
 
-        assertApiFeil(HttpStatus.FORBIDDEN) {
-            iverksettingTilgangskontrollService.validerAtRammevedtakSendesAvBeslutter(nåværendeIverksetting, "")
-        }
     }
 
     @Test
     fun `skal få OK når rammevedtak sendes av beslutter`() {
-        val iverksettDtoTmp = opprettIverksettDto()
-        val nåværendeIverksetting = iverksettDtoTmp.copy(
-            vedtak = iverksettDtoTmp.vedtak.copy(vedtakstype = VedtakType.RAMMEVEDTAK),
+        val nåværendeIverksetting = opprettIverksettDto().copy(
+            vedtak = opprettIverksettDto().vedtak.copy(vedtakstype = VedtakType.RAMMEVEDTAK),
         )
 
-        System.setProperty("BESLUTTER_GRUPPE", beslutterGruppe)
-        val token = PlainJWT(JWTClaimsSet.Builder().claim("groups", arrayOf(beslutterGruppe)).build())
-        assertDoesNotThrow {
-            iverksettingTilgangskontrollService.validerAtRammevedtakSendesAvBeslutter(
-                nåværendeIverksetting,
-                token.serialize(),
-            )
-        }
-    }
-
-    @Test
-    fun `skal få CONFLICT når utbetaingsvedtak sendes uten rammevedtak`() {
-        val iverksettDtoTmp = opprettIverksettDto()
-        val nåværendeIverksetting = iverksettDtoTmp.copy(
-            vedtak = iverksettDtoTmp.vedtak.copy(vedtakstype = VedtakType.UTBETALINGSVEDTAK),
-        )
-
-        every { iverksettingRepository.findByFagsakId(
-            nåværendeIverksetting.sakId!!)
+        every {
+            iverksettingRepository.findByFagsakId(nåværendeIverksetting.sakId!!)
         } returns emptyList()
 
-        assertApiFeil(HttpStatus.CONFLICT) {
-            iverksettingTilgangskontrollService.validerAtDetFinnesIverksattRammevedtak(nåværendeIverksetting)
+        mockkObject(TokenContext)
+        every { TokenContext.hentGrupper() } returns listOf(beslutterGruppe)
+
+        assertDoesNotThrow {
+            iverksettingTilgangskontrollService.valider(
+                nåværendeIverksetting
+            )
+        }
+
+        unmockkObject(TokenContext)
+    }
+
+    @Test
+    fun `skal få FORBIDDEN når første vedtak på sak sendes uten beslutter-token`() {
+        val nåværendeIverksetting = opprettIverksettDto()
+
+        every {
+            iverksettingRepository.findByFagsakId(
+                nåværendeIverksetting.sakId!!
+            )
+        } returns emptyList()
+
+        assertApiFeil(HttpStatus.FORBIDDEN) {
+            iverksettingTilgangskontrollService.valider(nåværendeIverksetting)
         }
     }
 
     @Test
-    fun `skal få OK når utbetaingsvedtak sendes med rammevedtak`() {
-        val iverksettingTmp = lagIverksettData()
-        val forrigeIverksetting = iverksettingTmp.copy(
-            vedtak = iverksettingTmp.vedtak.copy(
+    fun `skal få OK når utbetalingsvedtak sendes etter autorisert vedtak`() {
+        val forrigeIverksetting = lagIverksettData().copy(
+            vedtak = lagIverksettData().vedtak.copy(
                 vedtakstype = VedtakType.RAMMEVEDTAK,
             ),
         )
 
-        val iverksettDtoTmp = opprettIverksettDto()
-        val nåværendeIverksetting = iverksettDtoTmp.copy(
-            vedtak = iverksettDtoTmp.vedtak.copy(vedtakstype = VedtakType.UTBETALINGSVEDTAK),
+        val nåværendeIverksetting = opprettIverksettDto().copy(
+            vedtak = opprettIverksettDto().vedtak.copy(vedtakstype = VedtakType.UTBETALINGSVEDTAK),
         )
 
         val iverksettListe = listOf(lagIverksett(forrigeIverksetting))
-        every { iverksettingRepository.findByFagsakId(
-            nåværendeIverksetting.sakId!!)
+        every {
+            iverksettingRepository.findByFagsakId(
+                nåværendeIverksetting.sakId!!
+            )
         } returns iverksettListe
 
         assertDoesNotThrow {
-            iverksettingTilgangskontrollService.validerAtDetFinnesIverksattRammevedtak(nåværendeIverksetting)
+            iverksettingTilgangskontrollService.valider(nåværendeIverksetting)
         }
     }
 

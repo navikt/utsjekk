@@ -37,21 +37,15 @@ class IverksettingController(
     private val validatorService: IverksettingValidatorService,
     private val tilgangskontrollService: IverksettingTilgangskontrollService,
 ) {
-
-    private val secureLogger = LoggerFactory.getLogger("secureLogger")
-
     @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE])
     @Tag(name = "Iverksetting")
     @ApiResponse(responseCode = "202", description = "iverksetting er mottatt")
     @ApiResponse(responseCode = "400", description = "ugyldig iverksetting")
     fun iverksettUtenBrev(
         @Parameter(required = false, hidden = true)
-        @RequestHeader("Authorization")
-        bearerToken: String,
         @RequestBody iverksettDto: IverksettDto,
     ): ResponseEntity<Void> {
-        secureLogger.info("Saksbehandler-token: $bearerToken")
-        tilgangskontrollService.valider(iverksettDto, bearerToken)
+        tilgangskontrollService.valider(iverksettDto)
 
         iverksettDto.valider()
         val iverksett = iverksettDto.toDomain()
@@ -69,12 +63,10 @@ class IverksettingController(
     @ApiResponse(responseCode = "400", description = "ugyldig iverksetting")
     fun iverksett(
         @Parameter(required = false, hidden = true)
-        @RequestHeader("Authorization")
-        bearerToken: String,
         @RequestPart("data") iverksettDto: IverksettDto,
         @RequestPart("fil", required = false) fil: MultipartFile?,
     ): ResponseEntity<Void> {
-        tilgangskontrollService.valider(iverksettDto, bearerToken)
+        tilgangskontrollService.valider(iverksettDto)
 
         val brev = fil?.let { Brev(it.bytes) }
         iverksettDto.valider()
@@ -85,13 +77,6 @@ class IverksettingController(
         iverksettingService.startIverksetting(iverksett, brev)
 
         return ResponseEntity.accepted().build()
-    }
-
-    @GetMapping("/rammevedtak", produces = ["application/json"])
-    @ProtectedWithClaims(issuer = "azuread")
-    fun varselOmRammevedtak(): ResponseEntity<String> {
-        tilgangskontrollService.validerBeslutterkontekst()
-        return ResponseEntity.ok(TokenContext.hentSaksbehandlerIdent())
     }
 
     @GetMapping("{behandlingId}/status", produces = ["application/json"])
