@@ -21,12 +21,6 @@ class IverksettingTilgangskontrollService(
 ) {
     private val logger = LoggerFactory.getLogger(this::class.java)
 
-    fun validerBeslutterkontekst() {
-        if (!erBeslutter()) {
-            throw ApiFeil("Varsel om rammevedtak kommer ikke fra beslutter", HttpStatus.FORBIDDEN)
-        }
-    }
-
     fun valider(iverksett: IverksettDto) {
         if (featureToggleService.isEnabled(FeatureToggleConfig.TILGANGSKONTROLL, false)) {
             validerFørsteVedtakPåSakSendesAvBeslutter(iverksett)
