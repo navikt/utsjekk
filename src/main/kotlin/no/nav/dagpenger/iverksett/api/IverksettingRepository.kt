@@ -3,6 +3,7 @@ package no.nav.dagpenger.iverksett.api
 import no.nav.dagpenger.iverksett.api.domene.Iverksett
 import no.nav.dagpenger.iverksett.infrastruktur.repository.InsertUpdateRepository
 import no.nav.dagpenger.iverksett.infrastruktur.repository.RepositoryInterface
+import no.nav.dagpenger.kontrakter.felles.SakIdentifikator
 import org.springframework.data.jdbc.repository.query.Query
 import org.springframework.data.repository.query.Param
 import org.springframework.stereotype.Repository
@@ -19,9 +20,9 @@ interface IverksettingRepository : RepositoryInterface<Iverksett, UUID>, InsertU
 
     @Query(
         "select behandling_id, data " +
-            "from iverksett " +
-            "where data -> 'søker' ->> 'personIdent' = :personId " +
-            "and data -> 'vedtak' ->> 'vedtaksresultat' = :vedtaksresultat",
+                "from iverksett " +
+                "where data -> 'søker' ->> 'personIdent' = :personId " +
+                "and data -> 'vedtak' ->> 'vedtaksresultat' = :vedtaksresultat",
     )
     fun findByPersonIdAndResult(
         @Param("personId") personId: String,
@@ -30,4 +31,24 @@ interface IverksettingRepository : RepositoryInterface<Iverksett, UUID>, InsertU
 
     @Query("select behandling_id, data from iverksett where data -> 'fagsak' ->> 'fagsakId' = :fagsakId::text")
     fun findByFagsakId(@Param("fagsakId") fagsakId: UUID): List<Iverksett>
+
+    @Query(
+        """
+        select behandling_id, data from iverksett 
+        where data -> 'fagsak' ->> 'saksreferanse' = :saksreferanse
+        """
+    )
+    fun findBySaksreferanse(
+        @Param("saksreferanse") saksreferanse: String,
+    ): List<Iverksett>
+}
+
+fun IverksettingRepository.findBySakIdentifikator(
+    sakIdentifikator: SakIdentifikator
+): List<Iverksett> {
+    return if (sakIdentifikator.sakId != null) {
+        this.findByFagsakId(sakIdentifikator.sakId!!)
+    } else {
+        this.findBySaksreferanse(sakIdentifikator.saksreferanse!!)
+    }
 }

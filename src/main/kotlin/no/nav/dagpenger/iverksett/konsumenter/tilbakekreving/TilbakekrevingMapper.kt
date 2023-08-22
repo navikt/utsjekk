@@ -50,7 +50,8 @@ fun IverksettDagpenger.tilFagsystembehandling(enhet: Enhet) =
     HentFagsystemsbehandlingRespons(
         hentFagsystemsbehandling =
         HentFagsystemsbehandling(
-            fagsakId = this.fagsak.fagsakId,
+            sakId = this.fagsak.fagsakId,
+            saksreferanse = this.fagsak.saksreferanse,
             behandlingId = this.behandling.behandlingId,
             ytelsestype = Ytelsestype.valueOf(this.fagsak.stønadstype.name),
             personIdent = this.søker.personIdent,

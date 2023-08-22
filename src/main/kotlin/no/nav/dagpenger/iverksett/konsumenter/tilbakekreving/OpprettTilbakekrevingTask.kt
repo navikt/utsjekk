@@ -121,7 +121,7 @@ class OpprettTilbakekrevingTask(
     }
 
     private fun finnesÅpenTilbakekrevingsbehandling(nyIverksett: IverksettDagpenger): Boolean =
-        tilbakekrevingClient.finnesÅpenBehandling(nyIverksett.fagsak.fagsakId)
+        tilbakekrevingClient.finnesÅpenBehandling(nyIverksett.fagsak.toIdString())
 
     companion object {
 

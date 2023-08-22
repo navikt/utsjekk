@@ -131,7 +131,8 @@ class IverksettingValidatorServiceTest {
     private fun beregnUtbetalingsoppdrag(iverksettData: IverksettDagpenger): BeregnetUtbetalingsoppdrag {
         val behandlingsinformasjon = Behandlingsinformasjon(
             saksbehandlerId = iverksettData.vedtak.saksbehandlerId,
-            fagsakId = iverksettData.sakId.toString(),
+            fagsakId = iverksettData.sakId,
+            saksreferanse = iverksettData.fagsak.saksreferanse,
             behandlingId = iverksettData.behandlingId.toString(),
             personIdent = iverksettData.personIdent,
             vedtaksdato = iverksettData.vedtak.vedtakstidspunkt.toLocalDate(),

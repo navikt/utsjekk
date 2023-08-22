@@ -46,7 +46,7 @@ internal class TilbakekrevingClientTest : ServerTest() {
 
     @Test
     fun `finnesÅpenBehandling returnerer true hvis server retrurnerer transportobjekt med true`() {
-        val finnesÅpenBehandling = tilbakekrevingClient.finnesÅpenBehandling(UUID.randomUUID())
+        val finnesÅpenBehandling = tilbakekrevingClient.finnesÅpenBehandling(UUID.randomUUID().toString())
 
         assertThat(finnesÅpenBehandling).isEqualTo(true)
     }

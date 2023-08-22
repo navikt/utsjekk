@@ -80,7 +80,9 @@ class IverksettingTilgangskontrollServiceTest {
             vedtak = iverksettDtoTmp.vedtak.copy(vedtakstype = VedtakType.UTBETALINGSVEDTAK),
         )
 
-        every { iverksettingRepository.findByFagsakId(nåværendeIverksetting.sakId) } returns emptyList()
+        every { iverksettingRepository.findByFagsakId(
+            nåværendeIverksetting.sakId!!)
+        } returns emptyList()
 
         assertApiFeil(HttpStatus.CONFLICT) {
             iverksettingTilgangskontrollService.validerAtDetFinnesIverksattRammevedtak(nåværendeIverksetting)
@@ -102,7 +104,9 @@ class IverksettingTilgangskontrollServiceTest {
         )
 
         val iverksettListe = listOf(lagIverksett(forrigeIverksetting))
-        every { iverksettingRepository.findByFagsakId(nåværendeIverksetting.sakId) } returns iverksettListe
+        every { iverksettingRepository.findByFagsakId(
+            nåværendeIverksetting.sakId!!)
+        } returns iverksettListe
 
         assertDoesNotThrow {
             iverksettingTilgangskontrollService.validerAtDetFinnesIverksattRammevedtak(nåværendeIverksetting)

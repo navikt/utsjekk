@@ -64,7 +64,8 @@ internal class TilbakekrevingMapperTest {
         val fagsystemsbehandling = iverksett.tilFagsystembehandling(enhet = enhet).hentFagsystemsbehandling!!
 
         assertThat(fagsystemsbehandling.behandlingId).isEqualTo(iverksett.behandling.behandlingId)
-        assertThat(fagsystemsbehandling.fagsakId).isEqualTo(iverksett.fagsak.fagsakId)
+        assertThat(fagsystemsbehandling.sakId).isEqualTo(iverksett.fagsak.fagsakId)
+        assertThat(fagsystemsbehandling.saksreferanse).isEqualTo(iverksett.fagsak.saksreferanse)
         assertThat(fagsystemsbehandling.ytelsestype.name).isEqualTo(iverksett.fagsak.stønadstype.name)
         assertThat(fagsystemsbehandling.revurderingsvedtaksdato).isEqualTo(iverksett.vedtak.vedtakstidspunkt.toLocalDate())
         assertThat(fagsystemsbehandling.personIdent).isEqualTo(iverksett.søker.personIdent)

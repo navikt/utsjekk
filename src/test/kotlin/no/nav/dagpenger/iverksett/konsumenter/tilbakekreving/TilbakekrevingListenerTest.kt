@@ -25,7 +25,6 @@ import org.junit.jupiter.api.Test
 import java.time.LocalDate
 import java.util.Optional
 import java.util.UUID
-
 internal class TilbakekrevingListenerTest {
 
     private val iverksettingRepository = mockk<IverksettingRepository>()
@@ -70,7 +69,7 @@ internal class TilbakekrevingListenerTest {
     private fun record(ytelsestype: Ytelsestype): ConsumerRecord<String, String> {
         val behandling = objectMapper.writeValueAsString(
             HentFagsystemsbehandling(
-                fagsakId = UUID.randomUUID(),
+                sakId = UUID.randomUUID(),
                 behandlingId = UUID.randomUUID(),
                 ytelsestype = ytelsestype,
                 personIdent = "12345678910",

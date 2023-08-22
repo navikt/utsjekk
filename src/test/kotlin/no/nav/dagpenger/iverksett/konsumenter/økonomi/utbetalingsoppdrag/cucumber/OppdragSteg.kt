@@ -37,7 +37,7 @@ import org.slf4j.LoggerFactory
 import java.time.LocalDate
 import java.util.UUID
 
-val FAGSAK_ID = UUID.randomUUID().toString()
+val FAGSAK_ID = UUID.randomUUID()
 
 class OppdragSteg {
 

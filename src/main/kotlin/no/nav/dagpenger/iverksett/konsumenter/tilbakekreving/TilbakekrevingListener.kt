@@ -1,9 +1,11 @@
 package no.nav.dagpenger.iverksett.konsumenter.tilbakekreving
 
 import com.fasterxml.jackson.module.kotlin.readValue
+import java.util.UUID
 import no.nav.dagpenger.iverksett.api.IverksettingRepository
 import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
 import no.nav.dagpenger.iverksett.infrastruktur.FamilieIntegrasjonerClient
+import no.nav.dagpenger.kontrakter.felles.SakIdentifikator
 import no.nav.dagpenger.kontrakter.felles.objectMapper
 import no.nav.dagpenger.kontrakter.iverksett.tilbakekreving.HentFagsystemsbehandlingRequest
 import no.nav.dagpenger.kontrakter.iverksett.tilbakekreving.HentFagsystemsbehandlingRespons
@@ -13,7 +15,6 @@ import org.slf4j.LoggerFactory
 import org.slf4j.MDC
 import org.springframework.kafka.listener.ConsumerSeekAware
 import org.springframework.stereotype.Component
-import java.util.UUID
 
 @Component
 class TilbakekrevingListener(
@@ -69,10 +70,11 @@ class TilbakekrevingListener(
     }
 
     private fun sjekkFagsakIdKonsistens(iverksett: IverksettDagpenger, request: HentFagsystemsbehandlingRequest) {
-        if (iverksett.fagsak.fagsakId != request.fagsakId) {
+        val sakIdForRequest = SakIdentifikator(request.sakId, request.saksreferanse)
+        if (iverksett.fagsak.sakIdentifikator != sakIdForRequest) {
             error(
                 "Inkonsistens. FagsakID mellom iverksatt behandling (fagsakID=" +
-                    "${iverksett.fagsak.fagsakId}) og request (ekstern fagsakID=${request.fagsakId}) er ulike, " +
+                    "${iverksett.fagsak.sakIdentifikator}) og request (ekstern fagsakID=${sakIdForRequest}) er ulike, " +
                     "med behandlingID=${request.behandlingId}",
             )
         }

@@ -12,6 +12,7 @@ import no.nav.dagpenger.iverksett.konsumenter.brev.domain.Brevmottaker
 import no.nav.dagpenger.iverksett.konsumenter.brev.domain.Brevmottakere
 import no.nav.dagpenger.kontrakter.felles.BrevmottakerDto
 import no.nav.dagpenger.kontrakter.felles.Datoperiode
+import no.nav.dagpenger.kontrakter.felles.SakIdentifikator
 import no.nav.dagpenger.kontrakter.iverksett.BehandlingType
 import no.nav.dagpenger.kontrakter.iverksett.BehandlingÅrsak
 import no.nav.dagpenger.kontrakter.iverksett.ForrigeIverksettingDto
@@ -21,7 +22,6 @@ import no.nav.dagpenger.kontrakter.iverksett.TilbakekrevingMedVarselDto
 import no.nav.dagpenger.kontrakter.iverksett.VedtaksdetaljerDto
 import no.nav.dagpenger.kontrakter.iverksett.VedtaksperiodeDto
 import java.time.LocalDate
-import java.util.UUID
 
 fun VedtaksperiodeDto.toDomain(): VedtaksperiodeDagpenger {
     return VedtaksperiodeDagpenger(
@@ -73,7 +73,7 @@ fun BrevmottakerDto.toDomain(): Brevmottaker = Brevmottaker(
 
 fun IverksettDto.toDomain(): IverksettDagpenger {
     return IverksettDagpenger(
-        fagsak = this.sakId.tilSak(),
+        fagsak = this.tilFagsak(),
         søker = this.personIdent.tilSøker(),
         behandling = this.tilBehandling(),
         vedtak = this.vedtak.toDomain(),
@@ -81,7 +81,18 @@ fun IverksettDto.toDomain(): IverksettDagpenger {
     )
 }
 
-fun UUID.tilSak(): Fagsakdetaljer = Fagsakdetaljer(this)
+fun IverksettDto.tilFagsak(): Fagsakdetaljer {
+    return Fagsakdetaljer(
+        fagsakId = this.sakId,
+        saksreferanse = this.saksreferanse
+    )
+}
+
+fun IverksettDto.tilSakIdentifikator(): SakIdentifikator {
+    return SakIdentifikator(this.sakId, this.saksreferanse)
+}
+
+
 fun String.tilSøker(): Søker = Søker(personIdent = this, tilhørendeEnhet = "")
 
 fun IverksettDto.tilBehandling(): Behandlingsdetaljer = Behandlingsdetaljer(
@@ -101,7 +112,7 @@ fun IverksettDto.tilForrigeIverksetting(): IverksettDagpenger? {
     return when (this.forrigeIverksetting) {
         null -> null
         else -> IverksettDagpenger(
-            fagsak = this.sakId.tilSak(),
+            fagsak = this.tilFagsak(),
             søker = this.personIdent.tilSøker(),
             behandling = this.forrigeIverksetting!!.tilBehandling(),
             vedtak = this.forrigeIverksetting!!.tilVedtaksdetaljer(),

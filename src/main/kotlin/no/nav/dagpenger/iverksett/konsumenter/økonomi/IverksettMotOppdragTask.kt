@@ -64,7 +64,8 @@ class IverksettMotOppdragTask(
     ) {
         val behandlingsinformasjon = Behandlingsinformasjon(
             saksbehandlerId = iverksett.vedtak.saksbehandlerId,
-            fagsakId = iverksett.sakId.toString(),
+            fagsakId = iverksett.sakId,
+            saksreferanse = iverksett.fagsak.saksreferanse,
             behandlingId = iverksett.behandlingId.toString(),
             personIdent = iverksett.personIdent,
             vedtaksdato = iverksett.vedtak.vedtakstidspunkt.toLocalDate(),

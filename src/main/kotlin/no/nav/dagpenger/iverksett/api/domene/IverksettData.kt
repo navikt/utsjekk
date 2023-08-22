@@ -2,6 +2,7 @@ package no.nav.dagpenger.iverksett.api.domene
 
 import no.nav.dagpenger.iverksett.konsumenter.brev.domain.Brevmottakere
 import no.nav.dagpenger.kontrakter.felles.Datoperiode
+import no.nav.dagpenger.kontrakter.felles.SakIdentifikator
 import no.nav.dagpenger.kontrakter.felles.StønadType
 import no.nav.dagpenger.kontrakter.felles.Tilbakekrevingsvalg
 import no.nav.dagpenger.kontrakter.iverksett.AvslagÅrsak
@@ -46,9 +47,18 @@ data class IverksettDagpenger(
 }
 
 data class Fagsakdetaljer(
-    val fagsakId: UUID,
+    val fagsakId: UUID? = null,
+    val saksreferanse: String? = null,
     val stønadstype: StønadType = StønadType.DAGPENGER_ARBEIDSSOKER_ORDINAER,
-)
+) {
+    init {
+        SakIdentifikator.valider(fagsakId, saksreferanse)
+    }
+
+    val sakIdentifikator: SakIdentifikator get() = SakIdentifikator(fagsakId, saksreferanse)
+
+    fun toIdString() = fagsakId?.toString() ?: saksreferanse!!
+}
 
 data class Søker(
     val personIdent: String,
