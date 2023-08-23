@@ -1,5 +1,6 @@
 package no.nav.dagpenger.iverksett.konsumenter.økonomi.simulering
 
+import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import no.nav.dagpenger.iverksett.infrastruktur.advice.Ressurs
 import no.nav.dagpenger.iverksett.infrastruktur.transformer.toDomain
@@ -22,6 +23,7 @@ class SimuleringController(
 
     @PostMapping(produces = ["application/json"])
     @Tag(name = "Simulering")
+    @Operation(hidden = true)
     fun hentSimulering(@RequestBody simuleringDto: SimuleringDto): Ressurs<BeriketSimuleringsresultat> {
         val beriketSimuleringResultat =
             simuleringService.hentBeriketSimulering(simuleringDto.toDomain())

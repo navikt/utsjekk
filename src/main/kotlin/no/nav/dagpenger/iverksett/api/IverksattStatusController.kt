@@ -1,5 +1,6 @@
 package no.nav.dagpenger.iverksett.api
 
+import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import no.nav.dagpenger.kontrakter.datadeling.DatadelingRequest
 import no.nav.dagpenger.kontrakter.datadeling.DatadelingResponse
@@ -25,14 +26,16 @@ class IverksattStatusController(
     private val vedtakStatusService: VedtakStatusService,
 ) {
     @GetMapping("/{personId}", produces = ["application/json"])
-    @Tag(name = "Status")
+    @Tag(name = "Datadeling")
+    @Operation(summary = "Få vedtaksstatus for person")
     fun hentStatusForPerson(@PathVariable personId: String): ResponseEntity<VedtaksstatusDto> {
         val status = vedtakStatusService.getVedtakStatus(personId)
         return status?.let { ResponseEntity(status, HttpStatus.OK) } ?: ResponseEntity(null, HttpStatus.NOT_FOUND)
     }
 
     @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE], produces = [MediaType.APPLICATION_JSON_VALUE])
-    @Tag(name = "Iverksettinger for person og periode")
+    @Tag(name = "Datadeling")
+    @Operation(summary = "Få vedtaksstatus for person og periode")
     fun hentVedtaksperioderForPersonOgPeriode(@RequestBody request: DatadelingRequest): ResponseEntity<DatadelingResponse> {
         val response = vedtakStatusService.hentVedtaksperioderForPersonOgPeriode(request)
         return ResponseEntity(response, HttpStatus.OK)
