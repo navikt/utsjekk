@@ -16,7 +16,7 @@
     <name>Iverksett</name>
 
     <properties>
-        <dp-kontrakter.version>2.0_20230823165905_82aeca5</dp-kontrakter.version>
+        <dp-kontrakter.version>2.0_20230823173600_d8b38ed</dp-kontrakter.version>
         <revision>1.0</revision>
         <sha1/>
         <changelist>-SNAPSHOT</changelist>

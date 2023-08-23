@@ -36,7 +36,17 @@ class IverksettingController(
 ) {
     @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE])
     @Tag(name = "Iverksetting")
-    @Operation(summary = "Start iverksetting av vedtak")
+    @Operation(
+        summary = "Start iverksetting av vedtak",
+        description = """
+             Iverksetter rammevedtak og utbetalingsvedtak.
+             Rammevedtak er som regel første vedtak og inneholder trenger bare å inneholde id'ene til sak, behandling, person og saksbehandlere
+             Iverksetting av første vedtak må uansett være autorisert av en bruker med besluttermyndighet
+             Utbetalingsvedtak inneholder som regel også utbetalingsperioder
+             Iverksettinger kjedes ved at hver iverksetting inneholder informasjon som identifiserer forrige vedtak
+             Det kjøres implisitt en konsistensavstemming av at nye utbetalinger stemmer overens med forrige iverksatte utbetalinger
+        """
+    )
     @ApiResponse(responseCode = "202", description = "iverksetting er mottatt")
     @ApiResponse(responseCode = "400", description = "ugyldig format på iverksetting")
     @ApiResponse(responseCode = "403", description = "ikke autorisert til å starte iverksetting")
