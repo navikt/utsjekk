@@ -1,76 +1,79 @@
-#apiVersion: "nais.io/v1alpha1"
-#kind: "Application"
-#metadata:
-#  name: dp-iverksett
-#  namespace: teamdagpenger
-#  labels:
-#    team: teamdagpenger
-#spec:
-#  image: {{ image }}
-#  ingresses:
-#    - https://dp-iverksett.intern.nav.no
-#  liveness:
-#    path: /internal/isAlive
-#    initialDelay: 30
-#    failureThreshold: 10
-#  readiness:
-#    path: /internal/isAlive
-#    initialDelay: 30
-#    failureThreshold: 10
-#  prometheus:
-#    enabled: true
-#    path: /internal/prometheus
-#  replicas:
-#    min: 2
-#    max: 4
-#    cpuThresholdPercentage: 50
-#  resources:
-#    limits:
-#      memory: 1024Mi
-#      cpu: 1500m
-#    requests:
-#      memory: 512Mi
-#      cpu: 500m
-#  secureLogs:
-#    enabled: true
-#  env:
-#    - name: SPRING_PROFILES_ACTIVE
-#      value: prod
-#    - name: BESLUTTER_GRUPPE
-#      value: "70d54cad-53a3-4788-bbe3-565096f01da7"
-#  envFrom:
-#    - secret: dp-iverksett
-#  azure:
-#    application:
-#      enabled: true
-#      claims:
-#        groups:
-#          - id: "87190cf3-b278-457d-8ab7-1a5c55a9edd7" # Group_87190cf3-b278-457d-8ab7-1a5c55a9edd7 gir tilgang til prosessering
-#          - id: "2e9c63d8-322e-4c1f-b500-a0abb812761c" # 0000-GA-Dagpenger-Saksbehandler
-#          - id: "70d54cad-53a3-4788-bbe3-565096f01da7" # 0000-GA-Dagpenger-Beslutter
-#        extra:
-#          - "NAVident"
-#  accessPolicy:
-#    inbound:
-#      rules:
-#        - application: dp-behandling
-#        - application: familie-prosessering
-#    outbound:
-#      rules:
-#        - application: dp-tilbake
-#      external:
-#        - host: dp-oppdrag.prod-fss-pub.nais.io
-#  gcp:
-#    sqlInstances:
-#      - type: POSTGRES_14 # IF This is changed, all data will be lost. Read on nais.io how to upgrade
-#        diskAutoresize: true
-#        cascadingDelete: false
-#        pointInTimeRecovery: true
-#        maintenance:
-#          day: 7
-#          hour: 23
-#        databases:
-#          - name: dp-iverksett
-#            envVarPrefix: DB
-#  kafka:
-#    pool: nav-prod
+apiVersion: "nais.io/v1alpha1"
+kind: "Application"
+metadata:
+  name: dp-iverksett
+  namespace: teamdagpenger
+  labels:
+    team: teamdagpenger
+spec:
+  image: {{ image }}
+  ingresses:
+    - https://dp-iverksett.intern.nav.no
+  liveness:
+    path: /internal/isAlive
+    initialDelay: 30
+    failureThreshold: 10
+  readiness:
+    path: /internal/isAlive
+    initialDelay: 30
+    failureThreshold: 10
+  prometheus:
+    enabled: true
+    path: /internal/prometheus
+  replicas:
+    min: 2
+    max: 4
+    cpuThresholdPercentage: 50
+  resources:
+    limits:
+      memory: 1024Mi
+      cpu: 1500m
+    requests:
+      memory: 512Mi
+      cpu: 500m
+  secureLogs:
+    enabled: true
+  env:
+    - name: SPRING_PROFILES_ACTIVE
+      value: prod
+    - name: BESLUTTER_GRUPPE
+      value: "70d54cad-53a3-4788-bbe3-565096f01da7"
+  azure:
+    application:
+      enabled: true
+      claims:
+        groups:
+          - id: "87190cf3-b278-457d-8ab7-1a5c55a9edd7" # Group_87190cf3-b278-457d-8ab7-1a5c55a9edd7 gir tilgang til prosessering
+          - id: "2e9c63d8-322e-4c1f-b500-a0abb812761c" # 0000-GA-Dagpenger-Saksbehandler
+          - id: "70d54cad-53a3-4788-bbe3-565096f01da7" # 0000-GA-Dagpenger-Beslutter
+        extra:
+          - "NAVident"
+  accessPolicy:
+    inbound:
+      rules:
+        - application: dp-iverksett # For å sette i gang grensesnittavstemming første gang
+        - application: dp-vedtak-iverksett
+        - application: dp-prosessering #frontend for task-rammeverket
+        - application: dp-datadeling
+        - application: dp-behandling
+    outbound:
+      rules:
+        - application: dp-oppdrag
+      external:
+        - host: unleash.nais.io
+  gcp:
+    sqlInstances:
+      - type: POSTGRES_15 # IF This is changed, all data will be lost. Read on nais.io how to upgrade
+        diskAutoresize: true
+        tier: db-custom-1-3840
+        cascadingDelete: false
+        highAvailability: true
+        pointInTimeRecovery: true
+        maintenance:
+          day: 7
+          hour: 23
+        databases:
+          - name: dp-iverksett
+            envVarPrefix: DB
+  kafka:
+    pool: nav-prod
