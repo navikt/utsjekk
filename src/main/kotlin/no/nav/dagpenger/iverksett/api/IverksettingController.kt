@@ -40,12 +40,12 @@ class IverksettingController(
     @Operation(
         summary = "Start iverksetting av vedtak",
         description = """
-             |Iverksetter rammevedtak og utbetalingsvedtak.
-             |Rammevedtak er som regel første vedtak og inneholder trenger bare å inneholde id'ene til sak, behandling, person og saksbehandlere
-             |Iverksetting av første vedtak må uansett være autorisert av en bruker med besluttermyndighet
-             |Utbetalingsvedtak inneholder som regel også utbetalingsperioder
-             |Iverksettinger kjedes ved at hver iverksetting inneholder informasjon som identifiserer forrige vedtak
-             |Det kjøres implisitt en konsistensavstemming av at nye utbetalinger stemmer overens med forrige iverksatte utbetalinger
+Iverksetter rammevedtak og utbetalingsvedtak.
+Rammevedtak er som regel første vedtak og inneholder trenger bare å inneholde id'ene til sak, behandling, person og saksbehandlere
+Iverksetting av første vedtak må uansett være autorisert av en bruker med besluttermyndighet
+Utbetalingsvedtak inneholder som regel også utbetalingsperioder
+Iverksettinger kjedes ved at hver iverksetting inneholder informasjon som identifiserer forrige vedtak
+Det kjøres implisitt en konsistensavstemming av at nye utbetalinger stemmer overens med forrige iverksatte utbetalinger
         """,
         externalDocs = ExternalDocumentation(url = "https://github.com/navikt/dp-iverksett/tree/3a8fecbc6076e278407ddd8ceb90291077bf8d99/doc")
     )
