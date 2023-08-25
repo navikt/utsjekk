@@ -27,4 +27,31 @@ object TokenContext {
                 onFailure = { emptyList() },
             )
     }
+
+    fun erSystemtoken(): Boolean {
+        return Result.runCatching { SpringTokenValidationContextHolder().tokenValidationContext }
+            .fold(
+                onSuccess = {
+                    @Suppress("UNCHECKED_CAST")
+                    val roller = it.getClaims("azuread")?.get("roles") as List<String>? ?: emptyList()
+                    roller.contains("access_as_application")
+                },
+                onFailure = { throw ApiFeil("Kunne ikke hente 'roles' på token", HttpStatus.UNAUTHORIZED) },
+            )
+
+    }
+
+    fun hentKlientnavn(): String? {
+        return Result.runCatching { SpringTokenValidationContextHolder().tokenValidationContext }
+            .fold(
+                onSuccess = {
+                    @Suppress("UNCHECKED_CAST")
+                   it.getClaims("azuread")?.get("azp_name") as String?
+
+                },
+                onFailure = { null },
+            )
+
+
+    }
 }

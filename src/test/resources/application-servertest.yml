@@ -54,3 +54,4 @@ KAFKA_CREDSTORE_PASSWORD: kafkaCredstorePassword
 KAFKA_TRUSTSTORE_PATH: kafkaTruststorePath
 
 BESLUTTER_GRUPPE: 11b8475a-fb12-41aa-b1f6-8497c1b5385b
+APP_MED_SYSTEMTILGANG: dev-gcp:teamdagpenger:dp-vedtak-iverksett

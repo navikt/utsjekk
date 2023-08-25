@@ -38,6 +38,8 @@ spec:
       value: prod
     - name: BESLUTTER_GRUPPE
       value: "70d54cad-53a3-4788-bbe3-565096f01da7"
+    - name: APP_MED_SYSTEMTILGANG
+      value: "prod-gcp:teamdagpenger:dp-vedtak-iverksett"
   azure:
     application:
       enabled: true
@@ -47,7 +49,8 @@ spec:
           - id: "2e9c63d8-322e-4c1f-b500-a0abb812761c" # 0000-GA-Dagpenger-Saksbehandler
           - id: "70d54cad-53a3-4788-bbe3-565096f01da7" # 0000-GA-Dagpenger-Beslutter
         extra:
-          - "NAVident"
+          - NAVident
+          - azp_name
   accessPolicy:
     inbound:
       rules:

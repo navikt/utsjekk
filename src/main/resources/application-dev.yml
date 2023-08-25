@@ -8,5 +8,3 @@ arena-mq:
 DEPLOY_ENV: dev
 DAGPENGER_VEDTAK_TOPIC: teamdagpenger.aapen-dagpenger-vedtak-test
 DAGPENGER_BEHANDLING_TOPIC: teamdagpenger.aapen-dagpenger-behandling-test
-
-BESLUTTER_GRUPPE: ${BESLUTTER_GRUPPE}
