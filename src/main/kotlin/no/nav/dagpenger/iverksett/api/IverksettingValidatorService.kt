@@ -105,12 +105,12 @@ class IverksettingValidatorService(
         iverksett?.behandling?.forrigeBehandlingId?.apply {
             val forrigeResultat = iverksettResultatService.hentIverksettResultat(this)
 
-            val forrigeErUtenUtbetalingsoppdrag =
-                forrigeResultat?.tilkjentYtelseForUtbetaling?.utbetalingsoppdrag == null
+            val forrigeErUtenUtbetalingsperioder =
+                forrigeResultat?.tilkjentYtelseForUtbetaling?.utbetalingsoppdrag?.utbetalingsperiode?.isEmpty() ?: true
             val forrigeErKvittertOk =
                 forrigeResultat?.oppdragResultat?.oppdragStatus == OppdragStatus.KVITTERT_OK
 
-            val forrigeErOkMotOppdrag = forrigeErUtenUtbetalingsoppdrag || forrigeErKvittertOk
+            val forrigeErOkMotOppdrag = forrigeErUtenUtbetalingsperioder || forrigeErKvittertOk
             if (!forrigeErOkMotOppdrag) {
                 throw ApiFeil("Forrige iverksetting er ikke ferdig håndtert mhp oppdrag", HttpStatus.CONFLICT)
             }
