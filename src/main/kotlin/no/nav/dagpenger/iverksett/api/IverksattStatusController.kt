@@ -18,14 +18,14 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping(
-    path = ["/api/vedtakstatus"],
+    path = ["/api"],
     produces = [MediaType.APPLICATION_JSON_VALUE],
 )
 @ProtectedWithClaims(issuer = "azuread")
 class IverksattStatusController(
     private val vedtakStatusService: VedtakStatusService,
 ) {
-    @GetMapping("/{personId}", produces = ["application/json"])
+    @GetMapping("/vedtakstatus/{personId}", produces = [MediaType.APPLICATION_JSON_VALUE])
     @Tag(name = "Datadeling")
     @Operation(summary = "Få vedtaksstatus for person")
     fun hentStatusForPerson(@PathVariable personId: String): ResponseEntity<VedtaksstatusDto> {
@@ -33,7 +33,7 @@ class IverksattStatusController(
         return status?.let { ResponseEntity(status, HttpStatus.OK) } ?: ResponseEntity(null, HttpStatus.NOT_FOUND)
     }
 
-    @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE], produces = [MediaType.APPLICATION_JSON_VALUE])
+    @PostMapping("/dagpengerperioder", consumes = [MediaType.APPLICATION_JSON_VALUE], produces = [MediaType.APPLICATION_JSON_VALUE])
     @Tag(name = "Datadeling")
     @Operation(summary = "Få vedtaksstatus for person og periode")
     fun hentVedtaksperioderForPersonOgPeriode(@RequestBody request: DatadelingRequest): ResponseEntity<DatadelingResponse> {

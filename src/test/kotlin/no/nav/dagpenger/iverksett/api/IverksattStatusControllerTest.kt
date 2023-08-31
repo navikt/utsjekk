@@ -89,7 +89,7 @@ class IverksattStatusControllerTest : ServerTest() {
         // Iverksetting:  |-------|
         // Request:     |----------
         val response: ResponseEntity<DatadelingResponse> = restTemplate.exchange(
-            localhostUrl("/api/vedtakstatus"),
+            localhostUrl("/api/dagpengerperioder"),
             HttpMethod.POST,
             HttpEntity(DatadelingRequest(personId, LocalDate.now().minusDays(5), null), headers),
         )
@@ -111,7 +111,7 @@ class IverksattStatusControllerTest : ServerTest() {
         // Iverksetting:  |-------|
         // Request:         |---|
         val response: ResponseEntity<DatadelingResponse> = restTemplate.exchange(
-            localhostUrl("/api/vedtakstatus"),
+            localhostUrl("/api/dagpengerperioder"),
             HttpMethod.POST,
             HttpEntity(
                 DatadelingRequest(
@@ -138,7 +138,7 @@ class IverksattStatusControllerTest : ServerTest() {
 
         // Riktig ID
         val response1: ResponseEntity<DatadelingResponse> = restTemplate.exchange(
-            localhostUrl("/api/vedtakstatus"),
+            localhostUrl("/api/dagpengerperioder"),
             HttpMethod.POST,
             HttpEntity(DatadelingRequest(personId, LocalDate.now().minusDays(5), null), headers),
         )
@@ -148,7 +148,7 @@ class IverksattStatusControllerTest : ServerTest() {
 
         // En annen ID
         val response2: ResponseEntity<DatadelingResponse> = restTemplate.exchange(
-            localhostUrl("/api/vedtakstatus"),
+            localhostUrl("/api/dagpengerperioder"),
             HttpMethod.POST,
             HttpEntity(DatadelingRequest("01020312345", LocalDate.now().minusDays(5), null), headers),
         )
