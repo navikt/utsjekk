@@ -12,8 +12,10 @@ fun stønadstypeTilDokumenttype(stønadType: StønadType) =
         StønadType.DAGPENGER_ARBEIDSSOKER_ORDINAER,
         StønadType.DAGPENGER_PERMITTERING_ORDINAER,
         StønadType.DAGPENGER_PERMITTERING_FISKEINDUSTRI,
-        StønadType.DAGPENGER_EOS,
-        StønadType.TILTAKSPENGER,
+        StønadType.DAGPENGER_EOS
+        -> Dokumenttype.DAGPENGER_FRITTSTÅENDE_BREV
+
+        else
         -> Dokumenttype.DAGPENGER_FRITTSTÅENDE_BREV
     }
 
@@ -22,8 +24,10 @@ fun vedtaksbrevForStønadType(stønadType: StønadType): Dokumenttype =
         StønadType.DAGPENGER_ARBEIDSSOKER_ORDINAER,
         StønadType.DAGPENGER_PERMITTERING_ORDINAER,
         StønadType.DAGPENGER_PERMITTERING_FISKEINDUSTRI,
-        StønadType.DAGPENGER_EOS,
-        StønadType.TILTAKSPENGER,
+        StønadType.DAGPENGER_EOS
+        -> Dokumenttype.VEDTAKSBREV_DAGPENGER
+
+        else
         -> Dokumenttype.VEDTAKSBREV_DAGPENGER
     }
 
@@ -33,8 +37,10 @@ fun lagStønadtypeTekst(stønadstype: StønadType): String =
         StønadType.DAGPENGER_PERMITTERING_ORDINAER,
         StønadType.DAGPENGER_PERMITTERING_FISKEINDUSTRI,
         StønadType.DAGPENGER_EOS,
-        StønadType.TILTAKSPENGER,
         -> "dagpenger"
+
+        else
+        -> "tiltakspenger"
     }
 
 fun lagVedtakstekst(iverksettData: IverksettDagpenger): String =
@@ -46,7 +52,7 @@ fun lagVedtakstekst(iverksettData: IverksettDagpenger): String =
         iverksettData.vedtak.vedtaksresultat === Vedtaksresultat.AVSLÅTT -> "Vedtak om avslått "
         iverksettData.vedtak.vedtaksresultat === Vedtaksresultat.OPPHØRT -> "Vedtak om opphørt "
         iverksettData.vedtak.vedtaksresultat === Vedtaksresultat.INNVILGET &&
-            iverksettData.behandling.behandlingÅrsak === BehandlingÅrsak.SØKNAD -> "Vedtak om innvilget "
+                iverksettData.behandling.behandlingÅrsak === BehandlingÅrsak.SØKNAD -> "Vedtak om innvilget "
 
         else -> "Vedtak om revurdert "
     }

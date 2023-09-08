@@ -58,6 +58,7 @@ jobs:
     needs: deploy-dev
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
+    permissions: write-all
     steps:
       - uses: actions/checkout@v3
       - uses: nais/deploy/actions/deploy@v1
