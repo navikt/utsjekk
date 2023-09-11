@@ -37,6 +37,8 @@ spec:
       value: dev
     - name: BESLUTTER_GRUPPE
       value: "TODO" #Riktig beslutter-gruppe i AAD for tiltakspenger må settes her
+    - name: APP_MED_SYSTEMTILGANG
+      value: "TODO" #Riktig app som skal iverksette for tiltakspenger må settes her
   azure:
     application:
       enabled: true
