@@ -36,7 +36,7 @@ object Utbetalingsgenerator {
         forrigeAndeler: List<AndelData>,
         sisteAndelPerKjede: Map<StønadTypeOgFerietillegg, AndelData>,
     ): BeregnetUtbetalingsoppdrag {
-        validerAndeler(behandlingsinformasjon, forrigeAndeler, nyeAndeler)
+        validerAndeler(forrigeAndeler, nyeAndeler)
         val nyeAndelerGruppert = nyeAndeler.groupByStønadTypeOgFerietillegg()
         val forrigeKjeder = forrigeAndeler.groupByStønadTypeOgFerietillegg()
 
@@ -54,7 +54,7 @@ object Utbetalingsgenerator {
         sisteAndelPerKjede: Map<StønadTypeOgFerietillegg, AndelData>,
         behandlingsinformasjon: Behandlingsinformasjon,
     ): BeregnetUtbetalingsoppdrag {
-        val nyeKjeder = lagNyeKjeder(nyeAndeler, forrigeKjeder, sisteAndelPerKjede, behandlingsinformasjon)
+        val nyeKjeder = lagNyeKjeder(nyeAndeler, forrigeKjeder, sisteAndelPerKjede)
 
         val utbetalingsoppdrag = Utbetalingsoppdrag(
             saksbehandlerId = behandlingsinformasjon.saksbehandlerId,
@@ -76,7 +76,6 @@ object Utbetalingsgenerator {
         nyeKjeder: Map<StønadTypeOgFerietillegg, List<AndelData>>,
         forrigeKjeder: Map<StønadTypeOgFerietillegg, List<AndelData>>,
         sisteAndelPerKjede: Map<StønadTypeOgFerietillegg, AndelData>,
-        behandlingsinformasjon: Behandlingsinformasjon,
     ): List<ResultatForKjede> {
         val alleStønadTypeOgFerietillegg = nyeKjeder.keys + forrigeKjeder.keys
         var sistePeriodeId = sisteAndelPerKjede.values.mapNotNull { it.periodeId }.maxOrNull() ?: -1
@@ -84,7 +83,7 @@ object Utbetalingsgenerator {
             val forrigeAndeler = forrigeKjeder[stønadTypeOgFerietillegg] ?: emptyList()
             val nyeAndeler = nyeKjeder[stønadTypeOgFerietillegg] ?: emptyList()
             val sisteAndel = sisteAndelPerKjede[stønadTypeOgFerietillegg]
-            val opphørsdato = finnOpphørsdato(forrigeAndeler, nyeAndeler, behandlingsinformasjon)
+            val opphørsdato = finnOpphørsdato(forrigeAndeler, nyeAndeler)
 
             val nyKjede = beregnNyKjede(
                 forrigeAndeler.uten0beløp(),
@@ -99,20 +98,10 @@ object Utbetalingsgenerator {
     }
 
     /**
-     * Har tidligere valideret at opphørFra er <= andeler sitt fom
-     * opphørFom opphører alle perioder, og kanskje lengre bak i tiden
-     */
-    private fun finnOpphørsdato(
-        forrigeAndeler: List<AndelData>,
-        nyeAndeler: List<AndelData>,
-        behandlingsinformasjon: Behandlingsinformasjon,
-    ): LocalDate? = behandlingsinformasjon.opphørFra ?: finnOpphørsdatoPga0Beløp(forrigeAndeler, nyeAndeler)
-
-    /**
      * For å unngå unøvendig 0-sjekk senere, så sjekkes det for om man
      * må opphøre alle andeler pga nye 0-andeler som har startdato før forrige første periode
      */
-    private fun finnOpphørsdatoPga0Beløp(forrigeAndeler: List<AndelData>, nyeAndeler: List<AndelData>): LocalDate? {
+    private fun finnOpphørsdato(forrigeAndeler: List<AndelData>, nyeAndeler: List<AndelData>): LocalDate? {
         val forrigeFørsteAndel = forrigeAndeler.firstOrNull()
         val nyFørsteAndel = nyeAndeler.firstOrNull()
         if (

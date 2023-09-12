@@ -4,10 +4,11 @@ import io.cucumber.datatable.DataTable
 import io.cucumber.java.no.Gitt
 import io.cucumber.java.no.Når
 import io.cucumber.java.no.Så
+import java.time.LocalDate
+import java.util.UUID
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.Utbetalingsgenerator
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.cucumber.ValideringUtil.assertSjekkBehandlingIder
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.cucumber.domeneparser.Domenebegrep
-import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.cucumber.domeneparser.DomenebegrepBehandlingsinformasjon
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.cucumber.domeneparser.DomenebegrepUtbetalingsoppdrag
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.cucumber.domeneparser.DomeneparserUtil.groupByBehandlingId
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.cucumber.domeneparser.ForventetUtbetalingsoppdrag
@@ -17,8 +18,6 @@ import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.cucumb
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.cucumber.domeneparser.OppdragParser.mapAndeler
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.cucumber.domeneparser.parseLong
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.cucumber.domeneparser.parseString
-import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.cucumber.domeneparser.parseValgfriDato
-import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.cucumber.domeneparser.parseValgfriEnum
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.cucumber.domeneparser.parseValgfriLong
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene.AndelData
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene.AndelMedPeriodeId
@@ -27,15 +26,12 @@ import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene.StønadTypeOgFerietillegg
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene.tilKlassifisering
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene.uten0beløp
-import no.nav.dagpenger.kontrakter.felles.StønadType
 import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsoppdrag
 import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsperiode
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.slf4j.LoggerFactory
-import java.time.LocalDate
-import java.util.UUID
 
 val FAGSAK_ID = UUID.randomUUID()
 
@@ -120,13 +116,10 @@ class OppdragSteg {
     }
 
     private fun opprettBehandlingsinformasjon(dataTable: DataTable) {
-        dataTable.groupByBehandlingId().map { (behandlingId, rader) ->
-            val rad = rader.single()
+        dataTable.groupByBehandlingId().map { (behandlingId, _) ->
             val behandlingIdAsUUID = behandlingIdTilUUID[behandlingId.toInt()]!!
             behandlingsinformasjon[behandlingIdAsUUID] = lagBehandlingsinformasjon(
                 behandlingId = behandlingIdAsUUID.toString(),
-                opphørFra = parseValgfriDato(DomenebegrepBehandlingsinformasjon.OPPHØR_FRA, rad),
-                ytelse = parseValgfriEnum<StønadType>(DomenebegrepBehandlingsinformasjon.YTELSE, rad),
             )
         }
     }
@@ -142,15 +135,12 @@ class OppdragSteg {
 
     private fun lagBehandlingsinformasjon(
         behandlingId: String,
-        opphørFra: LocalDate? = null,
-        ytelse: StønadType? = null,
     ) = Behandlingsinformasjon(
         fagsakId = FAGSAK_ID,
         saksbehandlerId = "saksbehandlerId",
         behandlingId = behandlingId,
         personIdent = "1",
         vedtaksdato = LocalDate.now(),
-        opphørFra = opphørFra,
     )
 
     private fun beregnUtbetalingsoppdrag(

@@ -136,7 +136,6 @@ class IverksettingValidatorServiceTest {
             behandlingId = iverksettData.behandlingId.toString(),
             personIdent = iverksettData.personIdent,
             vedtaksdato = iverksettData.vedtak.vedtakstidspunkt.toLocalDate(),
-            opphørFra = null,
         )
 
         return Utbetalingsgenerator.lagUtbetalingsoppdrag(

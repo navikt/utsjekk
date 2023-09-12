@@ -6,7 +6,6 @@ import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene
 internal object OppdragBeregnerUtil {
 
     fun validerAndeler(
-        behandlingsinformasjon: Behandlingsinformasjon,
         forrige: List<AndelData>,
         nye: List<AndelData>,
     ) {
@@ -24,10 +23,5 @@ internal object OppdragBeregnerUtil {
 
         nye.find { it.periodeId != null || it.forrigePeriodeId != null }
             ?.let { error("Ny andel=${it.id} inneholder periodeId/forrigePeriodeId") }
-
-        behandlingsinformasjon.opphørFra?.let { opphørFra ->
-            forrige.find { it.fom < opphørFra }
-                ?.let { error("Ugyldig opphørFra=$opphørFra som er etter andel=${it.id} sitt fom=${it.fom}") }
-        }
     }
 }

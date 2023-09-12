@@ -69,7 +69,6 @@ class IverksettMotOppdragTask(
             behandlingId = iverksett.behandlingId.toString(),
             personIdent = iverksett.personIdent,
             vedtaksdato = iverksett.vedtak.vedtakstidspunkt.toLocalDate(),
-            opphørFra = null,
         )
 
         val nyeAndeler = iverksett.vedtak.tilkjentYtelse.lagAndelData()

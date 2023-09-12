@@ -44,5 +44,4 @@ fun Simulering.tilBehandlingsinformasjon(): Behandlingsinformasjon =
         behandlingId = this.behandlingId.toString(),
         personIdent = this.personIdent,
         vedtaksdato = this.vedtaksdato,
-        opphørFra = null,
     )

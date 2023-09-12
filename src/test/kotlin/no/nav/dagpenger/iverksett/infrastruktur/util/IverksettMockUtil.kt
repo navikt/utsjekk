@@ -116,7 +116,6 @@ fun opprettBehandlingsinformasjon(
         behandlingId = behandlingId.toString(),
         personIdent = "12345678910",
         vedtaksdato = LocalDate.of(2021, 1, 1),
-        opphørFra = null,
     )
 }
 
