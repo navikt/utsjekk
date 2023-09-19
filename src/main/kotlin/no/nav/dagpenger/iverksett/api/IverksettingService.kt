@@ -34,6 +34,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.Properties
 import java.util.UUID
+import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
 import kotlin.jvm.optionals.getOrNull
 
 @Service
@@ -164,7 +165,7 @@ class IverksettingService(
         }
 
         val grensesnittavstemmingDto = GrensesnittavstemmingDto(
-            stønadstype = StønadType.DAGPENGER_ARBEIDSSOKER_ORDINAER,
+            stønadstype = StønadTypeDagpenger.DAGPENGER_ARBEIDSSOKER_ORDINAER,
             fraDato = LocalDate.now().minusDays(5),
             triggerTid = LocalDateTime.now(),
         )

@@ -18,6 +18,7 @@ import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.util.*
+import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
 
 class SendVedtakTilArbeidsoppfølgingTaskTest {
 
@@ -55,7 +56,7 @@ class SendVedtakTilArbeidsoppfølgingTaskTest {
 
     @Test
     internal fun `skal mappe stønadstyper`() {
-        Assertions.assertThat(StønadType.values().map { it.name }).isEqualTo(StønadType.values().map { it.name })
+        Assertions.assertThat(StønadTypeDagpenger.values().map { it.name }).isEqualTo(StønadTypeDagpenger.values().map { it.name })
     }
 
     private fun lagTask() = Task(SendVedtakTilArbeidsoppfølgingTask.TYPE, UUID.randomUUID().toString())

@@ -1,6 +1,11 @@
 package no.nav.dagpenger.iverksett.util
 
-import no.nav.dagpenger.kontrakter.felles.StønadType
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.ZonedDateTime
+import java.util.UUID
+import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
 import no.nav.dagpenger.kontrakter.iverksett.AvslagÅrsak
 import no.nav.dagpenger.kontrakter.iverksett.BehandlingMetode
 import no.nav.dagpenger.kontrakter.iverksett.BehandlingType
@@ -10,11 +15,6 @@ import no.nav.dagpenger.kontrakter.iverksett.Hendelse
 import no.nav.dagpenger.kontrakter.iverksett.Opplysningskilde
 import no.nav.dagpenger.kontrakter.iverksett.Revurderingsårsak
 import no.nav.dagpenger.kontrakter.iverksett.ÅrsakRevurderingDto
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.ZoneId
-import java.time.ZonedDateTime
-import java.util.UUID
 
 fun opprettBehandlingsstatistikkDto(behandlingId: UUID, hendelse: Hendelse, fortrolig: Boolean): BehandlingsstatistikkDto {
     return BehandlingsstatistikkDto(
@@ -31,7 +31,7 @@ fun opprettBehandlingsstatistikkDto(behandlingId: UUID, hendelse: Hendelse, fort
         ansvarligEnhet = "ansvarligEnhet",
         opprettetEnhet = "opprettetEnhet",
         strengtFortroligAdresse = fortrolig,
-        stønadstype = StønadType.DAGPENGER_ARBEIDSSOKER_ORDINAER,
+        stønadstype = StønadTypeDagpenger.DAGPENGER_ARBEIDSSOKER_ORDINAER,
         behandlingstype = BehandlingType.FØRSTEGANGSBEHANDLING,
         relatertBehandlingId = UUID.randomUUID(),
         relatertEksternBehandlingId = null,

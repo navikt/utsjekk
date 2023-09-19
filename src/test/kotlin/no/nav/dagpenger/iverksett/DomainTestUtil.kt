@@ -1,5 +1,10 @@
 package no.nav.dagpenger.iverksett
 
+import java.math.BigDecimal
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.YearMonth
+import java.util.UUID
 import no.nav.dagpenger.iverksett.api.domene.Brev
 import no.nav.dagpenger.iverksett.api.domene.Iverksett
 import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
@@ -14,7 +19,7 @@ import no.nav.dagpenger.iverksett.konsumenter.økonomi.lagAndelTilkjentYtelse
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.lagUtbetalingDto
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.simulering.grupperPosteringerEtterDato
 import no.nav.dagpenger.kontrakter.felles.Datoperiode
-import no.nav.dagpenger.kontrakter.felles.StønadType
+import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
 import no.nav.dagpenger.kontrakter.iverksett.BehandlingType
 import no.nav.dagpenger.kontrakter.iverksett.BehandlingÅrsak
 import no.nav.dagpenger.kontrakter.iverksett.SimuleringDto
@@ -30,11 +35,6 @@ import no.nav.dagpenger.kontrakter.oppdrag.simulering.SimuleringMottaker
 import no.nav.dagpenger.kontrakter.oppdrag.simulering.Simuleringsoppsummering
 import no.nav.dagpenger.kontrakter.oppdrag.simulering.Simuleringsperiode
 import no.nav.dagpenger.kontrakter.oppdrag.simulering.SimulertPostering
-import java.math.BigDecimal
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.YearMonth
-import java.util.UUID
 
 fun simuleringDto(
     andeler: List<UtbetalingDto> = listOf(lagDefaultAndeler()),
@@ -46,7 +46,7 @@ fun simuleringDto(
         utbetalinger = andeler,
         saksbehandlerId = "saksbehandlerId",
         eksternBehandlingId = 1,
-        stønadstype = StønadType.DAGPENGER_ARBEIDSSOKER_ORDINAER,
+        stønadstype = StønadTypeDagpenger.DAGPENGER_ARBEIDSSOKER_ORDINAER,
         sakId = UUID.randomUUID(),
         behandlingId = behandlingId,
         personIdent = "12345611111",

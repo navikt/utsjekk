@@ -2,6 +2,7 @@ package no.nav.dagpenger.iverksett.konsumenter.brev
 
 import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
 import no.nav.dagpenger.kontrakter.felles.StønadType
+import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
 import no.nav.dagpenger.kontrakter.iverksett.BehandlingType
 import no.nav.dagpenger.kontrakter.iverksett.BehandlingÅrsak
 import no.nav.dagpenger.kontrakter.iverksett.Vedtaksresultat
@@ -9,10 +10,10 @@ import no.nav.dagpenger.kontrakter.iverksett.journalføring.dokarkiv.Dokumenttyp
 
 fun stønadstypeTilDokumenttype(stønadType: StønadType) =
     when (stønadType) {
-        StønadType.DAGPENGER_ARBEIDSSOKER_ORDINAER,
-        StønadType.DAGPENGER_PERMITTERING_ORDINAER,
-        StønadType.DAGPENGER_PERMITTERING_FISKEINDUSTRI,
-        StønadType.DAGPENGER_EOS
+        StønadTypeDagpenger.DAGPENGER_ARBEIDSSOKER_ORDINAER,
+        StønadTypeDagpenger.DAGPENGER_PERMITTERING_ORDINAER,
+        StønadTypeDagpenger.DAGPENGER_PERMITTERING_FISKEINDUSTRI,
+        StønadTypeDagpenger.DAGPENGER_EOS
         -> Dokumenttype.DAGPENGER_FRITTSTÅENDE_BREV
 
         else
@@ -21,10 +22,10 @@ fun stønadstypeTilDokumenttype(stønadType: StønadType) =
 
 fun vedtaksbrevForStønadType(stønadType: StønadType): Dokumenttype =
     when (stønadType) {
-        StønadType.DAGPENGER_ARBEIDSSOKER_ORDINAER,
-        StønadType.DAGPENGER_PERMITTERING_ORDINAER,
-        StønadType.DAGPENGER_PERMITTERING_FISKEINDUSTRI,
-        StønadType.DAGPENGER_EOS
+        StønadTypeDagpenger.DAGPENGER_ARBEIDSSOKER_ORDINAER,
+        StønadTypeDagpenger.DAGPENGER_PERMITTERING_ORDINAER,
+        StønadTypeDagpenger.DAGPENGER_PERMITTERING_FISKEINDUSTRI,
+        StønadTypeDagpenger.DAGPENGER_EOS
         -> Dokumenttype.VEDTAKSBREV_DAGPENGER
 
         else
@@ -33,10 +34,10 @@ fun vedtaksbrevForStønadType(stønadType: StønadType): Dokumenttype =
 
 fun lagStønadtypeTekst(stønadstype: StønadType): String =
     when (stønadstype) {
-        StønadType.DAGPENGER_ARBEIDSSOKER_ORDINAER,
-        StønadType.DAGPENGER_PERMITTERING_ORDINAER,
-        StønadType.DAGPENGER_PERMITTERING_FISKEINDUSTRI,
-        StønadType.DAGPENGER_EOS,
+        StønadTypeDagpenger.DAGPENGER_ARBEIDSSOKER_ORDINAER,
+        StønadTypeDagpenger.DAGPENGER_PERMITTERING_ORDINAER,
+        StønadTypeDagpenger.DAGPENGER_PERMITTERING_FISKEINDUSTRI,
+        StønadTypeDagpenger.DAGPENGER_EOS,
         -> "dagpenger"
 
         else

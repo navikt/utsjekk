@@ -1,11 +1,11 @@
 package no.nav.dagpenger.iverksett.konsumenter.arena
 
-import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
-import no.nav.dagpenger.kontrakter.felles.Behandlingstema
-import no.nav.dagpenger.kontrakter.iverksett.Vedtaksresultat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
+import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
+import no.nav.dagpenger.kontrakter.felles.Behandlingstema
+import no.nav.dagpenger.kontrakter.iverksett.Vedtaksresultat
 
 private val dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
 
@@ -14,7 +14,7 @@ fun mapIverksettTilVedtakHendelser(iverksettData: IverksettDagpenger, aktørId: 
         aktoerID = aktørId,
         avslutningsstatus = mapAvslutningsstatus(iverksettData.vedtak.vedtaksresultat),
         behandlingstema = Behandlingstema.valueOf(
-            iverksettData.fagsak.stønadstype.name.lowercase(Locale.getDefault())
+            iverksettData.fagsak.stønadstype.tilEnum().name.lowercase(Locale.getDefault())
                 .replaceFirstChar { it.uppercase() },
         ).value,
         hendelsesprodusentREF = "DP",

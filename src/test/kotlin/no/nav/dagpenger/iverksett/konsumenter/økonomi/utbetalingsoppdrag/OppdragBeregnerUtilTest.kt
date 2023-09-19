@@ -5,6 +5,7 @@ import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.Oppdra
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene.AndelData
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene.StønadTypeOgFerietillegg
 import no.nav.dagpenger.kontrakter.felles.StønadType
+import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -116,7 +117,7 @@ class OppdragBeregnerUtilTest {
 
     private fun lagAndel(
         id: String = "",
-        ytelseType: StønadType = StønadType.DAGPENGER_ARBEIDSSOKER_ORDINAER,
+        ytelseType: StønadType = StønadTypeDagpenger.DAGPENGER_ARBEIDSSOKER_ORDINAER,
         periodeId: Long? = null,
         forrigePeriodeId: Long? = null,
         beløp: Int = 1,

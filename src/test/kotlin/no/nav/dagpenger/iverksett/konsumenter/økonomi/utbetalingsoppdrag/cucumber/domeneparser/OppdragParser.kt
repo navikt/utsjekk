@@ -11,6 +11,7 @@ import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsperiode
 import org.assertj.core.api.Assertions.assertThat
 import java.time.LocalDate
 import java.util.UUID
+import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
 
 object OppdragParser {
 
@@ -41,8 +42,8 @@ object OppdragParser {
         andelId: Long,
     ): AndelData {
         val stønadTypeOgFerietillegg = StønadTypeOgFerietillegg(
-            stønadstype = parseValgfriEnum<StønadType>(DomenebegrepAndeler.YTELSE_TYPE, rad)
-                ?: StønadType.DAGPENGER_ARBEIDSSOKER_ORDINAER,
+            stønadstype = parseValgfriEnum<StønadTypeDagpenger>(DomenebegrepAndeler.YTELSE_TYPE, rad)
+                ?: StønadTypeDagpenger.DAGPENGER_ARBEIDSSOKER_ORDINAER,
             ferietillegg = null,
         )
         return AndelData(
@@ -76,8 +77,8 @@ object OppdragParser {
             periodeId = parseLong(DomenebegrepUtbetalingsoppdrag.PERIODE_ID, it),
             forrigePeriodeId = parseValgfriLong(DomenebegrepUtbetalingsoppdrag.FORRIGE_PERIODE_ID, it),
             sats = parseInt(DomenebegrepUtbetalingsoppdrag.BELØP, it),
-            ytelse = parseValgfriEnum<StønadType>(DomenebegrepUtbetalingsoppdrag.YTELSE_TYPE, it)
-                ?: StønadType.DAGPENGER_ARBEIDSSOKER_ORDINAER,
+            ytelse = parseValgfriEnum<StønadTypeDagpenger>(DomenebegrepUtbetalingsoppdrag.YTELSE_TYPE, it)
+                ?: StønadTypeDagpenger.DAGPENGER_ARBEIDSSOKER_ORDINAER,
             fom = parseDato(Domenebegrep.FRA_DATO, it),
             tom = parseDato(Domenebegrep.TIL_DATO, it),
             opphør = parseValgfriDato(DomenebegrepUtbetalingsoppdrag.OPPHØRSDATO, it),

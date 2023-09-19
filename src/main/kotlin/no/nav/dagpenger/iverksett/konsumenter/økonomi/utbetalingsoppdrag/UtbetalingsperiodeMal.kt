@@ -1,13 +1,12 @@
 package no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag
 
-import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene.AndelData
-import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene.Behandlingsinformasjon
-import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene.tilKlassifisering
-import no.nav.dagpenger.kontrakter.oppdrag.Opphør
-import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsperiode
 import java.math.BigDecimal
 import java.time.LocalDate
 import java.util.UUID
+import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene.AndelData
+import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene.Behandlingsinformasjon
+import no.nav.dagpenger.kontrakter.oppdrag.Opphør
+import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsperiode
 
 /**
  * Lager mal for generering av utbetalingsperioder med tilpasset setting av verdier basert på parametre

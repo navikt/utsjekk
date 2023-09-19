@@ -21,7 +21,7 @@ object OppgaveUtil {
     fun opprettBehandlingstema(stønadstype: StønadType): Behandlingstema {
         return Behandlingstema
             .fromValue(
-                stønadstype.name.lowercase(Locale.getDefault())
+                stønadstype.tilEnum().name.lowercase(Locale.getDefault())
                     .replaceFirstChar { it.uppercase() },
             )
     }

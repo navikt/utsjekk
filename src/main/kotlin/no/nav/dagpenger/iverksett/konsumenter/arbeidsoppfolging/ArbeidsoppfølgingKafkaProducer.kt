@@ -1,13 +1,13 @@
 package no.nav.dagpenger.iverksett.konsumenter.arbeidsoppfolging
 
+import java.util.UUID
 import no.nav.dagpenger.iverksett.infrastruktur.service.KafkaProducerService
-import no.nav.dagpenger.kontrakter.felles.StønadType
+import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
 import no.nav.dagpenger.kontrakter.felles.objectMapper
 import no.nav.dagpenger.kontrakter.iverksett.arbeidsoppfølging.VedtakDagpengerArbeidsoppfølging
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
-import java.util.UUID
 
 @Component
 class ArbeidsoppfølgingKafkaProducer(private val kafkaProducerService: KafkaProducerService) {
@@ -21,17 +21,17 @@ class ArbeidsoppfølgingKafkaProducer(private val kafkaProducerService: KafkaPro
     fun sendVedtak(vedtakDagpengerArbeidsoppfølging: VedtakDagpengerArbeidsoppfølging) {
         sendVedtak(
             vedtakDagpengerArbeidsoppfølging.behanlingId,
-            vedtakDagpengerArbeidsoppfølging.stønadstype,
+            vedtakDagpengerArbeidsoppfølging.stønadstype as StønadTypeDagpenger,
             objectMapper.writeValueAsString(vedtakDagpengerArbeidsoppfølging),
         )
     }
 
-    fun sendVedtak(behandlingId: UUID, stønadstype: StønadType, vedtakArbeidsoppfølging: String) {
+    fun sendVedtak(behandlingId: UUID, stønadstype: StønadTypeDagpenger, vedtakArbeidsoppfølging: String) {
         logger.info("Sending to Kafka topic: {}", topic)
         secureLogger.debug("Sending to Kafka topic: {}\nArbeidsoppfølging: {}", topic, vedtakArbeidsoppfølging)
 
         runCatching {
-            kafkaProducerService.sendMedStønadstypeIHeader(topic, StønadType.valueOf(stønadstype.name), behandlingId.toString(), vedtakArbeidsoppfølging)
+            kafkaProducerService.sendMedStønadstypeIHeader(topic, StønadTypeDagpenger.valueOf(stønadstype.name), behandlingId.toString(), vedtakArbeidsoppfølging)
             logger.info("Arbeidsoppfølging for behandling=$behandlingId sent til Kafka")
         }.onFailure {
             val errorMessage = "Kunne ikke sende vedtak til arbeidsoppfølging topic. Se securelogs for mer informasjon."

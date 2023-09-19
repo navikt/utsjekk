@@ -4,18 +4,17 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
+import java.time.LocalDate
+import java.time.LocalDateTime
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.grensesnitt.GrensesnittavstemmingPayload
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.grensesnitt.GrensesnittavstemmingTask
-import no.nav.dagpenger.kontrakter.felles.StønadType
+import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
 import no.nav.dagpenger.kontrakter.felles.objectMapper
-import no.nav.dagpenger.kontrakter.felles.tilFagsystem
 import no.nav.dagpenger.kontrakter.oppdrag.GrensesnittavstemmingRequest
 import no.nav.familie.prosessering.domene.Task
 import no.nav.familie.prosessering.internal.TaskService
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import java.time.LocalDate
-import java.time.LocalDateTime
 
 internal class GrensesnittavstemmingTaskTest {
 
@@ -40,7 +39,7 @@ internal class GrensesnittavstemmingTaskTest {
         val capturedGrensesnittRequest = grensesnittavstemmingRequestSlot.captured
         assertThat(capturedGrensesnittRequest.fra).isEqualTo(LocalDate.of(2018, 4, 18).atStartOfDay())
         assertThat(capturedGrensesnittRequest.til).isEqualTo(LocalDate.of(2018, 4, 19).atStartOfDay())
-        assertThat(capturedGrensesnittRequest.fagsystem).isEqualTo(StønadType.DAGPENGER_ARBEIDSSOKER_ORDINAER.tilFagsystem())
+        assertThat(capturedGrensesnittRequest.fagsystem).isEqualTo(StønadTypeDagpenger.DAGPENGER_ARBEIDSSOKER_ORDINAER.tilFagsystem())
     }
 
     @Test
@@ -60,7 +59,7 @@ internal class GrensesnittavstemmingTaskTest {
             objectMapper.writeValueAsString(
                 GrensesnittavstemmingPayload(
                     fraDato = LocalDate.of(2018, 4, 19),
-                    stønadstype = StønadType.DAGPENGER_ARBEIDSSOKER_ORDINAER,
+                    stønadstype = StønadTypeDagpenger.DAGPENGER_ARBEIDSSOKER_ORDINAER,
                 ),
             )
         assertThat(slot.captured.payload).isEqualTo(forventetPayload)
@@ -72,7 +71,7 @@ internal class GrensesnittavstemmingTaskTest {
             objectMapper.writeValueAsString(
                 GrensesnittavstemmingPayload(
                     fraDato = LocalDate.of(2018, 4, 18),
-                    stønadstype = StønadType.DAGPENGER_ARBEIDSSOKER_ORDINAER,
+                    stønadstype = StønadTypeDagpenger.DAGPENGER_ARBEIDSSOKER_ORDINAER,
                 ),
             )
     }

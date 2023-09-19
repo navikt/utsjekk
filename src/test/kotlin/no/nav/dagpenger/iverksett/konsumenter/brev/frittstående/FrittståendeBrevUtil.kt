@@ -4,7 +4,7 @@ import no.nav.dagpenger.iverksett.konsumenter.brev.domain.Brevmottakere
 import no.nav.dagpenger.iverksett.konsumenter.brev.domain.FrittståendeBrev
 import no.nav.dagpenger.kontrakter.felles.BrevmottakerDto
 import no.nav.dagpenger.kontrakter.felles.FrittståendeBrevType
-import no.nav.dagpenger.kontrakter.felles.StønadType
+import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
 
 object FrittståendeBrevUtil {
 
@@ -13,7 +13,7 @@ object FrittståendeBrevUtil {
         eksternFagsakId = 1L,
         journalførendeEnhet = "enhet",
         saksbehandlerIdent = "saksbehandlerIdent",
-        stønadstype = StønadType.DAGPENGER_ARBEIDSSOKER_ORDINAER,
+        stønadstype = StønadTypeDagpenger.DAGPENGER_ARBEIDSSOKER_ORDINAER,
         mottakere = Brevmottakere(
             listOf(
                 no.nav.dagpenger.iverksett.konsumenter.brev.domain.Brevmottaker(

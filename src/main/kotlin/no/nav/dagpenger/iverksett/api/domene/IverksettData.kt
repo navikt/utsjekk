@@ -22,6 +22,7 @@ import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.UUID
+import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
 
 data class IverksettDagpenger(
     val fagsak: Fagsakdetaljer,
@@ -49,7 +50,7 @@ data class IverksettDagpenger(
 data class Fagsakdetaljer(
     val fagsakId: UUID? = null,
     val saksreferanse: String? = null,
-    val stønadstype: StønadType = StønadType.DAGPENGER_ARBEIDSSOKER_ORDINAER,
+    val stønadstype: StønadType = StønadTypeDagpenger.DAGPENGER_ARBEIDSSOKER_ORDINAER,
 ) {
     init {
         SakIdentifikator.valider(fagsakId, saksreferanse)

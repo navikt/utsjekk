@@ -18,6 +18,7 @@ import java.math.BigDecimal
 import java.math.BigDecimal.ZERO
 import java.time.LocalDate
 import java.util.WeakHashMap
+import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
 
 fun lagSimuleringsoppsummering(
     detaljertSimuleringResultat: DetaljertSimuleringResultat,
@@ -67,11 +68,7 @@ fun grupperPosteringerEtterDato(mottakere: List<SimuleringMottaker>?): List<Simu
 }
 
 fun fagområdeKoderForPosteringer(stønadType: StønadType): Set<FagOmrådeKode> = when (stønadType) {
-    StønadType.DAGPENGER_ARBEIDSSOKER_ORDINAER,
-    StønadType.DAGPENGER_PERMITTERING_ORDINAER,
-    StønadType.DAGPENGER_PERMITTERING_FISKEINDUSTRI,
-    StønadType.DAGPENGER_EOS
-    -> setOf(FagOmrådeKode.DAGPENGER)
+    is StønadTypeDagpenger -> setOf(FagOmrådeKode.DAGPENGER)
     else // TODO: Det er IKKE riktig at dette er Dagpenger.Trengs ny fagområdekode
     -> setOf(FagOmrådeKode.DAGPENGER)
 }

@@ -1,5 +1,6 @@
 package no.nav.dagpenger.iverksett.api
 
+import java.time.LocalDate
 import no.nav.dagpenger.iverksett.api.IverksettDtoValidator.avslåttVedtakHarIkkeUtbetalinger
 import no.nav.dagpenger.iverksett.api.IverksettDtoValidator.fraOgMedKommerFørTilOgMedIUtbetalingsperioder
 import no.nav.dagpenger.iverksett.api.IverksettDtoValidator.ingenUtbetalingsperioderHarStønadstypeEØSOgFerietilleggTilAvdød
@@ -10,7 +11,7 @@ import no.nav.dagpenger.iverksett.api.IverksettDtoValidator.utbetalingsperioderO
 import no.nav.dagpenger.iverksett.infrastruktur.advice.ApiFeil
 import no.nav.dagpenger.iverksett.infrastruktur.util.opprettIverksettDto
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.lagUtbetalingDto
-import no.nav.dagpenger.kontrakter.felles.StønadType
+import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
 import no.nav.dagpenger.kontrakter.iverksett.Ferietillegg
 import no.nav.dagpenger.kontrakter.iverksett.VedtakType
 import no.nav.dagpenger.kontrakter.iverksett.Vedtaksresultat
@@ -18,7 +19,6 @@ import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.fail
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
-import java.time.LocalDate
 
 class IverksettDtoValidatorTest {
 
@@ -122,7 +122,7 @@ class IverksettDtoValidatorTest {
 
     @Test
     fun `Ferietillegg til avdød for stønadstype EØS skal gi BAD_REQUEST`() {
-        val iverksettDto = opprettIverksettDto(stønadType = StønadType.DAGPENGER_EOS, ferietillegg = Ferietillegg.AVDOD)
+        val iverksettDto = opprettIverksettDto(stønadType = StønadTypeDagpenger.DAGPENGER_EOS, ferietillegg = Ferietillegg.AVDOD)
 
         assertApiFeil(HttpStatus.BAD_REQUEST) {
             ingenUtbetalingsperioderHarStønadstypeEØSOgFerietilleggTilAvdød(iverksettDto)
