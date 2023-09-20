@@ -2,7 +2,6 @@ package no.nav.dagpenger.iverksett.configuration
 
 import io.mockk.every
 import io.mockk.mockk
-import no.nav.dagpenger.iverksett.detaljertSimuleringResultat
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.OppdragClient
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.OppdragStatusMedMelding
 import no.nav.dagpenger.kontrakter.oppdrag.OppdragStatus
@@ -22,7 +21,6 @@ class OppdragClientMock {
 
         every { oppdragClientMock.grensesnittavstemming(any()) } returns "OK"
         every { oppdragClientMock.iverksettOppdrag(any()) } returns "OK"
-        every { oppdragClientMock.hentSimuleringsresultat(any()) } returns detaljertSimuleringResultat()
         every { oppdragClientMock.hentStatus(any()) } returns OppdragStatusMedMelding(OppdragStatus.KVITTERT_OK, "OK")
 
         return oppdragClientMock

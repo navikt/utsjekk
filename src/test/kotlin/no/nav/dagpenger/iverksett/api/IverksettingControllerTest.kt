@@ -1,19 +1,13 @@
 package no.nav.dagpenger.iverksett.api
 
+import java.util.UUID
 import no.nav.dagpenger.iverksett.ServerTest
 import no.nav.dagpenger.iverksett.infrastruktur.util.opprettIverksettDto
-import no.nav.dagpenger.iverksett.konsumenter.brev.JournalførVedtaksbrevTask
-import no.nav.dagpenger.iverksett.konsumenter.tilbakekreving.OpprettTilbakekrevingTask
-import no.nav.dagpenger.iverksett.konsumenter.økonomi.IverksettMotOppdragTask
 import no.nav.dagpenger.kontrakter.iverksett.VedtakType
-import no.nav.dagpenger.kontrakter.iverksett.Vedtaksresultat
-import no.nav.familie.http.client.MultipartBuilder
 import no.nav.familie.kontrakter.felles.Ressurs
-import no.nav.familie.prosessering.internal.TaskService
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.web.client.exchange
 import org.springframework.http.HttpEntity
@@ -21,15 +15,11 @@ import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
-import java.util.UUID
 
 class IverksettingControllerTest : ServerTest() {
 
     private val behandlingId = UUID.randomUUID()
     private val sakId = UUID.randomUUID()
-
-    @Autowired
-    lateinit var taskService: TaskService
 
     @Value("\${BESLUTTER_GRUPPE}")
     private lateinit var beslutterGruppe: String
@@ -37,48 +27,19 @@ class IverksettingControllerTest : ServerTest() {
     @BeforeEach
     fun setUp() {
         headers.setBearerAuth(lokalTestToken(grupper = listOf(beslutterGruppe)))
-        headers.set(HttpHeaders.CONTENT_TYPE, MediaType.MULTIPART_FORM_DATA_VALUE)
+        headers.set(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
     }
 
     @Test
     internal fun `starte iverksetting gir 202 Accepted`() {
         val iverksettJson = opprettIverksettDto(behandlingId = behandlingId, sakId = sakId)
-        val request = MultipartBuilder()
-            .withJson("data", iverksettJson)
-            .withByteArray("fil", "1", byteArrayOf(12))
-            .build()
 
         val respons: ResponseEntity<Any> = restTemplate.exchange(
             localhostUrl("/api/iverksetting"),
             HttpMethod.POST,
-            HttpEntity(request, headers),
+            HttpEntity(iverksettJson, headers),
         )
         assertThat(respons.statusCode.value()).isEqualTo(202)
-        val tasker = taskService.findAll()
-        assertThat(tasker.map { it.type }).contains(OpprettTilbakekrevingTask.TYPE)
-        assertThat(tasker.map { it.type }).doesNotContain(JournalførVedtaksbrevTask.TYPE)
-    }
-
-    @Test
-    internal fun `starte iverksetting for avslag ytelse gir 202 Accepted`() {
-        val iverksettJson = opprettIverksettDto(behandlingId = behandlingId, sakId = sakId)
-        // Copy skal legges inn som egen metode i egen PR
-        val iverksettJsonMedAvslag =
-            iverksettJson.copy(vedtak = iverksettJson.vedtak.copy(utbetalinger = emptyList(), resultat = Vedtaksresultat.AVSLÅTT))
-        val request = MultipartBuilder()
-            .withJson("data", iverksettJsonMedAvslag)
-            .withByteArray("fil", "1", byteArrayOf(12))
-            .build()
-
-        val respons: ResponseEntity<Any> = restTemplate.exchange(
-            localhostUrl("/api/iverksetting"),
-            HttpMethod.POST,
-            HttpEntity(request, headers),
-        )
-        assertThat(respons.statusCode.value()).isEqualTo(202)
-        val tasker = taskService.findAll()
-        assertThat(tasker.map { it.type }).doesNotContain(IverksettMotOppdragTask.TYPE)
-        assertThat(tasker.map { it.type }).contains(JournalførVedtaksbrevTask.TYPE)
     }
 
     @Test
@@ -90,15 +51,11 @@ class IverksettingControllerTest : ServerTest() {
                 utbetalinger = emptyList(),
             ),
         )
-        val requestRammevedtak = MultipartBuilder()
-            .withJson("data", rammevedtak)
-            .withByteArray("fil", "1", byteArrayOf(12))
-            .build()
 
         val responsRammevedtak: ResponseEntity<Ressurs<Nothing>> = restTemplate.exchange(
             localhostUrl("/api/iverksetting"),
             HttpMethod.POST,
-            HttpEntity(requestRammevedtak, headers),
+            HttpEntity(rammevedtak, headers),
         )
         assertThat(responsRammevedtak.statusCode.value()).isEqualTo(202)
 
@@ -108,32 +65,12 @@ class IverksettingControllerTest : ServerTest() {
                 utbetalinger = emptyList(),
             ),
         )
-        val requestUtbetalingsvedtak = MultipartBuilder()
-            .withJson("data", utbetalingsvedtak)
-            .withByteArray("fil", "1", byteArrayOf(12))
-            .build()
 
         val responsUtbetalingsvedtak: ResponseEntity<Ressurs<Nothing>> = restTemplate.exchange(
             localhostUrl("/api/iverksetting"),
             HttpMethod.POST,
-            HttpEntity(requestUtbetalingsvedtak, headers),
+            HttpEntity(utbetalingsvedtak, headers),
         )
         assertThat(responsUtbetalingsvedtak.statusCode.value()).isEqualTo(400)
-    }
-
-    @Test
-    internal fun `mangler brev, forvent 400`() {
-        val iverksettJson = opprettIverksettDto(behandlingId = behandlingId, sakId = sakId)
-        val request = MultipartBuilder()
-            .withJson("data", iverksettJson)
-            .build()
-
-        val respons: ResponseEntity<Any> = restTemplate.exchange(
-            localhostUrl("/api/iverksetting"),
-            HttpMethod.POST,
-            HttpEntity(request, headers),
-        )
-
-        assertThat(respons.statusCode.value()).isEqualTo(400)
     }
 }

@@ -2,14 +2,13 @@ package no.nav.dagpenger.iverksett.api
 
 import io.mockk.every
 import io.mockk.mockk
+import java.time.LocalDate
+import java.time.LocalDateTime
 import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
 import no.nav.dagpenger.iverksett.api.domene.VedtaksperiodeDagpenger
-import no.nav.dagpenger.iverksett.konsumenter.brev.domain.Brevmottaker
-import no.nav.dagpenger.iverksett.konsumenter.brev.domain.Brevmottakere
 import no.nav.dagpenger.iverksett.lagIverksett
 import no.nav.dagpenger.iverksett.lagIverksettData
 import no.nav.dagpenger.kontrakter.datadeling.DatadelingRequest
-import no.nav.dagpenger.kontrakter.felles.BrevmottakerDto
 import no.nav.dagpenger.kontrakter.felles.Datoperiode
 import no.nav.dagpenger.kontrakter.iverksett.BehandlingType
 import no.nav.dagpenger.kontrakter.iverksett.VedtaksperiodeType
@@ -17,8 +16,6 @@ import no.nav.dagpenger.kontrakter.iverksett.Vedtaksresultat
 import no.nav.dagpenger.kontrakter.iverksett.VedtaksstatusDto
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
-import java.time.LocalDate
-import java.time.LocalDateTime
 
 class VedtakStatusServiceTest {
 
@@ -148,22 +145,6 @@ class VedtakStatusServiceTest {
                 VedtaksperiodeDagpenger(
                     periode = Datoperiode(LocalDate.now().minusDays(16), LocalDate.now().minusDays(2)),
                     periodeType = VedtaksperiodeType.HOVEDPERIODE,
-                ),
-            ),
-            brevmottakere = Brevmottakere(
-                listOf(
-                    Brevmottaker(
-                        ident = "01020312345",
-                        navn = "Test Testesen",
-                        mottakerRolle = BrevmottakerDto.MottakerRolle.BRUKER,
-                        identType = BrevmottakerDto.IdentType.PERSONIDENT,
-                    ),
-                    Brevmottaker(
-                        ident = "987654321",
-                        navn = "NAV",
-                        mottakerRolle = BrevmottakerDto.MottakerRolle.FULLMEKTIG,
-                        identType = BrevmottakerDto.IdentType.ORGANISASJONSNUMMER,
-                    ),
                 ),
             ),
         )

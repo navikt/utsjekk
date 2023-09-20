@@ -1,15 +1,12 @@
 package no.nav.dagpenger.iverksett.api
 
-import no.nav.dagpenger.iverksett.api.domene.Brev
 import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
 import no.nav.dagpenger.iverksett.api.domene.erKonsistentMed
 import no.nav.dagpenger.iverksett.api.domene.personIdent
 import no.nav.dagpenger.iverksett.api.domene.sakId
 import no.nav.dagpenger.iverksett.api.tilstand.IverksettResultatService
 import no.nav.dagpenger.iverksett.infrastruktur.advice.ApiFeil
-import no.nav.dagpenger.iverksett.infrastruktur.configuration.FeatureToggleConfig
 import no.nav.dagpenger.iverksett.infrastruktur.featuretoggle.FeatureToggleService
-import no.nav.dagpenger.iverksett.konsumenter.tilbakekreving.validerTilbakekreving
 import no.nav.dagpenger.kontrakter.oppdrag.OppdragStatus
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
@@ -27,27 +24,6 @@ class IverksettingValidatorService(
         validerKonsistensMellomVedtak(iverksett)
         validerAtIverksettingErForSammeSakOgPersonSomForrige(iverksett)
         validerAtForrigeBehandlingErFerdigIverksattMotOppdrag(iverksett)
-
-        validerTilbakekreving(iverksett)
-    }
-
-    fun validerBrev(iverksettData: IverksettDagpenger, brev: Brev?) {
-        when (brev) {
-            null -> validerUtenBrev(iverksettData)
-            else -> validerSkalHaBrev(iverksettData)
-        }
-    }
-
-    fun validerUtenBrev(iverksettData: IverksettDagpenger) {
-        if (featureToggleService.isEnabled(FeatureToggleConfig.SKAL_SENDE_BREV, false) &&
-            !iverksettData.skalIkkeSendeBrev()
-        ) {
-            throw ApiFeil(
-                "Kan ikke ha iverksetting uten brev når det ikke er en migrering, " +
-                    "g-omregning eller korrigering uten brev ",
-                HttpStatus.BAD_REQUEST,
-            )
-        }
     }
 
     internal fun validerKonsistensMellomVedtak(iverksett: IverksettDagpenger) {
@@ -61,17 +37,6 @@ class IverksettingValidatorService(
         if (!forrigeIverksettResultat.erKonsistentMed(iverksett.forrigeIverksetting)) {
             throw ApiFeil(
                 "Mottatt og faktisk forrige iverksatting er ikke konsistente",
-                HttpStatus.BAD_REQUEST,
-            )
-        }
-    }
-
-    internal fun validerSkalHaBrev(iverksettData: IverksettDagpenger) {
-        if (featureToggleService.isEnabled(FeatureToggleConfig.SKAL_SENDE_BREV, false) &&
-            iverksettData.skalIkkeSendeBrev()
-        ) {
-            throw ApiFeil(
-                "Kan ikke ha iverksetting med brev når det er migrering, g-omregning eller korrigering uten brev",
                 HttpStatus.BAD_REQUEST,
             )
         }
@@ -123,12 +88,6 @@ class IverksettingValidatorService(
                 "Behandling med id ${iverksett.behandling.behandlingId} er allerede mottattt",
                 HttpStatus.CONFLICT,
             )
-        }
-    }
-
-    internal fun validerTilbakekreving(iverksett: IverksettDagpenger) {
-        if (!iverksett.vedtak.tilbakekreving.validerTilbakekreving()) {
-            throw ApiFeil("Tilbakekreving er ikke gyldig", HttpStatus.BAD_REQUEST)
         }
     }
 }

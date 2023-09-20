@@ -1,14 +1,15 @@
 package no.nav.dagpenger.iverksett.api
 
-import no.nav.dagpenger.iverksett.api.domene.Brev
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.util.Properties
+import java.util.UUID
 import no.nav.dagpenger.iverksett.api.domene.Iverksett
 import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
 import no.nav.dagpenger.iverksett.api.domene.OppdragResultat
 import no.nav.dagpenger.iverksett.api.tilstand.IverksettResultatService
 import no.nav.dagpenger.iverksett.infrastruktur.configuration.FeatureToggleConfig
 import no.nav.dagpenger.iverksett.infrastruktur.featuretoggle.FeatureToggleService
-import no.nav.dagpenger.iverksett.infrastruktur.transformer.tilSakIdentifikator
-import no.nav.dagpenger.iverksett.konsumenter.brev.JournalførVedtaksbrevTask
 import no.nav.dagpenger.iverksett.konsumenter.hovedflyt
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.OppdragClient
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.grensesnitt.GrensesnittavstemmingDto
@@ -16,11 +17,8 @@ import no.nav.dagpenger.iverksett.konsumenter.økonomi.grensesnitt.Grensesnittav
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.grensesnitt.tilTask
 import no.nav.dagpenger.kontrakter.felles.SakIdentifikator
 import no.nav.dagpenger.kontrakter.felles.StønadType
-import no.nav.dagpenger.kontrakter.felles.tilFagsystem
-import no.nav.dagpenger.kontrakter.iverksett.IverksettDto
+import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
 import no.nav.dagpenger.kontrakter.iverksett.IverksettStatus
-import no.nav.dagpenger.kontrakter.iverksett.VedtakType
-import no.nav.dagpenger.kontrakter.iverksett.Vedtaksresultat
 import no.nav.dagpenger.kontrakter.oppdrag.OppdragId
 import no.nav.dagpenger.kontrakter.oppdrag.OppdragStatus
 import no.nav.familie.prosessering.domene.Status
@@ -30,11 +28,6 @@ import no.nav.familie.prosessering.internal.TaskService
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.util.Properties
-import java.util.UUID
-import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
 import kotlin.jvm.optionals.getOrNull
 
 @Service
@@ -47,7 +40,7 @@ class IverksettingService(
 ) {
 
     @Transactional
-    fun startIverksetting(iverksett: IverksettDagpenger, brev: Brev?) {
+    fun startIverksetting(iverksett: IverksettDagpenger) {
         if (featureToggleService.isEnabled(FeatureToggleConfig.STOPP_IVERKSETTING)) {
             error("Kan ikke iverksette akkurat nå")
         }
@@ -55,7 +48,6 @@ class IverksettingService(
             Iverksett(
                 iverksett.behandling.behandlingId,
                 iverksett,
-                brev,
             ),
         )
 
@@ -63,7 +55,7 @@ class IverksettingService(
 
         taskService.save(
             Task(
-                type = førsteHovedflytTask(iverksett),
+                type = førsteHovedflytTask(),
                 payload = iverksett.behandling.behandlingId.toString(),
                 properties = Properties().apply {
                     this["personIdent"] = iverksett.søker.personIdent
@@ -87,46 +79,20 @@ class IverksettingService(
             )
         }
 
-    fun hentRammevedtak(iverksettDto: IverksettDto): Iverksett {
-        val rammevedtakList = iverksettingRepository
-            .findBySakIdentifikator(
-                iverksettDto.tilSakIdentifikator()
-            )
-            .filter { it.data.vedtak.vedtakstype == VedtakType.RAMMEVEDTAK }
-
-        if (rammevedtakList.size != 1) {
-            throw NoSuchElementException("Fant ikke rammevedtak med fagsakId ${iverksettDto.tilSakIdentifikator()}")
-        }
-
-        return rammevedtakList[0]
-    }
-
-    private fun førsteHovedflytTask(iverksett: IverksettDagpenger) = when {
-        erIverksettingUtenVedtaksperioder(iverksett) -> JournalførVedtaksbrevTask.TYPE
-        else -> hovedflyt().first().type
-    }
-
-    private fun erIverksettingUtenVedtaksperioder(iverksett: IverksettDagpenger) =
-        iverksett.vedtak.tilkjentYtelse == null && iverksett.vedtak.vedtaksresultat == Vedtaksresultat.AVSLÅTT
+    private fun førsteHovedflytTask() = hovedflyt().first().type
 
     fun utledStatus(behandlingId: UUID): IverksettStatus? {
         val iverksettResultat = iverksettResultatService.hentIverksettResultat(behandlingId)
         return iverksettResultat?.let {
-            if (it.vedtaksbrevResultat.isNotEmpty()) {
-                return IverksettStatus.OK
-            }
-            if (it.journalpostResultat.isNotEmpty()) {
-                return IverksettStatus.JOURNALFORT
-            }
             it.oppdragResultat?.let { oppdragResultat ->
                 return when (oppdragResultat.oppdragStatus) {
-                    OppdragStatus.KVITTERT_OK -> IverksettStatus.OK_MOT_OPPDRAG
+                    OppdragStatus.KVITTERT_OK -> IverksettStatus.OK
                     OppdragStatus.LAGT_PAA_KOE -> IverksettStatus.SENDT_TIL_OPPDRAG
                     else -> IverksettStatus.FEILET_MOT_OPPDRAG
                 }
             }
-            it.tilkjentYtelseForUtbetaling?.let {
-                if (it.utbetalingsoppdrag?.utbetalingsperiode?.isEmpty() == true) {
+            it.tilkjentYtelseForUtbetaling?.let {ty ->
+                if (ty.utbetalingsoppdrag?.utbetalingsperiode?.isEmpty() == true) {
                     return IverksettStatus.OK_MOT_OPPDRAG
                 }
                 return IverksettStatus.SENDT_TIL_OPPDRAG

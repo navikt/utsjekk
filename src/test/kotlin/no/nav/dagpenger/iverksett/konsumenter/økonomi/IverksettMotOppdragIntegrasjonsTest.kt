@@ -1,9 +1,10 @@
 package no.nav.dagpenger.iverksett.konsumenter.økonomi
 
+import java.time.LocalDate
+import java.util.UUID
 import no.nav.dagpenger.iverksett.ServerTest
 import no.nav.dagpenger.iverksett.api.IverksettingService
 import no.nav.dagpenger.iverksett.api.tilstand.IverksettResultatService
-import no.nav.dagpenger.iverksett.infrastruktur.util.opprettBrev
 import no.nav.dagpenger.iverksett.infrastruktur.util.opprettIverksettDagpenger
 import no.nav.familie.prosessering.internal.TaskService
 import org.assertj.core.api.Assertions.assertThat
@@ -11,8 +12,6 @@ import org.assertj.core.api.Assertions.assertThatIllegalStateException
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import java.time.LocalDate
-import java.util.UUID
 
 class IverksettMotOppdragIntegrasjonsTest : ServerTest() {
 
@@ -39,7 +38,7 @@ class IverksettMotOppdragIntegrasjonsTest : ServerTest() {
 
     @BeforeEach
     internal fun setUp() {
-        iverksettingService.startIverksetting(iverksett, opprettBrev())
+        iverksettingService.startIverksetting(iverksett)
         iverksettMotOppdrag()
     }
 
@@ -68,7 +67,7 @@ class IverksettMotOppdragIntegrasjonsTest : ServerTest() {
         )
 
         taskService.deleteAll(taskService.findAll())
-        iverksettingService.startIverksetting(iverksettRevurdering, opprettBrev())
+        iverksettingService.startIverksetting(iverksettRevurdering)
         iverksettMotOppdrag()
 
         val tilkjentYtelse = iverksettResultatService.hentTilkjentYtelse(behandlingIdRevurdering)!!
@@ -98,7 +97,7 @@ class IverksettMotOppdragIntegrasjonsTest : ServerTest() {
         )
 
         taskService.deleteAll(taskService.findAll())
-        iverksettingService.startIverksetting(iverksettRevurdering, opprettBrev())
+        iverksettingService.startIverksetting(iverksettRevurdering)
         iverksettMotOppdrag()
 
         val tilkjentYtelse = iverksettResultatService.hentTilkjentYtelse(behandlingIdRevurdering)!!
@@ -120,7 +119,7 @@ class IverksettMotOppdragIntegrasjonsTest : ServerTest() {
             )
 
         taskService.deleteAll(taskService.findAll())
-        iverksettingService.startIverksetting(iverksettMedOpphør, opprettBrev())
+        iverksettingService.startIverksetting(iverksettMedOpphør)
         iverksettMotOppdrag()
 
         val tilkjentYtelse = iverksettResultatService.hentTilkjentYtelse(opphørBehandlingId)!!
@@ -154,7 +153,7 @@ class IverksettMotOppdragIntegrasjonsTest : ServerTest() {
             )
 
         taskService.deleteAll(taskService.findAll())
-        iverksettingService.startIverksetting(iverksettMedFeilForrige, opprettBrev())
+        iverksettingService.startIverksetting(iverksettMedFeilForrige)
 
         assertThatIllegalStateException().isThrownBy {
             iverksettMotOppdrag()

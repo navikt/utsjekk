@@ -1,22 +1,18 @@
 package no.nav.dagpenger.iverksett.api
 
+import java.util.UUID
 import no.nav.dagpenger.iverksett.ServerTest
 import no.nav.dagpenger.iverksett.api.domene.OppdragResultat
-import no.nav.dagpenger.iverksett.api.domene.TilbakekrevingResultat
 import no.nav.dagpenger.iverksett.api.domene.TilkjentYtelse
 import no.nav.dagpenger.iverksett.api.tilstand.IverksettResultatService
 import no.nav.dagpenger.iverksett.infrastruktur.util.IverksettResultatMockBuilder
-import no.nav.dagpenger.iverksett.infrastruktur.util.opprettIverksettDagpenger
 import no.nav.dagpenger.iverksett.infrastruktur.util.opprettTilkjentYtelse
-import no.nav.dagpenger.iverksett.konsumenter.tilbakekreving.tilOpprettTilbakekrevingRequest
-import no.nav.dagpenger.kontrakter.felles.Enhet
 import no.nav.dagpenger.kontrakter.oppdrag.OppdragStatus
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import java.util.UUID
 
 internal class HentIverksettResultatServiceTest : ServerTest() {
 
@@ -45,36 +41,13 @@ internal class HentIverksettResultatServiceTest : ServerTest() {
     }
 
     @Test
-    fun `hent ekisterende journalpost resultat, forvent likhet og ingen unntak`() {
-        val journalpostResultat =
-            IverksettResultatMockBuilder.Builder().journalPostResultat().build(behandlingId, tilkjentYtelse).journalpostResultat
-
-        val (mottakerIdent, resultat) = journalpostResultat.map.entries.first()
-        iverksettResultatService.oppdaterJournalpostResultat(behandlingId, mottakerIdent, resultat)
-
-        val hentetJournalpostResultat = iverksettResultatService.hentJournalpostResultat(behandlingId)
-        assertThat(hentetJournalpostResultat).isEqualTo(journalpostResultat.map)
-    }
-
-    @Test
-    fun `hent ikke-eksisterende journalpost resultat, forvent nullverdi i retur og ingen unntak`() {
-        val hentetJournalpostResultat = iverksettResultatService.hentJournalpostResultat(UUID.randomUUID())
-        assertThat(hentetJournalpostResultat).isEqualTo(null)
-    }
-
-    @Test
     fun `lagre tilkjentYtelse, hent IverksettResultat med riktig behandlingsID`() {
         val resultat = IverksettResultatMockBuilder.Builder()
             .oppdragResultat(OppdragResultat(OppdragStatus.KVITTERT_OK))
-            .journalPostResultat()
-            .vedtaksbrevResultat(behandlingId).build(behandlingId, tilkjentYtelse)
+            .build(behandlingId, tilkjentYtelse)
         iverksettResultatService.oppdaterTilkjentYtelseForUtbetaling(behandlingId, tilkjentYtelse)
         iverksettResultatService.oppdaterOppdragResultat(behandlingId, resultat.oppdragResultat!!)
-        val (mottakerIdent, journalpostresultat) = resultat.journalpostResultat.map.entries.first()
-        iverksettResultatService.oppdaterJournalpostResultat(behandlingId, mottakerIdent, journalpostresultat)
-        val (journalpostId, vedtaksbrevResultat) = resultat.vedtaksbrevResultat.map.entries.first()
 
-        iverksettResultatService.oppdaterDistribuerVedtaksbrevResultat(behandlingId, journalpostId, vedtaksbrevResultat)
         val iverksettResultat = iverksettResultatService.hentIverksettResultat(behandlingId)
         assertThat(iverksettResultat).isEqualTo(resultat)
     }
@@ -99,42 +72,5 @@ internal class HentIverksettResultatServiceTest : ServerTest() {
 
         assertThat(catchThrowable { iverksettResultatService.hentTilkjentYtelse(setOf(behandlingId, behandlingId2)) })
             .hasMessageContaining("=[$behandlingId2]")
-    }
-
-    @Test
-    fun `lagre tilbakekrevingsresultat, hent IverksettResultat med tilbakekrevingsresultat`() {
-        val iverksett = opprettIverksettDagpenger(behandlingId)
-        val opprettTilbakekrevingRequest = iverksett
-            .tilOpprettTilbakekrevingRequest(Enhet("1", "Enhet"))
-
-        val tilbakekrevingResultat = TilbakekrevingResultat(opprettTilbakekrevingRequest)
-
-        iverksettResultatService.oppdaterTilkjentYtelseForUtbetaling(behandlingId, iverksett.vedtak.tilkjentYtelse!!)
-        iverksettResultatService.oppdaterTilbakekrevingResultat(behandlingId, tilbakekrevingResultat)
-
-        val hentetTilbakekrevingResultat = iverksettResultatService.hentTilbakekrevingResultat(behandlingId)
-        assertThat(hentetTilbakekrevingResultat!!).isEqualTo(tilbakekrevingResultat)
-
-        val iverksettResultat = iverksettResultatService.hentIverksettResultat(behandlingId)
-        assertThat(iverksettResultat!!.tilkjentYtelseForUtbetaling).isNotNull
-        assertThat(iverksettResultat.tilbakekrevingResultat).isEqualTo(tilbakekrevingResultat)
-    }
-
-    @Test
-    fun `overskriv tomt (null) tilbakekrevingsresultat`() {
-        val id = UUID.randomUUID()
-        val iverksett = opprettIverksettDagpenger(id)
-        val opprettTilbakekrevingRequest = iverksett
-            .tilOpprettTilbakekrevingRequest(Enhet("1", "Enhet"))
-
-        val tilbakekrevingResultat = TilbakekrevingResultat(opprettTilbakekrevingRequest)
-
-        assertThat(iverksettResultatService.hentIverksettResultat(id)).isNull()
-        iverksettResultatService.opprettTomtResultat(id)
-        assertThat(iverksettResultatService.hentIverksettResultat(id)!!.tilbakekrevingResultat).isNull()
-
-        iverksettResultatService.oppdaterTilbakekrevingResultat(id, tilbakekrevingResultat)
-        assertThat(iverksettResultatService.hentTilbakekrevingResultat(id)!!)
-            .isEqualTo(tilbakekrevingResultat)
     }
 }

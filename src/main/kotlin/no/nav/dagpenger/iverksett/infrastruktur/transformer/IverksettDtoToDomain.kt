@@ -1,5 +1,6 @@
 package no.nav.dagpenger.iverksett.infrastruktur.transformer
 
+import java.time.LocalDate
 import no.nav.dagpenger.iverksett.api.domene.Behandlingsdetaljer
 import no.nav.dagpenger.iverksett.api.domene.Fagsakdetaljer
 import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
@@ -8,9 +9,6 @@ import no.nav.dagpenger.iverksett.api.domene.TilbakekrevingMedVarsel
 import no.nav.dagpenger.iverksett.api.domene.Tilbakekrevingsdetaljer
 import no.nav.dagpenger.iverksett.api.domene.VedtaksdetaljerDagpenger
 import no.nav.dagpenger.iverksett.api.domene.VedtaksperiodeDagpenger
-import no.nav.dagpenger.iverksett.konsumenter.brev.domain.Brevmottaker
-import no.nav.dagpenger.iverksett.konsumenter.brev.domain.Brevmottakere
-import no.nav.dagpenger.kontrakter.felles.BrevmottakerDto
 import no.nav.dagpenger.kontrakter.felles.Datoperiode
 import no.nav.dagpenger.kontrakter.felles.SakIdentifikator
 import no.nav.dagpenger.kontrakter.iverksett.BehandlingType
@@ -21,7 +19,6 @@ import no.nav.dagpenger.kontrakter.iverksett.TilbakekrevingDto
 import no.nav.dagpenger.kontrakter.iverksett.TilbakekrevingMedVarselDto
 import no.nav.dagpenger.kontrakter.iverksett.VedtaksdetaljerDto
 import no.nav.dagpenger.kontrakter.iverksett.VedtaksperiodeDto
-import java.time.LocalDate
 
 fun VedtaksperiodeDto.toDomain(): VedtaksperiodeDagpenger {
     return VedtaksperiodeDagpenger(
@@ -41,7 +38,6 @@ fun VedtaksdetaljerDto.toDomain(): VedtaksdetaljerDagpenger {
         tilkjentYtelse = this.utbetalinger.tilTilkjentYtelse(),
         vedtaksperioder = this.vedtaksperioder.map { it.toDomain() },
         tilbakekreving = this.tilbakekreving?.toDomain(),
-        brevmottakere = this.brevmottakere.toDomain(),
         avslagÅrsak = this.avslagAarsak,
     )
 }
@@ -60,16 +56,6 @@ fun TilbakekrevingMedVarselDto.toDomain(): TilbakekrevingMedVarsel {
         perioder = this.fellesperioder.toList(),
     )
 }
-
-fun List<BrevmottakerDto>.toDomain(): Brevmottakere =
-    Brevmottakere(mottakere = this.map { it.toDomain() })
-
-fun BrevmottakerDto.toDomain(): Brevmottaker = Brevmottaker(
-    ident = this.ident,
-    navn = this.navn,
-    identType = this.identType,
-    mottakerRolle = this.mottakerRolle,
-)
 
 fun IverksettDto.toDomain(): IverksettDagpenger {
     return IverksettDagpenger(

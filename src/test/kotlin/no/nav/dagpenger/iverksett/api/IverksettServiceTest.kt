@@ -54,7 +54,7 @@ internal class IverksettServiceTest {
     }
 
     @Test
-    fun `la IverksettResultat ha felt satt for tilkjent ytelse, oppdrag med kvittert_ok, forvent status OK_MOT_OPPDRAG`() {
+    fun `la IverksettResultat ha felt satt for tilkjent ytelse, oppdrag med kvittert_ok, forvent status OK`() {
         val behandlingsId = UUID.randomUUID()
         val tilkjentYtelse = opprettTilkjentYtelse(behandlingsId)
         every { iverksettResultatService.hentIverksettResultat(behandlingsId) } returns IverksettResultatMockBuilder.Builder()
@@ -62,20 +62,7 @@ internal class IverksettServiceTest {
             .build(behandlingsId, tilkjentYtelse)
 
         val status = iverksettStatusService.utledStatus(behandlingsId)
-        assertThat(status).isEqualTo(IverksettStatus.OK_MOT_OPPDRAG)
-    }
-
-    @Test
-    fun `la IverksettResultat ha felt satt for journalføring, forvent status JOURNALFØRT`() {
-        val behandlingsId = UUID.randomUUID()
-        val tilkjentYtelse = opprettTilkjentYtelse(behandlingsId)
-        every { iverksettResultatService.hentIverksettResultat(behandlingsId) } returns IverksettResultatMockBuilder.Builder()
-            .oppdragResultat(OppdragResultat(OppdragStatus.KVITTERT_OK))
-            .journalPostResultat()
-            .build(behandlingsId, tilkjentYtelse)
-
-        val status = iverksettStatusService.utledStatus(behandlingsId)
-        assertThat(status).isEqualTo(IverksettStatus.JOURNALFORT)
+        assertThat(status).isEqualTo(IverksettStatus.OK)
     }
 
     @Test
@@ -84,8 +71,7 @@ internal class IverksettServiceTest {
         val tilkjentYtelse = opprettTilkjentYtelse(behandlingsId)
         every { iverksettResultatService.hentIverksettResultat(behandlingsId) } returns IverksettResultatMockBuilder.Builder()
             .oppdragResultat(OppdragResultat(OppdragStatus.KVITTERT_OK))
-            .journalPostResultat()
-            .vedtaksbrevResultat(behandlingsId).build(behandlingsId, tilkjentYtelse)
+            .build(behandlingsId, tilkjentYtelse)
 
         val status = iverksettStatusService.utledStatus(behandlingsId)
         assertThat(status).isEqualTo(IverksettStatus.OK)

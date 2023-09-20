@@ -1,20 +1,19 @@
 package no.nav.dagpenger.iverksett.konsumenter.økonomi
 
+import java.net.URI
+import java.util.*
 import no.nav.dagpenger.iverksett.infrastruktur.advice.Ressurs
 import no.nav.dagpenger.iverksett.infrastruktur.advice.getDataOrThrow
 import no.nav.dagpenger.kontrakter.oppdrag.GrensesnittavstemmingRequest
 import no.nav.dagpenger.kontrakter.oppdrag.OppdragId
 import no.nav.dagpenger.kontrakter.oppdrag.OppdragStatus
 import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsoppdrag
-import no.nav.dagpenger.kontrakter.oppdrag.simulering.DetaljertSimuleringResultat
 import no.nav.familie.http.client.AbstractPingableRestClient
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestOperations
 import org.springframework.web.util.UriComponentsBuilder
-import java.net.URI
-import java.util.*
 
 @Service
 class OppdragClient(
@@ -30,13 +29,6 @@ class OppdragClient(
 
     private val grensesnittavstemmingUri: URI =
         UriComponentsBuilder.fromUri(dagepngerOppdragUri).pathSegment("grensesnittavstemming").build().toUri()
-
-    private val konsistensavstemmingUri: URI =
-        UriComponentsBuilder.fromUri(dagepngerOppdragUri).pathSegment("konsistensavstemming").build().toUri()
-
-    private val postSimuleringUri: URI =
-        UriComponentsBuilder.fromUri(dagepngerOppdragUri).pathSegment("simulering/v1").build().toUri()
-
     fun iverksettOppdrag(utbetalingsoppdrag: Utbetalingsoppdrag): String {
         return postForEntity<Ressurs<String>>(postOppdragUri, utbetalingsoppdrag).data!!
     }
@@ -50,10 +42,6 @@ class OppdragClient(
     fun grensesnittavstemming(grensesnittavstemmingRequest: GrensesnittavstemmingRequest): String {
         val ressurs = postForEntity<Ressurs<String>>(grensesnittavstemmingUri, grensesnittavstemmingRequest)
         return ressurs.getDataOrThrow()
-    }
-
-    fun hentSimuleringsresultat(utbetalingsoppdrag: Utbetalingsoppdrag): DetaljertSimuleringResultat {
-        return postForEntity<Ressurs<DetaljertSimuleringResultat>>(postSimuleringUri, utbetalingsoppdrag).getDataOrThrow()
     }
 
     override val pingUri = postOppdragUri

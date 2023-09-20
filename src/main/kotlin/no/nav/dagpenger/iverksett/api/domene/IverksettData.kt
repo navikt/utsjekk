@@ -1,9 +1,13 @@
 package no.nav.dagpenger.iverksett.api.domene
 
-import no.nav.dagpenger.iverksett.konsumenter.brev.domain.Brevmottakere
+import java.math.BigDecimal
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.util.UUID
 import no.nav.dagpenger.kontrakter.felles.Datoperiode
 import no.nav.dagpenger.kontrakter.felles.SakIdentifikator
 import no.nav.dagpenger.kontrakter.felles.StønadType
+import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
 import no.nav.dagpenger.kontrakter.felles.Tilbakekrevingsvalg
 import no.nav.dagpenger.kontrakter.iverksett.AvslagÅrsak
 import no.nav.dagpenger.kontrakter.iverksett.BehandlingType
@@ -18,11 +22,6 @@ import no.nav.dagpenger.kontrakter.iverksett.VedtaksperiodeType
 import no.nav.dagpenger.kontrakter.iverksett.Vedtaksresultat
 import no.nav.dagpenger.kontrakter.iverksett.VilkårType
 import no.nav.dagpenger.kontrakter.iverksett.Vilkårsresultat
-import java.math.BigDecimal
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.util.UUID
-import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
 
 data class IverksettDagpenger(
     val fagsak: Fagsakdetaljer,
@@ -83,7 +82,6 @@ data class VedtaksdetaljerDagpenger(
     val beslutterId: String,
     val tilkjentYtelse: TilkjentYtelse?,
     val tilbakekreving: Tilbakekrevingsdetaljer? = null,
-    val brevmottakere: Brevmottakere? = null,
     val vedtaksperioder: List<VedtaksperiodeDagpenger> = listOf(),
     val avslagÅrsak: AvslagÅrsak? = null,
 )

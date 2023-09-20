@@ -4,8 +4,8 @@ import io.swagger.v3.oas.annotations.ExternalDocumentation
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.tags.Tag
+import java.util.UUID
 import no.nav.dagpenger.iverksett.api.IverksettDtoValidator.valider
-import no.nav.dagpenger.iverksett.api.domene.Brev
 import no.nav.dagpenger.iverksett.api.tilgangskontroll.IverksettingTilgangskontrollService
 import no.nav.dagpenger.iverksett.infrastruktur.transformer.toDomain
 import no.nav.dagpenger.kontrakter.iverksett.IverksettDto
@@ -19,10 +19,7 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestPart
 import org.springframework.web.bind.annotation.RestController
-import org.springframework.web.multipart.MultipartFile
-import java.util.UUID
 
 @RestController
 @RequestMapping(
@@ -62,30 +59,7 @@ Det kjøres implisitt en konsistensavstemming av at nye utbetalinger stemmer ove
         val iverksett = iverksettDto.toDomain()
 
         validatorService.valider(iverksett)
-        validatorService.validerUtenBrev(iverksett)
-        iverksettingService.startIverksetting(iverksett, null)
-
-        return ResponseEntity.accepted().build()
-    }
-
-    @PostMapping(consumes = [MediaType.MULTIPART_FORM_DATA_VALUE])
-    @Tag(name = "Iverksetting")
-    @ApiResponse(responseCode = "202", description = "iverksetting er mottatt")
-    @ApiResponse(responseCode = "400", description = "ugyldig iverksetting")
-    @Operation(hidden = true)
-    fun iverksett(
-        @RequestPart("data") iverksettDto: IverksettDto,
-        @RequestPart("fil", required = false) fil: MultipartFile?,
-    ): ResponseEntity<Void> {
-        tilgangskontrollService.valider(iverksettDto)
-
-        val brev = fil?.let { Brev(it.bytes) }
-        iverksettDto.valider()
-        val iverksett = iverksettDto.toDomain()
-
-        validatorService.valider(iverksett)
-        validatorService.validerBrev(iverksett, brev)
-        iverksettingService.startIverksetting(iverksett, brev)
+        iverksettingService.startIverksetting(iverksett)
 
         return ResponseEntity.accepted().build()
     }

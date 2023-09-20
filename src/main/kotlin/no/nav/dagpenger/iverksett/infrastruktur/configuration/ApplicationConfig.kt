@@ -44,7 +44,6 @@ import java.time.temporal.ChronoUnit
 @EnableJwtTokenValidation(ignore = ["org.springframework", "org.springdoc"])
 @Import(
     RestTemplateAzure::class,
-    KafkaErrorHandler::class,
 )
 @EnableOAuth2Client(cacheEnabled = true)
 @EnableScheduling

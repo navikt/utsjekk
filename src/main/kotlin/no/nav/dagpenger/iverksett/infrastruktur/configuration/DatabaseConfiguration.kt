@@ -1,15 +1,12 @@
 package no.nav.dagpenger.iverksett.infrastruktur.configuration
 
+import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.fasterxml.jackson.module.kotlin.treeToValue
 import no.nav.dagpenger.iverksett.api.domene.Fagsakdetaljer
 import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
 import no.nav.dagpenger.iverksett.api.domene.OppdragResultat
-import no.nav.dagpenger.iverksett.api.domene.TilbakekrevingResultat
 import no.nav.dagpenger.iverksett.api.domene.TilkjentYtelse
-import no.nav.dagpenger.iverksett.konsumenter.brev.domain.Brevmottakere
-import no.nav.dagpenger.iverksett.konsumenter.brev.domain.DistribuerBrevResultatMap
-import no.nav.dagpenger.iverksett.konsumenter.brev.domain.JournalpostResultatMap
 import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
 import no.nav.dagpenger.kontrakter.felles.objectMapper
 import no.nav.familie.prosessering.PropertiesWrapperTilStringConverter
@@ -46,18 +43,12 @@ class DatabaseConfiguration : AbstractJdbcConfiguration() {
                 StringTilPropertiesWrapperConverter(),
                 TilkjentYtelseTilPGobjectConverter(),
                 PGobjectTilTilkjentYtelseConverter(),
+                JsonNodeTilPGobjectConverter(),
+                PGobjectTilJsonNodeConverter(),
                 OppdragResultatTilPGobjectConverter(),
                 PGobjectTilOppdragResultatConverter(),
-                JournalpostResultatMapTilPGobjectConverter(),
-                PGobjectTilJournalpostResultatMapConverter(),
-                VedtaksbrevResultatMapTilPGobjectConverter(),
-                PGobjectTilVedtaksbrevResultatMapConverter(),
-                TilbakekrevingResultatTilPGobjectConverter(),
-                PGobjectTilTilbakekrevingResultatConverter(),
                 IverksettDataTilPGobjectConverter(),
                 PGobjectConverterTilIverksettData(),
-                BrevmottakereTilStringConverter(),
-                StringTilBrevmottakereConverter(),
             ),
         )
     }
@@ -94,53 +85,13 @@ class DatabaseConfiguration : AbstractJdbcConfiguration() {
     }
 
     @WritingConverter
-    class JournalpostResultatMapTilPGobjectConverter : DomainTilPGobjectConverter<JournalpostResultatMap>()
+    class JsonNodeTilPGobjectConverter : DomainTilPGobjectConverter<JsonNode>()
 
     @ReadingConverter
-    class PGobjectTilJournalpostResultatMapConverter : Converter<PGobject, JournalpostResultatMap> {
+    class PGobjectTilJsonNodeConverter : Converter<PGobject, JsonNode?> {
 
-        override fun convert(pGobject: PGobject): JournalpostResultatMap {
-            return objectMapper.readValue(pGobject.value!!)
-        }
-    }
-
-    @WritingConverter
-    class VedtaksbrevResultatMapTilPGobjectConverter : DomainTilPGobjectConverter<DistribuerBrevResultatMap>()
-
-    @ReadingConverter
-    class PGobjectTilVedtaksbrevResultatMapConverter : Converter<PGobject, DistribuerBrevResultatMap> {
-
-        override fun convert(pGobject: PGobject): DistribuerBrevResultatMap {
-            return objectMapper.readValue(pGobject.value!!)
-        }
-    }
-
-    @WritingConverter
-    class TilbakekrevingResultatTilPGobjectConverter : DomainTilPGobjectConverter<TilbakekrevingResultat>()
-
-    @ReadingConverter
-    class PGobjectTilTilbakekrevingResultatConverter : Converter<PGobject, TilbakekrevingResultat> {
-
-        override fun convert(pGobject: PGobject): TilbakekrevingResultat {
-            return objectMapper.readValue(pGobject.value!!)
-        }
-    }
-
-    @WritingConverter
-    class BrevmottakereTilStringConverter : Converter<Brevmottakere, PGobject> {
-
-        override fun convert(data: Brevmottakere): PGobject =
-            PGobject().apply {
-                type = "json"
-                value = objectMapper.writeValueAsString(data)
-            }
-    }
-
-    @ReadingConverter
-    class StringTilBrevmottakereConverter : Converter<PGobject, Brevmottakere> {
-
-        override fun convert(pgObject: PGobject): Brevmottakere {
-            return objectMapper.readValue(pgObject.value!!)
+        override fun convert(pGobject: PGobject): JsonNode? {
+            return null
         }
     }
 

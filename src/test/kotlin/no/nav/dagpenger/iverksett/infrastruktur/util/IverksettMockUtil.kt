@@ -1,5 +1,11 @@
 package no.nav.dagpenger.iverksett.infrastruktur.util
 
+import java.math.BigDecimal
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.YearMonth
+import java.util.Random
+import java.util.UUID
 import no.nav.dagpenger.iverksett.api.domene.AndelTilkjentYtelse
 import no.nav.dagpenger.iverksett.api.domene.Barn
 import no.nav.dagpenger.iverksett.api.domene.Behandlingsdetaljer
@@ -11,7 +17,6 @@ import no.nav.dagpenger.iverksett.api.domene.IverksettResultat
 import no.nav.dagpenger.iverksett.api.domene.OppdragResultat
 import no.nav.dagpenger.iverksett.api.domene.Søker
 import no.nav.dagpenger.iverksett.api.domene.TilbakekrevingMedVarsel
-import no.nav.dagpenger.iverksett.api.domene.TilbakekrevingResultat
 import no.nav.dagpenger.iverksett.api.domene.Tilbakekrevingsdetaljer
 import no.nav.dagpenger.iverksett.api.domene.TilkjentYtelse
 import no.nav.dagpenger.iverksett.api.domene.VedtaksdetaljerDagpenger
@@ -19,16 +24,12 @@ import no.nav.dagpenger.iverksett.api.domene.VedtaksperiodeDagpenger
 import no.nav.dagpenger.iverksett.api.domene.Vilkårsvurdering
 import no.nav.dagpenger.iverksett.api.domene.Vurdering
 import no.nav.dagpenger.iverksett.api.domene.ÅrsakRevurdering
-import no.nav.dagpenger.iverksett.konsumenter.brev.domain.Brevmottakere
-import no.nav.dagpenger.iverksett.konsumenter.brev.domain.DistribuerBrevResultat
-import no.nav.dagpenger.iverksett.konsumenter.brev.domain.DistribuerBrevResultatMap
-import no.nav.dagpenger.iverksett.konsumenter.brev.domain.JournalpostResultat
-import no.nav.dagpenger.iverksett.konsumenter.brev.domain.JournalpostResultatMap
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.lagAndelTilkjentYtelse
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.lagUtbetalingDto
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene.Behandlingsinformasjon
 import no.nav.dagpenger.kontrakter.felles.Datoperiode
 import no.nav.dagpenger.kontrakter.felles.StønadType
+import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
 import no.nav.dagpenger.kontrakter.felles.Tilbakekrevingsvalg
 import no.nav.dagpenger.kontrakter.iverksett.BehandlingType
 import no.nav.dagpenger.kontrakter.iverksett.BehandlingÅrsak
@@ -48,16 +49,8 @@ import no.nav.dagpenger.kontrakter.iverksett.VedtaksdetaljerDto
 import no.nav.dagpenger.kontrakter.iverksett.VedtaksperiodeDto
 import no.nav.dagpenger.kontrakter.iverksett.VedtaksperiodeType
 import no.nav.dagpenger.kontrakter.iverksett.Vedtaksresultat
-import no.nav.dagpenger.kontrakter.iverksett.VedtaksstatusDto
 import no.nav.dagpenger.kontrakter.iverksett.VilkårType
 import no.nav.dagpenger.kontrakter.iverksett.Vilkårsresultat
-import java.math.BigDecimal
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.YearMonth
-import java.util.Random
-import java.util.UUID
-import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
 
 fun opprettIverksettDto(
     behandlingId: UUID = UUID.randomUUID(),
@@ -178,10 +171,8 @@ fun vedtaksperioderDagpenger() =
 fun vedtaksdetaljerDagpenger(
     vedtaksresultat: Vedtaksresultat = Vedtaksresultat.INNVILGET,
     andeler: List<AndelTilkjentYtelse> = listOf(opprettAndelTilkjentYtelse()),
-    tilbakekreving: Tilbakekrevingsdetaljer? = null,
     vedtakstidspunkt: LocalDateTime = LocalDateTime.of(2021, 5, 12, 0, 0),
     vedtaksperioder: List<VedtaksperiodeDagpenger> = listOf(vedtaksperioderDagpenger()),
-    brevmottakere: Brevmottakere = Brevmottakere(emptyList()),
 ): VedtaksdetaljerDagpenger {
     val tilkjentYtelse = lagTilkjentYtelse(andeler)
     return VedtaksdetaljerDagpenger(
@@ -192,24 +183,6 @@ fun vedtaksdetaljerDagpenger(
         saksbehandlerId = "A12345",
         beslutterId = "B23456",
         tilkjentYtelse = tilkjentYtelse,
-        vedtaksperioder = vedtaksperioder,
-        tilbakekreving = tilbakekreving,
-        brevmottakere = brevmottakere,
-    )
-}
-
-fun vedtaksstatusDto(
-    vedtakstype: VedtakType = VedtakType.RAMMEVEDTAK,
-    vedtakstidspunkt: LocalDateTime = LocalDateTime.of(2021, 5, 12, 0, 0),
-    resultat: Vedtaksresultat = Vedtaksresultat.INNVILGET,
-    vedtaksperioder: List<VedtaksperiodeDto> = listOf(
-        VedtaksperiodeDto(LocalDate.now(), LocalDate.now().plusDays(7), VedtaksperiodeType.HOVEDPERIODE),
-    ),
-): VedtaksstatusDto {
-    return VedtaksstatusDto(
-        vedtakstype = vedtakstype,
-        vedtakstidspunkt = vedtakstidspunkt,
-        resultat = resultat,
         vedtaksperioder = vedtaksperioder,
     )
 }
@@ -243,7 +216,6 @@ fun opprettIverksettDagpenger(
     behandlingId: UUID = UUID.randomUUID(),
     forrigeBehandlingId: UUID? = null,
     andeler: List<AndelTilkjentYtelse> = listOf(opprettAndelTilkjentYtelse()),
-    tilbakekreving: Tilbakekrevingsdetaljer? = null,
     forrigeIverksetting: IverksettDagpenger? = null,
     fagsakId: UUID = UUID.randomUUID(),
 ): IverksettDagpenger {
@@ -259,7 +231,6 @@ fun opprettIverksettDagpenger(
         vedtak = vedtaksdetaljerDagpenger(
             vedtaksresultat = Vedtaksresultat.INNVILGET,
             andeler = andeler,
-            tilbakekreving = tilbakekreving,
         ),
         forrigeIverksetting = forrigeIverksetting,
     )
@@ -295,34 +266,15 @@ class IverksettResultatMockBuilder private constructor(
 
     data class Builder(
         var oppdragResultat: OppdragResultat? = null,
-        var journalpostResultat: Map<String, JournalpostResultat> = mapOf(),
-        var vedtaksbrevResultat: Map<String, DistribuerBrevResultat> = mapOf(),
-        var tilbakekrevingResultat: TilbakekrevingResultat? = null,
     ) {
 
         fun oppdragResultat(oppdragResultat: OppdragResultat) = apply { this.oppdragResultat = oppdragResultat }
-        fun journalPostResultat() = apply {
-            this.journalpostResultat = mapOf("123456789" to JournalpostResultat(UUID.randomUUID().toString()))
-        }
-
-        fun vedtaksbrevResultat(behandlingId: UUID) =
-            apply {
-                this.vedtaksbrevResultat =
-                    mapOf(
-                        this.journalpostResultat.entries.first().value.journalpostId to DistribuerBrevResultat(
-                            bestillingId = behandlingId.toString(),
-                        ),
-                    )
-            }
 
         fun build(behandlingId: UUID, tilkjentYtelse: TilkjentYtelse?) =
             IverksettResultat(
                 behandlingId,
                 tilkjentYtelse,
                 oppdragResultat,
-                JournalpostResultatMap(journalpostResultat),
-                DistribuerBrevResultatMap(vedtaksbrevResultat),
-                tilbakekrevingResultat,
             )
     }
 }

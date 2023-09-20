@@ -1,5 +1,6 @@
 package no.nav.dagpenger.iverksett.api
 
+import java.time.LocalDate
 import no.nav.dagpenger.iverksett.ServerTest
 import no.nav.dagpenger.iverksett.infrastruktur.util.opprettIverksettDto
 import no.nav.dagpenger.kontrakter.datadeling.DatadelingRequest
@@ -9,7 +10,6 @@ import no.nav.dagpenger.kontrakter.iverksett.VedtaksperiodeDto
 import no.nav.dagpenger.kontrakter.iverksett.VedtaksperiodeType
 import no.nav.dagpenger.kontrakter.iverksett.Vedtaksresultat
 import no.nav.dagpenger.kontrakter.iverksett.VedtaksstatusDto
-import no.nav.familie.http.client.MultipartBuilder
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Value
@@ -20,7 +20,6 @@ import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
-import java.time.LocalDate
 
 class IverksattStatusControllerTest : ServerTest() {
 
@@ -159,7 +158,7 @@ class IverksattStatusControllerTest : ServerTest() {
 
     private fun opprettTestData(): IverksettDto {
         headers.setBearerAuth(lokalTestToken(grupper = listOf(beslutterGruppe)))
-        headers.set(HttpHeaders.CONTENT_TYPE, MediaType.MULTIPART_FORM_DATA_VALUE)
+        headers.set(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
 
         val iverksettDto = opprettIverksettDto(
             vedtaksperioder = listOf(
@@ -171,15 +170,10 @@ class IverksattStatusControllerTest : ServerTest() {
             ),
         )
 
-        val iverksettRequest = MultipartBuilder()
-            .withJson("data", iverksettDto)
-            .withByteArray("fil", "1", byteArrayOf(12))
-            .build()
-
         val iverksettResponse: ResponseEntity<Any> = restTemplate.exchange(
             localhostUrl("/api/iverksetting"),
             HttpMethod.POST,
-            HttpEntity(iverksettRequest, headers),
+            HttpEntity(iverksettDto, headers),
         )
         assertEquals(HttpStatus.ACCEPTED, iverksettResponse.statusCode)
 
