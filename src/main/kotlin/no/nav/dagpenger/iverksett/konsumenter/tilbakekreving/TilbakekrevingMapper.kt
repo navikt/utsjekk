@@ -30,7 +30,7 @@ fun Tilbakekrevingsdetaljer?.validerTilbakekreving(): Boolean {
 fun IverksettDagpenger.tilOpprettTilbakekrevingRequest(enhet: Enhet) =
     OpprettTilbakekrevingRequest(
         fagsystem = Fagsystem.Dagpenger,
-        ytelsestype = Ytelsestype.valueOf(this.fagsak.stønadstype.name),
+        ytelsestype = Ytelsestype.valueOf(this.fagsak.stønadstype.tilEnum().name),
         eksternFagsakId = this.fagsak.fagsakId.toString(),
         personIdent = this.søker.personIdent,
         eksternId = this.behandling.behandlingId.toString(),
@@ -53,7 +53,7 @@ fun IverksettDagpenger.tilFagsystembehandling(enhet: Enhet) =
             sakId = this.fagsak.fagsakId,
             saksreferanse = this.fagsak.saksreferanse,
             behandlingId = this.behandling.behandlingId,
-            ytelsestype = Ytelsestype.valueOf(this.fagsak.stønadstype.name),
+            ytelsestype = Ytelsestype.valueOf(this.fagsak.stønadstype.tilEnum().name),
             personIdent = this.søker.personIdent,
             språkkode = Språkkode.NB,
             enhetId = enhet.enhetId,

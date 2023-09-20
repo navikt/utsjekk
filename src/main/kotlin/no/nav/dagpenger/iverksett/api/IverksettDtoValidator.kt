@@ -1,7 +1,7 @@
 package no.nav.dagpenger.iverksett.api
 
 import no.nav.dagpenger.iverksett.infrastruktur.advice.ApiFeil
-import no.nav.dagpenger.kontrakter.felles.StønadType
+import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
 import no.nav.dagpenger.kontrakter.iverksett.Ferietillegg
 import no.nav.dagpenger.kontrakter.iverksett.IverksettDto
 import no.nav.dagpenger.kontrakter.iverksett.VedtakType
@@ -108,12 +108,12 @@ object IverksettDtoValidator {
 
     internal fun ingenUtbetalingsperioderHarStønadstypeEØSOgFerietilleggTilAvdød(iverksettDto: IverksettDto) {
         val ugyldigKombinasjon = iverksettDto.vedtak.utbetalinger.any {
-            it.stonadstype == StønadType.DAGPENGER_EOS && it.ferietillegg == Ferietillegg.AVDOD
+            it.stonadstype == StønadTypeDagpenger.DAGPENGER_EOS && it.ferietillegg == Ferietillegg.AVDOD
         }
 
         if (ugyldigKombinasjon) {
             throw ApiFeil(
-                "Ferietillegg til avdød er ikke tillatt for stønadstypen ${StønadType.DAGPENGER_EOS}",
+                "Ferietillegg til avdød er ikke tillatt for stønadstypen ${StønadTypeDagpenger.DAGPENGER_EOS}",
                 HttpStatus.BAD_REQUEST,
             )
         }

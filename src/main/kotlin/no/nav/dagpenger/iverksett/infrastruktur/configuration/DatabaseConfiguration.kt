@@ -10,7 +10,7 @@ import no.nav.dagpenger.iverksett.api.domene.TilkjentYtelse
 import no.nav.dagpenger.iverksett.konsumenter.brev.domain.Brevmottakere
 import no.nav.dagpenger.iverksett.konsumenter.brev.domain.DistribuerBrevResultatMap
 import no.nav.dagpenger.iverksett.konsumenter.brev.domain.JournalpostResultatMap
-import no.nav.dagpenger.kontrakter.felles.StønadType
+import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
 import no.nav.dagpenger.kontrakter.felles.objectMapper
 import no.nav.familie.prosessering.PropertiesWrapperTilStringConverter
 import no.nav.familie.prosessering.StringTilPropertiesWrapperConverter
@@ -154,10 +154,10 @@ class DatabaseConfiguration : AbstractJdbcConfiguration() {
             val fagsakNode = no.nav.familie.kontrakter.felles.objectMapper.readTree(pGobject.value).findValue("fagsak")
             val fagsakdetaljer: Fagsakdetaljer = no.nav.familie.kontrakter.felles.objectMapper.treeToValue(fagsakNode)
             return when (fagsakdetaljer.stønadstype) {
-                StønadType.DAGPENGER_ARBEIDSSOKER_ORDINAER,
-                StønadType.DAGPENGER_PERMITTERING_ORDINAER,
-                StønadType.DAGPENGER_PERMITTERING_FISKEINDUSTRI,
-                StønadType.DAGPENGER_EOS
+                StønadTypeDagpenger.DAGPENGER_ARBEIDSSOKER_ORDINAER,
+                StønadTypeDagpenger.DAGPENGER_PERMITTERING_ORDINAER,
+                StønadTypeDagpenger.DAGPENGER_PERMITTERING_FISKEINDUSTRI,
+                StønadTypeDagpenger.DAGPENGER_EOS
                 -> no.nav.familie.kontrakter.felles.objectMapper
                     .readValue(pGobject.value, IverksettDagpenger::class.java)
                 else

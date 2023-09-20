@@ -1,6 +1,7 @@
 package no.nav.dagpenger.iverksett.infrastruktur.service
 
 import no.nav.dagpenger.kontrakter.felles.StønadType
+import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
 import org.apache.kafka.clients.producer.ProducerRecord
 import org.apache.kafka.common.header.internals.RecordHeader
 import org.springframework.kafka.core.KafkaTemplate
@@ -13,7 +14,7 @@ class KafkaProducerService(private val kafkaTemplate: KafkaTemplate<String, Stri
         kafkaTemplate.send(topic, key, payload).get()
     }
 
-    fun sendMedStønadstypeIHeader(topic: String, stønadstype: StønadType, key: String, payload: String) {
+    fun sendMedStønadstypeIHeader(topic: String, stønadstype: StønadTypeDagpenger, key: String, payload: String) {
         val record = ProducerRecord(topic, key, payload)
         record.headers().add(RecordHeader("stønadstype", stønadstype.name.toByteArray()))
         kafkaTemplate.send(record).get()

@@ -1,13 +1,13 @@
 package no.nav.dagpenger.iverksett.infrastruktur.transformer
 
+import java.time.LocalDate
 import no.nav.dagpenger.iverksett.januar
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.lagUtbetalingDto
-import no.nav.dagpenger.kontrakter.felles.StønadType
+import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
 import no.nav.dagpenger.kontrakter.iverksett.Ferietillegg
 import no.nav.dagpenger.kontrakter.iverksett.UtbetalingDto
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
-import java.time.LocalDate
 
 class TilkjentYtelseDtoToDomainKtTest {
 
@@ -139,24 +139,24 @@ class TilkjentYtelseDtoToDomainKtTest {
                 beløp = 100,
                 fraOgMed = 2.januar(2023),
                 tilOgMed = 2.januar(2023),
-                stønadstype = StønadType.DAGPENGER_ARBEIDSSOKER_ORDINAER
+                stønadstype = StønadTypeDagpenger.DAGPENGER_ARBEIDSSOKER_ORDINAER
             ),
             lagUtbetalingDto(
                 beløp = 100,
                 fraOgMed = 3.januar(2023),
                 tilOgMed = 3.januar(2023),
-                stønadstype = StønadType.DAGPENGER_EOS
+                stønadstype = StønadTypeDagpenger.DAGPENGER_EOS
             )
         ).sammenslått()
 
         assertEquals(2, utbetalinger.size)
         utbetalinger.first().let {
-            assertEquals(StønadType.DAGPENGER_ARBEIDSSOKER_ORDINAER, it.stonadstype)
+            assertEquals(StønadTypeDagpenger.DAGPENGER_ARBEIDSSOKER_ORDINAER, it.stonadstype)
             assertEquals(2.januar(2023), it.fraOgMedDato)
             assertEquals(2.januar(2023), it.tilOgMedDato)
         }
         utbetalinger.component2().let {
-            assertEquals(StønadType.DAGPENGER_EOS, it.stonadstype)
+            assertEquals(StønadTypeDagpenger.DAGPENGER_EOS, it.stonadstype)
             assertEquals(LocalDate.of(2023, 1, 3), it.fraOgMedDato)
             assertEquals(LocalDate.of(2023, 1, 3), it.tilOgMedDato)
         }

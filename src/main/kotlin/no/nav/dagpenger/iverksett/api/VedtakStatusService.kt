@@ -6,6 +6,7 @@ import no.nav.dagpenger.kontrakter.datadeling.DatadelingRequest
 import no.nav.dagpenger.kontrakter.datadeling.DatadelingResponse
 import no.nav.dagpenger.kontrakter.datadeling.Periode
 import no.nav.dagpenger.kontrakter.felles.StønadType
+import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
 import no.nav.dagpenger.kontrakter.iverksett.VedtaksperiodeDto
 import no.nav.dagpenger.kontrakter.iverksett.Vedtaksresultat
 import no.nav.dagpenger.kontrakter.iverksett.VedtaksstatusDto
@@ -42,7 +43,7 @@ class VedtakStatusService(
 
     private fun mapPerioder(iverksett: Iverksett, request: DatadelingRequest): List<Periode> {
         val vedtak = iverksett.data.vedtak
-        val yt = vedtak.tilkjentYtelse?.sisteAndelIKjede?.stønadstype ?: StønadType.DAGPENGER_ARBEIDSSOKER_ORDINAER
+        val yt = vedtak.tilkjentYtelse?.sisteAndelIKjede?.stønadstype ?: StønadTypeDagpenger.DAGPENGER_ARBEIDSSOKER_ORDINAER
 
         return vedtak.vedtaksperioder
             .filter {

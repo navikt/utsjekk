@@ -6,6 +6,7 @@ import no.nav.dagpenger.kontrakter.felles.StønadType
 import no.nav.dagpenger.kontrakter.iverksett.Ferietillegg
 import no.nav.dagpenger.kontrakter.iverksett.UtbetalingDto
 import java.time.LocalDate
+import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
 
 fun lagAndelTilkjentYtelse(
     beløp: Int,
@@ -13,7 +14,7 @@ fun lagAndelTilkjentYtelse(
     tilOgMed: LocalDate,
     periodeId: Long? = null,
     forrigePeriodeId: Long? = null,
-    stønadstype: StønadType = StønadType.DAGPENGER_ARBEIDSSOKER_ORDINAER,
+    stønadstype: StønadType = StønadTypeDagpenger.DAGPENGER_ARBEIDSSOKER_ORDINAER,
     ferietillegg: Ferietillegg? = null,
 ) =
     AndelTilkjentYtelse(
@@ -29,7 +30,7 @@ fun lagUtbetalingDto(
     beløp: Int,
     fraOgMed: LocalDate = LocalDate.of(2021, 1, 1),
     tilOgMed: LocalDate = LocalDate.of(2021, 1, 31),
-    stønadstype: StønadType = StønadType.DAGPENGER_ARBEIDSSOKER_ORDINAER,
+    stønadstype: StønadType = StønadTypeDagpenger.DAGPENGER_ARBEIDSSOKER_ORDINAER,
     ferietillegg: Ferietillegg? = null,
 ) =
     UtbetalingDto(
