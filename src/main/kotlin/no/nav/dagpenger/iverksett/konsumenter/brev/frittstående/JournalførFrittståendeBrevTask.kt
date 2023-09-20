@@ -18,6 +18,7 @@ import no.nav.familie.prosessering.domene.Task
 import no.nav.familie.prosessering.internal.TaskService
 import org.springframework.stereotype.Service
 import java.util.UUID
+import no.nav.dagpenger.kontrakter.felles.StønadType
 
 @Service
 @TaskStepBeskrivelse(
@@ -76,7 +77,7 @@ class JournalførFrittståendeBrevTask(
             Dokument(
                 frittståendeBrev.fil,
                 Filtype.PDFA,
-                dokumenttype = stønadstypeTilDokumenttype(frittståendeBrev.stønadstype),
+                dokumenttype = stønadstypeTilDokumenttype(frittståendeBrev.stønadstype as StønadType),
                 tittel = frittståendeBrev.brevtype.tittel,
             ),
         ),
