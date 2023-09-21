@@ -78,5 +78,3 @@ spec:
         databases:
           - name: dp-iverksett
             envVarPrefix: DB
-  kafka:
-    pool: nav-prod

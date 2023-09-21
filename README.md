@@ -84,17 +84,6 @@ Når du lager kall mot APIet, så kan du sette følgende i header'en for å send
 
 * `Authorization`: `Bearer {{token-dp-iverksett}}`
 
-## Kafka
-Topic er opprettet i Aiven og GCP, men den kan også nås fra on-prem. Konfigurasjonen av topic finnes i `topic-dev.yaml` Dersom endringer gjøres på topic, må ny konfigurasjon merges til master.
-Etter merge til master må workflow `Deploy kafka topics` kjøres for at endringene skal tre i kraft. 
-For å se og verifisere konfigurasjon til gitt topic kan kommandoen `kubectl describe topic teamdagpenger.<topic> -n=teamdagpenger` kjøres.
-
-### Debugging og lesing fra kø med Kafkacat
-Det er mulig å se hva som ligger på kø med Kafkacat uten å lage en egen applikasjon for både dev og prod.
-Kjør kommando `kafkacat -F <configFile.config> -C -t teamdagpenger.<topicnavn> -o -1 -e` for å lese nyeste melding på topic. 
-Se dokumentasjon på kafkacat for å modifisere til å f.eks. se melding på gitt offset.
-Installasjon av kafkacat og oppsett av config-fil er dokumentert i dagpenger-repoet under utvikling. 
-
 ## Produksjonssetting
 Applikasjonen vil deployes til produksjon ved ny commit på master-branchen. Det er dermed tilstrekkelig å merge PR for å trigge produksjonsbygget.
 

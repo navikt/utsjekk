@@ -70,5 +70,3 @@ spec:
         databases:
           - name: tiltakspenger-iverksett
             envVarPrefix: DB
-  kafka:
-    pool: nav-dev

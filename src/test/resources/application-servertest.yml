@@ -8,20 +8,6 @@ no.nav.security.jwt:
     accepted_audience: aud-localhost
     cookie_name: localhost-idtoken
     proxy_url: #Default satt, skal være null i integrasjonstest
-spring:
-  kafka:
-    bootstrap-servers: http://localhost:9092
-    properties:
-      schema.registry.url: http://localhost:8081
-      security:
-        protocol: PLAINTEXT
-    consumer:
-      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      group-id: srvc01
-      max-poll-records: 1
-      auto-offset-reset: latest
-      enable-auto-commit: false
 arena-mq:
   queueManager: queuemanager
   channel: channel
@@ -47,11 +33,6 @@ AZURE_OPENID_CONFIG_TOKEN_ENDPOINT: https://login.microsoftonline.com/navq.onmic
 AZURE_APP_TENANT_ID: navq.onmicrosoft.com
 
 NAIS_CLUSTER_NAME: dev
-
-KAFKA_BROKERS: hostname:1234
-KAFKA_KEYSTORE_PATH: kafkaKeystorePath
-KAFKA_CREDSTORE_PASSWORD: kafkaCredstorePassword
-KAFKA_TRUSTSTORE_PATH: kafkaTruststorePath
 
 BESLUTTER_GRUPPE: 11b8475a-fb12-41aa-b1f6-8497c1b5385b
 APP_MED_SYSTEMTILGANG: dev-gcp:teamdagpenger:dp-vedtak-iverksett
