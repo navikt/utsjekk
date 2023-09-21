@@ -2,9 +2,6 @@
 App som tilbyr orkestrering av iverksetting for dagpenger. Følgende oppgaver gjøres i sekvens: 
 1. Lag og send utbetalingsoppdrag til OS/UR (via dp-oppdrag)
 2. Poll etter iverksatt utbetalingsoppdrag (mot dp-oppdrag)
-3. Journalfør og arkiver brev mot Joark
-4. Distribuer journalført brev
-5. Send opplysninger om vedtak til Arbeidsoppfølging
 
 ## Swagger
 http://localhost:8094/swagger-ui/index.html
