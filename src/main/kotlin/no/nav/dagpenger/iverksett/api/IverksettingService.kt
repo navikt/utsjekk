@@ -93,7 +93,7 @@ class IverksettingService(
             }
             it.tilkjentYtelseForUtbetaling?.let {ty ->
                 if (ty.utbetalingsoppdrag?.utbetalingsperiode?.isEmpty() == true) {
-                    return IverksettStatus.OK_MOT_OPPDRAG
+                    return IverksettStatus.OK
                 }
                 return IverksettStatus.SENDT_TIL_OPPDRAG
             }

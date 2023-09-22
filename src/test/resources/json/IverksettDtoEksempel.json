@@ -9,8 +9,6 @@
     "resultat": "AVSLÅTT",
     "saksbehandlerId": "A123456",
     "beslutterId": "B123456",
-    "opphorAarsak": "PERIODE_UTLØPT",
-    "avslagAarsak": null,
     "utbetalinger": [
       {
         "belopPerDag": 10,
@@ -26,16 +24,7 @@
         "tilOgMedDato": null,
         "periodeType": "HOVEDPERIODE"
       }
-    ],
-    "tilbakekreving": {
-      "tilbakekrevingsvalg": "OPPRETT_TILBAKEKREVING_MED_VARSEL",
-      "tilbakekrevingMedVarsel": {
-        "varseltekst": "varsel",
-        "sumFeilutbetaling": 1,
-        "fellesperioder": []
-      }
-    },
-    "brevmottakere": []
+    ]
   },
   "utbetalingerPaaForrigeVedtak": [],
   "forrigeIverksetting": null

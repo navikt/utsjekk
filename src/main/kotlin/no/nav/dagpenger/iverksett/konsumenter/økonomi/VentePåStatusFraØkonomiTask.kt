@@ -52,16 +52,9 @@ class VentePåStatusFraØkonomiTask(
     }
 
     override fun onCompletion(task: Task) {
-        val behandlingId = UUID.fromString(task.payload)
-        val iverksett = iverksettingRepository.findByIdOrThrow(behandlingId).data
-
         if (!featureToggleService.isEnabled(FeatureToggleConfig.SKAL_SENDE_BREV)) {
             logger.warn(
                 "Sender ikke ut brev fordi funksjonsbryteren for brevutsending er skrudd AV",
-            )
-        } else if (iverksett.skalIkkeSendeBrev()) {
-            logger.info(
-                "Journalfør ikke vedtaksbrev for behandling=$behandlingId fordi årsak=${iverksett.behandling.behandlingÅrsak}",
             )
         } else {
             taskService.save(task.opprettNesteTask())
