@@ -8,7 +8,6 @@ import no.nav.dagpenger.iverksett.api.domene.behandlingId
 import no.nav.dagpenger.iverksett.infrastruktur.repository.findByIdOrThrow
 import no.nav.dagpenger.iverksett.infrastruktur.transformer.toDomain
 import no.nav.dagpenger.iverksett.infrastruktur.util.ObjectMapperProvider.objectMapper
-import no.nav.dagpenger.iverksett.infrastruktur.util.opprettBrev
 import no.nav.dagpenger.iverksett.lagIverksett
 import no.nav.dagpenger.kontrakter.iverksett.IverksettDto
 import org.assertj.core.api.Assertions.assertThat
@@ -31,7 +30,7 @@ class IverksettingRepositoryTest : ServerTest() {
 
         assertThrows<IllegalStateException> { iverksettingRepository.findByIdOrThrow(iverksettData.behandlingId) }
 
-        val iverksett = iverksettingRepository.insert(lagIverksett(iverksettData, opprettBrev()))
+        val iverksett = iverksettingRepository.insert(lagIverksett(iverksettData))
 
         val iverksettResultat = iverksettingRepository.findByIdOrThrow(iverksett.behandlingId)
         assertThat(iverksett).usingRecursiveComparison().isEqualTo(iverksettResultat)
@@ -69,7 +68,7 @@ class IverksettingRepositoryTest : ServerTest() {
                 personIdent = "12345678911",
             ),
         )
-        iverksettingRepository.insert(lagIverksett(iverksettData, opprettBrev()))
+        iverksettingRepository.insert(lagIverksett(iverksettData))
         iverksettingRepository.insert(lagIverksett(iverksettData2))
         val iverksettAnnenPerson = iverksettingRepository.insert(lagIverksett(iverksettDataAnnenPerson))
 

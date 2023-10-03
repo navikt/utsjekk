@@ -64,16 +64,4 @@ internal class IverksettServiceTest {
         val status = iverksettStatusService.utledStatus(behandlingsId)
         assertThat(status).isEqualTo(IverksettStatus.OK)
     }
-
-    @Test
-    fun `la IverksettResultat ha felt for vedktasbrev ulik null, forvent status DISTRIBUERT`() {
-        val behandlingsId = UUID.randomUUID()
-        val tilkjentYtelse = opprettTilkjentYtelse(behandlingsId)
-        every { iverksettResultatService.hentIverksettResultat(behandlingsId) } returns IverksettResultatMockBuilder.Builder()
-            .oppdragResultat(OppdragResultat(OppdragStatus.KVITTERT_OK))
-            .build(behandlingsId, tilkjentYtelse)
-
-        val status = iverksettStatusService.utledStatus(behandlingsId)
-        assertThat(status).isEqualTo(IverksettStatus.OK)
-    }
 }

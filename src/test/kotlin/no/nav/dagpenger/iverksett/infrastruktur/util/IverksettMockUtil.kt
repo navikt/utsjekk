@@ -7,7 +7,6 @@ import java.util.Random
 import java.util.UUID
 import no.nav.dagpenger.iverksett.api.domene.AndelTilkjentYtelse
 import no.nav.dagpenger.iverksett.api.domene.Behandlingsdetaljer
-import no.nav.dagpenger.iverksett.api.domene.Brev
 import no.nav.dagpenger.iverksett.api.domene.Fagsakdetaljer
 import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
 import no.nav.dagpenger.iverksett.api.domene.IverksettResultat
@@ -185,10 +184,6 @@ fun opprettIverksettDagpenger(
         ),
         forrigeIverksetting = forrigeIverksetting,
     )
-}
-
-fun opprettBrev(): Brev {
-    return Brev(ByteArray(256))
 }
 
 class IverksettResultatMockBuilder private constructor(

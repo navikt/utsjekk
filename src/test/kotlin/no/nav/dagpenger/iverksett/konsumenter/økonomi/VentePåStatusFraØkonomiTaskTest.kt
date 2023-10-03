@@ -6,6 +6,11 @@ import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.slot
 import io.mockk.verify
+import java.math.BigDecimal
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.util.Properties
+import java.util.UUID
 import no.nav.dagpenger.iverksett.api.IverksettingRepository
 import no.nav.dagpenger.iverksett.api.IverksettingService
 import no.nav.dagpenger.iverksett.api.domene.OppdragResultat
@@ -25,13 +30,7 @@ import no.nav.familie.prosessering.domene.Task
 import no.nav.familie.prosessering.internal.TaskService
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
-import java.math.BigDecimal
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.util.Properties
-import java.util.UUID
 
 internal class VentePåStatusFraØkonomiTaskTest {
 
@@ -53,9 +52,7 @@ internal class VentePåStatusFraØkonomiTaskTest {
         VentePåStatusFraØkonomiTask(
             iverksettingRepository,
             iverksettingService,
-            taskService,
             iverksettResultatService,
-            mockFeatureToggleService(),
         )
 
     @BeforeEach
@@ -67,7 +64,7 @@ internal class VentePåStatusFraØkonomiTaskTest {
     }
 
     @Test
-    internal fun `kjør doTask for VentePåStatusFraØkonomiTaskhvis, forvent ingen unntak`() {
+    internal fun `kjør doTask for VentePåStatusFraØkonomiTask, forvent ingen unntak`() {
         val oppdragResultatSlot = slot<OppdragResultat>()
         every { iverksettResultatService.hentTilkjentYtelse(behandlingId) } returns tilkjentYtelse(
             listOf(
@@ -84,7 +81,6 @@ internal class VentePåStatusFraØkonomiTaskTest {
             )
         }
         assertThat(oppdragResultatSlot.captured.oppdragStatus).isEqualTo(OppdragStatus.KVITTERT_OK)
-        verify(exactly = 1) { taskService.save(any()) }
     }
 
     @Test
@@ -94,29 +90,10 @@ internal class VentePåStatusFraØkonomiTaskTest {
         runTask(Task(IverksettMotOppdragTask.TYPE, behandlingId.toString(), Properties()))
 
         verify(exactly = 0) { iverksettResultatService.oppdaterOppdragResultat(behandlingId, any()) }
-        verify(exactly = 1) { taskService.save(any()) }
-    }
-
-    @Test
-    @Disabled
-    internal fun `migrering - skal ikke opprette task for journalføring av vedtaksbrev`() {
-        // TODO hvorfor feiler denne
-        val opprettIverksettDto = opprettIverksettDto(behandlingId, sakId)
-        every { iverksettingRepository.findByIdOrThrow(any()) } returns lagIverksett(opprettIverksettDto.toDomain())
-        every { iverksettResultatService.hentTilkjentYtelse(behandlingId) } returns tilkjentYtelse(
-            listOf(
-                utbetalingsperiode,
-            ),
-        )
-
-        runTask(Task(IverksettMotOppdragTask.TYPE, behandlingId.toString(), Properties()))
-
-        verify(exactly = 0) { taskService.save(any()) }
     }
 
     private fun runTask(task: Task) {
         ventePåStatusFraØkonomiTask.doTask(task)
-        ventePåStatusFraØkonomiTask.onCompletion(task)
     }
 
     private val utbetalingsperiode = Utbetalingsperiode(

@@ -3,7 +3,6 @@ package no.nav.dagpenger.iverksett
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.UUID
-import no.nav.dagpenger.iverksett.api.domene.Brev
 import no.nav.dagpenger.iverksett.api.domene.Iverksett
 import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
 import no.nav.dagpenger.iverksett.api.domene.VedtaksperiodeDagpenger
@@ -41,8 +40,7 @@ fun lagIverksettData(
     )
 }
 
-fun lagIverksett(iverksettData: IverksettDagpenger, brev: Brev? = null) = Iverksett(
+fun lagIverksett(iverksettData: IverksettDagpenger) = Iverksett(
     iverksettData.behandling.behandlingId,
     iverksettData,
-    brev,
 )
