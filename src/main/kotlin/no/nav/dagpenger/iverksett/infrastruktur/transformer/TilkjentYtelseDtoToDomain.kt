@@ -51,7 +51,6 @@ fun ForrigeIverksettingDto.tilVedtaksdetaljer(): VedtaksdetaljerDagpenger {
         vedtakstype = VedtakType.UTBETALINGSVEDTAK,
         vedtaksresultat = Vedtaksresultat.INNVILGET,
         vedtakstidspunkt = LocalDateTime.now(),
-        opphørÅrsak = null,
         saksbehandlerId = "A123456",
         beslutterId = "B123456",
         tilkjentYtelse = this.utbetalinger.tilTilkjentYtelse(),

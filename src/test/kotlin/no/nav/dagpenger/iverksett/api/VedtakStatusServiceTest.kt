@@ -10,7 +10,6 @@ import no.nav.dagpenger.iverksett.lagIverksett
 import no.nav.dagpenger.iverksett.lagIverksettData
 import no.nav.dagpenger.kontrakter.datadeling.DatadelingRequest
 import no.nav.dagpenger.kontrakter.felles.Datoperiode
-import no.nav.dagpenger.kontrakter.iverksett.BehandlingType
 import no.nav.dagpenger.kontrakter.iverksett.VedtaksperiodeType
 import no.nav.dagpenger.kontrakter.iverksett.Vedtaksresultat
 import no.nav.dagpenger.kontrakter.iverksett.VedtaksstatusDto
@@ -138,7 +137,6 @@ class VedtakStatusServiceTest {
 
     companion object {
         private val iverksettDataFørsteVedtak = lagIverksettData(
-            behandlingType = BehandlingType.FØRSTEGANGSBEHANDLING,
             vedtaksresultat = Vedtaksresultat.INNVILGET,
             vedtakstidspunkt = LocalDateTime.now().minusMonths(2),
             vedtaksperioder = listOf(
@@ -149,7 +147,6 @@ class VedtakStatusServiceTest {
             ),
         )
         private val iverksettDataSisteVedtak = lagIverksettData(
-            behandlingType = BehandlingType.REVURDERING,
             vedtaksresultat = Vedtaksresultat.INNVILGET,
             vedtakstidspunkt = LocalDateTime.now(),
             vedtaksperioder = listOf(

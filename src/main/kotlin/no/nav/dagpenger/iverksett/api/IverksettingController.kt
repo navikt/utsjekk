@@ -50,7 +50,7 @@ Det kjøres implisitt en konsistensavstemming av at nye utbetalinger stemmer ove
     @ApiResponse(responseCode = "400", description = "ugyldig format på iverksetting")
     @ApiResponse(responseCode = "403", description = "ikke autorisert til å starte iverksetting")
     @ApiResponse(responseCode = "409", description = "iverksetting er i konflikt med tidligere iverksetting")
-    fun iverksettUtenBrev(
+    fun iverksett(
         @RequestBody iverksettDto: IverksettDto,
     ): ResponseEntity<Void> {
         tilgangskontrollService.valider(iverksettDto)

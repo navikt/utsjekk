@@ -17,7 +17,6 @@ import no.nav.dagpenger.iverksett.infrastruktur.util.opprettIverksettDto
 import no.nav.dagpenger.iverksett.lagIverksett
 import no.nav.dagpenger.iverksett.util.mockFeatureToggleService
 import no.nav.dagpenger.kontrakter.felles.Fagsystem
-import no.nav.dagpenger.kontrakter.iverksett.TilkjentYtelseStatus
 import no.nav.dagpenger.kontrakter.oppdrag.OppdragStatus
 import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsoppdrag
 import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsoppdrag.KodeEndring.NY
@@ -148,7 +147,6 @@ internal class VentePåStatusFraØkonomiTaskTest {
                 avstemmingTidspunkt = LocalDateTime.now(),
                 utbetalingsperiode = utbetalingsperioder,
             ),
-            status = TilkjentYtelseStatus.SENDT_TIL_IVERKSETTING,
             andelerTilkjentYtelse = listOf(),
         )
     }

@@ -1,56 +1,37 @@
 package no.nav.dagpenger.iverksett.infrastruktur.util
 
-import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.YearMonth
 import java.util.Random
 import java.util.UUID
 import no.nav.dagpenger.iverksett.api.domene.AndelTilkjentYtelse
-import no.nav.dagpenger.iverksett.api.domene.Barn
 import no.nav.dagpenger.iverksett.api.domene.Behandlingsdetaljer
 import no.nav.dagpenger.iverksett.api.domene.Brev
-import no.nav.dagpenger.iverksett.api.domene.Delvilkårsvurdering
 import no.nav.dagpenger.iverksett.api.domene.Fagsakdetaljer
 import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
 import no.nav.dagpenger.iverksett.api.domene.IverksettResultat
 import no.nav.dagpenger.iverksett.api.domene.OppdragResultat
 import no.nav.dagpenger.iverksett.api.domene.Søker
-import no.nav.dagpenger.iverksett.api.domene.TilbakekrevingMedVarsel
-import no.nav.dagpenger.iverksett.api.domene.Tilbakekrevingsdetaljer
 import no.nav.dagpenger.iverksett.api.domene.TilkjentYtelse
 import no.nav.dagpenger.iverksett.api.domene.VedtaksdetaljerDagpenger
 import no.nav.dagpenger.iverksett.api.domene.VedtaksperiodeDagpenger
-import no.nav.dagpenger.iverksett.api.domene.Vilkårsvurdering
-import no.nav.dagpenger.iverksett.api.domene.Vurdering
-import no.nav.dagpenger.iverksett.api.domene.ÅrsakRevurdering
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.lagAndelTilkjentYtelse
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.lagUtbetalingDto
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene.Behandlingsinformasjon
 import no.nav.dagpenger.kontrakter.felles.Datoperiode
 import no.nav.dagpenger.kontrakter.felles.StønadType
 import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
-import no.nav.dagpenger.kontrakter.felles.Tilbakekrevingsvalg
-import no.nav.dagpenger.kontrakter.iverksett.BehandlingType
-import no.nav.dagpenger.kontrakter.iverksett.BehandlingÅrsak
 import no.nav.dagpenger.kontrakter.iverksett.Ferietillegg
 import no.nav.dagpenger.kontrakter.iverksett.ForrigeIverksettingDto
 import no.nav.dagpenger.kontrakter.iverksett.IverksettDto
-import no.nav.dagpenger.kontrakter.iverksett.OpphørÅrsak
-import no.nav.dagpenger.kontrakter.iverksett.Opplysningskilde
-import no.nav.dagpenger.kontrakter.iverksett.RegelId
-import no.nav.dagpenger.kontrakter.iverksett.Revurderingsårsak
-import no.nav.dagpenger.kontrakter.iverksett.SvarId
 import no.nav.dagpenger.kontrakter.iverksett.TilkjentYtelseDto
-import no.nav.dagpenger.kontrakter.iverksett.TilkjentYtelseStatus
 import no.nav.dagpenger.kontrakter.iverksett.UtbetalingDto
 import no.nav.dagpenger.kontrakter.iverksett.VedtakType
 import no.nav.dagpenger.kontrakter.iverksett.VedtaksdetaljerDto
 import no.nav.dagpenger.kontrakter.iverksett.VedtaksperiodeDto
 import no.nav.dagpenger.kontrakter.iverksett.VedtaksperiodeType
 import no.nav.dagpenger.kontrakter.iverksett.Vedtaksresultat
-import no.nav.dagpenger.kontrakter.iverksett.VilkårType
-import no.nav.dagpenger.kontrakter.iverksett.Vilkårsresultat
 
 fun opprettIverksettDto(
     behandlingId: UUID = UUID.randomUUID(),
@@ -129,35 +110,12 @@ fun opprettTilkjentYtelse(
 fun behandlingsdetaljer(
     behandlingId: UUID = UUID.randomUUID(),
     forrigeBehandlingId: UUID? = null,
-    behandlingType: BehandlingType = BehandlingType.FØRSTEGANGSBEHANDLING,
-    behandlingÅrsak: BehandlingÅrsak = BehandlingÅrsak.SØKNAD,
 ): Behandlingsdetaljer {
     return Behandlingsdetaljer(
         behandlingId = behandlingId,
         forrigeBehandlingId = forrigeBehandlingId,
-        behandlingType = behandlingType,
-        behandlingÅrsak = behandlingÅrsak,
         relatertBehandlingId = null,
-        vilkårsvurderinger = listOf(
-            Vilkårsvurdering(
-                vilkårType = VilkårType.SAGT_OPP_ELLER_REDUSERT,
-                resultat = Vilkårsresultat.OPPFYLT,
-                delvilkårsvurderinger = listOf(
-                    Delvilkårsvurdering(
-                        resultat = Vilkårsresultat.OPPFYLT,
-                        vurderinger = listOf(
-                            Vurdering(
-                                regelId = RegelId.SAGT_OPP_ELLER_REDUSERT,
-                                svar = SvarId.JA,
-                                begrunnelse = "Nei",
-                            ),
-                        ),
-                    ),
-                ),
-            ),
-        ),
         kravMottatt = LocalDate.of(2021, 3, 3),
-        årsakRevurdering = ÅrsakRevurdering(Opplysningskilde.MELDING_MODIA, Revurderingsårsak.ENDRING_INNTEKT),
 
     )
 }
@@ -179,7 +137,6 @@ fun vedtaksdetaljerDagpenger(
         vedtakstype = VedtakType.UTBETALINGSVEDTAK,
         vedtaksresultat = vedtaksresultat,
         vedtakstidspunkt = vedtakstidspunkt,
-        opphørÅrsak = OpphørÅrsak.PERIODE_UTLØPT,
         saksbehandlerId = "A12345",
         beslutterId = "B23456",
         tilkjentYtelse = tilkjentYtelse,
@@ -193,7 +150,6 @@ private fun lagTilkjentYtelse(
     TilkjentYtelse(
         id = UUID.randomUUID(),
         utbetalingsoppdrag = null,
-        status = TilkjentYtelseStatus.AKTIV,
         andelerTilkjentYtelse = andeler,
     )
 
@@ -206,8 +162,6 @@ fun opprettIverksettDagpenger(
         behandling = behandlingsdetaljer,
         søker = Søker(
             personIdent = "12345678910",
-            barn = emptyList(),
-            tilhørendeEnhet = "4489",
         ),
         vedtak = vedtaksdetaljer,
     )
@@ -219,14 +173,11 @@ fun opprettIverksettDagpenger(
     forrigeIverksetting: IverksettDagpenger? = null,
     fagsakId: UUID = UUID.randomUUID(),
 ): IverksettDagpenger {
-    val behandlingType = forrigeBehandlingId?.let { BehandlingType.REVURDERING } ?: BehandlingType.FØRSTEGANGSBEHANDLING
     return IverksettDagpenger(
         fagsak = Fagsakdetaljer(fagsakId = fagsakId, stønadstype = StønadTypeDagpenger.DAGPENGER_ARBEIDSSOKER_ORDINAER),
-        behandling = behandlingsdetaljer(behandlingId, forrigeBehandlingId, behandlingType),
+        behandling = behandlingsdetaljer(behandlingId, forrigeBehandlingId),
         søker = Søker(
             personIdent = "12345678910",
-            barn = listOf(Barn("01010199999"), Barn(null, LocalDate.of(2023, 1, 1))),
-            tilhørendeEnhet = "4489",
         ),
         vedtak = vedtaksdetaljerDagpenger(
             vedtaksresultat = Vedtaksresultat.INNVILGET,
@@ -239,26 +190,6 @@ fun opprettIverksettDagpenger(
 fun opprettBrev(): Brev {
     return Brev(ByteArray(256))
 }
-
-fun opprettTilbakekrevingsdetaljer(): Tilbakekrevingsdetaljer =
-    Tilbakekrevingsdetaljer(
-        tilbakekrevingsvalg = Tilbakekrevingsvalg.OPPRETT_TILBAKEKREVING_MED_VARSEL,
-        tilbakekrevingMedVarsel = opprettTilbakekrevingMedVarsel(),
-    )
-
-fun opprettTilbakekrevingMedVarsel(
-    sumFeilutbetaling: BigDecimal = BigDecimal.valueOf(100),
-    perioder: List<Datoperiode> = listOf(
-        Datoperiode(
-            fom = LocalDate.of(2021, 5, 1),
-            tom = LocalDate.of(2021, 6, 30),
-        ),
-    ),
-) = TilbakekrevingMedVarsel(
-    varseltekst = "varseltekst",
-    sumFeilutbetaling = sumFeilutbetaling,
-    perioder = perioder,
-)
 
 class IverksettResultatMockBuilder private constructor(
     val tilkjentYtelse: TilkjentYtelse,
