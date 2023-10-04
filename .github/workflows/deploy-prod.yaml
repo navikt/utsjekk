@@ -1,6 +1,5 @@
 name: Build-Deploy prod
-on:
-  workflow_dispatch:
+on: push
 
 env:
   IMAGE: ghcr.io/${{ github.repository }}:${{ github.sha }}
@@ -42,7 +41,6 @@ jobs:
     name: Deploy til dev-gcp
     timeout-minutes: 30
     needs: build
-    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
