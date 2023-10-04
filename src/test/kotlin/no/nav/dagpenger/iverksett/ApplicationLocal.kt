@@ -14,7 +14,6 @@ fun main(args: Array<String>) {
         .initializers(DbContainerInitializer())
         .profiles(
             "local",
-            "mock-integrasjoner",
             // "mock-oppdrag",
         )
         .run(*args)

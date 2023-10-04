@@ -12,7 +12,7 @@ class TaskType(
 
 fun hovedflyt() = listOf(
     TaskType(IverksettMotOppdragTask.TYPE),
-    TaskType(VentePåStatusFraØkonomiTask.TYPE, 20), // går ikke videre ved migrering//korrigering_uten_brev
+    TaskType(VentePåStatusFraØkonomiTask.TYPE, 20)
 )
 
 fun TaskType.nesteHovedflytTask() = hovedflyt().zipWithNext().first { this.type == it.first.type }.second
