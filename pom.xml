@@ -24,7 +24,6 @@
         <java.version>17</java.version>
         <kotlin.version>1.8.10</kotlin.version>
         <springdoc.version>2.0.2</springdoc.version>
-        <familie-felles.version>2.20230210162649_a258d57-SPRING_BOOT_3</familie-felles.version>
         <prosessering.version>2.20230214102837_4b63c2e-SPRING_BOOT_3</prosessering.version>
         <maven-surefire-plugin.version>3.0.0-M9</maven-surefire-plugin.version>
         <mockk.version>1.13.4</mockk.version>
@@ -140,16 +139,17 @@
             <version>${dotenv.version}</version>
         </dependency>
 
+        <!-- Http -->
+        <dependency>
+            <groupId>org.apache.httpcomponents.client5</groupId>
+            <artifactId>httpclient5</artifactId>
+        </dependency>
+
         <!-- NAV internt -->
         <dependency>
             <groupId>no.nav.familie</groupId>
             <artifactId>prosessering-core</artifactId>
             <version>${prosessering.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>no.nav.familie.felles</groupId>
-            <artifactId>http-client</artifactId>
-            <version>${familie-felles.version}</version>
         </dependency>
         <dependency>
             <groupId>no.nav.security</groupId>

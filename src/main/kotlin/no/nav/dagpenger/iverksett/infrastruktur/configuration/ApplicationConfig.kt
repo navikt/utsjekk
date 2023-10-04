@@ -2,8 +2,7 @@ package no.nav.dagpenger.iverksett.infrastruktur.configuration
 
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import no.nav.dagpenger.iverksett.infrastruktur.util.ObjectMapperProvider
-import no.nav.familie.http.client.RetryOAuth2HttpClient
-import no.nav.familie.http.config.RestTemplateAzure
+import no.nav.dagpenger.iverksett.infrastruktur.client.RetryOAuth2HttpClient
 import no.nav.familie.log.filter.LogFilter
 import no.nav.familie.log.filter.RequestTimeFilter
 import no.nav.security.token.support.client.core.http.OAuth2HttpClient
@@ -34,6 +33,7 @@ import java.time.temporal.ChronoUnit
     "no.nav.familie.prosessering",
     "no.nav.familie.sikkerhet",
     "no.nav.dagpenger.iverksett",
+    "no.nav.security.token.support",
     excludeFilters = [
         ComponentScan.Filter(
             type = FilterType.ASSIGNABLE_TYPE,
