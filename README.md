@@ -82,14 +82,12 @@ Når du lager kall mot APIet, så kan du sette følgende i header'en for å send
 * `Authorization`: `Bearer {{token-dp-iverksett}}`
 
 ## Produksjonssetting
+
 Applikasjonen vil deployes til produksjon ved ny commit på master-branchen. Det er dermed tilstrekkelig å merge PR for å trigge produksjonsbygget.
 
 ## Henvendelser
 
-Spørsmål knyttet til koden eller prosjektet kan rettes til:
-
-* Jørn Ola Birkeland, `jorn.ola.birkeland@nav.no` (dagpenger-fork)
-* Mattis Janitz, `mattis.janitz@nav.no` (dp-iverksett)
+Spørsmål knyttet til koden eller prosjektet kan stilles ved å opprette et issue her på Github.
 
 ### For NAV-ansatte
 
