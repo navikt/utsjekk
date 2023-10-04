@@ -1,8 +1,8 @@
 package no.nav.dagpenger.iverksett.infrastruktur.interceptor
 
-import no.nav.familie.log.IdUtils
-import no.nav.familie.log.NavHttpHeaders
-import no.nav.familie.log.mdc.MDCConstants
+import no.nav.dagpenger.iverksett.infrastruktur.util.MDCConstants
+import no.nav.dagpenger.iverksett.infrastruktur.util.NavHttpHeaders
+import no.nav.familie.prosessering.util.IdUtils
 import org.slf4j.MDC
 import org.springframework.http.HttpRequest
 import org.springframework.http.client.ClientHttpRequestExecution

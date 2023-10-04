@@ -1,6 +1,5 @@
 package no.nav.dagpenger.iverksett.infrastruktur.advice
 
-import no.nav.familie.kontrakter.felles.Ressurs
 import no.nav.security.token.support.spring.validation.interceptor.JwtTokenUnauthorizedException
 import org.slf4j.LoggerFactory
 import org.springframework.core.NestedExceptionUtils
@@ -18,7 +17,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 class ApiExceptionHandler : ResponseEntityExceptionHandler() {
 
-    private val logger = LoggerFactory.getLogger(javaClass)
+    private val log = LoggerFactory.getLogger(javaClass)
     private val secureLogger = LoggerFactory.getLogger("secureLogger")
 
     private fun rootCause(throwable: Throwable): String {
@@ -33,7 +32,7 @@ class ApiExceptionHandler : ResponseEntityExceptionHandler() {
         request: WebRequest,
     ): ResponseEntity<Any>? {
         secureLogger.error("En feil har oppstått", ex)
-        logger.error("En feil har oppstått - throwable=${rootCause(ex)} status=${status.value()}")
+        log.error("En feil har oppstått - throwable=${rootCause(ex)} status=${status.value()}")
         return super.handleExceptionInternal(ex, body, headers, status, request)
     }
 
@@ -71,7 +70,7 @@ class ApiExceptionHandler : ResponseEntityExceptionHandler() {
 
     private fun uventetFeil(throwable: Throwable): ResponseEntity<Ressurs<Nothing>> {
         secureLogger.error("En feil har oppstått", throwable)
-        logger.error("En feil har oppstått - throwable=${rootCause(throwable)} ")
+        log.error("En feil har oppstått - throwable=${rootCause(throwable)} ")
         return ResponseEntity
             .status(HttpStatus.INTERNAL_SERVER_ERROR)
             .body(Ressurs.failure("Uventet feil"))

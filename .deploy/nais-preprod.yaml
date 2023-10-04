@@ -33,6 +33,7 @@ spec:
       cpu: 500m
   secureLogs:
     enabled: true
+  leaderElection: true
   env:
     - name: SPRING_PROFILES_ACTIVE
       value: dev
@@ -40,6 +41,8 @@ spec:
       value: "11b8475a-fb12-41aa-b1f6-8497c1b5385b"
     - name: APP_MED_SYSTEMTILGANG
       value: "dev-gcp:teamdagpenger:dp-vedtak-iverksett"
+    - name: PROSESSERING_GRUPPE
+      value: "97140b9a-07c5-414c-beeb-69824d04c044"
   azure:
     application:
       enabled: true

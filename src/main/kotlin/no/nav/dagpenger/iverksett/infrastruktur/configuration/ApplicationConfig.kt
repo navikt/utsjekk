@@ -3,12 +3,16 @@ package no.nav.dagpenger.iverksett.infrastruktur.configuration
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import no.nav.dagpenger.iverksett.infrastruktur.util.ObjectMapperProvider
 import no.nav.dagpenger.iverksett.infrastruktur.client.RetryOAuth2HttpClient
+import no.nav.dagpenger.iverksett.infrastruktur.util.LeaderClient
 import no.nav.familie.log.filter.LogFilter
 import no.nav.familie.log.filter.RequestTimeFilter
+import no.nav.familie.prosessering.config.ProsesseringInfoProvider
 import no.nav.security.token.support.client.core.http.OAuth2HttpClient
 import no.nav.security.token.support.client.spring.oauth2.EnableOAuth2Client
+import no.nav.security.token.support.spring.SpringTokenValidationContextHolder
 import no.nav.security.token.support.spring.api.EnableJwtTokenValidation
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.SpringBootConfiguration
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan
 import org.springframework.boot.web.client.RestTemplateBuilder
@@ -31,7 +35,6 @@ import java.time.temporal.ChronoUnit
 )
 @ComponentScan(
     "no.nav.familie.prosessering",
-    "no.nav.familie.sikkerhet",
     "no.nav.dagpenger.iverksett",
     "no.nav.security.token.support",
     excludeFilters = [
@@ -102,5 +105,29 @@ class ApplicationConfig {
                 .setConnectTimeout(Duration.of(2, ChronoUnit.SECONDS))
                 .setReadTimeout(Duration.of(2, ChronoUnit.SECONDS)),
         )
+    }
+
+    @Bean
+    fun prosesseringInfoProvider(
+        @Value("\${PROSESSERING_GRUPPE}") gruppe: String,
+    ) = object : ProsesseringInfoProvider {
+        override fun hentBrukernavn(): String = try {
+            SpringTokenValidationContextHolder().tokenValidationContext.getClaims("azuread").getStringClaim("preferred_username")
+        } catch (e: Exception) {
+            "dp-iverksett"
+        }
+
+        override fun harTilgang(): Boolean = grupper().contains(gruppe)
+
+        private fun grupper(): List<String> {
+            return try {
+                SpringTokenValidationContextHolder().tokenValidationContext.getClaims("azuread")
+                    ?.get("groups") as List<String>? ?: emptyList()
+            } catch (e: Exception) {
+                emptyList()
+            }
+        }
+
+        override fun isLeader(): Boolean = LeaderClient.isLeader() ?: true
     }
 }

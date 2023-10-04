@@ -102,17 +102,17 @@ class DatabaseConfiguration : AbstractJdbcConfiguration() {
     class PGobjectConverterTilIverksettData : Converter<PGobject, IverksettDagpenger> {
 
         override fun convert(pGobject: PGobject): IverksettDagpenger {
-            val fagsakNode = no.nav.familie.kontrakter.felles.objectMapper.readTree(pGobject.value).findValue("fagsak")
-            val fagsakdetaljer: Fagsakdetaljer = no.nav.familie.kontrakter.felles.objectMapper.treeToValue(fagsakNode)
+            val fagsakNode = objectMapper.readTree(pGobject.value).findValue("fagsak")
+            val fagsakdetaljer: Fagsakdetaljer = objectMapper.treeToValue(fagsakNode)
             return when (fagsakdetaljer.stønadstype) {
                 StønadTypeDagpenger.DAGPENGER_ARBEIDSSOKER_ORDINAER,
                 StønadTypeDagpenger.DAGPENGER_PERMITTERING_ORDINAER,
                 StønadTypeDagpenger.DAGPENGER_PERMITTERING_FISKEINDUSTRI,
                 StønadTypeDagpenger.DAGPENGER_EOS
-                -> no.nav.familie.kontrakter.felles.objectMapper
+                -> objectMapper
                     .readValue(pGobject.value, IverksettDagpenger::class.java)
                 else
-                -> no.nav.familie.kontrakter.felles.objectMapper
+                -> objectMapper
                     .readValue(pGobject.value, IverksettDagpenger::class.java)
             }
         }

@@ -4,8 +4,8 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import io.micrometer.core.instrument.Counter
 import io.micrometer.core.instrument.Metrics
 import io.micrometer.core.instrument.Timer
-import no.nav.familie.kontrakter.felles.Ressurs
-import no.nav.familie.kontrakter.felles.objectMapper
+import no.nav.dagpenger.iverksett.infrastruktur.advice.Ressurs
+import no.nav.dagpenger.iverksett.infrastruktur.util.ObjectMapperProvider.objectMapper
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpEntity

@@ -2,9 +2,9 @@ package no.nav.dagpenger.iverksett.api
 
 import java.util.UUID
 import no.nav.dagpenger.iverksett.ServerTest
+import no.nav.dagpenger.iverksett.infrastruktur.advice.Ressurs
 import no.nav.dagpenger.iverksett.infrastruktur.util.opprettIverksettDto
 import no.nav.dagpenger.kontrakter.iverksett.VedtakType
-import no.nav.familie.kontrakter.felles.Ressurs
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test

@@ -24,13 +24,13 @@
         <java.version>17</java.version>
         <kotlin.version>1.8.10</kotlin.version>
         <springdoc.version>2.0.2</springdoc.version>
-        <prosessering.version>2.20230214102837_4b63c2e-SPRING_BOOT_3</prosessering.version>
+        <prosessering.version>2.20230928100816_3cbdfc5</prosessering.version>
         <maven-surefire-plugin.version>3.0.0-M9</maven-surefire-plugin.version>
         <mockk.version>1.13.4</mockk.version>
         <cucumber.version>7.11.1</cucumber.version>
         <dotenv.version>6.4.1</dotenv.version>
         <start-class>no.nav.dagpenger.iverksett.ApplicationKt</start-class>
-        <token-validation-spring.version>3.0.4</token-validation-spring.version>
+        <nav.security.token.version>3.0.4</nav.security.token.version>
         <ibm-mq-client.version>9.3.2.0</ibm-mq-client.version>
         <unleash.version>7.1.0</unleash.version>
         <okhttp3.version>4.9.1
@@ -108,6 +108,13 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- Logging -->
+        <dependency>
+            <groupId>net.logstash.logback</groupId>
+            <artifactId>logstash-logback-encoder</artifactId>
+            <version>7.2</version>
+        </dependency>
+
         <!-- Kotlin -->
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
@@ -154,7 +161,22 @@
         <dependency>
             <groupId>no.nav.security</groupId>
             <artifactId>token-client-spring</artifactId>
-            <version>${token-validation-spring.version}</version>
+            <version>${nav.security.token.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>no.nav.security</groupId>
+            <artifactId>token-client-core</artifactId>
+            <version>${nav.security.token.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>no.nav.security</groupId>
+            <artifactId>token-validation-spring</artifactId>
+            <version>${nav.security.token.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>no.nav.security</groupId>
+            <artifactId>token-validation-core</artifactId>
+            <version>${nav.security.token.version}</version>
         </dependency>
 
         <!-- Database -->
@@ -225,7 +247,7 @@
         <dependency>
             <groupId>no.nav.security</groupId>
             <artifactId>token-validation-spring-test</artifactId>
-            <version>${token-validation-spring.version}</version>
+            <version>${nav.security.token.version}</version>
             <scope>test</scope>
             <exclusions>
                 <exclusion>
