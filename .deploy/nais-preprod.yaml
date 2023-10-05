@@ -42,7 +42,7 @@ spec:
     - name: APP_MED_SYSTEMTILGANG
       value: "dev-gcp:teamdagpenger:dp-vedtak-iverksett"
     - name: PROSESSERING_GRUPPE
-      value: "97140b9a-07c5-414c-beeb-69824d04c044"
+      value: "928636f4-fd0d-4149-978e-a6fb68bb19de"
   azure:
     application:
       enabled: true
