@@ -26,27 +26,6 @@ data class TilkjentYtelse(
     } ?: emptyMap(),
 )
 
-fun IverksettResultat?.erKonsistentMed(forrigeIverksetting: IverksettDagpenger?): Boolean {
-    val andeler = this?.tilkjentYtelseForUtbetaling?.lagNormaliserteAndeler()
-    val andreAndeler = forrigeIverksetting?.vedtak?.tilkjentYtelse?.lagNormaliserteAndeler()
-
-    return andeler == andreAndeler
-}
-
-private fun TilkjentYtelse?.lagNormaliserteAndeler(): List<AndelTilkjentYtelse> {
-    return this?.andelerTilkjentYtelse
-        ?.sortedBy { it.periode.fom }
-        ?.map {
-            AndelTilkjentYtelse(
-                id = it.id,
-                beløp = it.beløp,
-                periode = it.periode,
-                stønadstype = it.stønadstype,
-                ferietillegg = it.ferietillegg,
-            )
-        } ?: emptyList()
-}
-
 fun TilkjentYtelse?.lagAndelData(): List<AndelData> =
     this?.andelerTilkjentYtelse?.map {
         it.tilAndelData()

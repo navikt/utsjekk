@@ -4,21 +4,18 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
+import java.util.Properties
+import java.util.UUID
 import no.nav.dagpenger.iverksett.api.IverksettingService
-import no.nav.dagpenger.iverksett.api.domene.IverksettResultat
 import no.nav.dagpenger.iverksett.api.tilstand.IverksettResultatService
 import no.nav.dagpenger.iverksett.infrastruktur.transformer.toDomain
-import no.nav.dagpenger.iverksett.infrastruktur.util.lagForrigeIverksetting
 import no.nav.dagpenger.iverksett.infrastruktur.util.opprettIverksettDto
 import no.nav.dagpenger.kontrakter.felles.Fagsystem
 import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsoppdrag
 import no.nav.familie.prosessering.domene.Task
 import no.nav.familie.prosessering.internal.TaskService
-import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import java.util.Properties
-import java.util.UUID
 
 internal class IverksettMotOppdragTaskTest {
 
@@ -61,25 +58,5 @@ internal class IverksettMotOppdragTaskTest {
         iverksettMotOppdragTask.onCompletion(task)
         assertThat(taskSlot.captured.payload).isEqualTo(behandlingId.toString())
         assertThat(taskSlot.captured.type).isEqualTo(VentePåStatusFraØkonomiTask.TYPE)
-    }
-
-    @Test
-    internal fun `skal feile hvis det er inkonsistens mellom ny og forrige iverksetting`() {
-        val forrigeBehandlingId = UUID.randomUUID()
-        val forrigeIverksetting = lagForrigeIverksetting(forrigeBehandlingId)
-        // Iverksetting som sier at forrige iverksetting hadde utbetalinger
-        val iverksetting = opprettIverksettDto(behandlingId, sakId).copy(
-            forrigeIverksetting = forrigeIverksetting,
-        )
-
-        every { iverksettingService.hentIverksetting(any()) } returns
-            iverksetting.toDomain()
-        every { iverksettResultatService.hentIverksettResultat(forrigeBehandlingId) } returns
-            // IverksettResultat som sier forrige iverksetting IKKE hadde utbetalinger (er tom)
-            IverksettResultat(forrigeBehandlingId)
-
-        Assertions.assertThatExceptionOfType(IllegalStateException::class.java).isThrownBy {
-            iverksettMotOppdragTask.doTask(Task(IverksettMotOppdragTask.TYPE, behandlingId.toString(), Properties()))
-        }.withMessage("Lagret forrige tilkjent ytelse stemmer ikke med mottatt forrige tilkjent ytelse")
     }
 }

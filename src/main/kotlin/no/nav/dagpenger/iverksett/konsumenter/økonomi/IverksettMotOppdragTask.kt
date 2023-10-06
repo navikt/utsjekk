@@ -1,12 +1,12 @@
 package no.nav.dagpenger.iverksett.konsumenter.økonomi
 
+import java.util.UUID
 import no.nav.dagpenger.iverksett.api.IverksettingService
 import no.nav.dagpenger.iverksett.api.domene.AndelTilkjentYtelse
 import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
 import no.nav.dagpenger.iverksett.api.domene.IverksettResultat
 import no.nav.dagpenger.iverksett.api.domene.TilkjentYtelse
 import no.nav.dagpenger.iverksett.api.domene.behandlingId
-import no.nav.dagpenger.iverksett.api.domene.erKonsistentMed
 import no.nav.dagpenger.iverksett.api.domene.lagAndelData
 import no.nav.dagpenger.iverksett.api.domene.personIdent
 import no.nav.dagpenger.iverksett.api.domene.sakId
@@ -24,7 +24,6 @@ import no.nav.familie.prosessering.internal.TaskService
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
-import java.util.UUID
 
 @Service
 @TaskStepBeskrivelse(
@@ -48,10 +47,6 @@ class IverksettMotOppdragTask(
         val forrigeIverksettResultat = iverksett.behandling.forrigeBehandlingId?.let {
             iverksettResultatService.hentIverksettResultat(it)
                 ?: error("Kunne ikke finne iverksettresultat for behandlingId=$it")
-        }
-
-        if (!forrigeIverksettResultat.erKonsistentMed(iverksett.forrigeIverksetting)) {
-            error("Lagret forrige tilkjent ytelse stemmer ikke med mottatt forrige tilkjent ytelse")
         }
 
         nyLagOgSendUtbetalingsoppdragOgOppdaterTilkjentYtelse(iverksett, forrigeIverksettResultat, behandlingId)

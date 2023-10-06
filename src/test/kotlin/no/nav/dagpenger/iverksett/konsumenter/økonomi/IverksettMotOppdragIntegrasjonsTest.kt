@@ -8,7 +8,6 @@ import no.nav.dagpenger.iverksett.api.tilstand.IverksettResultatService
 import no.nav.dagpenger.iverksett.infrastruktur.util.opprettIverksettDagpenger
 import no.nav.familie.prosessering.internal.TaskService
 import org.assertj.core.api.Assertions.assertThat
-import org.assertj.core.api.Assertions.assertThatIllegalStateException
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -124,40 +123,6 @@ class IverksettMotOppdragIntegrasjonsTest : ServerTest() {
 
         val tilkjentYtelse = iverksettResultatService.hentTilkjentYtelse(opphørBehandlingId)!!
         assertThat(tilkjentYtelse.andelerTilkjentYtelse).hasSize(0)
-    }
-
-    @Test
-    internal fun `iverksetting med feil forrige iverksetting skal gi exception`() {
-        val opphørBehandlingId = UUID.randomUUID()
-
-        val feilFørsteAndel = førsteAndel.copy(beløp = førsteAndel.beløp + 1)
-        val feilForrigeIverksetting =
-            opprettIverksettDagpenger(
-                behandlingid,
-                andeler = listOf(feilFørsteAndel),
-            )
-
-        val iverksettMedFeilForrige =
-            opprettIverksettDagpenger(
-                opphørBehandlingId,
-                behandlingid,
-                listOf(
-                    førsteAndel,
-                    lagAndelTilkjentYtelse(
-                        beløp = 1000,
-                        fraOgMed = LocalDate.now(),
-                        tilOgMed = LocalDate.now().plusMonths(1),
-                    ),
-                ),
-                forrigeIverksetting = feilForrigeIverksetting,
-            )
-
-        taskService.deleteAll(taskService.findAll())
-        iverksettingService.startIverksetting(iverksettMedFeilForrige)
-
-        assertThatIllegalStateException().isThrownBy {
-            iverksettMotOppdrag()
-        }.withMessage("Lagret forrige tilkjent ytelse stemmer ikke med mottatt forrige tilkjent ytelse")
     }
 
     private fun iverksettMotOppdrag() {

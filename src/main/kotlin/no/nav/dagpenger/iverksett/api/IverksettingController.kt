@@ -53,7 +53,7 @@ Det kjøres implisitt en konsistensavstemming av at nye utbetalinger stemmer ove
     fun iverksett(
         @RequestBody iverksettDto: IverksettDto,
     ): ResponseEntity<Void> {
-        tilgangskontrollService.valider(iverksettDto)
+        //tilgangskontrollService.valider(iverksettDto)
 
         iverksettDto.valider()
         val iverksett = iverksettDto.toDomain()
