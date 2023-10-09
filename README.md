@@ -10,18 +10,18 @@ http://localhost:8094/swagger-ui/index.html
 Bygging gjøres ved å kjøre `mvn clean install`.
 
 ### Autentisering lokalt
-Dersom man vil gjøre autentiserte kall mot andre tjenester eller vil kjøre applikasjonen sammen med frontend, må man sette opp følgende miljø-variabler:
+Dersom man vil gjøre autentiserte kall mot andre tjenester eller vil kjøre applikasjonen sammen med frontend, må man 
+sette opp følgende miljø-variabler:
 * `AZURE_APP_CLIENT_ID` 
 * `AZURE_APP_CLIENT_SECRET` 
 
-Begge kan hentes fra aktuelt cluster med
-`kubectl -n teamdagpenger get secret azuread-dp-iverksett-<...> -o json | jq '.data | map_values(@base64d)'`
+Begge kan hentes fra aktuelt cluster med `./fetch-secrets.sh`
 
 I IntelliJ legges de inn under ApplicationLocal -> Edit Configurations -> Environment Variables.
 
 ### Overtyre funksjonsbrytere
 Funksjonsbrytere lokalt er i utgangspunktet PÅ (enabled=true) kan overstyres med miljøvariable. Det er nødvendig for
-* `dp.iverksett.stopp-iverksetting' = `false`    
+* `dp.iverksett.stopp-iverksetting' = false`    
 
 ### Kjøring med in-memory-database
 For å kjøre opp appen lokalt, kan en kjøre `ApplicationLocal`.
@@ -51,9 +51,7 @@ Du kan bruke Postman til å kalle APIene i dp-iverksett. Det krever at du har sa
 Den nødvendige informasjonen for å få token'et får du slik:
 
 1. Endre kontekst til [dev-gcp|prod-gcp] `kubectl config use-context [dev-gcp|prod-gcp]`
-2. Finne navn på secret ved å kjøre `kubectl -n teamdagpenger get secrets` og finne navnet på en secret som starter
-   med `azure-dp-iverksett-`. Kopier navnet på secreten.
-3. Kjør `kubectl -n teamdagpenger get secret [NAVN PÅ SECRET FRA STEG 2] -o json | jq '.data | map_values(@base64d)'`
+2. Finne `AZURE_APP_CLIENT_ID` og `AZURE_APP_CLIENT_SECRET` ved å kjøre `./fetch-secrets.sh`
 
 I Postman gjør du et GET-kall med følgende oppsett:
 
@@ -77,13 +75,13 @@ pm.test("Lagre token globalt", function () {
 
 som vil plukke ut token'et og lagre det i en global variabel, her `token-dp-iverksett`
 
-Når du lager kall mot APIet, så kan du sette følgende i header'en for å sende med token'et:
-
-* `Authorization`: `Bearer {{token-dp-iverksett}}`
+Når du lager kall mot APIet, så kan du i `Authorization`-fanen for kallet velge type `Bearer Token` og skrive inn 
+`{{token-dp-iverksett}}` i `Token`-feltet for å bruke verdien fra den globale variabelen.
 
 ## Produksjonssetting
 
-Applikasjonen vil deployes til produksjon ved ny commit på master-branchen. Det er dermed tilstrekkelig å merge PR for å trigge produksjonsbygget.
+Applikasjonen vil deployes til produksjon ved ny commit på master-branchen. Det er dermed tilstrekkelig å merge PR for 
+å trigge produksjonsbygget.
 
 ## Henvendelser
 
