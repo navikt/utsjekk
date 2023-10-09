@@ -6,7 +6,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.tags.Tag
 import java.util.UUID
 import no.nav.dagpenger.iverksett.api.IverksettDtoValidator.valider
-import no.nav.dagpenger.iverksett.api.tilgangskontroll.IverksettingTilgangskontrollService
+import no.nav.dagpenger.iverksett.api.tilgangskontroll.TilgangskontrollService
 import no.nav.dagpenger.iverksett.infrastruktur.transformer.toDomain
 import no.nav.dagpenger.kontrakter.iverksett.IverksettDto
 import no.nav.dagpenger.kontrakter.iverksett.IverksettStatus
@@ -30,7 +30,7 @@ import org.springframework.web.bind.annotation.RestController
 class IverksettingController(
     private val iverksettingService: IverksettingService,
     private val validatorService: IverksettingValidatorService,
-    private val tilgangskontrollService: IverksettingTilgangskontrollService,
+    private val tilgangskontrollService: TilgangskontrollService,
 ) {
     @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE])
     @Tag(name = "Iverksetting")
@@ -53,7 +53,7 @@ Det kjøres implisitt en konsistensavstemming av at nye utbetalinger stemmer ove
     fun iverksett(
         @RequestBody iverksettDto: IverksettDto,
     ): ResponseEntity<Void> {
-        //tilgangskontrollService.valider(iverksettDto)
+        tilgangskontrollService.valider(iverksettDto)
 
         iverksettDto.valider()
         val iverksett = iverksettDto.toDomain()

@@ -3,12 +3,10 @@ package no.nav.dagpenger.iverksett.api
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkObject
-import io.mockk.mockkStatic
 import io.mockk.unmockkObject
 import no.nav.dagpenger.iverksett.api.tilgangskontroll.IverksettingTilgangskontrollService
 import no.nav.dagpenger.iverksett.api.tilgangskontroll.TokenContext
 import no.nav.dagpenger.iverksett.api.tilstand.IverksettResultatService
-import no.nav.dagpenger.iverksett.infrastruktur.advice.ApiFeil
 import no.nav.dagpenger.iverksett.infrastruktur.featuretoggle.FeatureToggleService
 import no.nav.dagpenger.iverksett.infrastruktur.util.opprettIverksettDto
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.OppdragClient
@@ -17,24 +15,21 @@ import no.nav.dagpenger.iverksett.lagIverksettData
 import no.nav.dagpenger.iverksett.util.mockFeatureToggleService
 import no.nav.dagpenger.kontrakter.iverksett.VedtakType
 import no.nav.familie.prosessering.internal.TaskService
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
-import org.junit.jupiter.api.assertThrows
 import org.springframework.http.HttpStatus
 
 class IverksettingTilgangskontrollServiceTest {
 
-    private val taskService = mockk<TaskService>()
-    private val iverksettResultatService = mockk<IverksettResultatService>()
     private val iverksettingRepository = mockk<IverksettingRepository>()
-    private val oppdragClient = mockk<OppdragClient>()
     private val featureToggleServiceMock = mockk<FeatureToggleService>()
     private val iverksettingServiceMock = IverksettingService(
-        taskService = taskService,
-        iverksettResultatService = iverksettResultatService,
+        taskService = mockk<TaskService>(),
+        iverksettResultatService = mockk<IverksettResultatService>(),
         iverksettingRepository = iverksettingRepository,
-        oppdragClient = oppdragClient,
+        oppdragClient = mockk<OppdragClient>(),
         featureToggleService = mockFeatureToggleService(),
     )
     private lateinit var iverksettingTilgangskontrollService: IverksettingTilgangskontrollService
@@ -44,118 +39,84 @@ class IverksettingTilgangskontrollServiceTest {
         iverksettingTilgangskontrollService = IverksettingTilgangskontrollService(
             iverksettingServiceMock,
             featureToggleServiceMock,
-            beslutterGruppe,
-            appMedSystemtilgang
+            BESLUTTERGRUPPE,
+            APP_MED_SYSTEMTILGANG
         )
 
-        every { featureToggleServiceMock.isEnabled(any(),any()) } returns true
+        every { featureToggleServiceMock.isEnabled(any(), any()) } returns true
+        mockkObject(TokenContext)
+    }
 
+    @AfterEach
+    fun cleanup() {
+        unmockkObject(TokenContext)
     }
 
     @Test
     fun `skal få OK når rammevedtak sendes av beslutter`() {
-        val nåværendeIverksetting = opprettIverksettDto().copy(
-            vedtak = opprettIverksettDto().vedtak.copy(vedtakstype = VedtakType.RAMMEVEDTAK),
-        )
+        val nåværendeIverksetting = VedtakType.RAMMEVEDTAK.iverksetting()
 
-        every {
-            iverksettingRepository.findByFagsakId(nåværendeIverksetting.sakId!!)
-        } returns emptyList()
-
-        mockkObject(TokenContext)
-        every { TokenContext.hentGrupper() } returns listOf(beslutterGruppe)
+        every { iverksettingRepository.findByFagsakId(any()) } returns emptyList()
+        every { TokenContext.hentGrupper() } returns listOf(BESLUTTERGRUPPE)
         every { TokenContext.erSystemtoken() } returns false
 
         assertDoesNotThrow {
-            iverksettingTilgangskontrollService.valider(
-                nåværendeIverksetting
-            )
+            iverksettingTilgangskontrollService.valider(nåværendeIverksetting)
         }
-
-        unmockkObject(TokenContext)
     }
 
     @Test
     fun `skal få FORBIDDEN når første vedtak på sak sendes uten beslutter-token`() {
         val nåværendeIverksetting = opprettIverksettDto()
 
-        every {
-            iverksettingRepository.findByFagsakId(
-                nåværendeIverksetting.sakId!!
-            )
-        } returns emptyList()
-
-        mockkObject(TokenContext)
+        every { iverksettingRepository.findByFagsakId(any()) } returns emptyList()
         every { TokenContext.erSystemtoken() } returns true
 
         assertApiFeil(HttpStatus.FORBIDDEN) {
             iverksettingTilgangskontrollService.valider(nåværendeIverksetting)
         }
-
-        unmockkObject(TokenContext)
     }
 
     @Test
     fun `skal få OK når utbetalingsvedtak sendes etter autorisert vedtak`() {
-        val forrigeIverksetting = lagIverksettData().copy(
-            vedtak = lagIverksettData().vedtak.copy(
-                vedtakstype = VedtakType.RAMMEVEDTAK,
-            ),
-        )
-
-        val nåværendeIverksetting = opprettIverksettDto().copy(
-            vedtak = opprettIverksettDto().vedtak.copy(vedtakstype = VedtakType.UTBETALINGSVEDTAK),
-        )
-
+        val forrigeIverksetting = VedtakType.RAMMEVEDTAK.iverksettData()
+        val nåværendeIverksetting = VedtakType.UTBETALINGSVEDTAK.iverksetting()
         val iverksettListe = listOf(lagIverksett(forrigeIverksetting))
-        every {
-            iverksettingRepository.findByFagsakId(
-                nåværendeIverksetting.sakId!!
-            )
-        } returns iverksettListe
 
-        mockkObject(TokenContext)
+        every { iverksettingRepository.findByFagsakId(any()) } returns iverksettListe
         every { TokenContext.erSystemtoken() } returns true
-        every { TokenContext.hentKlientnavn() } returns appMedSystemtilgang
+        every { TokenContext.hentKlientnavn() } returns APP_MED_SYSTEMTILGANG
 
         assertDoesNotThrow {
             iverksettingTilgangskontrollService.valider(nåværendeIverksetting)
         }
-
-        unmockkObject(TokenContext)
     }
 
     @Test
     fun `skal få FORBIDDEN når utbetalingsvedtak sendes av ukjent system`() {
-        val forrigeIverksetting = lagIverksettData().copy(
-            vedtak = lagIverksettData().vedtak.copy(
-                vedtakstype = VedtakType.RAMMEVEDTAK,
-            ),
-        )
-
-        val nåværendeIverksetting = opprettIverksettDto().copy(
-            vedtak = opprettIverksettDto().vedtak.copy(vedtakstype = VedtakType.UTBETALINGSVEDTAK),
-        )
-
+        val forrigeIverksetting = VedtakType.RAMMEVEDTAK.iverksettData()
+        val nåværendeIverksetting = VedtakType.UTBETALINGSVEDTAK.iverksetting()
         val iverksettListe = listOf(lagIverksett(forrigeIverksetting))
-        every {
-            iverksettingRepository.findByFagsakId(
-                nåværendeIverksetting.sakId!!
-            )
-        } returns iverksettListe
 
-        mockkObject(TokenContext)
+        every { iverksettingRepository.findByFagsakId(any()) } returns iverksettListe
         every { TokenContext.erSystemtoken() } returns true
         every { TokenContext.hentKlientnavn() } returns "ukjent app"
 
-        assertApiFeil(HttpStatus.FORBIDDEN)  {
+        assertApiFeil(HttpStatus.FORBIDDEN) {
             iverksettingTilgangskontrollService.valider(nåværendeIverksetting)
         }
-
-        unmockkObject(TokenContext)
     }
+
+    private fun VedtakType.iverksettData() = lagIverksettData().let {
+        it.copy(vedtak = it.vedtak.copy(vedtakstype = this))
+    }
+
+    private fun VedtakType.iverksetting() = opprettIverksettDto().let {
+        it.copy(vedtak = it.vedtak.copy(vedtakstype = this))
+    }
+
     companion object {
-        private val beslutterGruppe = "0000-GA-Beslutter"
-        private val appMedSystemtilgang = "dev-gcp:teamdagpenger:dp-vedtak-iverksett"
+        private const val BESLUTTERGRUPPE = "0000-GA-Beslutter"
+        private const val APP_MED_SYSTEMTILGANG = "dev-gcp:teamdagpenger:dp-vedtak-iverksett"
     }
 }
