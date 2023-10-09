@@ -10,7 +10,6 @@ import no.nav.dagpenger.iverksett.api.domene.personIdent
 import no.nav.dagpenger.iverksett.api.domene.sakId
 import no.nav.dagpenger.iverksett.api.domene.tilAndelData
 import no.nav.dagpenger.iverksett.api.tilstand.IverksettResultatService
-import no.nav.dagpenger.iverksett.infrastruktur.featuretoggle.FeatureToggleService
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.Utbetalingsgenerator
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene.Behandlingsinformasjon
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene.BeregnetUtbetalingsoppdrag
@@ -25,7 +24,6 @@ class IverksettingValidatorServiceTest {
 
     private val iverksettResultatServiceMock = mockk<IverksettResultatService>()
     private val iverksettingServiceMock = mockk<IverksettingService>()
-    private val featureToggleServiceMock = mockk<FeatureToggleService>()
     private lateinit var iverksettingValidatorService: IverksettingValidatorService
 
     @BeforeEach
@@ -33,7 +31,6 @@ class IverksettingValidatorServiceTest {
         iverksettingValidatorService = IverksettingValidatorService(
             iverksettResultatServiceMock,
             iverksettingServiceMock,
-            featureToggleServiceMock,
         )
     }
 
@@ -100,31 +97,6 @@ class IverksettingValidatorServiceTest {
 
         assertApiFeil(HttpStatus.CONFLICT) {
             iverksettingValidatorService.validerAtForrigeBehandlingErFerdigIverksattMotOppdrag(nåværendeIverksetting)
-        }
-    }
-
-    @Test
-    fun `skal få BAD_REQUEST når forrige tilkjent ytelse hos oss ikke stemmer med forrige iverksetting som sendes`() {
-        val forrigeIverksetting = lagIverksettData()
-        val iverksettingTmp = lagIverksettData()
-        val nåværendeIverksetting = iverksettingTmp.copy(
-            fagsak = forrigeIverksetting.fagsak,
-            forrigeIverksetting = forrigeIverksetting.copy(
-                vedtak = forrigeIverksetting.vedtak.copy(
-                    tilkjentYtelse = forrigeIverksetting.vedtak.tilkjentYtelse?.copy(
-                        andelerTilkjentYtelse = emptyList(),
-                    ),
-                ),
-            ),
-        )
-        every { iverksettResultatServiceMock.hentIverksettResultat(forrigeIverksetting.behandling.behandlingId) } returns
-            IverksettResultat(
-                behandlingId = forrigeIverksetting.behandling.behandlingId,
-                tilkjentYtelseForUtbetaling = forrigeIverksetting.vedtak.tilkjentYtelse,
-            )
-
-        assertApiFeil(HttpStatus.BAD_REQUEST) {
-            iverksettingValidatorService.validerKonsistensMellomVedtak(nåværendeIverksetting)
         }
     }
 
