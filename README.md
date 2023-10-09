@@ -44,43 +44,25 @@ Anbefaler å bruke [modify-secrets](https://github.com/rajatjindal/kubectl-modif
 * `gcloud projects add-iam-policy-binding dp-iverksett --member=user:<FIRSTNAME>.<LASTNAME>@nav.no --role=roles/cloudsql.instanceUser --condition="expression=request.time < timestamp('$(date -v '+1H' -u +'%Y-%m-%dT%H:%M:%SZ')'),title=temp_access"`
 
 ### Bruk av postman
-Du kan bruke Postman til å kalle APIene i dp-iverksett. Det krever at du har satt opp autentisering i app'en riktig.
+Du kan bruke Postman til å kalle APIene i `dp-iverksett`. Det krever at du har satt opp autentisering i app'en riktig.
 `dp-iverksett` er konfigurert til å kunne kalle seg selv. Dermed kan man bruke token for app'en til å kalle den.
 
-#### Finne token
-Den nødvendige informasjonen for å få token'et får du slik:
+Vi har en ferdig samling og miljø i Postman du kan forke eller utforske ved å klikke på knappen under.
+
+[![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/8598165-2be7d928-461e-4cb6-85e1-72c6271d7ae8?action=collection%2Ffork&source=rip_markdown&collection-url=entityId%3D8598165-2be7d928-461e-4cb6-85e1-72c6271d7ae8%26entityType%3Dcollection%26workspaceId%3Db41539b8-ca43-4c80-9475-d7e6e6d85180#?env%5BIverksett%5D=W3sia2V5IjoiYXp1cmVBcHBDbGllbnRJZCIsInZhbHVlIjoiM2FjZGMyYTUtOTA2ZC00MjAwLWJmMGMtNmU3NzlhMTViMDQ5IiwiZW5hYmxlZCI6dHJ1ZSwidHlwZSI6ImRlZmF1bHQiLCJzZXNzaW9uVmFsdWUiOiIzYWNkYzJhNS05MDZkLTQyMDAtYmYwYy02ZTc3OWExNWIwNDkiLCJzZXNzaW9uSW5kZXgiOjB9LHsia2V5IjoiYXp1cmVBcHBDbGllbnRTZWNyZXQiLCJ2YWx1ZSI6IiIsImVuYWJsZWQiOnRydWUsInR5cGUiOiJkZWZhdWx0Iiwic2Vzc2lvblZhbHVlIjoieU4xOFF+RWVoLk5nVGtvUm9PaEJ5Ni5kMWFQLnhwNUdxRGNNUWNXTyIsInNlc3Npb25JbmRleCI6MX0seyJrZXkiOiJiZWFyZXJUb2tlbiIsInZhbHVlIjoiIiwiZW5hYmxlZCI6dHJ1ZSwidHlwZSI6ImRlZmF1bHQiLCJzZXNzaW9uVmFsdWUiOiJleUowZVhBaU9pSktWMVFpTENKaGJHY2lPaUpTVXpJMU5pSXNJbXRwWkNJNklpMUxTVE5ST1c1T1VqZGlVbTltZUcxbFdtOVljV0pJV2tkbGR5SjkuZXlKaGRXUWlPaUl6WVdOa1l6SmhOUzA1TURaa0xUUXlNREF0WW1Zd1l5MDJaVGMzT1dFeC4uLiIsInNlc3Npb25JbmRleCI6Mn0seyJrZXkiOiJob3N0IiwidmFsdWUiOiJodHRwOi8vbG9jYWxob3N0OjgwOTQiLCJlbmFibGVkIjp0cnVlLCJ0eXBlIjoiZGVmYXVsdCIsInNlc3Npb25WYWx1ZSI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA5NCIsInNlc3Npb25JbmRleCI6M31d)
+
+For å foreta kall mot `dp-iverksett` må du gjøre følgende:
 
 1. Endre kontekst til [dev-gcp|prod-gcp] `kubectl config use-context [dev-gcp|prod-gcp]`
-2. Finne `AZURE_APP_CLIENT_ID` og `AZURE_APP_CLIENT_SECRET` ved å kjøre `./fetch-secrets.sh`
+3. Pass på at aktivt miljø for samlingen i Postman er satt til `Iverksett`
+4. Oppdatere miljøvariablene `azureAppClientSecret` og `azureAppClientId` med verdiene du får ved å kjøre `./fetch-secrets.sh`
+5. Kjøre requesten som heter `Fetch token`. Denne henter et token og oppdaterer verdien til miljøvariabelen `bearerToken`
 
-I Postman gjør du et GET-kall med følgende oppsett:
-
-* URL: `https://login.microsoftonline.com/navq.onmicrosoft.com/oauth2/v2.0/token`
-* Body: `x-www-form-urlencoded` med følgende key-values
-    * `grant_type`: `client_credentials`
-    * `client_id`: <`AZURE_APP_CLIENT_ID`> fra kubectl-kallet over
-    * `client_secret`: <`AZURE_APP_CLIENT_SECRET`> fra kubectl-kallet over
-    * `scope`: `api://[dev-gcp|prod-gcp].teamdagpenger.dp-iverksett/.default`
-
-#### Lagre token globalt i Postman
-
-Et triks kan være å sette opp en "test" under *Tests* i request'en:
-
-```
-pm.test("Lagre token globalt", function () {
-    var jsonData = pm.response.json();
-    pm.globals.set("token-dp-iverksett", jsonData.access_token);
-});
-```
-
-som vil plukke ut token'et og lagre det i en global variabel, her `token-dp-iverksett`
-
-Når du lager kall mot APIet, så kan du i `Authorization`-fanen for kallet velge type `Bearer Token` og skrive inn 
-`{{token-dp-iverksett}}` i `Token`-feltet for å bruke verdien fra den globale variabelen.
+Nå er du klar til å foreta kall mot appen, og kan prøve å nå appen lokalt ved å kjøre requesten som heter `/api/iverksetting`
 
 ## Produksjonssetting
 
-Applikasjonen vil deployes til produksjon ved ny commit på master-branchen. Det er dermed tilstrekkelig å merge PR for 
+Applikasjonen vil deployes til produksjon ved ny commit på main. Det er dermed tilstrekkelig å merge PR for 
 å trigge produksjonsbygget.
 
 ## Henvendelser
@@ -89,4 +71,4 @@ Spørsmål knyttet til koden eller prosjektet kan stilles ved å opprette et iss
 
 ### For NAV-ansatte
 
-Interne henvendelser kan sendes via Slack i kanalen #team-dagpenger.
+Interne henvendelser kan sendes via Slack i kanalen #team-dagpenger-dev.
