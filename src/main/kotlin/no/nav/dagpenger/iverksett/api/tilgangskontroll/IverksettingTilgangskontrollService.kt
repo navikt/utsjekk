@@ -6,21 +6,20 @@ import no.nav.dagpenger.iverksett.infrastruktur.configuration.FeatureToggleConfi
 import no.nav.dagpenger.iverksett.infrastruktur.featuretoggle.FeatureToggleService
 import no.nav.dagpenger.iverksett.infrastruktur.transformer.tilSakIdentifikator
 import no.nav.dagpenger.kontrakter.iverksett.IverksettDto
-import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.context.annotation.Profile
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 
 @Service
+@Profile("!local")
 class IverksettingTilgangskontrollService(
     private val iverksettingService: IverksettingService,
     private val featureToggleService: FeatureToggleService,
     @Value("\${BESLUTTER_GRUPPE}") private val beslutterGruppe: String,
     @Value("\${APP_MED_SYSTEMTILGANG}") private val appMedSystemtilgang: String,
-) {
-    private val logger = LoggerFactory.getLogger(this::class.java)
-
-    fun valider(iverksett: IverksettDto) {
+): TilgangskontrollService {
+    override fun valider(iverksett: IverksettDto) {
         if (featureToggleService.isEnabled(FeatureToggleConfig.TILGANGSKONTROLL, false)) {
             validerFørsteVedtakPåSakSendesAvBeslutter(iverksett)
             validerSystemTilgangErLov()
