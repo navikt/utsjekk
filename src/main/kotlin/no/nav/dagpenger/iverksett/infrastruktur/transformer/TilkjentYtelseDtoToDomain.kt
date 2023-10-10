@@ -1,19 +1,12 @@
 package no.nav.dagpenger.iverksett.infrastruktur.transformer
 
+import java.time.LocalDateTime
 import no.nav.dagpenger.iverksett.api.domene.TilkjentYtelse
 import no.nav.dagpenger.iverksett.api.domene.VedtaksdetaljerDagpenger
 import no.nav.dagpenger.kontrakter.iverksett.ForrigeIverksettingDto
-import no.nav.dagpenger.kontrakter.iverksett.TilkjentYtelseDto
 import no.nav.dagpenger.kontrakter.iverksett.UtbetalingDto
 import no.nav.dagpenger.kontrakter.iverksett.VedtakType
 import no.nav.dagpenger.kontrakter.iverksett.Vedtaksresultat
-import java.time.LocalDateTime
-
-fun TilkjentYtelseDto.toDomain(): TilkjentYtelse {
-    return TilkjentYtelse(
-        andelerTilkjentYtelse = this.utbetalinger.map { it.toDomain() },
-    )
-}
 
 fun List<UtbetalingDto>.tilTilkjentYtelse(): TilkjentYtelse? {
     val andeler = this.sammenslått().map { it.toDomain() }
@@ -53,7 +46,7 @@ fun ForrigeIverksettingDto.tilVedtaksdetaljer(): VedtaksdetaljerDagpenger {
         vedtakstidspunkt = LocalDateTime.now(),
         saksbehandlerId = "A123456",
         beslutterId = "B123456",
-        tilkjentYtelse = this.utbetalinger.tilTilkjentYtelse(),
+        tilkjentYtelse = null,
     )
 }
 

@@ -22,10 +22,8 @@ import no.nav.dagpenger.kontrakter.felles.Datoperiode
 import no.nav.dagpenger.kontrakter.felles.StønadType
 import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
 import no.nav.dagpenger.kontrakter.iverksett.Ferietillegg
-import no.nav.dagpenger.kontrakter.iverksett.ForrigeIverksettingDto
 import no.nav.dagpenger.kontrakter.iverksett.IverksettDto
 import no.nav.dagpenger.kontrakter.iverksett.TilkjentYtelseDto
-import no.nav.dagpenger.kontrakter.iverksett.UtbetalingDto
 import no.nav.dagpenger.kontrakter.iverksett.VedtakType
 import no.nav.dagpenger.kontrakter.iverksett.VedtaksdetaljerDto
 import no.nav.dagpenger.kontrakter.iverksett.VedtaksperiodeDto
@@ -49,8 +47,7 @@ fun opprettIverksettDto(
         ferietillegg = ferietillegg,
     )
     val tilkjentYtelse = TilkjentYtelseDto(
-        utbetalinger = listOf(andelTilkjentYtelse),
-        startdato = andelTilkjentYtelse.fraOgMedDato,
+        utbetalinger = listOf(andelTilkjentYtelse)
     )
 
     return IverksettDto(
@@ -204,20 +201,3 @@ class IverksettResultatMockBuilder private constructor(
             )
     }
 }
-
-fun lagForrigeIverksetting(
-    forrigeBehandlingId: UUID = UUID.randomUUID(),
-    belopPerDag: Int = 400,
-    fraOgMedDato: LocalDate = LocalDate.now(),
-    tilOgMedDato: LocalDate = fraOgMedDato.plusDays(14),
-    utbetalinger: List<UtbetalingDto> = listOf(
-        UtbetalingDto(
-            fraOgMedDato = fraOgMedDato,
-            tilOgMedDato = tilOgMedDato,
-            belopPerDag = belopPerDag,
-        ),
-    ),
-) = ForrigeIverksettingDto(
-    behandlingId = forrigeBehandlingId,
-    utbetalinger = utbetalinger,
-)
