@@ -1,0 +1,147 @@
+{
+	"info": {
+		"_postman_id": "3dd0da62-bb1b-453a-b6df-94f2eea68c08",
+		"name": "Iverksetting",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "8598165"
+	},
+	"item": [
+		{
+			"name": "/api/iverksetting",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{bearerToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"sakId\": \"ec45be1c-1f2d-451e-bea3-e5a240586287\",\n    \"behandlingId\": \"f28417ba-78bb-440b-985c-fc1f0330c1c2\",\n    \"personIdent\": \"65836500878\",\n    \"vedtak\": {\n        \"vedtakstype\": \"UTBETALINGSVEDTAK\",\n        \"resultat\": \"INNVILGET\",\n        \"vedtakstidspunkt\": \"2023-06-19T15:24:14\",\n        \"saksbehandlerId\": \"S123456\",\n        \"beslutterId\": \"B123456\",\n        \"utbetalinger\": [\n            {\n                \"belopPerDag\": \"100\",\n                \"fraOgMedDato\": \"2023-06-19\",\n                \"tilOgMedDato\": \"2023-06-30\",\n                \"stonadstype\": \"DAGPENGER_ARBEIDSSOKER_ORDINAER\"\n            },\n            {\n                \"belopPerDag\": \"500\",\n                \"fraOgMedDato\": \"2023-07-01\",\n                \"tilOgMedDato\": \"2023-07-14\",\n                \"stonadstype\": \"DAGPENGER_ARBEIDSSOKER_ORDINAER\",\n                \"ferietillegg\": \"ORDINAER\"\n            }\n        ]\n    }\n}"
+				},
+				"url": {
+					"raw": "{{host}}/api/iverksetting",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"iverksetting"
+					]
+				},
+				"description": "Iverksett vedtak lokalt"
+			},
+			"response": []
+		},
+		{
+			"name": "Fetch token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Lagre token globalt\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.environment.set(\"bearerToken\", jsonData.access_token);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "grant_type",
+							"value": "client_credentials",
+							"type": "default"
+						},
+						{
+							"key": "client_id",
+							"value": "{{azureAppClientId}}",
+							"type": "default"
+						},
+						{
+							"key": "client_secret",
+							"value": "{{azureAppClientSecret}}",
+							"type": "default"
+						},
+						{
+							"key": "scope",
+							"value": "api://dev-gcp.teamdagpenger.dp-iverksett/.default",
+							"type": "default"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://login.microsoftonline.com/navq.onmicrosoft.com/oauth2/v2.0/token",
+					"protocol": "https",
+					"host": [
+						"login",
+						"microsoftonline",
+						"com"
+					],
+					"path": [
+						"navq.onmicrosoft.com",
+						"oauth2",
+						"v2.0",
+						"token"
+					]
+				},
+				"description": "Hent token"
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "client_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "client_secret",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
