@@ -59,6 +59,7 @@ spec:
     inbound:
       rules:
         - application: dp-iverksett # For testing; kan finne bruken token for app'en til å kalle seg selv
+        - application: dp-iverksett-lokal # For testing av prosessering-frontend lokalt
         - application: dp-vedtak-iverksett
         - application: dp-prosessering #frontend for task-rammeverket
         - application: dp-datadeling
