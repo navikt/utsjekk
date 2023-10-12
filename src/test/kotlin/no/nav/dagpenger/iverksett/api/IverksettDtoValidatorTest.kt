@@ -1,37 +1,24 @@
 package no.nav.dagpenger.iverksett.api
 
 import java.time.LocalDate
-import no.nav.dagpenger.iverksett.api.IverksettDtoValidator.avslåttVedtakHarIkkeUtbetalinger
 import no.nav.dagpenger.iverksett.api.IverksettDtoValidator.fraOgMedKommerFørTilOgMedIUtbetalingsperioder
 import no.nav.dagpenger.iverksett.api.IverksettDtoValidator.ingenUtbetalingsperioderHarStønadstypeEØSOgFerietilleggTilAvdød
-import no.nav.dagpenger.iverksett.api.IverksettDtoValidator.innvilgetUtbetalingsvedtakHarUtbetalinger
 import no.nav.dagpenger.iverksett.api.IverksettDtoValidator.utbetalingerHarIngenBeløpOverMaksgrense
 import no.nav.dagpenger.iverksett.api.IverksettDtoValidator.utbetalingerHarKunPositiveBeløp
 import no.nav.dagpenger.iverksett.api.IverksettDtoValidator.utbetalingsperioderOverlapperIkkeITid
+import no.nav.dagpenger.iverksett.api.IverksettDtoValidator.utbetalingsvedtakSomIkkeErOpphørHarUtbetalinger
 import no.nav.dagpenger.iverksett.infrastruktur.advice.ApiFeil
 import no.nav.dagpenger.iverksett.infrastruktur.util.opprettIverksettDto
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.lagUtbetalingDto
 import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
 import no.nav.dagpenger.kontrakter.iverksett.Ferietillegg
 import no.nav.dagpenger.kontrakter.iverksett.VedtakType
-import no.nav.dagpenger.kontrakter.iverksett.Vedtaksresultat
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.fail
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
 
 class IverksettDtoValidatorTest {
-
-    @Test
-    fun `Skal få BAD_REQUEST hvis vedtaksresultatet er avslått og det finnes utbetalinger`() {
-        val iverksettingDto = opprettIverksettDto(
-            vedtaksresultat = Vedtaksresultat.AVSLÅTT,
-        )
-
-        assertApiFeil(HttpStatus.BAD_REQUEST) {
-            avslåttVedtakHarIkkeUtbetalinger(iverksettingDto)
-        }
-    }
 
     @Test
     fun `Skal få BAD_REQUEST hvis vedtaksresultatet er innvilget og det ikke finnes utbetalinger på utbetalingsvedtak`() {
@@ -44,7 +31,7 @@ class IverksettDtoValidatorTest {
         )
 
         assertApiFeil(HttpStatus.BAD_REQUEST) {
-            innvilgetUtbetalingsvedtakHarUtbetalinger(iverksettingDto)
+            utbetalingsvedtakSomIkkeErOpphørHarUtbetalinger(iverksettingDto)
         }
     }
 

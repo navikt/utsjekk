@@ -5,14 +5,12 @@ import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
 import no.nav.dagpenger.kontrakter.iverksett.Ferietillegg
 import no.nav.dagpenger.kontrakter.iverksett.IverksettDto
 import no.nav.dagpenger.kontrakter.iverksett.VedtakType
-import no.nav.dagpenger.kontrakter.iverksett.Vedtaksresultat
 import org.springframework.http.HttpStatus
 
 object IverksettDtoValidator {
 
     fun IverksettDto.valider() {
-        innvilgetUtbetalingsvedtakHarUtbetalinger(this)
-        avslåttVedtakHarIkkeUtbetalinger(this)
+        utbetalingsvedtakSomIkkeErOpphørHarUtbetalinger(this)
         fraOgMedKommerFørTilOgMedIUtbetalingsperioder(this)
         utbetalingsperioderOverlapperIkkeITid(this)
         utbetalingerHarKunPositiveBeløp(this)
@@ -20,24 +18,13 @@ object IverksettDtoValidator {
         ingenUtbetalingsperioderHarStønadstypeEØSOgFerietilleggTilAvdød(this)
     }
 
-    internal fun innvilgetUtbetalingsvedtakHarUtbetalinger(iverksettDto: IverksettDto) {
+    internal fun utbetalingsvedtakSomIkkeErOpphørHarUtbetalinger(iverksettDto: IverksettDto) {
         if (iverksettDto.vedtak.utbetalinger.isEmpty() &&
-            iverksettDto.vedtak.resultat == Vedtaksresultat.INNVILGET &&
-            iverksettDto.vedtak.vedtakstype == VedtakType.UTBETALINGSVEDTAK
+            iverksettDto.vedtak.vedtakstype == VedtakType.UTBETALINGSVEDTAK &&
+            iverksettDto.forrigeIverksetting == null
         ) {
             throw ApiFeil(
                 "Kan ikke ha iverksetting av utbetalingsvedtak uten utbetalinger",
-                HttpStatus.BAD_REQUEST,
-            )
-        }
-    }
-
-    internal fun avslåttVedtakHarIkkeUtbetalinger(iverksettDto: IverksettDto) {
-        if (iverksettDto.vedtak.utbetalinger.isNotEmpty() &&
-            iverksettDto.vedtak.resultat == Vedtaksresultat.AVSLÅTT
-        ) {
-            throw ApiFeil(
-                "Kan ikke ha iverksetting med utbetalinger når vedtaket er avslått",
                 HttpStatus.BAD_REQUEST,
             )
         }
