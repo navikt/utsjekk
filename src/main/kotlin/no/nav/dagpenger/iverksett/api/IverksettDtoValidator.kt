@@ -4,30 +4,16 @@ import no.nav.dagpenger.iverksett.infrastruktur.advice.ApiFeil
 import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
 import no.nav.dagpenger.kontrakter.iverksett.Ferietillegg
 import no.nav.dagpenger.kontrakter.iverksett.IverksettDto
-import no.nav.dagpenger.kontrakter.iverksett.VedtakType
 import org.springframework.http.HttpStatus
 
 object IverksettDtoValidator {
 
     fun IverksettDto.valider() {
-        utbetalingsvedtakSomIkkeErOpphørHarUtbetalinger(this)
         fraOgMedKommerFørTilOgMedIUtbetalingsperioder(this)
         utbetalingsperioderOverlapperIkkeITid(this)
         utbetalingerHarKunPositiveBeløp(this)
         utbetalingerHarIngenBeløpOverMaksgrense(this)
         ingenUtbetalingsperioderHarStønadstypeEØSOgFerietilleggTilAvdød(this)
-    }
-
-    internal fun utbetalingsvedtakSomIkkeErOpphørHarUtbetalinger(iverksettDto: IverksettDto) {
-        if (iverksettDto.vedtak.utbetalinger.isEmpty() &&
-            iverksettDto.vedtak.vedtakstype == VedtakType.UTBETALINGSVEDTAK &&
-            iverksettDto.forrigeIverksetting == null
-        ) {
-            throw ApiFeil(
-                "Kan ikke ha iverksetting av utbetalingsvedtak uten utbetalinger",
-                HttpStatus.BAD_REQUEST,
-            )
-        }
     }
 
     internal fun fraOgMedKommerFørTilOgMedIUtbetalingsperioder(iverksettDto: IverksettDto) {

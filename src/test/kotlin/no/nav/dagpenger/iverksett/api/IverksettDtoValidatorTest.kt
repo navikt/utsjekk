@@ -6,34 +6,17 @@ import no.nav.dagpenger.iverksett.api.IverksettDtoValidator.ingenUtbetalingsperi
 import no.nav.dagpenger.iverksett.api.IverksettDtoValidator.utbetalingerHarIngenBeløpOverMaksgrense
 import no.nav.dagpenger.iverksett.api.IverksettDtoValidator.utbetalingerHarKunPositiveBeløp
 import no.nav.dagpenger.iverksett.api.IverksettDtoValidator.utbetalingsperioderOverlapperIkkeITid
-import no.nav.dagpenger.iverksett.api.IverksettDtoValidator.utbetalingsvedtakSomIkkeErOpphørHarUtbetalinger
 import no.nav.dagpenger.iverksett.infrastruktur.advice.ApiFeil
 import no.nav.dagpenger.iverksett.infrastruktur.util.opprettIverksettDto
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.lagUtbetalingDto
 import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
 import no.nav.dagpenger.kontrakter.iverksett.Ferietillegg
-import no.nav.dagpenger.kontrakter.iverksett.VedtakType
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.fail
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
 
 class IverksettDtoValidatorTest {
-
-    @Test
-    fun `Skal få BAD_REQUEST hvis vedtaksresultatet er innvilget og det ikke finnes utbetalinger på utbetalingsvedtak`() {
-        val tmpIverksettingDto = opprettIverksettDto()
-        val iverksettingDto = tmpIverksettingDto.copy(
-            vedtak = tmpIverksettingDto.vedtak.copy(
-                vedtakstype = VedtakType.UTBETALINGSVEDTAK,
-                utbetalinger = emptyList(),
-            ),
-        )
-
-        assertApiFeil(HttpStatus.BAD_REQUEST) {
-            utbetalingsvedtakSomIkkeErOpphørHarUtbetalinger(iverksettingDto)
-        }
-    }
 
     @Test
     fun `skal få BAD_REQUEST hvis beløp på utbetaling er negativt`() {
