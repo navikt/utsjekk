@@ -43,6 +43,10 @@ spec:
       value: "dev-gcp:teamdagpenger:dp-vedtak-iverksett"
     - name: PROSESSERING_GRUPPE
       value: "928636f4-fd0d-4149-978e-a6fb68bb19de"
+  envFrom:
+    - secret: dp-iverksett-unleash-api-token
+  unleash:
+    environment: development
   azure:
     application:
       enabled: true

@@ -20,6 +20,7 @@ class FeatureToggleConfig(
 
     data class Unleash(
         val uri: URI,
+        val apiKey: String,
         val environment: String,
         val applicationName: String,
     )
@@ -43,7 +44,8 @@ class FeatureToggleConfig(
         val unleash = DefaultUnleash(
             UnleashConfig.builder()
                 .appName(unleash.applicationName)
-                .unleashAPI(unleash.uri)
+                .unleashAPI("${unleash.uri}/api/")
+                .apiKey(unleash.apiKey)
                 .unleashContextProvider(lagUnleashContextProvider())
                 .build(),
             ByEnvironmentStrategy(),

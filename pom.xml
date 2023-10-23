@@ -32,7 +32,7 @@
         <start-class>no.nav.dagpenger.iverksett.ApplicationKt</start-class>
         <nav.security.token.version>3.0.4</nav.security.token.version>
         <ibm-mq-client.version>9.3.2.0</ibm-mq-client.version>
-        <unleash.version>7.1.0</unleash.version>
+        <unleash.version>8.4.0</unleash.version>
         <okhttp3.version>4.9.1
         </okhttp3.version> <!-- overskrever spring sin versjon, blir brukt av mock-oauth2-server -->
     </properties>
