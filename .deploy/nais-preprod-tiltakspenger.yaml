@@ -43,7 +43,7 @@ spec:
     - name: PROSESSERING_GRUPPE
       value: "97140b9a-07c5-414c-beeb-69824d04c044"
   envFrom:
-    - secret: dp-iverksett-unleash-api-token
+    - secret: tiltakspenger-iverksett-unleash-api-token
   unleash:
     environment: development
   azure:
@@ -63,8 +63,7 @@ spec:
       rules:
         - application: dp-oppdrag
       external:
-        - host: dp-oppdrag.dev-gcp-pub.nais.io
-        - host: unleash.nais.io
+        - host: dagpenger-unleash-api.nav.cloud.nais.io
   gcp:
     sqlInstances:
       - type: POSTGRES_14 # IF This is changed, all data will be lost. Read on nais.io how to upgrade

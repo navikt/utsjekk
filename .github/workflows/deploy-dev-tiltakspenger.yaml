@@ -59,4 +59,4 @@ jobs:
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-gcp
-          RESOURCE: .deploy/nais-preprod-tiltakspenger.yaml
+          RESOURCE: .deploy/tiltakspenger-unleash-apitoken.yaml,.deploy/nais-preprod-tiltakspenger.yaml
