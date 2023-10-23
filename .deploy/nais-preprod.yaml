@@ -72,7 +72,7 @@ spec:
       rules:
         - application: dp-oppdrag
       external:
-        - host: unleash.nais.io
+        - host: dagpenger-unleash-api.nav.cloud.nais.io
   gcp:
     sqlInstances:
       - type: POSTGRES_14 # IF This is changed, all data will be lost. Read on nais.io how to upgrade

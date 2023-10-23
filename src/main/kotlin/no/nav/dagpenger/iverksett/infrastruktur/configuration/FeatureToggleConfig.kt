@@ -79,7 +79,7 @@ class FeatureToggleConfig(
     }
 
     companion object {
-        const val STOPP_IVERKSETTING = "dp.iverksett.stopp-iverksetting"
-        const val TILGANGSKONTROLL = "dp.iverksett.tilgangskontroll"
+        const val STOPP_IVERKSETTING = "dp-iverksett.stopp-iverksetting"
+        const val TILGANGSKONTROLL = "dp-iverksett.tilgangskontroll"
     }
 }
