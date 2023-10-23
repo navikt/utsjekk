@@ -8,14 +8,6 @@ no.nav.security.jwt:
     accepted_audience: aud-localhost
     cookie_name: localhost-idtoken
     proxy_url: #Default satt, skal være null i integrasjonstest
-arena-mq:
-  queueManager: queuemanager
-  channel: channel
-  hostname: hostname
-  port: 1234
-  queueName: vedtakhendelserQueueName
-  servicebruker: srvuser
-  servicebrukerPassord: srvuserPassword
 
 funksjonsbrytere:
   enabled: false
@@ -27,13 +19,11 @@ funksjonsbrytere:
 
 
 DP_OPPDRAG_API_URL: http://localhost:8087
-FAMILIE_INTEGRASJONER_API_URL: http://localhost:9085
-FAMILIE_TILBAKE_URL: http://localhost:8030
 AZURE_OPENID_CONFIG_TOKEN_ENDPOINT: https://login.microsoftonline.com/navq.onmicrosoft.com/oauth2/v2.0/token
 
 AZURE_APP_TENANT_ID: navq.onmicrosoft.com
 
-NAIS_CLUSTER_NAME: dev
+NAIS_CLUSTER_NAME: dev-gcp
 
 BESLUTTER_GRUPPE: 11b8475a-fb12-41aa-b1f6-8497c1b5385b
 APP_MED_SYSTEMTILGANG: dev-gcp:teamdagpenger:dp-vedtak-iverksett

@@ -53,33 +53,6 @@ no.nav.security.jwt:
           client-id: ${AZURE_APP_CLIENT_ID}
           client-secret: ${AZURE_APP_CLIENT_SECRET}
           client-auth-method: client_secret_basic
-      familie-dokarkiv:
-        resource-url: ${FAMILIE_INTEGRASJONER_API_URL}
-        token-endpoint-url: ${AZURE_OPENID_CONFIG_TOKEN_ENDPOINT}
-        grant-type: client_credentials
-        scope: ${FAMILIE_INTEGRASJONER_SCOPE}
-        authentication:
-          client-id: ${AZURE_APP_CLIENT_ID}
-          client-secret: ${AZURE_APP_CLIENT_SECRET}
-          client-auth-method: client_secret_basic
-      familie-ef-tilbake-cc:
-        resource-url: ${FAMILIE_TILBAKE_URL}
-        token-endpoint-url: ${AZURE_OPENID_CONFIG_TOKEN_ENDPOINT}
-        grant-type: client_credentials
-        scope: ${FAMILIE_TILBAKE_SCOPE}
-        authentication:
-          client-id: ${AZURE_APP_CLIENT_ID}
-          client-secret: ${AZURE_APP_CLIENT_SECRET}
-          client-auth-method: client_secret_basic
-      familie-ef-tilbake-obo:
-        resource-url: ${FAMILIE_TILBAKE_URL}
-        token-endpoint-url: ${AZURE_OPENID_CONFIG_TOKEN_ENDPOINT}
-        grant-type: urn:ietf:params:oauth:grant-type:jwt-bearer
-        scope: ${FAMILIE_TILBAKE_SCOPE}
-        authentication:
-          client-id: ${AZURE_APP_CLIENT_ID}
-          client-secret: ${AZURE_APP_CLIENT_SECRET}
-          client-auth-method: client_secret_basic
 
 management:
   endpoint.health.show-details: always
@@ -89,15 +62,6 @@ management:
     path-mapping:
       info: "isAlive"
 
-arena-mq:
-  queueManager: MPLS01
-  channel: P_FAMILIE_EF_IVERKS
-  hostname: mpls01.adeo.no
-  port: 1414
-  queueName: QA.P475.SOB_VEDTAKHENDELSER_ARE
-  servicebruker: ${SERVICEBRUKER}
-  servicebrukerPassord: ${SERVICEBRUKER_PASSORD}
-
 funksjonsbrytere:
   enabled: true
   unleash:
@@ -106,19 +70,8 @@ funksjonsbrytere:
     environment: ${NAIS_CLUSTER_NAME}
     applicationName: ${NAIS_APP_NAME}
 
-DEPLOY_ENV: prod
 DP_OPPDRAG_API_URL: http://dp-oppdrag
-DP_OPPDRAG_SCOPE: api://${DEPLOY_ENV}-gcp.teamdagpenger.dp-oppdrag/.default
-FAMILIE_INTEGRASJONER_API_URL: https://familie-integrasjoner.${DEPLOY_ENV}-fss-pub.nais.io
-FAMILIE_INTEGRASJONER_SCOPE: api://${DEPLOY_ENV}-fss.teamfamilie.familie-integrasjoner/.default
-FAMILIE_TILBAKE_URL: http://familie-tilbake
-FAMILIE_TILBAKE_SCOPE: api://${DEPLOY_ENV}-gcp.teamfamilie.familie-tilbake/.default
-
-DAGPENGER_VEDTAK_TOPIC: teamdagpenger.aapen-dagpenger-vedtak-v1
-DAGPENGER_BEHANDLING_TOPIC: teamdagpenger.aapen-dagpenger-behandling-v1
-ARBEIDSOPPFOLGING_VEDTAK_TOPIC: teamdagpenger.aapen-dagpenger-vedtak-arbeidsoppfolging
-VEDTAK_TOPIC: teamdagpenger.aapen-dagpenger-iverksatt-vedtak
-FAGSYSTEMBEHANDLING_RESPONS_TOPIC: teamdagpenger.privat-tbk-hentfagsystemsbehandling-respons-topic
+DP_OPPDRAG_SCOPE: api://${NAIS_CLUSTER_NAME}.teamdagpenger.dp-oppdrag/.default
 
 prosessering:
   continuousRunning.enabled: true
