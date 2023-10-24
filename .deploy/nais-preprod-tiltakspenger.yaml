@@ -58,6 +58,7 @@ spec:
       rules:
         - application: tiltakspenger-iverksett # For testing; kan finne bruken token for app'en til å kalle seg selv
         - application: tiltakspenger-utbetaling
+          namespace: tpts
         - application: dp-prosessering #frontend for task-rammeverket
     outbound:
       rules:
