@@ -39,9 +39,9 @@ spec:
     - name: BESLUTTER_GRUPPE
       value: "TODO" #Riktig beslutter-gruppe i AAD for tiltakspenger må settes her
     - name: APP_MED_SYSTEMTILGANG
-      value: "TODO" #Riktig app som skal iverksette for tiltakspenger må settes her
+      value: "dev-gcp:tpts:tiltakspenger-utbetaling"
     - name: PROSESSERING_GRUPPE
-      value: "97140b9a-07c5-414c-beeb-69824d04c044"
+      value: "928636f4-fd0d-4149-978e-a6fb68bb19de"
   envFrom:
     - secret: tiltakspenger-iverksett-unleash-api-token
   unleash:
@@ -57,7 +57,7 @@ spec:
     inbound:
       rules:
         - application: tiltakspenger-iverksett # For testing; kan finne bruken token for app'en til å kalle seg selv
-        - application: tiltakspenger-vedtak
+        - application: tiltakspenger-utbetaling
         - application: dp-prosessering #frontend for task-rammeverket
     outbound:
       rules:
