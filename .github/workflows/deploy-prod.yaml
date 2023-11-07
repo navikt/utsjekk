@@ -3,6 +3,7 @@ on:
   push:
     branches-ignore:
       - 'gh-pages'
+      - 'docs'
 
 env:
   IMAGE: ghcr.io/${{ github.repository }}:${{ github.sha }}
