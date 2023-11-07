@@ -1,8 +1,8 @@
 name: Build-Deploy prod
 on:
   push:
-    branches:
-      - '!gh-pages'
+    branches-ignore:
+      - 'gh-pages'
 
 env:
   IMAGE: ghcr.io/${{ github.repository }}:${{ github.sha }}
