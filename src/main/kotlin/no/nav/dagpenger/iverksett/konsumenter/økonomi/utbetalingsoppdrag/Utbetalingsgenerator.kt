@@ -55,11 +55,13 @@ object Utbetalingsgenerator {
         behandlingsinformasjon: Behandlingsinformasjon,
     ): BeregnetUtbetalingsoppdrag {
         val nyeKjeder = lagNyeKjeder(nyeAndeler, forrigeKjeder, sisteAndelPerKjede)
+        val fagsystem = forrigeKjeder.keys.union(nyeAndeler.keys).first().stønadstype.tilFagsystem()
 
         val utbetalingsoppdrag = Utbetalingsoppdrag(
             saksbehandlerId = behandlingsinformasjon.saksbehandlerId,
             kodeEndring = kodeEndring(sisteAndelPerKjede),
             saksnummer = behandlingsinformasjon.fagsakId,
+            fagSystem = fagsystem,
             saksreferanse = behandlingsinformasjon.saksreferanse,
             aktoer = behandlingsinformasjon.personIdent,
             utbetalingsperiode = utbetalingsperioder(behandlingsinformasjon, nyeKjeder),
