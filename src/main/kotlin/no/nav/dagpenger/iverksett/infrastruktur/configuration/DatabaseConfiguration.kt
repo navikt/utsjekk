@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.fasterxml.jackson.module.kotlin.treeToValue
 import no.nav.dagpenger.iverksett.api.domene.Fagsakdetaljer
-import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
+import no.nav.dagpenger.iverksett.api.domene.Iverksett
 import no.nav.dagpenger.iverksett.api.domene.OppdragResultat
 import no.nav.dagpenger.iverksett.api.domene.TilkjentYtelse
 import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
@@ -96,12 +96,12 @@ class DatabaseConfiguration : AbstractJdbcConfiguration() {
     }
 
     @WritingConverter
-    class IverksettDataTilPGobjectConverter : DomainTilPGobjectConverter<IverksettDagpenger>()
+    class IverksettDataTilPGobjectConverter : DomainTilPGobjectConverter<Iverksett>()
 
     @ReadingConverter
-    class PGobjectConverterTilIverksettData : Converter<PGobject, IverksettDagpenger> {
+    class PGobjectConverterTilIverksettData : Converter<PGobject, Iverksett> {
 
-        override fun convert(pGobject: PGobject): IverksettDagpenger {
+        override fun convert(pGobject: PGobject): Iverksett {
             val fagsakNode = objectMapper.readTree(pGobject.value).findValue("fagsak")
             val fagsakdetaljer: Fagsakdetaljer = objectMapper.treeToValue(fagsakNode)
             return when (fagsakdetaljer.stønadstype) {
@@ -110,10 +110,10 @@ class DatabaseConfiguration : AbstractJdbcConfiguration() {
                 StønadTypeDagpenger.DAGPENGER_PERMITTERING_FISKEINDUSTRI,
                 StønadTypeDagpenger.DAGPENGER_EOS
                 -> objectMapper
-                    .readValue(pGobject.value, IverksettDagpenger::class.java)
+                    .readValue(pGobject.value, Iverksett::class.java)
                 else
                 -> objectMapper
-                    .readValue(pGobject.value, IverksettDagpenger::class.java)
+                    .readValue(pGobject.value, Iverksett::class.java)
             }
         }
     }

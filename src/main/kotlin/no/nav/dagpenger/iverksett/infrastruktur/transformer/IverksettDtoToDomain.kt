@@ -3,10 +3,10 @@ package no.nav.dagpenger.iverksett.infrastruktur.transformer
 import java.time.LocalDate
 import no.nav.dagpenger.iverksett.api.domene.Behandlingsdetaljer
 import no.nav.dagpenger.iverksett.api.domene.Fagsakdetaljer
-import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
+import no.nav.dagpenger.iverksett.api.domene.Iverksett
 import no.nav.dagpenger.iverksett.api.domene.Søker
-import no.nav.dagpenger.iverksett.api.domene.VedtaksdetaljerDagpenger
-import no.nav.dagpenger.iverksett.api.domene.VedtaksperiodeDagpenger
+import no.nav.dagpenger.iverksett.api.domene.Vedtaksdetaljer
+import no.nav.dagpenger.iverksett.api.domene.Vedtaksperiode
 import no.nav.dagpenger.kontrakter.felles.Datoperiode
 import no.nav.dagpenger.kontrakter.felles.SakIdentifikator
 import no.nav.dagpenger.kontrakter.iverksett.ForrigeIverksettingDto
@@ -14,15 +14,15 @@ import no.nav.dagpenger.kontrakter.iverksett.IverksettDto
 import no.nav.dagpenger.kontrakter.iverksett.VedtaksdetaljerDto
 import no.nav.dagpenger.kontrakter.iverksett.VedtaksperiodeDto
 
-fun VedtaksperiodeDto.toDomain(): VedtaksperiodeDagpenger {
-    return VedtaksperiodeDagpenger(
+fun VedtaksperiodeDto.toDomain(): Vedtaksperiode {
+    return Vedtaksperiode(
         periode = Datoperiode(this.fraOgMedDato, this.tilOgMedDato ?: LocalDate.MAX),
         periodeType = this.periodeType,
     )
 }
 
-fun VedtaksdetaljerDto.toDomain(): VedtaksdetaljerDagpenger {
-    return VedtaksdetaljerDagpenger(
+fun VedtaksdetaljerDto.toDomain(): Vedtaksdetaljer {
+    return Vedtaksdetaljer(
         vedtakstype = this.vedtakstype,
         vedtaksresultat = this.resultat,
         vedtakstidspunkt = this.vedtakstidspunkt,
@@ -34,8 +34,8 @@ fun VedtaksdetaljerDto.toDomain(): VedtaksdetaljerDagpenger {
     )
 }
 
-fun IverksettDto.toDomain(): IverksettDagpenger {
-    return IverksettDagpenger(
+fun IverksettDto.toDomain(): Iverksett {
+    return Iverksett(
         fagsak = this.tilFagsak(),
         søker = this.personIdent.tilSøker(),
         behandling = this.tilBehandling(),
@@ -67,10 +67,10 @@ fun ForrigeIverksettingDto.tilBehandling(): Behandlingsdetaljer = Behandlingsdet
     behandlingId = this.behandlingId,
 )
 
-fun IverksettDto.tilForrigeIverksetting(): IverksettDagpenger? {
+fun IverksettDto.tilForrigeIverksetting(): Iverksett? {
     return when (this.forrigeIverksetting) {
         null -> null
-        else -> IverksettDagpenger(
+        else -> Iverksett(
             fagsak = this.tilFagsak(),
             søker = this.personIdent.tilSøker(),
             behandling = this.forrigeIverksetting!!.tilBehandling(),

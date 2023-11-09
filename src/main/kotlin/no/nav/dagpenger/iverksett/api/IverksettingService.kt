@@ -4,8 +4,8 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.Properties
 import java.util.UUID
+import no.nav.dagpenger.iverksett.api.domene.IverksettEntitet
 import no.nav.dagpenger.iverksett.api.domene.Iverksett
-import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
 import no.nav.dagpenger.iverksett.api.domene.OppdragResultat
 import no.nav.dagpenger.iverksett.api.tilstand.IverksettResultatService
 import no.nav.dagpenger.iverksett.infrastruktur.configuration.FeatureToggleConfig
@@ -40,12 +40,12 @@ class IverksettingService(
 ) {
 
     @Transactional
-    fun startIverksetting(iverksett: IverksettDagpenger) {
+    fun startIverksetting(iverksett: Iverksett) {
         if (featureToggleService.isEnabled(FeatureToggleConfig.STOPP_IVERKSETTING)) {
             error("Kan ikke iverksette akkurat nå")
         }
         iverksettingRepository.insert(
-            Iverksett(
+            IverksettEntitet(
                 iverksett.behandling.behandlingId,
                 iverksett,
             ),
@@ -67,14 +67,14 @@ class IverksettingService(
         )
     }
 
-    fun hentIverksetting(behandlingId: UUID): IverksettDagpenger? {
+    fun hentIverksetting(behandlingId: UUID): Iverksett? {
         return iverksettingRepository.findById(behandlingId).getOrNull()?.data
     }
 
-    fun hentForrigeIverksett(iverksettDagpenger: IverksettDagpenger): IverksettDagpenger? =
-        iverksettDagpenger.behandling.forrigeBehandlingId?.let {
+    fun hentForrigeIverksett(iverksett: Iverksett): Iverksett? =
+        iverksett.behandling.forrigeBehandlingId?.let {
             hentIverksetting(it) ?: throw IllegalStateException(
-                "Fant ikke forrige iverksetting med behandlingId ${iverksettDagpenger.behandling.behandlingId} " +
+                "Fant ikke forrige iverksetting med behandlingId ${iverksett.behandling.behandlingId} " +
                     "og forrige behandlingId $it",
             )
         }

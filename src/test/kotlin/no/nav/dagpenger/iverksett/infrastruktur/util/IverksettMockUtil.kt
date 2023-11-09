@@ -8,13 +8,13 @@ import java.util.UUID
 import no.nav.dagpenger.iverksett.api.domene.AndelTilkjentYtelse
 import no.nav.dagpenger.iverksett.api.domene.Behandlingsdetaljer
 import no.nav.dagpenger.iverksett.api.domene.Fagsakdetaljer
-import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
+import no.nav.dagpenger.iverksett.api.domene.Iverksett
 import no.nav.dagpenger.iverksett.api.domene.IverksettResultat
 import no.nav.dagpenger.iverksett.api.domene.OppdragResultat
 import no.nav.dagpenger.iverksett.api.domene.Søker
 import no.nav.dagpenger.iverksett.api.domene.TilkjentYtelse
-import no.nav.dagpenger.iverksett.api.domene.VedtaksdetaljerDagpenger
-import no.nav.dagpenger.iverksett.api.domene.VedtaksperiodeDagpenger
+import no.nav.dagpenger.iverksett.api.domene.Vedtaksdetaljer
+import no.nav.dagpenger.iverksett.api.domene.Vedtaksperiode
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.lagAndelTilkjentYtelse
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.lagUtbetalingDto
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene.Behandlingsinformasjon
@@ -118,20 +118,20 @@ fun behandlingsdetaljer(
     )
 }
 
-fun vedtaksperioderDagpenger() =
-    VedtaksperiodeDagpenger(
+fun vedtaksperiode() =
+    Vedtaksperiode(
         periode = Datoperiode(YearMonth.now().atDay(1), YearMonth.now().atEndOfMonth()),
         periodeType = VedtaksperiodeType.HOVEDPERIODE,
     )
 
-fun vedtaksdetaljerDagpenger(
+fun vedtaksdetaljer(
     vedtaksresultat: Vedtaksresultat = Vedtaksresultat.INNVILGET,
     andeler: List<AndelTilkjentYtelse> = listOf(opprettAndelTilkjentYtelse()),
     vedtakstidspunkt: LocalDateTime = LocalDateTime.of(2021, 5, 12, 0, 0),
-    vedtaksperioder: List<VedtaksperiodeDagpenger> = listOf(vedtaksperioderDagpenger()),
-): VedtaksdetaljerDagpenger {
+    vedtaksperioder: List<Vedtaksperiode> = listOf(vedtaksperiode()),
+): Vedtaksdetaljer {
     val tilkjentYtelse = lagTilkjentYtelse(andeler)
-    return VedtaksdetaljerDagpenger(
+    return Vedtaksdetaljer(
         vedtakstype = VedtakType.UTBETALINGSVEDTAK,
         vedtaksresultat = vedtaksresultat,
         vedtakstidspunkt = vedtakstidspunkt,
@@ -151,11 +151,11 @@ private fun lagTilkjentYtelse(
         andelerTilkjentYtelse = andeler,
     )
 
-fun opprettIverksettDagpenger(
+fun opprettIverksett(
     behandlingsdetaljer: Behandlingsdetaljer = behandlingsdetaljer(),
-    vedtaksdetaljer: VedtaksdetaljerDagpenger = vedtaksdetaljerDagpenger(),
+    vedtaksdetaljer: Vedtaksdetaljer = vedtaksdetaljer(),
 ) =
-    IverksettDagpenger(
+    Iverksett(
         fagsak = Fagsakdetaljer(fagsakId = UUID.randomUUID(), stønadstype = StønadTypeDagpenger.DAGPENGER_ARBEIDSSOKER_ORDINAER),
         behandling = behandlingsdetaljer,
         søker = Søker(
@@ -164,20 +164,20 @@ fun opprettIverksettDagpenger(
         vedtak = vedtaksdetaljer,
     )
 
-fun opprettIverksettDagpenger(
+fun opprettIverksett(
     behandlingId: UUID = UUID.randomUUID(),
     forrigeBehandlingId: UUID? = null,
     andeler: List<AndelTilkjentYtelse> = listOf(opprettAndelTilkjentYtelse()),
-    forrigeIverksetting: IverksettDagpenger? = null,
+    forrigeIverksetting: Iverksett? = null,
     fagsakId: UUID = UUID.randomUUID(),
-): IverksettDagpenger {
-    return IverksettDagpenger(
+): Iverksett {
+    return Iverksett(
         fagsak = Fagsakdetaljer(fagsakId = fagsakId, stønadstype = StønadTypeDagpenger.DAGPENGER_ARBEIDSSOKER_ORDINAER),
         behandling = behandlingsdetaljer(behandlingId, forrigeBehandlingId),
         søker = Søker(
             personIdent = "12345678910",
         ),
-        vedtak = vedtaksdetaljerDagpenger(
+        vedtak = vedtaksdetaljer(
             vedtaksresultat = Vedtaksresultat.INNVILGET,
             andeler = andeler,
         ),

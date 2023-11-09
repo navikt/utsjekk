@@ -1,11 +1,10 @@
 package no.nav.dagpenger.iverksett.api
 
-import no.nav.dagpenger.iverksett.api.domene.Iverksett
-import no.nav.dagpenger.iverksett.api.domene.VedtaksperiodeDagpenger
+import no.nav.dagpenger.iverksett.api.domene.IverksettEntitet
+import no.nav.dagpenger.iverksett.api.domene.Vedtaksperiode
 import no.nav.dagpenger.kontrakter.datadeling.DatadelingRequest
 import no.nav.dagpenger.kontrakter.datadeling.DatadelingResponse
 import no.nav.dagpenger.kontrakter.datadeling.Periode
-import no.nav.dagpenger.kontrakter.felles.StønadType
 import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
 import no.nav.dagpenger.kontrakter.iverksett.VedtaksperiodeDto
 import no.nav.dagpenger.kontrakter.iverksett.Vedtaksresultat
@@ -41,7 +40,7 @@ class VedtakStatusService(
         )
     }
 
-    private fun mapPerioder(iverksett: Iverksett, request: DatadelingRequest): List<Periode> {
+    private fun mapPerioder(iverksett: IverksettEntitet, request: DatadelingRequest): List<Periode> {
         val vedtak = iverksett.data.vedtak
         val yt = vedtak.tilkjentYtelse?.sisteAndelIKjede?.stønadstype ?: StønadTypeDagpenger.DAGPENGER_ARBEIDSSOKER_ORDINAER
 
@@ -59,7 +58,7 @@ class VedtakStatusService(
             }
     }
 
-    private fun mapVedtaksperioder(inn: List<VedtaksperiodeDagpenger>): List<VedtaksperiodeDto> {
+    private fun mapVedtaksperioder(inn: List<Vedtaksperiode>): List<VedtaksperiodeDto> {
         return inn.map { vedtaksperiode ->
             VedtaksperiodeDto(
                 fraOgMedDato = vedtaksperiode.periode.fom,

@@ -5,7 +5,7 @@ import java.util.UUID
 import no.nav.dagpenger.iverksett.ServerTest
 import no.nav.dagpenger.iverksett.api.IverksettingService
 import no.nav.dagpenger.iverksett.api.tilstand.IverksettResultatService
-import no.nav.dagpenger.iverksett.infrastruktur.util.opprettIverksettDagpenger
+import no.nav.dagpenger.iverksett.infrastruktur.util.opprettIverksett
 import no.nav.familie.prosessering.internal.TaskService
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
@@ -33,7 +33,7 @@ class IverksettMotOppdragIntegrasjonsTest : ServerTest() {
         tilOgMed = LocalDate.of(2021, 1, 31),
     )
     private val iverksett =
-        opprettIverksettDagpenger(behandlingid, andeler = listOf(førsteAndel))
+        opprettIverksett(behandlingid, andeler = listOf(førsteAndel))
 
     @BeforeEach
     internal fun setUp() {
@@ -51,7 +51,7 @@ class IverksettMotOppdragIntegrasjonsTest : ServerTest() {
     @Test
     internal fun `revurdering med en ny periode, forvent at den nye perioden har peker på den forrige`() {
         val behandlingIdRevurdering = UUID.randomUUID()
-        val iverksettRevurdering = opprettIverksettDagpenger(
+        val iverksettRevurdering = opprettIverksett(
             behandlingIdRevurdering,
             behandlingid,
             listOf(
@@ -79,7 +79,7 @@ class IverksettMotOppdragIntegrasjonsTest : ServerTest() {
     @Test
     internal fun `revurdering der beløpet på den første endres, og en ny legges til, forvent at den første perioden erstattes`() {
         val behandlingIdRevurdering = UUID.randomUUID()
-        val iverksettRevurdering = opprettIverksettDagpenger(
+        val iverksettRevurdering = opprettIverksett(
             behandlingId = behandlingIdRevurdering,
             forrigeBehandlingId = behandlingid,
             andeler = listOf(
@@ -110,7 +110,7 @@ class IverksettMotOppdragIntegrasjonsTest : ServerTest() {
     internal fun `iverksett med opphør, forventer ingen andeler`() {
         val opphørBehandlingId = UUID.randomUUID()
         val iverksettMedOpphør =
-            opprettIverksettDagpenger(
+            opprettIverksett(
                 opphørBehandlingId,
                 behandlingid,
                 emptyList(),

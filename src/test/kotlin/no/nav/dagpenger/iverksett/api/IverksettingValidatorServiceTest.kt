@@ -2,7 +2,7 @@ package no.nav.dagpenger.iverksett.api
 
 import io.mockk.every
 import io.mockk.mockk
-import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
+import no.nav.dagpenger.iverksett.api.domene.Iverksett
 import no.nav.dagpenger.iverksett.api.domene.IverksettResultat
 import no.nav.dagpenger.iverksett.api.domene.OppdragResultat
 import no.nav.dagpenger.iverksett.api.domene.behandlingId
@@ -100,7 +100,7 @@ class IverksettingValidatorServiceTest {
         }
     }
 
-    private fun beregnUtbetalingsoppdrag(iverksettData: IverksettDagpenger): BeregnetUtbetalingsoppdrag {
+    private fun beregnUtbetalingsoppdrag(iverksettData: Iverksett): BeregnetUtbetalingsoppdrag {
         val behandlingsinformasjon = Behandlingsinformasjon(
             saksbehandlerId = iverksettData.vedtak.saksbehandlerId,
             fagsakId = iverksettData.sakId,

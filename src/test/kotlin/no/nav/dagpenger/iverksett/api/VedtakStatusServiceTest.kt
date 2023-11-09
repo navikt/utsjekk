@@ -4,8 +4,8 @@ import io.mockk.every
 import io.mockk.mockk
 import java.time.LocalDate
 import java.time.LocalDateTime
-import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
-import no.nav.dagpenger.iverksett.api.domene.VedtaksperiodeDagpenger
+import no.nav.dagpenger.iverksett.api.domene.Iverksett
+import no.nav.dagpenger.iverksett.api.domene.Vedtaksperiode
 import no.nav.dagpenger.iverksett.lagIverksett
 import no.nav.dagpenger.iverksett.lagIverksettData
 import no.nav.dagpenger.kontrakter.datadeling.DatadelingRequest
@@ -140,7 +140,7 @@ class VedtakStatusServiceTest {
             vedtaksresultat = Vedtaksresultat.INNVILGET,
             vedtakstidspunkt = LocalDateTime.now().minusMonths(2),
             vedtaksperioder = listOf(
-                VedtaksperiodeDagpenger(
+                Vedtaksperiode(
                     periode = Datoperiode(LocalDate.now().minusDays(16), LocalDate.now().minusDays(2)),
                     periodeType = VedtaksperiodeType.HOVEDPERIODE,
                 ),
@@ -150,7 +150,7 @@ class VedtakStatusServiceTest {
             vedtaksresultat = Vedtaksresultat.INNVILGET,
             vedtakstidspunkt = LocalDateTime.now(),
             vedtaksperioder = listOf(
-                VedtaksperiodeDagpenger(
+                Vedtaksperiode(
                     periode = Datoperiode(LocalDate.now(), LocalDate.now().plusDays(14)),
                     periodeType = VedtaksperiodeType.HOVEDPERIODE,
                 ),
@@ -158,7 +158,7 @@ class VedtakStatusServiceTest {
         )
     }
 
-    private fun assertVedtak(riktigIverksettData: IverksettDagpenger, returnertVedtak: VedtaksstatusDto?) {
+    private fun assertVedtak(riktigIverksettData: Iverksett, returnertVedtak: VedtaksstatusDto?) {
         val riktigVedtak = riktigIverksettData.vedtak
 
         assertEquals(riktigVedtak.vedtakstype, returnertVedtak?.vedtakstype)

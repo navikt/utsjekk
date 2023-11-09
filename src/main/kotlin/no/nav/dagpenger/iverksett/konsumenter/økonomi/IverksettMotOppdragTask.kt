@@ -3,7 +3,7 @@ package no.nav.dagpenger.iverksett.konsumenter.økonomi
 import java.util.UUID
 import no.nav.dagpenger.iverksett.api.IverksettingService
 import no.nav.dagpenger.iverksett.api.domene.AndelTilkjentYtelse
-import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
+import no.nav.dagpenger.iverksett.api.domene.Iverksett
 import no.nav.dagpenger.iverksett.api.domene.IverksettResultat
 import no.nav.dagpenger.iverksett.api.domene.TilkjentYtelse
 import no.nav.dagpenger.iverksett.api.domene.behandlingId
@@ -53,7 +53,7 @@ class IverksettMotOppdragTask(
     }
 
     private fun nyLagOgSendUtbetalingsoppdragOgOppdaterTilkjentYtelse(
-        iverksett: IverksettDagpenger,
+        iverksett: Iverksett,
         forrigeIverksettResultat: IverksettResultat?,
         behandlingId: UUID,
     ) {

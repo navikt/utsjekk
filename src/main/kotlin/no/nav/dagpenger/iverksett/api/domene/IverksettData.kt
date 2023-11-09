@@ -11,12 +11,12 @@ import no.nav.dagpenger.kontrakter.iverksett.VedtakType
 import no.nav.dagpenger.kontrakter.iverksett.VedtaksperiodeType
 import no.nav.dagpenger.kontrakter.iverksett.Vedtaksresultat
 
-data class IverksettDagpenger(
+data class Iverksett(
     val fagsak: Fagsakdetaljer,
     val behandling: Behandlingsdetaljer,
     val søker: Søker,
-    val vedtak: VedtaksdetaljerDagpenger,
-    val forrigeIverksetting: IverksettDagpenger? = null,
+    val vedtak: Vedtaksdetaljer,
+    val forrigeIverksetting: Iverksett? = null,
 )
 
 data class Fagsakdetaljer(
@@ -27,24 +27,18 @@ data class Fagsakdetaljer(
     init {
         SakIdentifikator.valider(fagsakId, saksreferanse)
     }
-
-    val sakIdentifikator: SakIdentifikator get() = SakIdentifikator(fagsakId, saksreferanse)
-
-    fun toIdString() = fagsakId?.toString() ?: saksreferanse!!
 }
 
 data class Søker(
     val personIdent: String,
 )
 
-sealed class Vedtaksperiode
-
-data class VedtaksperiodeDagpenger(
+data class Vedtaksperiode(
     val periode: Datoperiode,
     val periodeType: VedtaksperiodeType,
-) : Vedtaksperiode()
+)
 
-data class VedtaksdetaljerDagpenger(
+data class Vedtaksdetaljer(
     val vedtakstype: VedtakType = VedtakType.RAMMEVEDTAK,
     val vedtaksresultat: Vedtaksresultat,
     val vedtakstidspunkt: LocalDateTime,
@@ -52,7 +46,7 @@ data class VedtaksdetaljerDagpenger(
     val beslutterId: String,
     val enhet: String? = null,
     val tilkjentYtelse: TilkjentYtelse?,
-    val vedtaksperioder: List<VedtaksperiodeDagpenger> = listOf(),
+    val vedtaksperioder: List<Vedtaksperiode> = listOf(),
 )
 
 data class Behandlingsdetaljer(
@@ -63,7 +57,7 @@ data class Behandlingsdetaljer(
     val kravMottatt: LocalDate? = null,
 )
 
-val IverksettDagpenger.sakId get() = this.fagsak.fagsakId
-val IverksettDagpenger.personIdent get() = this.søker.personIdent
+val Iverksett.sakId get() = this.fagsak.fagsakId
+val Iverksett.personIdent get() = this.søker.personIdent
 
-val IverksettDagpenger.behandlingId get() = this.behandling.behandlingId
+val Iverksett.behandlingId get() = this.behandling.behandlingId

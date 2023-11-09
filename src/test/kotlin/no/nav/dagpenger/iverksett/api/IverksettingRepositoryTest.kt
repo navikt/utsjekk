@@ -3,7 +3,7 @@ package no.nav.dagpenger.iverksett.api
 import com.fasterxml.jackson.module.kotlin.readValue
 import no.nav.dagpenger.iverksett.ResourceLoaderTestUtil
 import no.nav.dagpenger.iverksett.ServerTest
-import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
+import no.nav.dagpenger.iverksett.api.domene.Iverksett
 import no.nav.dagpenger.iverksett.api.domene.behandlingId
 import no.nav.dagpenger.iverksett.infrastruktur.repository.findByIdOrThrow
 import no.nav.dagpenger.iverksett.infrastruktur.transformer.toDomain
@@ -26,7 +26,7 @@ class IverksettingRepositoryTest : ServerTest() {
     @Test
     fun `lagre og hent iverksett dagpenger, forvent likhet`() {
         val json: String = ResourceLoaderTestUtil.readResource("json/IverksettDtoEksempel.json")
-        val iverksettData: IverksettDagpenger = objectMapper.readValue<IverksettDto>(json).toDomain()
+        val iverksettData: Iverksett = objectMapper.readValue<IverksettDto>(json).toDomain()
 
         assertThrows<IllegalStateException> { iverksettingRepository.findByIdOrThrow(iverksettData.behandlingId) }
 
@@ -39,7 +39,7 @@ class IverksettingRepositoryTest : ServerTest() {
     @Test
     fun `lagre og hent iverksett på personId, forvent likhet`() {
         val json: String = ResourceLoaderTestUtil.readResource("json/IverksettDtoEksempel.json")
-        val iverksettData: IverksettDagpenger = objectMapper.readValue<IverksettDto>(json).toDomain()
+        val iverksettData: Iverksett = objectMapper.readValue<IverksettDto>(json).toDomain()
 
         val iverksettListe1 = iverksettingRepository.findByPersonId(iverksettData.søker.personIdent)
         assertEquals(0, iverksettListe1.size)
@@ -54,7 +54,7 @@ class IverksettingRepositoryTest : ServerTest() {
     @Test
     fun `lagre to iverksettinger på samme person, forvent å få begge`() {
         val json: String = ResourceLoaderTestUtil.readResource("json/IverksettDtoEksempel.json")
-        val iverksettData: IverksettDagpenger = objectMapper.readValue<IverksettDto>(json).toDomain()
+        val iverksettData: Iverksett = objectMapper.readValue<IverksettDto>(json).toDomain()
         val iverksettData2 = iverksettData.copy(
             behandling = iverksettData.behandling.copy(
                 behandlingId = UUID.randomUUID(),
@@ -81,7 +81,7 @@ class IverksettingRepositoryTest : ServerTest() {
     @Test
     fun `lagre og hent iverksett på fagsakId, forvent likhet`() {
         val json: String = ResourceLoaderTestUtil.readResource("json/IverksettDtoEksempel.json")
-        val iverksettData: IverksettDagpenger = objectMapper.readValue<IverksettDto>(json).toDomain()
+        val iverksettData: Iverksett = objectMapper.readValue<IverksettDto>(json).toDomain()
 
         val iverksettListe1 = iverksettingRepository.findByFagsakId(iverksettData.fagsak.fagsakId!!)
         assertEquals(0, iverksettListe1.size)
@@ -96,7 +96,7 @@ class IverksettingRepositoryTest : ServerTest() {
     @Test
     fun `lagre og hent iverksett på saksreferanse, forvent likhet`() {
         val json: String = ResourceLoaderTestUtil.readResource("json/IverksettDtoEksempel.json")
-        val iverksettData: IverksettDagpenger = objectMapper.readValue<IverksettDto>(json).toDomain()
+        val iverksettData: Iverksett = objectMapper.readValue<IverksettDto>(json).toDomain()
 
         val iverksettListe1 = iverksettingRepository.findBySaksreferanse(iverksettData.fagsak.saksreferanse!!)
         assertEquals(0, iverksettListe1.size)

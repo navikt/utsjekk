@@ -2,7 +2,7 @@ package no.nav.dagpenger.iverksett.infrastruktur.transformer
 
 import java.time.LocalDateTime
 import no.nav.dagpenger.iverksett.api.domene.TilkjentYtelse
-import no.nav.dagpenger.iverksett.api.domene.VedtaksdetaljerDagpenger
+import no.nav.dagpenger.iverksett.api.domene.Vedtaksdetaljer
 import no.nav.dagpenger.kontrakter.iverksett.ForrigeIverksettingDto
 import no.nav.dagpenger.kontrakter.iverksett.UtbetalingDto
 import no.nav.dagpenger.kontrakter.iverksett.VedtakType
@@ -39,8 +39,8 @@ private fun UtbetalingDto.kanSlåsSammen(forrige: UtbetalingDto): Boolean {
             && this.fraOgMedDato == forrige.tilOgMedDato.plusDays(1)
 }
 
-fun ForrigeIverksettingDto.tilVedtaksdetaljer(): VedtaksdetaljerDagpenger {
-    return VedtaksdetaljerDagpenger(
+fun ForrigeIverksettingDto.tilVedtaksdetaljer(): Vedtaksdetaljer {
+    return Vedtaksdetaljer(
         vedtakstype = VedtakType.UTBETALINGSVEDTAK,
         vedtaksresultat = Vedtaksresultat.INNVILGET,
         vedtakstidspunkt = LocalDateTime.now(),

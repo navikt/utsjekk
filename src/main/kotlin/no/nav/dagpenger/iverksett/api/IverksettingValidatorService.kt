@@ -1,6 +1,6 @@
 package no.nav.dagpenger.iverksett.api
 
-import no.nav.dagpenger.iverksett.api.domene.IverksettDagpenger
+import no.nav.dagpenger.iverksett.api.domene.Iverksett
 import no.nav.dagpenger.iverksett.api.domene.personIdent
 import no.nav.dagpenger.iverksett.api.domene.sakId
 import no.nav.dagpenger.iverksett.api.tilstand.IverksettResultatService
@@ -15,14 +15,14 @@ class IverksettingValidatorService(
     private val iverksettingService: IverksettingService,
 ) {
 
-    fun valider(iverksett: IverksettDagpenger) {
+    fun valider(iverksett: Iverksett) {
         /* Med DB-oppslag */
         validerAtBehandlingIkkeAlleredeErMottatt(iverksett)
         validerAtIverksettingErForSammeSakOgPersonSomForrige(iverksett)
         validerAtForrigeBehandlingErFerdigIverksattMotOppdrag(iverksett)
     }
 
-    internal fun validerAtIverksettingErForSammeSakOgPersonSomForrige(iverksett: IverksettDagpenger) {
+    internal fun validerAtIverksettingErForSammeSakOgPersonSomForrige(iverksett: Iverksett) {
         val forrigeIverksett = try {
             iverksettingService.hentForrigeIverksett(iverksett)
         } catch (e: IllegalStateException) {
@@ -46,7 +46,7 @@ class IverksettingValidatorService(
         }
     }
 
-    internal fun validerAtForrigeBehandlingErFerdigIverksattMotOppdrag(iverksett: IverksettDagpenger?) {
+    internal fun validerAtForrigeBehandlingErFerdigIverksattMotOppdrag(iverksett: Iverksett?) {
         iverksett?.behandling?.forrigeBehandlingId?.apply {
             val forrigeResultat = iverksettResultatService.hentIverksettResultat(this)
 
@@ -62,7 +62,7 @@ class IverksettingValidatorService(
         }
     }
 
-    internal fun validerAtBehandlingIkkeAlleredeErMottatt(iverksett: IverksettDagpenger) {
+    internal fun validerAtBehandlingIkkeAlleredeErMottatt(iverksett: Iverksett) {
         if (iverksettingService.hentIverksetting(iverksett.behandling.behandlingId) != null) {
             throw ApiFeil(
                 "Behandling med id ${iverksett.behandling.behandlingId} er allerede mottattt",
