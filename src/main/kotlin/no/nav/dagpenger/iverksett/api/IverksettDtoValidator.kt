@@ -2,6 +2,7 @@ package no.nav.dagpenger.iverksett.api
 
 import no.nav.dagpenger.iverksett.infrastruktur.advice.ApiFeil
 import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
+import no.nav.dagpenger.kontrakter.felles.StønadTypeTiltakspenger
 import no.nav.dagpenger.kontrakter.iverksett.Ferietillegg
 import no.nav.dagpenger.kontrakter.iverksett.IverksettDto
 import org.springframework.http.HttpStatus
@@ -14,6 +15,7 @@ object IverksettDtoValidator {
         utbetalingerHarKunPositiveBeløp(this)
         utbetalingerHarIngenBeløpOverMaksgrense(this)
         ingenUtbetalingsperioderHarStønadstypeEØSOgFerietilleggTilAvdød(this)
+        enhetErSattForTiltakspenger(this)
     }
 
     internal fun fraOgMedKommerFørTilOgMedIUtbetalingsperioder(iverksettDto: IverksettDto) {
@@ -87,6 +89,17 @@ object IverksettDtoValidator {
         if (ugyldigKombinasjon) {
             throw ApiFeil(
                 "Ferietillegg til avdød er ikke tillatt for stønadstypen ${StønadTypeDagpenger.DAGPENGER_EOS}",
+                HttpStatus.BAD_REQUEST,
+            )
+        }
+    }
+
+    internal fun enhetErSattForTiltakspenger(iverksettDto: IverksettDto) {
+        val stønadstype = iverksettDto.vedtak.utbetalinger.firstOrNull()?.stonadstype
+
+        if (stønadstype is StønadTypeTiltakspenger && iverksettDto.enhet == null) {
+            throw ApiFeil(
+                "Enhet må være satt for tiltakspenger",
                 HttpStatus.BAD_REQUEST,
             )
         }

@@ -1,6 +1,7 @@
 package no.nav.dagpenger.iverksett.api
 
 import java.time.LocalDate
+import no.nav.dagpenger.iverksett.api.IverksettDtoValidator.enhetErSattForTiltakspenger
 import no.nav.dagpenger.iverksett.api.IverksettDtoValidator.fraOgMedKommerFørTilOgMedIUtbetalingsperioder
 import no.nav.dagpenger.iverksett.api.IverksettDtoValidator.ingenUtbetalingsperioderHarStønadstypeEØSOgFerietilleggTilAvdød
 import no.nav.dagpenger.iverksett.api.IverksettDtoValidator.utbetalingerHarIngenBeløpOverMaksgrense
@@ -10,10 +11,12 @@ import no.nav.dagpenger.iverksett.infrastruktur.advice.ApiFeil
 import no.nav.dagpenger.iverksett.infrastruktur.util.opprettIverksettDto
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.lagUtbetalingDto
 import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
+import no.nav.dagpenger.kontrakter.felles.StønadTypeTiltakspenger
 import no.nav.dagpenger.kontrakter.iverksett.Ferietillegg
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.fail
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertDoesNotThrow
 import org.springframework.http.HttpStatus
 
 class IverksettDtoValidatorTest {
@@ -96,6 +99,24 @@ class IverksettDtoValidatorTest {
 
         assertApiFeil(HttpStatus.BAD_REQUEST) {
             ingenUtbetalingsperioderHarStønadstypeEØSOgFerietilleggTilAvdød(iverksettDto)
+        }
+    }
+
+    @Test
+    fun `Skal få BAD_REQUEST når enhet ikke er satt for tiltakspenger`() {
+        val iverksettDto = opprettIverksettDto(stønadType = StønadTypeTiltakspenger.TILTAKSPENGER)
+
+        assertApiFeil(HttpStatus.BAD_REQUEST) {
+            enhetErSattForTiltakspenger(iverksettDto)
+        }
+    }
+
+    @Test
+    fun `Skal få OK når enhet er satt for tiltakspenger`() {
+        val iverksettDto = opprettIverksettDto(stønadType = StønadTypeTiltakspenger.TILTAKSPENGER, enhet = "4444")
+
+        assertDoesNotThrow {
+            enhetErSattForTiltakspenger(iverksettDto)
         }
     }
 }
