@@ -50,6 +50,7 @@ data class VedtaksdetaljerDagpenger(
     val vedtakstidspunkt: LocalDateTime,
     val saksbehandlerId: String,
     val beslutterId: String,
+    val enhet: String? = null,
     val tilkjentYtelse: TilkjentYtelse?,
     val vedtaksperioder: List<VedtaksperiodeDagpenger> = listOf(),
 )

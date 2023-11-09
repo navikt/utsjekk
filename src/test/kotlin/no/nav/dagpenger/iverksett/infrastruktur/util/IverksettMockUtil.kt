@@ -60,11 +60,11 @@ fun opprettIverksettDto(
             vedtakstidspunkt = LocalDateTime.of(2021, 5, 12, 0, 0),
             saksbehandlerId = "A12345",
             beslutterId = "B23456",
+            enhet = enhet,
             utbetalinger = tilkjentYtelse.utbetalinger,
             vedtaksperioder = vedtaksperioder,
             vedtakstype = VedtakType.RAMMEVEDTAK
         ),
-        enhet = enhet,
     )
 }
 
