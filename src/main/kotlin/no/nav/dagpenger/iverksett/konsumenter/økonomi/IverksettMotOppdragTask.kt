@@ -63,6 +63,7 @@ class IverksettMotOppdragTask(
             saksreferanse = iverksett.fagsak.saksreferanse,
             behandlingId = iverksett.behandlingId.toString(),
             personIdent = iverksett.personIdent,
+            enhet = iverksett.vedtak.enhet,
             vedtaksdato = iverksett.vedtak.vedtakstidspunkt.toLocalDate(),
         )
 

@@ -18,6 +18,7 @@ data class Behandlingsinformasjon(
     val behandlingId: String,
     val personIdent: String,
     val vedtaksdato: LocalDate,
+    val enhet: String? = null,
     val erGOmregning: Boolean = false,
 ) {
     init {
