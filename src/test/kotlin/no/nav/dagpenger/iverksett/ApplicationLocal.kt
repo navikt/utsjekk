@@ -12,6 +12,6 @@ class ApplicationLocal
 fun main(args: Array<String>) {
     SpringApplicationBuilder(ApplicationConfig::class.java)
         .initializers(DbContainerInitializer())
-        .profiles("local", "mock-oppdrag")
+        .profiles("local")//, "mock-oppdrag")
         .run(*args)
 }

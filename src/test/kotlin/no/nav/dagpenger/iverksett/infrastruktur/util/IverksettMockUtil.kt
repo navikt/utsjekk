@@ -72,10 +72,12 @@ fun opprettAndelTilkjentYtelse(
     beløp: Int = 5000,
     fra: LocalDate = LocalDate.of(2021, 1, 1),
     til: LocalDate = LocalDate.of(2021, 12, 31),
+    stønadstype: StønadType = StønadTypeDagpenger.DAGPENGER_ARBEIDSSOKER_ORDINAER,
 ) = lagAndelTilkjentYtelse(
     beløp = beløp,
     fraOgMed = fra,
     tilOgMed = til,
+    stønadstype = stønadstype
 )
 
 private val eksternIdGenerator = Random()

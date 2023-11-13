@@ -44,10 +44,14 @@ class IverksettingService(
         if (featureToggleService.isEnabled(FeatureToggleConfig.STOPP_IVERKSETTING)) {
             error("Kan ikke iverksette akkurat nå")
         }
+
+        val iverksettMedRiktigStønadstype = iverksett.copy(
+            fagsak = iverksett.fagsak.copy(stønadstype = utledStønadstype(iverksett))
+        )
         iverksettingRepository.insert(
             IverksettEntitet(
                 iverksett.behandling.behandlingId,
-                iverksett,
+                iverksettMedRiktigStønadstype,
             ),
         )
 
@@ -145,6 +149,12 @@ class IverksettingService(
 
         return vedtakForSak.isEmpty()
     }
+
+    private fun utledStønadstype(iverksett: Iverksett): StønadType =
+        iverksett.vedtak.tilkjentYtelse?.andelerTilkjentYtelse?.firstOrNull()?.stønadstype
+            ?: hentForrigeIverksett(iverksett)?.vedtak?.tilkjentYtelse?.andelerTilkjentYtelse?.firstOrNull()?.stønadstype
+            ?: StønadTypeDagpenger.DAGPENGER_ARBEIDSSOKER_ORDINAER
+
 
     companion object {
         private val logger = LoggerFactory.getLogger(this::class.java)

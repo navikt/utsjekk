@@ -5,9 +5,12 @@ import java.util.UUID
 import no.nav.dagpenger.iverksett.ServerTest
 import no.nav.dagpenger.iverksett.api.IverksettingService
 import no.nav.dagpenger.iverksett.api.tilstand.IverksettResultatService
+import no.nav.dagpenger.iverksett.infrastruktur.util.opprettAndelTilkjentYtelse
 import no.nav.dagpenger.iverksett.infrastruktur.util.opprettIverksett
+import no.nav.dagpenger.kontrakter.felles.StønadTypeTiltakspenger
 import no.nav.familie.prosessering.internal.TaskService
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -123,6 +126,17 @@ class IverksettMotOppdragIntegrasjonsTest : ServerTest() {
 
         val tilkjentYtelse = iverksettResultatService.hentTilkjentYtelse(opphørBehandlingId)!!
         assertThat(tilkjentYtelse.andelerTilkjentYtelse).hasSize(0)
+    }
+
+    @Test
+    internal fun `iverksett skal persisteres med korrekt stønadstype`() {
+        val iverksett =
+            opprettIverksett(andeler = listOf(opprettAndelTilkjentYtelse(stønadstype = StønadTypeTiltakspenger.TILTAKSPENGER)))
+
+        iverksettingService.startIverksetting(iverksett)
+
+        val iverksettPersistert = iverksettingService.hentIverksetting(iverksett.behandling.behandlingId)
+        assertEquals(StønadTypeTiltakspenger.TILTAKSPENGER, iverksettPersistert?.fagsak?.stønadstype)
     }
 
     private fun iverksettMotOppdrag() {
