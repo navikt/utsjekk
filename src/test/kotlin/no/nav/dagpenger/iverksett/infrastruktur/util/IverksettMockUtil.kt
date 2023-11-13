@@ -3,7 +3,6 @@ package no.nav.dagpenger.iverksett.infrastruktur.util
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.YearMonth
-import java.util.Random
 import java.util.UUID
 import no.nav.dagpenger.iverksett.api.domene.AndelTilkjentYtelse
 import no.nav.dagpenger.iverksett.api.domene.Behandlingsdetaljer
@@ -17,7 +16,6 @@ import no.nav.dagpenger.iverksett.api.domene.Vedtaksdetaljer
 import no.nav.dagpenger.iverksett.api.domene.Vedtaksperiode
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.lagAndelTilkjentYtelse
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.lagUtbetalingDto
-import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene.Behandlingsinformasjon
 import no.nav.dagpenger.kontrakter.felles.Datoperiode
 import no.nav.dagpenger.kontrakter.felles.StønadType
 import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
@@ -79,20 +77,6 @@ fun opprettAndelTilkjentYtelse(
     tilOgMed = til,
     stønadstype = stønadstype
 )
-
-private val eksternIdGenerator = Random()
-
-fun opprettBehandlingsinformasjon(
-    behandlingId: UUID = UUID.randomUUID(),
-): Behandlingsinformasjon {
-    return Behandlingsinformasjon(
-        saksbehandlerId = "saksbehandlerId",
-        fagsakId = UUID.randomUUID(),
-        behandlingId = behandlingId.toString(),
-        personIdent = "12345678910",
-        vedtaksdato = LocalDate.of(2021, 1, 1),
-    )
-}
 
 fun opprettTilkjentYtelse(
     behandlingId: UUID = UUID.randomUUID(),
@@ -187,9 +171,7 @@ fun opprettIverksett(
     )
 }
 
-class IverksettResultatMockBuilder private constructor(
-    val tilkjentYtelse: TilkjentYtelse,
-) {
+class IverksettResultatMockBuilder {
 
     data class Builder(
         var oppdragResultat: OppdragResultat? = null,
