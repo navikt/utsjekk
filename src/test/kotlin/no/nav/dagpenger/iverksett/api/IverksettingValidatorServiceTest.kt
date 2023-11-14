@@ -82,14 +82,15 @@ class IverksettingValidatorServiceTest {
             beløp = 300,
         )
         val nåværendeIverksetting = lagIverksettData(
-            forrigeIverksetting = forrigeIverksetting,
+            forrigeBehandlingId = forrigeIverksetting.behandlingId,
         )
 
         val beregnetUtbetalingsoppdrag = beregnUtbetalingsoppdrag(forrigeIverksetting)
         val forrigeIverksettResultat = IverksettResultat(
             behandlingId = forrigeIverksetting.behandlingId,
-            tilkjentYtelseForUtbetaling = forrigeIverksetting.vedtak.tilkjentYtelse
-                ?.copy(utbetalingsoppdrag = beregnetUtbetalingsoppdrag.utbetalingsoppdrag),
+            tilkjentYtelseForUtbetaling = forrigeIverksetting.vedtak.tilkjentYtelse.copy(
+                utbetalingsoppdrag = beregnetUtbetalingsoppdrag.utbetalingsoppdrag
+            ),
             oppdragResultat = OppdragResultat(OppdragStatus.LAGT_PAA_KOE),
         )
 
@@ -112,11 +113,9 @@ class IverksettingValidatorServiceTest {
 
         return Utbetalingsgenerator.lagUtbetalingsoppdrag(
             behandlingsinformasjon = behandlingsinformasjon,
-            nyeAndeler = iverksettData.vedtak.tilkjentYtelse?.andelerTilkjentYtelse?.map { it.tilAndelData() }
-                ?: emptyList(),
+            nyeAndeler = iverksettData.vedtak.tilkjentYtelse.andelerTilkjentYtelse.map { it.tilAndelData() },
             forrigeAndeler = emptyList(),
-            sisteAndelPerKjede = iverksettData.vedtak.tilkjentYtelse?.sisteAndelPerKjede?.mapValues { it.value.tilAndelData() }
-                ?: emptyMap(),
+            sisteAndelPerKjede = iverksettData.vedtak.tilkjentYtelse.sisteAndelPerKjede.mapValues { it.value.tilAndelData() },
         )
     }
 }

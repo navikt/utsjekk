@@ -3,10 +3,9 @@ package no.nav.dagpenger.iverksett
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.UUID
-import no.nav.dagpenger.iverksett.api.domene.IverksettEntitet
 import no.nav.dagpenger.iverksett.api.domene.Iverksett
+import no.nav.dagpenger.iverksett.api.domene.IverksettEntitet
 import no.nav.dagpenger.iverksett.api.domene.Vedtaksperiode
-import no.nav.dagpenger.iverksett.api.domene.behandlingId
 import no.nav.dagpenger.iverksett.infrastruktur.util.behandlingsdetaljer
 import no.nav.dagpenger.iverksett.infrastruktur.util.opprettIverksett
 import no.nav.dagpenger.iverksett.infrastruktur.util.vedtaksdetaljer
@@ -17,8 +16,7 @@ fun Int.januar(år: Int) = LocalDate.of(år, 1, this)
 fun Int.mai(år: Int) = LocalDate.of(år, 5, this)
 
 fun lagIverksettData(
-    forrigeIverksetting: Iverksett? = null,
-    forrigeBehandlingId: UUID? = forrigeIverksetting?.behandlingId,
+    forrigeBehandlingId: UUID? = null,
     vedtaksresultat: Vedtaksresultat = Vedtaksresultat.INNVILGET,
     vedtaksperioder: List<Vedtaksperiode> = emptyList(),
     andelsdatoer: List<LocalDate> = emptyList(),
