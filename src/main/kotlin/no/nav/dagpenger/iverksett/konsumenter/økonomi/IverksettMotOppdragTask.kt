@@ -80,9 +80,16 @@ class IverksettMotOppdragTask(
             sisteAndelPerKjede = sisteAndelPerKjede,
         )
 
-        iverksett.vedtak.tilkjentYtelse?.let {
-            oppdaterTilkjentYtelseOgIverksettOppdrag(it, beregnetUtbetalingsoppdrag, forrigeIverksettResultat, behandlingId)
-        } ?: log.warn("Iverksetter ikke noe mot oppdrag. Ikke utbetalingsoppdrag. behandlingId=$behandlingId")
+        if (beregnetUtbetalingsoppdrag.utbetalingsoppdrag.utbetalingsperiode.isNotEmpty()) {
+            oppdaterTilkjentYtelseOgIverksettOppdrag(
+                iverksett.vedtak.tilkjentYtelse,
+                beregnetUtbetalingsoppdrag,
+                forrigeIverksettResultat,
+                behandlingId
+            )
+        } else {
+            log.warn("Iverksetter ikke noe mot oppdrag. Ikke utbetalingsoppdrag. behandlingId=$behandlingId")
+        }
     }
 
     private fun oppdaterTilkjentYtelseOgIverksettOppdrag(

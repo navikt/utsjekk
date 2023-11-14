@@ -45,7 +45,7 @@ data class Vedtaksdetaljer(
     val saksbehandlerId: String,
     val beslutterId: String,
     val enhet: String? = null,
-    val tilkjentYtelse: TilkjentYtelse?,
+    val tilkjentYtelse: TilkjentYtelse,
     val vedtaksperioder: List<Vedtaksperiode> = listOf(),
 )
 

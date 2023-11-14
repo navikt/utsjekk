@@ -8,11 +8,11 @@ import no.nav.dagpenger.kontrakter.iverksett.UtbetalingDto
 import no.nav.dagpenger.kontrakter.iverksett.VedtakType
 import no.nav.dagpenger.kontrakter.iverksett.Vedtaksresultat
 
-fun List<UtbetalingDto>.tilTilkjentYtelse(): TilkjentYtelse? {
+fun List<UtbetalingDto>.tilTilkjentYtelse(): TilkjentYtelse {
     val andeler = this.sammenslått().map { it.toDomain() }
 
     return when (andeler.size) {
-        0 -> null
+        0 -> tomTilkjentYtelse()
         else -> TilkjentYtelse(andelerTilkjentYtelse = andeler)
     }
 }
@@ -46,7 +46,7 @@ fun ForrigeIverksettingDto.tilVedtaksdetaljer(): Vedtaksdetaljer {
         vedtakstidspunkt = LocalDateTime.now(),
         saksbehandlerId = "A123456",
         beslutterId = "B123456",
-        tilkjentYtelse = null,
+        tilkjentYtelse = tomTilkjentYtelse(),
     )
 }
 
