@@ -154,7 +154,6 @@ fun opprettIverksett(
     behandlingId: UUID = UUID.randomUUID(),
     forrigeBehandlingId: UUID? = null,
     andeler: List<AndelTilkjentYtelse> = listOf(opprettAndelTilkjentYtelse()),
-    forrigeIverksetting: Iverksett? = null,
     fagsakId: UUID = UUID.randomUUID(),
 ): Iverksett {
     return Iverksett(
@@ -167,7 +166,7 @@ fun opprettIverksett(
             vedtaksresultat = Vedtaksresultat.INNVILGET,
             andeler = andeler,
         ),
-        forrigeIverksetting = forrigeIverksetting,
+        forrigeIverksettingBehandlingId = forrigeBehandlingId,
     )
 }
 

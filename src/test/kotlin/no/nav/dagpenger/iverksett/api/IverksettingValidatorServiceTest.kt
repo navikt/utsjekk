@@ -53,7 +53,7 @@ class IverksettingValidatorServiceTest {
         val iverksettingTmp = lagIverksettData()
         val nåværendeIverksetting = iverksettingTmp.copy(
             fagsak = forrigeIverksetting.fagsak,
-            forrigeIverksetting = forrigeIverksetting,
+            forrigeIverksettingBehandlingId = forrigeIverksetting.behandlingId,
             søker = iverksettingTmp.søker.copy(personIdent = "12345678911"),
         )
         every { iverksettingServiceMock.hentForrigeIverksett(nåværendeIverksetting) } returns forrigeIverksetting

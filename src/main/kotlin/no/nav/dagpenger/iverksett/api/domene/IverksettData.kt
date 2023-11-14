@@ -16,7 +16,7 @@ data class Iverksett(
     val behandling: Behandlingsdetaljer,
     val søker: Søker,
     val vedtak: Vedtaksdetaljer,
-    val forrigeIverksetting: Iverksett? = null,
+    val forrigeIverksettingBehandlingId: UUID? = null,
 )
 
 data class Fagsakdetaljer(

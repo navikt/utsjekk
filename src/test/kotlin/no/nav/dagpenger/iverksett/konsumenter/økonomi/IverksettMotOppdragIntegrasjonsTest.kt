@@ -65,7 +65,6 @@ class IverksettMotOppdragIntegrasjonsTest : ServerTest() {
                     tilOgMed = LocalDate.now().plusMonths(1),
                 ),
             ),
-            forrigeIverksetting = iverksett,
         )
 
         taskService.deleteAll(taskService.findAll())
@@ -95,7 +94,6 @@ class IverksettMotOppdragIntegrasjonsTest : ServerTest() {
                     tilOgMed = LocalDate.now().plusMonths(1),
                 ),
             ),
-            forrigeIverksetting = iverksett,
         )
 
         taskService.deleteAll(taskService.findAll())
@@ -117,7 +115,6 @@ class IverksettMotOppdragIntegrasjonsTest : ServerTest() {
                 opphørBehandlingId,
                 behandlingid,
                 emptyList(),
-                forrigeIverksetting = iverksett,
             )
 
         taskService.deleteAll(taskService.findAll())
