@@ -16,6 +16,7 @@ import no.nav.dagpenger.iverksett.api.domene.Vedtaksdetaljer
 import no.nav.dagpenger.iverksett.api.domene.Vedtaksperiode
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.lagAndelTilkjentYtelse
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.lagUtbetalingDto
+import no.nav.dagpenger.kontrakter.felles.BrukersNavKontor
 import no.nav.dagpenger.kontrakter.felles.Datoperiode
 import no.nav.dagpenger.kontrakter.felles.StønadType
 import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
@@ -36,7 +37,7 @@ fun opprettIverksettDto(
     stønadType: StønadType = StønadTypeDagpenger.DAGPENGER_ARBEIDSSOKER_ORDINAER,
     ferietillegg: Ferietillegg? = null,
     vedtaksperioder: List<VedtaksperiodeDto> = emptyList(),
-    enhet: String? = null,
+    brukersNavKontor: BrukersNavKontor? = null,
 ): IverksettDto {
     val andelTilkjentYtelse = lagUtbetalingDto(
         beløp = andelsbeløp,
@@ -58,7 +59,7 @@ fun opprettIverksettDto(
             vedtakstidspunkt = LocalDateTime.of(2021, 5, 12, 0, 0),
             saksbehandlerId = "A12345",
             beslutterId = "B23456",
-            enhet = enhet,
+            brukersNavKontor = brukersNavKontor,
             utbetalinger = tilkjentYtelse.utbetalinger,
             vedtaksperioder = vedtaksperioder,
             vedtakstype = VedtakType.RAMMEVEDTAK

@@ -3,6 +3,7 @@ package no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domen
 import no.nav.dagpenger.kontrakter.felles.SakIdentifikator
 import java.time.LocalDate
 import java.util.UUID
+import no.nav.dagpenger.kontrakter.felles.BrukersNavKontor
 
 /**
  * @param opphørFra Kan brukes når man ønsker å oppøre bak i tiden, før man selv var master,
@@ -18,7 +19,7 @@ data class Behandlingsinformasjon(
     val behandlingId: String,
     val personIdent: String,
     val vedtaksdato: LocalDate,
-    val enhet: String? = null,
+    val brukersNavKontor: BrukersNavKontor? = null,
     val erGOmregning: Boolean = false,
 ) {
     init {

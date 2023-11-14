@@ -3,6 +3,7 @@ package no.nav.dagpenger.iverksett.api.domene
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.UUID
+import no.nav.dagpenger.kontrakter.felles.BrukersNavKontor
 import no.nav.dagpenger.kontrakter.felles.Datoperiode
 import no.nav.dagpenger.kontrakter.felles.SakIdentifikator
 import no.nav.dagpenger.kontrakter.felles.StønadType
@@ -44,7 +45,7 @@ data class Vedtaksdetaljer(
     val vedtakstidspunkt: LocalDateTime,
     val saksbehandlerId: String,
     val beslutterId: String,
-    val enhet: String? = null,
+    val brukersNavKontor: BrukersNavKontor? = null,
     val tilkjentYtelse: TilkjentYtelse,
     val vedtaksperioder: List<Vedtaksperiode> = listOf(),
 )

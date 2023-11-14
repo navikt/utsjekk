@@ -1,7 +1,7 @@
 package no.nav.dagpenger.iverksett.api
 
 import java.time.LocalDate
-import no.nav.dagpenger.iverksett.api.IverksettDtoValidator.enhetErSattForTiltakspenger
+import no.nav.dagpenger.iverksett.api.IverksettDtoValidator.brukersNavKontorErSattForTiltakspenger
 import no.nav.dagpenger.iverksett.api.IverksettDtoValidator.fraOgMedKommerFørTilOgMedIUtbetalingsperioder
 import no.nav.dagpenger.iverksett.api.IverksettDtoValidator.ingenUtbetalingsperioderHarStønadstypeEØSOgFerietilleggTilAvdød
 import no.nav.dagpenger.iverksett.api.IverksettDtoValidator.utbetalingerHarIngenBeløpOverMaksgrense
@@ -10,6 +10,7 @@ import no.nav.dagpenger.iverksett.api.IverksettDtoValidator.utbetalingsperioderO
 import no.nav.dagpenger.iverksett.infrastruktur.advice.ApiFeil
 import no.nav.dagpenger.iverksett.infrastruktur.util.opprettIverksettDto
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.lagUtbetalingDto
+import no.nav.dagpenger.kontrakter.felles.BrukersNavKontor
 import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
 import no.nav.dagpenger.kontrakter.felles.StønadTypeTiltakspenger
 import no.nav.dagpenger.kontrakter.iverksett.Ferietillegg
@@ -103,20 +104,23 @@ class IverksettDtoValidatorTest {
     }
 
     @Test
-    fun `Skal få BAD_REQUEST når enhet ikke er satt for tiltakspenger`() {
+    fun `Skal få BAD_REQUEST når brukers NAV-kontor ikke er satt for tiltakspenger`() {
         val iverksettDto = opprettIverksettDto(stønadType = StønadTypeTiltakspenger.TILTAKSPENGER)
 
         assertApiFeil(HttpStatus.BAD_REQUEST) {
-            enhetErSattForTiltakspenger(iverksettDto)
+            brukersNavKontorErSattForTiltakspenger(iverksettDto)
         }
     }
 
     @Test
-    fun `Skal få OK når enhet er satt for tiltakspenger`() {
-        val iverksettDto = opprettIverksettDto(stønadType = StønadTypeTiltakspenger.TILTAKSPENGER, enhet = "4444")
+    fun `Skal få OK når brukers NAV-kontor er satt for tiltakspenger`() {
+        val iverksettDto = opprettIverksettDto(
+            stønadType = StønadTypeTiltakspenger.TILTAKSPENGER,
+            brukersNavKontor = BrukersNavKontor("4444", LocalDate.now())
+        )
 
         assertDoesNotThrow {
-            enhetErSattForTiltakspenger(iverksettDto)
+            brukersNavKontorErSattForTiltakspenger(iverksettDto)
         }
     }
 }

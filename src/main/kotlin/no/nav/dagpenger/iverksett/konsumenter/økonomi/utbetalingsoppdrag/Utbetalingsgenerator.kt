@@ -66,7 +66,7 @@ object Utbetalingsgenerator {
             fagSystem = fagsystem,
             saksreferanse = behandlingsinformasjon.saksreferanse,
             aktoer = behandlingsinformasjon.personIdent,
-            enhet = behandlingsinformasjon.enhet,
+            brukersNavKontor = behandlingsinformasjon.brukersNavKontor,
             utbetalingsperiode = utbetalingsperioder(behandlingsinformasjon, nyeKjeder),
             gOmregning = behandlingsinformasjon.erGOmregning,
         )

@@ -27,7 +27,7 @@ fun VedtaksdetaljerDto.toDomain(): Vedtaksdetaljer {
         vedtakstidspunkt = this.vedtakstidspunkt,
         saksbehandlerId = this.saksbehandlerId,
         beslutterId = this.beslutterId,
-        enhet = this.enhet,
+        brukersNavKontor = this.brukersNavKontor,
         tilkjentYtelse = this.utbetalinger.tilTilkjentYtelse(),
         vedtaksperioder = this.vedtaksperioder.map { it.toDomain() }
     )

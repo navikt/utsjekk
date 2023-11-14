@@ -15,7 +15,7 @@ object IverksettDtoValidator {
         utbetalingerHarKunPositiveBeløp(this)
         utbetalingerHarIngenBeløpOverMaksgrense(this)
         ingenUtbetalingsperioderHarStønadstypeEØSOgFerietilleggTilAvdød(this)
-        enhetErSattForTiltakspenger(this)
+        brukersNavKontorErSattForTiltakspenger(this)
     }
 
     internal fun fraOgMedKommerFørTilOgMedIUtbetalingsperioder(iverksettDto: IverksettDto) {
@@ -94,12 +94,12 @@ object IverksettDtoValidator {
         }
     }
 
-    internal fun enhetErSattForTiltakspenger(iverksettDto: IverksettDto) {
+    internal fun brukersNavKontorErSattForTiltakspenger(iverksettDto: IverksettDto) {
         val stønadstype = iverksettDto.vedtak.utbetalinger.firstOrNull()?.stonadstype
 
-        if (stønadstype is StønadTypeTiltakspenger && iverksettDto.vedtak.enhet == null) {
+        if (stønadstype is StønadTypeTiltakspenger && iverksettDto.vedtak.brukersNavKontor == null) {
             throw ApiFeil(
-                "Enhet må være satt på vedtaket for tiltakspenger",
+                "Brukers NAV-kontor må være satt på vedtaket for tiltakspenger",
                 HttpStatus.BAD_REQUEST,
             )
         }
