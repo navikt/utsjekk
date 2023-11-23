@@ -12,9 +12,6 @@ import java.util.UUID
 @Repository
 interface IverksettingRepository : RepositoryInterface<IverksettingEntitet, UUID>, InsertUpdateRepository<IverksettingEntitet> {
 
-    @Query("SELECT behandling_id from iverksett")
-    fun finnAlleIder(): List<UUID>
-
     @Query("select behandling_id, data from iverksett where data -> 'søker' ->> 'personIdent' = :personId")
     fun findByPersonId(@Param("personId") personId: String): List<IverksettingEntitet>
 

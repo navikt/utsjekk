@@ -151,7 +151,7 @@ class IverksettingService(
     }
 
     private fun utledStønadstype(iverksetting: Iverksetting): StønadType =
-        iverksetting.vedtak.tilkjentYtelse?.andelerTilkjentYtelse?.firstOrNull()?.stønadstype
+        iverksetting.vedtak.tilkjentYtelse.andelerTilkjentYtelse.firstOrNull()?.stønadstype
             ?: hentForrigeIverksett(iverksetting)?.vedtak?.tilkjentYtelse?.andelerTilkjentYtelse?.firstOrNull()?.stønadstype
             ?: StønadTypeDagpenger.DAGPENGER_ARBEIDSSOKER_ORDINAER
 

@@ -88,7 +88,7 @@ class IverksettingRepositoryTest : ServerTest() {
 
         val iverksett = iverksettingRepository.insert(lagIverksettingEntitet(iverksettingData))
 
-        val iverksettListe2 = iverksettingRepository.findByFagsakId(iverksettingData.fagsak.fagsakId!!)
+        val iverksettListe2 = iverksettingRepository.findByFagsakId(iverksettingData.fagsak.fagsakId)
         assertEquals(1, iverksettListe2.size)
         assertThat(iverksett).usingRecursiveComparison().isEqualTo(iverksettListe2[0])
     }
@@ -103,7 +103,7 @@ class IverksettingRepositoryTest : ServerTest() {
 
         val iverksett = iverksettingRepository.insert(lagIverksettingEntitet(iverksettingData))
 
-        val iverksettListe2 = iverksettingRepository.findBySaksreferanse(iverksettingData.fagsak.saksreferanse!!)
+        val iverksettListe2 = iverksettingRepository.findBySaksreferanse(iverksettingData.fagsak.saksreferanse)
         assertEquals(1, iverksettListe2.size)
         assertThat(iverksett).usingRecursiveComparison().isEqualTo(iverksettListe2[0])
     }
