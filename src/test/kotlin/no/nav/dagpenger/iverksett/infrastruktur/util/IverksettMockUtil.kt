@@ -8,7 +8,7 @@ import no.nav.dagpenger.iverksett.api.domene.AndelTilkjentYtelse
 import no.nav.dagpenger.iverksett.api.domene.Behandlingsdetaljer
 import no.nav.dagpenger.iverksett.api.domene.Fagsakdetaljer
 import no.nav.dagpenger.iverksett.api.domene.Iverksetting
-import no.nav.dagpenger.iverksett.api.domene.IverksettResultat
+import no.nav.dagpenger.iverksett.api.domene.Iverksettingsresultat
 import no.nav.dagpenger.iverksett.api.domene.OppdragResultat
 import no.nav.dagpenger.iverksett.api.domene.Søker
 import no.nav.dagpenger.iverksett.api.domene.TilkjentYtelse
@@ -180,7 +180,7 @@ class IverksettResultatMockBuilder {
         fun oppdragResultat(oppdragResultat: OppdragResultat) = apply { this.oppdragResultat = oppdragResultat }
 
         fun build(behandlingId: UUID, tilkjentYtelse: TilkjentYtelse?) =
-            IverksettResultat(
+            Iverksettingsresultat(
                 behandlingId,
                 tilkjentYtelse,
                 oppdragResultat,

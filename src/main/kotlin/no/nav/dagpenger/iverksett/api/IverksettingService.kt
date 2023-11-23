@@ -7,7 +7,7 @@ import java.util.UUID
 import no.nav.dagpenger.iverksett.api.domene.IverksettingEntitet
 import no.nav.dagpenger.iverksett.api.domene.Iverksetting
 import no.nav.dagpenger.iverksett.api.domene.OppdragResultat
-import no.nav.dagpenger.iverksett.api.tilstand.IverksettResultatService
+import no.nav.dagpenger.iverksett.api.tilstand.IverksettingsresultatService
 import no.nav.dagpenger.iverksett.infrastruktur.configuration.FeatureToggleConfig
 import no.nav.dagpenger.iverksett.infrastruktur.featuretoggle.FeatureToggleService
 import no.nav.dagpenger.iverksett.konsumenter.hovedflyt
@@ -35,7 +35,7 @@ class IverksettingService(
     val taskService: TaskService,
     val oppdragClient: OppdragClient,
     val iverksettingRepository: IverksettingRepository,
-    val iverksettResultatService: IverksettResultatService,
+    val iverksettingsresultatService: IverksettingsresultatService,
     val featureToggleService: FeatureToggleService,
 ) {
 
@@ -55,7 +55,7 @@ class IverksettingService(
             ),
         )
 
-        iverksettResultatService.opprettTomtResultat(iverksetting.behandling.behandlingId)
+        iverksettingsresultatService.opprettTomtResultat(iverksetting.behandling.behandlingId)
 
         taskService.save(
             Task(
@@ -86,7 +86,7 @@ class IverksettingService(
     private fun førsteHovedflytTask() = hovedflyt().first().type
 
     fun utledStatus(behandlingId: UUID): IverksettStatus? {
-        val iverksettResultat = iverksettResultatService.hentIverksettResultat(behandlingId)
+        val iverksettResultat = iverksettingsresultatService.hentIverksettResultat(behandlingId)
         return iverksettResultat?.let {
             it.oppdragResultat?.let { oppdragResultat ->
                 return when (oppdragResultat.oppdragStatus) {
@@ -122,7 +122,7 @@ class IverksettingService(
             throw TaskExceptionUtenStackTrace("Status fra oppdrag er ikke ok, status=$status melding=$melding")
         }
 
-        iverksettResultatService.oppdaterOppdragResultat(
+        iverksettingsresultatService.oppdaterOppdragResultat(
             behandlingId = behandlingId,
             OppdragResultat(oppdragStatus = status),
         )

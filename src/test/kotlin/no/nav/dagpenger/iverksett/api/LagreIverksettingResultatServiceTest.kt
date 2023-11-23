@@ -3,7 +3,7 @@ package no.nav.dagpenger.iverksett.api
 import java.util.UUID
 import no.nav.dagpenger.iverksett.ServerTest
 import no.nav.dagpenger.iverksett.api.domene.OppdragResultat
-import no.nav.dagpenger.iverksett.api.tilstand.IverksettResultatService
+import no.nav.dagpenger.iverksett.api.tilstand.IverksettingsresultatService
 import no.nav.dagpenger.iverksett.infrastruktur.util.opprettTilkjentYtelse
 import no.nav.dagpenger.kontrakter.oppdrag.OppdragStatus
 import org.junit.jupiter.api.BeforeEach
@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired
 internal class LagreIverksettingResultatServiceTest : ServerTest() {
 
     @Autowired
-    private lateinit var tilstandRepositoryService: IverksettResultatService
+    private lateinit var tilstandRepositoryService: IverksettingsresultatService
 
     private val behandlingsId: UUID = UUID.randomUUID()
 

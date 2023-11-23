@@ -4,7 +4,7 @@ import java.util.UUID
 import no.nav.dagpenger.iverksett.api.IverksettingRepository
 import no.nav.dagpenger.iverksett.api.IverksettingService
 import no.nav.dagpenger.iverksett.api.domene.TilkjentYtelse
-import no.nav.dagpenger.iverksett.api.tilstand.IverksettResultatService
+import no.nav.dagpenger.iverksett.api.tilstand.IverksettingsresultatService
 import no.nav.dagpenger.iverksett.infrastruktur.repository.findByIdOrThrow
 import no.nav.familie.prosessering.AsyncTaskStep
 import no.nav.familie.prosessering.TaskStepBeskrivelse
@@ -23,7 +23,7 @@ import org.springframework.stereotype.Service
 class VentePåStatusFraØkonomiTask(
     private val iverksettingRepository: IverksettingRepository,
     private val iverksettingService: IverksettingService,
-    private val iverksettResultatService: IverksettResultatService,
+    private val iverksettingsresultatService: IverksettingsresultatService,
 ) : AsyncTaskStep {
 
     private val logger = LoggerFactory.getLogger(javaClass)
@@ -31,7 +31,7 @@ class VentePåStatusFraØkonomiTask(
     override fun doTask(task: Task) {
         val behandlingId = UUID.fromString(task.payload)
         val iverksett = iverksettingRepository.findByIdOrThrow(behandlingId).data
-        val tilkjentYtelse = iverksettResultatService.hentTilkjentYtelse(behandlingId)
+        val tilkjentYtelse = iverksettingsresultatService.hentTilkjentYtelse(behandlingId)
 
         if (tilkjentYtelse.harIngenUtbetaling()) {
             logger.info("Iverksetting har ikke utbetalingsoppdrag. Sjekker ikke status fra OS/UR")

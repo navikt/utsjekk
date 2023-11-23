@@ -9,10 +9,10 @@ import io.mockk.verify
 import java.util.Properties
 import java.util.UUID
 import no.nav.dagpenger.iverksett.api.IverksettingService
-import no.nav.dagpenger.iverksett.api.domene.IverksettResultat
+import no.nav.dagpenger.iverksett.api.domene.Iverksettingsresultat
 import no.nav.dagpenger.iverksett.api.domene.OppdragResultat
 import no.nav.dagpenger.iverksett.api.domene.TilkjentYtelse
-import no.nav.dagpenger.iverksett.api.tilstand.IverksettResultatService
+import no.nav.dagpenger.iverksett.api.tilstand.IverksettingsresultatService
 import no.nav.dagpenger.iverksett.infrastruktur.transformer.toDomain
 import no.nav.dagpenger.iverksett.infrastruktur.util.opprettIverksettDto
 import no.nav.dagpenger.kontrakter.felles.Fagsystem
@@ -32,7 +32,7 @@ internal class IverksettingMotOppdragTaskTest {
     private val oppdragClient = mockk<OppdragClient>()
     val taskService = mockk<TaskService>()
     val iverksettingService = mockk<IverksettingService>()
-    val iverksettResultatService = mockk<IverksettResultatService>()
+    val iverksettingsresultatService = mockk<IverksettingsresultatService>()
     val behandlingId: UUID = UUID.randomUUID()
     val sakId: UUID = UUID.randomUUID()
     private val iverksettMotOppdragTask =
@@ -40,7 +40,7 @@ internal class IverksettingMotOppdragTaskTest {
             iverksettingService = iverksettingService,
             oppdragClient = oppdragClient,
             taskService = taskService,
-            iverksettResultatService = iverksettResultatService,
+            iverksettingsresultatService = iverksettingsresultatService,
         )
 
     @Test
@@ -51,13 +51,13 @@ internal class IverksettingMotOppdragTaskTest {
             sakId
         ).toDomain()
         every { oppdragClient.iverksettOppdrag(capture(oppdragSlot)) } returns "abc"
-        every { iverksettResultatService.oppdaterTilkjentYtelseForUtbetaling(behandlingId, any()) } returns Unit
-        every { iverksettResultatService.hentTilkjentYtelse(any<UUID>()) } returns null
+        every { iverksettingsresultatService.oppdaterTilkjentYtelseForUtbetaling(behandlingId, any()) } returns Unit
+        every { iverksettingsresultatService.hentTilkjentYtelse(any<UUID>()) } returns null
 
         iverksettMotOppdragTask.doTask(Task(IverksettMotOppdragTask.TYPE, behandlingId.toString(), Properties()))
 
         verify(exactly = 1) { oppdragClient.iverksettOppdrag(any()) }
-        verify(exactly = 1) { iverksettResultatService.oppdaterTilkjentYtelseForUtbetaling(behandlingId, any()) }
+        verify(exactly = 1) { iverksettingsresultatService.oppdaterTilkjentYtelseForUtbetaling(behandlingId, any()) }
 
         assertThat(oppdragSlot.captured.fagSystem).isEqualTo(Fagsystem.Dagpenger)
         assertThat(oppdragSlot.captured.kodeEndring).isEqualTo(Utbetalingsoppdrag.KodeEndring.NY)
@@ -68,13 +68,13 @@ internal class IverksettingMotOppdragTaskTest {
         val oppdragSlot = slot<Utbetalingsoppdrag>()
         every { iverksettingService.hentIverksetting(any()) } returns opphørAvUtbetaling().toDomain()
         every { oppdragClient.iverksettOppdrag(capture(oppdragSlot)) } returns "abc"
-        every { iverksettResultatService.hentIverksettResultat(any()) } returns iverksettResultat()
-        every { iverksettResultatService.oppdaterTilkjentYtelseForUtbetaling(any(), any()) } just Runs
+        every { iverksettingsresultatService.hentIverksettResultat(any()) } returns iverksettResultat()
+        every { iverksettingsresultatService.oppdaterTilkjentYtelseForUtbetaling(any(), any()) } just Runs
 
         iverksettMotOppdragTask.doTask(Task(IverksettMotOppdragTask.TYPE, behandlingId.toString(), Properties()))
 
         verify(exactly = 1) { oppdragClient.iverksettOppdrag(any()) }
-        verify(exactly = 1) { iverksettResultatService.oppdaterTilkjentYtelseForUtbetaling(behandlingId, any()) }
+        verify(exactly = 1) { iverksettingsresultatService.oppdaterTilkjentYtelseForUtbetaling(behandlingId, any()) }
 
         assertEquals(Utbetalingsoppdrag.KodeEndring.ENDR, oppdragSlot.captured.kodeEndring)
         assertEquals(1, oppdragSlot.captured.utbetalingsperiode.size)
@@ -113,10 +113,10 @@ internal class IverksettingMotOppdragTaskTest {
         return tomUtbetaling().copy(forrigeIverksetting = ForrigeIverksettingDto(behandlingId = behandlingId))
     }
 
-    private fun iverksettResultat(): IverksettResultat {
+    private fun iverksettResultat(): Iverksettingsresultat {
         val iverksett = opprettIverksettDto(behandlingId, sakId).toDomain()
         val sisteAndelIKjede = iverksett.vedtak.tilkjentYtelse.andelerTilkjentYtelse.first().copy(periodeId = 0)
-        return IverksettResultat(
+        return Iverksettingsresultat(
             behandlingId = behandlingId,
             tilkjentYtelseForUtbetaling = TilkjentYtelse(
                 andelerTilkjentYtelse = listOf(

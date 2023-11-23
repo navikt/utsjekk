@@ -6,7 +6,7 @@ import io.mockk.mockkObject
 import io.mockk.unmockkObject
 import no.nav.dagpenger.iverksett.api.tilgangskontroll.IverksettingTilgangskontrollService
 import no.nav.dagpenger.iverksett.api.tilgangskontroll.TokenContext
-import no.nav.dagpenger.iverksett.api.tilstand.IverksettResultatService
+import no.nav.dagpenger.iverksett.api.tilstand.IverksettingsresultatService
 import no.nav.dagpenger.iverksett.infrastruktur.featuretoggle.FeatureToggleService
 import no.nav.dagpenger.iverksett.infrastruktur.util.opprettIverksettDto
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.OppdragClient
@@ -27,7 +27,7 @@ class IverksettingTilgangskontrollServiceTest {
     private val featureToggleServiceMock = mockk<FeatureToggleService>()
     private val iverksettingServiceMock = IverksettingService(
         taskService = mockk<TaskService>(),
-        iverksettResultatService = mockk<IverksettResultatService>(),
+        iverksettingsresultatService = mockk<IverksettingsresultatService>(),
         iverksettingRepository = iverksettingRepository,
         oppdragClient = mockk<OppdragClient>(),
         featureToggleService = mockFeatureToggleService(),

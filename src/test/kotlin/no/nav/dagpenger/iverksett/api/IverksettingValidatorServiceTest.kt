@@ -3,13 +3,13 @@ package no.nav.dagpenger.iverksett.api
 import io.mockk.every
 import io.mockk.mockk
 import no.nav.dagpenger.iverksett.api.domene.Iverksetting
-import no.nav.dagpenger.iverksett.api.domene.IverksettResultat
+import no.nav.dagpenger.iverksett.api.domene.Iverksettingsresultat
 import no.nav.dagpenger.iverksett.api.domene.OppdragResultat
 import no.nav.dagpenger.iverksett.api.domene.behandlingId
 import no.nav.dagpenger.iverksett.api.domene.personIdent
 import no.nav.dagpenger.iverksett.api.domene.sakId
 import no.nav.dagpenger.iverksett.api.domene.tilAndelData
-import no.nav.dagpenger.iverksett.api.tilstand.IverksettResultatService
+import no.nav.dagpenger.iverksett.api.tilstand.IverksettingsresultatService
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.Utbetalingsgenerator
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene.Behandlingsinformasjon
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene.BeregnetUtbetalingsoppdrag
@@ -22,14 +22,14 @@ import org.springframework.http.HttpStatus
 
 class IverksettingValidatorServiceTest {
 
-    private val iverksettResultatServiceMock = mockk<IverksettResultatService>()
+    private val iverksettingsresultatServiceMock = mockk<IverksettingsresultatService>()
     private val iverksettingServiceMock = mockk<IverksettingService>()
     private lateinit var iverksettingValidatorService: IverksettingValidatorService
 
     @BeforeEach
     fun setup() {
         iverksettingValidatorService = IverksettingValidatorService(
-            iverksettResultatServiceMock,
+            iverksettingsresultatServiceMock,
             iverksettingServiceMock,
         )
     }
@@ -86,7 +86,7 @@ class IverksettingValidatorServiceTest {
         )
 
         val beregnetUtbetalingsoppdrag = beregnUtbetalingsoppdrag(forrigeIverksetting)
-        val forrigeIverksettResultat = IverksettResultat(
+        val forrigeIverksettingsresultat = Iverksettingsresultat(
             behandlingId = forrigeIverksetting.behandlingId,
             tilkjentYtelseForUtbetaling = forrigeIverksetting.vedtak.tilkjentYtelse.copy(
                 utbetalingsoppdrag = beregnetUtbetalingsoppdrag.utbetalingsoppdrag
@@ -94,7 +94,7 @@ class IverksettingValidatorServiceTest {
             oppdragResultat = OppdragResultat(OppdragStatus.LAGT_PAA_KOE),
         )
 
-        every { iverksettResultatServiceMock.hentIverksettResultat(forrigeIverksettResultat.behandlingId) } returns forrigeIverksettResultat
+        every { iverksettingsresultatServiceMock.hentIverksettResultat(forrigeIverksettingsresultat.behandlingId) } returns forrigeIverksettingsresultat
 
         assertApiFeil(HttpStatus.CONFLICT) {
             iverksettingValidatorService.validerAtForrigeBehandlingErFerdigIverksattMotOppdrag(nåværendeIverksetting)

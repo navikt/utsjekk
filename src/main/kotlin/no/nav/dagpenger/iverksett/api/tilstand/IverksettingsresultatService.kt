@@ -1,7 +1,7 @@
 package no.nav.dagpenger.iverksett.api.tilstand
 
 import java.util.UUID
-import no.nav.dagpenger.iverksett.api.domene.IverksettResultat
+import no.nav.dagpenger.iverksett.api.domene.Iverksettingsresultat
 import no.nav.dagpenger.iverksett.api.domene.OppdragResultat
 import no.nav.dagpenger.iverksett.api.domene.TilkjentYtelse
 import no.nav.dagpenger.iverksett.infrastruktur.repository.findByIdOrThrow
@@ -11,29 +11,29 @@ import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-class IverksettResultatService(private val iverksettResultatRepository: IverksettResultatRepository) {
+class IverksettingsresultatService(private val iverksettingsresultatRepository: IverksettingsresultatRepository) {
 
     fun opprettTomtResultat(behandlingId: UUID) {
-        iverksettResultatRepository.insert(IverksettResultat(behandlingId))
+        iverksettingsresultatRepository.insert(Iverksettingsresultat(behandlingId))
     }
 
     fun oppdaterTilkjentYtelseForUtbetaling(behandlingId: UUID, tilkjentYtelseForUtbetaling: TilkjentYtelse) {
-        val iverksettResultat = iverksettResultatRepository.findByIdOrThrow(behandlingId)
-        iverksettResultatRepository.update(iverksettResultat.copy(tilkjentYtelseForUtbetaling = tilkjentYtelseForUtbetaling))
+        val iverksettResultat = iverksettingsresultatRepository.findByIdOrThrow(behandlingId)
+        iverksettingsresultatRepository.update(iverksettResultat.copy(tilkjentYtelseForUtbetaling = tilkjentYtelseForUtbetaling))
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     fun oppdaterOppdragResultat(behandlingId: UUID, oppdragResultat: OppdragResultat) {
-        val iverksettResultat = iverksettResultatRepository.findByIdOrThrow(behandlingId)
-        iverksettResultatRepository.update(iverksettResultat.copy(oppdragResultat = oppdragResultat))
+        val iverksettResultat = iverksettingsresultatRepository.findByIdOrThrow(behandlingId)
+        iverksettingsresultatRepository.update(iverksettResultat.copy(oppdragResultat = oppdragResultat))
     }
 
     fun hentTilkjentYtelse(behandlingId: UUID): TilkjentYtelse? {
-        return iverksettResultatRepository.findByIdOrNull(behandlingId)?.tilkjentYtelseForUtbetaling
+        return iverksettingsresultatRepository.findByIdOrNull(behandlingId)?.tilkjentYtelseForUtbetaling
     }
 
     fun hentTilkjentYtelse(behandlingId: Set<UUID>): Map<UUID, TilkjentYtelse> {
-        val iverksettResultater = iverksettResultatRepository.findAllById(behandlingId)
+        val iverksettResultater = iverksettingsresultatRepository.findAllById(behandlingId)
         val tilkjenteYtelser = iverksettResultater.filter { it.tilkjentYtelseForUtbetaling != null }
             .associate { it.behandlingId to it.tilkjentYtelseForUtbetaling!! }
         if (behandlingId.size > tilkjenteYtelser.size) {
@@ -42,7 +42,7 @@ class IverksettResultatService(private val iverksettResultatRepository: Iverkset
         return tilkjenteYtelser
     }
 
-    fun hentIverksettResultat(behandlingId: UUID): IverksettResultat? {
-        return iverksettResultatRepository.findByIdOrNull(behandlingId)
+    fun hentIverksettResultat(behandlingId: UUID): Iverksettingsresultat? {
+        return iverksettingsresultatRepository.findByIdOrNull(behandlingId)
     }
 }

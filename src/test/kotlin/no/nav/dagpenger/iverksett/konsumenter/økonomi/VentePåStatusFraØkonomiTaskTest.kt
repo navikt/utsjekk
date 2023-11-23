@@ -15,7 +15,7 @@ import no.nav.dagpenger.iverksett.api.IverksettingRepository
 import no.nav.dagpenger.iverksett.api.IverksettingService
 import no.nav.dagpenger.iverksett.api.domene.OppdragResultat
 import no.nav.dagpenger.iverksett.api.domene.TilkjentYtelse
-import no.nav.dagpenger.iverksett.api.tilstand.IverksettResultatService
+import no.nav.dagpenger.iverksett.api.tilstand.IverksettingsresultatService
 import no.nav.dagpenger.iverksett.infrastruktur.repository.findByIdOrThrow
 import no.nav.dagpenger.iverksett.infrastruktur.transformer.toDomain
 import no.nav.dagpenger.iverksett.infrastruktur.util.opprettIverksettDto
@@ -37,14 +37,14 @@ internal class VentePåStatusFraØkonomiTaskTest {
     private val oppdragClient = mockk<OppdragClient>()
     private val iverksettingRepository = mockk<IverksettingRepository>()
     private val taskService = mockk<TaskService>()
-    private val iverksettResultatService = mockk<IverksettResultatService>()
+    private val iverksettingsresultatService = mockk<IverksettingsresultatService>()
     private val behandlingId: UUID = UUID.randomUUID()
     private val sakId: UUID = UUID.randomUUID()
     private val iverksettingService = IverksettingService(
         taskService = taskService,
         oppdragClient = oppdragClient,
         iverksettingRepository = iverksettingRepository,
-        iverksettResultatService = iverksettResultatService,
+        iverksettingsresultatService = iverksettingsresultatService,
         featureToggleService = mockFeatureToggleService(),
     )
 
@@ -52,21 +52,21 @@ internal class VentePåStatusFraØkonomiTaskTest {
         VentePåStatusFraØkonomiTask(
             iverksettingRepository,
             iverksettingService,
-            iverksettResultatService,
+            iverksettingsresultatService,
         )
 
     @BeforeEach
     internal fun setUp() {
         every { oppdragClient.hentStatus(any()) } returns OppdragStatusMedMelding(OppdragStatus.KVITTERT_OK, "OK")
         every { iverksettingRepository.findByIdOrThrow(any()) } returns lagIverksettingEntitet(opprettIverksettDto(behandlingId, sakId).toDomain())
-        every { iverksettResultatService.oppdaterOppdragResultat(behandlingId, any()) } just runs
+        every { iverksettingsresultatService.oppdaterOppdragResultat(behandlingId, any()) } just runs
         every { taskService.save(any()) } answers { firstArg() }
     }
 
     @Test
     internal fun `kjør doTask for VentePåStatusFraØkonomiTask, forvent ingen unntak`() {
         val oppdragResultatSlot = slot<OppdragResultat>()
-        every { iverksettResultatService.hentTilkjentYtelse(behandlingId) } returns tilkjentYtelse(
+        every { iverksettingsresultatService.hentTilkjentYtelse(behandlingId) } returns tilkjentYtelse(
             listOf(
                 utbetalingsperiode,
             ),
@@ -75,7 +75,7 @@ internal class VentePåStatusFraØkonomiTaskTest {
         runTask(Task(IverksettMotOppdragTask.TYPE, behandlingId.toString(), Properties()))
 
         verify(exactly = 1) {
-            iverksettResultatService.oppdaterOppdragResultat(
+            iverksettingsresultatService.oppdaterOppdragResultat(
                 behandlingId,
                 capture(oppdragResultatSlot),
             )
@@ -85,11 +85,11 @@ internal class VentePåStatusFraØkonomiTaskTest {
 
     @Test
     internal fun `Skal ikke gjøre noe hvis ingen utbetalingoppdrag på tilkjent ytelse`() {
-        every { iverksettResultatService.hentTilkjentYtelse(behandlingId) } returns tilkjentYtelse()
+        every { iverksettingsresultatService.hentTilkjentYtelse(behandlingId) } returns tilkjentYtelse()
 
         runTask(Task(IverksettMotOppdragTask.TYPE, behandlingId.toString(), Properties()))
 
-        verify(exactly = 0) { iverksettResultatService.oppdaterOppdragResultat(behandlingId, any()) }
+        verify(exactly = 0) { iverksettingsresultatService.oppdaterOppdragResultat(behandlingId, any()) }
     }
 
     private fun runTask(task: Task) {

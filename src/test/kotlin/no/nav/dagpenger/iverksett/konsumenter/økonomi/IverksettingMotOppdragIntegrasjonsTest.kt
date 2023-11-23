@@ -4,7 +4,7 @@ import java.time.LocalDate
 import java.util.UUID
 import no.nav.dagpenger.iverksett.ServerTest
 import no.nav.dagpenger.iverksett.api.IverksettingService
-import no.nav.dagpenger.iverksett.api.tilstand.IverksettResultatService
+import no.nav.dagpenger.iverksett.api.tilstand.IverksettingsresultatService
 import no.nav.dagpenger.iverksett.infrastruktur.util.opprettAndelTilkjentYtelse
 import no.nav.dagpenger.iverksett.infrastruktur.util.opprettIverksett
 import no.nav.dagpenger.kontrakter.felles.StønadTypeTiltakspenger
@@ -18,7 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired
 class IverksettingMotOppdragIntegrasjonsTest : ServerTest() {
 
     @Autowired
-    lateinit var iverksettResultatService: IverksettResultatService
+    lateinit var iverksettingsresultatService: IverksettingsresultatService
 
     @Autowired
     lateinit var taskService: TaskService
@@ -46,7 +46,7 @@ class IverksettingMotOppdragIntegrasjonsTest : ServerTest() {
 
     @Test
     internal fun `start iverksetting, forvent at andelerTilkjentYtelse er lik 1 og har periodeId 1`() {
-        val tilkjentYtelse = iverksettResultatService.hentTilkjentYtelse(behandlingid)!!
+        val tilkjentYtelse = iverksettingsresultatService.hentTilkjentYtelse(behandlingid)!!
         assertThat(tilkjentYtelse.andelerTilkjentYtelse).hasSize(1)
         assertThat(tilkjentYtelse.andelerTilkjentYtelse.first().periodeId).isEqualTo(0)
     }
@@ -71,7 +71,7 @@ class IverksettingMotOppdragIntegrasjonsTest : ServerTest() {
         iverksettingService.startIverksetting(iverksettRevurdering)
         iverksettMotOppdrag()
 
-        val tilkjentYtelse = iverksettResultatService.hentTilkjentYtelse(behandlingIdRevurdering)!!
+        val tilkjentYtelse = iverksettingsresultatService.hentTilkjentYtelse(behandlingIdRevurdering)!!
         assertThat(tilkjentYtelse.andelerTilkjentYtelse).hasSize(2)
         assertThat(tilkjentYtelse.andelerTilkjentYtelse.first().periodeId).isEqualTo(0)
         assertThat(tilkjentYtelse.andelerTilkjentYtelse[1].periodeId).isEqualTo(1)
@@ -100,7 +100,7 @@ class IverksettingMotOppdragIntegrasjonsTest : ServerTest() {
         iverksettingService.startIverksetting(iverksettRevurdering)
         iverksettMotOppdrag()
 
-        val tilkjentYtelse = iverksettResultatService.hentTilkjentYtelse(behandlingIdRevurdering)!!
+        val tilkjentYtelse = iverksettingsresultatService.hentTilkjentYtelse(behandlingIdRevurdering)!!
         assertThat(tilkjentYtelse.andelerTilkjentYtelse).hasSize(2)
         assertThat(tilkjentYtelse.andelerTilkjentYtelse.first().periodeId).isEqualTo(1)
         assertThat(tilkjentYtelse.andelerTilkjentYtelse[1].periodeId).isEqualTo(2)
@@ -121,7 +121,7 @@ class IverksettingMotOppdragIntegrasjonsTest : ServerTest() {
         iverksettingService.startIverksetting(iverksettMedOpphør)
         iverksettMotOppdrag()
 
-        val tilkjentYtelse = iverksettResultatService.hentTilkjentYtelse(opphørBehandlingId)!!
+        val tilkjentYtelse = iverksettingsresultatService.hentTilkjentYtelse(opphørBehandlingId)!!
         assertThat(tilkjentYtelse.andelerTilkjentYtelse).hasSize(0)
     }
 

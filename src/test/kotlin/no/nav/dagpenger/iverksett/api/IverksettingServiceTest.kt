@@ -3,7 +3,7 @@ package no.nav.dagpenger.iverksett.api
 import io.mockk.every
 import io.mockk.mockk
 import no.nav.dagpenger.iverksett.api.domene.OppdragResultat
-import no.nav.dagpenger.iverksett.api.tilstand.IverksettResultatService
+import no.nav.dagpenger.iverksett.api.tilstand.IverksettingsresultatService
 import no.nav.dagpenger.iverksett.infrastruktur.util.IverksettResultatMockBuilder
 import no.nav.dagpenger.iverksett.infrastruktur.util.opprettTilkjentYtelse
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.OppdragClient
@@ -17,14 +17,14 @@ import java.util.UUID
 
 internal class IverksettingServiceTest {
 
-    val iverksettResultatService = mockk<IverksettResultatService>()
+    val iverksettingsresultatService = mockk<IverksettingsresultatService>()
     val taskService = mockk<TaskService>()
     val iverksettingRepository = mockk<IverksettingRepository>()
     private val oppdragClient = mockk<OppdragClient>()
 
     private var iverksettStatusService: IverksettingService = IverksettingService(
         taskService = taskService,
-        iverksettResultatService = iverksettResultatService,
+        iverksettingsresultatService = iverksettingsresultatService,
         iverksettingRepository = iverksettingRepository,
         oppdragClient = oppdragClient,
         featureToggleService = mockFeatureToggleService(),
@@ -34,7 +34,7 @@ internal class IverksettingServiceTest {
     fun `la IverksettResultat ha felt kun satt for tilkjent ytelse, forvent status SENDT_TIL_OPPDRAG`() {
         val behandlingsId = UUID.randomUUID()
         val tilkjentYtelse = opprettTilkjentYtelse(behandlingsId)
-        every { iverksettResultatService.hentIverksettResultat(behandlingsId) } returns IverksettResultatMockBuilder.Builder()
+        every { iverksettingsresultatService.hentIverksettResultat(behandlingsId) } returns IverksettResultatMockBuilder.Builder()
             .build(behandlingsId, tilkjentYtelse)
 
         val status = iverksettStatusService.utledStatus(behandlingsId)
@@ -45,7 +45,7 @@ internal class IverksettingServiceTest {
     fun `la IverksettResultat ha tilkjent ytelse, oppdrag, og oppdragsresultat satt, forvent status FEILET_MOT_OPPDRAG`() {
         val behandlingsId = UUID.randomUUID()
         val tilkjentYtelse = opprettTilkjentYtelse(behandlingsId)
-        every { iverksettResultatService.hentIverksettResultat(behandlingsId) } returns IverksettResultatMockBuilder.Builder()
+        every { iverksettingsresultatService.hentIverksettResultat(behandlingsId) } returns IverksettResultatMockBuilder.Builder()
             .oppdragResultat(OppdragResultat(OppdragStatus.KVITTERT_FUNKSJONELL_FEIL))
             .build(behandlingsId, tilkjentYtelse)
 
@@ -57,7 +57,7 @@ internal class IverksettingServiceTest {
     fun `la IverksettResultat ha felt satt for tilkjent ytelse, oppdrag med kvittert_ok, forvent status OK`() {
         val behandlingsId = UUID.randomUUID()
         val tilkjentYtelse = opprettTilkjentYtelse(behandlingsId)
-        every { iverksettResultatService.hentIverksettResultat(behandlingsId) } returns IverksettResultatMockBuilder.Builder()
+        every { iverksettingsresultatService.hentIverksettResultat(behandlingsId) } returns IverksettResultatMockBuilder.Builder()
             .oppdragResultat(OppdragResultat(OppdragStatus.KVITTERT_OK))
             .build(behandlingsId, tilkjentYtelse)
 

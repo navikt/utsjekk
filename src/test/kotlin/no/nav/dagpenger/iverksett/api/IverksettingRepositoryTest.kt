@@ -83,12 +83,13 @@ class IverksettingRepositoryTest : ServerTest() {
         val json: String = ResourceLoaderTestUtil.readResource("json/IverksettDtoEksempel.json")
         val iverksettingData: Iverksetting = objectMapper.readValue<IverksettDto>(json).toDomain()
 
-        val iverksettListe1 = iverksettingRepository.findByFagsakId(iverksettingData.fagsak.fagsakId!!)
+        val fagsakId = iverksettingData.fagsak.fagsakId!!
+        val iverksettListe1 = iverksettingRepository.findByFagsakId(fagsakId)
         assertEquals(0, iverksettListe1.size)
 
         val iverksett = iverksettingRepository.insert(lagIverksettingEntitet(iverksettingData))
 
-        val iverksettListe2 = iverksettingRepository.findByFagsakId(iverksettingData.fagsak.fagsakId)
+        val iverksettListe2 = iverksettingRepository.findByFagsakId(fagsakId)
         assertEquals(1, iverksettListe2.size)
         assertThat(iverksett).usingRecursiveComparison().isEqualTo(iverksettListe2[0])
     }
@@ -98,12 +99,13 @@ class IverksettingRepositoryTest : ServerTest() {
         val json: String = ResourceLoaderTestUtil.readResource("json/IverksettDtoEksempel.json")
         val iverksettingData: Iverksetting = objectMapper.readValue<IverksettDto>(json).toDomain()
 
-        val iverksettListe1 = iverksettingRepository.findBySaksreferanse(iverksettingData.fagsak.saksreferanse!!)
+        val saksreferanse = iverksettingData.fagsak.saksreferanse!!
+        val iverksettListe1 = iverksettingRepository.findBySaksreferanse(saksreferanse)
         assertEquals(0, iverksettListe1.size)
 
         val iverksett = iverksettingRepository.insert(lagIverksettingEntitet(iverksettingData))
 
-        val iverksettListe2 = iverksettingRepository.findBySaksreferanse(iverksettingData.fagsak.saksreferanse)
+        val iverksettListe2 = iverksettingRepository.findBySaksreferanse(saksreferanse)
         assertEquals(1, iverksettListe2.size)
         assertThat(iverksett).usingRecursiveComparison().isEqualTo(iverksettListe2[0])
     }

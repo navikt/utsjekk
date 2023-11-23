@@ -4,14 +4,14 @@ import java.util.UUID
 import no.nav.dagpenger.iverksett.api.IverksettingService
 import no.nav.dagpenger.iverksett.api.domene.AndelTilkjentYtelse
 import no.nav.dagpenger.iverksett.api.domene.Iverksetting
-import no.nav.dagpenger.iverksett.api.domene.IverksettResultat
+import no.nav.dagpenger.iverksett.api.domene.Iverksettingsresultat
 import no.nav.dagpenger.iverksett.api.domene.TilkjentYtelse
 import no.nav.dagpenger.iverksett.api.domene.behandlingId
 import no.nav.dagpenger.iverksett.api.domene.lagAndelData
 import no.nav.dagpenger.iverksett.api.domene.personIdent
 import no.nav.dagpenger.iverksett.api.domene.sakId
 import no.nav.dagpenger.iverksett.api.domene.tilAndelData
-import no.nav.dagpenger.iverksett.api.tilstand.IverksettResultatService
+import no.nav.dagpenger.iverksett.api.tilstand.IverksettingsresultatService
 import no.nav.dagpenger.iverksett.konsumenter.opprettNesteTask
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.Utbetalingsgenerator
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene.Behandlingsinformasjon
@@ -34,7 +34,7 @@ class IverksettMotOppdragTask(
     private val iverksettingService: IverksettingService,
     private val oppdragClient: OppdragClient,
     private val taskService: TaskService,
-    private val iverksettResultatService: IverksettResultatService,
+    private val iverksettingsresultatService: IverksettingsresultatService,
 ) : AsyncTaskStep {
 
     private val log: Logger = LoggerFactory.getLogger(this::class.java)
@@ -45,7 +45,7 @@ class IverksettMotOppdragTask(
             ?: error("Fant ikke iverksetting for behandlingId $behandlingId")
 
         val forrigeIverksettResultat = iverksett.behandling.forrigeBehandlingId?.let {
-            iverksettResultatService.hentIverksettResultat(it)
+            iverksettingsresultatService.hentIverksettResultat(it)
                 ?: error("Kunne ikke finne iverksettresultat for behandlingId=$it")
         }
 
@@ -54,7 +54,7 @@ class IverksettMotOppdragTask(
 
     private fun lagOgSendUtbetalingsoppdragOgOppdaterTilkjentYtelse(
         iverksetting: Iverksetting,
-        forrigeIverksettResultat: IverksettResultat?,
+        forrigeIverksettingsresultat: Iverksettingsresultat?,
         behandlingId: UUID,
     ) {
         val behandlingsinformasjon = Behandlingsinformasjon(
@@ -68,8 +68,8 @@ class IverksettMotOppdragTask(
         )
 
         val nyeAndeler = iverksetting.vedtak.tilkjentYtelse.lagAndelData()
-        val forrigeAndeler = forrigeIverksettResultat?.tilkjentYtelseForUtbetaling.lagAndelData()
-        val sisteAndelPerKjede = forrigeIverksettResultat?.tilkjentYtelseForUtbetaling?.sisteAndelPerKjede
+        val forrigeAndeler = forrigeIverksettingsresultat?.tilkjentYtelseForUtbetaling.lagAndelData()
+        val sisteAndelPerKjede = forrigeIverksettingsresultat?.tilkjentYtelseForUtbetaling?.sisteAndelPerKjede
             ?.mapValues { it.value.tilAndelData() }
             ?: emptyMap()
 
@@ -84,7 +84,7 @@ class IverksettMotOppdragTask(
             oppdaterTilkjentYtelseOgIverksettOppdrag(
                 iverksetting.vedtak.tilkjentYtelse,
                 beregnetUtbetalingsoppdrag,
-                forrigeIverksettResultat,
+                forrigeIverksettingsresultat,
                 behandlingId
             )
         } else {
@@ -95,7 +95,7 @@ class IverksettMotOppdragTask(
     private fun oppdaterTilkjentYtelseOgIverksettOppdrag(
         tilkjentYtelse: TilkjentYtelse,
         beregnetUtbetalingsoppdrag: BeregnetUtbetalingsoppdrag,
-        forrigeIverksettResultat: IverksettResultat?,
+        forrigeIverksettingsresultat: Iverksettingsresultat?,
         behandlingId: UUID,
     ) {
         val nyeAndelerMedPeriodeId = tilkjentYtelse.andelerTilkjentYtelse.map { andel ->
@@ -112,12 +112,12 @@ class IverksettMotOppdragTask(
             andelerTilkjentYtelse = nyeAndelerMedPeriodeId,
             utbetalingsoppdrag = beregnetUtbetalingsoppdrag.utbetalingsoppdrag,
         )
-        val forrigeSisteAndelPerKjede = forrigeIverksettResultat?.tilkjentYtelseForUtbetaling?.sisteAndelPerKjede
+        val forrigeSisteAndelPerKjede = forrigeIverksettingsresultat?.tilkjentYtelseForUtbetaling?.sisteAndelPerKjede
             ?: emptyMap()
         val nyTilkjentYtelseMedSisteAndelIKjede =
             lagTilkjentYtelseMedSisteAndelPerKjede(nyTilkjentYtelse, forrigeSisteAndelPerKjede)
 
-        iverksettResultatService.oppdaterTilkjentYtelseForUtbetaling(
+        iverksettingsresultatService.oppdaterTilkjentYtelseForUtbetaling(
             behandlingId = behandlingId,
             tilkjentYtelseForUtbetaling = nyTilkjentYtelseMedSisteAndelIKjede,
         )

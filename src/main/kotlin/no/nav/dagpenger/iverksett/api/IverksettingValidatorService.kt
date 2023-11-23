@@ -3,7 +3,7 @@ package no.nav.dagpenger.iverksett.api
 import no.nav.dagpenger.iverksett.api.domene.Iverksetting
 import no.nav.dagpenger.iverksett.api.domene.personIdent
 import no.nav.dagpenger.iverksett.api.domene.sakId
-import no.nav.dagpenger.iverksett.api.tilstand.IverksettResultatService
+import no.nav.dagpenger.iverksett.api.tilstand.IverksettingsresultatService
 import no.nav.dagpenger.iverksett.infrastruktur.advice.ApiFeil
 import no.nav.dagpenger.kontrakter.oppdrag.OppdragStatus
 import org.springframework.http.HttpStatus
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service
 
 @Service
 class IverksettingValidatorService(
-    private val iverksettResultatService: IverksettResultatService,
+    private val iverksettingsresultatService: IverksettingsresultatService,
     private val iverksettingService: IverksettingService,
 ) {
 
@@ -48,7 +48,7 @@ class IverksettingValidatorService(
 
     internal fun validerAtForrigeBehandlingErFerdigIverksattMotOppdrag(iverksetting: Iverksetting?) {
         iverksetting?.behandling?.forrigeBehandlingId?.apply {
-            val forrigeResultat = iverksettResultatService.hentIverksettResultat(this)
+            val forrigeResultat = iverksettingsresultatService.hentIverksettResultat(this)
 
             val forrigeErUtenUtbetalingsperioder =
                 forrigeResultat?.tilkjentYtelseForUtbetaling?.utbetalingsoppdrag?.utbetalingsperiode?.isEmpty() ?: true
