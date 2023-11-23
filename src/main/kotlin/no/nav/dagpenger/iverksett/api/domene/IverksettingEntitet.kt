@@ -5,8 +5,8 @@ import org.springframework.data.annotation.Id
 import org.springframework.data.relational.core.mapping.Table
 
 @Table("iverksett")
-data class IverksettEntitet(
+data class IverksettingEntitet(
     @Id
     val behandlingId: UUID,
-    val data: Iverksett,
+    val data: Iverksetting,
 )

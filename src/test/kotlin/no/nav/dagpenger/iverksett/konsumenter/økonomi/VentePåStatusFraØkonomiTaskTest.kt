@@ -19,7 +19,7 @@ import no.nav.dagpenger.iverksett.api.tilstand.IverksettResultatService
 import no.nav.dagpenger.iverksett.infrastruktur.repository.findByIdOrThrow
 import no.nav.dagpenger.iverksett.infrastruktur.transformer.toDomain
 import no.nav.dagpenger.iverksett.infrastruktur.util.opprettIverksettDto
-import no.nav.dagpenger.iverksett.lagIverksett
+import no.nav.dagpenger.iverksett.lagIverksettingEntitet
 import no.nav.dagpenger.iverksett.util.mockFeatureToggleService
 import no.nav.dagpenger.kontrakter.felles.Fagsystem
 import no.nav.dagpenger.kontrakter.oppdrag.OppdragStatus
@@ -58,7 +58,7 @@ internal class VentePåStatusFraØkonomiTaskTest {
     @BeforeEach
     internal fun setUp() {
         every { oppdragClient.hentStatus(any()) } returns OppdragStatusMedMelding(OppdragStatus.KVITTERT_OK, "OK")
-        every { iverksettingRepository.findByIdOrThrow(any()) } returns lagIverksett(opprettIverksettDto(behandlingId, sakId).toDomain())
+        every { iverksettingRepository.findByIdOrThrow(any()) } returns lagIverksettingEntitet(opprettIverksettDto(behandlingId, sakId).toDomain())
         every { iverksettResultatService.oppdaterOppdragResultat(behandlingId, any()) } just runs
         every { taskService.save(any()) } answers { firstArg() }
     }

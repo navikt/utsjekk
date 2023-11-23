@@ -20,7 +20,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.springframework.http.HttpStatus
 
-class IverksettDtoValidatorTest {
+class IverksettingDtoValidatorTest {
 
     @Test
     fun `skal få BAD_REQUEST hvis beløp på utbetaling er negativt`() {

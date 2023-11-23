@@ -4,8 +4,8 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.Properties
 import java.util.UUID
-import no.nav.dagpenger.iverksett.api.domene.IverksettEntitet
-import no.nav.dagpenger.iverksett.api.domene.Iverksett
+import no.nav.dagpenger.iverksett.api.domene.IverksettingEntitet
+import no.nav.dagpenger.iverksett.api.domene.Iverksetting
 import no.nav.dagpenger.iverksett.api.domene.OppdragResultat
 import no.nav.dagpenger.iverksett.api.tilstand.IverksettResultatService
 import no.nav.dagpenger.iverksett.infrastruktur.configuration.FeatureToggleConfig
@@ -40,45 +40,45 @@ class IverksettingService(
 ) {
 
     @Transactional
-    fun startIverksetting(iverksett: Iverksett) {
+    fun startIverksetting(iverksetting: Iverksetting) {
         if (featureToggleService.isEnabled(FeatureToggleConfig.STOPP_IVERKSETTING)) {
             error("Kan ikke iverksette akkurat nå")
         }
 
-        val iverksettMedRiktigStønadstype = iverksett.copy(
-            fagsak = iverksett.fagsak.copy(stønadstype = utledStønadstype(iverksett))
+        val iverksettMedRiktigStønadstype = iverksetting.copy(
+            fagsak = iverksetting.fagsak.copy(stønadstype = utledStønadstype(iverksetting))
         )
         iverksettingRepository.insert(
-            IverksettEntitet(
-                iverksett.behandling.behandlingId,
+            IverksettingEntitet(
+                iverksetting.behandling.behandlingId,
                 iverksettMedRiktigStønadstype,
             ),
         )
 
-        iverksettResultatService.opprettTomtResultat(iverksett.behandling.behandlingId)
+        iverksettResultatService.opprettTomtResultat(iverksetting.behandling.behandlingId)
 
         taskService.save(
             Task(
                 type = førsteHovedflytTask(),
-                payload = iverksett.behandling.behandlingId.toString(),
+                payload = iverksetting.behandling.behandlingId.toString(),
                 properties = Properties().apply {
-                    this["personIdent"] = iverksett.søker.personIdent
-                    this["behandlingId"] = iverksett.behandling.behandlingId.toString()
-                    this["saksbehandler"] = iverksett.vedtak.saksbehandlerId
-                    this["beslutter"] = iverksett.vedtak.beslutterId
+                    this["personIdent"] = iverksetting.søker.personIdent
+                    this["behandlingId"] = iverksetting.behandling.behandlingId.toString()
+                    this["saksbehandler"] = iverksetting.vedtak.saksbehandlerId
+                    this["beslutter"] = iverksetting.vedtak.beslutterId
                 },
             ),
         )
     }
 
-    fun hentIverksetting(behandlingId: UUID): Iverksett? {
+    fun hentIverksetting(behandlingId: UUID): Iverksetting? {
         return iverksettingRepository.findById(behandlingId).getOrNull()?.data
     }
 
-    fun hentForrigeIverksett(iverksett: Iverksett): Iverksett? =
-        iverksett.behandling.forrigeBehandlingId?.let {
+    fun hentForrigeIverksett(iverksetting: Iverksetting): Iverksetting? =
+        iverksetting.behandling.forrigeBehandlingId?.let {
             hentIverksetting(it) ?: throw IllegalStateException(
-                "Fant ikke forrige iverksetting med behandlingId ${iverksett.behandling.behandlingId} " +
+                "Fant ikke forrige iverksetting med behandlingId ${iverksetting.behandling.behandlingId} " +
                     "og forrige behandlingId $it",
             )
         }
@@ -150,9 +150,9 @@ class IverksettingService(
         return vedtakForSak.isEmpty()
     }
 
-    private fun utledStønadstype(iverksett: Iverksett): StønadType =
-        iverksett.vedtak.tilkjentYtelse?.andelerTilkjentYtelse?.firstOrNull()?.stønadstype
-            ?: hentForrigeIverksett(iverksett)?.vedtak?.tilkjentYtelse?.andelerTilkjentYtelse?.firstOrNull()?.stønadstype
+    private fun utledStønadstype(iverksetting: Iverksetting): StønadType =
+        iverksetting.vedtak.tilkjentYtelse?.andelerTilkjentYtelse?.firstOrNull()?.stønadstype
+            ?: hentForrigeIverksett(iverksetting)?.vedtak?.tilkjentYtelse?.andelerTilkjentYtelse?.firstOrNull()?.stønadstype
             ?: StønadTypeDagpenger.DAGPENGER_ARBEIDSSOKER_ORDINAER
 
 

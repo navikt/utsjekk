@@ -1,6 +1,6 @@
 package no.nav.dagpenger.iverksett.api
 
-import no.nav.dagpenger.iverksett.api.domene.IverksettEntitet
+import no.nav.dagpenger.iverksett.api.domene.IverksettingEntitet
 import no.nav.dagpenger.iverksett.api.domene.Vedtaksperiode
 import no.nav.dagpenger.kontrakter.datadeling.DatadelingRequest
 import no.nav.dagpenger.kontrakter.datadeling.DatadelingResponse
@@ -40,7 +40,7 @@ class VedtakStatusService(
         )
     }
 
-    private fun mapPerioder(iverksett: IverksettEntitet, request: DatadelingRequest): List<Periode> {
+    private fun mapPerioder(iverksett: IverksettingEntitet, request: DatadelingRequest): List<Periode> {
         val vedtak = iverksett.data.vedtak
         val yt = vedtak.tilkjentYtelse?.sisteAndelIKjede?.stønadstype ?: StønadTypeDagpenger.DAGPENGER_ARBEIDSSOKER_ORDINAER
 

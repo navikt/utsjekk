@@ -10,8 +10,8 @@ import no.nav.dagpenger.iverksett.api.tilstand.IverksettResultatService
 import no.nav.dagpenger.iverksett.infrastruktur.featuretoggle.FeatureToggleService
 import no.nav.dagpenger.iverksett.infrastruktur.util.opprettIverksettDto
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.OppdragClient
-import no.nav.dagpenger.iverksett.lagIverksett
-import no.nav.dagpenger.iverksett.lagIverksettData
+import no.nav.dagpenger.iverksett.lagIverksettingEntitet
+import no.nav.dagpenger.iverksett.lagIverksettingsdata
 import no.nav.dagpenger.iverksett.util.mockFeatureToggleService
 import no.nav.dagpenger.kontrakter.iverksett.VedtakType
 import no.nav.familie.prosessering.internal.TaskService
@@ -81,7 +81,7 @@ class IverksettingTilgangskontrollServiceTest {
     fun `skal få OK når utbetalingsvedtak sendes etter autorisert vedtak`() {
         val forrigeIverksetting = VedtakType.RAMMEVEDTAK.iverksettData()
         val nåværendeIverksetting = VedtakType.UTBETALINGSVEDTAK.iverksetting()
-        val iverksettListe = listOf(lagIverksett(forrigeIverksetting))
+        val iverksettListe = listOf(lagIverksettingEntitet(forrigeIverksetting))
 
         every { iverksettingRepository.findByFagsakId(any()) } returns iverksettListe
         every { TokenContext.erSystemtoken() } returns true
@@ -96,7 +96,7 @@ class IverksettingTilgangskontrollServiceTest {
     fun `skal få FORBIDDEN når utbetalingsvedtak sendes av ukjent system`() {
         val forrigeIverksetting = VedtakType.RAMMEVEDTAK.iverksettData()
         val nåværendeIverksetting = VedtakType.UTBETALINGSVEDTAK.iverksetting()
-        val iverksettListe = listOf(lagIverksett(forrigeIverksetting))
+        val iverksettListe = listOf(lagIverksettingEntitet(forrigeIverksetting))
 
         every { iverksettingRepository.findByFagsakId(any()) } returns iverksettListe
         every { TokenContext.erSystemtoken() } returns true
@@ -107,7 +107,7 @@ class IverksettingTilgangskontrollServiceTest {
         }
     }
 
-    private fun VedtakType.iverksettData() = lagIverksettData().let {
+    private fun VedtakType.iverksettData() = lagIverksettingsdata().let {
         it.copy(vedtak = it.vedtak.copy(vedtakstype = this))
     }
 

@@ -15,7 +15,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 
-class IverksettMotOppdragIntegrasjonsTest : ServerTest() {
+class IverksettingMotOppdragIntegrasjonsTest : ServerTest() {
 
     @Autowired
     lateinit var iverksettResultatService: IverksettResultatService

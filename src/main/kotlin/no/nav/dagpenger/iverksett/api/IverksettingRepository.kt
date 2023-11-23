@@ -1,6 +1,6 @@
 package no.nav.dagpenger.iverksett.api
 
-import no.nav.dagpenger.iverksett.api.domene.IverksettEntitet
+import no.nav.dagpenger.iverksett.api.domene.IverksettingEntitet
 import no.nav.dagpenger.iverksett.infrastruktur.repository.InsertUpdateRepository
 import no.nav.dagpenger.iverksett.infrastruktur.repository.RepositoryInterface
 import no.nav.dagpenger.kontrakter.felles.SakIdentifikator
@@ -10,13 +10,13 @@ import org.springframework.stereotype.Repository
 import java.util.UUID
 
 @Repository
-interface IverksettingRepository : RepositoryInterface<IverksettEntitet, UUID>, InsertUpdateRepository<IverksettEntitet> {
+interface IverksettingRepository : RepositoryInterface<IverksettingEntitet, UUID>, InsertUpdateRepository<IverksettingEntitet> {
 
     @Query("SELECT behandling_id from iverksett")
     fun finnAlleIder(): List<UUID>
 
     @Query("select behandling_id, data from iverksett where data -> 'søker' ->> 'personIdent' = :personId")
-    fun findByPersonId(@Param("personId") personId: String): List<IverksettEntitet>
+    fun findByPersonId(@Param("personId") personId: String): List<IverksettingEntitet>
 
     @Query(
         "select behandling_id, data " +
@@ -27,10 +27,10 @@ interface IverksettingRepository : RepositoryInterface<IverksettEntitet, UUID>, 
     fun findByPersonIdAndResult(
         @Param("personId") personId: String,
         @Param("vedtaksresultat") vedtaksresultat: String,
-    ): List<IverksettEntitet>
+    ): List<IverksettingEntitet>
 
     @Query("select behandling_id, data from iverksett where data -> 'fagsak' ->> 'fagsakId' = :fagsakId::text")
-    fun findByFagsakId(@Param("fagsakId") fagsakId: UUID): List<IverksettEntitet>
+    fun findByFagsakId(@Param("fagsakId") fagsakId: UUID): List<IverksettingEntitet>
 
     @Query(
         """
@@ -40,12 +40,12 @@ interface IverksettingRepository : RepositoryInterface<IverksettEntitet, UUID>, 
     )
     fun findBySaksreferanse(
         @Param("saksreferanse") saksreferanse: String,
-    ): List<IverksettEntitet>
+    ): List<IverksettingEntitet>
 }
 
 fun IverksettingRepository.findBySakIdentifikator(
     sakIdentifikator: SakIdentifikator
-): List<IverksettEntitet> {
+): List<IverksettingEntitet> {
     return if (sakIdentifikator.sakId != null) {
         this.findByFagsakId(sakIdentifikator.sakId!!)
     } else {

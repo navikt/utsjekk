@@ -1,6 +1,6 @@
 package no.nav.dagpenger.iverksett.api
 
-import no.nav.dagpenger.iverksett.api.domene.Iverksett
+import no.nav.dagpenger.iverksett.api.domene.Iverksetting
 import no.nav.dagpenger.iverksett.api.domene.personIdent
 import no.nav.dagpenger.iverksett.api.domene.sakId
 import no.nav.dagpenger.iverksett.api.tilstand.IverksettResultatService
@@ -15,22 +15,22 @@ class IverksettingValidatorService(
     private val iverksettingService: IverksettingService,
 ) {
 
-    fun valider(iverksett: Iverksett) {
+    fun valider(iverksetting: Iverksetting) {
         /* Med DB-oppslag */
-        validerAtBehandlingIkkeAlleredeErMottatt(iverksett)
-        validerAtIverksettingErForSammeSakOgPersonSomForrige(iverksett)
-        validerAtForrigeBehandlingErFerdigIverksattMotOppdrag(iverksett)
+        validerAtBehandlingIkkeAlleredeErMottatt(iverksetting)
+        validerAtIverksettingErForSammeSakOgPersonSomForrige(iverksetting)
+        validerAtForrigeBehandlingErFerdigIverksattMotOppdrag(iverksetting)
     }
 
-    internal fun validerAtIverksettingErForSammeSakOgPersonSomForrige(iverksett: Iverksett) {
+    internal fun validerAtIverksettingErForSammeSakOgPersonSomForrige(iverksetting: Iverksetting) {
         val forrigeIverksett = try {
-            iverksettingService.hentForrigeIverksett(iverksett)
+            iverksettingService.hentForrigeIverksett(iverksetting)
         } catch (e: IllegalStateException) {
             throw ApiFeil(e.message ?: "Fant ikke forrige iverksetting", HttpStatus.CONFLICT)
         }
 
         val forrigeSakId = forrigeIverksett?.sakId
-        if (forrigeSakId != null && forrigeSakId != iverksett.sakId) {
+        if (forrigeSakId != null && forrigeSakId != iverksetting.sakId) {
             throw ApiFeil(
                 "Forrige behandling er knyttet til en annen sak enn denne iverksettingen gjelder",
                 HttpStatus.BAD_REQUEST,
@@ -38,7 +38,7 @@ class IverksettingValidatorService(
         }
 
         val forrigePersonident = forrigeIverksett?.personIdent
-        if (forrigePersonident != null && forrigePersonident != iverksett.personIdent) {
+        if (forrigePersonident != null && forrigePersonident != iverksetting.personIdent) {
             throw ApiFeil(
                 "Forrige behandling er knyttet til en annen person enn denne iverksettingen gjelder",
                 HttpStatus.BAD_REQUEST,
@@ -46,8 +46,8 @@ class IverksettingValidatorService(
         }
     }
 
-    internal fun validerAtForrigeBehandlingErFerdigIverksattMotOppdrag(iverksett: Iverksett?) {
-        iverksett?.behandling?.forrigeBehandlingId?.apply {
+    internal fun validerAtForrigeBehandlingErFerdigIverksattMotOppdrag(iverksetting: Iverksetting?) {
+        iverksetting?.behandling?.forrigeBehandlingId?.apply {
             val forrigeResultat = iverksettResultatService.hentIverksettResultat(this)
 
             val forrigeErUtenUtbetalingsperioder =
@@ -62,10 +62,10 @@ class IverksettingValidatorService(
         }
     }
 
-    internal fun validerAtBehandlingIkkeAlleredeErMottatt(iverksett: Iverksett) {
-        if (iverksettingService.hentIverksetting(iverksett.behandling.behandlingId) != null) {
+    internal fun validerAtBehandlingIkkeAlleredeErMottatt(iverksetting: Iverksetting) {
+        if (iverksettingService.hentIverksetting(iverksetting.behandling.behandlingId) != null) {
             throw ApiFeil(
-                "Behandling med id ${iverksett.behandling.behandlingId} er allerede mottattt",
+                "Behandling med id ${iverksetting.behandling.behandlingId} er allerede mottattt",
                 HttpStatus.CONFLICT,
             )
         }

@@ -3,7 +3,7 @@ package no.nav.dagpenger.iverksett.konsumenter.økonomi
 import java.util.UUID
 import no.nav.dagpenger.iverksett.api.IverksettingService
 import no.nav.dagpenger.iverksett.api.domene.AndelTilkjentYtelse
-import no.nav.dagpenger.iverksett.api.domene.Iverksett
+import no.nav.dagpenger.iverksett.api.domene.Iverksetting
 import no.nav.dagpenger.iverksett.api.domene.IverksettResultat
 import no.nav.dagpenger.iverksett.api.domene.TilkjentYtelse
 import no.nav.dagpenger.iverksett.api.domene.behandlingId
@@ -49,25 +49,25 @@ class IverksettMotOppdragTask(
                 ?: error("Kunne ikke finne iverksettresultat for behandlingId=$it")
         }
 
-        nyLagOgSendUtbetalingsoppdragOgOppdaterTilkjentYtelse(iverksett, forrigeIverksettResultat, behandlingId)
+        lagOgSendUtbetalingsoppdragOgOppdaterTilkjentYtelse(iverksett, forrigeIverksettResultat, behandlingId)
     }
 
-    private fun nyLagOgSendUtbetalingsoppdragOgOppdaterTilkjentYtelse(
-        iverksett: Iverksett,
+    private fun lagOgSendUtbetalingsoppdragOgOppdaterTilkjentYtelse(
+        iverksetting: Iverksetting,
         forrigeIverksettResultat: IverksettResultat?,
         behandlingId: UUID,
     ) {
         val behandlingsinformasjon = Behandlingsinformasjon(
-            saksbehandlerId = iverksett.vedtak.saksbehandlerId,
-            fagsakId = iverksett.sakId,
-            saksreferanse = iverksett.fagsak.saksreferanse,
-            behandlingId = iverksett.behandlingId.toString(),
-            personIdent = iverksett.personIdent,
-            brukersNavKontor = iverksett.vedtak.brukersNavKontor,
-            vedtaksdato = iverksett.vedtak.vedtakstidspunkt.toLocalDate(),
+            saksbehandlerId = iverksetting.vedtak.saksbehandlerId,
+            fagsakId = iverksetting.sakId,
+            saksreferanse = iverksetting.fagsak.saksreferanse,
+            behandlingId = iverksetting.behandlingId.toString(),
+            personIdent = iverksetting.personIdent,
+            brukersNavKontor = iverksetting.vedtak.brukersNavKontor,
+            vedtaksdato = iverksetting.vedtak.vedtakstidspunkt.toLocalDate(),
         )
 
-        val nyeAndeler = iverksett.vedtak.tilkjentYtelse.lagAndelData()
+        val nyeAndeler = iverksetting.vedtak.tilkjentYtelse.lagAndelData()
         val forrigeAndeler = forrigeIverksettResultat?.tilkjentYtelseForUtbetaling.lagAndelData()
         val sisteAndelPerKjede = forrigeIverksettResultat?.tilkjentYtelseForUtbetaling?.sisteAndelPerKjede
             ?.mapValues { it.value.tilAndelData() }
@@ -82,7 +82,7 @@ class IverksettMotOppdragTask(
 
         if (beregnetUtbetalingsoppdrag.utbetalingsoppdrag.utbetalingsperiode.isNotEmpty()) {
             oppdaterTilkjentYtelseOgIverksettOppdrag(
-                iverksett.vedtak.tilkjentYtelse,
+                iverksetting.vedtak.tilkjentYtelse,
                 beregnetUtbetalingsoppdrag,
                 forrigeIverksettResultat,
                 behandlingId

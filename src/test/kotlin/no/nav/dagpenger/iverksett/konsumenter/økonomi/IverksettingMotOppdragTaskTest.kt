@@ -27,7 +27,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
 
-internal class IverksettMotOppdragTaskTest {
+internal class IverksettingMotOppdragTaskTest {
 
     private val oppdragClient = mockk<OppdragClient>()
     val taskService = mockk<TaskService>()

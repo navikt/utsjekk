@@ -12,7 +12,7 @@ import no.nav.dagpenger.kontrakter.iverksett.VedtakType
 import no.nav.dagpenger.kontrakter.iverksett.VedtaksperiodeType
 import no.nav.dagpenger.kontrakter.iverksett.Vedtaksresultat
 
-data class Iverksett(
+data class Iverksetting(
     val fagsak: Fagsakdetaljer,
     val behandling: Behandlingsdetaljer,
     val søker: Søker,
@@ -58,7 +58,7 @@ data class Behandlingsdetaljer(
     val kravMottatt: LocalDate? = null,
 )
 
-val Iverksett.sakId get() = this.fagsak.fagsakId
-val Iverksett.personIdent get() = this.søker.personIdent
+val Iverksetting.sakId get() = this.fagsak.fagsakId
+val Iverksetting.personIdent get() = this.søker.personIdent
 
-val Iverksett.behandlingId get() = this.behandling.behandlingId
+val Iverksetting.behandlingId get() = this.behandling.behandlingId

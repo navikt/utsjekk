@@ -10,7 +10,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 
-internal class LagreIverksettResultatServiceTest : ServerTest() {
+internal class LagreIverksettingResultatServiceTest : ServerTest() {
 
     @Autowired
     private lateinit var tilstandRepositoryService: IverksettResultatService

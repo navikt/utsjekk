@@ -4,10 +4,10 @@ import io.mockk.every
 import io.mockk.mockk
 import java.time.LocalDate
 import java.time.LocalDateTime
-import no.nav.dagpenger.iverksett.api.domene.Iverksett
+import no.nav.dagpenger.iverksett.api.domene.Iverksetting
 import no.nav.dagpenger.iverksett.api.domene.Vedtaksperiode
-import no.nav.dagpenger.iverksett.lagIverksett
-import no.nav.dagpenger.iverksett.lagIverksettData
+import no.nav.dagpenger.iverksett.lagIverksettingEntitet
+import no.nav.dagpenger.iverksett.lagIverksettingsdata
 import no.nav.dagpenger.kontrakter.datadeling.DatadelingRequest
 import no.nav.dagpenger.kontrakter.felles.Datoperiode
 import no.nav.dagpenger.kontrakter.iverksett.VedtaksperiodeType
@@ -25,7 +25,7 @@ class VedtakStatusServiceTest {
     @Test
     fun `skal hente vedtak som er iverksatt OK`() {
         every { iverksettingRepositoryMock.findByPersonIdAndResult(personId, "INNVILGET") } returns listOf(
-            lagIverksett(iverksettDataFørsteVedtak),
+            lagIverksettingEntitet(iverksettDataFørsteVedtak),
         )
 
         val vedtak = vedtakStatusService.getVedtakStatus(personId)
@@ -36,8 +36,8 @@ class VedtakStatusServiceTest {
     @Test
     fun `skal hente siste vedtak som er iverksatt OK når det finnes flere`() {
         every { iverksettingRepositoryMock.findByPersonIdAndResult(personId, "INNVILGET") } returns listOf(
-            lagIverksett(iverksettDataFørsteVedtak),
-            lagIverksett(iverksettDataSisteVedtak),
+            lagIverksettingEntitet(iverksettDataFørsteVedtak),
+            lagIverksettingEntitet(iverksettDataSisteVedtak),
         )
 
         val vedtak = vedtakStatusService.getVedtakStatus(personId)
@@ -48,8 +48,8 @@ class VedtakStatusServiceTest {
     @Test
     fun `skal hente iverksettinger som har overlapende perioder`() {
         every { iverksettingRepositoryMock.findByPersonIdAndResult(personId, "INNVILGET") } returns listOf(
-            lagIverksett(iverksettDataFørsteVedtak),
-            lagIverksett(iverksettDataSisteVedtak),
+            lagIverksettingEntitet(iverksettDataFørsteVedtak),
+            lagIverksettingEntitet(iverksettDataSisteVedtak),
         )
 
         // Perioder:  |-------|  |-------|
@@ -63,8 +63,8 @@ class VedtakStatusServiceTest {
     @Test
     fun `skal hente iverksettinger som starter etter fom dato 1`() {
         every { iverksettingRepositoryMock.findByPersonIdAndResult(personId, "INNVILGET") } returns listOf(
-            lagIverksett(iverksettDataFørsteVedtak),
-            lagIverksett(iverksettDataSisteVedtak),
+            lagIverksettingEntitet(iverksettDataFørsteVedtak),
+            lagIverksettingEntitet(iverksettDataSisteVedtak),
         )
 
         // Perioder:  |-------|  |-------|
@@ -78,8 +78,8 @@ class VedtakStatusServiceTest {
     @Test
     fun `skal hente iverksettinger som inneholder fom dato`() {
         every { iverksettingRepositoryMock.findByPersonIdAndResult(personId, "INNVILGET") } returns listOf(
-            lagIverksett(iverksettDataFørsteVedtak),
-            lagIverksett(iverksettDataSisteVedtak),
+            lagIverksettingEntitet(iverksettDataFørsteVedtak),
+            lagIverksettingEntitet(iverksettDataSisteVedtak),
         )
 
         // Perioder:  |-------|  |-------|
@@ -93,8 +93,8 @@ class VedtakStatusServiceTest {
     @Test
     fun `skal hente iverksettinger som starter etter fom dato 2`() {
         every { iverksettingRepositoryMock.findByPersonIdAndResult(personId, "INNVILGET") } returns listOf(
-            lagIverksett(iverksettDataFørsteVedtak),
-            lagIverksett(iverksettDataSisteVedtak),
+            lagIverksettingEntitet(iverksettDataFørsteVedtak),
+            lagIverksettingEntitet(iverksettDataSisteVedtak),
         )
 
         // Perioder:  |-------|  |-------|
@@ -108,8 +108,8 @@ class VedtakStatusServiceTest {
     @Test
     fun `skal hente iverksettinger som har inneholder både fom og tom datoer`() {
         every { iverksettingRepositoryMock.findByPersonIdAndResult(personId, "INNVILGET") } returns listOf(
-            lagIverksett(iverksettDataFørsteVedtak),
-            lagIverksett(iverksettDataSisteVedtak),
+            lagIverksettingEntitet(iverksettDataFørsteVedtak),
+            lagIverksettingEntitet(iverksettDataSisteVedtak),
         )
 
         // Perioder:  |-------|  |-------|
@@ -123,8 +123,8 @@ class VedtakStatusServiceTest {
     @Test
     fun `skal ikke hente iverksettinger som er før fom dato`() {
         every { iverksettingRepositoryMock.findByPersonIdAndResult(personId, "INNVILGET") } returns listOf(
-            lagIverksett(iverksettDataFørsteVedtak),
-            lagIverksett(iverksettDataSisteVedtak),
+            lagIverksettingEntitet(iverksettDataFørsteVedtak),
+            lagIverksettingEntitet(iverksettDataSisteVedtak),
         )
 
         // Perioder:  |-------|  |-------|
@@ -136,7 +136,7 @@ class VedtakStatusServiceTest {
     }
 
     companion object {
-        private val iverksettDataFørsteVedtak = lagIverksettData(
+        private val iverksettDataFørsteVedtak = lagIverksettingsdata(
             vedtaksresultat = Vedtaksresultat.INNVILGET,
             vedtakstidspunkt = LocalDateTime.now().minusMonths(2),
             vedtaksperioder = listOf(
@@ -146,7 +146,7 @@ class VedtakStatusServiceTest {
                 ),
             ),
         )
-        private val iverksettDataSisteVedtak = lagIverksettData(
+        private val iverksettDataSisteVedtak = lagIverksettingsdata(
             vedtaksresultat = Vedtaksresultat.INNVILGET,
             vedtakstidspunkt = LocalDateTime.now(),
             vedtaksperioder = listOf(
@@ -158,8 +158,8 @@ class VedtakStatusServiceTest {
         )
     }
 
-    private fun assertVedtak(riktigIverksettData: Iverksett, returnertVedtak: VedtaksstatusDto?) {
-        val riktigVedtak = riktigIverksettData.vedtak
+    private fun assertVedtak(riktigIverksettingData: Iverksetting, returnertVedtak: VedtaksstatusDto?) {
+        val riktigVedtak = riktigIverksettingData.vedtak
 
         assertEquals(riktigVedtak.vedtakstype, returnertVedtak?.vedtakstype)
         assertEquals(riktigVedtak.vedtakstidspunkt, returnertVedtak?.vedtakstidspunkt)

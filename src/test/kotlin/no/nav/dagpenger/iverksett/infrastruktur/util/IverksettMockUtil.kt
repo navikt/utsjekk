@@ -7,7 +7,7 @@ import java.util.UUID
 import no.nav.dagpenger.iverksett.api.domene.AndelTilkjentYtelse
 import no.nav.dagpenger.iverksett.api.domene.Behandlingsdetaljer
 import no.nav.dagpenger.iverksett.api.domene.Fagsakdetaljer
-import no.nav.dagpenger.iverksett.api.domene.Iverksett
+import no.nav.dagpenger.iverksett.api.domene.Iverksetting
 import no.nav.dagpenger.iverksett.api.domene.IverksettResultat
 import no.nav.dagpenger.iverksett.api.domene.OppdragResultat
 import no.nav.dagpenger.iverksett.api.domene.Søker
@@ -142,7 +142,7 @@ fun opprettIverksett(
     behandlingsdetaljer: Behandlingsdetaljer = behandlingsdetaljer(),
     vedtaksdetaljer: Vedtaksdetaljer = vedtaksdetaljer(),
 ) =
-    Iverksett(
+    Iverksetting(
         fagsak = Fagsakdetaljer(fagsakId = UUID.randomUUID(), stønadstype = StønadTypeDagpenger.DAGPENGER_ARBEIDSSOKER_ORDINAER),
         behandling = behandlingsdetaljer,
         søker = Søker(
@@ -156,8 +156,8 @@ fun opprettIverksett(
     forrigeBehandlingId: UUID? = null,
     andeler: List<AndelTilkjentYtelse> = listOf(opprettAndelTilkjentYtelse()),
     fagsakId: UUID = UUID.randomUUID(),
-): Iverksett {
-    return Iverksett(
+): Iverksetting {
+    return Iverksetting(
         fagsak = Fagsakdetaljer(fagsakId = fagsakId, stønadstype = StønadTypeDagpenger.DAGPENGER_ARBEIDSSOKER_ORDINAER),
         behandling = behandlingsdetaljer(behandlingId, forrigeBehandlingId),
         søker = Søker(

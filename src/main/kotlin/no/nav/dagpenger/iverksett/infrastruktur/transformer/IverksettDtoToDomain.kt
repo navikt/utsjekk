@@ -3,7 +3,7 @@ package no.nav.dagpenger.iverksett.infrastruktur.transformer
  import java.time.LocalDate
 import no.nav.dagpenger.iverksett.api.domene.Behandlingsdetaljer
 import no.nav.dagpenger.iverksett.api.domene.Fagsakdetaljer
-import no.nav.dagpenger.iverksett.api.domene.Iverksett
+import no.nav.dagpenger.iverksett.api.domene.Iverksetting
 import no.nav.dagpenger.iverksett.api.domene.Søker
 import no.nav.dagpenger.iverksett.api.domene.Vedtaksdetaljer
 import no.nav.dagpenger.iverksett.api.domene.Vedtaksperiode
@@ -33,8 +33,8 @@ fun VedtaksdetaljerDto.toDomain(): Vedtaksdetaljer {
     )
 }
 
-fun IverksettDto.toDomain(): Iverksett {
-    return Iverksett(
+fun IverksettDto.toDomain(): Iverksetting {
+    return Iverksetting(
         fagsak = this.tilFagsak(),
         søker = this.personIdent.tilSøker(),
         behandling = this.tilBehandling(),

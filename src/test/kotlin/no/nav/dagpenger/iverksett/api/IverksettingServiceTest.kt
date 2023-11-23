@@ -15,7 +15,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.util.UUID
 
-internal class IverksettServiceTest {
+internal class IverksettingServiceTest {
 
     val iverksettResultatService = mockk<IverksettResultatService>()
     val taskService = mockk<TaskService>()

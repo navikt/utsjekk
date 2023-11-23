@@ -3,8 +3,8 @@ package no.nav.dagpenger.iverksett
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.UUID
-import no.nav.dagpenger.iverksett.api.domene.Iverksett
-import no.nav.dagpenger.iverksett.api.domene.IverksettEntitet
+import no.nav.dagpenger.iverksett.api.domene.Iverksetting
+import no.nav.dagpenger.iverksett.api.domene.IverksettingEntitet
 import no.nav.dagpenger.iverksett.api.domene.Vedtaksperiode
 import no.nav.dagpenger.iverksett.infrastruktur.util.behandlingsdetaljer
 import no.nav.dagpenger.iverksett.infrastruktur.util.opprettIverksett
@@ -15,14 +15,14 @@ import no.nav.dagpenger.kontrakter.iverksett.Vedtaksresultat
 fun Int.januar(år: Int) = LocalDate.of(år, 1, this)
 fun Int.mai(år: Int) = LocalDate.of(år, 5, this)
 
-fun lagIverksettData(
+fun lagIverksettingsdata(
     forrigeBehandlingId: UUID? = null,
     vedtaksresultat: Vedtaksresultat = Vedtaksresultat.INNVILGET,
     vedtaksperioder: List<Vedtaksperiode> = emptyList(),
     andelsdatoer: List<LocalDate> = emptyList(),
     beløp: Int = 100,
     vedtakstidspunkt: LocalDateTime = LocalDateTime.now(),
-): Iverksett {
+): Iverksetting {
     return opprettIverksett(
         behandlingsdetaljer = behandlingsdetaljer(
             forrigeBehandlingId = forrigeBehandlingId,
@@ -38,7 +38,7 @@ fun lagIverksettData(
     )
 }
 
-fun lagIverksett(iverksettData: Iverksett) = IverksettEntitet(
-    iverksettData.behandling.behandlingId,
-    iverksettData,
+fun lagIverksettingEntitet(iverksettingData: Iverksetting) = IverksettingEntitet(
+    iverksettingData.behandling.behandlingId,
+    iverksettingData,
 )

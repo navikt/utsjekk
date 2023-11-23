@@ -14,7 +14,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 
-internal class HentIverksettResultatServiceTest : ServerTest() {
+internal class HentIverksettingResultatServiceTest : ServerTest() {
 
     @Autowired
     private lateinit var iverksettResultatService: IverksettResultatService
