@@ -12,27 +12,28 @@ import java.util.UUID
 @Repository
 interface IverksettingRepository : RepositoryInterface<IverksettingEntitet, UUID>, InsertUpdateRepository<IverksettingEntitet> {
 
-    @Query("select behandling_id, data from iverksett where data -> 'søker' ->> 'personIdent' = :personId")
+    @Query("select behandling_id, data from iverksetting where data -> 'søker' ->> 'personIdent' = :personId")
     fun findByPersonId(@Param("personId") personId: String): List<IverksettingEntitet>
 
     @Query(
-        "select behandling_id, data " +
-                "from iverksett " +
-                "where data -> 'søker' ->> 'personIdent' = :personId " +
-                "and data -> 'vedtak' ->> 'vedtaksresultat' = :vedtaksresultat",
+        """
+            select behandling_id, data from iverksetting 
+            where data -> 'søker' ->> 'personIdent' = :personId 
+            and data -> 'vedtak' ->> 'vedtaksresultat' = :vedtaksresultat
+        """,
     )
     fun findByPersonIdAndResult(
         @Param("personId") personId: String,
         @Param("vedtaksresultat") vedtaksresultat: String,
     ): List<IverksettingEntitet>
 
-    @Query("select behandling_id, data from iverksett where data -> 'fagsak' ->> 'fagsakId' = :fagsakId::text")
+    @Query("select behandling_id, data from iverksetting where data -> 'fagsak' ->> 'fagsakId' = :fagsakId::text")
     fun findByFagsakId(@Param("fagsakId") fagsakId: UUID): List<IverksettingEntitet>
 
     @Query(
         """
-        select behandling_id, data from iverksett 
-        where data -> 'fagsak' ->> 'saksreferanse' = :saksreferanse
+            select behandling_id, data from iverksetting 
+            where data -> 'fagsak' ->> 'saksreferanse' = :saksreferanse
         """
     )
     fun findBySaksreferanse(
