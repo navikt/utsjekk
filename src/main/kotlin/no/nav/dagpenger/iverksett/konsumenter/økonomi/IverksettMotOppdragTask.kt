@@ -8,7 +8,7 @@ import no.nav.dagpenger.iverksett.api.domene.Iverksettingsresultat
 import no.nav.dagpenger.iverksett.api.domene.TilkjentYtelse
 import no.nav.dagpenger.iverksett.api.domene.behandlingId
 import no.nav.dagpenger.iverksett.api.domene.lagAndelData
-import no.nav.dagpenger.iverksett.api.domene.personIdent
+import no.nav.dagpenger.iverksett.api.domene.personident
 import no.nav.dagpenger.iverksett.api.domene.sakId
 import no.nav.dagpenger.iverksett.api.domene.tilAndelData
 import no.nav.dagpenger.iverksett.api.tilstand.IverksettingsresultatService
@@ -62,7 +62,7 @@ class IverksettMotOppdragTask(
             fagsakId = iverksetting.sakId,
             saksreferanse = iverksetting.fagsak.saksreferanse,
             behandlingId = iverksetting.behandlingId.toString(),
-            personIdent = iverksetting.personIdent,
+            personident = iverksetting.personident,
             brukersNavKontor = iverksetting.vedtak.brukersNavKontor,
             vedtaksdato = iverksetting.vedtak.vedtakstidspunkt.toLocalDate(),
         )

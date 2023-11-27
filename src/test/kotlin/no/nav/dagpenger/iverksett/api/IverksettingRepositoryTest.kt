@@ -41,12 +41,12 @@ class IverksettingRepositoryTest : ServerTest() {
         val json: String = ResourceLoaderTestUtil.readResource("json/IverksettDtoEksempel.json")
         val iverksettingData: Iverksetting = objectMapper.readValue<IverksettDto>(json).toDomain()
 
-        val iverksettListe1 = iverksettingRepository.findByPersonId(iverksettingData.søker.personIdent)
+        val iverksettListe1 = iverksettingRepository.findByPersonId(iverksettingData.søker.personident)
         assertEquals(0, iverksettListe1.size)
 
         val iverksett = iverksettingRepository.insert(lagIverksettingEntitet(iverksettingData))
 
-        val iverksettListe2 = iverksettingRepository.findByPersonId(iverksettingData.søker.personIdent)
+        val iverksettListe2 = iverksettingRepository.findByPersonId(iverksettingData.søker.personident)
         assertEquals(1, iverksettListe2.size)
         assertThat(iverksett).usingRecursiveComparison().isEqualTo(iverksettListe2[0])
     }
@@ -65,14 +65,14 @@ class IverksettingRepositoryTest : ServerTest() {
                 behandlingId = UUID.randomUUID(),
             ),
             søker = iverksettingData.søker.copy(
-                personIdent = "12345678911",
+                personident = "12345678911",
             ),
         )
         iverksettingRepository.insert(lagIverksettingEntitet(iverksettingData))
         iverksettingRepository.insert(lagIverksettingEntitet(iverksettData2))
         val iverksettAnnenPerson = iverksettingRepository.insert(lagIverksettingEntitet(iverksettDataAnnenPerson))
 
-        val iverksettResultat = iverksettingRepository.findByPersonId(iverksettingData.søker.personIdent)
+        val iverksettResultat = iverksettingRepository.findByPersonId(iverksettingData.søker.personident)
 
         assertEquals(2, iverksettResultat.size)
         assertFalse(iverksettResultat.contains(iverksettAnnenPerson))

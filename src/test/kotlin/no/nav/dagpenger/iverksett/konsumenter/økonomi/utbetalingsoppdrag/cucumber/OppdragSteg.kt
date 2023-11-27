@@ -138,7 +138,7 @@ class OppdragSteg {
         fagsakId = FAGSAK_ID,
         saksbehandlerId = "saksbehandlerId",
         behandlingId = behandlingId,
-        personIdent = "1",
+        personident = "1",
         vedtaksdato = LocalDate.now(),
     )
 

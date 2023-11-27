@@ -6,7 +6,7 @@ import no.nav.dagpenger.iverksett.api.domene.Iverksetting
 import no.nav.dagpenger.iverksett.api.domene.Iverksettingsresultat
 import no.nav.dagpenger.iverksett.api.domene.OppdragResultat
 import no.nav.dagpenger.iverksett.api.domene.behandlingId
-import no.nav.dagpenger.iverksett.api.domene.personIdent
+import no.nav.dagpenger.iverksett.api.domene.personident
 import no.nav.dagpenger.iverksett.api.domene.sakId
 import no.nav.dagpenger.iverksett.api.domene.tilAndelData
 import no.nav.dagpenger.iverksett.api.tilstand.IverksettingsresultatService
@@ -54,7 +54,7 @@ class IverksettingValidatorServiceTest {
         val nåværendeIverksetting = iverksettingTmp.copy(
             fagsak = forrigeIverksetting.fagsak,
             forrigeIverksettingBehandlingId = forrigeIverksetting.behandlingId,
-            søker = iverksettingTmp.søker.copy(personIdent = "12345678911"),
+            søker = iverksettingTmp.søker.copy(personident = "12345678911"),
         )
         every { iverksettingServiceMock.hentForrigeIverksett(nåværendeIverksetting) } returns forrigeIverksetting
 
@@ -107,7 +107,7 @@ class IverksettingValidatorServiceTest {
             fagsakId = iverksettingData.sakId,
             saksreferanse = iverksettingData.fagsak.saksreferanse,
             behandlingId = iverksettingData.behandlingId.toString(),
-            personIdent = iverksettingData.personIdent,
+            personident = iverksettingData.personident,
             vedtaksdato = iverksettingData.vedtak.vedtakstidspunkt.toLocalDate(),
         )
 

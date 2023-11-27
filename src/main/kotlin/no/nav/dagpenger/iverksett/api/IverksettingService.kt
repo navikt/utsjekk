@@ -62,7 +62,7 @@ class IverksettingService(
                 type = førsteHovedflytTask(),
                 payload = iverksetting.behandling.behandlingId.toString(),
                 properties = Properties().apply {
-                    this["personIdent"] = iverksetting.søker.personIdent
+                    this["personIdent"] = iverksetting.søker.personident
                     this["behandlingId"] = iverksetting.behandling.behandlingId.toString()
                     this["saksbehandler"] = iverksetting.vedtak.saksbehandlerId
                     this["beslutter"] = iverksetting.vedtak.beslutterId
@@ -107,12 +107,12 @@ class IverksettingService(
 
     fun sjekkStatusPåIverksettOgOppdaterTilstand(
         stønadstype: StønadType,
-        personIdent: String,
+        personident: String,
         behandlingId: UUID,
     ) {
         val oppdragId = OppdragId(
             fagsystem = stønadstype.tilFagsystem(),
-            personIdent = personIdent,
+            personIdent = personident,
             behandlingsId = behandlingId,
         )
 

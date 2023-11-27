@@ -31,7 +31,7 @@ data class Fagsakdetaljer(
 }
 
 data class Søker(
-    val personIdent: String,
+    val personident: String,
 )
 
 data class Vedtaksperiode(
@@ -59,6 +59,6 @@ data class Behandlingsdetaljer(
 )
 
 val Iverksetting.sakId get() = this.fagsak.fagsakId
-val Iverksetting.personIdent get() = this.søker.personIdent
+val Iverksetting.personident get() = this.søker.personident
 
 val Iverksetting.behandlingId get() = this.behandling.behandlingId

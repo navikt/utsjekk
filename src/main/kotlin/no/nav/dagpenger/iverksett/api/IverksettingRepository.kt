@@ -12,13 +12,13 @@ import java.util.UUID
 @Repository
 interface IverksettingRepository : RepositoryInterface<IverksettingEntitet, UUID>, InsertUpdateRepository<IverksettingEntitet> {
 
-    @Query("select behandling_id, data from iverksetting where data -> 'søker' ->> 'personIdent' = :personId")
+    @Query("select behandling_id, data from iverksetting where data -> 'søker' ->> 'personident' = :personId")
     fun findByPersonId(@Param("personId") personId: String): List<IverksettingEntitet>
 
     @Query(
         """
             select behandling_id, data from iverksetting 
-            where data -> 'søker' ->> 'personIdent' = :personId 
+            where data -> 'søker' ->> 'personident' = :personId 
             and data -> 'vedtak' ->> 'vedtaksresultat' = :vedtaksresultat
         """,
     )

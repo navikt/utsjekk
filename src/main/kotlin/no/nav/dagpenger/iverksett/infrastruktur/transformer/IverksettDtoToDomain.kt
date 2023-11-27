@@ -36,7 +36,7 @@ fun VedtaksdetaljerDto.toDomain(): Vedtaksdetaljer {
 fun IverksettDto.toDomain(): Iverksetting {
     return Iverksetting(
         fagsak = this.tilFagsak(),
-        søker = this.personIdent.tilSøker(),
+        søker = this.personIdent?.tilSøker() ?: this.personident.verdi.tilSøker(),
         behandling = this.tilBehandling(),
         vedtak = this.vedtak.toDomain(),
         forrigeIverksettingBehandlingId = this.forrigeIverksetting?.behandlingId,
@@ -54,7 +54,7 @@ fun IverksettDto.tilSakIdentifikator(): SakIdentifikator {
     return SakIdentifikator(this.sakId, this.saksreferanse)
 }
 
-fun String.tilSøker(): Søker = Søker(personIdent = this)
+fun String.tilSøker(): Søker = Søker(personident = this)
 
 fun IverksettDto.tilBehandling(): Behandlingsdetaljer = Behandlingsdetaljer(
     behandlingId = this.behandlingId,

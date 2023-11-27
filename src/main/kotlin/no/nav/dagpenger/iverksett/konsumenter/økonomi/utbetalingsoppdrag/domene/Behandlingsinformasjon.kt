@@ -17,7 +17,7 @@ data class Behandlingsinformasjon(
     val fagsakId: UUID? = null,
     val saksreferanse: String? = null,
     val behandlingId: String,
-    val personIdent: String,
+    val personident: String,
     val vedtaksdato: LocalDate,
     val brukersNavKontor: BrukersNavKontor? = null,
     val erGOmregning: Boolean = false,

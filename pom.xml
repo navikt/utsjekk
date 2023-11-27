@@ -25,7 +25,7 @@
         <kotlin.version>1.8.10</kotlin.version>
 
         <!-- Versjoner -->
-        <dp-kontrakter.version>2.0_20231114144943_2428cb9</dp-kontrakter.version>
+        <dp-kontrakter.version>2.0_20231124154225_d640fba</dp-kontrakter.version>
         <springdoc.version>2.0.2</springdoc.version>
         <prosessering.version>2.20230928100816_3cbdfc5</prosessering.version>
         <maven-surefire-plugin.version>3.0.0-M9</maven-surefire-plugin.version>

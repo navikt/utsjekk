@@ -29,7 +29,7 @@ class IverksattStatusControllerTest : ServerTest() {
     @Test
     fun `skal svare med 401 uten token`() {
         val response: ResponseEntity<Any> = restTemplate.exchange(
-            localhostUrl("/api/vedtakstatus/12345678910"),
+            localhostUrl("/api/vedtakstatus/15507600333"),
             HttpMethod.GET,
             HttpEntity(null, headers),
         )
@@ -42,7 +42,7 @@ class IverksattStatusControllerTest : ServerTest() {
         headers.setBearerAuth(lokalTestToken())
 
         val response: ResponseEntity<VedtaksstatusDto> = restTemplate.exchange(
-            localhostUrl("/api/vedtakstatus/12345678910"),
+            localhostUrl("/api/vedtakstatus/15507600333"),
             HttpMethod.GET,
             HttpEntity(null, headers),
         )
@@ -59,7 +59,7 @@ class IverksattStatusControllerTest : ServerTest() {
         headers.setBearerAuth(lokalTestToken())
 
         val statusResponse: ResponseEntity<VedtaksstatusDto> = restTemplate.exchange(
-            localhostUrl("/api/vedtakstatus/12345678910"),
+            localhostUrl("/api/vedtakstatus/15507600333"),
             HttpMethod.GET,
             HttpEntity(null, headers),
         )
@@ -75,7 +75,7 @@ class IverksattStatusControllerTest : ServerTest() {
 
     @Test
     fun `skal hente iverksettinger for person og periode med fraOgMed i request før perioden`() {
-        val personId = "12345678910"
+        val personId = "15507600333"
 
         opprettTestData()
 
@@ -99,7 +99,7 @@ class IverksattStatusControllerTest : ServerTest() {
 
     @Test
     fun `skal hente iverksettinger for person og periode med fom og tom i request innen perioden`() {
-        val personId = "12345678910"
+        val personId = "15507600333"
 
         opprettTestData()
 
@@ -127,7 +127,7 @@ class IverksattStatusControllerTest : ServerTest() {
 
     @Test
     fun `skal hente iverksettinger for kun for oppgitt personId`() {
-        val personId = "12345678910"
+        val personId = "15507600333"
 
         opprettTestData()
 

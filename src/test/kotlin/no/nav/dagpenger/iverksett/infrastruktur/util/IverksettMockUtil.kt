@@ -18,6 +18,7 @@ import no.nav.dagpenger.iverksett.konsumenter.økonomi.lagAndelTilkjentYtelse
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.lagUtbetalingDto
 import no.nav.dagpenger.kontrakter.felles.BrukersNavKontor
 import no.nav.dagpenger.kontrakter.felles.Datoperiode
+import no.nav.dagpenger.kontrakter.felles.Personident
 import no.nav.dagpenger.kontrakter.felles.StønadType
 import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
 import no.nav.dagpenger.kontrakter.iverksett.Ferietillegg
@@ -53,7 +54,7 @@ fun opprettIverksettDto(
     return IverksettDto(
         behandlingId = behandlingId,
         sakId = sakId,
-        personIdent = "12345678910",
+        personident = Personident("15507600333"),
         vedtak = VedtaksdetaljerDto(
             resultat = vedtaksresultat,
             vedtakstidspunkt = LocalDateTime.of(2021, 5, 12, 0, 0),
@@ -146,7 +147,7 @@ fun opprettIverksett(
         fagsak = Fagsakdetaljer(fagsakId = UUID.randomUUID(), stønadstype = StønadTypeDagpenger.DAGPENGER_ARBEIDSSOKER_ORDINAER),
         behandling = behandlingsdetaljer,
         søker = Søker(
-            personIdent = "12345678910",
+            personident = "15507600333",
         ),
         vedtak = vedtaksdetaljer,
     )
@@ -161,7 +162,7 @@ fun opprettIverksett(
         fagsak = Fagsakdetaljer(fagsakId = fagsakId, stønadstype = StønadTypeDagpenger.DAGPENGER_ARBEIDSSOKER_ORDINAER),
         behandling = behandlingsdetaljer(behandlingId, forrigeBehandlingId),
         søker = Søker(
-            personIdent = "12345678910",
+            personident = "15507600333",
         ),
         vedtak = vedtaksdetaljer(
             vedtaksresultat = Vedtaksresultat.INNVILGET,

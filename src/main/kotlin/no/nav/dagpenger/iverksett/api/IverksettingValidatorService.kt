@@ -1,7 +1,7 @@
 package no.nav.dagpenger.iverksett.api
 
 import no.nav.dagpenger.iverksett.api.domene.Iverksetting
-import no.nav.dagpenger.iverksett.api.domene.personIdent
+import no.nav.dagpenger.iverksett.api.domene.personident
 import no.nav.dagpenger.iverksett.api.domene.sakId
 import no.nav.dagpenger.iverksett.api.tilstand.IverksettingsresultatService
 import no.nav.dagpenger.iverksett.infrastruktur.advice.ApiFeil
@@ -37,8 +37,8 @@ class IverksettingValidatorService(
             )
         }
 
-        val forrigePersonident = forrigeIverksett?.personIdent
-        if (forrigePersonident != null && forrigePersonident != iverksetting.personIdent) {
+        val forrigePersonident = forrigeIverksett?.personident
+        if (forrigePersonident != null && forrigePersonident != iverksetting.personident) {
             throw ApiFeil(
                 "Forrige behandling er knyttet til en annen person enn denne iverksettingen gjelder",
                 HttpStatus.BAD_REQUEST,

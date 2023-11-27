@@ -53,7 +53,7 @@ internal data class UtbetalingsperiodeMal(
             vedtakdatoTom = andel.tom,
             sats = BigDecimal(andel.beløp),
             satsType = Utbetalingsperiode.SatsType.DAG,
-            utbetalesTil = behandlingsinformasjon.personIdent,
+            utbetalesTil = behandlingsinformasjon.personident,
             behandlingId = UUID.fromString(behandlingsinformasjon.behandlingId),
         )
 }
