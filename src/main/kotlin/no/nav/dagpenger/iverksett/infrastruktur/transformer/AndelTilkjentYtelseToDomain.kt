@@ -8,7 +8,6 @@ fun UtbetalingDto.toDomain(): AndelTilkjentYtelse {
     return AndelTilkjentYtelse(
         beløp = this.belopPerDag,
         periode = Datoperiode(this.fraOgMedDato, this.tilOgMedDato),
-        stønadstype = stonadstype,
-        ferietillegg = this.ferietillegg,
+        stønadsdata = this.stønadsdata,
     )
 }

@@ -34,8 +34,7 @@ fun List<UtbetalingDto>.sammenslått(): List<UtbetalingDto> {
 
 private fun UtbetalingDto.kanSlåsSammen(forrige: UtbetalingDto): Boolean {
     return this.belopPerDag == forrige.belopPerDag
-            && this.stonadstype == forrige.stonadstype
-            && this.ferietillegg == forrige.ferietillegg
+            && this.stønadsdata == forrige.stønadsdata
             && this.fraOgMedDato == forrige.tilOgMedDato.plusDays(1)
 }
 

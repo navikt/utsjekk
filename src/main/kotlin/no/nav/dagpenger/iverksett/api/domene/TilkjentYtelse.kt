@@ -4,9 +4,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import java.util.UUID
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene.AndelData
-import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene.StønadTypeOgFerietillegg
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene.StønadTypeOgFerietilleggKeyDeserializer
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene.StønadTypeOgFerietilleggKeySerializer
+import no.nav.dagpenger.kontrakter.iverksett.Stønadsdata
 import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsoppdrag
 
 data class TilkjentYtelse(
@@ -16,13 +16,8 @@ data class TilkjentYtelse(
     val sisteAndelIKjede: AndelTilkjentYtelse? = null,
     @JsonSerialize(keyUsing = StønadTypeOgFerietilleggKeySerializer::class)
     @JsonDeserialize(keyUsing = StønadTypeOgFerietilleggKeyDeserializer::class)
-    val sisteAndelPerKjede: Map<StønadTypeOgFerietillegg, AndelTilkjentYtelse> = sisteAndelIKjede?.let {
-        mapOf(
-            StønadTypeOgFerietillegg(
-                it.stønadstype,
-                it.ferietillegg,
-            ) to it,
-        )
+    val sisteAndelPerKjede: Map<Stønadsdata, AndelTilkjentYtelse> = sisteAndelIKjede?.let {
+        mapOf(it.stønadsdata to it)
     } ?: emptyMap(),
 )
 

@@ -128,12 +128,12 @@ class IverksettingMotOppdragIntegrasjonsTest : ServerTest() {
     @Test
     internal fun `iverksett skal persisteres med korrekt stønadstype`() {
         val iverksett =
-            opprettIverksett(andeler = listOf(opprettAndelTilkjentYtelse(stønadstype = StønadTypeTiltakspenger.TILTAKSPENGER)))
+            opprettIverksett(andeler = listOf(opprettAndelTilkjentYtelse(stønadstype = StønadTypeTiltakspenger.JOBBKLUBB)))
 
         iverksettingService.startIverksetting(iverksett)
 
         val iverksettPersistert = iverksettingService.hentIverksetting(iverksett.behandling.behandlingId)
-        assertEquals(StønadTypeTiltakspenger.TILTAKSPENGER, iverksettPersistert?.fagsak?.stønadstype)
+        assertEquals(StønadTypeTiltakspenger.JOBBKLUBB, iverksettPersistert?.fagsak?.stønadstype)
     }
 
     private fun iverksettMotOppdrag() {

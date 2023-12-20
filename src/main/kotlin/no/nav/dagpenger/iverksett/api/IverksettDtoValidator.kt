@@ -2,9 +2,10 @@ package no.nav.dagpenger.iverksett.api
 
 import no.nav.dagpenger.iverksett.infrastruktur.advice.ApiFeil
 import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
-import no.nav.dagpenger.kontrakter.felles.StønadTypeTiltakspenger
 import no.nav.dagpenger.kontrakter.iverksett.Ferietillegg
 import no.nav.dagpenger.kontrakter.iverksett.IverksettDto
+import no.nav.dagpenger.kontrakter.iverksett.StønadsdataDagpenger
+import no.nav.dagpenger.kontrakter.iverksett.StønadsdataTiltakspenger
 import org.springframework.http.HttpStatus
 
 object IverksettDtoValidator {
@@ -83,7 +84,12 @@ object IverksettDtoValidator {
 
     internal fun ingenUtbetalingsperioderHarStønadstypeEØSOgFerietilleggTilAvdød(iverksettDto: IverksettDto) {
         val ugyldigKombinasjon = iverksettDto.vedtak.utbetalinger.any {
-            it.stonadstype == StønadTypeDagpenger.DAGPENGER_EOS && it.ferietillegg == Ferietillegg.AVDOD
+            if (it.stønadsdata is StønadsdataDagpenger) {
+                val sd = it.stønadsdata as StønadsdataDagpenger
+                sd.stønadstype == StønadTypeDagpenger.DAGPENGER_EOS && sd.ferietillegg == Ferietillegg.AVDOD
+            } else {
+                false
+            }
         }
 
         if (ugyldigKombinasjon) {
@@ -95,9 +101,9 @@ object IverksettDtoValidator {
     }
 
     internal fun brukersNavKontorErSattForTiltakspenger(iverksettDto: IverksettDto) {
-        val stønadstype = iverksettDto.vedtak.utbetalinger.firstOrNull()?.stonadstype
+        val stønadsdata = iverksettDto.vedtak.utbetalinger.firstOrNull()?.stønadsdata
 
-        if (stønadstype is StønadTypeTiltakspenger && iverksettDto.vedtak.brukersNavKontor == null) {
+        if (stønadsdata is StønadsdataTiltakspenger && iverksettDto.vedtak.brukersNavKontor == null) {
             throw ApiFeil(
                 "Brukers NAV-kontor må være satt på vedtaket for tiltakspenger",
                 HttpStatus.BAD_REQUEST,

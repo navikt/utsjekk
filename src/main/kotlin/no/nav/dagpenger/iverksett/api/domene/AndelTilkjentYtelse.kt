@@ -2,16 +2,13 @@ package no.nav.dagpenger.iverksett.api.domene
 
 import java.util.UUID
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene.AndelData
-import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene.StønadTypeOgFerietillegg
 import no.nav.dagpenger.kontrakter.felles.Datoperiode
-import no.nav.dagpenger.kontrakter.felles.StønadType
-import no.nav.dagpenger.kontrakter.iverksett.Ferietillegg
+import no.nav.dagpenger.kontrakter.iverksett.Stønadsdata
 
 data class AndelTilkjentYtelse(
     val beløp: Int,
     val periode: Datoperiode,
-    val stønadstype: StønadType,
-    val ferietillegg: Ferietillegg?,
+    val stønadsdata: Stønadsdata,
     val periodeId: Long? = null,
     val forrigePeriodeId: Long? = null,
 ) {
@@ -22,11 +19,10 @@ data class AndelTilkjentYtelse(
         id: UUID,
         beløp: Int,
         periode: Datoperiode,
-        stønadstype: StønadType,
-        ferietillegg: Ferietillegg?,
+        stønadsdata: Stønadsdata,
         periodeId: Long? = null,
         forrigePeriodeId: Long? = null,
-    ) : this(beløp, periode, stønadstype, ferietillegg, periodeId, forrigePeriodeId) {
+    ) : this(beløp, periode, stønadsdata, periodeId, forrigePeriodeId) {
         this.id = id
     }
 
@@ -63,15 +59,13 @@ data class AndelTilkjentYtelse(
         }
     }
 }
-fun AndelTilkjentYtelse.tilKlassifisering() =
-    StønadTypeOgFerietillegg(this.stønadstype, this.ferietillegg).tilKlassifisering()
 
 fun AndelTilkjentYtelse.tilAndelData() = AndelData(
     id = this.id.toString(),
     fom = this.periode.fom,
     tom = this.periode.tom,
     beløp = this.beløp,
-    type = StønadTypeOgFerietillegg(this.stønadstype, this.ferietillegg),
+    stønadsdata = this.stønadsdata,
     periodeId = this.periodeId,
     forrigePeriodeId = this.forrigePeriodeId,
 )

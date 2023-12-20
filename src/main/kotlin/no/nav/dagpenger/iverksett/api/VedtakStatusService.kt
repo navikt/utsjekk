@@ -42,7 +42,8 @@ class VedtakStatusService(
 
     private fun mapPerioder(iverksett: IverksettingEntitet, request: DatadelingRequest): List<Periode> {
         val vedtak = iverksett.data.vedtak
-        val yt = vedtak.tilkjentYtelse.sisteAndelIKjede?.stønadstype ?: StønadTypeDagpenger.DAGPENGER_ARBEIDSSOKER_ORDINAER
+        val yt = vedtak.tilkjentYtelse.sisteAndelIKjede?.stønadsdata?.stønadstype
+            ?: StønadTypeDagpenger.DAGPENGER_ARBEIDSSOKER_ORDINAER
 
         return vedtak.vedtaksperioder
             .filter {
@@ -53,7 +54,6 @@ class VedtakStatusService(
                     fraOgMedDato = it.periode.fom,
                     tilOgMedDato = it.periode.tom,
                     ytelseType = yt,
-                    gjenståendeDager = 0  // TODO: Vi må få tilgang til BEREGNINGSLEDD-tabellen
                 )
             }
     }

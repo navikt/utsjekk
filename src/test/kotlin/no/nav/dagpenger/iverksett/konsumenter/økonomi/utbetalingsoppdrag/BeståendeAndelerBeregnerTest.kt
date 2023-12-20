@@ -8,6 +8,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
 import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
+import no.nav.dagpenger.kontrakter.iverksett.StønadsdataDagpenger
 
 class BeståendeAndelerBeregnerTest {
     companion object {
@@ -319,14 +320,14 @@ class BeståendeAndelerBeregnerTest {
         beløp: Int,
         periodeId: Long? = null,
         forrigePeriodeId: Long? = null,
-        type: StønadType = StønadTypeDagpenger.DAGPENGER_ARBEIDSSOKER_ORDINAER,
+        type: StønadTypeDagpenger = StønadTypeDagpenger.DAGPENGER_ARBEIDSSOKER_ORDINAER,
     ): AndelData {
         return AndelData(
             id = "0",
             fom = fom,
             tom = tom,
             beløp = beløp,
-            type = StønadTypeOgFerietillegg(type, null),
+            stønadsdata = StønadsdataDagpenger(type),
             periodeId = periodeId,
             forrigePeriodeId = forrigePeriodeId,
         )

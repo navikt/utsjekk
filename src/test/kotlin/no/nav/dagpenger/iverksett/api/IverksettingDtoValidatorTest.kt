@@ -105,7 +105,7 @@ class IverksettingDtoValidatorTest {
 
     @Test
     fun `Skal få BAD_REQUEST når brukers NAV-kontor ikke er satt for tiltakspenger`() {
-        val iverksettDto = opprettIverksettDto(stønadType = StønadTypeTiltakspenger.TILTAKSPENGER)
+        val iverksettDto = opprettIverksettDto(stønadType = StønadTypeTiltakspenger.JOBBKLUBB)
 
         assertApiFeil(HttpStatus.BAD_REQUEST) {
             brukersNavKontorErSattForTiltakspenger(iverksettDto)
@@ -115,7 +115,7 @@ class IverksettingDtoValidatorTest {
     @Test
     fun `Skal få OK når brukers NAV-kontor er satt for tiltakspenger`() {
         val iverksettDto = opprettIverksettDto(
-            stønadType = StønadTypeTiltakspenger.TILTAKSPENGER,
+            stønadType = StønadTypeTiltakspenger.JOBBKLUBB,
             brukersNavKontor = BrukersNavKontor("4444", LocalDate.now())
         )
 

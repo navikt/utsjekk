@@ -1,6 +1,7 @@
 package no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene
 
 import java.time.LocalDate
+import no.nav.dagpenger.kontrakter.iverksett.Stønadsdata
 
 /**
  * ID her burde ikke brukes til noe spesielt. EF har ikke et ID på andeler som sendes til utbetalingsgeneratorn
@@ -10,7 +11,7 @@ data class AndelData(
     val fom: LocalDate,
     val tom: LocalDate,
     val beløp: Int,
-    val type: StønadTypeOgFerietillegg,
+    val stønadsdata: Stønadsdata,
     val periodeId: Long? = null,
     val forrigePeriodeId: Long? = null,
 )

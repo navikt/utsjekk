@@ -151,10 +151,9 @@ class IverksettingService(
     }
 
     private fun utledStønadstype(iverksetting: Iverksetting): StønadType =
-        iverksetting.vedtak.tilkjentYtelse.andelerTilkjentYtelse.firstOrNull()?.stønadstype
-            ?: hentForrigeIverksett(iverksetting)?.vedtak?.tilkjentYtelse?.andelerTilkjentYtelse?.firstOrNull()?.stønadstype
+        iverksetting.vedtak.tilkjentYtelse.andelerTilkjentYtelse.firstOrNull()?.stønadsdata?.stønadstype
+            ?: hentForrigeIverksett(iverksetting)?.vedtak?.tilkjentYtelse?.andelerTilkjentYtelse?.firstOrNull()?.stønadsdata?.stønadstype
             ?: StønadTypeDagpenger.DAGPENGER_ARBEIDSSOKER_ORDINAER
-
 
     companion object {
         private val logger = LoggerFactory.getLogger(this::class.java)

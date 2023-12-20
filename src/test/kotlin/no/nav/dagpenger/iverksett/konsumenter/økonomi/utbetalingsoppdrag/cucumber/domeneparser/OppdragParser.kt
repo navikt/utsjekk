@@ -4,7 +4,6 @@ import io.cucumber.datatable.DataTable
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.cucumber.domeneparser.DomeneparserUtil.groupByBehandlingId
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.cucumber.domeneparser.IdTIlUUIDHolder.behandlingIdTilUUID
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene.AndelData
-import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene.StønadTypeOgFerietillegg
 import no.nav.dagpenger.kontrakter.felles.StønadType
 import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsoppdrag
 import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsperiode
@@ -12,6 +11,7 @@ import org.assertj.core.api.Assertions.assertThat
 import java.time.LocalDate
 import java.util.UUID
 import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
+import no.nav.dagpenger.kontrakter.iverksett.StønadsdataDagpenger
 
 object OppdragParser {
 
@@ -41,7 +41,7 @@ object OppdragParser {
         rad: Map<String, String>,
         andelId: Long,
     ): AndelData {
-        val stønadTypeOgFerietillegg = StønadTypeOgFerietillegg(
+        val stønadsdataDagpenger = StønadsdataDagpenger(
             stønadstype = parseValgfriEnum<StønadTypeDagpenger>(DomenebegrepAndeler.YTELSE_TYPE, rad)
                 ?: StønadTypeDagpenger.DAGPENGER_ARBEIDSSOKER_ORDINAER,
             ferietillegg = null,
@@ -51,7 +51,7 @@ object OppdragParser {
             fom = parseDato(Domenebegrep.FRA_DATO, rad),
             tom = parseDato(Domenebegrep.TIL_DATO, rad),
             beløp = parseInt(DomenebegrepAndeler.BELØP, rad),
-            type = stønadTypeOgFerietillegg,
+            stønadsdata = stønadsdataDagpenger,
             periodeId = parseValgfriLong(DomenebegrepUtbetalingsoppdrag.PERIODE_ID, rad),
             forrigePeriodeId = parseValgfriLong(DomenebegrepUtbetalingsoppdrag.FORRIGE_PERIODE_ID, rad),
         )

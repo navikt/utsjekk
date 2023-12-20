@@ -7,12 +7,15 @@ import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene.StønadTypeOgFerietillegg
 import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
 import no.nav.dagpenger.kontrakter.felles.StønadTypeTiltakspenger
+import no.nav.dagpenger.kontrakter.iverksett.Stønadsdata
+import no.nav.dagpenger.kontrakter.iverksett.StønadsdataDagpenger
+import no.nav.dagpenger.kontrakter.iverksett.StønadsdataTiltakspenger
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 class UtbetalingsgeneratorTest {
     companion object {
-        private val FAGSYSTEM_TP = StønadTypeTiltakspenger.TILTAKSPENGER.tilFagsystem()
+        private val FAGSYSTEM_TP = StønadTypeTiltakspenger.JOBBKLUBB.tilFagsystem()
         private val FAGSYSTEM_DP = StønadTypeDagpenger.DAGPENGER_ARBEIDSSOKER_ORDINAER.tilFagsystem()
         private val behandlingsinformasjon = Behandlingsinformasjon(
             saksbehandlerId = "A123456",
@@ -26,14 +29,14 @@ class UtbetalingsgeneratorTest {
             fom = LocalDate.of(2023, 10, 10),
             tom = LocalDate.of(2023, 10, 20),
             beløp = 250,
-            type = StønadTypeOgFerietillegg(StønadTypeDagpenger.DAGPENGER_ARBEIDSSOKER_ORDINAER)
+            stønadsdata = StønadsdataDagpenger(StønadTypeDagpenger.DAGPENGER_ARBEIDSSOKER_ORDINAER)
         )
     }
 
     @Test
     fun `utbetaling for tiltakspenger skal ha fagsystem tiltakspenger`() {
         val nyeAndeler =
-            listOf(basisAndelData.copy(type = StønadTypeOgFerietillegg(StønadTypeTiltakspenger.TILTAKSPENGER)))
+            listOf(basisAndelData.copy(stønadsdata = StønadsdataTiltakspenger(StønadTypeTiltakspenger.JOBBKLUBB)))
 
         val beregnetUtbetalingsoppdrag = Utbetalingsgenerator.lagUtbetalingsoppdrag(
             behandlingsinformasjon = behandlingsinformasjon,
@@ -52,7 +55,7 @@ class UtbetalingsgeneratorTest {
             behandlingsinformasjon = behandlingsinformasjon,
             nyeAndeler = emptyList(),
             forrigeAndeler = listOf(forrigeAndel),
-            sisteAndelPerKjede = mapOf(StønadTypeOgFerietillegg(StønadTypeDagpenger.DAGPENGER_ARBEIDSSOKER_ORDINAER) to forrigeAndel)
+            sisteAndelPerKjede = mapOf(StønadsdataDagpenger(StønadTypeDagpenger.DAGPENGER_ARBEIDSSOKER_ORDINAER) to forrigeAndel)
         )
 
         assertEquals(FAGSYSTEM_DP, beregnetUtbetalingsoppdrag.utbetalingsoppdrag.fagSystem)

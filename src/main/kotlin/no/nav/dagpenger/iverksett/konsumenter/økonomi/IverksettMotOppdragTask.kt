@@ -17,6 +17,7 @@ import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.Utbeta
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene.Behandlingsinformasjon
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene.BeregnetUtbetalingsoppdrag
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene.StønadTypeOgFerietillegg
+import no.nav.dagpenger.kontrakter.iverksett.Stønadsdata
 import no.nav.familie.prosessering.AsyncTaskStep
 import no.nav.familie.prosessering.TaskStepBeskrivelse
 import no.nav.familie.prosessering.domene.Task
@@ -133,15 +134,15 @@ class IverksettMotOppdragTask(
 
     private fun lagTilkjentYtelseMedSisteAndelPerKjede(
         tilkjentYtelse: TilkjentYtelse,
-        forrigeSisteAndelPerKjede: Map<StønadTypeOgFerietillegg, AndelTilkjentYtelse>,
+        forrigeSisteAndelPerKjede: Map<Stønadsdata, AndelTilkjentYtelse>,
     ): TilkjentYtelse {
         val beregnetSisteAndePerKjede = tilkjentYtelse.andelerTilkjentYtelse.groupBy {
-            StønadTypeOgFerietillegg(it.stønadstype, it.ferietillegg)
+            it.stønadsdata
         }.mapValues {
             it.value.maxBy { it.periodeId!! }
         }
 
-        val nySisteAndelerPerKjede: Map<StønadTypeOgFerietillegg, AndelTilkjentYtelse> =
+        val nySisteAndelerPerKjede: Map<Stønadsdata, AndelTilkjentYtelse> =
             finnSisteAndelPerKjede(beregnetSisteAndePerKjede, forrigeSisteAndelPerKjede)
 
         return tilkjentYtelse.copy(
@@ -158,8 +159,8 @@ class IverksettMotOppdragTask(
      * 2. Hvis periodeIdene er like, bruk den med størst til-og-med-dato
      */
     private fun finnSisteAndelPerKjede(
-        nySisteAndePerKjede: Map<StønadTypeOgFerietillegg, AndelTilkjentYtelse>,
-        forrigeSisteAndelPerKjede: Map<StønadTypeOgFerietillegg, AndelTilkjentYtelse>,
+        nySisteAndePerKjede: Map<Stønadsdata, AndelTilkjentYtelse>,
+        forrigeSisteAndelPerKjede: Map<Stønadsdata, AndelTilkjentYtelse>,
     ) = (nySisteAndePerKjede.asSequence() + forrigeSisteAndelPerKjede.asSequence())
         .groupBy({ it.key }, { it.value })
         .mapValues {
