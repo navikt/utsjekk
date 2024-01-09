@@ -20,13 +20,23 @@ fun lagAndelTilkjentYtelse(
     stønadstype: StønadType = StønadTypeDagpenger.DAGPENGER_ARBEIDSSOKER_ORDINAER,
     ferietillegg: Ferietillegg? = null,
 ) =
-    AndelTilkjentYtelse(
-        beløp = beløp,
-        periode = Datoperiode(fraOgMed, tilOgMed),
-        periodeId = periodeId,
-        forrigePeriodeId = forrigePeriodeId,
-        stønadsdata = StønadsdataDagpenger(stønadstype as StønadTypeDagpenger, ferietillegg)
-    )
+        if (stønadstype is StønadTypeDagpenger) {
+            AndelTilkjentYtelse(
+                    beløp = beløp,
+                    periode = Datoperiode(fraOgMed, tilOgMed),
+                    periodeId = periodeId,
+                    forrigePeriodeId = forrigePeriodeId,
+                    stønadsdata = StønadsdataDagpenger(stønadstype, ferietillegg)
+            )
+        } else {
+            AndelTilkjentYtelse(
+                    beløp = beløp,
+                    periode = Datoperiode(fraOgMed, tilOgMed),
+                    periodeId = periodeId,
+                    forrigePeriodeId = forrigePeriodeId,
+                    stønadsdata = StønadsdataTiltakspenger(stønadstype as StønadTypeTiltakspenger)
+            )
+        }
 
 fun lagUtbetalingDto(
     beløp: Int,

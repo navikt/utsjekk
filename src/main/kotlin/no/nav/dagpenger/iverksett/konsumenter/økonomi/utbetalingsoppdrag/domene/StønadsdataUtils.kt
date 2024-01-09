@@ -1,26 +1,17 @@
 package no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene
 
 import com.fasterxml.jackson.core.JsonGenerator
-import com.fasterxml.jackson.core.JsonProcessingException
 import com.fasterxml.jackson.databind.DeserializationContext
 import com.fasterxml.jackson.databind.JsonSerializer
 import com.fasterxml.jackson.databind.KeyDeserializer
 import com.fasterxml.jackson.databind.SerializerProvider
-import no.nav.dagpenger.kontrakter.felles.StønadType
-import no.nav.dagpenger.kontrakter.felles.objectMapper
-import no.nav.dagpenger.kontrakter.iverksett.Ferietillegg
-import java.io.IOException
 import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
 import no.nav.dagpenger.kontrakter.felles.StønadTypeTiltakspenger
+import no.nav.dagpenger.kontrakter.felles.objectMapper
+import no.nav.dagpenger.kontrakter.iverksett.Ferietillegg
 import no.nav.dagpenger.kontrakter.iverksett.Stønadsdata
 import no.nav.dagpenger.kontrakter.iverksett.StønadsdataDagpenger
 import no.nav.dagpenger.kontrakter.iverksett.StønadsdataTiltakspenger
-
-data class StønadTypeOgFerietillegg(
-    val stønadstype: StønadType,
-    val ferietillegg: Ferietillegg? = null,
-    val barnetillegg: Boolean? = null // TODO må finne en løsning på dette
-) {}
 
 fun Stønadsdata.tilKlassifisering(): String =
     when (this) {
@@ -98,20 +89,18 @@ private fun StønadsdataTiltakspenger.tilKlassifiseringTiltakspenger(): String =
         }
     }
 
-class StønadTypeOgFerietilleggKeySerializer : JsonSerializer<StønadTypeOgFerietillegg>() {
-    @Throws(IOException::class, JsonProcessingException::class)
-    override fun serialize(value: StønadTypeOgFerietillegg?, gen: JsonGenerator?, serializers: SerializerProvider?) {
+class StønadsdataKeySerializer : JsonSerializer<Stønadsdata>() {
+    override fun serialize(value: Stønadsdata?, gen: JsonGenerator?, serializers: SerializerProvider?) {
         gen?.let { jGen ->
-            value?.let { stønadtypeOgFerietillegg ->
-                jGen.writeFieldName(objectMapper.writeValueAsString(stønadtypeOgFerietillegg))
+            value?.let { stønadsdata ->
+                jGen.writeFieldName(objectMapper.writeValueAsString(stønadsdata))
             } ?: jGen.writeNull()
         }
     }
 }
 
-class StønadTypeOgFerietilleggKeyDeserializer : KeyDeserializer() {
-    @Throws(IOException::class, JsonProcessingException::class)
-    override fun deserializeKey(key: String?, ctxt: DeserializationContext?): StønadTypeOgFerietillegg? {
-        return key?.let { objectMapper.readValue(key, StønadTypeOgFerietillegg::class.java) }
+class StønadsdataKeyDeserializer : KeyDeserializer() {
+    override fun deserializeKey(key: String?, ctx: DeserializationContext?): Stønadsdata? {
+        return key?.let{ objectMapper.readValue(key, Stønadsdata::class.java) }
     }
 }
