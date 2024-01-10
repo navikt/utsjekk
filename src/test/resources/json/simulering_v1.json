@@ -7,17 +7,17 @@
       "utbetaltPerPeriode": 3800,
       "fraOgMedDato": "2021-03-01",
       "tilOgMedDato": "2021-08-31",
-      "stønadstype": "DAGPENGER_ARBEIDSSOKER_ORDINAER"
+      "stønadstype": "DAGPENGER_ARBEIDSSØKER_ORDINÆR"
     },
     {
       "beløp": 3800,
       "fraOgMedDato": "2022-09-01",
       "tilOgMedDato": "2023-11-30",
-      "stønadstype": "DAGPENGER_ARBEIDSSOKER_ORDINAER"
+      "stønadstype": "DAGPENGER_ARBEIDSSØKER_ORDINÆR"
     }
   ],
   "saksbehandlerId": "12345",
-  "stønadstype": "DAGPENGER_ARBEIDSSOKER_ORDINAER",
+  "stønadstype": "DAGPENGER_ARBEIDSSØKER_ORDINÆR",
   "sakId": "4b657902-d994-11eb-b8bc-0242ac130004",
   "forrigeBehandlingId": "4b657902-d994-11eb-b8bc-0242ac130003"
 }

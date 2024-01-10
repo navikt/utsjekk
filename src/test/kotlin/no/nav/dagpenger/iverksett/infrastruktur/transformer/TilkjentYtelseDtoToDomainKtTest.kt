@@ -24,7 +24,7 @@ class TilkjentYtelseDtoToDomainKtTest {
         val utbetalinger = listOf(lagUtbetalingDto(beløp = 100)).sammenslått()
 
         assertEquals(1, utbetalinger.size)
-        assertEquals(100, utbetalinger.first().belopPerDag)
+        assertEquals(100, utbetalinger.first().beløpPerDag)
     }
 
     @Test
@@ -74,22 +74,22 @@ class TilkjentYtelseDtoToDomainKtTest {
 
         assertEquals(4, utbetalinger.size)
         utbetalinger.component1().let {
-            assertEquals(100, it.belopPerDag)
+            assertEquals(100, it.beløpPerDag)
             assertEquals(2.januar(2023), it.fraOgMedDato)
             assertEquals(6.januar(2023), it.tilOgMedDato)
         }
         utbetalinger.component2().let {
-            assertEquals(0, it.belopPerDag)
+            assertEquals(0, it.beløpPerDag)
             assertEquals(7.januar(2023), it.fraOgMedDato)
             assertEquals(8.januar(2023), it.tilOgMedDato)
         }
         utbetalinger.component3().let {
-            assertEquals(100, it.belopPerDag)
+            assertEquals(100, it.beløpPerDag)
             assertEquals(9.januar(2023), it.fraOgMedDato)
             assertEquals(9.januar(2023), it.tilOgMedDato)
         }
         utbetalinger.component4().let {
-            assertEquals(200, it.belopPerDag)
+            assertEquals(200, it.beløpPerDag)
             assertEquals(10.januar(2023), it.fraOgMedDato)
             assertEquals(13.januar(2023), it.tilOgMedDato)
         }
@@ -122,12 +122,12 @@ class TilkjentYtelseDtoToDomainKtTest {
 
         assertEquals(2, utbetalinger.size)
         utbetalinger.first().let {
-            assertEquals(100, it.belopPerDag)
+            assertEquals(100, it.beløpPerDag)
             assertEquals(2.januar(2023), it.fraOgMedDato)
             assertEquals(2.januar(2023), it.tilOgMedDato)
         }
         utbetalinger.component2().let {
-            assertEquals(200, it.belopPerDag)
+            assertEquals(200, it.beløpPerDag)
             assertEquals(3.januar(2023), it.fraOgMedDato)
             assertEquals(3.januar(2023), it.tilOgMedDato)
         }
@@ -140,24 +140,24 @@ class TilkjentYtelseDtoToDomainKtTest {
                 beløp = 100,
                 fraOgMed = 2.januar(2023),
                 tilOgMed = 2.januar(2023),
-                stønadstype = StønadTypeDagpenger.DAGPENGER_ARBEIDSSOKER_ORDINAER
+                stønadstype = StønadTypeDagpenger.DAGPENGER_ARBEIDSSØKER_ORDINÆR
             ),
             lagUtbetalingDto(
                 beløp = 100,
                 fraOgMed = 3.januar(2023),
                 tilOgMed = 3.januar(2023),
-                stønadstype = StønadTypeDagpenger.DAGPENGER_EOS
+                stønadstype = StønadTypeDagpenger.DAGPENGER_EØS
             )
         ).sammenslått()
 
         assertEquals(2, utbetalinger.size)
         utbetalinger.first().let {
-            assertEquals(StønadTypeDagpenger.DAGPENGER_ARBEIDSSOKER_ORDINAER, it.stønadsdata.stønadstype)
+            assertEquals(StønadTypeDagpenger.DAGPENGER_ARBEIDSSØKER_ORDINÆR, it.stønadsdata.stønadstype)
             assertEquals(2.januar(2023), it.fraOgMedDato)
             assertEquals(2.januar(2023), it.tilOgMedDato)
         }
         utbetalinger.component2().let {
-            assertEquals(StønadTypeDagpenger.DAGPENGER_EOS, it.stønadsdata.stønadstype)
+            assertEquals(StønadTypeDagpenger.DAGPENGER_EØS, it.stønadsdata.stønadstype)
             assertEquals(LocalDate.of(2023, 1, 3), it.fraOgMedDato)
             assertEquals(LocalDate.of(2023, 1, 3), it.tilOgMedDato)
         }
@@ -170,26 +170,26 @@ class TilkjentYtelseDtoToDomainKtTest {
                 beløp = 100,
                 fraOgMed = 2.januar(2023),
                 tilOgMed = 2.januar(2023),
-                ferietillegg = Ferietillegg.ORDINAER
+                ferietillegg = Ferietillegg.ORDINÆR
             ),
             lagUtbetalingDto(
                 beløp = 100,
                 fraOgMed = 3.januar(2023),
                 tilOgMed = 3.januar(2023),
-                ferietillegg = Ferietillegg.AVDOD
+                ferietillegg = Ferietillegg.AVDØD
             )
         ).sammenslått()
 
         assertEquals(2, utbetalinger.size)
         utbetalinger.first().let {
             val stønadsdata = it.stønadsdata as StønadsdataDagpengerDto
-            assertEquals(Ferietillegg.ORDINAER, stønadsdata.ferietillegg)
+            assertEquals(Ferietillegg.ORDINÆR, stønadsdata.ferietillegg)
             assertEquals(2.januar(2023), it.fraOgMedDato)
             assertEquals(2.januar(2023), it.tilOgMedDato)
         }
         utbetalinger.component2().let {
             val stønadsdata = it.stønadsdata as StønadsdataDagpengerDto
-            assertEquals(Ferietillegg.AVDOD, stønadsdata.ferietillegg)
+            assertEquals(Ferietillegg.AVDØD, stønadsdata.ferietillegg)
             assertEquals(LocalDate.of(2023, 1, 3), it.fraOgMedDato)
             assertEquals(LocalDate.of(2023, 1, 3), it.tilOgMedDato)
         }

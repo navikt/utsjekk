@@ -19,7 +19,7 @@ fun lagAndelTilkjentYtelse(
     tilOgMed: LocalDate,
     periodeId: Long? = null,
     forrigePeriodeId: Long? = null,
-    stønadstype: StønadType = StønadTypeDagpenger.DAGPENGER_ARBEIDSSOKER_ORDINAER,
+    stønadstype: StønadType = StønadTypeDagpenger.DAGPENGER_ARBEIDSSØKER_ORDINÆR,
     ferietillegg: Ferietillegg? = null,
 ) =
         if (stønadstype is StønadTypeDagpenger) {
@@ -44,7 +44,7 @@ fun lagUtbetalingDto(
     beløp: Int,
     fraOgMed: LocalDate = LocalDate.of(2021, 1, 1),
     tilOgMed: LocalDate = LocalDate.of(2021, 1, 31),
-    stønadstype: StønadType = StønadTypeDagpenger.DAGPENGER_ARBEIDSSOKER_ORDINAER,
+    stønadstype: StønadType = StønadTypeDagpenger.DAGPENGER_ARBEIDSSØKER_ORDINÆR,
     ferietillegg: Ferietillegg? = null,
 ): UtbetalingDto {
     val stønadsdata = if (stønadstype is StønadTypeDagpenger) {
@@ -53,7 +53,7 @@ fun lagUtbetalingDto(
         StønadsdataTiltakspengerDto(stønadstype as StønadTypeTiltakspenger)
     }
     return UtbetalingDto(
-        belopPerDag = beløp,
+        beløpPerDag = beløp,
         fraOgMedDato = fraOgMed,
         tilOgMedDato = tilOgMed,
         stønadsdata = stønadsdata

@@ -45,27 +45,27 @@ sealed class Stønadsdata(open val stønadstype: StønadType) {
 data class StønadsdataDagpenger(override val stønadstype: StønadTypeDagpenger, val ferietillegg: Ferietillegg? = null) : Stønadsdata(stønadstype) {
     fun tilKlassifiseringDagpenger(): String =
             when (this.stønadstype) {
-                StønadTypeDagpenger.DAGPENGER_ARBEIDSSOKER_ORDINAER -> when (ferietillegg) {
-                    Ferietillegg.ORDINAER -> "DPORASFE"
-                    Ferietillegg.AVDOD -> "DPORASFE-IOP"
+                StønadTypeDagpenger.DAGPENGER_ARBEIDSSØKER_ORDINÆR -> when (ferietillegg) {
+                    Ferietillegg.ORDINÆR -> "DPORASFE"
+                    Ferietillegg.AVDØD -> "DPORASFE-IOP"
                     null -> "DPORAS"
                 }
 
-                StønadTypeDagpenger.DAGPENGER_PERMITTERING_ORDINAER -> when (ferietillegg) {
-                    Ferietillegg.ORDINAER -> "DPPEASFE1"
-                    Ferietillegg.AVDOD -> "DPPEASFE1-IOP"
+                StønadTypeDagpenger.DAGPENGER_PERMITTERING_ORDINÆR -> when (ferietillegg) {
+                    Ferietillegg.ORDINÆR -> "DPPEASFE1"
+                    Ferietillegg.AVDØD -> "DPPEASFE1-IOP"
                     null -> "DPPEAS"
                 }
 
                 StønadTypeDagpenger.DAGPENGER_PERMITTERING_FISKEINDUSTRI -> when (ferietillegg) {
-                    Ferietillegg.ORDINAER -> "DPPEFIFE1"
-                    Ferietillegg.AVDOD -> "DPPEFIFE1-IOP"
+                    Ferietillegg.ORDINÆR -> "DPPEFIFE1"
+                    Ferietillegg.AVDØD -> "DPPEFIFE1-IOP"
                     null -> "DPPEFI"
                 }
 
-                StønadTypeDagpenger.DAGPENGER_EOS -> when (ferietillegg) {
-                    Ferietillegg.ORDINAER -> "DPFEASISP"
-                    Ferietillegg.AVDOD -> throw IllegalArgumentException("Eksport-gruppen har ingen egen kode for ferietillegg til avdød")
+                StønadTypeDagpenger.DAGPENGER_EØS -> when (ferietillegg) {
+                    Ferietillegg.ORDINÆR -> "DPFEASISP"
+                    Ferietillegg.AVDØD -> throw IllegalArgumentException("Eksport-gruppen har ingen egen kode for ferietillegg til avdød")
                     null -> "DPDPASISP1"
                 }
             }
@@ -84,17 +84,17 @@ data class StønadsdataTiltakspenger(
                     StønadTypeTiltakspenger.AVKLARING -> "TPBTAAGR"
                     StønadTypeTiltakspenger.DIGITAL_JOBBKLUBB -> "TPBTDJK"
                     StønadTypeTiltakspenger.ENKELTPLASS_AMO -> "TPBTEPAMO"
-                    StønadTypeTiltakspenger.ENKELTPLASS_VGS_OG_HOYERE_YRKESFAG -> "TPBTEPVGSHOY"
-                    StønadTypeTiltakspenger.FORSOK_OPPLAERING_LENGRE_VARIGHET -> "TPBTFLV"
+                    StønadTypeTiltakspenger.ENKELTPLASS_VGS_OG_HØYERE_YRKESFAG -> "TPBTEPVGSHOY"
+                    StønadTypeTiltakspenger.FORSØK_OPPLÆRING_LENGRE_VARIGHET -> "TPBTFLV"
                     StønadTypeTiltakspenger.GRUPPE_AMO -> "TPBTGRAMO"
-                    StønadTypeTiltakspenger.GRUPPE_VGS_OG_HOYERE_YRKESFAG -> "TPBTGRVGSHOY"
-                    StønadTypeTiltakspenger.HOYERE_UTDANNING -> "TPBTHOYUTD"
-                    StønadTypeTiltakspenger.INDIVIDUELL_JOBBSTOTTE -> "TPBTIPS"
-                    StønadTypeTiltakspenger.INDIVIDUELL_KARRIERESTOTTE_UNG -> "TPBTIPSUNG"
+                    StønadTypeTiltakspenger.GRUPPE_VGS_OG_HØYERE_YRKESFAG -> "TPBTGRVGSHOY"
+                    StønadTypeTiltakspenger.HØYERE_UTDANNING -> "TPBTHOYUTD"
+                    StønadTypeTiltakspenger.INDIVIDUELL_JOBBSTØTTE -> "TPBTIPS"
+                    StønadTypeTiltakspenger.INDIVIDUELL_KARRIERESTØTTE_UNG -> "TPBTIPSUNG"
                     StønadTypeTiltakspenger.JOBBKLUBB -> "TPBTJK2009"
-                    StønadTypeTiltakspenger.OPPFOLGING -> "TPBTOPPFAGR"
-                    StønadTypeTiltakspenger.UTVIDET_OPPFOLGING_I_NAV -> "TPBTUAOPPFL"
-                    StønadTypeTiltakspenger.UTVIDET_OPPFOLGING_I_OPPLAERING -> "TPBTUOPPFOPPL"
+                    StønadTypeTiltakspenger.OPPFØLGING -> "TPBTOPPFAGR"
+                    StønadTypeTiltakspenger.UTVIDET_OPPFØLGING_I_NAV -> "TPBTUAOPPFL"
+                    StønadTypeTiltakspenger.UTVIDET_OPPFØLGING_I_OPPLÆRING -> "TPBTUOPPFOPPL"
                 }
             } else {
                 when (this.stønadstype) {
@@ -104,17 +104,17 @@ data class StønadsdataTiltakspenger(
                     StønadTypeTiltakspenger.AVKLARING -> "TPTPAAG"
                     StønadTypeTiltakspenger.DIGITAL_JOBBKLUBB -> "TPTPDJB"
                     StønadTypeTiltakspenger.ENKELTPLASS_AMO -> "TPTPEPAMO"
-                    StønadTypeTiltakspenger.ENKELTPLASS_VGS_OG_HOYERE_YRKESFAG -> "TPTPEPVGSHOU"
-                    StønadTypeTiltakspenger.FORSOK_OPPLAERING_LENGRE_VARIGHET -> "TPTPFLV"
+                    StønadTypeTiltakspenger.ENKELTPLASS_VGS_OG_HØYERE_YRKESFAG -> "TPTPEPVGSHOU"
+                    StønadTypeTiltakspenger.FORSØK_OPPLÆRING_LENGRE_VARIGHET -> "TPTPFLV"
                     StønadTypeTiltakspenger.GRUPPE_AMO -> "TPTPGRAMO"
-                    StønadTypeTiltakspenger.GRUPPE_VGS_OG_HOYERE_YRKESFAG -> "TPTPGRVGSHOY"
-                    StønadTypeTiltakspenger.HOYERE_UTDANNING -> "TPTPHOYUTD"
-                    StønadTypeTiltakspenger.INDIVIDUELL_JOBBSTOTTE -> "TPTPIPS"
-                    StønadTypeTiltakspenger.INDIVIDUELL_KARRIERESTOTTE_UNG -> "TPTPIPSUNG"
+                    StønadTypeTiltakspenger.GRUPPE_VGS_OG_HØYERE_YRKESFAG -> "TPTPGRVGSHOY"
+                    StønadTypeTiltakspenger.HØYERE_UTDANNING -> "TPTPHOYUTD"
+                    StønadTypeTiltakspenger.INDIVIDUELL_JOBBSTØTTE -> "TPTPIPS"
+                    StønadTypeTiltakspenger.INDIVIDUELL_KARRIERESTØTTE_UNG -> "TPTPIPSUNG"
                     StønadTypeTiltakspenger.JOBBKLUBB -> "TPTPJK2009"
-                    StønadTypeTiltakspenger.OPPFOLGING -> "TPTPOPPFAG"
-                    StønadTypeTiltakspenger.UTVIDET_OPPFOLGING_I_NAV -> "TPTPUAOPPF"
-                    StønadTypeTiltakspenger.UTVIDET_OPPFOLGING_I_OPPLAERING -> "TPTPUOPPFOPPL"
+                    StønadTypeTiltakspenger.OPPFØLGING -> "TPTPOPPFAG"
+                    StønadTypeTiltakspenger.UTVIDET_OPPFØLGING_I_NAV -> "TPTPUAOPPF"
+                    StønadTypeTiltakspenger.UTVIDET_OPPFØLGING_I_OPPLÆRING -> "TPTPUOPPFOPPL"
                 }
             }
 }

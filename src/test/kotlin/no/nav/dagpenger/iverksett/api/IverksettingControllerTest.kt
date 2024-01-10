@@ -1,20 +1,15 @@
 package no.nav.dagpenger.iverksett.api
 
-import java.util.UUID
 import no.nav.dagpenger.iverksett.ServerTest
 import no.nav.dagpenger.iverksett.infrastruktur.advice.Ressurs
 import no.nav.dagpenger.iverksett.infrastruktur.util.opprettIverksettDto
-import no.nav.dagpenger.kontrakter.iverksett.VedtakType
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.web.client.exchange
-import org.springframework.http.HttpEntity
-import org.springframework.http.HttpHeaders
-import org.springframework.http.HttpMethod
-import org.springframework.http.MediaType
-import org.springframework.http.ResponseEntity
+import org.springframework.http.*
+import java.util.*
 
 class IverksettingControllerTest : ServerTest() {
 
@@ -47,7 +42,6 @@ class IverksettingControllerTest : ServerTest() {
         val iverksettJson = opprettIverksettDto(behandlingId = behandlingId, sakId = sakId)
         val rammevedtak = iverksettJson.copy(
             vedtak = iverksettJson.vedtak.copy(
-                vedtakstype = VedtakType.RAMMEVEDTAK,
                 utbetalinger = emptyList(),
             ),
         )

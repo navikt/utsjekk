@@ -13,7 +13,6 @@ import no.nav.dagpenger.iverksett.konsumenter.økonomi.OppdragClient
 import no.nav.dagpenger.iverksett.lagIverksettingEntitet
 import no.nav.dagpenger.iverksett.lagIverksettingsdata
 import no.nav.dagpenger.iverksett.util.mockFeatureToggleService
-import no.nav.dagpenger.kontrakter.iverksett.VedtakType
 import no.nav.familie.prosessering.internal.TaskService
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -54,7 +53,7 @@ class IverksettingTilgangskontrollServiceTest {
 
     @Test
     fun `skal få OK når rammevedtak sendes av beslutter`() {
-        val nåværendeIverksetting = VedtakType.RAMMEVEDTAK.iverksetting()
+        val nåværendeIverksetting = iverksetting()
 
         every { iverksettingRepository.findByFagsakId(any()) } returns emptyList()
         every { TokenContext.hentGrupper() } returns listOf(BESLUTTERGRUPPE)
@@ -79,8 +78,8 @@ class IverksettingTilgangskontrollServiceTest {
 
     @Test
     fun `skal få OK når utbetalingsvedtak sendes etter autorisert vedtak`() {
-        val forrigeIverksetting = VedtakType.RAMMEVEDTAK.iverksettData()
-        val nåværendeIverksetting = VedtakType.UTBETALINGSVEDTAK.iverksetting()
+        val forrigeIverksetting = iverksettData()
+        val nåværendeIverksetting = iverksetting()
         val iverksettListe = listOf(lagIverksettingEntitet(forrigeIverksetting))
 
         every { iverksettingRepository.findByFagsakId(any()) } returns iverksettListe
@@ -94,8 +93,8 @@ class IverksettingTilgangskontrollServiceTest {
 
     @Test
     fun `skal få FORBIDDEN når utbetalingsvedtak sendes av ukjent system`() {
-        val forrigeIverksetting = VedtakType.RAMMEVEDTAK.iverksettData()
-        val nåværendeIverksetting = VedtakType.UTBETALINGSVEDTAK.iverksetting()
+        val forrigeIverksetting = iverksettData()
+        val nåværendeIverksetting = iverksetting()
         val iverksettListe = listOf(lagIverksettingEntitet(forrigeIverksetting))
 
         every { iverksettingRepository.findByFagsakId(any()) } returns iverksettListe
@@ -107,13 +106,9 @@ class IverksettingTilgangskontrollServiceTest {
         }
     }
 
-    private fun VedtakType.iverksettData() = lagIverksettingsdata().let {
-        it.copy(vedtak = it.vedtak.copy(vedtakstype = this))
-    }
+    private fun iverksettData() = lagIverksettingsdata()
 
-    private fun VedtakType.iverksetting() = opprettIverksettDto().let {
-        it.copy(vedtak = it.vedtak.copy(vedtakstype = this))
-    }
+    private fun iverksetting() = opprettIverksettDto()
 
     companion object {
         private const val BESLUTTERGRUPPE = "0000-GA-Beslutter"

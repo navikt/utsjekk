@@ -161,7 +161,6 @@ class VedtakStatusServiceTest {
     private fun assertVedtak(riktigIverksettingData: Iverksetting, returnertVedtak: VedtaksstatusDto?) {
         val riktigVedtak = riktigIverksettingData.vedtak
 
-        assertEquals(riktigVedtak.vedtakstype, returnertVedtak?.vedtakstype)
         assertEquals(riktigVedtak.vedtakstidspunkt, returnertVedtak?.vedtakstidspunkt)
         assertEquals(riktigVedtak.vedtaksresultat, returnertVedtak?.resultat)
 

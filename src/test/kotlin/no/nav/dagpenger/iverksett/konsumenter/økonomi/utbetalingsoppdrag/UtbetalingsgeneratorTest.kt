@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test
 class UtbetalingsgeneratorTest {
     companion object {
         private val FAGSYSTEM_TP = StønadTypeTiltakspenger.JOBBKLUBB.tilFagsystem()
-        private val FAGSYSTEM_DP = StønadTypeDagpenger.DAGPENGER_ARBEIDSSOKER_ORDINAER.tilFagsystem()
+        private val FAGSYSTEM_DP = StønadTypeDagpenger.DAGPENGER_ARBEIDSSØKER_ORDINÆR.tilFagsystem()
         private val behandlingsinformasjon = Behandlingsinformasjon(
             saksbehandlerId = "A123456",
             fagsakId = UUID.randomUUID(),
@@ -27,7 +27,7 @@ class UtbetalingsgeneratorTest {
             fom = LocalDate.of(2023, 10, 10),
             tom = LocalDate.of(2023, 10, 20),
             beløp = 250,
-            stønadsdata = StønadsdataDagpenger(StønadTypeDagpenger.DAGPENGER_ARBEIDSSOKER_ORDINAER)
+            stønadsdata = StønadsdataDagpenger(StønadTypeDagpenger.DAGPENGER_ARBEIDSSØKER_ORDINÆR)
         )
     }
 
@@ -53,7 +53,7 @@ class UtbetalingsgeneratorTest {
             behandlingsinformasjon = behandlingsinformasjon,
             nyeAndeler = emptyList(),
             forrigeAndeler = listOf(forrigeAndel),
-            sisteAndelPerKjede = mapOf(StønadsdataDagpenger(StønadTypeDagpenger.DAGPENGER_ARBEIDSSOKER_ORDINAER) to forrigeAndel)
+            sisteAndelPerKjede = mapOf(StønadsdataDagpenger(StønadTypeDagpenger.DAGPENGER_ARBEIDSSØKER_ORDINÆR) to forrigeAndel)
         )
 
         assertEquals(FAGSYSTEM_DP, beregnetUtbetalingsoppdrag.utbetalingsoppdrag.fagSystem)

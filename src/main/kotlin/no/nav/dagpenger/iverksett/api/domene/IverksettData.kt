@@ -8,7 +8,6 @@ import no.nav.dagpenger.kontrakter.felles.Datoperiode
 import no.nav.dagpenger.kontrakter.felles.SakIdentifikator
 import no.nav.dagpenger.kontrakter.felles.StønadType
 import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
-import no.nav.dagpenger.kontrakter.iverksett.VedtakType
 import no.nav.dagpenger.kontrakter.iverksett.VedtaksperiodeType
 import no.nav.dagpenger.kontrakter.iverksett.Vedtaksresultat
 
@@ -23,7 +22,7 @@ data class Iverksetting(
 data class Fagsakdetaljer(
     val fagsakId: UUID? = null,
     val saksreferanse: String? = null,
-    val stønadstype: StønadType = StønadTypeDagpenger.DAGPENGER_ARBEIDSSOKER_ORDINAER,
+    val stønadstype: StønadType = StønadTypeDagpenger.DAGPENGER_ARBEIDSSØKER_ORDINÆR,
 ) {
     init {
         SakIdentifikator.valider(fagsakId, saksreferanse)
@@ -40,7 +39,6 @@ data class Vedtaksperiode(
 )
 
 data class Vedtaksdetaljer(
-    val vedtakstype: VedtakType = VedtakType.RAMMEVEDTAK,
     val vedtaksresultat: Vedtaksresultat,
     val vedtakstidspunkt: LocalDateTime,
     val saksbehandlerId: String,

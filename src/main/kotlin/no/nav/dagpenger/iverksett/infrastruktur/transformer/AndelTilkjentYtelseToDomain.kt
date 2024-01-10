@@ -12,7 +12,7 @@ import no.nav.dagpenger.kontrakter.iverksett.UtbetalingDto
 
 fun UtbetalingDto.toDomain(): AndelTilkjentYtelse {
     return AndelTilkjentYtelse(
-        beløp = this.belopPerDag,
+        beløp = this.beløpPerDag,
         periode = Datoperiode(this.fraOgMedDato, this.tilOgMedDato),
         stønadsdata = this.stønadsdata.toDomain(),
     )

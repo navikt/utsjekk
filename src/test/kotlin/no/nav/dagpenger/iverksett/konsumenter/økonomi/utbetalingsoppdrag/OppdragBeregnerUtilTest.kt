@@ -116,7 +116,7 @@ class OppdragBeregnerUtilTest {
 
     private fun lagAndel(
         id: String = "",
-        ytelseType: StønadTypeDagpenger = StønadTypeDagpenger.DAGPENGER_ARBEIDSSOKER_ORDINAER,
+        ytelseType: StønadTypeDagpenger = StønadTypeDagpenger.DAGPENGER_ARBEIDSSØKER_ORDINÆR,
         periodeId: Long? = null,
         forrigePeriodeId: Long? = null,
         beløp: Int = 1,

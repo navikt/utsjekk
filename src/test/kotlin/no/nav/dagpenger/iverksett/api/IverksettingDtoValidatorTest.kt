@@ -96,7 +96,7 @@ class IverksettingDtoValidatorTest {
 
     @Test
     fun `Ferietillegg til avdød for stønadstype EØS skal gi BAD_REQUEST`() {
-        val iverksettDto = opprettIverksettDto(stønadType = StønadTypeDagpenger.DAGPENGER_EOS, ferietillegg = Ferietillegg.AVDOD)
+        val iverksettDto = opprettIverksettDto(stønadType = StønadTypeDagpenger.DAGPENGER_EØS, ferietillegg = Ferietillegg.AVDØD)
 
         assertApiFeil(HttpStatus.BAD_REQUEST) {
             ingenUtbetalingsperioderHarStønadstypeEØSOgFerietilleggTilAvdød(iverksettDto)

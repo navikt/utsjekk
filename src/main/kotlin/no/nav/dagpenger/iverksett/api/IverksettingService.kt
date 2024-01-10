@@ -91,7 +91,7 @@ class IverksettingService(
             it.oppdragResultat?.let { oppdragResultat ->
                 return when (oppdragResultat.oppdragStatus) {
                     OppdragStatus.KVITTERT_OK -> IverksettStatus.OK
-                    OppdragStatus.LAGT_PAA_KOE -> IverksettStatus.SENDT_TIL_OPPDRAG
+                    OppdragStatus.LAGT_PÅ_KØ -> IverksettStatus.SENDT_TIL_OPPDRAG
                     else -> IverksettStatus.FEILET_MOT_OPPDRAG
                 }
             }
@@ -135,7 +135,7 @@ class IverksettingService(
         }
 
         val grensesnittavstemmingDto = GrensesnittavstemmingDto(
-            stønadstype = StønadTypeDagpenger.DAGPENGER_ARBEIDSSOKER_ORDINAER,
+            stønadstype = StønadTypeDagpenger.DAGPENGER_ARBEIDSSØKER_ORDINÆR,
             fraDato = LocalDate.now().minusDays(5),
             triggerTid = LocalDateTime.now(),
         )
@@ -153,7 +153,7 @@ class IverksettingService(
     private fun utledStønadstype(iverksetting: Iverksetting): StønadType =
         iverksetting.vedtak.tilkjentYtelse.andelerTilkjentYtelse.firstOrNull()?.stønadsdata?.stønadstype
             ?: hentForrigeIverksett(iverksetting)?.vedtak?.tilkjentYtelse?.andelerTilkjentYtelse?.firstOrNull()?.stønadsdata?.stønadstype
-            ?: StønadTypeDagpenger.DAGPENGER_ARBEIDSSOKER_ORDINAER
+            ?: StønadTypeDagpenger.DAGPENGER_ARBEIDSSØKER_ORDINÆR
 
     companion object {
         private val logger = LoggerFactory.getLogger(this::class.java)

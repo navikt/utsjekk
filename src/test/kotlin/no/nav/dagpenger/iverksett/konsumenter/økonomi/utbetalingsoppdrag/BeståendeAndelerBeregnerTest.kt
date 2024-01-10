@@ -318,7 +318,7 @@ class BeståendeAndelerBeregnerTest {
         beløp: Int,
         periodeId: Long? = null,
         forrigePeriodeId: Long? = null,
-        type: StønadTypeDagpenger = StønadTypeDagpenger.DAGPENGER_ARBEIDSSOKER_ORDINAER,
+        type: StønadTypeDagpenger = StønadTypeDagpenger.DAGPENGER_ARBEIDSSØKER_ORDINÆR,
     ): AndelData {
         return AndelData(
             id = "0",

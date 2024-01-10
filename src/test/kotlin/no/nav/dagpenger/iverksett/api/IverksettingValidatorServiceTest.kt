@@ -91,7 +91,7 @@ class IverksettingValidatorServiceTest {
             tilkjentYtelseForUtbetaling = forrigeIverksetting.vedtak.tilkjentYtelse.copy(
                 utbetalingsoppdrag = beregnetUtbetalingsoppdrag.utbetalingsoppdrag
             ),
-            oppdragResultat = OppdragResultat(OppdragStatus.LAGT_PAA_KOE),
+            oppdragResultat = OppdragResultat(OppdragStatus.LAGT_PÅ_KØ),
         )
 
         every { iverksettingsresultatServiceMock.hentIverksettResultat(forrigeIverksettingsresultat.behandlingId) } returns forrigeIverksettingsresultat

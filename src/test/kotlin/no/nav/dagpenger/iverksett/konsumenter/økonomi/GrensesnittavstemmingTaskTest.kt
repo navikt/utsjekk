@@ -39,7 +39,7 @@ internal class GrensesnittavstemmingTaskTest {
         val capturedGrensesnittRequest = grensesnittavstemmingRequestSlot.captured
         assertThat(capturedGrensesnittRequest.fra).isEqualTo(LocalDate.of(2018, 4, 18).atStartOfDay())
         assertThat(capturedGrensesnittRequest.til).isEqualTo(LocalDate.of(2018, 4, 19).atStartOfDay())
-        assertThat(capturedGrensesnittRequest.fagsystem).isEqualTo(StønadTypeDagpenger.DAGPENGER_ARBEIDSSOKER_ORDINAER.tilFagsystem())
+        assertThat(capturedGrensesnittRequest.fagsystem).isEqualTo(StønadTypeDagpenger.DAGPENGER_ARBEIDSSØKER_ORDINÆR.tilFagsystem())
     }
 
     @Test
@@ -59,7 +59,7 @@ internal class GrensesnittavstemmingTaskTest {
             objectMapper.writeValueAsString(
                 GrensesnittavstemmingPayload(
                     fraDato = LocalDate.of(2018, 4, 19),
-                    stønadstype = StønadTypeDagpenger.DAGPENGER_ARBEIDSSOKER_ORDINAER,
+                    stønadstype = StønadTypeDagpenger.DAGPENGER_ARBEIDSSØKER_ORDINÆR,
                 ),
             )
         assertThat(slot.captured.payload).isEqualTo(forventetPayload)
@@ -71,7 +71,7 @@ internal class GrensesnittavstemmingTaskTest {
             objectMapper.writeValueAsString(
                 GrensesnittavstemmingPayload(
                     fraDato = LocalDate.of(2018, 4, 18),
-                    stønadstype = StønadTypeDagpenger.DAGPENGER_ARBEIDSSOKER_ORDINAER,
+                    stønadstype = StønadTypeDagpenger.DAGPENGER_ARBEIDSSØKER_ORDINÆR,
                 ),
             )
     }

@@ -105,10 +105,10 @@ class DatabaseConfiguration : AbstractJdbcConfiguration() {
             val fagsakNode = objectMapper.readTree(pGobject.value).findValue("fagsak")
             val fagsakdetaljer: Fagsakdetaljer = objectMapper.treeToValue(fagsakNode)
             return when (fagsakdetaljer.stønadstype) {
-                StønadTypeDagpenger.DAGPENGER_ARBEIDSSOKER_ORDINAER,
-                StønadTypeDagpenger.DAGPENGER_PERMITTERING_ORDINAER,
+                StønadTypeDagpenger.DAGPENGER_ARBEIDSSØKER_ORDINÆR,
+                StønadTypeDagpenger.DAGPENGER_PERMITTERING_ORDINÆR,
                 StønadTypeDagpenger.DAGPENGER_PERMITTERING_FISKEINDUSTRI,
-                StønadTypeDagpenger.DAGPENGER_EOS
+                StønadTypeDagpenger.DAGPENGER_EØS
                 -> objectMapper
                     .readValue(pGobject.value, Iverksetting::class.java)
                 else

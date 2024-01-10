@@ -56,13 +56,13 @@ object IverksettDtoValidator {
 
     internal fun utbetalingerHarKunPositiveBeløp(iverksettDto: IverksettDto) {
         val alleBeløpErPositive = iverksettDto.vedtak.utbetalinger.all {
-            val belop = it.belopPerDag
+            val belop = it.beløpPerDag
             belop > 0
         }
 
         if (!alleBeløpErPositive) {
             throw ApiFeil(
-                "Det finnes utbetalinger som ikke har positivt belopPerDag",
+                "Det finnes utbetalinger som ikke har positivt beløpPerDag",
                 HttpStatus.BAD_REQUEST,
             )
         }
@@ -71,7 +71,7 @@ object IverksettDtoValidator {
     internal fun utbetalingerHarIngenBeløpOverMaksgrense(iverksettDto: IverksettDto) {
         val maksgrense = 5000
         val alleBeløpErUnderMaksgrense = iverksettDto.vedtak.utbetalinger.all {
-            it.belopPerDag < maksgrense
+            it.beløpPerDag < maksgrense
         }
 
         if (!alleBeløpErUnderMaksgrense) {
@@ -86,7 +86,7 @@ object IverksettDtoValidator {
         val ugyldigKombinasjon = iverksettDto.vedtak.utbetalinger.any {
             if (it.stønadsdata is StønadsdataDagpengerDto) {
                 val sd = it.stønadsdata as StønadsdataDagpengerDto
-                sd.stønadstype == StønadTypeDagpenger.DAGPENGER_EOS && sd.ferietillegg == Ferietillegg.AVDOD
+                sd.stønadstype == StønadTypeDagpenger.DAGPENGER_EØS && sd.ferietillegg == Ferietillegg.AVDØD
             } else {
                 false
             }
@@ -94,7 +94,7 @@ object IverksettDtoValidator {
 
         if (ugyldigKombinasjon) {
             throw ApiFeil(
-                "Ferietillegg til avdød er ikke tillatt for stønadstypen ${StønadTypeDagpenger.DAGPENGER_EOS}",
+                "Ferietillegg til avdød er ikke tillatt for stønadstypen ${StønadTypeDagpenger.DAGPENGER_EØS}",
                 HttpStatus.BAD_REQUEST,
             )
         }

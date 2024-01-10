@@ -22,7 +22,6 @@ fun VedtaksperiodeDto.toDomain(): Vedtaksperiode {
 
 fun VedtaksdetaljerDto.toDomain(): Vedtaksdetaljer {
     return Vedtaksdetaljer(
-        vedtakstype = this.vedtakstype,
         vedtaksresultat = this.resultat,
         vedtakstidspunkt = this.vedtakstidspunkt,
         saksbehandlerId = this.saksbehandlerId,
@@ -36,7 +35,7 @@ fun VedtaksdetaljerDto.toDomain(): Vedtaksdetaljer {
 fun IverksettDto.toDomain(): Iverksetting {
     return Iverksetting(
         fagsak = this.tilFagsak(),
-        søker = this.personIdent?.tilSøker() ?: this.personident.verdi.tilSøker(),
+        søker = this.personident.verdi.tilSøker(),
         behandling = this.tilBehandling(),
         vedtak = this.vedtak.toDomain(),
         forrigeIverksettingBehandlingId = this.forrigeIverksetting?.behandlingId,

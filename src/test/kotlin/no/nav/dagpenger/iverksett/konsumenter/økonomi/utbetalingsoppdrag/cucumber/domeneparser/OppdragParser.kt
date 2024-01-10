@@ -43,7 +43,7 @@ object OppdragParser {
     ): AndelData {
         val stønadsdataDagpenger = StønadsdataDagpenger(
             stønadstype = parseValgfriEnum<StønadTypeDagpenger>(DomenebegrepAndeler.YTELSE_TYPE, rad)
-                ?: StønadTypeDagpenger.DAGPENGER_ARBEIDSSOKER_ORDINAER,
+                ?: StønadTypeDagpenger.DAGPENGER_ARBEIDSSØKER_ORDINÆR,
             ferietillegg = null,
         )
         return AndelData(
@@ -78,7 +78,7 @@ object OppdragParser {
             forrigePeriodeId = parseValgfriLong(DomenebegrepUtbetalingsoppdrag.FORRIGE_PERIODE_ID, it),
             sats = parseInt(DomenebegrepUtbetalingsoppdrag.BELØP, it),
             ytelse = parseValgfriEnum<StønadTypeDagpenger>(DomenebegrepUtbetalingsoppdrag.YTELSE_TYPE, it)
-                ?: StønadTypeDagpenger.DAGPENGER_ARBEIDSSOKER_ORDINAER,
+                ?: StønadTypeDagpenger.DAGPENGER_ARBEIDSSØKER_ORDINÆR,
             fom = parseDato(Domenebegrep.FRA_DATO, it),
             tom = parseDato(Domenebegrep.TIL_DATO, it),
             opphør = parseValgfriDato(DomenebegrepUtbetalingsoppdrag.OPPHØRSDATO, it),
