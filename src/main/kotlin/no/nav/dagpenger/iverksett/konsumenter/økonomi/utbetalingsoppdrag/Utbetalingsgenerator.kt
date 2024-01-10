@@ -1,5 +1,6 @@
 package no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag
 
+import no.nav.dagpenger.iverksett.api.domene.Stønadsdata
 import java.time.LocalDate
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.BeståendeAndelerBeregner.finnBeståendeAndeler
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.OppdragBeregnerUtil.validerAndeler
@@ -9,7 +10,6 @@ import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene.BeregnetUtbetalingsoppdrag
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene.uten0beløp
 import no.nav.dagpenger.kontrakter.felles.Fagsystem
-import no.nav.dagpenger.kontrakter.iverksett.Stønadsdata
 import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsoppdrag
 import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsperiode
 
@@ -32,10 +32,10 @@ object Utbetalingsgenerator {
      * som inneholder periodeId/forrigePeriodeId for å kunne oppdatere andeler i basen
      */
     fun lagUtbetalingsoppdrag(
-        behandlingsinformasjon: Behandlingsinformasjon,
-        nyeAndeler: List<AndelData>,
-        forrigeAndeler: List<AndelData>,
-        sisteAndelPerKjede: Map<Stønadsdata, AndelData>,
+            behandlingsinformasjon: Behandlingsinformasjon,
+            nyeAndeler: List<AndelData>,
+            forrigeAndeler: List<AndelData>,
+            sisteAndelPerKjede: Map<Stønadsdata, AndelData>,
     ): BeregnetUtbetalingsoppdrag {
         validerAndeler(forrigeAndeler, nyeAndeler)
         val nyeAndelerGruppert = nyeAndeler.groupByStønadsdata()

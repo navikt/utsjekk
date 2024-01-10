@@ -3,7 +3,6 @@ package no.nav.dagpenger.iverksett.api.domene
 import java.util.UUID
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene.AndelData
 import no.nav.dagpenger.kontrakter.felles.Datoperiode
-import no.nav.dagpenger.kontrakter.iverksett.Stønadsdata
 
 data class AndelTilkjentYtelse(
     val beløp: Int,

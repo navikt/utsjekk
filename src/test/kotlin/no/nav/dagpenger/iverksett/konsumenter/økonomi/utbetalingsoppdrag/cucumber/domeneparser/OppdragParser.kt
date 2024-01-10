@@ -1,6 +1,7 @@
 package no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.cucumber.domeneparser
 
 import io.cucumber.datatable.DataTable
+import no.nav.dagpenger.iverksett.api.domene.StønadsdataDagpenger
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.cucumber.domeneparser.DomeneparserUtil.groupByBehandlingId
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.cucumber.domeneparser.IdTIlUUIDHolder.behandlingIdTilUUID
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene.AndelData
@@ -11,7 +12,6 @@ import org.assertj.core.api.Assertions.assertThat
 import java.time.LocalDate
 import java.util.UUID
 import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
-import no.nav.dagpenger.kontrakter.iverksett.StønadsdataDagpenger
 
 object OppdragParser {
 

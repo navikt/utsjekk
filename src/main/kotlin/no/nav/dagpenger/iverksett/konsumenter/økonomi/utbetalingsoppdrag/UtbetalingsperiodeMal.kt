@@ -5,7 +5,6 @@ import java.time.LocalDate
 import java.util.UUID
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene.AndelData
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene.Behandlingsinformasjon
-import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene.tilKlassifisering
 import no.nav.dagpenger.kontrakter.oppdrag.Opphør
 import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsperiode
 

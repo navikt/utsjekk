@@ -1,13 +1,13 @@
 package no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag
 
+import no.nav.dagpenger.iverksett.api.domene.StønadsdataDagpenger
+import no.nav.dagpenger.iverksett.api.domene.StønadsdataTiltakspenger
 import java.time.LocalDate
 import java.util.UUID
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene.AndelData
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene.Behandlingsinformasjon
 import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
 import no.nav.dagpenger.kontrakter.felles.StønadTypeTiltakspenger
-import no.nav.dagpenger.kontrakter.iverksett.StønadsdataDagpenger
-import no.nav.dagpenger.kontrakter.iverksett.StønadsdataTiltakspenger
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 

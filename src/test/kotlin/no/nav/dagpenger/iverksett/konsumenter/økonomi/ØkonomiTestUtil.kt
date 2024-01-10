@@ -2,13 +2,15 @@ package no.nav.dagpenger.iverksett.konsumenter.økonomi
 
 import java.time.LocalDate
 import no.nav.dagpenger.iverksett.api.domene.AndelTilkjentYtelse
+import no.nav.dagpenger.iverksett.api.domene.StønadsdataDagpenger
+import no.nav.dagpenger.iverksett.api.domene.StønadsdataTiltakspenger
 import no.nav.dagpenger.kontrakter.felles.Datoperiode
 import no.nav.dagpenger.kontrakter.felles.StønadType
 import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
 import no.nav.dagpenger.kontrakter.felles.StønadTypeTiltakspenger
 import no.nav.dagpenger.kontrakter.iverksett.Ferietillegg
-import no.nav.dagpenger.kontrakter.iverksett.StønadsdataDagpenger
-import no.nav.dagpenger.kontrakter.iverksett.StønadsdataTiltakspenger
+import no.nav.dagpenger.kontrakter.iverksett.StønadsdataDagpengerDto
+import no.nav.dagpenger.kontrakter.iverksett.StønadsdataTiltakspengerDto
 import no.nav.dagpenger.kontrakter.iverksett.UtbetalingDto
 
 fun lagAndelTilkjentYtelse(
@@ -46,9 +48,9 @@ fun lagUtbetalingDto(
     ferietillegg: Ferietillegg? = null,
 ): UtbetalingDto {
     val stønadsdata = if (stønadstype is StønadTypeDagpenger) {
-        StønadsdataDagpenger(stønadstype, ferietillegg)
+        StønadsdataDagpengerDto(stønadstype, ferietillegg)
     } else {
-        StønadsdataTiltakspenger(stønadstype as StønadTypeTiltakspenger)
+        StønadsdataTiltakspengerDto(stønadstype as StønadTypeTiltakspenger)
     }
     return UtbetalingDto(
         belopPerDag = beløp,

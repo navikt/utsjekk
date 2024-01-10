@@ -1,12 +1,12 @@
 package no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag
 
+import no.nav.dagpenger.iverksett.api.domene.StønadsdataDagpenger
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.BeståendeAndelerBeregner.finnBeståendeAndeler
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene.AndelData
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
 import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
-import no.nav.dagpenger.kontrakter.iverksett.StønadsdataDagpenger
 
 class BeståendeAndelerBeregnerTest {
     companion object {

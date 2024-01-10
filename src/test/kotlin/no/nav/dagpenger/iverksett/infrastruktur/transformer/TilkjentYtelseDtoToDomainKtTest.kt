@@ -5,7 +5,7 @@ import no.nav.dagpenger.iverksett.januar
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.lagUtbetalingDto
 import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
 import no.nav.dagpenger.kontrakter.iverksett.Ferietillegg
-import no.nav.dagpenger.kontrakter.iverksett.StønadsdataDagpenger
+import no.nav.dagpenger.kontrakter.iverksett.StønadsdataDagpengerDto
 import no.nav.dagpenger.kontrakter.iverksett.UtbetalingDto
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -182,13 +182,13 @@ class TilkjentYtelseDtoToDomainKtTest {
 
         assertEquals(2, utbetalinger.size)
         utbetalinger.first().let {
-            val stønadsdata = it.stønadsdata as StønadsdataDagpenger
+            val stønadsdata = it.stønadsdata as StønadsdataDagpengerDto
             assertEquals(Ferietillegg.ORDINAER, stønadsdata.ferietillegg)
             assertEquals(2.januar(2023), it.fraOgMedDato)
             assertEquals(2.januar(2023), it.tilOgMedDato)
         }
         utbetalinger.component2().let {
-            val stønadsdata = it.stønadsdata as StønadsdataDagpenger
+            val stønadsdata = it.stønadsdata as StønadsdataDagpengerDto
             assertEquals(Ferietillegg.AVDOD, stønadsdata.ferietillegg)
             assertEquals(LocalDate.of(2023, 1, 3), it.fraOgMedDato)
             assertEquals(LocalDate.of(2023, 1, 3), it.tilOgMedDato)

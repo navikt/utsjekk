@@ -2,21 +2,12 @@ package no.nav.dagpenger.iverksett.konsumenter.økonomi
 
 import java.util.UUID
 import no.nav.dagpenger.iverksett.api.IverksettingService
-import no.nav.dagpenger.iverksett.api.domene.AndelTilkjentYtelse
-import no.nav.dagpenger.iverksett.api.domene.Iverksetting
-import no.nav.dagpenger.iverksett.api.domene.Iverksettingsresultat
-import no.nav.dagpenger.iverksett.api.domene.TilkjentYtelse
-import no.nav.dagpenger.iverksett.api.domene.behandlingId
-import no.nav.dagpenger.iverksett.api.domene.lagAndelData
-import no.nav.dagpenger.iverksett.api.domene.personident
-import no.nav.dagpenger.iverksett.api.domene.sakId
-import no.nav.dagpenger.iverksett.api.domene.tilAndelData
+import no.nav.dagpenger.iverksett.api.domene.*
 import no.nav.dagpenger.iverksett.api.tilstand.IverksettingsresultatService
 import no.nav.dagpenger.iverksett.konsumenter.opprettNesteTask
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.Utbetalingsgenerator
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene.Behandlingsinformasjon
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene.BeregnetUtbetalingsoppdrag
-import no.nav.dagpenger.kontrakter.iverksett.Stønadsdata
 import no.nav.familie.prosessering.AsyncTaskStep
 import no.nav.familie.prosessering.TaskStepBeskrivelse
 import no.nav.familie.prosessering.domene.Task
@@ -132,8 +123,8 @@ class IverksettMotOppdragTask(
     }
 
     private fun lagTilkjentYtelseMedSisteAndelPerKjede(
-        tilkjentYtelse: TilkjentYtelse,
-        forrigeSisteAndelPerKjede: Map<Stønadsdata, AndelTilkjentYtelse>,
+            tilkjentYtelse: TilkjentYtelse,
+            forrigeSisteAndelPerKjede: Map<Stønadsdata, AndelTilkjentYtelse>,
     ): TilkjentYtelse {
         val beregnetSisteAndePerKjede = tilkjentYtelse.andelerTilkjentYtelse.groupBy {
             it.stønadsdata

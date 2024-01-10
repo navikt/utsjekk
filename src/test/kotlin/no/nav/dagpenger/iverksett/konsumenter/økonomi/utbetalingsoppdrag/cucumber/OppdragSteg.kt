@@ -4,6 +4,9 @@ import io.cucumber.datatable.DataTable
 import io.cucumber.java.no.Gitt
 import io.cucumber.java.no.Når
 import io.cucumber.java.no.Så
+import no.nav.dagpenger.iverksett.api.domene.Stønadsdata
+import no.nav.dagpenger.iverksett.api.domene.StønadsdataDagpenger
+import no.nav.dagpenger.iverksett.api.domene.StønadsdataTiltakspenger
 import java.time.LocalDate
 import java.util.UUID
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.Utbetalingsgenerator
@@ -23,13 +26,9 @@ import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene.AndelMedPeriodeId
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene.Behandlingsinformasjon
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene.BeregnetUtbetalingsoppdrag
-import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene.tilKlassifisering
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene.uten0beløp
 import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
 import no.nav.dagpenger.kontrakter.felles.StønadTypeTiltakspenger
-import no.nav.dagpenger.kontrakter.iverksett.Stønadsdata
-import no.nav.dagpenger.kontrakter.iverksett.StønadsdataDagpenger
-import no.nav.dagpenger.kontrakter.iverksett.StønadsdataTiltakspenger
 import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsoppdrag
 import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsperiode
 import org.assertj.core.api.Assertions.assertThat

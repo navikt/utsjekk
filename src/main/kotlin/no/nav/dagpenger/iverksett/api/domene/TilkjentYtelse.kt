@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene.*
 import java.util.UUID
-import no.nav.dagpenger.kontrakter.iverksett.Stønadsdata
 import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsoppdrag
 
 data class TilkjentYtelse(
