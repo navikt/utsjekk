@@ -1,9 +1,8 @@
 package no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag
 
+import no.nav.dagpenger.iverksett.api.domene.StønadsdataDagpenger
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.BeståendeAndelerBeregner.finnBeståendeAndeler
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene.AndelData
-import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene.StønadTypeOgFerietillegg
-import no.nav.dagpenger.kontrakter.felles.StønadType
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
@@ -319,14 +318,14 @@ class BeståendeAndelerBeregnerTest {
         beløp: Int,
         periodeId: Long? = null,
         forrigePeriodeId: Long? = null,
-        type: StønadType = StønadTypeDagpenger.DAGPENGER_ARBEIDSSOKER_ORDINAER,
+        type: StønadTypeDagpenger = StønadTypeDagpenger.DAGPENGER_ARBEIDSSØKER_ORDINÆR,
     ): AndelData {
         return AndelData(
             id = "0",
             fom = fom,
             tom = tom,
             beløp = beløp,
-            type = StønadTypeOgFerietillegg(type, null),
+            stønadsdata = StønadsdataDagpenger(type),
             periodeId = periodeId,
             forrigePeriodeId = forrigePeriodeId,
         )

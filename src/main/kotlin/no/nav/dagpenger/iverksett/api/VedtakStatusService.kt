@@ -20,7 +20,6 @@ class VedtakStatusService(
         return iverksettingRepository.findByPersonIdAndResult(personId, Vedtaksresultat.INNVILGET.name)
             .maxByOrNull { it.data.vedtak.vedtakstidspunkt }?.data?.vedtak?.let {
                 VedtaksstatusDto(
-                    vedtakstype = it.vedtakstype,
                     vedtakstidspunkt = it.vedtakstidspunkt,
                     resultat = it.vedtaksresultat,
                     vedtaksperioder = mapVedtaksperioder(it.vedtaksperioder),
@@ -42,7 +41,8 @@ class VedtakStatusService(
 
     private fun mapPerioder(iverksett: IverksettingEntitet, request: DatadelingRequest): List<Periode> {
         val vedtak = iverksett.data.vedtak
-        val yt = vedtak.tilkjentYtelse.sisteAndelIKjede?.stønadstype ?: StønadTypeDagpenger.DAGPENGER_ARBEIDSSOKER_ORDINAER
+        val yt = vedtak.tilkjentYtelse.sisteAndelIKjede?.stønadsdata?.stønadstype
+            ?: StønadTypeDagpenger.DAGPENGER_ARBEIDSSØKER_ORDINÆR
 
         return vedtak.vedtaksperioder
             .filter {
@@ -53,7 +53,6 @@ class VedtakStatusService(
                     fraOgMedDato = it.periode.fom,
                     tilOgMedDato = it.periode.tom,
                     ytelseType = yt,
-                    gjenståendeDager = 0  // TODO: Vi må få tilgang til BEREGNINGSLEDD-tabellen
                 )
             }
     }

@@ -5,7 +5,6 @@ import no.nav.dagpenger.iverksett.api.domene.TilkjentYtelse
 import no.nav.dagpenger.iverksett.api.domene.Vedtaksdetaljer
 import no.nav.dagpenger.kontrakter.iverksett.ForrigeIverksettingDto
 import no.nav.dagpenger.kontrakter.iverksett.UtbetalingDto
-import no.nav.dagpenger.kontrakter.iverksett.VedtakType
 import no.nav.dagpenger.kontrakter.iverksett.Vedtaksresultat
 
 fun List<UtbetalingDto>.tilTilkjentYtelse(): TilkjentYtelse {
@@ -33,15 +32,13 @@ fun List<UtbetalingDto>.sammenslått(): List<UtbetalingDto> {
 }
 
 private fun UtbetalingDto.kanSlåsSammen(forrige: UtbetalingDto): Boolean {
-    return this.belopPerDag == forrige.belopPerDag
-            && this.stonadstype == forrige.stonadstype
-            && this.ferietillegg == forrige.ferietillegg
+    return this.beløpPerDag == forrige.beløpPerDag
+            && this.stønadsdata == forrige.stønadsdata
             && this.fraOgMedDato == forrige.tilOgMedDato.plusDays(1)
 }
 
 fun ForrigeIverksettingDto.tilVedtaksdetaljer(): Vedtaksdetaljer {
     return Vedtaksdetaljer(
-        vedtakstype = VedtakType.UTBETALINGSVEDTAK,
         vedtaksresultat = Vedtaksresultat.INNVILGET,
         vedtakstidspunkt = LocalDateTime.now(),
         saksbehandlerId = "A123456",

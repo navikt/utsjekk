@@ -66,7 +66,6 @@ class IverksattStatusControllerTest : ServerTest() {
 
         assertEquals(HttpStatus.OK, statusResponse.statusCode)
         val vedtaksstatusDto: VedtaksstatusDto = statusResponse.body!!
-        assertEquals(vedtaksstatusDto.vedtakstype, iverksettDto.vedtak.vedtakstype)
         assertEquals(vedtaksstatusDto.vedtakstidspunkt, iverksettDto.vedtak.vedtakstidspunkt)
         assertEquals(vedtaksstatusDto.resultat, Vedtaksresultat.INNVILGET)
         assertEquals(vedtaksstatusDto.vedtaksperioder.size, iverksettDto.vedtak.vedtaksperioder.size)

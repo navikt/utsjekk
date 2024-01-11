@@ -1,17 +1,17 @@
 package no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag
 
+import no.nav.dagpenger.iverksett.api.domene.Stønadsdata
+import java.time.LocalDate
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.BeståendeAndelerBeregner.finnBeståendeAndeler
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.OppdragBeregnerUtil.validerAndeler
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene.AndelData
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene.AndelMedPeriodeId
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene.Behandlingsinformasjon
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene.BeregnetUtbetalingsoppdrag
-import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene.StønadTypeOgFerietillegg
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene.uten0beløp
+import no.nav.dagpenger.kontrakter.felles.Fagsystem
 import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsoppdrag
 import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsperiode
-import java.time.LocalDate
-import no.nav.dagpenger.kontrakter.felles.Fagsystem
 
 object Utbetalingsgenerator {
 
@@ -32,14 +32,14 @@ object Utbetalingsgenerator {
      * som inneholder periodeId/forrigePeriodeId for å kunne oppdatere andeler i basen
      */
     fun lagUtbetalingsoppdrag(
-        behandlingsinformasjon: Behandlingsinformasjon,
-        nyeAndeler: List<AndelData>,
-        forrigeAndeler: List<AndelData>,
-        sisteAndelPerKjede: Map<StønadTypeOgFerietillegg, AndelData>,
+            behandlingsinformasjon: Behandlingsinformasjon,
+            nyeAndeler: List<AndelData>,
+            forrigeAndeler: List<AndelData>,
+            sisteAndelPerKjede: Map<Stønadsdata, AndelData>,
     ): BeregnetUtbetalingsoppdrag {
         validerAndeler(forrigeAndeler, nyeAndeler)
-        val nyeAndelerGruppert = nyeAndeler.groupByStønadTypeOgFerietillegg()
-        val forrigeKjeder = forrigeAndeler.groupByStønadTypeOgFerietillegg()
+        val nyeAndelerGruppert = nyeAndeler.groupByStønadsdata()
+        val forrigeKjeder = forrigeAndeler.groupByStønadsdata()
 
         return lagUtbetalingsoppdrag(
             nyeAndeler = nyeAndelerGruppert,
@@ -50,9 +50,9 @@ object Utbetalingsgenerator {
     }
 
     private fun lagUtbetalingsoppdrag(
-        nyeAndeler: Map<StønadTypeOgFerietillegg, List<AndelData>>,
-        forrigeKjeder: Map<StønadTypeOgFerietillegg, List<AndelData>>,
-        sisteAndelPerKjede: Map<StønadTypeOgFerietillegg, AndelData>,
+        nyeAndeler: Map<Stønadsdata, List<AndelData>>,
+        forrigeKjeder: Map<Stønadsdata, List<AndelData>>,
+        sisteAndelPerKjede: Map<Stønadsdata, AndelData>,
         behandlingsinformasjon: Behandlingsinformasjon,
     ): BeregnetUtbetalingsoppdrag {
         val nyeKjeder = lagNyeKjeder(nyeAndeler, forrigeKjeder, sisteAndelPerKjede)
@@ -65,7 +65,7 @@ object Utbetalingsgenerator {
             saksnummer = behandlingsinformasjon.fagsakId,
             fagSystem = fagsystem,
             saksreferanse = behandlingsinformasjon.saksreferanse,
-            aktoer = behandlingsinformasjon.personident,
+            aktør = behandlingsinformasjon.personident,
             brukersNavKontor = behandlingsinformasjon.brukersNavKontor,
             utbetalingsperiode = utbetalingsperioder(behandlingsinformasjon, nyeKjeder),
             gOmregning = behandlingsinformasjon.erGOmregning,
@@ -78,16 +78,16 @@ object Utbetalingsgenerator {
     }
 
     private fun lagNyeKjeder(
-        nyeKjeder: Map<StønadTypeOgFerietillegg, List<AndelData>>,
-        forrigeKjeder: Map<StønadTypeOgFerietillegg, List<AndelData>>,
-        sisteAndelPerKjede: Map<StønadTypeOgFerietillegg, AndelData>,
+        nyeKjeder: Map<Stønadsdata, List<AndelData>>,
+        forrigeKjeder: Map<Stønadsdata, List<AndelData>>,
+        sisteAndelPerKjede: Map<Stønadsdata, AndelData>,
     ): List<ResultatForKjede> {
-        val alleStønadTypeOgFerietillegg = nyeKjeder.keys + forrigeKjeder.keys
+        val alleStønadsdata = nyeKjeder.keys + forrigeKjeder.keys
         var sistePeriodeId = sisteAndelPerKjede.values.mapNotNull { it.periodeId }.maxOrNull() ?: -1
-        return alleStønadTypeOgFerietillegg.map { stønadTypeOgFerietillegg ->
-            val forrigeAndeler = forrigeKjeder[stønadTypeOgFerietillegg] ?: emptyList()
-            val nyeAndeler = nyeKjeder[stønadTypeOgFerietillegg] ?: emptyList()
-            val sisteAndel = sisteAndelPerKjede[stønadTypeOgFerietillegg]
+        return alleStønadsdata.map { stønadsdata ->
+            val forrigeAndeler = forrigeKjeder[stønadsdata] ?: emptyList()
+            val nyeAndeler = nyeKjeder[stønadsdata] ?: emptyList()
+            val sisteAndel = sisteAndelPerKjede[stønadsdata]
             val opphørsdato = finnOpphørsdato(forrigeAndeler, nyeAndeler)
 
             val nyKjede = beregnNyKjede(
@@ -139,7 +139,7 @@ object Utbetalingsgenerator {
     // Da de har opplevd å motta
     // UEND på oppdrag som skulle vært ENDR anbefaler de at kun ENDR brukes når sak
     // ikke er ny, så man slipper å forholde seg til om det er endring over 150-nivå eller ikke.
-    private fun kodeEndring(sisteAndelMedPeriodeId: Map<StønadTypeOgFerietillegg, AndelData>) =
+    private fun kodeEndring(sisteAndelMedPeriodeId: Map<Stønadsdata, AndelData>) =
         if (sisteAndelMedPeriodeId.isEmpty()) Utbetalingsoppdrag.KodeEndring.NY else Utbetalingsoppdrag.KodeEndring.ENDR
 
     private fun beregnNyKjede(
@@ -179,8 +179,8 @@ object Utbetalingsgenerator {
         return Pair(nyeAndelerMedPeriodeId, gjeldendePeriodeId)
     }
 
-    private fun List<AndelData>.groupByStønadTypeOgFerietillegg(): Map<StønadTypeOgFerietillegg, List<AndelData>> =
-        groupBy { it.type }.mapValues { andel -> andel.value.sortedBy { it.fom } }
+    private fun List<AndelData>.groupByStønadsdata(): Map<Stønadsdata, List<AndelData>> =
+        groupBy { it.stønadsdata }.mapValues { andel -> andel.value.sortedBy { it.fom } }
 
     private fun lagOpphørsperioder(
         behandlingsinformasjon: Behandlingsinformasjon,

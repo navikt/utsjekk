@@ -119,7 +119,7 @@ internal class VentePåStatusFraØkonomiTaskTest {
                 kodeEndring = NY,
                 fagSystem = Fagsystem.Dagpenger,
                 saksnummer = UUID.randomUUID(),
-                aktoer = "",
+                aktør = "",
                 saksbehandlerId = "",
                 avstemmingTidspunkt = LocalDateTime.now(),
                 utbetalingsperiode = utbetalingsperioder,

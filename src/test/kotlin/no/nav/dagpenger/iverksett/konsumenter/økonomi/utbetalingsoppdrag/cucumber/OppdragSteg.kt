@@ -4,6 +4,9 @@ import io.cucumber.datatable.DataTable
 import io.cucumber.java.no.Gitt
 import io.cucumber.java.no.Når
 import io.cucumber.java.no.Så
+import no.nav.dagpenger.iverksett.api.domene.Stønadsdata
+import no.nav.dagpenger.iverksett.api.domene.StønadsdataDagpenger
+import no.nav.dagpenger.iverksett.api.domene.StønadsdataTiltakspenger
 import java.time.LocalDate
 import java.util.UUID
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.Utbetalingsgenerator
@@ -23,8 +26,9 @@ import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene.AndelMedPeriodeId
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene.Behandlingsinformasjon
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene.BeregnetUtbetalingsoppdrag
-import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene.StønadTypeOgFerietillegg
 import no.nav.dagpenger.iverksett.konsumenter.økonomi.utbetalingsoppdrag.domene.uten0beløp
+import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
+import no.nav.dagpenger.kontrakter.felles.StønadTypeTiltakspenger
 import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsoppdrag
 import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsperiode
 import org.assertj.core.api.Assertions.assertThat
@@ -162,10 +166,10 @@ class OppdragSteg {
      * Når vi henter forrige offset for en kjede så må vi hente max periodeId, men den første hendelsen av den typen
      * Dette då vi i noen tilfeller opphører en peride, som beholder den samme periodeId'n
      */
-    private fun gjeldendeForrigeOffsetForKjede(forrigeKjeder: List<Pair<UUID, List<AndelData>>>): Map<StønadTypeOgFerietillegg, AndelData> {
+    private fun gjeldendeForrigeOffsetForKjede(forrigeKjeder: List<Pair<UUID, List<AndelData>>>): Map<Stønadsdata, AndelData> {
         return forrigeKjeder.flatMap { it.second }
             .uten0beløp()
-            .groupBy { it.type }
+            .groupBy { it.stønadsdata }
             .mapValues { it.value.sortedWith(compareByDescending<AndelData> { it.periodeId!! }.thenByDescending { it.tom }).first() }
     }
 
@@ -227,12 +231,17 @@ private fun assertUtbetalingsperiode(
     utbetalingsperiode: Utbetalingsperiode,
     forventetUtbetalingsperiode: ForventetUtbetalingsperiode,
 ) {
+    val forventetStønadsdata = if (forventetUtbetalingsperiode.ytelse is StønadTypeDagpenger) {
+        StønadsdataDagpenger(forventetUtbetalingsperiode.ytelse)
+    } else {
+        StønadsdataTiltakspenger(forventetUtbetalingsperiode.ytelse as StønadTypeTiltakspenger, false)
+    }
     assertThat(utbetalingsperiode.erEndringPåEksisterendePeriode)
         .`as`("erEndringPåEksisterendePeriode")
         .isEqualTo(forventetUtbetalingsperiode.erEndringPåEksisterendePeriode)
     assertThat(utbetalingsperiode.klassifisering)
         .`as`("klassifisering")
-        .isEqualTo(StønadTypeOgFerietillegg(forventetUtbetalingsperiode.ytelse, null).tilKlassifisering())
+        .isEqualTo(forventetStønadsdata.tilKlassifisering())
     assertThat(utbetalingsperiode.periodeId)
         .`as`("periodeId")
         .isEqualTo(forventetUtbetalingsperiode.periodeId)

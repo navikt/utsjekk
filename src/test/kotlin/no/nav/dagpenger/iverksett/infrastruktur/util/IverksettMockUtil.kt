@@ -23,8 +23,6 @@ import no.nav.dagpenger.kontrakter.felles.StønadType
 import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
 import no.nav.dagpenger.kontrakter.iverksett.Ferietillegg
 import no.nav.dagpenger.kontrakter.iverksett.IverksettDto
-import no.nav.dagpenger.kontrakter.iverksett.TilkjentYtelseDto
-import no.nav.dagpenger.kontrakter.iverksett.VedtakType
 import no.nav.dagpenger.kontrakter.iverksett.VedtaksdetaljerDto
 import no.nav.dagpenger.kontrakter.iverksett.VedtaksperiodeDto
 import no.nav.dagpenger.kontrakter.iverksett.VedtaksperiodeType
@@ -35,7 +33,7 @@ fun opprettIverksettDto(
     sakId: UUID = UUID.randomUUID(),
     andelsbeløp: Int = 500,
     vedtaksresultat: Vedtaksresultat = Vedtaksresultat.INNVILGET,
-    stønadType: StønadType = StønadTypeDagpenger.DAGPENGER_ARBEIDSSOKER_ORDINAER,
+    stønadType: StønadType = StønadTypeDagpenger.DAGPENGER_ARBEIDSSØKER_ORDINÆR,
     ferietillegg: Ferietillegg? = null,
     vedtaksperioder: List<VedtaksperiodeDto> = emptyList(),
     brukersNavKontor: BrukersNavKontor? = null,
@@ -46,9 +44,6 @@ fun opprettIverksettDto(
         tilOgMed = LocalDate.of(2021, 12, 31),
         stønadstype = stønadType,
         ferietillegg = ferietillegg,
-    )
-    val tilkjentYtelse = TilkjentYtelseDto(
-        utbetalinger = listOf(andelTilkjentYtelse)
     )
 
     return IverksettDto(
@@ -61,9 +56,8 @@ fun opprettIverksettDto(
             saksbehandlerId = "A12345",
             beslutterId = "B23456",
             brukersNavKontor = brukersNavKontor,
-            utbetalinger = tilkjentYtelse.utbetalinger,
-            vedtaksperioder = vedtaksperioder,
-            vedtakstype = VedtakType.RAMMEVEDTAK
+            utbetalinger = listOf(andelTilkjentYtelse),
+            vedtaksperioder = vedtaksperioder
         ),
     )
 }
@@ -72,7 +66,7 @@ fun opprettAndelTilkjentYtelse(
     beløp: Int = 5000,
     fra: LocalDate = LocalDate.of(2021, 1, 1),
     til: LocalDate = LocalDate.of(2021, 12, 31),
-    stønadstype: StønadType = StønadTypeDagpenger.DAGPENGER_ARBEIDSSOKER_ORDINAER,
+    stønadstype: StønadType = StønadTypeDagpenger.DAGPENGER_ARBEIDSSØKER_ORDINÆR,
 ) = lagAndelTilkjentYtelse(
     beløp = beløp,
     fraOgMed = fra,
@@ -120,7 +114,6 @@ fun vedtaksdetaljer(
 ): Vedtaksdetaljer {
     val tilkjentYtelse = lagTilkjentYtelse(andeler)
     return Vedtaksdetaljer(
-        vedtakstype = VedtakType.UTBETALINGSVEDTAK,
         vedtaksresultat = vedtaksresultat,
         vedtakstidspunkt = vedtakstidspunkt,
         saksbehandlerId = "A12345",
@@ -144,7 +137,7 @@ fun opprettIverksett(
     vedtaksdetaljer: Vedtaksdetaljer = vedtaksdetaljer(),
 ) =
     Iverksetting(
-        fagsak = Fagsakdetaljer(fagsakId = UUID.randomUUID(), stønadstype = StønadTypeDagpenger.DAGPENGER_ARBEIDSSOKER_ORDINAER),
+        fagsak = Fagsakdetaljer(fagsakId = UUID.randomUUID(), stønadstype = StønadTypeDagpenger.DAGPENGER_ARBEIDSSØKER_ORDINÆR),
         behandling = behandlingsdetaljer,
         søker = Søker(
             personident = "15507600333",
@@ -159,7 +152,7 @@ fun opprettIverksett(
     fagsakId: UUID = UUID.randomUUID(),
 ): Iverksetting {
     return Iverksetting(
-        fagsak = Fagsakdetaljer(fagsakId = fagsakId, stønadstype = StønadTypeDagpenger.DAGPENGER_ARBEIDSSOKER_ORDINAER),
+        fagsak = Fagsakdetaljer(fagsakId = fagsakId, stønadstype = StønadTypeDagpenger.DAGPENGER_ARBEIDSSØKER_ORDINÆR),
         behandling = behandlingsdetaljer(behandlingId, forrigeBehandlingId),
         søker = Søker(
             personident = "15507600333",

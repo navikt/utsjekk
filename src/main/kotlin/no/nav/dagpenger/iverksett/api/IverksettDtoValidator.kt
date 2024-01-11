@@ -2,9 +2,10 @@ package no.nav.dagpenger.iverksett.api
 
 import no.nav.dagpenger.iverksett.infrastruktur.advice.ApiFeil
 import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
-import no.nav.dagpenger.kontrakter.felles.StønadTypeTiltakspenger
 import no.nav.dagpenger.kontrakter.iverksett.Ferietillegg
 import no.nav.dagpenger.kontrakter.iverksett.IverksettDto
+import no.nav.dagpenger.kontrakter.iverksett.StønadsdataDagpengerDto
+import no.nav.dagpenger.kontrakter.iverksett.StønadsdataTiltakspengerDto
 import org.springframework.http.HttpStatus
 
 object IverksettDtoValidator {
@@ -55,13 +56,13 @@ object IverksettDtoValidator {
 
     internal fun utbetalingerHarKunPositiveBeløp(iverksettDto: IverksettDto) {
         val alleBeløpErPositive = iverksettDto.vedtak.utbetalinger.all {
-            val belop = it.belopPerDag
+            val belop = it.beløpPerDag
             belop > 0
         }
 
         if (!alleBeløpErPositive) {
             throw ApiFeil(
-                "Det finnes utbetalinger som ikke har positivt belopPerDag",
+                "Det finnes utbetalinger som ikke har positivt beløpPerDag",
                 HttpStatus.BAD_REQUEST,
             )
         }
@@ -70,7 +71,7 @@ object IverksettDtoValidator {
     internal fun utbetalingerHarIngenBeløpOverMaksgrense(iverksettDto: IverksettDto) {
         val maksgrense = 5000
         val alleBeløpErUnderMaksgrense = iverksettDto.vedtak.utbetalinger.all {
-            it.belopPerDag < maksgrense
+            it.beløpPerDag < maksgrense
         }
 
         if (!alleBeløpErUnderMaksgrense) {
@@ -83,21 +84,26 @@ object IverksettDtoValidator {
 
     internal fun ingenUtbetalingsperioderHarStønadstypeEØSOgFerietilleggTilAvdød(iverksettDto: IverksettDto) {
         val ugyldigKombinasjon = iverksettDto.vedtak.utbetalinger.any {
-            it.stonadstype == StønadTypeDagpenger.DAGPENGER_EOS && it.ferietillegg == Ferietillegg.AVDOD
+            if (it.stønadsdata is StønadsdataDagpengerDto) {
+                val sd = it.stønadsdata as StønadsdataDagpengerDto
+                sd.stønadstype == StønadTypeDagpenger.DAGPENGER_EØS && sd.ferietillegg == Ferietillegg.AVDØD
+            } else {
+                false
+            }
         }
 
         if (ugyldigKombinasjon) {
             throw ApiFeil(
-                "Ferietillegg til avdød er ikke tillatt for stønadstypen ${StønadTypeDagpenger.DAGPENGER_EOS}",
+                "Ferietillegg til avdød er ikke tillatt for stønadstypen ${StønadTypeDagpenger.DAGPENGER_EØS}",
                 HttpStatus.BAD_REQUEST,
             )
         }
     }
 
     internal fun brukersNavKontorErSattForTiltakspenger(iverksettDto: IverksettDto) {
-        val stønadstype = iverksettDto.vedtak.utbetalinger.firstOrNull()?.stonadstype
+        val stønadsdata = iverksettDto.vedtak.utbetalinger.firstOrNull()?.stønadsdata
 
-        if (stønadstype is StønadTypeTiltakspenger && iverksettDto.vedtak.brukersNavKontor == null) {
+        if (stønadsdata is StønadsdataTiltakspengerDto && iverksettDto.vedtak.brukersNavKontor == null) {
             throw ApiFeil(
                 "Brukers NAV-kontor må være satt på vedtaket for tiltakspenger",
                 HttpStatus.BAD_REQUEST,

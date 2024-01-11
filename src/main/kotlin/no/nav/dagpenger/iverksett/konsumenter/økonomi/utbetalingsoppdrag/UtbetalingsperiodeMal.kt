@@ -48,7 +48,7 @@ internal data class UtbetalingsperiodeMal(
             forrigePeriodeId = andel.forrigePeriodeId,
             periodeId = andel.periodeId ?: error("Mangler periodeId på andel=${andel.id}"),
             datoForVedtak = behandlingsinformasjon.vedtaksdato,
-            klassifisering = andel.type.tilKlassifisering(),
+            klassifisering = andel.stønadsdata.tilKlassifisering(),
             vedtakdatoFom = andel.fom,
             vedtakdatoTom = andel.tom,
             sats = BigDecimal(andel.beløp),
