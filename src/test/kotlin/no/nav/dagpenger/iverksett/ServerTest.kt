@@ -1,9 +1,9 @@
 package no.nav.dagpenger.iverksett
 
 import com.github.tomakehurst.wiremock.WireMockServer
-import no.nav.dagpenger.iverksett.infrastruktur.configuration.ApplicationConfig
-import no.nav.dagpenger.iverksett.infrastruktur.database.DbContainerInitializer
-import no.nav.dagpenger.iverksett.infrastruktur.util.TokenUtil
+import no.nav.dagpenger.iverksett.felles.konfig.ApplicationConfig
+import no.nav.dagpenger.iverksett.felles.database.DbContainerInitializer
+import no.nav.dagpenger.iverksett.felles.util.TokenUtil
 import no.nav.security.mock.oauth2.MockOAuth2Server
 import no.nav.security.token.support.spring.test.EnableMockOAuth2Server
 import org.junit.jupiter.api.AfterEach
