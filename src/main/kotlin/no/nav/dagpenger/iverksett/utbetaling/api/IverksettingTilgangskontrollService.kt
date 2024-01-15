@@ -1,10 +1,9 @@
 package no.nav.dagpenger.iverksett.utbetaling.api
 
-import no.nav.dagpenger.iverksett.felles.tilgangskontroll.TokenContext
 import no.nav.dagpenger.iverksett.utbetaling.tilstand.IverksettingService
 import no.nav.dagpenger.iverksett.felles.http.advice.ApiFeil
-import no.nav.dagpenger.iverksett.felles.konfig.FeatureToggleConfig
-import no.nav.dagpenger.iverksett.felles.featuretoggle.FeatureToggleService
+import no.nav.dagpenger.iverksett.utbetaling.featuretoggle.FeatureToggleConfig
+import no.nav.dagpenger.iverksett.utbetaling.featuretoggle.FeatureToggleService
 import no.nav.dagpenger.iverksett.utbetaling.domene.transformer.tilSakIdentifikator
 import no.nav.dagpenger.kontrakter.iverksett.IverksettDto
 import org.springframework.beans.factory.annotation.Value

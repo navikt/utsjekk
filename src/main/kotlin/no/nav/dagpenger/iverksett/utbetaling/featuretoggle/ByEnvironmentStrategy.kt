@@ -1,4 +1,4 @@
-package no.nav.dagpenger.iverksett.felles.featuretoggle
+package no.nav.dagpenger.iverksett.utbetaling.featuretoggle
 
 import io.getunleash.UnleashContext
 import io.getunleash.strategy.Strategy

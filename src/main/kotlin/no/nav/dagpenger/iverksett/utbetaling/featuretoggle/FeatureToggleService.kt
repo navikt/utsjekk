@@ -1,4 +1,4 @@
-package no.nav.dagpenger.iverksett.felles.featuretoggle
+package no.nav.dagpenger.iverksett.utbetaling.featuretoggle
 
 interface FeatureToggleService {
 

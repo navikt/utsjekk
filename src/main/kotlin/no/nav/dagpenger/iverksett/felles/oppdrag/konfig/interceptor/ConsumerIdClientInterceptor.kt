@@ -1,4 +1,4 @@
-package no.nav.dagpenger.iverksett.felles.http.interceptor
+package no.nav.dagpenger.iverksett.felles.oppdrag.konfig.interceptor
 
 import no.nav.dagpenger.iverksett.felles.http.NavHttpHeaders
 import org.springframework.beans.factory.annotation.Value
@@ -10,13 +10,12 @@ import org.springframework.stereotype.Component
 
 @Component
 class ConsumerIdClientInterceptor(
-    @Value("\${application.name}") private val appName: String,
-    @Value("\${credential.username:}") private val serviceUser: String
+    @Value("\${application.name}") private val appName: String
 ) :
     ClientHttpRequestInterceptor {
 
     override fun intercept(request: HttpRequest, body: ByteArray, execution: ClientHttpRequestExecution): ClientHttpResponse {
-        request.headers.add(NavHttpHeaders.NAV_CONSUMER_ID.asString(), serviceUser.ifBlank { appName })
+        request.headers.add(NavHttpHeaders.NAV_CONSUMER_ID.asString(), appName)
         return execution.execute(request, body)
     }
 }

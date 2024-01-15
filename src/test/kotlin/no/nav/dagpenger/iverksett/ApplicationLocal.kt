@@ -1,6 +1,6 @@
 package no.nav.dagpenger.iverksett
 
-import no.nav.dagpenger.iverksett.felles.konfig.ApplicationConfig
+import no.nav.dagpenger.iverksett.felles.ApplicationConfig
 import no.nav.dagpenger.iverksett.felles.database.DbContainerInitializer
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.autoconfigure.web.servlet.error.ErrorMvcAutoConfiguration

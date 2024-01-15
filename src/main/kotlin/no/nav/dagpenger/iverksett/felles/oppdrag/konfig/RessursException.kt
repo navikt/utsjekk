@@ -1,4 +1,4 @@
-package no.nav.dagpenger.iverksett.felles.klient
+package no.nav.dagpenger.iverksett.felles.oppdrag.konfig
 
 import no.nav.dagpenger.iverksett.felles.http.advice.Ressurs
 import org.springframework.http.HttpStatus

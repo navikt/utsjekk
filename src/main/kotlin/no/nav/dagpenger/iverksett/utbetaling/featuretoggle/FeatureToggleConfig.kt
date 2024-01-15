@@ -1,11 +1,9 @@
-package no.nav.dagpenger.iverksett.felles.konfig
+package no.nav.dagpenger.iverksett.utbetaling.featuretoggle
 
 import io.getunleash.DefaultUnleash
 import io.getunleash.UnleashContext
 import io.getunleash.UnleashContextProvider
 import io.getunleash.util.UnleashConfig
-import no.nav.dagpenger.iverksett.felles.featuretoggle.ByEnvironmentStrategy
-import no.nav.dagpenger.iverksett.felles.featuretoggle.FeatureToggleService
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.boot.context.properties.ConfigurationProperties

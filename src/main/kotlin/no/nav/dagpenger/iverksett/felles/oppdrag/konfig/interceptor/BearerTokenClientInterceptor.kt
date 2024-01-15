@@ -1,4 +1,4 @@
-package no.nav.dagpenger.iverksett.felles.http.interceptor
+package no.nav.dagpenger.iverksett.felles.oppdrag.konfig.interceptor
 
 import no.nav.security.token.support.client.core.ClientProperties
 import no.nav.security.token.support.client.core.OAuth2GrantType

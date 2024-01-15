@@ -4,8 +4,8 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkObject
 import io.mockk.unmockkObject
-import no.nav.dagpenger.iverksett.felles.featuretoggle.FeatureToggleService
-import no.nav.dagpenger.iverksett.felles.tilgangskontroll.TokenContext
+import no.nav.dagpenger.iverksett.utbetaling.featuretoggle.FeatureToggleService
+import no.nav.dagpenger.iverksett.utbetaling.api.TokenContext
 import no.nav.dagpenger.iverksett.utbetaling.tilstand.IverksettingsresultatService
 import no.nav.dagpenger.iverksett.utbetaling.util.opprettIverksettDto
 import no.nav.dagpenger.iverksett.felles.oppdrag.OppdragClient

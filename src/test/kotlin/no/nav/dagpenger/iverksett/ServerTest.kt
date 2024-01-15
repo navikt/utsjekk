@@ -1,8 +1,8 @@
 package no.nav.dagpenger.iverksett
 
 import com.github.tomakehurst.wiremock.WireMockServer
-import no.nav.dagpenger.iverksett.felles.konfig.ApplicationConfig
 import no.nav.dagpenger.iverksett.felles.database.DbContainerInitializer
+import no.nav.dagpenger.iverksett.felles.oppdrag.konfig.RestTemplateAzure
 import no.nav.dagpenger.iverksett.felles.util.TokenUtil
 import no.nav.security.mock.oauth2.MockOAuth2Server
 import no.nav.security.token.support.spring.test.EnableMockOAuth2Server
@@ -27,7 +27,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 @EnableMockOAuth2Server
 abstract class ServerTest {
 
-    protected val restTemplate = TestRestTemplate(ApplicationConfig().restTemplateBuilder())
+    protected val restTemplate = TestRestTemplate(RestTemplateAzure().restTemplateBuilder())
     protected val headers = HttpHeaders()
 
     @Autowired

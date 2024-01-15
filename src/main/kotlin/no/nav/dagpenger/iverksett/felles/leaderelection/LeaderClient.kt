@@ -1,4 +1,4 @@
-package no.nav.dagpenger.iverksett.felles.klient
+package no.nav.dagpenger.iverksett.felles.leaderelection
 
 import org.slf4j.LoggerFactory
 import java.net.InetAddress

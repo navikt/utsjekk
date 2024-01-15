@@ -2,8 +2,7 @@ package no.nav.dagpenger.iverksett.felles.oppdrag
 
 import no.nav.dagpenger.iverksett.felles.http.advice.Ressurs
 import no.nav.dagpenger.iverksett.felles.http.advice.getDataOrThrow
-import no.nav.dagpenger.iverksett.felles.klient.AbstractPingableRestClient
-import java.net.URI
+import no.nav.dagpenger.iverksett.felles.oppdrag.konfig.AbstractRestClient
 import no.nav.dagpenger.kontrakter.oppdrag.GrensesnittavstemmingRequest
 import no.nav.dagpenger.kontrakter.oppdrag.OppdragId
 import no.nav.dagpenger.kontrakter.oppdrag.OppdragStatus
@@ -13,14 +12,15 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestOperations
 import org.springframework.web.util.UriComponentsBuilder
+import java.net.URI
 
 @Service
 class OppdragClient(
         @Value("\${DP_OPPDRAG_API_URL}")
     private val dagpengerOppdragUri: URI,
         @Qualifier("azure")
-    restOperations: RestOperations,
-) : AbstractPingableRestClient(restOperations, "dp.oppdrag") {
+        restOperations: RestOperations,
+): AbstractRestClient(restOperations, "dp.oppdrag") {
 
     private val postOppdragUri: URI = UriComponentsBuilder.fromUri(dagpengerOppdragUri).pathSegment("oppdrag").build().toUri()
 
@@ -41,11 +41,5 @@ class OppdragClient(
     fun grensesnittavstemming(grensesnittavstemmingRequest: GrensesnittavstemmingRequest): String {
         val ressurs = postForEntity<Ressurs<String>>(grensesnittavstemmingUri, grensesnittavstemmingRequest)
         return ressurs.getDataOrThrow()
-    }
-
-    override val pingUri = postOppdragUri
-
-    override fun ping() {
-        operations.optionsForAllow(pingUri)
     }
 }

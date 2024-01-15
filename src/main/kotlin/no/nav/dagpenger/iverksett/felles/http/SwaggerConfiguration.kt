@@ -1,4 +1,4 @@
-package no.nav.dagpenger.iverksett.felles.konfig
+package no.nav.dagpenger.iverksett.felles.http
 
 import io.swagger.v3.oas.models.Components
 import io.swagger.v3.oas.models.OpenAPI

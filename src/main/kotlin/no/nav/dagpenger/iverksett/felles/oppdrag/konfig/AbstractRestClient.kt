@@ -1,4 +1,4 @@
-package no.nav.dagpenger.iverksett.felles.klient
+package no.nav.dagpenger.iverksett.felles.oppdrag.konfig
 
 import com.fasterxml.jackson.module.kotlin.readValue
 import io.micrometer.core.instrument.Counter

@@ -1,4 +1,4 @@
-package no.nav.dagpenger.iverksett.felles.tilgangskontroll
+package no.nav.dagpenger.iverksett.utbetaling.api
 
 
 import no.nav.dagpenger.iverksett.felles.http.advice.ApiFeil

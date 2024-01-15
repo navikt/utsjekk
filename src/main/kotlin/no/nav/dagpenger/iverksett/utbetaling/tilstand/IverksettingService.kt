@@ -7,8 +7,8 @@ import no.nav.dagpenger.iverksett.utbetaling.domene.Iverksetting
 import no.nav.dagpenger.iverksett.utbetaling.domene.OppdragResultat
 import no.nav.dagpenger.iverksett.felles.hovedflyt
 import no.nav.dagpenger.iverksett.felles.oppdrag.OppdragClient
-import no.nav.dagpenger.iverksett.felles.konfig.FeatureToggleConfig
-import no.nav.dagpenger.iverksett.felles.featuretoggle.FeatureToggleService
+import no.nav.dagpenger.iverksett.utbetaling.featuretoggle.FeatureToggleConfig
+import no.nav.dagpenger.iverksett.utbetaling.featuretoggle.FeatureToggleService
 import no.nav.dagpenger.kontrakter.felles.SakIdentifikator
 import no.nav.dagpenger.kontrakter.felles.StønadType
 import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger

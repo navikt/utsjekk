@@ -40,7 +40,7 @@ open class RequestTimeFilter : Filter {
 
     @Suppress("MemberVisibilityCanBePrivate") // kan overrides hvis det ønskes
     fun shouldNotFilter(uri: String): Boolean {
-        return uri.contains("/internal") || uri == "/api/ping"
+        return uri.contains("/internal")
     }
 
     companion object {
