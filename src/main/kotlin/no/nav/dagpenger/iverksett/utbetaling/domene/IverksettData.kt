@@ -4,12 +4,9 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.UUID
 import no.nav.dagpenger.kontrakter.felles.BrukersNavKontor
-import no.nav.dagpenger.kontrakter.felles.Datoperiode
 import no.nav.dagpenger.kontrakter.felles.SakIdentifikator
 import no.nav.dagpenger.kontrakter.felles.StønadType
 import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
-import no.nav.dagpenger.kontrakter.iverksett.VedtaksperiodeType
-import no.nav.dagpenger.kontrakter.iverksett.Vedtaksresultat
 
 data class Iverksetting(
         val fagsak: Fagsakdetaljer,
@@ -33,19 +30,12 @@ data class Søker(
     val personident: String,
 )
 
-data class Vedtaksperiode(
-    val periode: Datoperiode,
-    val periodeType: VedtaksperiodeType,
-)
-
 data class Vedtaksdetaljer(
-        val vedtaksresultat: Vedtaksresultat,
         val vedtakstidspunkt: LocalDateTime,
         val saksbehandlerId: String,
         val beslutterId: String,
         val brukersNavKontor: BrukersNavKontor? = null,
         val tilkjentYtelse: TilkjentYtelse,
-        val vedtaksperioder: List<Vedtaksperiode> = listOf(),
 )
 
 data class Behandlingsdetaljer(

@@ -5,7 +5,6 @@ import no.nav.dagpenger.iverksett.utbetaling.domene.TilkjentYtelse
 import no.nav.dagpenger.iverksett.utbetaling.domene.Vedtaksdetaljer
 import no.nav.dagpenger.kontrakter.iverksett.ForrigeIverksettingDto
 import no.nav.dagpenger.kontrakter.iverksett.UtbetalingDto
-import no.nav.dagpenger.kontrakter.iverksett.Vedtaksresultat
 
 fun List<UtbetalingDto>.tilTilkjentYtelse(): TilkjentYtelse {
     val andeler = this.sammenslått().map { it.toDomain() }
@@ -39,7 +38,6 @@ private fun UtbetalingDto.kanSlåsSammen(forrige: UtbetalingDto): Boolean {
 
 fun ForrigeIverksettingDto.tilVedtaksdetaljer(): Vedtaksdetaljer {
     return Vedtaksdetaljer(
-        vedtaksresultat = Vedtaksresultat.INNVILGET,
         vedtakstidspunkt = LocalDateTime.now(),
         saksbehandlerId = "A123456",
         beslutterId = "B123456",

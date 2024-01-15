@@ -1,39 +1,23 @@
 package no.nav.dagpenger.iverksett.utbetaling.util
 
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.YearMonth
-import java.util.UUID
-import no.nav.dagpenger.iverksett.utbetaling.domene.AndelTilkjentYtelse
-import no.nav.dagpenger.iverksett.utbetaling.domene.Behandlingsdetaljer
-import no.nav.dagpenger.iverksett.utbetaling.domene.Fagsakdetaljer
-import no.nav.dagpenger.iverksett.utbetaling.domene.Iverksetting
-import no.nav.dagpenger.iverksett.utbetaling.domene.Iverksettingsresultat
-import no.nav.dagpenger.iverksett.utbetaling.domene.OppdragResultat
-import no.nav.dagpenger.iverksett.utbetaling.domene.Søker
-import no.nav.dagpenger.iverksett.utbetaling.domene.TilkjentYtelse
-import no.nav.dagpenger.iverksett.utbetaling.domene.Vedtaksdetaljer
-import no.nav.dagpenger.iverksett.utbetaling.domene.Vedtaksperiode
+import no.nav.dagpenger.iverksett.utbetaling.domene.*
 import no.nav.dagpenger.kontrakter.felles.BrukersNavKontor
-import no.nav.dagpenger.kontrakter.felles.Datoperiode
 import no.nav.dagpenger.kontrakter.felles.Personident
 import no.nav.dagpenger.kontrakter.felles.StønadType
 import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
 import no.nav.dagpenger.kontrakter.iverksett.Ferietillegg
 import no.nav.dagpenger.kontrakter.iverksett.IverksettDto
 import no.nav.dagpenger.kontrakter.iverksett.VedtaksdetaljerDto
-import no.nav.dagpenger.kontrakter.iverksett.VedtaksperiodeDto
-import no.nav.dagpenger.kontrakter.iverksett.VedtaksperiodeType
-import no.nav.dagpenger.kontrakter.iverksett.Vedtaksresultat
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.util.*
 
 fun opprettIverksettDto(
     behandlingId: UUID = UUID.randomUUID(),
     sakId: UUID = UUID.randomUUID(),
     andelsbeløp: Int = 500,
-    vedtaksresultat: Vedtaksresultat = Vedtaksresultat.INNVILGET,
     stønadType: StønadType = StønadTypeDagpenger.DAGPENGER_ARBEIDSSØKER_ORDINÆR,
     ferietillegg: Ferietillegg? = null,
-    vedtaksperioder: List<VedtaksperiodeDto> = emptyList(),
     brukersNavKontor: BrukersNavKontor? = null,
 ): IverksettDto {
     val andelTilkjentYtelse = lagUtbetalingDto(
@@ -49,13 +33,11 @@ fun opprettIverksettDto(
         sakId = sakId,
         personident = Personident("15507600333"),
         vedtak = VedtaksdetaljerDto(
-            resultat = vedtaksresultat,
             vedtakstidspunkt = LocalDateTime.of(2021, 5, 12, 0, 0),
             saksbehandlerId = "A12345",
             beslutterId = "B23456",
             brukersNavKontor = brukersNavKontor,
             utbetalinger = listOf(andelTilkjentYtelse),
-            vedtaksperioder = vedtaksperioder
         ),
     )
 }
@@ -98,26 +80,16 @@ fun behandlingsdetaljer(
     )
 }
 
-fun vedtaksperiode() =
-    Vedtaksperiode(
-        periode = Datoperiode(YearMonth.now().atDay(1), YearMonth.now().atEndOfMonth()),
-        periodeType = VedtaksperiodeType.HOVEDPERIODE,
-    )
-
 fun vedtaksdetaljer(
-        vedtaksresultat: Vedtaksresultat = Vedtaksresultat.INNVILGET,
         andeler: List<AndelTilkjentYtelse> = listOf(opprettAndelTilkjentYtelse()),
         vedtakstidspunkt: LocalDateTime = LocalDateTime.of(2021, 5, 12, 0, 0),
-        vedtaksperioder: List<Vedtaksperiode> = listOf(vedtaksperiode()),
 ): Vedtaksdetaljer {
     val tilkjentYtelse = lagTilkjentYtelse(andeler)
     return Vedtaksdetaljer(
-        vedtaksresultat = vedtaksresultat,
         vedtakstidspunkt = vedtakstidspunkt,
         saksbehandlerId = "A12345",
         beslutterId = "B23456",
         tilkjentYtelse = tilkjentYtelse,
-        vedtaksperioder = vedtaksperioder,
     )
 }
 
@@ -156,7 +128,6 @@ fun opprettIverksett(
             personident = "15507600333",
         ),
         vedtak = vedtaksdetaljer(
-            vedtaksresultat = Vedtaksresultat.INNVILGET,
             andeler = andeler,
         ),
         forrigeIverksettingBehandlingId = forrigeBehandlingId,
