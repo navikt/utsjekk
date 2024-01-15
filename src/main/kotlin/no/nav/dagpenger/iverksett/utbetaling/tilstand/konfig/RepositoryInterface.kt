@@ -1,4 +1,4 @@
-package no.nav.dagpenger.iverksett.felles.repository
+package no.nav.dagpenger.iverksett.utbetaling.tilstand.konfig
 
 import org.springframework.data.repository.CrudRepository
 import org.springframework.data.repository.NoRepositoryBean

@@ -4,7 +4,7 @@ import java.util.UUID
 import no.nav.dagpenger.iverksett.utbetaling.domene.Iverksettingsresultat
 import no.nav.dagpenger.iverksett.utbetaling.domene.OppdragResultat
 import no.nav.dagpenger.iverksett.utbetaling.domene.TilkjentYtelse
-import no.nav.dagpenger.iverksett.felles.repository.findByIdOrThrow
+import no.nav.dagpenger.iverksett.utbetaling.tilstand.konfig.findByIdOrThrow
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Propagation

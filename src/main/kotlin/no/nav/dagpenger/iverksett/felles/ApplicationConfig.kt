@@ -1,7 +1,6 @@
 package no.nav.dagpenger.iverksett.felles
 
 import com.fasterxml.jackson.module.kotlin.KotlinModule
-import no.nav.dagpenger.iverksett.felles.leaderelection.LeaderClient
 import no.nav.dagpenger.iverksett.felles.http.ObjectMapperProvider
 import no.nav.dagpenger.iverksett.felles.oppdrag.konfig.RestTemplateAzure
 import no.nav.familie.log.filter.LogFilter

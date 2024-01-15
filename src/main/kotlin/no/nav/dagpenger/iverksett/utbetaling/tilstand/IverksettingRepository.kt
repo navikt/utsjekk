@@ -1,8 +1,8 @@
 package no.nav.dagpenger.iverksett.utbetaling.tilstand
 
 import no.nav.dagpenger.iverksett.utbetaling.domene.IverksettingEntitet
-import no.nav.dagpenger.iverksett.felles.repository.InsertUpdateRepository
-import no.nav.dagpenger.iverksett.felles.repository.RepositoryInterface
+import no.nav.dagpenger.iverksett.utbetaling.tilstand.konfig.InsertUpdateRepository
+import no.nav.dagpenger.iverksett.utbetaling.tilstand.konfig.RepositoryInterface
 import no.nav.dagpenger.kontrakter.felles.SakIdentifikator
 import org.springframework.data.jdbc.repository.query.Query
 import org.springframework.data.repository.query.Param

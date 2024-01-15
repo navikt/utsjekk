@@ -3,7 +3,7 @@ package no.nav.dagpenger.iverksett.utbetaling.tilstand
 import com.fasterxml.jackson.module.kotlin.readValue
 import no.nav.dagpenger.iverksett.ResourceLoaderTestUtil
 import no.nav.dagpenger.iverksett.ServerTest
-import no.nav.dagpenger.iverksett.felles.repository.findByIdOrThrow
+import no.nav.dagpenger.iverksett.utbetaling.tilstand.konfig.findByIdOrThrow
 import no.nav.dagpenger.iverksett.felles.http.ObjectMapperProvider.objectMapper
 import no.nav.dagpenger.iverksett.utbetaling.domene.Iverksetting
 import no.nav.dagpenger.iverksett.utbetaling.domene.behandlingId

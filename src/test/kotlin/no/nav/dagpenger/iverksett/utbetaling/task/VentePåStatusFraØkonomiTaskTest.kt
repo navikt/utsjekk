@@ -18,7 +18,7 @@ import no.nav.dagpenger.iverksett.utbetaling.tilstand.IverksettingService
 import no.nav.dagpenger.iverksett.utbetaling.domene.OppdragResultat
 import no.nav.dagpenger.iverksett.utbetaling.domene.TilkjentYtelse
 import no.nav.dagpenger.iverksett.utbetaling.tilstand.IverksettingsresultatService
-import no.nav.dagpenger.iverksett.felles.repository.findByIdOrThrow
+import no.nav.dagpenger.iverksett.utbetaling.tilstand.konfig.findByIdOrThrow
 import no.nav.dagpenger.iverksett.utbetaling.domene.transformer.toDomain
 import no.nav.dagpenger.iverksett.utbetaling.util.opprettIverksettDto
 import no.nav.dagpenger.iverksett.utbetaling.lagIverksettingEntitet
