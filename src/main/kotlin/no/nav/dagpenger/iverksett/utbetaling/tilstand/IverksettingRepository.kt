@@ -15,18 +15,6 @@ interface IverksettingRepository : RepositoryInterface<IverksettingEntitet, UUID
     @Query("select behandling_id, data from iverksetting where data -> 'søker' ->> 'personident' = :personId")
     fun findByPersonId(@Param("personId") personId: String): List<IverksettingEntitet>
 
-    @Query(
-        """
-            select behandling_id, data from iverksetting 
-            where data -> 'søker' ->> 'personident' = :personId 
-            and data -> 'vedtak' ->> 'vedtaksresultat' = :vedtaksresultat
-        """,
-    )
-    fun findByPersonIdAndResult(
-        @Param("personId") personId: String,
-        @Param("vedtaksresultat") vedtaksresultat: String,
-    ): List<IverksettingEntitet>
-
     @Query("select behandling_id, data from iverksetting where data -> 'fagsak' ->> 'fagsakId' = :fagsakId::text")
     fun findByFagsakId(@Param("fagsakId") fagsakId: UUID): List<IverksettingEntitet>
 

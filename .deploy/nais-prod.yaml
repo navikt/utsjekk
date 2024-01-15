@@ -63,7 +63,6 @@ spec:
         - application: dp-iverksett # For å sette i gang grensesnittavstemming første gang
         - application: dp-vedtak-iverksett
         - application: dp-prosessering #frontend for task-rammeverket
-        - application: dp-datadeling
         - application: dp-behandling
     outbound:
       rules:

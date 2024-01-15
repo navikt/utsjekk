@@ -65,8 +65,6 @@ spec:
         - application: dp-iverksett-lokal # For testing av prosessering-frontend lokalt
         - application: dp-vedtak-iverksett
         - application: dp-prosessering #frontend for task-rammeverket
-        - application: dp-datadeling
-        - application: dp-behandling
     outbound:
       rules:
         - application: dp-oppdrag
