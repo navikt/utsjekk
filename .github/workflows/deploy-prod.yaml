@@ -53,7 +53,8 @@ jobs:
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-gcp
-          RESOURCE: .deploy/unleash-apitoken.yaml,.deploy/nais-preprod.yaml
+          RESOURCE: .deploy/unleash-apitoken.yaml,.deploy/nais.yaml
+          VARS: .deploy/vars-preprod.yaml
 
   deploy-prod:
     name: Deploy til prod-gcp
@@ -69,3 +70,4 @@ jobs:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: prod-gcp
           RESOURCE: .deploy/unleash-apitoken.yaml,.deploy/nais-prod.yaml
+          VARS: .deploy/vars-prod.yaml

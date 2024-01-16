@@ -5,10 +5,11 @@ metadata:
   namespace: teamdagpenger
   labels:
     team: teamdagpenger
+
 spec:
   image: {{ image }}
   ingresses:
-    - https://dp-iverksett.intern.nav.no
+      - {{ ingress }}
   liveness:
     path: /internal/isAlive
     initialDelay: 30
@@ -35,25 +36,23 @@ spec:
   leaderElection: true
   env:
     - name: SPRING_PROFILES_ACTIVE
-      value: prod
+      value: {{ springProfil }}
     - name: BESLUTTER_GRUPPE
-      value: "70d54cad-53a3-4788-bbe3-565096f01da7"
+      value: {{ groups.beslutter }}
     - name: APP_MED_SYSTEMTILGANG
-      value: "prod-gcp:teamdagpenger:dp-vedtak-iverksett"
+      value: {{ systemtilgang_app }}
     - name: PROSESSERING_GRUPPE
-      value: "97140b9a-07c5-414c-beeb-69824d04c044"
+      value: {{ groups.prosesseringAdmin }}
   envFrom:
-    - secret: dp-iverksett-unleash-api-token
-  unleash:
-    environment: production
+    - secret: {{ unleash.apiToken }}
   azure:
     application:
       enabled: true
       claims:
         groups:
-          - id: "97140b9a-07c5-414c-beeb-69824d04c044" # 0000-GA-Dagpenger-Prosessering-Admin gir tilgang til prosessering
-          - id: "2e9c63d8-322e-4c1f-b500-a0abb812761c" # 0000-GA-Dagpenger-Saksbehandler
-          - id: "70d54cad-53a3-4788-bbe3-565096f01da7" # 0000-GA-Dagpenger-Beslutter
+          - id: {{ groups.prosesseringAdmin }} # 0000-GA-Dagpenger-Prosessering-Admin gir tilgang til prosessering
+          - id: {{ groups.saksbehandler }} # 0000-GA-Dagpenger-Saksbehandler
+          - id: {{ groups.beslutter }} # 0000-GA-Dagpenger-Beslutter
         extra:
           - NAVident
           - azp_name
@@ -71,15 +70,15 @@ spec:
         - host: dagpenger-unleash-api.nav.cloud.nais.io
   gcp:
     sqlInstances:
-      - type: POSTGRES_15 # IF This is changed, all data will be lost. Read on nais.io how to upgrade
+      - type: {{ db.version }} # IF This is changed, all data will be lost. Read on nais.io how to upgrade
         diskAutoresize: true
-        tier: db-custom-1-3840
+        tier: {{ db.tier }}
         cascadingDelete: false
-        highAvailability: true
+        highAvailability: {{ db.highAvailability }}
         pointInTimeRecovery: true
         maintenance:
           day: 7
           hour: 23
         databases:
-          - name: dp-iverksett
+          - name: {{ db.name }}
             envVarPrefix: DB

@@ -1,0 +1,15 @@
+ingress: https://dp-iverksett.intern.dev.nav.no
+springProfil: dev
+systemtilgang_app: "dev-gcp:teamdagpenger:dp-vedtak-iverksett"
+unleash:
+  apiToken: dp-iverksett-unleash-api-token
+  environment: development
+db:
+  tier: "db-f1-micro"
+  highAvailability: "false"
+  version: "POSTGRES_14"
+  name: "dp-iverksett-2"
+groups:
+  prosesseringAdmin: "928636f4-fd0d-4149-978e-a6fb68bb19de" #Dette er 0000-GA-STDAPPS i preprod
+  saksbehandler: "3e28466f-c53d-46da-8b44-a4abc2ad4593"
+  beslutter: "11b8475a-fb12-41aa-b1f6-8497c1b5385b"
