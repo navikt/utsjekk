@@ -22,7 +22,7 @@ jobs:
     permissions: write-all
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Read/save maven cache
         uses: actions/cache@v3
         with:
@@ -53,7 +53,7 @@ jobs:
     #if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: nais/deploy/actions/deploy@v1
         timeout-minutes: 30
         env:
