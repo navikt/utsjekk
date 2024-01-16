@@ -4,6 +4,7 @@ on:
     branches-ignore:
       - 'gh-pages'
       - 'docs'
+      - 'dependabot/**'
 
 env:
   IMAGE: ghcr.io/${{ github.repository }}:${{ github.sha }}
