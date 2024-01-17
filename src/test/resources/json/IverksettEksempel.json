@@ -25,6 +25,7 @@
           "fraOgMed": null,
           "tilOgMed": null,
           "stønadsdata": {
+            "@type": "dagpenger",
             "stønadstype": "DAGPENGER_ARBEIDSSØKER_ORDINÆR"
           },
           "periode": {
