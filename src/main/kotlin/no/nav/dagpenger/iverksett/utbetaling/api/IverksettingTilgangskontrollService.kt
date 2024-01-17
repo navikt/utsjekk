@@ -4,7 +4,7 @@ import no.nav.dagpenger.iverksett.felles.http.advice.ApiFeil
 import no.nav.dagpenger.iverksett.utbetaling.featuretoggle.FeatureToggleConfig
 import no.nav.dagpenger.iverksett.utbetaling.featuretoggle.FeatureToggleService
 import no.nav.dagpenger.iverksett.utbetaling.tilstand.IverksettingService
-import no.nav.dagpenger.kontrakter.felles.SakIdentifikator
+import no.nav.dagpenger.kontrakter.felles.GeneriskId
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Profile
 import org.springframework.http.HttpStatus
@@ -18,7 +18,7 @@ class IverksettingTilgangskontrollService(
     @Value("\${BESLUTTER_GRUPPE}") private val beslutterGruppe: String,
     @Value("\${APP_MED_SYSTEMTILGANG}") private val appMedSystemtilgang: String,
 ) : TilgangskontrollService {
-    override fun valider(sakId: SakIdentifikator) {
+    override fun valider(sakId: GeneriskId) {
         if (featureToggleService.isEnabled(FeatureToggleConfig.TILGANGSKONTROLL, false)) {
             validerFørsteVedtakPåSakSendesAvBeslutter(sakId)
             validerSystemTilgangErLov()
@@ -34,7 +34,7 @@ class IverksettingTilgangskontrollService(
         }
     }
 
-    private fun validerFørsteVedtakPåSakSendesAvBeslutter(sakId: SakIdentifikator) {
+    private fun validerFørsteVedtakPåSakSendesAvBeslutter(sakId: GeneriskId) {
         if (iverksettingService.erFørsteVedtakPåSak(sakId) && !erBeslutter()) {
             throw ApiFeil("Første vedtak på en sak må sendes av en ansatt med beslutter-rolle", HttpStatus.FORBIDDEN)
         }

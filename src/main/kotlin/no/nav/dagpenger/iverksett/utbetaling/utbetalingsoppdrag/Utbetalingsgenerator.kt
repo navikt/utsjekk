@@ -64,7 +64,6 @@ object Utbetalingsgenerator {
             kodeEndring = kodeEndring(sisteAndelPerKjede),
             saksnummer = behandlingsinformasjon.fagsakId,
             fagSystem = fagsystem,
-            saksreferanse = behandlingsinformasjon.saksreferanse,
             aktør = behandlingsinformasjon.personident,
             brukersNavKontor = behandlingsinformasjon.brukersNavKontor,
             utbetalingsperiode = utbetalingsperioder(behandlingsinformasjon, nyeKjeder),

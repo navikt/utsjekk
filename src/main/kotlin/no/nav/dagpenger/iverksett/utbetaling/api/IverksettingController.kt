@@ -6,10 +6,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.tags.Tag
 import no.nav.dagpenger.iverksett.utbetaling.api.IverksettDtoValidator.valider
 import no.nav.dagpenger.iverksett.utbetaling.api.IverksettTilleggsstønaderDtoValidator.valider
-import no.nav.dagpenger.iverksett.utbetaling.domene.transformer.tilSakIdentifikator
 import no.nav.dagpenger.iverksett.utbetaling.domene.transformer.toDomain
 import no.nav.dagpenger.iverksett.utbetaling.tilstand.IverksettingService
-import no.nav.dagpenger.kontrakter.felles.SakIdentifikator
 import no.nav.dagpenger.kontrakter.iverksett.IverksettDto
 import no.nav.dagpenger.kontrakter.iverksett.IverksettStatus
 import no.nav.security.token.support.core.api.ProtectedWithClaims
@@ -59,7 +57,7 @@ Det kjøres implisitt en konsistensavstemming av at nye utbetalinger stemmer ove
     fun iverksett(
         @RequestBody iverksettDto: IverksettDto,
     ): ResponseEntity<Void> {
-        tilgangskontrollService.valider(iverksettDto.tilSakIdentifikator())
+        tilgangskontrollService.valider(iverksettDto.sakId)
 
         iverksettDto.valider()
         val iverksett = iverksettDto.toDomain()
@@ -86,7 +84,7 @@ Det kjøres implisitt en konsistensavstemming av at nye utbetalinger stemmer ove
     fun iverksettTilleggsstønader(
         @RequestBody iverksettDto: IverksettTilleggsstønaderDto,
     ): ResponseEntity<Void> {
-        tilgangskontrollService.valider(SakIdentifikator(saksreferanse = iverksettDto.saksreferanse))
+        tilgangskontrollService.valider(iverksettDto.sakId)
 
         iverksettDto.valider()
 //        val iverksett = iverksettDto.toDomain()

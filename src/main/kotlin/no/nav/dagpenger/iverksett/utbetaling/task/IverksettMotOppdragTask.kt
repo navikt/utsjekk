@@ -9,6 +9,7 @@ import no.nav.dagpenger.iverksett.utbetaling.utbetalingsoppdrag.domene.Behandlin
 import no.nav.dagpenger.iverksett.utbetaling.utbetalingsoppdrag.domene.BeregnetUtbetalingsoppdrag
 import no.nav.dagpenger.iverksett.utbetaling.domene.*
 import no.nav.dagpenger.iverksett.utbetaling.tilstand.IverksettingService
+import no.nav.dagpenger.kontrakter.felles.somUUID
 import no.nav.familie.prosessering.AsyncTaskStep
 import no.nav.familie.prosessering.TaskStepBeskrivelse
 import no.nav.familie.prosessering.domene.Task
@@ -37,7 +38,7 @@ class IverksettMotOppdragTask(
             ?: error("Fant ikke iverksetting for behandlingId $behandlingId")
 
         val forrigeIverksettResultat = iverksett.behandling.forrigeBehandlingId?.let {
-            iverksettingsresultatService.hentIverksettResultat(it)
+            iverksettingsresultatService.hentIverksettResultat(it.somUUID)
                 ?: error("Kunne ikke finne iverksettresultat for behandlingId=$it")
         }
 
@@ -52,8 +53,7 @@ class IverksettMotOppdragTask(
         val behandlingsinformasjon = Behandlingsinformasjon(
             saksbehandlerId = iverksetting.vedtak.saksbehandlerId,
             fagsakId = iverksetting.sakId,
-            saksreferanse = iverksetting.fagsak.saksreferanse,
-            behandlingId = iverksetting.behandlingId.toString(),
+            behandlingId = iverksetting.behandlingId,
             personident = iverksetting.personident,
             brukersNavKontor = iverksetting.vedtak.brukersNavKontor,
             vedtaksdato = iverksetting.vedtak.vedtakstidspunkt.toLocalDate(),

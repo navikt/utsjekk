@@ -1,19 +1,17 @@
 package no.nav.dagpenger.iverksett.utbetaling.api
 
 import io.swagger.v3.oas.annotations.media.Schema
-import jakarta.validation.constraints.Size
 import no.nav.dagpenger.kontrakter.felles.BrukersNavKontor
+import no.nav.dagpenger.kontrakter.felles.GeneriskId
 import no.nav.dagpenger.kontrakter.felles.Personident
 import java.time.LocalDate
 import java.time.LocalDateTime
 
 data class IverksettTilleggsstønaderDto(
-    @Size(min = 1, max = 20)
     @Schema(required = true)
-    val saksreferanse: String,
-    @Size(min = 1, max = 30)
+    val sakId: GeneriskId,
     @Schema(required = true)
-    val behandlingId: String,
+    val behandlingId: GeneriskId,
     val iverksettingId: String?,
     @Schema(required = true, description = "Fødselsnummer eller D-nummer", example = "15507600333", type = "string")
     val personident: Personident,
@@ -62,8 +60,7 @@ enum class Satstype {
 }
 
 data class ForrigeIverksettingTilleggsstønaderDto(
-    @Size(min = 1, max = 30)
     @Schema(required = true)
-    val behandlingId: String,
+    val behandlingId: GeneriskId,
     val iverksettingId: String? = null,
 )

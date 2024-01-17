@@ -1,12 +1,11 @@
 package no.nav.dagpenger.iverksett.utbetaling.utbetalingsoppdrag
 
-import java.math.BigDecimal
-import java.time.LocalDate
-import java.util.UUID
 import no.nav.dagpenger.iverksett.utbetaling.utbetalingsoppdrag.domene.AndelData
 import no.nav.dagpenger.iverksett.utbetaling.utbetalingsoppdrag.domene.Behandlingsinformasjon
 import no.nav.dagpenger.kontrakter.oppdrag.Opphør
 import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsperiode
+import java.math.BigDecimal
+import java.time.LocalDate
 
 /**
  * Lager mal for generering av utbetalingsperioder med tilpasset setting av verdier basert på parametre
@@ -54,6 +53,6 @@ internal data class UtbetalingsperiodeMal(
             sats = BigDecimal(andel.beløp),
             satsType = Utbetalingsperiode.SatsType.DAG,
             utbetalesTil = behandlingsinformasjon.personident,
-            behandlingId = UUID.fromString(behandlingsinformasjon.behandlingId),
+            behandlingId = behandlingsinformasjon.behandlingId,
         )
 }

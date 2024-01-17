@@ -27,6 +27,8 @@ import no.nav.dagpenger.iverksett.utbetaling.utbetalingsoppdrag.domene.AndelMedP
 import no.nav.dagpenger.iverksett.utbetaling.utbetalingsoppdrag.domene.Behandlingsinformasjon
 import no.nav.dagpenger.iverksett.utbetaling.utbetalingsoppdrag.domene.BeregnetUtbetalingsoppdrag
 import no.nav.dagpenger.iverksett.utbetaling.utbetalingsoppdrag.domene.uten0beløp
+import no.nav.dagpenger.kontrakter.felles.GeneriskId
+import no.nav.dagpenger.kontrakter.felles.GeneriskIdSomUUID
 import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
 import no.nav.dagpenger.kontrakter.felles.StønadTypeTiltakspenger
 import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsoppdrag
@@ -36,7 +38,7 @@ import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.slf4j.LoggerFactory
 
-val FAGSAK_ID = UUID.randomUUID()
+val FAGSAK_ID = GeneriskIdSomUUID(UUID.randomUUID())
 
 class OppdragSteg {
 
@@ -122,7 +124,7 @@ class OppdragSteg {
         dataTable.groupByBehandlingId().map { (behandlingId, _) ->
             val behandlingIdAsUUID = behandlingIdTilUUID[behandlingId.toInt()]!!
             behandlingsinformasjon[behandlingIdAsUUID] = lagBehandlingsinformasjon(
-                behandlingId = behandlingIdAsUUID.toString(),
+                behandlingId = GeneriskIdSomUUID(behandlingIdAsUUID),
             )
         }
     }
@@ -131,13 +133,13 @@ class OppdragSteg {
         dataTable.groupByBehandlingId().forEach { (behandlingId, _) ->
             val behandlingIdAsUUID = behandlingIdTilUUID[behandlingId.toInt()]!!
             if (!behandlingsinformasjon.containsKey(behandlingIdAsUUID)) {
-                behandlingsinformasjon[behandlingIdAsUUID] = lagBehandlingsinformasjon(behandlingIdAsUUID.toString())
+                behandlingsinformasjon[behandlingIdAsUUID] = lagBehandlingsinformasjon(GeneriskIdSomUUID(behandlingIdAsUUID))
             }
         }
     }
 
     private fun lagBehandlingsinformasjon(
-        behandlingId: String,
+        behandlingId: GeneriskId,
     ) = Behandlingsinformasjon(
         fagsakId = FAGSAK_ID,
         saksbehandlerId = "saksbehandlerId",

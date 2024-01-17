@@ -24,6 +24,10 @@ import no.nav.dagpenger.iverksett.utbetaling.util.opprettIverksettDto
 import no.nav.dagpenger.iverksett.utbetaling.lagIverksettingEntitet
 import no.nav.dagpenger.iverksett.util.mockFeatureToggleService
 import no.nav.dagpenger.kontrakter.felles.Fagsystem
+import no.nav.dagpenger.kontrakter.felles.GeneriskId
+import no.nav.dagpenger.kontrakter.felles.GeneriskIdSomUUID
+import no.nav.dagpenger.kontrakter.felles.somString
+import no.nav.dagpenger.kontrakter.felles.somUUID
 import no.nav.dagpenger.kontrakter.oppdrag.OppdragStatus
 import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsoppdrag
 import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsoppdrag.KodeEndring.NY
@@ -40,8 +44,8 @@ internal class VentePåStatusFraØkonomiTaskTest {
     private val iverksettingRepository = mockk<IverksettingRepository>()
     private val taskService = mockk<TaskService>()
     private val iverksettingsresultatService = mockk<IverksettingsresultatService>()
-    private val behandlingId: UUID = UUID.randomUUID()
-    private val sakId: UUID = UUID.randomUUID()
+    private val behandlingId: GeneriskId = GeneriskIdSomUUID(UUID.randomUUID())
+    private val sakId: GeneriskId = GeneriskIdSomUUID(UUID.randomUUID())
     private val iverksettingService = IverksettingService(
         taskService = taskService,
         oppdragClient = oppdragClient,
@@ -61,24 +65,24 @@ internal class VentePåStatusFraØkonomiTaskTest {
     internal fun setUp() {
         every { oppdragClient.hentStatus(any()) } returns OppdragStatusMedMelding(OppdragStatus.KVITTERT_OK, "OK")
         every { iverksettingRepository.findByIdOrThrow(any()) } returns lagIverksettingEntitet(opprettIverksettDto(behandlingId, sakId).toDomain())
-        every { iverksettingsresultatService.oppdaterOppdragResultat(behandlingId, any()) } just runs
+        every { iverksettingsresultatService.oppdaterOppdragResultat(behandlingId.somUUID, any()) } just runs
         every { taskService.save(any()) } answers { firstArg() }
     }
 
     @Test
     internal fun `kjør doTask for VentePåStatusFraØkonomiTask, forvent ingen unntak`() {
         val oppdragResultatSlot = slot<OppdragResultat>()
-        every { iverksettingsresultatService.hentTilkjentYtelse(behandlingId) } returns tilkjentYtelse(
+        every { iverksettingsresultatService.hentTilkjentYtelse(behandlingId.somUUID) } returns tilkjentYtelse(
             listOf(
                 utbetalingsperiode,
             ),
         )
 
-        runTask(Task(IverksettMotOppdragTask.TYPE, behandlingId.toString(), Properties()))
+        runTask(Task(IverksettMotOppdragTask.TYPE, behandlingId.somString, Properties()))
 
         verify(exactly = 1) {
             iverksettingsresultatService.oppdaterOppdragResultat(
-                behandlingId,
+                behandlingId.somUUID,
                 capture(oppdragResultatSlot),
             )
         }
@@ -87,11 +91,11 @@ internal class VentePåStatusFraØkonomiTaskTest {
 
     @Test
     internal fun `Skal ikke gjøre noe hvis ingen utbetalingoppdrag på tilkjent ytelse`() {
-        every { iverksettingsresultatService.hentTilkjentYtelse(behandlingId) } returns tilkjentYtelse()
+        every { iverksettingsresultatService.hentTilkjentYtelse(behandlingId.somUUID) } returns tilkjentYtelse()
 
-        runTask(Task(IverksettMotOppdragTask.TYPE, behandlingId.toString(), Properties()))
+        runTask(Task(IverksettMotOppdragTask.TYPE, behandlingId.somString, Properties()))
 
-        verify(exactly = 0) { iverksettingsresultatService.oppdaterOppdragResultat(behandlingId, any()) }
+        verify(exactly = 0) { iverksettingsresultatService.oppdaterOppdragResultat(behandlingId.somUUID, any()) }
     }
 
     private fun runTask(task: Task) {
@@ -110,7 +114,7 @@ internal class VentePåStatusFraØkonomiTaskTest {
         sats = BigDecimal.TEN,
         satsType = Utbetalingsperiode.SatsType.DAG,
         utbetalesTil = "x",
-        behandlingId = UUID.randomUUID(),
+        behandlingId = GeneriskIdSomUUID(UUID.randomUUID()),
         utbetalingsgrad = null,
     )
 
@@ -120,7 +124,7 @@ internal class VentePåStatusFraØkonomiTaskTest {
             utbetalingsoppdrag = Utbetalingsoppdrag(
                 kodeEndring = NY,
                 fagSystem = Fagsystem.Dagpenger,
-                saksnummer = UUID.randomUUID(),
+                saksnummer = GeneriskIdSomUUID(UUID.randomUUID()),
                 aktør = "",
                 saksbehandlerId = "",
                 avstemmingTidspunkt = LocalDateTime.now(),

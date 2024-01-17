@@ -2,6 +2,8 @@ package no.nav.dagpenger.iverksett.utbetaling.util
 
 import no.nav.dagpenger.iverksett.utbetaling.domene.*
 import no.nav.dagpenger.kontrakter.felles.BrukersNavKontor
+import no.nav.dagpenger.kontrakter.felles.GeneriskId
+import no.nav.dagpenger.kontrakter.felles.GeneriskIdSomUUID
 import no.nav.dagpenger.kontrakter.felles.Personident
 import no.nav.dagpenger.kontrakter.felles.StønadType
 import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
@@ -13,8 +15,8 @@ import java.time.LocalDateTime
 import java.util.*
 
 fun opprettIverksettDto(
-    behandlingId: UUID = UUID.randomUUID(),
-    sakId: UUID = UUID.randomUUID(),
+    behandlingId: GeneriskId = GeneriskIdSomUUID(UUID.randomUUID()),
+    sakId: GeneriskId = GeneriskIdSomUUID(UUID.randomUUID()),
     andelsbeløp: Int = 500,
     stønadType: StønadType = StønadTypeDagpenger.DAGPENGER_ARBEIDSSØKER_ORDINÆR,
     ferietillegg: Ferietillegg? = null,
@@ -72,10 +74,8 @@ fun behandlingsdetaljer(
     forrigeBehandlingId: UUID? = null,
 ): Behandlingsdetaljer {
     return Behandlingsdetaljer(
-        behandlingId = behandlingId,
-        forrigeBehandlingId = forrigeBehandlingId,
-        relatertBehandlingId = null,
-        kravMottatt = LocalDate.of(2021, 3, 3),
+        behandlingId = GeneriskIdSomUUID(behandlingId),
+        forrigeBehandlingId = forrigeBehandlingId?.let { GeneriskIdSomUUID(it) },
 
     )
 }
@@ -107,7 +107,7 @@ fun opprettIverksett(
         vedtaksdetaljer: Vedtaksdetaljer = vedtaksdetaljer(),
 ) =
     Iverksetting(
-        fagsak = Fagsakdetaljer(fagsakId = UUID.randomUUID(), stønadstype = StønadTypeDagpenger.DAGPENGER_ARBEIDSSØKER_ORDINÆR),
+        fagsak = Fagsakdetaljer(fagsakId = GeneriskIdSomUUID(UUID.randomUUID()), stønadstype = StønadTypeDagpenger.DAGPENGER_ARBEIDSSØKER_ORDINÆR),
         behandling = behandlingsdetaljer,
         søker = Søker(
             personident = "15507600333",
@@ -122,7 +122,7 @@ fun opprettIverksett(
         fagsakId: UUID = UUID.randomUUID(),
 ): Iverksetting {
     return Iverksetting(
-        fagsak = Fagsakdetaljer(fagsakId = fagsakId, stønadstype = StønadTypeDagpenger.DAGPENGER_ARBEIDSSØKER_ORDINÆR),
+        fagsak = Fagsakdetaljer(fagsakId = GeneriskIdSomUUID(fagsakId), stønadstype = StønadTypeDagpenger.DAGPENGER_ARBEIDSSØKER_ORDINÆR),
         behandling = behandlingsdetaljer(behandlingId, forrigeBehandlingId),
         søker = Søker(
             personident = "15507600333",
@@ -130,7 +130,7 @@ fun opprettIverksett(
         vedtak = vedtaksdetaljer(
             andeler = andeler,
         ),
-        forrigeIverksettingBehandlingId = forrigeBehandlingId,
+        forrigeIverksettingBehandlingId = forrigeBehandlingId?.let { GeneriskIdSomUUID(it) },
     )
 }
 

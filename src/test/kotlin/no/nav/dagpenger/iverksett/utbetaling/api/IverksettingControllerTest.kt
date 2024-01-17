@@ -3,6 +3,7 @@ package no.nav.dagpenger.iverksett.utbetaling.api
 import no.nav.dagpenger.iverksett.ServerTest
 import no.nav.dagpenger.iverksett.felles.http.advice.Ressurs
 import no.nav.dagpenger.iverksett.utbetaling.util.opprettIverksettDto
+import no.nav.dagpenger.kontrakter.felles.GeneriskIdSomUUID
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -13,8 +14,8 @@ import java.util.*
 
 class IverksettingControllerTest : ServerTest() {
 
-    private val behandlingId = UUID.randomUUID()
-    private val sakId = UUID.randomUUID()
+    private val behandlingId = GeneriskIdSomUUID(UUID.randomUUID())
+    private val sakId = GeneriskIdSomUUID(UUID.randomUUID())
 
     @Value("\${BESLUTTER_GRUPPE}")
     private lateinit var beslutterGruppe: String

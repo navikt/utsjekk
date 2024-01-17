@@ -7,8 +7,12 @@ import no.nav.dagpenger.iverksett.utbetaling.tilstand.konfig.findByIdOrThrow
 import no.nav.dagpenger.iverksett.felles.http.ObjectMapperProvider.objectMapper
 import no.nav.dagpenger.iverksett.utbetaling.domene.Iverksetting
 import no.nav.dagpenger.iverksett.utbetaling.domene.behandlingId
+import no.nav.dagpenger.iverksett.utbetaling.domene.sakId
 import no.nav.dagpenger.iverksett.utbetaling.domene.transformer.toDomain
 import no.nav.dagpenger.iverksett.utbetaling.lagIverksettingEntitet
+import no.nav.dagpenger.kontrakter.felles.GeneriskIdSomUUID
+import no.nav.dagpenger.kontrakter.felles.somString
+import no.nav.dagpenger.kontrakter.felles.somUUID
 import no.nav.dagpenger.kontrakter.iverksett.IverksettDto
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -28,7 +32,7 @@ class IverksettingRepositoryTest : ServerTest() {
         val json: String = ResourceLoaderTestUtil.readResource("json/IverksettDtoEksempel.json")
         val iverksettingData: Iverksetting = objectMapper.readValue<IverksettDto>(json).toDomain()
 
-        assertThrows<IllegalStateException> { iverksettingRepository.findByIdOrThrow(iverksettingData.behandlingId) }
+        assertThrows<IllegalStateException> { iverksettingRepository.findByIdOrThrow(iverksettingData.behandlingId.somUUID) }
 
         val iverksett = iverksettingRepository.insert(lagIverksettingEntitet(iverksettingData))
 
@@ -57,12 +61,12 @@ class IverksettingRepositoryTest : ServerTest() {
         val iverksettingData: Iverksetting = objectMapper.readValue<IverksettDto>(json).toDomain()
         val iverksettData2 = iverksettingData.copy(
             behandling = iverksettingData.behandling.copy(
-                behandlingId = UUID.randomUUID(),
+                behandlingId = GeneriskIdSomUUID(UUID.randomUUID()),
             ),
         )
         val iverksettDataAnnenPerson = iverksettingData.copy(
             behandling = iverksettingData.behandling.copy(
-                behandlingId = UUID.randomUUID(),
+                behandlingId = GeneriskIdSomUUID(UUID.randomUUID()),
             ),
             søker = iverksettingData.søker.copy(
                 personident = "12345678911",
@@ -83,13 +87,13 @@ class IverksettingRepositoryTest : ServerTest() {
         val json: String = ResourceLoaderTestUtil.readResource("json/IverksettDtoEksempel.json")
         val iverksettingData: Iverksetting = objectMapper.readValue<IverksettDto>(json).toDomain()
 
-        val fagsakId = iverksettingData.fagsak.fagsakId!!
-        val iverksettListe1 = iverksettingRepository.findByFagsakId(fagsakId)
+        val fagsakId = iverksettingData.fagsak.fagsakId
+        val iverksettListe1 = iverksettingRepository.findByFagsakId(fagsakId.somString)
         assertEquals(0, iverksettListe1.size)
 
         val iverksett = iverksettingRepository.insert(lagIverksettingEntitet(iverksettingData))
 
-        val iverksettListe2 = iverksettingRepository.findByFagsakId(fagsakId)
+        val iverksettListe2 = iverksettingRepository.findByFagsakId(fagsakId.somString)
         assertEquals(1, iverksettListe2.size)
         assertThat(iverksett).usingRecursiveComparison().isEqualTo(iverksettListe2[0])
     }
@@ -99,13 +103,12 @@ class IverksettingRepositoryTest : ServerTest() {
         val json: String = ResourceLoaderTestUtil.readResource("json/IverksettDtoEksempel.json")
         val iverksettingData: Iverksetting = objectMapper.readValue<IverksettDto>(json).toDomain()
 
-        val saksreferanse = iverksettingData.fagsak.saksreferanse!!
-        val iverksettListe1 = iverksettingRepository.findBySaksreferanse(saksreferanse)
+        val iverksettListe1 = iverksettingRepository.findByFagsakId(iverksettingData.sakId.somString)
         assertEquals(0, iverksettListe1.size)
 
         val iverksett = iverksettingRepository.insert(lagIverksettingEntitet(iverksettingData))
 
-        val iverksettListe2 = iverksettingRepository.findBySaksreferanse(saksreferanse)
+        val iverksettListe2 = iverksettingRepository.findByFagsakId(iverksettingData.sakId.somString)
         assertEquals(1, iverksettListe2.size)
         assertThat(iverksett).usingRecursiveComparison().isEqualTo(iverksettListe2[0])
     }

@@ -1,11 +1,10 @@
 package no.nav.dagpenger.iverksett.utbetaling.api
 
-import no.nav.dagpenger.iverksett.utbetaling.domene.Iverksetting
-import no.nav.dagpenger.iverksett.utbetaling.domene.personident
-import no.nav.dagpenger.iverksett.utbetaling.domene.sakId
 import no.nav.dagpenger.iverksett.utbetaling.tilstand.IverksettingsresultatService
 import no.nav.dagpenger.iverksett.felles.http.advice.ApiFeil
+import no.nav.dagpenger.iverksett.utbetaling.domene.*
 import no.nav.dagpenger.iverksett.utbetaling.tilstand.IverksettingService
+import no.nav.dagpenger.kontrakter.felles.somUUID
 import no.nav.dagpenger.kontrakter.oppdrag.OppdragStatus
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
@@ -49,7 +48,7 @@ class IverksettingValidatorService(
 
     internal fun validerAtForrigeBehandlingErFerdigIverksattMotOppdrag(iverksetting: Iverksetting?) {
         iverksetting?.behandling?.forrigeBehandlingId?.apply {
-            val forrigeResultat = iverksettingsresultatService.hentIverksettResultat(this)
+            val forrigeResultat = iverksettingsresultatService.hentIverksettResultat(this.somUUID)
 
             val forrigeErUtenUtbetalingsperioder =
                 forrigeResultat?.tilkjentYtelseForUtbetaling?.utbetalingsoppdrag?.utbetalingsperiode?.isEmpty() ?: true
@@ -64,7 +63,7 @@ class IverksettingValidatorService(
     }
 
     internal fun validerAtBehandlingIkkeAlleredeErMottatt(iverksetting: Iverksetting) {
-        if (iverksettingService.hentIverksetting(iverksetting.behandling.behandlingId) != null) {
+        if (iverksettingService.hentIverksetting(iverksetting.behandling.behandlingId.somUUID) != null) {
             throw ApiFeil(
                 "Behandling med id ${iverksetting.behandling.behandlingId} er allerede mottattt",
                 HttpStatus.CONFLICT,

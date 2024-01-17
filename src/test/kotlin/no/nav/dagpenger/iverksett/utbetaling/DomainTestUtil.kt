@@ -9,6 +9,7 @@ import no.nav.dagpenger.iverksett.utbetaling.util.behandlingsdetaljer
 import no.nav.dagpenger.iverksett.utbetaling.util.opprettIverksett
 import no.nav.dagpenger.iverksett.utbetaling.util.vedtaksdetaljer
 import no.nav.dagpenger.iverksett.utbetaling.util.lagAndelTilkjentYtelse
+import no.nav.dagpenger.kontrakter.felles.somUUID
 
 fun Int.januar(år: Int) = LocalDate.of(år, 1, this)
 fun Int.mai(år: Int) = LocalDate.of(år, 5, this)
@@ -33,6 +34,6 @@ fun lagIverksettingsdata(
 }
 
 fun lagIverksettingEntitet(iverksettingData: Iverksetting) = IverksettingEntitet(
-    iverksettingData.behandling.behandlingId,
+    iverksettingData.behandling.behandlingId.somUUID,
     iverksettingData,
 )

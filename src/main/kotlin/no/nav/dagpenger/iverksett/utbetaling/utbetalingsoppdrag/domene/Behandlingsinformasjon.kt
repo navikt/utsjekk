@@ -1,9 +1,8 @@
 package no.nav.dagpenger.iverksett.utbetaling.utbetalingsoppdrag.domene
 
-import no.nav.dagpenger.kontrakter.felles.SakIdentifikator
-import java.time.LocalDate
-import java.util.UUID
 import no.nav.dagpenger.kontrakter.felles.BrukersNavKontor
+import no.nav.dagpenger.kontrakter.felles.GeneriskId
+import java.time.LocalDate
 
 /**
  * @param opphørFra Kan brukes når man ønsker å oppøre bak i tiden, før man selv var master,
@@ -14,15 +13,10 @@ import no.nav.dagpenger.kontrakter.felles.BrukersNavKontor
  */
 data class Behandlingsinformasjon(
     val saksbehandlerId: String,
-    val fagsakId: UUID? = null,
-    val saksreferanse: String? = null,
-    val behandlingId: String,
+    val fagsakId: GeneriskId,
+    val behandlingId: GeneriskId,
     val personident: String,
     val vedtaksdato: LocalDate,
     val brukersNavKontor: BrukersNavKontor? = null,
     val erGOmregning: Boolean = false,
-) {
-    init {
-        SakIdentifikator.valider(fagsakId, saksreferanse)
-    }
-}
+)

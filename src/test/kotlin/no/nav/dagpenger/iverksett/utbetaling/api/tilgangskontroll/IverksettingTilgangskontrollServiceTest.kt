@@ -8,7 +8,6 @@ import no.nav.dagpenger.iverksett.felles.oppdrag.OppdragClient
 import no.nav.dagpenger.iverksett.utbetaling.api.IverksettingTilgangskontrollService
 import no.nav.dagpenger.iverksett.utbetaling.api.TokenContext
 import no.nav.dagpenger.iverksett.utbetaling.api.assertApiFeil
-import no.nav.dagpenger.iverksett.utbetaling.domene.transformer.tilSakIdentifikator
 import no.nav.dagpenger.iverksett.utbetaling.featuretoggle.FeatureToggleService
 import no.nav.dagpenger.iverksett.utbetaling.lagIverksettingEntitet
 import no.nav.dagpenger.iverksett.utbetaling.lagIverksettingsdata
@@ -65,7 +64,7 @@ class IverksettingTilgangskontrollServiceTest {
         every { TokenContext.erSystemtoken() } returns false
 
         assertDoesNotThrow {
-            iverksettingTilgangskontrollService.valider(nåværendeIverksetting.tilSakIdentifikator())
+            iverksettingTilgangskontrollService.valider(nåværendeIverksetting.sakId)
         }
     }
 
@@ -77,7 +76,7 @@ class IverksettingTilgangskontrollServiceTest {
         every { TokenContext.erSystemtoken() } returns true
 
         assertApiFeil(HttpStatus.FORBIDDEN) {
-            iverksettingTilgangskontrollService.valider(nåværendeIverksetting.tilSakIdentifikator())
+            iverksettingTilgangskontrollService.valider(nåværendeIverksetting.sakId)
         }
     }
 
@@ -92,7 +91,7 @@ class IverksettingTilgangskontrollServiceTest {
         every { TokenContext.hentKlientnavn() } returns APP_MED_SYSTEMTILGANG
 
         assertDoesNotThrow {
-            iverksettingTilgangskontrollService.valider(nåværendeIverksetting.tilSakIdentifikator())
+            iverksettingTilgangskontrollService.valider(nåværendeIverksetting.sakId)
         }
     }
 
@@ -107,7 +106,7 @@ class IverksettingTilgangskontrollServiceTest {
         every { TokenContext.hentKlientnavn() } returns "ukjent app"
 
         assertApiFeil(HttpStatus.FORBIDDEN) {
-            iverksettingTilgangskontrollService.valider(nåværendeIverksetting.tilSakIdentifikator())
+            iverksettingTilgangskontrollService.valider(nåværendeIverksetting.sakId)
         }
     }
 

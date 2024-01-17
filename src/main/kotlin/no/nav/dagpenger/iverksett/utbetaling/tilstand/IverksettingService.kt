@@ -1,17 +1,17 @@
 package no.nav.dagpenger.iverksett.utbetaling.tilstand
 
-import java.util.Properties
-import java.util.UUID
-import no.nav.dagpenger.iverksett.utbetaling.domene.IverksettingEntitet
-import no.nav.dagpenger.iverksett.utbetaling.domene.Iverksetting
-import no.nav.dagpenger.iverksett.utbetaling.domene.OppdragResultat
 import no.nav.dagpenger.iverksett.felles.hovedflyt
 import no.nav.dagpenger.iverksett.felles.oppdrag.OppdragClient
+import no.nav.dagpenger.iverksett.utbetaling.domene.Iverksetting
+import no.nav.dagpenger.iverksett.utbetaling.domene.IverksettingEntitet
+import no.nav.dagpenger.iverksett.utbetaling.domene.OppdragResultat
 import no.nav.dagpenger.iverksett.utbetaling.featuretoggle.FeatureToggleConfig
 import no.nav.dagpenger.iverksett.utbetaling.featuretoggle.FeatureToggleService
-import no.nav.dagpenger.kontrakter.felles.SakIdentifikator
+import no.nav.dagpenger.kontrakter.felles.GeneriskId
 import no.nav.dagpenger.kontrakter.felles.StønadType
 import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
+import no.nav.dagpenger.kontrakter.felles.somString
+import no.nav.dagpenger.kontrakter.felles.somUUID
 import no.nav.dagpenger.kontrakter.iverksett.IverksettStatus
 import no.nav.dagpenger.kontrakter.oppdrag.OppdragId
 import no.nav.dagpenger.kontrakter.oppdrag.OppdragStatus
@@ -21,6 +21,7 @@ import no.nav.familie.prosessering.error.TaskExceptionUtenStackTrace
 import no.nav.familie.prosessering.internal.TaskService
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.util.*
 import kotlin.jvm.optionals.getOrNull
 
 @Service
@@ -43,17 +44,17 @@ class IverksettingService(
         )
         iverksettingRepository.insert(
             IverksettingEntitet(
-                iverksetting.behandling.behandlingId,
+                iverksetting.behandling.behandlingId.somUUID,
                 iverksettMedRiktigStønadstype,
             ),
         )
 
-        iverksettingsresultatService.opprettTomtResultat(iverksetting.behandling.behandlingId)
+        iverksettingsresultatService.opprettTomtResultat(iverksetting.behandling.behandlingId.somUUID)
 
         taskService.save(
             Task(
                 type = førsteHovedflytTask(),
-                payload = iverksetting.behandling.behandlingId.toString(),
+                payload = iverksetting.behandling.behandlingId.somUUID.toString(),
                 properties = Properties().apply {
                     this["personIdent"] = iverksetting.søker.personident
                     this["behandlingId"] = iverksetting.behandling.behandlingId.toString()
@@ -70,7 +71,7 @@ class IverksettingService(
 
     fun hentForrigeIverksett(iverksetting: Iverksetting): Iverksetting? =
         iverksetting.behandling.forrigeBehandlingId?.let {
-            hentIverksetting(it) ?: throw IllegalStateException(
+            hentIverksetting(it.somUUID) ?: throw IllegalStateException(
                 "Fant ikke forrige iverksetting med behandlingId ${iverksetting.behandling.behandlingId} " +
                     "og forrige behandlingId $it",
             )
@@ -121,9 +122,8 @@ class IverksettingService(
         )
     }
 
-    fun erFørsteVedtakPåSak(sakId: SakIdentifikator): Boolean {
-        val vedtakForSak = iverksettingRepository
-            .findBySakIdentifikator(sakId)
+    fun erFørsteVedtakPåSak(sakId: GeneriskId): Boolean {
+        val vedtakForSak = iverksettingRepository.findByFagsakId(sakId.somString)
 
         return vedtakForSak.isEmpty()
     }
