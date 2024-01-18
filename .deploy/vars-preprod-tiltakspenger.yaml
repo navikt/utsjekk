@@ -1,2 +1,3 @@
 unleash:
   environment: development
+  apiToken: tiltakspenger-iverksett-unleash-api-token
