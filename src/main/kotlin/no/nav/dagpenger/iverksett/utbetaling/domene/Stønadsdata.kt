@@ -136,7 +136,7 @@ data class StønadsdataTiltakspenger(
 
 data class StønadsdataTilleggsstønader(
     override val stønadstype: StønadType,
-    val brukersNavKontor: BrukersNavKontor,
+    val brukersNavKontor: BrukersNavKontor? = null,
 ) : Stønadsdata(stønadstype) {
     fun tilKlassifiseringTilleggsstønader() = "TSTBASISP3-OP"
 }

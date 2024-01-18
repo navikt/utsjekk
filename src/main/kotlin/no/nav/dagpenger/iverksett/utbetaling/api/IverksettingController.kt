@@ -87,11 +87,10 @@ Det kjøres implisitt en konsistensavstemming av at nye utbetalinger stemmer ove
         tilgangskontrollService.valider(iverksettDto.sakId)
 
         iverksettDto.valider()
-//        val iverksett = iverksettDto.toDomain()
+        val iverksett = iverksettDto.toDomain()
 
-//        validatorService.valider(iverksett)
-
-//        iverksettingService.startIverksetting(iverksett)
+        validatorService.valider(iverksett)
+        iverksettingService.startIverksetting(iverksett)
 
         return ResponseEntity.accepted().build()
     }
