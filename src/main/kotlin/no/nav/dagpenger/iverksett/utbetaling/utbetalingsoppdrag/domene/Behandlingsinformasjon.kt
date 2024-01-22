@@ -18,5 +18,4 @@ data class Behandlingsinformasjon(
     val personident: String,
     val vedtaksdato: LocalDate,
     val brukersNavKontor: BrukersNavKontor? = null,
-    val erGOmregning: Boolean = false,
 )

@@ -15,10 +15,9 @@ import java.time.LocalDate
  * @return mal med tilpasset lagPeriodeFraAndel
  */
 internal data class UtbetalingsperiodeMal(
-        val behandlingsinformasjon: Behandlingsinformasjon,
-        val erEndringPåEksisterendePeriode: Boolean = false,
+    val behandlingsinformasjon: Behandlingsinformasjon,
+    val erEndringPåEksisterendePeriode: Boolean = false,
 ) {
-
     /**
      * Lager utbetalingsperioder som legges på utbetalingsoppdrag. En utbetalingsperiode tilsvarer linjer hos økonomi
      *
@@ -32,26 +31,28 @@ internal data class UtbetalingsperiodeMal(
      * @return Periode til utbetalingsoppdrag
      */
     fun lagPeriodeFraAndel(
-            andel: AndelData,
-            opphørKjedeFom: LocalDate? = null,
+        andel: AndelData,
+        opphørKjedeFom: LocalDate? = null,
     ): Utbetalingsperiode =
         Utbetalingsperiode(
             erEndringPåEksisterendePeriode = erEndringPåEksisterendePeriode,
-            opphør = if (erEndringPåEksisterendePeriode) {
-                val opphørDatoFom = opphørKjedeFom
-                    ?: error("Mangler opphørsdato for kjede")
-                Opphør(opphørDatoFom)
-            } else {
-                null
-            },
+            opphør =
+                if (erEndringPåEksisterendePeriode) {
+                    val opphørDatoFom =
+                        opphørKjedeFom
+                            ?: error("Mangler opphørsdato for kjede")
+                    Opphør(opphørDatoFom)
+                } else {
+                    null
+                },
             forrigePeriodeId = andel.forrigePeriodeId,
             periodeId = andel.periodeId ?: error("Mangler periodeId på andel=${andel.id}"),
-            datoForVedtak = behandlingsinformasjon.vedtaksdato,
+            vedtaksdato = behandlingsinformasjon.vedtaksdato,
             klassifisering = andel.stønadsdata.tilKlassifisering(),
-            vedtakdatoFom = andel.fom,
-            vedtakdatoTom = andel.tom,
+            fom = andel.fom,
+            tom = andel.tom,
             sats = BigDecimal(andel.beløp),
-            satsType = Utbetalingsperiode.SatsType.DAG,
+            satstype = Utbetalingsperiode.Satstype.DAG,
             utbetalesTil = behandlingsinformasjon.personident,
             behandlingId = behandlingsinformasjon.behandlingId,
         )

@@ -31,7 +31,6 @@ import org.junit.jupiter.api.Test
 import java.util.*
 
 internal class IverksettingMotOppdragTaskTest {
-
     private val oppdragClient = mockk<OppdragClient>()
     val taskService = mockk<TaskService>()
     val iverksettingService = mockk<IverksettingService>()
@@ -49,10 +48,11 @@ internal class IverksettingMotOppdragTaskTest {
     @Test
     internal fun `skal sende utbetaling til oppdrag`() {
         val oppdragSlot = slot<Utbetalingsoppdrag>()
-        every { iverksettingService.hentIverksetting(any()) } returns opprettIverksettDto(
-            behandlingId,
-            sakId
-        ).toDomain()
+        every { iverksettingService.hentIverksetting(any()) } returns
+            opprettIverksettDto(
+                behandlingId,
+                sakId,
+            ).toDomain()
         every { oppdragClient.iverksettOppdrag(capture(oppdragSlot)) } returns "abc"
         every { iverksettingsresultatService.oppdaterTilkjentYtelseForUtbetaling(behandlingId.somUUID, any()) } returns Unit
         every { iverksettingsresultatService.hentTilkjentYtelse(any<UUID>()) } returns null
@@ -62,7 +62,7 @@ internal class IverksettingMotOppdragTaskTest {
         verify(exactly = 1) { oppdragClient.iverksettOppdrag(any()) }
         verify(exactly = 1) { iverksettingsresultatService.oppdaterTilkjentYtelseForUtbetaling(behandlingId.somUUID, any()) }
 
-        assertThat(oppdragSlot.captured.fagSystem).isEqualTo(Fagsystem.Dagpenger)
+        assertThat(oppdragSlot.captured.fagsystem).isEqualTo(Fagsystem.Dagpenger)
         assertThat(oppdragSlot.captured.kodeEndring).isEqualTo(Utbetalingsoppdrag.KodeEndring.NY)
     }
 
@@ -98,7 +98,7 @@ internal class IverksettingMotOppdragTaskTest {
         val taskSlot = slot<Task>()
         val task = Task(IverksettMotOppdragTask.TYPE, behandlingId.somString, Properties())
         every { iverksettingService.hentIverksetting(any()) } returns
-                opprettIverksettDto(behandlingId, sakId).toDomain()
+            opprettIverksettDto(behandlingId, sakId).toDomain()
         every { taskService.save(capture(taskSlot)) } returns task
 
         iverksettMotOppdragTask.onCompletion(task)
@@ -121,13 +121,15 @@ internal class IverksettingMotOppdragTaskTest {
         val sisteAndelIKjede = iverksett.vedtak.tilkjentYtelse.andelerTilkjentYtelse.first().copy(periodeId = 0)
         return Iverksettingsresultat(
             behandlingId = behandlingId.somUUID,
-            tilkjentYtelseForUtbetaling = TilkjentYtelse(
-                andelerTilkjentYtelse = listOf(
-                    sisteAndelIKjede
+            tilkjentYtelseForUtbetaling =
+                TilkjentYtelse(
+                    andelerTilkjentYtelse =
+                        listOf(
+                            sisteAndelIKjede,
+                        ),
+                    sisteAndelIKjede = sisteAndelIKjede,
                 ),
-                sisteAndelIKjede = sisteAndelIKjede
-            ),
-            oppdragResultat = OppdragResultat(OppdragStatus.KVITTERT_OK)
+            oppdragResultat = OppdragResultat(OppdragStatus.KVITTERT_OK),
         )
     }
 }
