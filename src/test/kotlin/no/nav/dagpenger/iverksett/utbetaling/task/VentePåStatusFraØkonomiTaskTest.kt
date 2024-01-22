@@ -21,7 +21,7 @@ import no.nav.dagpenger.iverksett.util.mockFeatureToggleService
 import no.nav.dagpenger.kontrakter.felles.Fagsystem
 import no.nav.dagpenger.kontrakter.felles.GeneriskId
 import no.nav.dagpenger.kontrakter.felles.GeneriskIdSomUUID
-import no.nav.dagpenger.kontrakter.felles.somString
+import no.nav.dagpenger.kontrakter.felles.objectMapper
 import no.nav.dagpenger.kontrakter.felles.somUUID
 import no.nav.dagpenger.kontrakter.oppdrag.OppdragStatus
 import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsoppdrag
@@ -44,6 +44,7 @@ internal class VentePåStatusFraØkonomiTaskTest {
     private val taskService = mockk<TaskService>()
     private val iverksettingsresultatService = mockk<IverksettingsresultatService>()
     private val behandlingId: GeneriskId = GeneriskIdSomUUID(UUID.randomUUID())
+    private val behandlingIdPayload = objectMapper.writeValueAsString(behandlingId)
     private val sakId: GeneriskId = GeneriskIdSomUUID(UUID.randomUUID())
     private val iverksettingService =
         IverksettingService(
@@ -79,7 +80,7 @@ internal class VentePåStatusFraØkonomiTaskTest {
                 ),
             )
 
-        runTask(Task(IverksettMotOppdragTask.TYPE, behandlingId.somString, Properties()))
+        runTask(Task(IverksettMotOppdragTask.TYPE, behandlingIdPayload, Properties()))
 
         verify(exactly = 1) {
             iverksettingsresultatService.oppdaterOppdragResultat(
@@ -94,7 +95,7 @@ internal class VentePåStatusFraØkonomiTaskTest {
     internal fun `Skal ikke gjøre noe hvis ingen utbetalingoppdrag på tilkjent ytelse`() {
         every { iverksettingsresultatService.hentTilkjentYtelse(behandlingId.somUUID) } returns tilkjentYtelse()
 
-        runTask(Task(IverksettMotOppdragTask.TYPE, behandlingId.somString, Properties()))
+        runTask(Task(IverksettMotOppdragTask.TYPE, behandlingIdPayload, Properties()))
 
         verify(exactly = 0) { iverksettingsresultatService.oppdaterOppdragResultat(behandlingId.somUUID, any()) }
     }

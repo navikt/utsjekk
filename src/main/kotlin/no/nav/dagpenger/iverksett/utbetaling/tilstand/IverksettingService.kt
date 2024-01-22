@@ -10,6 +10,7 @@ import no.nav.dagpenger.iverksett.utbetaling.featuretoggle.FeatureToggleService
 import no.nav.dagpenger.kontrakter.felles.GeneriskId
 import no.nav.dagpenger.kontrakter.felles.StønadType
 import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
+import no.nav.dagpenger.kontrakter.felles.objectMapper
 import no.nav.dagpenger.kontrakter.felles.somString
 import no.nav.dagpenger.kontrakter.felles.somUUID
 import no.nav.dagpenger.kontrakter.iverksett.IverksettStatus
@@ -21,27 +22,28 @@ import no.nav.familie.prosessering.error.TaskExceptionUtenStackTrace
 import no.nav.familie.prosessering.internal.TaskService
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.util.*
+import java.util.Properties
+import java.util.UUID
 import kotlin.jvm.optionals.getOrNull
 
 @Service
 class IverksettingService(
-        val taskService: TaskService,
-        val oppdragClient: OppdragClient,
-        val iverksettingRepository: IverksettingRepository,
-        val iverksettingsresultatService: IverksettingsresultatService,
-        val featureToggleService: FeatureToggleService,
+    val taskService: TaskService,
+    val oppdragClient: OppdragClient,
+    val iverksettingRepository: IverksettingRepository,
+    val iverksettingsresultatService: IverksettingsresultatService,
+    val featureToggleService: FeatureToggleService,
 ) {
-
     @Transactional
     fun startIverksetting(iverksetting: Iverksetting) {
         if (featureToggleService.isEnabled(FeatureToggleConfig.STOPP_IVERKSETTING)) {
             error("Kan ikke iverksette akkurat nå")
         }
 
-        val iverksettMedRiktigStønadstype = iverksetting.copy(
-            fagsak = iverksetting.fagsak.copy(stønadstype = utledStønadstype(iverksetting))
-        )
+        val iverksettMedRiktigStønadstype =
+            iverksetting.copy(
+                fagsak = iverksetting.fagsak.copy(stønadstype = utledStønadstype(iverksetting)),
+            )
         iverksettingRepository.insert(
             IverksettingEntitet(
                 iverksetting.behandling.behandlingId.somUUID,
@@ -54,13 +56,14 @@ class IverksettingService(
         taskService.save(
             Task(
                 type = førsteHovedflytTask(),
-                payload = iverksetting.behandling.behandlingId.somUUID.toString(),
-                properties = Properties().apply {
-                    this["personIdent"] = iverksetting.søker.personident
-                    this["behandlingId"] = iverksetting.behandling.behandlingId.toString()
-                    this["saksbehandler"] = iverksetting.vedtak.saksbehandlerId
-                    this["beslutter"] = iverksetting.vedtak.beslutterId
-                },
+                payload = objectMapper.writeValueAsString(iverksetting.behandling.behandlingId),
+                properties =
+                    Properties().apply {
+                        this["personIdent"] = iverksetting.søker.personident
+                        this["behandlingId"] = objectMapper.writeValueAsString(iverksetting.behandling.behandlingId)
+                        this["saksbehandler"] = iverksetting.vedtak.saksbehandlerId
+                        this["beslutter"] = iverksetting.vedtak.beslutterId
+                    },
             ),
         )
     }
@@ -89,7 +92,7 @@ class IverksettingService(
                     else -> IverksettStatus.FEILET_MOT_OPPDRAG
                 }
             }
-            it.tilkjentYtelseForUtbetaling?.let {ty ->
+            it.tilkjentYtelseForUtbetaling?.let { ty ->
                 if (ty.utbetalingsoppdrag?.utbetalingsperiode?.isEmpty() == true) {
                     return IverksettStatus.OK
                 }
@@ -102,13 +105,14 @@ class IverksettingService(
     fun sjekkStatusPåIverksettOgOppdaterTilstand(
         stønadstype: StønadType,
         personident: String,
-        behandlingId: UUID,
+        behandlingId: GeneriskId,
     ) {
-        val oppdragId = OppdragId(
-            fagsystem = stønadstype.tilFagsystem(),
-            personIdent = personident,
-            behandlingsId = behandlingId,
-        )
+        val oppdragId =
+            OppdragId(
+                fagsystem = stønadstype.tilFagsystem(),
+                personIdent = personident,
+                behandlingId = behandlingId,
+            )
 
         val (status, melding) = oppdragClient.hentStatus(oppdragId)
 
@@ -117,7 +121,7 @@ class IverksettingService(
         }
 
         iverksettingsresultatService.oppdaterOppdragResultat(
-            behandlingId = behandlingId,
+            behandlingId = behandlingId.somUUID,
             OppdragResultat(oppdragStatus = status),
         )
     }
@@ -132,9 +136,9 @@ class IverksettingService(
         iverksetting.vedtak.tilkjentYtelse.andelerTilkjentYtelse.firstOrNull()?.stønadsdata?.stønadstype
             ?: hentForrigeIverksett(iverksetting)?.vedtak?.tilkjentYtelse?.andelerTilkjentYtelse?.firstOrNull()?.stønadsdata?.stønadstype
             ?: StønadTypeDagpenger.DAGPENGER_ARBEIDSSØKER_ORDINÆR
-
 }
 
-fun Task.erAktiv() = this.status != Status.AVVIKSHÅNDTERT &&
-    this.status != Status.MANUELL_OPPFØLGING &&
-    this.status != Status.FERDIG
+fun Task.erAktiv() =
+    this.status != Status.AVVIKSHÅNDTERT &&
+        this.status != Status.MANUELL_OPPFØLGING &&
+        this.status != Status.FERDIG
