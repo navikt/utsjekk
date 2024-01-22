@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.SerializerProvider
 import no.nav.dagpenger.kontrakter.felles.BrukersNavKontor
 import no.nav.dagpenger.kontrakter.felles.StønadType
 import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
+import no.nav.dagpenger.kontrakter.felles.StønadTypeTilleggsstønader
 import no.nav.dagpenger.kontrakter.felles.StønadTypeTiltakspenger
 import no.nav.dagpenger.kontrakter.felles.objectMapper
 import no.nav.dagpenger.kontrakter.iverksett.Ferietillegg
@@ -27,29 +28,6 @@ sealed class Stønadsdata(open val stønadstype: StønadType) {
             is StønadsdataTiltakspenger -> this.tilKlassifiseringTiltakspenger()
             is StønadsdataTilleggsstønader -> this.tilKlassifiseringTilleggsstønader()
         }
-
-//    companion object {
-//        @JsonCreator
-//        @JvmStatic
-//        fun deserialize(json: JsonNode): Stønadsdata {
-//            val stønadstype = json.findValue("stønadstype").asText()
-//            return Result.runCatching { StønadTypeDagpenger.valueOf(stønadstype) }.fold(
-//                onSuccess = {
-//                    val ferietillegg = json.findValue("ferietillegg")?.asText()
-//                    if (ferietillegg != null && ferietillegg != "null") {
-//                        StønadsdataDagpenger(it, Ferietillegg.valueOf(ferietillegg))
-//                    } else {
-//                        StønadsdataDagpenger(it)
-//                    }
-//                },
-//                onFailure = {
-//                    val stønadstypeTiltakspenger = StønadTypeTiltakspenger.valueOf(stønadstype)
-//                    val barnetillegg = json.findValue("barnetillegg")?.asBoolean()
-//                    StønadsdataTiltakspenger(stønadstypeTiltakspenger, barnetillegg ?: false)
-//                },
-//            )
-//        }
-//    }
 }
 
 data class StønadsdataDagpenger(override val stønadstype: StønadTypeDagpenger, val ferietillegg: Ferietillegg? = null) :
@@ -135,10 +113,15 @@ data class StønadsdataTiltakspenger(
 }
 
 data class StønadsdataTilleggsstønader(
-    override val stønadstype: StønadType,
+    override val stønadstype: StønadTypeTilleggsstønader,
     val brukersNavKontor: BrukersNavKontor? = null,
 ) : Stønadsdata(stønadstype) {
-    fun tilKlassifiseringTilleggsstønader() = "TSTBASISP3-OP"
+    fun tilKlassifiseringTilleggsstønader() =
+        when (stønadstype) {
+            StønadTypeTilleggsstønader.TILSYN_BARN_ENSLIG_FORSØRGER -> "TSTBASISP2-OP"
+            StønadTypeTilleggsstønader.TILSYN_BARN_AAP -> "TSTBASISP4-OP"
+            StønadTypeTilleggsstønader.TILSYN_BARN_ETTERLATTE -> "TSTBASISP5-OP"
+        }
 }
 
 class StønadsdataKeySerializer : JsonSerializer<Stønadsdata>() {

@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema
 import no.nav.dagpenger.kontrakter.felles.BrukersNavKontor
 import no.nav.dagpenger.kontrakter.felles.GeneriskId
 import no.nav.dagpenger.kontrakter.felles.Personident
+import no.nav.dagpenger.kontrakter.felles.StønadTypeTilleggsstønader
 import java.time.LocalDate
 import java.time.LocalDateTime
 
@@ -48,7 +49,7 @@ data class UtbetalingTilleggsstønaderDto(
     val satstype: Satstype,
     val fraOgMedDato: LocalDate,
     val tilOgMedDato: LocalDate,
-    val klassifiseringskode: String,
+    val stønadstype: StønadTypeTilleggsstønader,
     val brukersNavKontor: BrukersNavKontor? = null,
 )
 

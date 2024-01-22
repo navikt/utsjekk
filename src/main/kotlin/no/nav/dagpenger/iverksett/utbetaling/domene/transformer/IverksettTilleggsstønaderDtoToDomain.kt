@@ -11,7 +11,6 @@ import no.nav.dagpenger.iverksett.utbetaling.domene.StønadsdataTilleggsstønade
 import no.nav.dagpenger.iverksett.utbetaling.domene.TilkjentYtelse
 import no.nav.dagpenger.iverksett.utbetaling.domene.Vedtaksdetaljer
 import no.nav.dagpenger.kontrakter.felles.Datoperiode
-import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
 
 fun IverksettTilleggsstønaderDto.toDomain(): Iverksetting =
     Iverksetting(
@@ -61,11 +60,11 @@ fun UtbetalingTilleggsstønaderDto.toDomain() =
         stønadsdata =
             StønadsdataTilleggsstønader(
                 brukersNavKontor = this.brukersNavKontor,
-                stønadstype = StønadTypeDagpenger.DAGPENGER_ARBEIDSSØKER_ORDINÆR,
+                stønadstype = this.stønadstype,
             ),
     )
 
-// TODO må fikse disse så vi slipper duplikat
+// TODO Må fikse duplikatet når DTO-ene for tilleggsstønader flyttes til kontrakter og vi kan lage felles superklasse
 fun List<UtbetalingTilleggsstønaderDto>.sammenslått(): List<UtbetalingTilleggsstønaderDto> {
     return this.sortedBy { it.fraOgMedDato }.fold(emptyList()) { utbetalinger, utbetaling ->
         if (utbetalinger.isEmpty()) {
@@ -86,6 +85,6 @@ private fun UtbetalingTilleggsstønaderDto.kanSlåsSammen(forrige: UtbetalingTil
     return this.beløp == forrige.beløp &&
         this.brukersNavKontor == forrige.brukersNavKontor &&
         this.satstype == forrige.satstype &&
-        this.klassifiseringskode == forrige.klassifiseringskode &&
+        this.stønadstype == forrige.stønadstype &&
         this.fraOgMedDato == forrige.tilOgMedDato.plusDays(1)
 }

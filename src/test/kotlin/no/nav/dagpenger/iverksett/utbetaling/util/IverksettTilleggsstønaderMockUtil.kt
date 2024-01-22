@@ -7,6 +7,7 @@ import no.nav.dagpenger.iverksett.utbetaling.api.VedtaksdetaljerTilleggsstønade
 import no.nav.dagpenger.kontrakter.felles.GeneriskId
 import no.nav.dagpenger.kontrakter.felles.GeneriskIdSomString
 import no.nav.dagpenger.kontrakter.felles.Personident
+import no.nav.dagpenger.kontrakter.felles.StønadTypeTilleggsstønader
 import java.time.LocalDate
 import java.time.LocalDateTime
 
@@ -45,6 +46,6 @@ fun lagUtbetalingTilleggsstønaderDto(
         satstype = Satstype.MND,
         fraOgMedDato = fraOgMed,
         tilOgMedDato = tilOgMed,
-        klassifiseringskode = "TSTBASISP3-OP",
+        stønadstype = StønadTypeTilleggsstønader.TILSYN_BARN_ENSLIG_FORSØRGER,
     )
 }
