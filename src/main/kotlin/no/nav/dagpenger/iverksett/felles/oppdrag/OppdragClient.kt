@@ -16,20 +16,20 @@ import java.net.URI
 
 @Service
 class OppdragClient(
-        @Value("\${DP_OPPDRAG_API_URL}")
+    @Value("\${DP_OPPDRAG_API_URL}")
     private val dagpengerOppdragUri: URI,
-        @Qualifier("azure")
-        restOperations: RestOperations,
-): AbstractRestClient(restOperations, "dp.oppdrag") {
-
+    @Qualifier("azure")
+    restOperations: RestOperations,
+) : AbstractRestClient(restOperations, "dp.oppdrag") {
     private val postOppdragUri: URI = UriComponentsBuilder.fromUri(dagpengerOppdragUri).pathSegment("oppdrag").build().toUri()
 
     private val getStatusUri: URI = UriComponentsBuilder.fromUri(dagpengerOppdragUri).pathSegment("status").build().toUri()
 
     private val grensesnittavstemmingUri: URI =
         UriComponentsBuilder.fromUri(dagpengerOppdragUri).pathSegment("grensesnittavstemming").build().toUri()
-    fun iverksettOppdrag(utbetalingsoppdrag: Utbetalingsoppdrag): String {
-        return postForEntity<Ressurs<String>>(postOppdragUri, utbetalingsoppdrag).data!!
+
+    fun iverksettOppdrag(utbetalingsoppdrag: Utbetalingsoppdrag) {
+        return postForEntity(postOppdragUri, utbetalingsoppdrag)
     }
 
     fun hentStatus(oppdragId: OppdragId): OppdragStatusMedMelding {

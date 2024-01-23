@@ -55,7 +55,7 @@ internal class IverksettingMotOppdragTaskTest {
                 behandlingId,
                 sakId,
             ).toDomain()
-        every { oppdragClient.iverksettOppdrag(capture(oppdragSlot)) } returns "abc"
+        every { oppdragClient.iverksettOppdrag(capture(oppdragSlot)) } just Runs
         every { iverksettingsresultatService.oppdaterTilkjentYtelseForUtbetaling(behandlingId.somUUID, any()) } returns Unit
         every { iverksettingsresultatService.hentTilkjentYtelse(any<UUID>()) } returns null
 
@@ -72,7 +72,7 @@ internal class IverksettingMotOppdragTaskTest {
     internal fun `skal sende opphør av utbetaling til oppdrag`() {
         val oppdragSlot = slot<Utbetalingsoppdrag>()
         every { iverksettingService.hentIverksetting(any()) } returns opphørAvUtbetaling().toDomain()
-        every { oppdragClient.iverksettOppdrag(capture(oppdragSlot)) } returns "abc"
+        every { oppdragClient.iverksettOppdrag(capture(oppdragSlot)) } just Runs
         every { iverksettingsresultatService.hentIverksettResultat(any()) } returns iverksettResultat()
         every { iverksettingsresultatService.oppdaterTilkjentYtelseForUtbetaling(any(), any()) } just Runs
 
