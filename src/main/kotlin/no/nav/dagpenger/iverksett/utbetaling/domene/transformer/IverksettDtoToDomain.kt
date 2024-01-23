@@ -5,7 +5,6 @@ import no.nav.dagpenger.iverksett.utbetaling.domene.Fagsakdetaljer
 import no.nav.dagpenger.iverksett.utbetaling.domene.Iverksetting
 import no.nav.dagpenger.iverksett.utbetaling.domene.Søker
 import no.nav.dagpenger.iverksett.utbetaling.domene.Vedtaksdetaljer
-import no.nav.dagpenger.kontrakter.felles.SakIdentifikator
 import no.nav.dagpenger.kontrakter.iverksett.IverksettDto
 import no.nav.dagpenger.kontrakter.iverksett.VedtaksdetaljerDto
 
@@ -33,12 +32,7 @@ fun IverksettDto.toDomain(): Iverksetting {
 fun IverksettDto.tilFagsak(): Fagsakdetaljer {
     return Fagsakdetaljer(
         fagsakId = this.sakId,
-        saksreferanse = this.saksreferanse
     )
-}
-
-fun IverksettDto.tilSakIdentifikator(): SakIdentifikator {
-    return SakIdentifikator(this.sakId, this.saksreferanse)
 }
 
 fun String.tilSøker(): Søker = Søker(personident = this)

@@ -7,8 +7,6 @@ import io.cucumber.java.no.Så
 import no.nav.dagpenger.iverksett.utbetaling.domene.Stønadsdata
 import no.nav.dagpenger.iverksett.utbetaling.domene.StønadsdataDagpenger
 import no.nav.dagpenger.iverksett.utbetaling.domene.StønadsdataTiltakspenger
-import java.time.LocalDate
-import java.util.UUID
 import no.nav.dagpenger.iverksett.utbetaling.utbetalingsoppdrag.Utbetalingsgenerator
 import no.nav.dagpenger.iverksett.utbetaling.utbetalingsoppdrag.cucumber.ValideringUtil.assertSjekkBehandlingIder
 import no.nav.dagpenger.iverksett.utbetaling.utbetalingsoppdrag.cucumber.domeneparser.Domenebegrep
@@ -27,6 +25,8 @@ import no.nav.dagpenger.iverksett.utbetaling.utbetalingsoppdrag.domene.AndelMedP
 import no.nav.dagpenger.iverksett.utbetaling.utbetalingsoppdrag.domene.Behandlingsinformasjon
 import no.nav.dagpenger.iverksett.utbetaling.utbetalingsoppdrag.domene.BeregnetUtbetalingsoppdrag
 import no.nav.dagpenger.iverksett.utbetaling.utbetalingsoppdrag.domene.uten0beløp
+import no.nav.dagpenger.kontrakter.felles.GeneriskId
+import no.nav.dagpenger.kontrakter.felles.GeneriskIdSomUUID
 import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
 import no.nav.dagpenger.kontrakter.felles.StønadTypeTiltakspenger
 import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsoppdrag
@@ -35,11 +35,12 @@ import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.slf4j.LoggerFactory
+import java.time.LocalDate
+import java.util.UUID
 
-val FAGSAK_ID = UUID.randomUUID()
+val FAGSAK_ID = GeneriskIdSomUUID(UUID.randomUUID())
 
 class OppdragSteg {
-
     private val logger = LoggerFactory.getLogger(javaClass)
 
     private var behandlingsinformasjon = mutableMapOf<UUID, Behandlingsinformasjon>()
@@ -105,13 +106,14 @@ class OppdragSteg {
         val groupByBehandlingId = dataTable.groupByBehandlingId()
         groupByBehandlingId.forEach { (behandlingId, rader) ->
             val beregnedeAndeler = beregnetUtbetalingsoppdrag.getValue(behandlingIdTilUUID[behandlingId.toInt()]!!).andeler
-            val forventedeAndeler = rader.map { rad ->
-                AndelMedPeriodeId(
-                    id = parseString(Domenebegrep.ID, rad),
-                    periodeId = parseLong(DomenebegrepUtbetalingsoppdrag.PERIODE_ID, rad),
-                    forrigePeriodeId = parseValgfriLong(DomenebegrepUtbetalingsoppdrag.FORRIGE_PERIODE_ID, rad),
-                )
-            }
+            val forventedeAndeler =
+                rader.map { rad ->
+                    AndelMedPeriodeId(
+                        id = parseString(Domenebegrep.ID, rad),
+                        periodeId = parseLong(DomenebegrepUtbetalingsoppdrag.PERIODE_ID, rad),
+                        forrigePeriodeId = parseValgfriLong(DomenebegrepUtbetalingsoppdrag.FORRIGE_PERIODE_ID, rad),
+                    )
+                }
             assertThat(beregnedeAndeler).containsExactlyElementsOf(forventedeAndeler)
         }
         assertThat(beregnetUtbetalingsoppdrag.values.map { it.andeler }.filter { it.isNotEmpty() })
@@ -121,9 +123,10 @@ class OppdragSteg {
     private fun opprettBehandlingsinformasjon(dataTable: DataTable) {
         dataTable.groupByBehandlingId().map { (behandlingId, _) ->
             val behandlingIdAsUUID = behandlingIdTilUUID[behandlingId.toInt()]!!
-            behandlingsinformasjon[behandlingIdAsUUID] = lagBehandlingsinformasjon(
-                behandlingId = behandlingIdAsUUID.toString(),
-            )
+            behandlingsinformasjon[behandlingIdAsUUID] =
+                lagBehandlingsinformasjon(
+                    behandlingId = GeneriskIdSomUUID(behandlingIdAsUUID),
+                )
         }
     }
 
@@ -131,24 +134,23 @@ class OppdragSteg {
         dataTable.groupByBehandlingId().forEach { (behandlingId, _) ->
             val behandlingIdAsUUID = behandlingIdTilUUID[behandlingId.toInt()]!!
             if (!behandlingsinformasjon.containsKey(behandlingIdAsUUID)) {
-                behandlingsinformasjon[behandlingIdAsUUID] = lagBehandlingsinformasjon(behandlingIdAsUUID.toString())
+                behandlingsinformasjon[behandlingIdAsUUID] = lagBehandlingsinformasjon(GeneriskIdSomUUID(behandlingIdAsUUID))
             }
         }
     }
 
-    private fun lagBehandlingsinformasjon(
-        behandlingId: String,
-    ) = Behandlingsinformasjon(
-        fagsakId = FAGSAK_ID,
-        saksbehandlerId = "saksbehandlerId",
-        behandlingId = behandlingId,
-        personident = "1",
-        vedtaksdato = LocalDate.now(),
-    )
+    private fun lagBehandlingsinformasjon(behandlingId: GeneriskId) =
+        Behandlingsinformasjon(
+            fagsakId = FAGSAK_ID,
+            saksbehandlerId = "saksbehandlerId",
+            behandlingId = behandlingId,
+            personident = "1",
+            vedtaksdato = LocalDate.now(),
+        )
 
     private fun beregnUtbetalingsoppdrag(
-            acc: List<Pair<UUID, List<AndelData>>>,
-            andeler: Map.Entry<UUID, List<AndelData>>,
+        acc: List<Pair<UUID, List<AndelData>>>,
+        andeler: Map.Entry<UUID, List<AndelData>>,
     ): BeregnetUtbetalingsoppdrag {
         val forrigeKjeder = acc.lastOrNull()?.second ?: emptyList()
         val behandlingId = andeler.key
@@ -174,8 +176,8 @@ class OppdragSteg {
     }
 
     private fun oppdaterAndelerMedPeriodeId(
-            beregnUtbetalingsoppdrag: BeregnetUtbetalingsoppdrag,
-            andelPåBehandlingId: Map.Entry<UUID, List<AndelData>>,
+        beregnUtbetalingsoppdrag: BeregnetUtbetalingsoppdrag,
+        andelPåBehandlingId: Map.Entry<UUID, List<AndelData>>,
     ): List<AndelData> {
         val andelerPerId = beregnUtbetalingsoppdrag.andeler.associateBy { it.id }
         return andelPåBehandlingId.value.map {
@@ -192,14 +194,15 @@ class OppdragSteg {
     }
 
     private fun validerForventetUtbetalingsoppdrag(
-            dataTable: DataTable,
-            beregnetUtbetalingsoppdrag: MutableMap<UUID, BeregnetUtbetalingsoppdrag>,
+        dataTable: DataTable,
+        beregnetUtbetalingsoppdrag: MutableMap<UUID, BeregnetUtbetalingsoppdrag>,
     ) {
         val forventedeUtbetalingsoppdrag = OppdragParser.mapForventetUtbetalingsoppdrag(dataTable)
         forventedeUtbetalingsoppdrag.forEach { forventetUtbetalingsoppdrag ->
             val behandlingId = behandlingIdTilUUID[forventetUtbetalingsoppdrag.behandlingId.toInt()]
-            val utbetalingsoppdrag = beregnetUtbetalingsoppdrag[behandlingId]
-                ?: error("Mangler utbetalingsoppdrag for $behandlingId")
+            val utbetalingsoppdrag =
+                beregnetUtbetalingsoppdrag[behandlingId]
+                    ?: error("Mangler utbetalingsoppdrag for $behandlingId")
             try {
                 assertUtbetalingsoppdrag(forventetUtbetalingsoppdrag, utbetalingsoppdrag.utbetalingsoppdrag)
             } catch (e: Throwable) {
@@ -210,8 +213,8 @@ class OppdragSteg {
     }
 
     private fun assertUtbetalingsoppdrag(
-            forventetUtbetalingsoppdrag: ForventetUtbetalingsoppdrag,
-            utbetalingsoppdrag: Utbetalingsoppdrag,
+        forventetUtbetalingsoppdrag: ForventetUtbetalingsoppdrag,
+        utbetalingsoppdrag: Utbetalingsoppdrag,
     ) {
         assertEquals(utbetalingsoppdrag.kodeEndring, forventetUtbetalingsoppdrag.kodeEndring)
         forventetUtbetalingsoppdrag.utbetalingsperiode.forEachIndexed { index, forventetUtbetalingsperiode ->
@@ -228,14 +231,15 @@ class OppdragSteg {
 }
 
 private fun assertUtbetalingsperiode(
-        utbetalingsperiode: Utbetalingsperiode,
-        forventetUtbetalingsperiode: ForventetUtbetalingsperiode,
+    utbetalingsperiode: Utbetalingsperiode,
+    forventetUtbetalingsperiode: ForventetUtbetalingsperiode,
 ) {
-    val forventetStønadsdata = if (forventetUtbetalingsperiode.ytelse is StønadTypeDagpenger) {
-        StønadsdataDagpenger(forventetUtbetalingsperiode.ytelse)
-    } else {
-        StønadsdataTiltakspenger(forventetUtbetalingsperiode.ytelse as StønadTypeTiltakspenger, false)
-    }
+    val forventetStønadsdata =
+        if (forventetUtbetalingsperiode.ytelse is StønadTypeDagpenger) {
+            StønadsdataDagpenger(forventetUtbetalingsperiode.ytelse)
+        } else {
+            StønadsdataTiltakspenger(forventetUtbetalingsperiode.ytelse as StønadTypeTiltakspenger, false)
+        }
     assertThat(utbetalingsperiode.erEndringPåEksisterendePeriode)
         .`as`("erEndringPåEksisterendePeriode")
         .isEqualTo(forventetUtbetalingsperiode.erEndringPåEksisterendePeriode)
@@ -251,16 +255,16 @@ private fun assertUtbetalingsperiode(
     assertThat(utbetalingsperiode.sats.toInt())
         .`as`("sats")
         .isEqualTo(forventetUtbetalingsperiode.sats)
-    assertThat(utbetalingsperiode.satsType)
+    assertThat(utbetalingsperiode.satstype)
         .`as`("satsType")
         .isEqualTo(forventetUtbetalingsperiode.satstype)
-    assertThat(utbetalingsperiode.vedtakdatoFom)
+    assertThat(utbetalingsperiode.fom)
         .`as`("fom")
         .isEqualTo(forventetUtbetalingsperiode.fom)
-    assertThat(utbetalingsperiode.vedtakdatoTom)
+    assertThat(utbetalingsperiode.tom)
         .`as`("tom")
         .isEqualTo(forventetUtbetalingsperiode.tom)
-    assertThat(utbetalingsperiode.opphør?.opphørDatoFom)
+    assertThat(utbetalingsperiode.opphør?.fom)
         .`as`("opphør")
         .isEqualTo(forventetUtbetalingsperiode.opphør)
 }

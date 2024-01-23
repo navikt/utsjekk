@@ -6,15 +6,14 @@ import no.nav.dagpenger.iverksett.utbetaling.utbetalingsoppdrag.cucumber.domenep
 import no.nav.dagpenger.iverksett.utbetaling.utbetalingsoppdrag.cucumber.domeneparser.IdTIlUUIDHolder.behandlingIdTilUUID
 import no.nav.dagpenger.iverksett.utbetaling.utbetalingsoppdrag.domene.AndelData
 import no.nav.dagpenger.kontrakter.felles.StønadType
+import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
 import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsoppdrag
 import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsperiode
 import org.assertj.core.api.Assertions.assertThat
 import java.time.LocalDate
 import java.util.UUID
-import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
 
 object OppdragParser {
-
     fun mapAndeler(dataTable: DataTable): Map<UUID, List<AndelData>> {
         var index = 0L
         return dataTable.groupByBehandlingId().map { (behandlingId, rader) ->
@@ -41,11 +40,13 @@ object OppdragParser {
         rad: Map<String, String>,
         andelId: Long,
     ): AndelData {
-        val stønadsdataDagpenger = StønadsdataDagpenger(
-            stønadstype = parseValgfriEnum<StønadTypeDagpenger>(DomenebegrepAndeler.YTELSE_TYPE, rad)
-                ?: StønadTypeDagpenger.DAGPENGER_ARBEIDSSØKER_ORDINÆR,
-            ferietillegg = null,
-        )
+        val stønadsdataDagpenger =
+            StønadsdataDagpenger(
+                stønadstype =
+                    parseValgfriEnum<StønadTypeDagpenger>(DomenebegrepAndeler.YTELSE_TYPE, rad)
+                        ?: StønadTypeDagpenger.DAGPENGER_ARBEIDSSØKER_ORDINÆR,
+                ferietillegg = null,
+            )
         return AndelData(
             id = andelId.toString(),
             fom = parseDato(Domenebegrep.FRA_DATO, rad),
@@ -57,9 +58,7 @@ object OppdragParser {
         )
     }
 
-    fun mapForventetUtbetalingsoppdrag(
-        dataTable: DataTable,
-    ): List<ForventetUtbetalingsoppdrag> {
+    fun mapForventetUtbetalingsoppdrag(dataTable: DataTable): List<ForventetUtbetalingsoppdrag> {
         return dataTable.groupByBehandlingId().map { (behandlingId, rader) ->
             val rad = rader.first()
             validerAlleKodeEndringerLike(rader)
@@ -77,13 +76,15 @@ object OppdragParser {
             periodeId = parseLong(DomenebegrepUtbetalingsoppdrag.PERIODE_ID, it),
             forrigePeriodeId = parseValgfriLong(DomenebegrepUtbetalingsoppdrag.FORRIGE_PERIODE_ID, it),
             sats = parseInt(DomenebegrepUtbetalingsoppdrag.BELØP, it),
-            ytelse = parseValgfriEnum<StønadTypeDagpenger>(DomenebegrepUtbetalingsoppdrag.YTELSE_TYPE, it)
-                ?: StønadTypeDagpenger.DAGPENGER_ARBEIDSSØKER_ORDINÆR,
+            ytelse =
+                parseValgfriEnum<StønadTypeDagpenger>(DomenebegrepUtbetalingsoppdrag.YTELSE_TYPE, it)
+                    ?: StønadTypeDagpenger.DAGPENGER_ARBEIDSSØKER_ORDINÆR,
             fom = parseDato(Domenebegrep.FRA_DATO, it),
             tom = parseDato(Domenebegrep.TIL_DATO, it),
             opphør = parseValgfriDato(DomenebegrepUtbetalingsoppdrag.OPPHØRSDATO, it),
-            satstype = parseValgfriEnum<Utbetalingsperiode.SatsType>(DomenebegrepAndeler.SATSTYPE, it)
-                ?: Utbetalingsperiode.SatsType.DAG,
+            satstype =
+                parseValgfriEnum<Utbetalingsperiode.Satstype>(DomenebegrepAndeler.SATSTYPE, it)
+                    ?: Utbetalingsperiode.Satstype.DAG,
         )
 
     private fun validerAlleKodeEndringerLike(rader: List<Map<String, String>>) {
@@ -125,9 +126,9 @@ enum class DomenebegrepUtbetalingsoppdrag(override val nøkkel: String) : Domene
 }
 
 data class ForventetUtbetalingsoppdrag(
-        val behandlingId: Long,
-        val kodeEndring: Utbetalingsoppdrag.KodeEndring,
-        val utbetalingsperiode: List<ForventetUtbetalingsperiode>,
+    val behandlingId: Long,
+    val kodeEndring: Utbetalingsoppdrag.KodeEndring,
+    val utbetalingsperiode: List<ForventetUtbetalingsperiode>,
 )
 
 data class ForventetUtbetalingsperiode(
@@ -139,5 +140,5 @@ data class ForventetUtbetalingsperiode(
     val fom: LocalDate,
     val tom: LocalDate,
     val opphør: LocalDate?,
-    val satstype: Utbetalingsperiode.SatsType,
+    val satstype: Utbetalingsperiode.Satstype,
 )

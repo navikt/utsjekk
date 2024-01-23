@@ -1,7 +1,7 @@
 package no.nav.dagpenger.iverksett.utbetaling.api
 
-import no.nav.dagpenger.kontrakter.iverksett.IverksettDto
+import no.nav.dagpenger.kontrakter.felles.GeneriskId
 
 interface TilgangskontrollService {
-    fun valider(iverksett: IverksettDto)
+    fun valider(sakId: GeneriskId)
 }

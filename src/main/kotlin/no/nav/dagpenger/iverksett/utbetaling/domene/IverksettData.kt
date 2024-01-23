@@ -1,30 +1,23 @@
 package no.nav.dagpenger.iverksett.utbetaling.domene
 
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.util.UUID
 import no.nav.dagpenger.kontrakter.felles.BrukersNavKontor
-import no.nav.dagpenger.kontrakter.felles.SakIdentifikator
+import no.nav.dagpenger.kontrakter.felles.GeneriskId
 import no.nav.dagpenger.kontrakter.felles.StønadType
 import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
+import java.time.LocalDateTime
 
 data class Iverksetting(
         val fagsak: Fagsakdetaljer,
         val behandling: Behandlingsdetaljer,
         val søker: Søker,
         val vedtak: Vedtaksdetaljer,
-        val forrigeIverksettingBehandlingId: UUID? = null,
+        val forrigeIverksettingBehandlingId: GeneriskId? = null,
 )
 
 data class Fagsakdetaljer(
-    val fagsakId: UUID? = null,
-    val saksreferanse: String? = null,
+    val fagsakId: GeneriskId,
     val stønadstype: StønadType = StønadTypeDagpenger.DAGPENGER_ARBEIDSSØKER_ORDINÆR,
-) {
-    init {
-        SakIdentifikator.valider(fagsakId, saksreferanse)
-    }
-}
+)
 
 data class Søker(
     val personident: String,
@@ -39,11 +32,10 @@ data class Vedtaksdetaljer(
 )
 
 data class Behandlingsdetaljer(
-    val forrigeBehandlingId: UUID? = null,
-    val behandlingId: UUID,
-    val relatertBehandlingId: UUID? = null,
-    val aktivitetspliktInntrefferDato: LocalDate? = null,
-    val kravMottatt: LocalDate? = null,
+        val forrigeBehandlingId: GeneriskId? = null,
+        val forrigeIverksettingId: String? = null,
+        val behandlingId: GeneriskId,
+        val iverksettingId: String? = null,
 )
 
 val Iverksetting.sakId get() = this.fagsak.fagsakId

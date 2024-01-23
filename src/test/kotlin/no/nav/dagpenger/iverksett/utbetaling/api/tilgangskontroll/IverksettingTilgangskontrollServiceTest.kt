@@ -4,17 +4,17 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkObject
 import io.mockk.unmockkObject
-import no.nav.dagpenger.iverksett.utbetaling.featuretoggle.FeatureToggleService
-import no.nav.dagpenger.iverksett.utbetaling.api.TokenContext
-import no.nav.dagpenger.iverksett.utbetaling.tilstand.IverksettingsresultatService
-import no.nav.dagpenger.iverksett.utbetaling.util.opprettIverksettDto
 import no.nav.dagpenger.iverksett.felles.oppdrag.OppdragClient
+import no.nav.dagpenger.iverksett.utbetaling.api.IverksettingTilgangskontrollService
+import no.nav.dagpenger.iverksett.utbetaling.api.TokenContext
+import no.nav.dagpenger.iverksett.utbetaling.api.assertApiFeil
+import no.nav.dagpenger.iverksett.utbetaling.featuretoggle.FeatureToggleService
 import no.nav.dagpenger.iverksett.utbetaling.lagIverksettingEntitet
 import no.nav.dagpenger.iverksett.utbetaling.lagIverksettingsdata
-import no.nav.dagpenger.iverksett.utbetaling.api.IverksettingTilgangskontrollService
-import no.nav.dagpenger.iverksett.utbetaling.api.assertApiFeil
 import no.nav.dagpenger.iverksett.utbetaling.tilstand.IverksettingRepository
 import no.nav.dagpenger.iverksett.utbetaling.tilstand.IverksettingService
+import no.nav.dagpenger.iverksett.utbetaling.tilstand.IverksettingsresultatService
+import no.nav.dagpenger.iverksett.utbetaling.util.opprettIverksettDto
 import no.nav.dagpenger.iverksett.util.mockFeatureToggleService
 import no.nav.familie.prosessering.internal.TaskService
 import org.junit.jupiter.api.AfterEach
@@ -24,26 +24,27 @@ import org.junit.jupiter.api.assertDoesNotThrow
 import org.springframework.http.HttpStatus
 
 class IverksettingTilgangskontrollServiceTest {
-
     private val iverksettingRepository = mockk<IverksettingRepository>()
     private val featureToggleServiceMock = mockk<FeatureToggleService>()
-    private val iverksettingServiceMock = IverksettingService(
-        taskService = mockk<TaskService>(),
-        iverksettingsresultatService = mockk<IverksettingsresultatService>(),
-        iverksettingRepository = iverksettingRepository,
-        oppdragClient = mockk<OppdragClient>(),
-        featureToggleService = mockFeatureToggleService(),
-    )
+    private val iverksettingServiceMock =
+        IverksettingService(
+            taskService = mockk<TaskService>(),
+            iverksettingsresultatService = mockk<IverksettingsresultatService>(),
+            iverksettingRepository = iverksettingRepository,
+            oppdragClient = mockk<OppdragClient>(),
+            featureToggleService = mockFeatureToggleService(),
+        )
     private lateinit var iverksettingTilgangskontrollService: IverksettingTilgangskontrollService
 
     @BeforeEach
     fun setup() {
-        iverksettingTilgangskontrollService = IverksettingTilgangskontrollService(
-            iverksettingServiceMock,
-            featureToggleServiceMock,
-            BESLUTTERGRUPPE,
-            APP_MED_SYSTEMTILGANG
-        )
+        iverksettingTilgangskontrollService =
+            IverksettingTilgangskontrollService(
+                iverksettingServiceMock,
+                featureToggleServiceMock,
+                BESLUTTERGRUPPE,
+                APP_MED_SYSTEMTILGANG,
+            )
 
         every { featureToggleServiceMock.isEnabled(any(), any()) } returns true
         mockkObject(TokenContext)
@@ -63,7 +64,7 @@ class IverksettingTilgangskontrollServiceTest {
         every { TokenContext.erSystemtoken() } returns false
 
         assertDoesNotThrow {
-            iverksettingTilgangskontrollService.valider(nåværendeIverksetting)
+            iverksettingTilgangskontrollService.valider(nåværendeIverksetting.sakId)
         }
     }
 
@@ -75,7 +76,7 @@ class IverksettingTilgangskontrollServiceTest {
         every { TokenContext.erSystemtoken() } returns true
 
         assertApiFeil(HttpStatus.FORBIDDEN) {
-            iverksettingTilgangskontrollService.valider(nåværendeIverksetting)
+            iverksettingTilgangskontrollService.valider(nåværendeIverksetting.sakId)
         }
     }
 
@@ -90,7 +91,7 @@ class IverksettingTilgangskontrollServiceTest {
         every { TokenContext.hentKlientnavn() } returns APP_MED_SYSTEMTILGANG
 
         assertDoesNotThrow {
-            iverksettingTilgangskontrollService.valider(nåværendeIverksetting)
+            iverksettingTilgangskontrollService.valider(nåværendeIverksetting.sakId)
         }
     }
 
@@ -105,7 +106,7 @@ class IverksettingTilgangskontrollServiceTest {
         every { TokenContext.hentKlientnavn() } returns "ukjent app"
 
         assertApiFeil(HttpStatus.FORBIDDEN) {
-            iverksettingTilgangskontrollService.valider(nåværendeIverksetting)
+            iverksettingTilgangskontrollService.valider(nåværendeIverksetting.sakId)
         }
     }
 

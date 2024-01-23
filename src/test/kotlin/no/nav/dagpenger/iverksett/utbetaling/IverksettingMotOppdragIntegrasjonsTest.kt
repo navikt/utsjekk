@@ -10,6 +10,7 @@ import no.nav.dagpenger.iverksett.utbetaling.util.lagAndelTilkjentYtelse
 import no.nav.dagpenger.iverksett.utbetaling.util.opprettAndelTilkjentYtelse
 import no.nav.dagpenger.iverksett.utbetaling.util.opprettIverksett
 import no.nav.dagpenger.kontrakter.felles.StønadTypeTiltakspenger
+import no.nav.dagpenger.kontrakter.felles.somUUID
 import no.nav.familie.prosessering.internal.TaskService
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -134,7 +135,7 @@ class IverksettingMotOppdragIntegrasjonsTest : ServerTest() {
 
         iverksettingService.startIverksetting(iverksett)
 
-        val iverksettPersistert = iverksettingService.hentIverksetting(iverksett.behandling.behandlingId)
+        val iverksettPersistert = iverksettingService.hentIverksetting(iverksett.behandling.behandlingId.somUUID)
         assertEquals(StønadTypeTiltakspenger.JOBBKLUBB, iverksettPersistert?.fagsak?.stønadstype)
     }
 
