@@ -5,7 +5,7 @@ import no.nav.dagpenger.iverksett.felles.http.advice.getDataOrThrow
 import no.nav.dagpenger.iverksett.felles.oppdrag.konfig.AbstractRestClient
 import no.nav.dagpenger.kontrakter.oppdrag.GrensesnittavstemmingRequest
 import no.nav.dagpenger.kontrakter.oppdrag.OppdragId
-import no.nav.dagpenger.kontrakter.oppdrag.OppdragStatus
+import no.nav.dagpenger.kontrakter.oppdrag.OppdragStatusDto
 import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsoppdrag
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
@@ -32,10 +32,8 @@ class OppdragClient(
         return postForEntity(postOppdragUri, utbetalingsoppdrag)
     }
 
-    fun hentStatus(oppdragId: OppdragId): OppdragStatusMedMelding {
-        val ressurs = postForEntity<Ressurs<OppdragStatus>>(getStatusUri, oppdragId)
-        val data = ressurs.getDataOrThrow()
-        return OppdragStatusMedMelding(data, ressurs.melding)
+    fun hentStatus(oppdragId: OppdragId): OppdragStatusDto {
+        return postForEntity<OppdragStatusDto>(getStatusUri, oppdragId)
     }
 
     fun grensesnittavstemming(grensesnittavstemmingRequest: GrensesnittavstemmingRequest): String {

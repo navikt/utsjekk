@@ -7,7 +7,6 @@ import io.mockk.runs
 import io.mockk.slot
 import io.mockk.verify
 import no.nav.dagpenger.iverksett.felles.oppdrag.OppdragClient
-import no.nav.dagpenger.iverksett.felles.oppdrag.OppdragStatusMedMelding
 import no.nav.dagpenger.iverksett.utbetaling.domene.OppdragResultat
 import no.nav.dagpenger.iverksett.utbetaling.domene.TilkjentYtelse
 import no.nav.dagpenger.iverksett.utbetaling.domene.transformer.toDomain
@@ -24,6 +23,7 @@ import no.nav.dagpenger.kontrakter.felles.GeneriskIdSomUUID
 import no.nav.dagpenger.kontrakter.felles.objectMapper
 import no.nav.dagpenger.kontrakter.felles.somUUID
 import no.nav.dagpenger.kontrakter.oppdrag.OppdragStatus
+import no.nav.dagpenger.kontrakter.oppdrag.OppdragStatusDto
 import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsoppdrag
 import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsoppdrag.KodeEndring.NY
 import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsperiode
@@ -64,7 +64,7 @@ internal class VentePåStatusFraØkonomiTaskTest {
 
     @BeforeEach
     internal fun setUp() {
-        every { oppdragClient.hentStatus(any()) } returns OppdragStatusMedMelding(OppdragStatus.KVITTERT_OK, "OK")
+        every { oppdragClient.hentStatus(any()) } returns OppdragStatusDto(OppdragStatus.KVITTERT_OK, null)
         every { iverksettingRepository.findByIdOrThrow(any()) } returns lagIverksettingEntitet(opprettIverksettDto(behandlingId, sakId).toDomain())
         every { iverksettingsresultatService.oppdaterOppdragResultat(behandlingId.somUUID, any()) } just runs
         every { taskService.save(any()) } answers { firstArg() }

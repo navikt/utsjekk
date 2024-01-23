@@ -5,8 +5,8 @@ import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import no.nav.dagpenger.iverksett.felles.oppdrag.OppdragClient
-import no.nav.dagpenger.iverksett.felles.oppdrag.OppdragStatusMedMelding
 import no.nav.dagpenger.kontrakter.oppdrag.OppdragStatus
+import no.nav.dagpenger.kontrakter.oppdrag.OppdragStatusDto
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Primary
@@ -22,7 +22,7 @@ class OppdragClientMock {
 
         every { oppdragClientMock.grensesnittavstemming(any()) } returns "OK"
         every { oppdragClientMock.iverksettOppdrag(any()) } just Runs
-        every { oppdragClientMock.hentStatus(any()) } returns OppdragStatusMedMelding(OppdragStatus.KVITTERT_OK, "OK")
+        every { oppdragClientMock.hentStatus(any()) } returns OppdragStatusDto(OppdragStatus.KVITTERT_OK, null)
 
         return oppdragClientMock
     }
