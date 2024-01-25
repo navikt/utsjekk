@@ -7,8 +7,11 @@ import no.nav.dagpenger.kontrakter.felles.GeneriskIdSomUUID
 import no.nav.dagpenger.kontrakter.felles.Personident
 import no.nav.dagpenger.kontrakter.felles.StønadType
 import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
+import no.nav.dagpenger.kontrakter.felles.StønadTypeTiltakspenger
 import no.nav.dagpenger.kontrakter.iverksett.Ferietillegg
 import no.nav.dagpenger.kontrakter.iverksett.IverksettDto
+import no.nav.dagpenger.kontrakter.iverksett.StønadsdataDagpengerDto
+import no.nav.dagpenger.kontrakter.iverksett.StønadsdataTiltakspengerDto
 import no.nav.dagpenger.kontrakter.iverksett.VedtaksdetaljerDto
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -22,25 +25,39 @@ fun opprettIverksettDto(
     ferietillegg: Ferietillegg? = null,
     brukersNavKontor: BrukersNavKontor? = null,
 ): IverksettDto {
-    val andelTilkjentYtelse = lagUtbetalingDto(
-        beløp = andelsbeløp,
-        fraOgMed = LocalDate.of(2021, 1, 1),
-        tilOgMed = LocalDate.of(2021, 12, 31),
-        stønadstype = stønadType,
-        ferietillegg = ferietillegg,
-    )
+    val stønadsdata =
+        when (stønadType) {
+            is StønadTypeDagpenger ->
+                StønadsdataDagpengerDto(
+                    stønadstype = stønadType,
+                    ferietillegg = ferietillegg,
+                )
+            is StønadTypeTiltakspenger ->
+                StønadsdataTiltakspengerDto(
+                    stønadstype = stønadType,
+                )
+            else -> throw UnsupportedOperationException("Støtter ikke opprettelse av IverksettDto for tilleggsstønader")
+        }
+    val andelTilkjentYtelse =
+        lagUtbetalingDto(
+            beløp = andelsbeløp,
+            fraOgMed = LocalDate.of(2021, 1, 1),
+            tilOgMed = LocalDate.of(2021, 12, 31),
+            stønadsdata = stønadsdata,
+        )
 
     return IverksettDto(
         behandlingId = behandlingId,
         sakId = sakId,
         personident = Personident("15507600333"),
-        vedtak = VedtaksdetaljerDto(
-            vedtakstidspunkt = LocalDateTime.of(2021, 5, 12, 0, 0),
-            saksbehandlerId = "A12345",
-            beslutterId = "B23456",
-            brukersNavKontor = brukersNavKontor,
-            utbetalinger = listOf(andelTilkjentYtelse),
-        ),
+        vedtak =
+            VedtaksdetaljerDto(
+                vedtakstidspunkt = LocalDateTime.of(2021, 5, 12, 0, 0),
+                saksbehandlerId = "A12345",
+                beslutterId = "B23456",
+                brukersNavKontor = brukersNavKontor,
+                utbetalinger = listOf(andelTilkjentYtelse),
+            ),
     )
 }
 
@@ -53,13 +70,13 @@ fun opprettAndelTilkjentYtelse(
     beløp = beløp,
     fraOgMed = fra,
     tilOgMed = til,
-    stønadstype = stønadstype
+    stønadstype = stønadstype,
 )
 
 fun opprettTilkjentYtelse(
-        behandlingId: UUID = UUID.randomUUID(),
-        andeler: List<AndelTilkjentYtelse> = listOf(opprettAndelTilkjentYtelse()),
-        sisteAndelIKjede: AndelTilkjentYtelse? = null,
+    behandlingId: UUID = UUID.randomUUID(),
+    andeler: List<AndelTilkjentYtelse> = listOf(opprettAndelTilkjentYtelse()),
+    sisteAndelIKjede: AndelTilkjentYtelse? = null,
 ): TilkjentYtelse {
     return TilkjentYtelse(
         id = behandlingId,
@@ -76,13 +93,12 @@ fun behandlingsdetaljer(
     return Behandlingsdetaljer(
         behandlingId = GeneriskIdSomUUID(behandlingId),
         forrigeBehandlingId = forrigeBehandlingId?.let { GeneriskIdSomUUID(it) },
-
     )
 }
 
 fun vedtaksdetaljer(
-        andeler: List<AndelTilkjentYtelse> = listOf(opprettAndelTilkjentYtelse()),
-        vedtakstidspunkt: LocalDateTime = LocalDateTime.of(2021, 5, 12, 0, 0),
+    andeler: List<AndelTilkjentYtelse> = listOf(opprettAndelTilkjentYtelse()),
+    vedtakstidspunkt: LocalDateTime = LocalDateTime.of(2021, 5, 12, 0, 0),
 ): Vedtaksdetaljer {
     val tilkjentYtelse = lagTilkjentYtelse(andeler)
     return Vedtaksdetaljer(
@@ -93,9 +109,7 @@ fun vedtaksdetaljer(
     )
 }
 
-private fun lagTilkjentYtelse(
-        andeler: List<AndelTilkjentYtelse>,
-): TilkjentYtelse =
+private fun lagTilkjentYtelse(andeler: List<AndelTilkjentYtelse>): TilkjentYtelse =
     TilkjentYtelse(
         id = UUID.randomUUID(),
         utbetalingsoppdrag = null,
@@ -103,50 +117,56 @@ private fun lagTilkjentYtelse(
     )
 
 fun opprettIverksett(
-        behandlingsdetaljer: Behandlingsdetaljer = behandlingsdetaljer(),
-        vedtaksdetaljer: Vedtaksdetaljer = vedtaksdetaljer(),
-) =
-    Iverksetting(
-        fagsak = Fagsakdetaljer(fagsakId = GeneriskIdSomUUID(UUID.randomUUID()), stønadstype = StønadTypeDagpenger.DAGPENGER_ARBEIDSSØKER_ORDINÆR),
-        behandling = behandlingsdetaljer,
-        søker = Søker(
+    behandlingsdetaljer: Behandlingsdetaljer = behandlingsdetaljer(),
+    vedtaksdetaljer: Vedtaksdetaljer = vedtaksdetaljer(),
+) = Iverksetting(
+    fagsak =
+        Fagsakdetaljer(
+            fagsakId = GeneriskIdSomUUID(UUID.randomUUID()),
+            stønadstype = StønadTypeDagpenger.DAGPENGER_ARBEIDSSØKER_ORDINÆR,
+        ),
+    behandling = behandlingsdetaljer,
+    søker =
+        Søker(
             personident = "15507600333",
         ),
-        vedtak = vedtaksdetaljer,
-    )
+    vedtak = vedtaksdetaljer,
+)
 
 fun opprettIverksett(
-        behandlingId: UUID = UUID.randomUUID(),
-        forrigeBehandlingId: UUID? = null,
-        andeler: List<AndelTilkjentYtelse> = listOf(opprettAndelTilkjentYtelse()),
-        fagsakId: UUID = UUID.randomUUID(),
+    behandlingId: UUID = UUID.randomUUID(),
+    forrigeBehandlingId: UUID? = null,
+    andeler: List<AndelTilkjentYtelse> = listOf(opprettAndelTilkjentYtelse()),
+    fagsakId: UUID = UUID.randomUUID(),
 ): Iverksetting {
     return Iverksetting(
         fagsak = Fagsakdetaljer(fagsakId = GeneriskIdSomUUID(fagsakId), stønadstype = StønadTypeDagpenger.DAGPENGER_ARBEIDSSØKER_ORDINÆR),
         behandling = behandlingsdetaljer(behandlingId, forrigeBehandlingId),
-        søker = Søker(
-            personident = "15507600333",
-        ),
-        vedtak = vedtaksdetaljer(
-            andeler = andeler,
-        ),
+        søker =
+            Søker(
+                personident = "15507600333",
+            ),
+        vedtak =
+            vedtaksdetaljer(
+                andeler = andeler,
+            ),
         forrigeIverksettingBehandlingId = forrigeBehandlingId?.let { GeneriskIdSomUUID(it) },
     )
 }
 
 class IverksettResultatMockBuilder {
-
     data class Builder(
-            var oppdragResultat: OppdragResultat? = null,
+        var oppdragResultat: OppdragResultat? = null,
     ) {
-
         fun oppdragResultat(oppdragResultat: OppdragResultat) = apply { this.oppdragResultat = oppdragResultat }
 
-        fun build(behandlingId: UUID, tilkjentYtelse: TilkjentYtelse?) =
-            Iverksettingsresultat(
-                behandlingId,
-                tilkjentYtelse,
-                oppdragResultat,
-            )
+        fun build(
+            behandlingId: UUID,
+            tilkjentYtelse: TilkjentYtelse?,
+        ) = Iverksettingsresultat(
+            behandlingId,
+            tilkjentYtelse,
+            oppdragResultat,
+        )
     }
 }

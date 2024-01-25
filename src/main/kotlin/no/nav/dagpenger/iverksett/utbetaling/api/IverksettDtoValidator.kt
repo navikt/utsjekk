@@ -9,7 +9,6 @@ import no.nav.dagpenger.kontrakter.iverksett.StønadsdataTiltakspengerDto
 import org.springframework.http.HttpStatus
 
 object IverksettDtoValidator {
-
     fun IverksettDto.valider() {
         fraOgMedKommerFørTilOgMedIUtbetalingsperioder(this)
         utbetalingsperioderOverlapperIkkeITid(this)
@@ -20,11 +19,12 @@ object IverksettDtoValidator {
     }
 
     internal fun fraOgMedKommerFørTilOgMedIUtbetalingsperioder(iverksettDto: IverksettDto) {
-        val alleErOk = iverksettDto.vedtak.utbetalinger.all {
-            val fom = it.fraOgMedDato
-            val tom = it.tilOgMedDato
-            !tom.isBefore(fom)
-        }
+        val alleErOk =
+            iverksettDto.vedtak.utbetalinger.all {
+                val fom = it.fraOgMedDato
+                val tom = it.tilOgMedDato
+                !tom.isBefore(fom)
+            }
 
         if (!alleErOk) {
             throw ApiFeil(
@@ -37,28 +37,32 @@ object IverksettDtoValidator {
     internal fun utbetalingsperioderOverlapperIkkeITid(iverksettDto: IverksettDto) {
         fraOgMedKommerFørTilOgMedIUtbetalingsperioder(iverksettDto)
 
-        val allePerioderErUavhengige = iverksettDto.vedtak.utbetalinger
-            .sortedBy { it.fraOgMedDato }
-            .windowed(2, 1, false) {
-                val førstePeriodeTom = it.first().tilOgMedDato
-                val sistePeriodeFom = it.last().fraOgMedDato
+        val allePerioderErUavhengige =
+            iverksettDto.vedtak.utbetalinger
+                .groupBy { it.stønadsdata }.all { utbetalinger ->
+                    utbetalinger.value.sortedBy { it.fraOgMedDato }
+                        .windowed(2, 1, false) {
+                            val førstePeriodeTom = it.first().tilOgMedDato
+                            val sistePeriodeFom = it.last().fraOgMedDato
 
-                førstePeriodeTom.isBefore(sistePeriodeFom)
-            }.all { it }
+                            førstePeriodeTom.isBefore(sistePeriodeFom)
+                        }.all { it }
+                }
 
         if (!allePerioderErUavhengige) {
             throw ApiFeil(
-                "Utbetalinger inneholder perioder som overlapper i tid",
+                "Utbetalinger inneholder perioder med lik stønadsdata som overlapper i tid",
                 HttpStatus.BAD_REQUEST,
             )
         }
     }
 
     internal fun utbetalingerHarKunPositiveBeløp(iverksettDto: IverksettDto) {
-        val alleBeløpErPositive = iverksettDto.vedtak.utbetalinger.all {
-            val belop = it.beløpPerDag
-            belop > 0
-        }
+        val alleBeløpErPositive =
+            iverksettDto.vedtak.utbetalinger.all {
+                val belop = it.beløpPerDag
+                belop > 0
+            }
 
         if (!alleBeløpErPositive) {
             throw ApiFeil(
@@ -70,9 +74,10 @@ object IverksettDtoValidator {
 
     internal fun utbetalingerHarIngenBeløpOverMaksgrense(iverksettDto: IverksettDto) {
         val maksgrense = 5000
-        val alleBeløpErUnderMaksgrense = iverksettDto.vedtak.utbetalinger.all {
-            it.beløpPerDag < maksgrense
-        }
+        val alleBeløpErUnderMaksgrense =
+            iverksettDto.vedtak.utbetalinger.all {
+                it.beløpPerDag < maksgrense
+            }
 
         if (!alleBeløpErUnderMaksgrense) {
             throw ApiFeil(
@@ -83,14 +88,15 @@ object IverksettDtoValidator {
     }
 
     internal fun ingenUtbetalingsperioderHarStønadstypeEØSOgFerietilleggTilAvdød(iverksettDto: IverksettDto) {
-        val ugyldigKombinasjon = iverksettDto.vedtak.utbetalinger.any {
-            if (it.stønadsdata is StønadsdataDagpengerDto) {
-                val sd = it.stønadsdata as StønadsdataDagpengerDto
-                sd.stønadstype == StønadTypeDagpenger.DAGPENGER_EØS && sd.ferietillegg == Ferietillegg.AVDØD
-            } else {
-                false
+        val ugyldigKombinasjon =
+            iverksettDto.vedtak.utbetalinger.any {
+                if (it.stønadsdata is StønadsdataDagpengerDto) {
+                    val sd = it.stønadsdata as StønadsdataDagpengerDto
+                    sd.stønadstype == StønadTypeDagpenger.DAGPENGER_EØS && sd.ferietillegg == Ferietillegg.AVDØD
+                } else {
+                    false
+                }
             }
-        }
 
         if (ugyldigKombinasjon) {
             throw ApiFeil(
