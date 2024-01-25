@@ -24,7 +24,6 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.Properties
 import java.util.UUID
-import kotlin.jvm.optionals.getOrNull
 
 @Service
 class IverksettingService(
@@ -68,8 +67,11 @@ class IverksettingService(
         )
     }
 
-    fun hentIverksetting(behandlingId: UUID): Iverksetting? {
-        return iverksettingRepository.findById(behandlingId).getOrNull()?.data
+    fun hentIverksetting(
+        behandlingId: UUID,
+        iverksettingId: String? = null,
+    ): Iverksetting? {
+        return iverksettingRepository.findByBehandlingAndIverksetting(behandlingId, iverksettingId)?.data
     }
 
     fun hentForrigeIverksett(iverksetting: Iverksetting): Iverksetting? =
