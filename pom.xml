@@ -33,7 +33,7 @@
         <cucumber.version>7.11.1</cucumber.version>
         <dotenv.version>6.4.1</dotenv.version>
         <nav.security.token.version>3.0.4</nav.security.token.version>
-        <ibm-mq-client.version>9.3.4.0</ibm-mq-client.version>
+        <ibm-mq-client.version>9.3.4.1</ibm-mq-client.version>
         <unleash.version>9.2.0</unleash.version>
 
         <!-- Overstyring av spring-avhengigheter -->
