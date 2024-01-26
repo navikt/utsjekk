@@ -27,11 +27,6 @@ class IverksettingRepository(private val jdbcTemplate: JdbcTemplate) {
         }
     }
 
-    fun findByPersonId(personId: String): List<IverksettingEntitet> {
-        val sql = "select behandling_id, data from iverksetting where data -> 'søker' ->> 'personident' = ?"
-        return jdbcTemplate.query(sql, IverksettingRowMapper(), personId)
-    }
-
     fun findByFagsakId(fagsakId: String): List<IverksettingEntitet> {
         val sql = "select behandling_id, data from iverksetting where data -> 'fagsak' -> 'fagsakId' ->> 'id' = ?"
         return jdbcTemplate.query(sql, IverksettingRowMapper(), fagsakId)
@@ -62,7 +57,8 @@ class IverksettingRepository(private val jdbcTemplate: JdbcTemplate) {
     }
 
     private fun findByBehandlingId(behandlingId: UUID): IverksettingEntitet? {
-        val sql = "select behandling_id, data from iverksetting where behandling_id = ? and data -> 'behandling' ->> 'iverksettingId' is null"
+        val sql =
+            "select behandling_id, data from iverksetting where behandling_id = ? and data -> 'behandling' ->> 'iverksettingId' is null"
         val resultat = jdbcTemplate.query(sql, IverksettingRowMapper(), behandlingId)
         return when (resultat.size) {
             0 -> null

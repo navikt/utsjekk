@@ -8,19 +8,16 @@ import no.nav.dagpenger.iverksett.utbetaling.domene.Iverksetting
 import no.nav.dagpenger.iverksett.utbetaling.domene.behandlingId
 import no.nav.dagpenger.iverksett.utbetaling.domene.transformer.toDomain
 import no.nav.dagpenger.iverksett.utbetaling.lagIverksettingEntitet
-import no.nav.dagpenger.kontrakter.felles.GeneriskIdSomUUID
 import no.nav.dagpenger.kontrakter.felles.somString
 import no.nav.dagpenger.kontrakter.felles.somUUID
 import no.nav.dagpenger.kontrakter.iverksett.IverksettDto
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
-import java.util.UUID
 
 class IverksettingRepositoryTest : ServerTest() {
     @Autowired
@@ -37,53 +34,6 @@ class IverksettingRepositoryTest : ServerTest() {
 
         val iverksettResultat = iverksettingRepository.findByIdOrThrow(iverksett.behandlingId)
         assertThat(iverksett).usingRecursiveComparison().isEqualTo(iverksettResultat)
-    }
-
-    @Test
-    fun `lagre og hent iverksett på personId, forvent likhet`() {
-        val json: String = ResourceLoaderTestUtil.readResource("json/IverksettDtoEksempel.json")
-        val iverksettingData: Iverksetting = objectMapper.readValue<IverksettDto>(json).toDomain()
-
-        val iverksettListe1 = iverksettingRepository.findByPersonId(iverksettingData.søker.personident)
-        assertEquals(0, iverksettListe1.size)
-
-        val iverksett = iverksettingRepository.insert(lagIverksettingEntitet(iverksettingData))
-
-        val iverksettListe2 = iverksettingRepository.findByPersonId(iverksettingData.søker.personident)
-        assertEquals(1, iverksettListe2.size)
-        assertThat(iverksett).usingRecursiveComparison().isEqualTo(iverksettListe2[0])
-    }
-
-    @Test
-    fun `lagre to iverksettinger på samme person, forvent å få begge`() {
-        val json: String = ResourceLoaderTestUtil.readResource("json/IverksettDtoEksempel.json")
-        val iverksettingData: Iverksetting = objectMapper.readValue<IverksettDto>(json).toDomain()
-        val iverksettData2 =
-            iverksettingData.copy(
-                behandling =
-                    iverksettingData.behandling.copy(
-                        behandlingId = GeneriskIdSomUUID(UUID.randomUUID()),
-                    ),
-            )
-        val iverksettDataAnnenPerson =
-            iverksettingData.copy(
-                behandling =
-                    iverksettingData.behandling.copy(
-                        behandlingId = GeneriskIdSomUUID(UUID.randomUUID()),
-                    ),
-                søker =
-                    iverksettingData.søker.copy(
-                        personident = "12345678911",
-                    ),
-            )
-        iverksettingRepository.insert(lagIverksettingEntitet(iverksettingData))
-        iverksettingRepository.insert(lagIverksettingEntitet(iverksettData2))
-        val iverksettAnnenPerson = iverksettingRepository.insert(lagIverksettingEntitet(iverksettDataAnnenPerson))
-
-        val iverksettResultat = iverksettingRepository.findByPersonId(iverksettingData.søker.personident)
-
-        assertEquals(2, iverksettResultat.size)
-        assertFalse(iverksettResultat.contains(iverksettAnnenPerson))
     }
 
     @Test
