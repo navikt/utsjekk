@@ -29,7 +29,7 @@
         <springdoc.version>2.0.2</springdoc.version>
         <prosessering.version>2.20230928100816_3cbdfc5</prosessering.version>
         <maven-surefire-plugin.version>3.0.0-M9</maven-surefire-plugin.version>
-        <mockk.version>1.13.4</mockk.version>
+        <mockk.version>1.13.9</mockk.version>
         <cucumber.version>7.11.1</cucumber.version>
         <dotenv.version>6.4.1</dotenv.version>
         <nav.security.token.version>3.0.4</nav.security.token.version>
