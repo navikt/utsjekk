@@ -22,7 +22,7 @@
         <maven.deploy.skip>true</maven.deploy.skip>
         <start-class>no.nav.dagpenger.iverksett.ApplicationKt</start-class>
         <java.version>17</java.version>
-        <kotlin.version>1.8.10</kotlin.version>
+        <kotlin.version>1.9.22</kotlin.version>
 
         <!-- Versjoner -->
         <dp-kontrakter.version>3.0_20240123161544_daec3af</dp-kontrakter.version>
