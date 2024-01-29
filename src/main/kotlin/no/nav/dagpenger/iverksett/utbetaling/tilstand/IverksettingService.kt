@@ -7,6 +7,7 @@ import no.nav.dagpenger.iverksett.utbetaling.domene.IverksettingEntitet
 import no.nav.dagpenger.iverksett.utbetaling.domene.OppdragResultat
 import no.nav.dagpenger.iverksett.utbetaling.featuretoggle.FeatureToggleConfig
 import no.nav.dagpenger.iverksett.utbetaling.featuretoggle.FeatureToggleService
+import no.nav.dagpenger.kontrakter.felles.Fagsystem
 import no.nav.dagpenger.kontrakter.felles.GeneriskId
 import no.nav.dagpenger.kontrakter.felles.StønadType
 import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
@@ -128,9 +129,15 @@ class IverksettingService(
         )
     }
 
-    fun erFørsteVedtakPåSak(sakId: GeneriskId): Boolean {
-        val vedtakForSak = iverksettingRepository.findByFagsakId(sakId.somString)
-
+    fun erFørsteVedtakPåSak(
+        sakId: GeneriskId,
+        fagsystem: Fagsystem,
+    ): Boolean {
+        val vedtakForSak =
+            iverksettingRepository.findByFagsakId(sakId.somString)
+                .filter { it.data.fagsak.stønadstype.tilFagsystem() == fagsystem }
+        // TODO denne kan også være tom hvis noen sender et rent opphør, vi defaulter da til fagsystem DP
+        //  og filteret kan filtrere bort alle tidligere vedtak
         return vedtakForSak.isEmpty()
     }
 

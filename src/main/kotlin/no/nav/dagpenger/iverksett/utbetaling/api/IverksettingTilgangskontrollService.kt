@@ -1,10 +1,10 @@
 package no.nav.dagpenger.iverksett.utbetaling.api
 
 import no.nav.dagpenger.iverksett.felles.http.advice.ApiFeil
+import no.nav.dagpenger.iverksett.utbetaling.domene.Fagsakdetaljer
 import no.nav.dagpenger.iverksett.utbetaling.featuretoggle.FeatureToggleConfig
 import no.nav.dagpenger.iverksett.utbetaling.featuretoggle.FeatureToggleService
 import no.nav.dagpenger.iverksett.utbetaling.tilstand.IverksettingService
-import no.nav.dagpenger.kontrakter.felles.GeneriskId
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Profile
 import org.springframework.http.HttpStatus
@@ -18,9 +18,9 @@ class IverksettingTilgangskontrollService(
     @Value("\${BESLUTTER_GRUPPE}") private val beslutterGruppe: String,
     @Value("\${APP_MED_SYSTEMTILGANG}") private val appMedSystemtilgang: String,
 ) : TilgangskontrollService {
-    override fun valider(sakId: GeneriskId) {
+    override fun valider(fagsakdetaljer: Fagsakdetaljer) {
         if (featureToggleService.isEnabled(FeatureToggleConfig.TILGANGSKONTROLL, false)) {
-            validerFørsteVedtakPåSakSendesAvBeslutter(sakId)
+            validerFørsteVedtakPåSakSendesAvBeslutter(fagsakdetaljer)
             validerSystemTilgangErLov()
         }
     }
@@ -29,13 +29,13 @@ class IverksettingTilgangskontrollService(
         if (TokenContext.erSystemtoken() && TokenContext.hentKlientnavn() != appMedSystemtilgang) {
             throw ApiFeil(
                 "Forsøker å gjøre systemkall fra ${TokenContext.hentKlientnavn()} uten å være godkjent app",
-                HttpStatus.FORBIDDEN
+                HttpStatus.FORBIDDEN,
             )
         }
     }
 
-    private fun validerFørsteVedtakPåSakSendesAvBeslutter(sakId: GeneriskId) {
-        if (iverksettingService.erFørsteVedtakPåSak(sakId) && !erBeslutter()) {
+    private fun validerFørsteVedtakPåSakSendesAvBeslutter(fagsakdetaljer: Fagsakdetaljer) {
+        if (iverksettingService.erFørsteVedtakPåSak(fagsakdetaljer.fagsakId, fagsakdetaljer.stønadstype.tilFagsystem()) && !erBeslutter()) {
             throw ApiFeil("Første vedtak på en sak må sendes av en ansatt med beslutter-rolle", HttpStatus.FORBIDDEN)
         }
     }

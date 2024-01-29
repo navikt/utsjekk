@@ -57,11 +57,10 @@ Det kjøres implisitt en konsistensavstemming av at nye utbetalinger stemmer ove
     fun iverksett(
         @RequestBody iverksettDto: IverksettDto,
     ): ResponseEntity<Void> {
-        tilgangskontrollService.valider(iverksettDto.sakId)
+        val iverksett = iverksettDto.toDomain()
+        tilgangskontrollService.valider(iverksett.fagsak)
 
         iverksettDto.valider()
-        val iverksett = iverksettDto.toDomain()
-
         validatorService.valider(iverksett)
         iverksettingService.startIverksetting(iverksett)
 
@@ -84,11 +83,10 @@ Det kjøres implisitt en konsistensavstemming av at nye utbetalinger stemmer ove
     fun iverksettTilleggsstønader(
         @RequestBody iverksettDto: IverksettTilleggsstønaderDto,
     ): ResponseEntity<Void> {
-        tilgangskontrollService.valider(iverksettDto.sakId)
+        val iverksett = iverksettDto.toDomain()
+        tilgangskontrollService.valider(iverksett.fagsak)
 
         iverksettDto.valider()
-        val iverksett = iverksettDto.toDomain()
-
         validatorService.valider(iverksett)
         iverksettingService.startIverksetting(iverksett)
 

@@ -8,6 +8,8 @@ import no.nav.dagpenger.iverksett.felles.oppdrag.OppdragClient
 import no.nav.dagpenger.iverksett.utbetaling.api.IverksettingTilgangskontrollService
 import no.nav.dagpenger.iverksett.utbetaling.api.TokenContext
 import no.nav.dagpenger.iverksett.utbetaling.api.assertApiFeil
+import no.nav.dagpenger.iverksett.utbetaling.domene.IverksettingEntitet
+import no.nav.dagpenger.iverksett.utbetaling.domene.transformer.toDomain
 import no.nav.dagpenger.iverksett.utbetaling.featuretoggle.FeatureToggleService
 import no.nav.dagpenger.iverksett.utbetaling.lagIverksettingEntitet
 import no.nav.dagpenger.iverksett.utbetaling.lagIverksettingsdata
@@ -16,6 +18,8 @@ import no.nav.dagpenger.iverksett.utbetaling.tilstand.IverksettingService
 import no.nav.dagpenger.iverksett.utbetaling.tilstand.IverksettingsresultatService
 import no.nav.dagpenger.iverksett.utbetaling.util.opprettIverksettDto
 import no.nav.dagpenger.iverksett.util.mockFeatureToggleService
+import no.nav.dagpenger.kontrakter.felles.StønadTypeTiltakspenger
+import no.nav.dagpenger.kontrakter.felles.somUUID
 import no.nav.familie.prosessering.internal.TaskService
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -64,7 +68,7 @@ class IverksettingTilgangskontrollServiceTest {
         every { TokenContext.erSystemtoken() } returns false
 
         assertDoesNotThrow {
-            iverksettingTilgangskontrollService.valider(nåværendeIverksetting.sakId)
+            iverksettingTilgangskontrollService.valider(nåværendeIverksetting.toDomain().fagsak)
         }
     }
 
@@ -76,7 +80,26 @@ class IverksettingTilgangskontrollServiceTest {
         every { TokenContext.erSystemtoken() } returns true
 
         assertApiFeil(HttpStatus.FORBIDDEN) {
-            iverksettingTilgangskontrollService.valider(nåværendeIverksetting.sakId)
+            iverksettingTilgangskontrollService.valider(nåværendeIverksetting.toDomain().fagsak)
+        }
+    }
+
+    @Test
+    fun `skal få FORBIDDEN når første vedtak på sak sendes uten beslutter-token og samme sakId finnes for annet fagsystem`() {
+        val nåværendeIverksetting = opprettIverksettDto()
+        val eksisterendeIverksettingTiltakspenger = opprettIverksettDto(stønadType = StønadTypeTiltakspenger.JOBBKLUBB).toDomain()
+
+        every { iverksettingRepository.findByFagsakId(any()) } returns
+            listOf(
+                IverksettingEntitet(
+                    behandlingId = eksisterendeIverksettingTiltakspenger.behandling.behandlingId.somUUID,
+                    data = eksisterendeIverksettingTiltakspenger,
+                ),
+            )
+        every { TokenContext.erSystemtoken() } returns true
+
+        assertApiFeil(HttpStatus.FORBIDDEN) {
+            iverksettingTilgangskontrollService.valider(nåværendeIverksetting.toDomain().fagsak)
         }
     }
 
@@ -91,7 +114,7 @@ class IverksettingTilgangskontrollServiceTest {
         every { TokenContext.hentKlientnavn() } returns APP_MED_SYSTEMTILGANG
 
         assertDoesNotThrow {
-            iverksettingTilgangskontrollService.valider(nåværendeIverksetting.sakId)
+            iverksettingTilgangskontrollService.valider(nåværendeIverksetting.toDomain().fagsak)
         }
     }
 
@@ -106,7 +129,7 @@ class IverksettingTilgangskontrollServiceTest {
         every { TokenContext.hentKlientnavn() } returns "ukjent app"
 
         assertApiFeil(HttpStatus.FORBIDDEN) {
-            iverksettingTilgangskontrollService.valider(nåværendeIverksetting.sakId)
+            iverksettingTilgangskontrollService.valider(nåværendeIverksetting.toDomain().fagsak)
         }
     }
 

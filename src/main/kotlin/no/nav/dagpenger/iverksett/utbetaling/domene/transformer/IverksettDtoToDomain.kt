@@ -5,9 +5,9 @@ import no.nav.dagpenger.iverksett.utbetaling.domene.Fagsakdetaljer
 import no.nav.dagpenger.iverksett.utbetaling.domene.Iverksetting
 import no.nav.dagpenger.iverksett.utbetaling.domene.Søker
 import no.nav.dagpenger.iverksett.utbetaling.domene.Vedtaksdetaljer
+import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
 import no.nav.dagpenger.kontrakter.iverksett.IverksettDto
 import no.nav.dagpenger.kontrakter.iverksett.VedtaksdetaljerDto
-
 
 fun VedtaksdetaljerDto.toDomain(): Vedtaksdetaljer {
     return Vedtaksdetaljer(
@@ -32,12 +32,16 @@ fun IverksettDto.toDomain(): Iverksetting {
 fun IverksettDto.tilFagsak(): Fagsakdetaljer {
     return Fagsakdetaljer(
         fagsakId = this.sakId,
+        stønadstype =
+            this.vedtak.utbetalinger.firstOrNull()?.stønadsdata?.stønadstype
+                ?: StønadTypeDagpenger.DAGPENGER_ARBEIDSSØKER_ORDINÆR,
     )
 }
 
 fun String.tilSøker(): Søker = Søker(personident = this)
 
-fun IverksettDto.tilBehandling(): Behandlingsdetaljer = Behandlingsdetaljer(
-    behandlingId = this.behandlingId,
-    forrigeBehandlingId = this.forrigeIverksetting?.behandlingId,
-)
+fun IverksettDto.tilBehandling(): Behandlingsdetaljer =
+    Behandlingsdetaljer(
+        behandlingId = this.behandlingId,
+        forrigeBehandlingId = this.forrigeIverksetting?.behandlingId,
+    )

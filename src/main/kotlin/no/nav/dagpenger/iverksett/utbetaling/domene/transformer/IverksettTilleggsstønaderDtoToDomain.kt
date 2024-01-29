@@ -11,6 +11,7 @@ import no.nav.dagpenger.iverksett.utbetaling.domene.StønadsdataTilleggsstønade
 import no.nav.dagpenger.iverksett.utbetaling.domene.TilkjentYtelse
 import no.nav.dagpenger.iverksett.utbetaling.domene.Vedtaksdetaljer
 import no.nav.dagpenger.kontrakter.felles.Datoperiode
+import no.nav.dagpenger.kontrakter.felles.StønadTypeTilleggsstønader
 
 fun IverksettTilleggsstønaderDto.toDomain(): Iverksetting =
     Iverksetting(
@@ -24,6 +25,9 @@ fun IverksettTilleggsstønaderDto.toDomain(): Iverksetting =
 fun IverksettTilleggsstønaderDto.tilFagsak(): Fagsakdetaljer {
     return Fagsakdetaljer(
         fagsakId = this.sakId,
+        stønadstype =
+            this.vedtak.utbetalinger.firstOrNull()?.stønadstype
+                ?: StønadTypeTilleggsstønader.TILSYN_BARN_ENSLIG_FORSØRGER,
     )
 }
 

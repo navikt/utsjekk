@@ -15,7 +15,7 @@ import no.nav.dagpenger.kontrakter.iverksett.StønadsdataTiltakspengerDto
 import no.nav.dagpenger.kontrakter.iverksett.VedtaksdetaljerDto
 import java.time.LocalDate
 import java.time.LocalDateTime
-import java.util.*
+import java.util.UUID
 
 fun opprettIverksettDto(
     behandlingId: GeneriskId = GeneriskIdSomUUID(UUID.randomUUID()),
