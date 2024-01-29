@@ -1,13 +1,11 @@
 package no.nav.dagpenger.iverksett.utbetaling.domene
 
 import no.nav.dagpenger.kontrakter.oppdrag.OppdragStatus
-import org.springframework.data.annotation.Id
 import org.springframework.data.relational.core.mapping.Column
 import java.time.LocalDateTime
 import java.util.UUID
 
 data class Iverksettingsresultat(
-    @Id
     val behandlingId: UUID,
     @Column("tilkjentytelseforutbetaling")
     val tilkjentYtelseForUtbetaling: TilkjentYtelse? = null,
