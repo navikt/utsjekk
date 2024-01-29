@@ -1,11 +1,9 @@
 package no.nav.dagpenger.iverksett.utbetaling
 
-import java.time.LocalDate
-import java.util.UUID
 import no.nav.dagpenger.iverksett.ServerTest
+import no.nav.dagpenger.iverksett.utbetaling.task.IverksettMotOppdragTask
 import no.nav.dagpenger.iverksett.utbetaling.tilstand.IverksettingService
 import no.nav.dagpenger.iverksett.utbetaling.tilstand.IverksettingsresultatService
-import no.nav.dagpenger.iverksett.utbetaling.task.IverksettMotOppdragTask
 import no.nav.dagpenger.iverksett.utbetaling.util.lagAndelTilkjentYtelse
 import no.nav.dagpenger.iverksett.utbetaling.util.opprettAndelTilkjentYtelse
 import no.nav.dagpenger.iverksett.utbetaling.util.opprettIverksett
@@ -17,9 +15,10 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
+import java.time.LocalDate
+import java.util.UUID
 
 class IverksettingMotOppdragIntegrasjonsTest : ServerTest() {
-
     @Autowired
     lateinit var iverksettingsresultatService: IverksettingsresultatService
 
@@ -33,11 +32,12 @@ class IverksettingMotOppdragIntegrasjonsTest : ServerTest() {
     lateinit var iverksettMotOppdragTask: IverksettMotOppdragTask
 
     private val behandlingid: UUID = UUID.randomUUID()
-    private val førsteAndel = lagAndelTilkjentYtelse(
-        beløp = 1000,
-        fraOgMed = LocalDate.of(2021, 1, 1),
-        tilOgMed = LocalDate.of(2021, 1, 31),
-    )
+    private val førsteAndel =
+        lagAndelTilkjentYtelse(
+            beløp = 1000,
+            fraOgMed = LocalDate.of(2021, 1, 1),
+            tilOgMed = LocalDate.of(2021, 1, 31),
+        )
     private val iverksett =
         opprettIverksett(behandlingid, andeler = listOf(førsteAndel))
 
@@ -57,18 +57,19 @@ class IverksettingMotOppdragIntegrasjonsTest : ServerTest() {
     @Test
     internal fun `revurdering med en ny periode, forvent at den nye perioden har peker på den forrige`() {
         val behandlingIdRevurdering = UUID.randomUUID()
-        val iverksettRevurdering = opprettIverksett(
-            behandlingIdRevurdering,
-            behandlingid,
-            listOf(
-                førsteAndel,
-                lagAndelTilkjentYtelse(
-                    beløp = 1000,
-                    fraOgMed = LocalDate.now(),
-                    tilOgMed = LocalDate.now().plusMonths(1),
+        val iverksettRevurdering =
+            opprettIverksett(
+                behandlingIdRevurdering,
+                behandlingid,
+                listOf(
+                    førsteAndel,
+                    lagAndelTilkjentYtelse(
+                        beløp = 1000,
+                        fraOgMed = LocalDate.now(),
+                        tilOgMed = LocalDate.now().plusMonths(1),
+                    ),
                 ),
-            ),
-        )
+            )
 
         taskService.deleteAll(taskService.findAll())
         iverksettingService.startIverksetting(iverksettRevurdering)
@@ -84,20 +85,22 @@ class IverksettingMotOppdragIntegrasjonsTest : ServerTest() {
     @Test
     internal fun `revurdering der beløpet på den første endres, og en ny legges til, forvent at den første perioden erstattes`() {
         val behandlingIdRevurdering = UUID.randomUUID()
-        val iverksettRevurdering = opprettIverksett(
-            behandlingId = behandlingIdRevurdering,
-            forrigeBehandlingId = behandlingid,
-            andeler = listOf(
-                førsteAndel.copy(
-                    beløp = 299,
-                ),
-                lagAndelTilkjentYtelse(
-                    beløp = 1000,
-                    fraOgMed = LocalDate.now(),
-                    tilOgMed = LocalDate.now().plusMonths(1),
-                ),
-            ),
-        )
+        val iverksettRevurdering =
+            opprettIverksett(
+                behandlingId = behandlingIdRevurdering,
+                forrigeBehandlingId = behandlingid,
+                andeler =
+                    listOf(
+                        førsteAndel.copy(
+                            beløp = 299,
+                        ),
+                        lagAndelTilkjentYtelse(
+                            beløp = 1000,
+                            fraOgMed = LocalDate.now(),
+                            tilOgMed = LocalDate.now().plusMonths(1),
+                        ),
+                    ),
+            )
 
         taskService.deleteAll(taskService.findAll())
         iverksettingService.startIverksetting(iverksettRevurdering)
@@ -135,7 +138,11 @@ class IverksettingMotOppdragIntegrasjonsTest : ServerTest() {
 
         iverksettingService.startIverksetting(iverksett)
 
-        val iverksettPersistert = iverksettingService.hentIverksetting(iverksett.behandling.behandlingId.somUUID)
+        val iverksettPersistert =
+            iverksettingService.hentIverksetting(
+                iverksett.fagsak.stønadstype.tilFagsystem(),
+                iverksett.behandling.behandlingId.somUUID,
+            )
         assertEquals(StønadTypeTiltakspenger.JOBBKLUBB, iverksettPersistert?.fagsak?.stønadstype)
     }
 

@@ -13,28 +13,13 @@ import no.nav.dagpenger.kontrakter.felles.somUUID
 import no.nav.dagpenger.kontrakter.iverksett.IverksettDto
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNotNull
-import org.junit.jupiter.api.Assertions.assertNull
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 
 class IverksettingRepositoryTest : ServerTest() {
     @Autowired
     private lateinit var iverksettingRepository: IverksettingRepository
-
-    @Test
-    fun `lagre og hent iverksett dagpenger, forvent likhet`() {
-        val json: String = ResourceLoaderTestUtil.readResource("json/IverksettDtoEksempel.json")
-        val iverksettingData: Iverksetting = objectMapper.readValue<IverksettDto>(json).toDomain()
-
-        assertThrows<NoSuchElementException> { iverksettingRepository.findByIdOrThrow(iverksettingData.behandlingId.somUUID) }
-
-        val iverksett = iverksettingRepository.insert(lagIverksettingEntitet(iverksettingData))
-
-        val iverksettResultat = iverksettingRepository.findByIdOrThrow(iverksett.behandlingId)
-        assertThat(iverksett).usingRecursiveComparison().isEqualTo(iverksettResultat)
-    }
 
     @Test
     fun `lagre og hent iverksett på fagsakId, forvent likhet`() {
@@ -63,7 +48,7 @@ class IverksettingRepositoryTest : ServerTest() {
                 iverksettingData.behandlingId.somUUID,
                 iverksettingData.behandling.iverksettingId,
             )
-        assertNull(iverksetting)
+        assertTrue(iverksetting.isEmpty())
 
         val iverksett = iverksettingRepository.insert(lagIverksettingEntitet(iverksettingData))
 
@@ -72,8 +57,8 @@ class IverksettingRepositoryTest : ServerTest() {
                 iverksettingData.behandlingId.somUUID,
                 iverksettingData.behandling.iverksettingId,
             )
-        assertNotNull(iverksetting2)
-        assertEquals(iverksett, iverksetting2)
+        assertTrue(iverksetting2.isNotEmpty())
+        assertEquals(iverksett, iverksetting2.first())
     }
 
     @Test
@@ -86,7 +71,7 @@ class IverksettingRepositoryTest : ServerTest() {
                 iverksettingData.behandlingId.somUUID,
                 iverksettingData.behandling.iverksettingId,
             )
-        assertNull(iverksetting)
+        assertTrue(iverksetting.isEmpty())
 
         val iverksett = iverksettingRepository.insert(lagIverksettingEntitet(iverksettingData))
 
@@ -95,7 +80,7 @@ class IverksettingRepositoryTest : ServerTest() {
                 iverksettingData.behandlingId.somUUID,
                 iverksettingData.behandling.iverksettingId,
             )
-        assertNotNull(iverksetting2)
-        assertEquals(iverksett, iverksetting2)
+        assertTrue(iverksetting2.isNotEmpty())
+        assertEquals(iverksett, iverksetting2.first())
     }
 }

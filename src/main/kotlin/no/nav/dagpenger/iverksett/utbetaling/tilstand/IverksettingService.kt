@@ -7,6 +7,7 @@ import no.nav.dagpenger.iverksett.utbetaling.domene.IverksettingEntitet
 import no.nav.dagpenger.iverksett.utbetaling.domene.OppdragResultat
 import no.nav.dagpenger.iverksett.utbetaling.featuretoggle.FeatureToggleConfig
 import no.nav.dagpenger.iverksett.utbetaling.featuretoggle.FeatureToggleService
+import no.nav.dagpenger.iverksett.utbetaling.task.tilTaskPayload
 import no.nav.dagpenger.kontrakter.felles.Fagsystem
 import no.nav.dagpenger.kontrakter.felles.GeneriskId
 import no.nav.dagpenger.kontrakter.felles.StønadType
@@ -56,7 +57,7 @@ class IverksettingService(
         taskService.save(
             Task(
                 type = førsteHovedflytTask(),
-                payload = objectMapper.writeValueAsString(iverksetting.behandling.behandlingId),
+                payload = objectMapper.writeValueAsString(iverksetting.tilTaskPayload()),
                 properties =
                     Properties().apply {
                         this["personIdent"] = iverksetting.søker.personident
@@ -69,17 +70,27 @@ class IverksettingService(
     }
 
     fun hentIverksetting(
+        fagsystem: Fagsystem,
         behandlingId: UUID,
         iverksettingId: String? = null,
     ): Iverksetting? {
-        return iverksettingRepository.findByBehandlingAndIverksetting(behandlingId, iverksettingId)?.data
+        val iverksettingerForFagsystem =
+            iverksettingRepository.findByBehandlingAndIverksetting(behandlingId, iverksettingId)
+                .filter { it.data.fagsak.stønadstype.tilFagsystem() == fagsystem }
+        return when (iverksettingerForFagsystem.size) {
+            0 -> null
+            1 -> iverksettingerForFagsystem.first().data
+            else -> throw IllegalStateException(
+                "Fant flere iverksettinger for behandling $behandlingId, fagsystem $fagsystem og iverksetting $iverksettingId",
+            )
+        }
     }
 
     fun hentForrigeIverksett(iverksetting: Iverksetting): Iverksetting? =
         iverksetting.behandling.forrigeBehandlingId?.let {
-            hentIverksetting(it.somUUID) ?: throw IllegalStateException(
+            hentIverksetting(iverksetting.fagsak.stønadstype.tilFagsystem(), it.somUUID) ?: throw IllegalStateException(
                 "Fant ikke forrige iverksetting med behandlingId ${iverksetting.behandling.behandlingId} " +
-                    "og forrige behandlingId $it",
+                    "og forrige behandlingId $it for fagsystem ${iverksetting.fagsak.stønadstype.tilFagsystem()}",
             )
         }
 

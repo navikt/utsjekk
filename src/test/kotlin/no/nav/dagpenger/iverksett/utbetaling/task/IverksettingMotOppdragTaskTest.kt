@@ -37,7 +37,7 @@ internal class IverksettingMotOppdragTaskTest {
     val iverksettingService = mockk<IverksettingService>()
     val iverksettingsresultatService = mockk<IverksettingsresultatService>()
     val behandlingId = GeneriskIdSomUUID(UUID.randomUUID())
-    val behandlingIdPayload = objectMapper.writeValueAsString(behandlingId)
+    val taskPayload = objectMapper.writeValueAsString(TaskPayload(fagsystem = Fagsystem.Dagpenger, behandlingId = behandlingId))
     val sakId = GeneriskIdSomUUID(UUID.randomUUID())
     private val iverksettMotOppdragTask =
         IverksettMotOppdragTask(
@@ -50,7 +50,7 @@ internal class IverksettingMotOppdragTaskTest {
     @Test
     internal fun `skal sende utbetaling til oppdrag`() {
         val oppdragSlot = slot<Utbetalingsoppdrag>()
-        every { iverksettingService.hentIverksetting(any()) } returns
+        every { iverksettingService.hentIverksetting(any(), any()) } returns
             opprettIverksettDto(
                 behandlingId,
                 sakId,
@@ -59,7 +59,7 @@ internal class IverksettingMotOppdragTaskTest {
         every { iverksettingsresultatService.oppdaterTilkjentYtelseForUtbetaling(behandlingId.somUUID, any()) } returns Unit
         every { iverksettingsresultatService.hentTilkjentYtelse(any<UUID>()) } returns null
 
-        iverksettMotOppdragTask.doTask(Task(IverksettMotOppdragTask.TYPE, behandlingIdPayload, Properties()))
+        iverksettMotOppdragTask.doTask(Task(IverksettMotOppdragTask.TYPE, taskPayload, Properties()))
 
         verify(exactly = 1) { oppdragClient.iverksettOppdrag(any()) }
         verify(exactly = 1) { iverksettingsresultatService.oppdaterTilkjentYtelseForUtbetaling(behandlingId.somUUID, any()) }
@@ -71,12 +71,12 @@ internal class IverksettingMotOppdragTaskTest {
     @Test
     internal fun `skal sende opphør av utbetaling til oppdrag`() {
         val oppdragSlot = slot<Utbetalingsoppdrag>()
-        every { iverksettingService.hentIverksetting(any()) } returns opphørAvUtbetaling().toDomain()
+        every { iverksettingService.hentIverksetting(any(), any()) } returns opphørAvUtbetaling().toDomain()
         every { oppdragClient.iverksettOppdrag(capture(oppdragSlot)) } just Runs
         every { iverksettingsresultatService.hentIverksettResultat(any()) } returns iverksettResultat()
         every { iverksettingsresultatService.oppdaterTilkjentYtelseForUtbetaling(any(), any()) } just Runs
 
-        iverksettMotOppdragTask.doTask(Task(IverksettMotOppdragTask.TYPE, behandlingIdPayload, Properties()))
+        iverksettMotOppdragTask.doTask(Task(IverksettMotOppdragTask.TYPE, taskPayload, Properties()))
 
         verify(exactly = 1) { oppdragClient.iverksettOppdrag(any()) }
         verify(exactly = 1) { iverksettingsresultatService.oppdaterTilkjentYtelseForUtbetaling(behandlingId.somUUID, any()) }
@@ -88,9 +88,9 @@ internal class IverksettingMotOppdragTaskTest {
 
     @Test
     internal fun `skal ikke sende tom utbetaling som ikke skal iverksettes til oppdrag`() {
-        every { iverksettingService.hentIverksetting(any()) } returns tomUtbetaling().toDomain()
+        every { iverksettingService.hentIverksetting(any(), any()) } returns tomUtbetaling().toDomain()
 
-        iverksettMotOppdragTask.doTask(Task(IverksettMotOppdragTask.TYPE, behandlingIdPayload, Properties()))
+        iverksettMotOppdragTask.doTask(Task(IverksettMotOppdragTask.TYPE, taskPayload, Properties()))
 
         verify(exactly = 0) { oppdragClient.iverksettOppdrag(any()) }
     }
@@ -98,14 +98,14 @@ internal class IverksettingMotOppdragTaskTest {
     @Test
     internal fun `skal opprette ny task når den er ferdig`() {
         val taskSlot = slot<Task>()
-        val task = Task(IverksettMotOppdragTask.TYPE, behandlingIdPayload, Properties())
-        every { iverksettingService.hentIverksetting(any()) } returns
+        val task = Task(IverksettMotOppdragTask.TYPE, taskPayload, Properties())
+        every { iverksettingService.hentIverksetting(any(), any()) } returns
             opprettIverksettDto(behandlingId, sakId).toDomain()
         every { taskService.save(capture(taskSlot)) } returns task
 
         iverksettMotOppdragTask.onCompletion(task)
 
-        assertThat(taskSlot.captured.payload).isEqualTo(behandlingIdPayload)
+        assertThat(taskSlot.captured.payload).isEqualTo(taskPayload)
         assertThat(taskSlot.captured.type).isEqualTo(VentePåStatusFraØkonomiTask.TYPE)
     }
 

@@ -43,7 +43,7 @@ internal class VentePåStatusFraØkonomiTaskTest {
     private val taskService = mockk<TaskService>()
     private val iverksettingsresultatService = mockk<IverksettingsresultatService>()
     private val behandlingId: GeneriskId = GeneriskIdSomUUID(UUID.randomUUID())
-    private val behandlingIdPayload = objectMapper.writeValueAsString(behandlingId)
+    private val taskPayload = objectMapper.writeValueAsString(TaskPayload(fagsystem = Fagsystem.Dagpenger, behandlingId = behandlingId))
     private val sakId: GeneriskId = GeneriskIdSomUUID(UUID.randomUUID())
     private val iverksettingService =
         IverksettingService(
@@ -56,7 +56,6 @@ internal class VentePåStatusFraØkonomiTaskTest {
 
     private val ventePåStatusFraØkonomiTask =
         VentePåStatusFraØkonomiTask(
-            iverksettingRepository,
             iverksettingService,
             iverksettingsresultatService,
         )
@@ -64,8 +63,8 @@ internal class VentePåStatusFraØkonomiTaskTest {
     @BeforeEach
     internal fun setUp() {
         every { oppdragClient.hentStatus(any()) } returns OppdragStatusDto(OppdragStatus.KVITTERT_OK, null)
-        every { iverksettingRepository.findByIdOrThrow(any()) } returns
-            lagIverksettingEntitet(opprettIverksettDto(behandlingId, sakId).toDomain())
+        every { iverksettingRepository.findByBehandlingAndIverksetting(any(), any()) } returns
+            listOf(lagIverksettingEntitet(opprettIverksettDto(behandlingId, sakId).toDomain()))
         every { iverksettingsresultatService.oppdaterOppdragResultat(behandlingId.somUUID, any()) } just runs
         every { taskService.save(any()) } answers { firstArg() }
     }
@@ -80,7 +79,7 @@ internal class VentePåStatusFraØkonomiTaskTest {
                 ),
             )
 
-        runTask(Task(IverksettMotOppdragTask.TYPE, behandlingIdPayload, Properties()))
+        runTask(Task(IverksettMotOppdragTask.TYPE, taskPayload, Properties()))
 
         verify(exactly = 1) {
             iverksettingsresultatService.oppdaterOppdragResultat(
@@ -95,7 +94,7 @@ internal class VentePåStatusFraØkonomiTaskTest {
     internal fun `Skal ikke gjøre noe hvis ingen utbetalingoppdrag på tilkjent ytelse`() {
         every { iverksettingsresultatService.hentTilkjentYtelse(behandlingId.somUUID) } returns tilkjentYtelse()
 
-        runTask(Task(IverksettMotOppdragTask.TYPE, behandlingIdPayload, Properties()))
+        runTask(Task(IverksettMotOppdragTask.TYPE, taskPayload, Properties()))
 
         verify(exactly = 0) { iverksettingsresultatService.oppdaterOppdragResultat(behandlingId.somUUID, any()) }
     }

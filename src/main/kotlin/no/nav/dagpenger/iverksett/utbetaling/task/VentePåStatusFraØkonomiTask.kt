@@ -1,10 +1,8 @@
 package no.nav.dagpenger.iverksett.utbetaling.task
 
 import no.nav.dagpenger.iverksett.utbetaling.domene.TilkjentYtelse
-import no.nav.dagpenger.iverksett.utbetaling.tilstand.IverksettingRepository
 import no.nav.dagpenger.iverksett.utbetaling.tilstand.IverksettingService
 import no.nav.dagpenger.iverksett.utbetaling.tilstand.IverksettingsresultatService
-import no.nav.dagpenger.kontrakter.felles.GeneriskId
 import no.nav.dagpenger.kontrakter.felles.objectMapper
 import no.nav.dagpenger.kontrakter.felles.somString
 import no.nav.dagpenger.kontrakter.felles.somUUID
@@ -23,20 +21,28 @@ import org.springframework.stereotype.Service
     beskrivelse = "Sjekker status på utbetalingsoppdraget i dp-oppdrag.",
 )
 class VentePåStatusFraØkonomiTask(
-    private val iverksettingRepository: IverksettingRepository,
     private val iverksettingService: IverksettingService,
     private val iverksettingsresultatService: IverksettingsresultatService,
 ) : AsyncTaskStep {
     private val logger = LoggerFactory.getLogger(javaClass)
 
     override fun doTask(task: Task) {
-        val behandlingId = objectMapper.readValue(task.payload, GeneriskId::class.java)
-        val iverksett = iverksettingRepository.findByIdOrThrow(behandlingId.somUUID).data
-        val tilkjentYtelse = iverksettingsresultatService.hentTilkjentYtelse(behandlingId.somUUID)
+        val payload = objectMapper.readValue(task.payload, TaskPayload::class.java)
+        val iverksett =
+            iverksettingService.hentIverksetting(
+                fagsystem = payload.fagsystem,
+                behandlingId = payload.behandlingId.somUUID,
+                iverksettingId = payload.iverksettingId,
+            ) ?: error(
+                "Fant ikke iverksetting for fagsystem ${payload.fagsystem}, behandling ${payload.behandlingId.somString}" +
+                    " og iverksettingId ${payload.iverksettingId}",
+            )
+        val tilkjentYtelse = iverksettingsresultatService.hentTilkjentYtelse(payload.behandlingId.somUUID)
 
         if (tilkjentYtelse.harIngenUtbetaling()) {
             logger.info(
-                "Iverksetting med behandlingsid ${behandlingId.somString} har ikke utbetalingsoppdrag. Sjekker ikke status fra OS/UR",
+                "Iverksetting for fagsystem ${payload.fagsystem} med behandlingsid ${payload.behandlingId.somString} " +
+                    "har ikke utbetalingsoppdrag. Sjekker ikke status fra OS/UR",
             )
             return
         }
@@ -44,7 +50,7 @@ class VentePåStatusFraØkonomiTask(
         iverksettingService.sjekkStatusPåIverksettOgOppdaterTilstand(
             stønadstype = iverksett.fagsak.stønadstype,
             personident = iverksett.søker.personident,
-            behandlingId = behandlingId,
+            behandlingId = payload.behandlingId,
         )
     }
 

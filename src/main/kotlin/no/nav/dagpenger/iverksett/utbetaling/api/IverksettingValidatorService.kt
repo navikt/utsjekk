@@ -18,7 +18,7 @@ class IverksettingValidatorService(
 ) {
     fun valider(iverksetting: Iverksetting) {
         // Med DB-oppslag
-        validerAtBehandlingIkkeAlleredeErMottatt(iverksetting)
+        validerAtIverksettingIkkeAlleredeErMottatt(iverksetting)
         validerAtIverksettingErForSammeSakOgPersonSomForrige(iverksetting)
         validerAtForrigeBehandlingErFerdigIverksattMotOppdrag(iverksetting)
     }
@@ -64,10 +64,16 @@ class IverksettingValidatorService(
         }
     }
 
-    internal fun validerAtBehandlingIkkeAlleredeErMottatt(iverksetting: Iverksetting) {
-        if (iverksettingService.hentIverksetting(iverksetting.behandling.behandlingId.somUUID) != null) {
+    internal fun validerAtIverksettingIkkeAlleredeErMottatt(iverksetting: Iverksetting) {
+        val iverksettinger =
+            iverksettingService.hentIverksetting(
+                iverksetting.fagsak.stønadstype.tilFagsystem(),
+                iverksetting.behandling.behandlingId.somUUID,
+                iverksetting.behandling.iverksettingId,
+            )
+        if (iverksettinger != null) {
             throw ApiFeil(
-                "Behandling med id ${iverksetting.behandling.behandlingId} er allerede mottattt",
+                "Behandling med id ${iverksetting.behandling.behandlingId} er allerede mottatt",
                 HttpStatus.CONFLICT,
             )
         }

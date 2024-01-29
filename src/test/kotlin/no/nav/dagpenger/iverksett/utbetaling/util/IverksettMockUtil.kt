@@ -139,8 +139,9 @@ fun opprettIverksett(
     andeler: List<AndelTilkjentYtelse> = listOf(opprettAndelTilkjentYtelse()),
     fagsakId: UUID = UUID.randomUUID(),
 ): Iverksetting {
+    val stønadstype = andeler.firstOrNull()?.stønadsdata?.stønadstype ?: StønadTypeDagpenger.DAGPENGER_ARBEIDSSØKER_ORDINÆR
     return Iverksetting(
-        fagsak = Fagsakdetaljer(fagsakId = GeneriskIdSomUUID(fagsakId), stønadstype = StønadTypeDagpenger.DAGPENGER_ARBEIDSSØKER_ORDINÆR),
+        fagsak = Fagsakdetaljer(fagsakId = GeneriskIdSomUUID(fagsakId), stønadstype = stønadstype),
         behandling = behandlingsdetaljer(behandlingId, forrigeBehandlingId),
         søker =
             Søker(

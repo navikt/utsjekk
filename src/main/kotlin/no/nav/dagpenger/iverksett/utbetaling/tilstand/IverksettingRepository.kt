@@ -17,16 +17,6 @@ class IverksettingRepository(private val jdbcTemplate: JdbcTemplate) {
         return iverksetting
     }
 
-    fun findByIdOrThrow(behandlingId: UUID): IverksettingEntitet {
-        val sql = "select behandling_id, data from iverksetting where behandling_id = ?"
-        val resultat = jdbcTemplate.query(sql, IverksettingRowMapper(), behandlingId)
-        return when (resultat.size) {
-            1 -> resultat.first()
-            0 -> throw NoSuchElementException("Fant ingen iverksettinger for behandling $behandlingId")
-            else -> throw IllegalStateException("Fant flere iverksettinger for behandling $behandlingId")
-        }
-    }
-
     fun findByFagsakId(fagsakId: String): List<IverksettingEntitet> {
         val sql = "select behandling_id, data from iverksetting where data -> 'fagsak' -> 'fagsakId' ->> 'id' = ?"
         return jdbcTemplate.query(sql, IverksettingRowMapper(), fagsakId)
@@ -35,7 +25,7 @@ class IverksettingRepository(private val jdbcTemplate: JdbcTemplate) {
     fun findByBehandlingAndIverksetting(
         behandlingId: UUID,
         iverksettingId: String?,
-    ): IverksettingEntitet? {
+    ): List<IverksettingEntitet> {
         return if (iverksettingId != null) {
             findByBehandlingIdAndIverksettingId(behandlingId, iverksettingId)
         } else {
@@ -46,25 +36,15 @@ class IverksettingRepository(private val jdbcTemplate: JdbcTemplate) {
     private fun findByBehandlingIdAndIverksettingId(
         behandlingId: UUID,
         iverksettingId: String,
-    ): IverksettingEntitet? {
+    ): List<IverksettingEntitet> {
         val sql = "select behandling_id, data from iverksetting where behandling_id = ? and data -> 'behandling' ->> 'iverksettingId' = ?"
-        val resultat = jdbcTemplate.query(sql, IverksettingRowMapper(), behandlingId, iverksettingId)
-        return when (resultat.size) {
-            0 -> null
-            1 -> resultat.first()
-            else -> throw IllegalStateException("Fant flere iverksettinger for behandling $behandlingId og iverksetting $iverksettingId")
-        }
+        return jdbcTemplate.query(sql, IverksettingRowMapper(), behandlingId, iverksettingId)
     }
 
-    private fun findByBehandlingId(behandlingId: UUID): IverksettingEntitet? {
+    private fun findByBehandlingId(behandlingId: UUID): List<IverksettingEntitet> {
         val sql =
             "select behandling_id, data from iverksetting where behandling_id = ? and data -> 'behandling' ->> 'iverksettingId' is null"
-        val resultat = jdbcTemplate.query(sql, IverksettingRowMapper(), behandlingId)
-        return when (resultat.size) {
-            0 -> null
-            1 -> resultat.first()
-            else -> throw IllegalStateException("Fant flere iverksettinger for behandling $behandlingId")
-        }
+        return jdbcTemplate.query(sql, IverksettingRowMapper(), behandlingId)
     }
 }
 

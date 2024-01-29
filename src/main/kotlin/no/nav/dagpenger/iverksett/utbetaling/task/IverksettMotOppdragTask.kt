@@ -23,7 +23,7 @@ import org.springframework.stereotype.Service
 @Service
 @TaskStepBeskrivelse(
     taskStepType = IverksettMotOppdragTask.TYPE,
-    beskrivelse = "Utfører iverksetting av utbetalning mot økonomi.",
+    beskrivelse = "Utfører iverksetting av utbetaling mot økonomi.",
 )
 class IverksettMotOppdragTask(
     private val iverksettingService: IverksettingService,
@@ -34,10 +34,10 @@ class IverksettMotOppdragTask(
     private val log: Logger = LoggerFactory.getLogger(this::class.java)
 
     override fun doTask(task: Task) {
-        val behandlingId = objectMapper.readValue(task.payload, GeneriskId::class.java)
+        val payload = objectMapper.readValue(task.payload, TaskPayload::class.java)
         val iverksett =
-            iverksettingService.hentIverksetting(behandlingId.somUUID)
-                ?: error("Fant ikke iverksetting for behandlingId ${behandlingId.somString}")
+            iverksettingService.hentIverksetting(fagsystem = payload.fagsystem, behandlingId = payload.behandlingId.somUUID, iverksettingId = payload.iverksettingId)
+                ?: error("Fant ikke iverksetting for fagsystem ${payload.fagsystem}, behandling ${payload.behandlingId.somString} og iverksettingId ${payload.iverksettingId}")
 
         val forrigeIverksettResultat =
             iverksett.behandling.forrigeBehandlingId?.let {
@@ -45,7 +45,7 @@ class IverksettMotOppdragTask(
                     ?: error("Kunne ikke finne iverksettresultat for behandlingId=${it.somString}")
             }
 
-        lagOgSendUtbetalingsoppdragOgOppdaterTilkjentYtelse(iverksett, forrigeIverksettResultat, behandlingId)
+        lagOgSendUtbetalingsoppdragOgOppdaterTilkjentYtelse(iverksett, forrigeIverksettResultat, payload.behandlingId)
     }
 
     private fun lagOgSendUtbetalingsoppdragOgOppdaterTilkjentYtelse(
