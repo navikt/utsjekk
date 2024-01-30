@@ -92,10 +92,15 @@ class IverksettingService(
 
     fun hentForrigeIverksett(iverksetting: Iverksetting): Iverksetting? =
         iverksetting.behandling.forrigeBehandlingId?.let {
-            hentIverksetting(iverksetting.fagsak.stønadstype.tilFagsystem(), it.somUUID) ?: throw IllegalStateException(
-                "Fant ikke forrige iverksetting med behandlingId ${iverksetting.behandling.behandlingId} " +
-                    "og forrige behandlingId $it for fagsystem ${iverksetting.fagsak.stønadstype.tilFagsystem()}",
+            hentIverksetting(
+                fagsystem = iverksetting.fagsak.stønadstype.tilFagsystem(),
+                behandlingId = it.somUUID,
+                iverksettingId = iverksetting.behandling.forrigeIverksettingId,
             )
+                ?: throw IllegalStateException(
+                    "Fant ikke forrige iverksetting med behandlingId ${iverksetting.behandling.behandlingId} " +
+                        "og forrige behandlingId $it for fagsystem ${iverksetting.fagsak.stønadstype.tilFagsystem()}",
+                )
         }
 
     private fun førsteHovedflytTask() = hovedflyt().first().type
