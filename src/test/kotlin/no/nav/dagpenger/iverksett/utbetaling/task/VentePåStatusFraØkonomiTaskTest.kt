@@ -43,7 +43,7 @@ internal class VentePåStatusFraØkonomiTaskTest {
     private val taskService = mockk<TaskService>()
     private val iverksettingsresultatService = mockk<IverksettingsresultatService>()
     private val behandlingId: GeneriskId = GeneriskIdSomUUID(UUID.randomUUID())
-    private val taskPayload = objectMapper.writeValueAsString(TaskPayload(fagsystem = Fagsystem.Dagpenger, behandlingId = behandlingId))
+    private val taskPayload = objectMapper.writeValueAsString(TaskPayload(fagsystem = Fagsystem.DAGPENGER, behandlingId = behandlingId))
     private val sakId: GeneriskId = GeneriskIdSomUUID(UUID.randomUUID())
     private val iverksettingService =
         IverksettingService(
@@ -126,7 +126,7 @@ internal class VentePåStatusFraØkonomiTaskTest {
             utbetalingsoppdrag =
                 Utbetalingsoppdrag(
                     kodeEndring = NY,
-                    fagsystem = Fagsystem.Dagpenger,
+                    fagsystem = Fagsystem.DAGPENGER,
                     saksnummer = GeneriskIdSomUUID(UUID.randomUUID()),
                     aktør = "",
                     saksbehandlerId = "",

@@ -37,7 +37,7 @@ internal class IverksettingMotOppdragTaskTest {
     val iverksettingService = mockk<IverksettingService>()
     val iverksettingsresultatService = mockk<IverksettingsresultatService>()
     val behandlingId = GeneriskIdSomUUID(UUID.randomUUID())
-    val taskPayload = objectMapper.writeValueAsString(TaskPayload(fagsystem = Fagsystem.Dagpenger, behandlingId = behandlingId))
+    val taskPayload = objectMapper.writeValueAsString(TaskPayload(fagsystem = Fagsystem.DAGPENGER, behandlingId = behandlingId))
     val sakId = GeneriskIdSomUUID(UUID.randomUUID())
     private val iverksettMotOppdragTask =
         IverksettMotOppdragTask(
@@ -64,7 +64,7 @@ internal class IverksettingMotOppdragTaskTest {
         verify(exactly = 1) { oppdragClient.iverksettOppdrag(any()) }
         verify(exactly = 1) { iverksettingsresultatService.oppdaterTilkjentYtelseForUtbetaling(behandlingId.somUUID, any()) }
 
-        assertThat(oppdragSlot.captured.fagsystem).isEqualTo(Fagsystem.Dagpenger)
+        assertThat(oppdragSlot.captured.fagsystem).isEqualTo(Fagsystem.DAGPENGER)
         assertThat(oppdragSlot.captured.kodeEndring).isEqualTo(Utbetalingsoppdrag.KodeEndring.NY)
     }
 

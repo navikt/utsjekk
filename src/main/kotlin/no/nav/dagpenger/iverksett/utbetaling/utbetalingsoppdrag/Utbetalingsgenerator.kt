@@ -57,7 +57,7 @@ object Utbetalingsgenerator {
         val nyeKjeder = lagNyeKjeder(nyeAndeler, forrigeKjeder, sisteAndelPerKjede)
         val fagsystem =
             forrigeKjeder.keys.union(nyeAndeler.keys).firstOrNull()?.stønadstype?.tilFagsystem()
-                ?: Fagsystem.Dagpenger
+                ?: Fagsystem.DAGPENGER
 
         val utbetalingsoppdrag =
             Utbetalingsoppdrag(
