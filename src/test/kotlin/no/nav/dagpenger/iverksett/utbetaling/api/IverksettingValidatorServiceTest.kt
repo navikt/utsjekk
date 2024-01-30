@@ -96,7 +96,9 @@ class IverksettingValidatorServiceTest {
         val beregnetUtbetalingsoppdrag = beregnUtbetalingsoppdrag(forrigeIverksetting)
         val forrigeIverksettingsresultat =
             Iverksettingsresultat(
+                fagsystem = forrigeIverksetting.fagsak.stønadstype.tilFagsystem(),
                 behandlingId = forrigeIverksetting.behandlingId.somUUID,
+                iverksettingId = forrigeIverksetting.behandling.iverksettingId,
                 tilkjentYtelseForUtbetaling =
                     forrigeIverksetting.vedtak.tilkjentYtelse.copy(
                         utbetalingsoppdrag = beregnetUtbetalingsoppdrag.utbetalingsoppdrag,

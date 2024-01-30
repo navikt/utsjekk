@@ -52,7 +52,11 @@ class IverksettingService(
             ),
         )
 
-        iverksettingsresultatService.opprettTomtResultat(iverksetting.behandling.behandlingId.somUUID)
+        iverksettingsresultatService.opprettTomtResultat(
+            fagsystem = iverksetting.fagsak.stønadstype.tilFagsystem(),
+            behandlingId = iverksetting.behandling.behandlingId.somUUID,
+            iverksettingId = iverksetting.behandling.iverksettingId,
+        )
 
         taskService.save(
             Task(

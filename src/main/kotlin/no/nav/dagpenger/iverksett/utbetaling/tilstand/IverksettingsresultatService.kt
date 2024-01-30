@@ -3,6 +3,7 @@ package no.nav.dagpenger.iverksett.utbetaling.tilstand
 import no.nav.dagpenger.iverksett.utbetaling.domene.Iverksettingsresultat
 import no.nav.dagpenger.iverksett.utbetaling.domene.OppdragResultat
 import no.nav.dagpenger.iverksett.utbetaling.domene.TilkjentYtelse
+import no.nav.dagpenger.kontrakter.felles.Fagsystem
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
@@ -10,8 +11,12 @@ import java.util.UUID
 
 @Service
 class IverksettingsresultatService(private val iverksettingsresultatRepository: IverksettingsresultatRepository) {
-    fun opprettTomtResultat(behandlingId: UUID) {
-        iverksettingsresultatRepository.insert(Iverksettingsresultat(behandlingId))
+    fun opprettTomtResultat(
+        fagsystem: Fagsystem,
+        behandlingId: UUID,
+        iverksettingId: String? = null,
+    ) {
+        iverksettingsresultatRepository.insert(Iverksettingsresultat(fagsystem, behandlingId, iverksettingId))
     }
 
     fun oppdaterTilkjentYtelseForUtbetaling(

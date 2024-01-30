@@ -7,6 +7,7 @@ import no.nav.dagpenger.iverksett.utbetaling.domene.OppdragResultat
 import no.nav.dagpenger.iverksett.utbetaling.util.IverksettResultatMockBuilder
 import no.nav.dagpenger.iverksett.utbetaling.util.opprettTilkjentYtelse
 import no.nav.dagpenger.iverksett.util.mockFeatureToggleService
+import no.nav.dagpenger.kontrakter.felles.Fagsystem
 import no.nav.dagpenger.kontrakter.iverksett.IverksettStatus
 import no.nav.dagpenger.kontrakter.oppdrag.OppdragStatus
 import no.nav.familie.prosessering.internal.TaskService
@@ -35,7 +36,7 @@ internal class IverksettingServiceTest {
         val tilkjentYtelse = opprettTilkjentYtelse(behandlingsId)
         every { iverksettingsresultatService.hentIverksettResultat(behandlingsId) } returns
             IverksettResultatMockBuilder.Builder()
-                .build(behandlingsId, tilkjentYtelse)
+                .build(Fagsystem.DAGPENGER, behandlingsId, tilkjentYtelse)
 
         val status = iverksettStatusService.utledStatus(behandlingsId)
         assertThat(status).isEqualTo(IverksettStatus.SENDT_TIL_OPPDRAG)
@@ -48,7 +49,7 @@ internal class IverksettingServiceTest {
         every { iverksettingsresultatService.hentIverksettResultat(behandlingsId) } returns
             IverksettResultatMockBuilder.Builder()
                 .oppdragResultat(OppdragResultat(OppdragStatus.KVITTERT_FUNKSJONELL_FEIL))
-                .build(behandlingsId, tilkjentYtelse)
+                .build(Fagsystem.DAGPENGER, behandlingsId, tilkjentYtelse)
 
         val status = iverksettStatusService.utledStatus(behandlingsId)
         assertThat(status).isEqualTo(IverksettStatus.FEILET_MOT_OPPDRAG)
@@ -61,7 +62,7 @@ internal class IverksettingServiceTest {
         every { iverksettingsresultatService.hentIverksettResultat(behandlingsId) } returns
             IverksettResultatMockBuilder.Builder()
                 .oppdragResultat(OppdragResultat(OppdragStatus.KVITTERT_OK))
-                .build(behandlingsId, tilkjentYtelse)
+                .build(Fagsystem.DAGPENGER, behandlingsId, tilkjentYtelse)
 
         val status = iverksettStatusService.utledStatus(behandlingsId)
         assertThat(status).isEqualTo(IverksettStatus.OK)

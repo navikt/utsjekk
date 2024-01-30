@@ -2,6 +2,7 @@ package no.nav.dagpenger.iverksett.utbetaling.util
 
 import no.nav.dagpenger.iverksett.utbetaling.domene.*
 import no.nav.dagpenger.kontrakter.felles.BrukersNavKontor
+import no.nav.dagpenger.kontrakter.felles.Fagsystem
 import no.nav.dagpenger.kontrakter.felles.GeneriskId
 import no.nav.dagpenger.kontrakter.felles.GeneriskIdSomUUID
 import no.nav.dagpenger.kontrakter.felles.Personident
@@ -162,10 +163,14 @@ class IverksettResultatMockBuilder {
         fun oppdragResultat(oppdragResultat: OppdragResultat) = apply { this.oppdragResultat = oppdragResultat }
 
         fun build(
+            fagsystem: Fagsystem,
             behandlingId: UUID,
             tilkjentYtelse: TilkjentYtelse?,
+            iverksettingId: String? = null,
         ) = Iverksettingsresultat(
+            fagsystem,
             behandlingId,
+            iverksettingId,
             tilkjentYtelse,
             oppdragResultat,
         )

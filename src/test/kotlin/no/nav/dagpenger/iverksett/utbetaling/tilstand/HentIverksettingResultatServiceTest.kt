@@ -5,6 +5,7 @@ import no.nav.dagpenger.iverksett.utbetaling.domene.OppdragResultat
 import no.nav.dagpenger.iverksett.utbetaling.domene.TilkjentYtelse
 import no.nav.dagpenger.iverksett.utbetaling.util.IverksettResultatMockBuilder
 import no.nav.dagpenger.iverksett.utbetaling.util.opprettTilkjentYtelse
+import no.nav.dagpenger.kontrakter.felles.Fagsystem
 import no.nav.dagpenger.kontrakter.oppdrag.OppdragStatus
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
@@ -21,7 +22,7 @@ internal class HentIverksettingResultatServiceTest : ServerTest() {
 
     @BeforeEach
     fun beforeEach() {
-        iverksettingsresultatService.opprettTomtResultat(behandlingId)
+        iverksettingsresultatService.opprettTomtResultat(Fagsystem.DAGPENGER, behandlingId)
         iverksettingsresultatService.oppdaterTilkjentYtelseForUtbetaling(behandlingId, tilkjentYtelse)
     }
 
@@ -42,7 +43,7 @@ internal class HentIverksettingResultatServiceTest : ServerTest() {
         val resultat =
             IverksettResultatMockBuilder.Builder()
                 .oppdragResultat(OppdragResultat(OppdragStatus.KVITTERT_OK))
-                .build(behandlingId, tilkjentYtelse)
+                .build(Fagsystem.DAGPENGER, behandlingId, tilkjentYtelse)
         iverksettingsresultatService.oppdaterTilkjentYtelseForUtbetaling(behandlingId, tilkjentYtelse)
         iverksettingsresultatService.oppdaterOppdragResultat(behandlingId, resultat.oppdragResultat!!)
 

@@ -3,6 +3,7 @@ package no.nav.dagpenger.iverksett.utbetaling.tilstand
 import no.nav.dagpenger.iverksett.utbetaling.domene.Iverksettingsresultat
 import no.nav.dagpenger.iverksett.utbetaling.domene.OppdragResultat
 import no.nav.dagpenger.iverksett.utbetaling.domene.TilkjentYtelse
+import no.nav.dagpenger.kontrakter.felles.Fagsystem
 import no.nav.dagpenger.kontrakter.felles.objectMapper
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.jdbc.core.RowMapper
@@ -13,10 +14,12 @@ import java.util.UUID
 @Repository
 class IverksettingsresultatRepository(private val jdbcTemplate: JdbcTemplate) {
     fun insert(iverksettingsresultat: Iverksettingsresultat): Iverksettingsresultat {
-        val sql = "insert into iverksettingsresultat (behandling_id, tilkjentytelseforutbetaling) values (?,to_json(?::json))"
+        val sql = "insert into iverksettingsresultat (fagsystem, behandling_id, iverksetting_id, tilkjentytelseforutbetaling) values (?,?,?,to_json(?::json))"
         jdbcTemplate.update(
             sql,
+            iverksettingsresultat.fagsystem.name,
             iverksettingsresultat.behandlingId,
+            iverksettingsresultat.iverksettingId,
             objectMapper.writeValueAsString(iverksettingsresultat.tilkjentYtelseForUtbetaling),
         )
         return iverksettingsresultat
@@ -59,7 +62,9 @@ internal class IverksettingsresultatRowMapper : RowMapper<Iverksettingsresultat>
         rowNum: Int,
     ): Iverksettingsresultat {
         return Iverksettingsresultat(
+            fagsystem = Fagsystem.valueOf(resultSet.getString("fagsystem")),
             behandlingId = UUID.fromString(resultSet.getString("behandling_id")),
+            iverksettingId = resultSet.getString("iverksetting_id"),
             tilkjentYtelseForUtbetaling =
                 resultSet.getString("tilkjentytelseforutbetaling")?.let {
                     objectMapper.readValue(it, TilkjentYtelse::class.java)
