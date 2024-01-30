@@ -2,7 +2,16 @@ package no.nav.dagpenger.iverksett.utbetaling.task
 
 import no.nav.dagpenger.iverksett.felles.oppdrag.OppdragClient
 import no.nav.dagpenger.iverksett.felles.opprettNesteTask
-import no.nav.dagpenger.iverksett.utbetaling.domene.*
+import no.nav.dagpenger.iverksett.utbetaling.domene.AndelTilkjentYtelse
+import no.nav.dagpenger.iverksett.utbetaling.domene.Iverksetting
+import no.nav.dagpenger.iverksett.utbetaling.domene.Iverksettingsresultat
+import no.nav.dagpenger.iverksett.utbetaling.domene.Stønadsdata
+import no.nav.dagpenger.iverksett.utbetaling.domene.TilkjentYtelse
+import no.nav.dagpenger.iverksett.utbetaling.domene.behandlingId
+import no.nav.dagpenger.iverksett.utbetaling.domene.lagAndelData
+import no.nav.dagpenger.iverksett.utbetaling.domene.personident
+import no.nav.dagpenger.iverksett.utbetaling.domene.sakId
+import no.nav.dagpenger.iverksett.utbetaling.domene.tilAndelData
 import no.nav.dagpenger.iverksett.utbetaling.tilstand.IverksettingService
 import no.nav.dagpenger.iverksett.utbetaling.tilstand.IverksettingsresultatService
 import no.nav.dagpenger.iverksett.utbetaling.utbetalingsoppdrag.Utbetalingsgenerator
@@ -36,8 +45,15 @@ class IverksettMotOppdragTask(
     override fun doTask(task: Task) {
         val payload = objectMapper.readValue(task.payload, TaskPayload::class.java)
         val iverksett =
-            iverksettingService.hentIverksetting(fagsystem = payload.fagsystem, behandlingId = payload.behandlingId.somUUID, iverksettingId = payload.iverksettingId)
-                ?: error("Fant ikke iverksetting for fagsystem ${payload.fagsystem}, behandling ${payload.behandlingId.somString} og iverksettingId ${payload.iverksettingId}")
+            iverksettingService.hentIverksetting(
+                fagsystem = payload.fagsystem,
+                behandlingId = payload.behandlingId.somUUID,
+                iverksettingId = payload.iverksettingId,
+            )
+                ?: error(
+                    "Fant ikke iverksetting for fagsystem ${payload.fagsystem}, behandling ${payload.behandlingId.somString}" +
+                        " og iverksettingId ${payload.iverksettingId}",
+                )
 
         val forrigeIverksettResultat =
             iverksett.behandling.forrigeBehandlingId?.let {
@@ -49,9 +65,9 @@ class IverksettMotOppdragTask(
     }
 
     private fun lagOgSendUtbetalingsoppdragOgOppdaterTilkjentYtelse(
-        iverksetting: Iverksetting,
-        forrigeIverksettingsresultat: Iverksettingsresultat?,
-        behandlingId: GeneriskId,
+            iverksetting: Iverksetting,
+            forrigeIverksettingsresultat: Iverksettingsresultat?,
+            behandlingId: GeneriskId,
     ) {
         val behandlingsinformasjon =
             Behandlingsinformasjon(
@@ -91,10 +107,10 @@ class IverksettMotOppdragTask(
     }
 
     private fun oppdaterTilkjentYtelseOgIverksettOppdrag(
-        tilkjentYtelse: TilkjentYtelse,
-        beregnetUtbetalingsoppdrag: BeregnetUtbetalingsoppdrag,
-        forrigeIverksettingsresultat: Iverksettingsresultat?,
-        behandlingId: GeneriskId,
+            tilkjentYtelse: TilkjentYtelse,
+            beregnetUtbetalingsoppdrag: BeregnetUtbetalingsoppdrag,
+            forrigeIverksettingsresultat: Iverksettingsresultat?,
+            behandlingId: GeneriskId,
     ) {
         val nyeAndelerMedPeriodeId =
             tilkjentYtelse.andelerTilkjentYtelse.map { andel ->
@@ -134,8 +150,8 @@ class IverksettMotOppdragTask(
     }
 
     private fun lagTilkjentYtelseMedSisteAndelPerKjede(
-        tilkjentYtelse: TilkjentYtelse,
-        forrigeSisteAndelPerKjede: Map<Stønadsdata, AndelTilkjentYtelse>,
+            tilkjentYtelse: TilkjentYtelse,
+            forrigeSisteAndelPerKjede: Map<Stønadsdata, AndelTilkjentYtelse>,
     ): TilkjentYtelse {
         val beregnetSisteAndePerKjede =
             tilkjentYtelse.andelerTilkjentYtelse.groupBy {
