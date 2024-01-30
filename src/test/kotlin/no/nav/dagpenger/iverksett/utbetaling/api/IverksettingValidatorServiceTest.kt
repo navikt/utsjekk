@@ -107,7 +107,11 @@ class IverksettingValidatorServiceTest {
             )
 
         every {
-            iverksettingsresultatServiceMock.hentIverksettResultat(forrigeIverksettingsresultat.behandlingId)
+            iverksettingsresultatServiceMock.hentIverksettResultat(
+                forrigeIverksettingsresultat.fagsystem,
+                forrigeIverksettingsresultat.behandlingId,
+                forrigeIverksettingsresultat.iverksettingId,
+            )
         } returns forrigeIverksettingsresultat
 
         assertApiFeil(HttpStatus.CONFLICT) {

@@ -34,11 +34,11 @@ internal class IverksettingServiceTest {
     fun `la IverksettResultat ha felt kun satt for tilkjent ytelse, forvent status SENDT_TIL_OPPDRAG`() {
         val behandlingsId = UUID.randomUUID()
         val tilkjentYtelse = opprettTilkjentYtelse(behandlingsId)
-        every { iverksettingsresultatService.hentIverksettResultat(behandlingsId) } returns
+        every { iverksettingsresultatService.hentIverksettResultat(any(), behandlingsId, any()) } returns
             IverksettResultatMockBuilder.Builder()
                 .build(Fagsystem.DAGPENGER, behandlingsId, tilkjentYtelse)
 
-        val status = iverksettStatusService.utledStatus(behandlingsId)
+        val status = iverksettStatusService.utledStatus(Fagsystem.DAGPENGER, behandlingsId)
         assertThat(status).isEqualTo(IverksettStatus.SENDT_TIL_OPPDRAG)
     }
 
@@ -46,12 +46,12 @@ internal class IverksettingServiceTest {
     fun `la IverksettResultat ha tilkjent ytelse, oppdrag, og oppdragsresultat satt, forvent status FEILET_MOT_OPPDRAG`() {
         val behandlingsId = UUID.randomUUID()
         val tilkjentYtelse = opprettTilkjentYtelse(behandlingsId)
-        every { iverksettingsresultatService.hentIverksettResultat(behandlingsId) } returns
+        every { iverksettingsresultatService.hentIverksettResultat(any(), behandlingsId, any()) } returns
             IverksettResultatMockBuilder.Builder()
                 .oppdragResultat(OppdragResultat(OppdragStatus.KVITTERT_FUNKSJONELL_FEIL))
                 .build(Fagsystem.DAGPENGER, behandlingsId, tilkjentYtelse)
 
-        val status = iverksettStatusService.utledStatus(behandlingsId)
+        val status = iverksettStatusService.utledStatus(Fagsystem.DAGPENGER, behandlingsId)
         assertThat(status).isEqualTo(IverksettStatus.FEILET_MOT_OPPDRAG)
     }
 
@@ -59,12 +59,12 @@ internal class IverksettingServiceTest {
     fun `la IverksettResultat ha felt satt for tilkjent ytelse, oppdrag med kvittert_ok, forvent status OK`() {
         val behandlingsId = UUID.randomUUID()
         val tilkjentYtelse = opprettTilkjentYtelse(behandlingsId)
-        every { iverksettingsresultatService.hentIverksettResultat(behandlingsId) } returns
+        every { iverksettingsresultatService.hentIverksettResultat(any(), behandlingsId, any()) } returns
             IverksettResultatMockBuilder.Builder()
                 .oppdragResultat(OppdragResultat(OppdragStatus.KVITTERT_OK))
                 .build(Fagsystem.DAGPENGER, behandlingsId, tilkjentYtelse)
 
-        val status = iverksettStatusService.utledStatus(behandlingsId)
+        val status = iverksettStatusService.utledStatus(Fagsystem.DAGPENGER, behandlingsId)
         assertThat(status).isEqualTo(IverksettStatus.OK)
     }
 }

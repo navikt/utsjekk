@@ -105,8 +105,17 @@ class IverksettingService(
 
     private fun førsteHovedflytTask() = hovedflyt().first().type
 
-    fun utledStatus(behandlingId: UUID): IverksettStatus? {
-        val iverksettResultat = iverksettingsresultatService.hentIverksettResultat(behandlingId)
+    fun utledStatus(
+        fagsystem: Fagsystem,
+        behandlingId: UUID,
+        iverksettingId: String? = null,
+    ): IverksettStatus? {
+        val iverksettResultat =
+            iverksettingsresultatService.hentIverksettResultat(
+                fagsystem = fagsystem,
+                behandlingId = behandlingId,
+                iverksettingId = iverksettingId,
+            )
         return iverksettResultat?.let {
             it.oppdragResultat?.let { oppdragResultat ->
                 return when (oppdragResultat.oppdragStatus) {
@@ -129,6 +138,7 @@ class IverksettingService(
         stønadstype: StønadType,
         personident: String,
         behandlingId: GeneriskId,
+        iverksettingId: String? = null,
     ) {
         val oppdragId =
             OppdragId(
@@ -144,8 +154,10 @@ class IverksettingService(
         }
 
         iverksettingsresultatService.oppdaterOppdragResultat(
+            fagsystem = stønadstype.tilFagsystem(),
             behandlingId = behandlingId.somUUID,
-            OppdragResultat(oppdragStatus = status),
+            iverksettingId = iverksettingId,
+            oppdragResultat = OppdragResultat(oppdragStatus = status),
         )
     }
 

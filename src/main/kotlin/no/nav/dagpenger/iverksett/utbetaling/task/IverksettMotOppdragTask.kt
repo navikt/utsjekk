@@ -17,6 +17,7 @@ import no.nav.dagpenger.iverksett.utbetaling.tilstand.IverksettingsresultatServi
 import no.nav.dagpenger.iverksett.utbetaling.utbetalingsoppdrag.Utbetalingsgenerator
 import no.nav.dagpenger.iverksett.utbetaling.utbetalingsoppdrag.domene.Behandlingsinformasjon
 import no.nav.dagpenger.iverksett.utbetaling.utbetalingsoppdrag.domene.BeregnetUtbetalingsoppdrag
+import no.nav.dagpenger.kontrakter.felles.Fagsystem
 import no.nav.dagpenger.kontrakter.felles.GeneriskId
 import no.nav.dagpenger.kontrakter.felles.objectMapper
 import no.nav.dagpenger.kontrakter.felles.somString
@@ -57,7 +58,11 @@ class IverksettMotOppdragTask(
 
         val forrigeIverksettResultat =
             iverksett.behandling.forrigeBehandlingId?.let {
-                iverksettingsresultatService.hentIverksettResultat(it.somUUID)
+                iverksettingsresultatService.hentIverksettResultat(
+                    fagsystem = iverksett.fagsak.stønadstype.tilFagsystem(),
+                    behandlingId = it.somUUID,
+                    iverksettingId = iverksett.behandling.forrigeIverksettingId,
+                )
                     ?: error("Kunne ikke finne iverksettresultat for behandlingId=${it.somString}")
             }
 
@@ -65,9 +70,9 @@ class IverksettMotOppdragTask(
     }
 
     private fun lagOgSendUtbetalingsoppdragOgOppdaterTilkjentYtelse(
-            iverksetting: Iverksetting,
-            forrigeIverksettingsresultat: Iverksettingsresultat?,
-            behandlingId: GeneriskId,
+        iverksetting: Iverksetting,
+        forrigeIverksettingsresultat: Iverksettingsresultat?,
+        behandlingId: GeneriskId,
     ) {
         val behandlingsinformasjon =
             Behandlingsinformasjon(
@@ -96,10 +101,12 @@ class IverksettMotOppdragTask(
 
         if (beregnetUtbetalingsoppdrag.utbetalingsoppdrag.utbetalingsperiode.isNotEmpty()) {
             oppdaterTilkjentYtelseOgIverksettOppdrag(
-                iverksetting.vedtak.tilkjentYtelse,
-                beregnetUtbetalingsoppdrag,
-                forrigeIverksettingsresultat,
-                behandlingId,
+                tilkjentYtelse = iverksetting.vedtak.tilkjentYtelse,
+                beregnetUtbetalingsoppdrag = beregnetUtbetalingsoppdrag,
+                forrigeIverksettingsresultat = forrigeIverksettingsresultat,
+                behandlingId = behandlingId,
+                fagsystem = iverksetting.fagsak.stønadstype.tilFagsystem(),
+                iverksettingId = iverksetting.behandling.iverksettingId,
             )
         } else {
             log.warn("Iverksetter ikke noe mot oppdrag. Ikke utbetalingsoppdrag. behandlingId=${behandlingId.somString}")
@@ -107,10 +114,12 @@ class IverksettMotOppdragTask(
     }
 
     private fun oppdaterTilkjentYtelseOgIverksettOppdrag(
-            tilkjentYtelse: TilkjentYtelse,
-            beregnetUtbetalingsoppdrag: BeregnetUtbetalingsoppdrag,
-            forrigeIverksettingsresultat: Iverksettingsresultat?,
-            behandlingId: GeneriskId,
+        tilkjentYtelse: TilkjentYtelse,
+        beregnetUtbetalingsoppdrag: BeregnetUtbetalingsoppdrag,
+        forrigeIverksettingsresultat: Iverksettingsresultat?,
+        behandlingId: GeneriskId,
+        fagsystem: Fagsystem,
+        iverksettingId: String? = null,
     ) {
         val nyeAndelerMedPeriodeId =
             tilkjentYtelse.andelerTilkjentYtelse.map { andel ->
@@ -136,7 +145,9 @@ class IverksettMotOppdragTask(
             lagTilkjentYtelseMedSisteAndelPerKjede(nyTilkjentYtelse, forrigeSisteAndelPerKjede)
 
         iverksettingsresultatService.oppdaterTilkjentYtelseForUtbetaling(
+            fagsystem = fagsystem,
             behandlingId = behandlingId.somUUID,
+            iverksettingId = iverksettingId,
             tilkjentYtelseForUtbetaling = nyTilkjentYtelseMedSisteAndelIKjede,
         )
 
@@ -150,8 +161,8 @@ class IverksettMotOppdragTask(
     }
 
     private fun lagTilkjentYtelseMedSisteAndelPerKjede(
-            tilkjentYtelse: TilkjentYtelse,
-            forrigeSisteAndelPerKjede: Map<Stønadsdata, AndelTilkjentYtelse>,
+        tilkjentYtelse: TilkjentYtelse,
+        forrigeSisteAndelPerKjede: Map<Stønadsdata, AndelTilkjentYtelse>,
     ): TilkjentYtelse {
         val beregnetSisteAndePerKjede =
             tilkjentYtelse.andelerTilkjentYtelse.groupBy {

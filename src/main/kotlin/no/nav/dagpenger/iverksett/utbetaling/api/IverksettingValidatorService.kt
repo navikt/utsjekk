@@ -50,7 +50,12 @@ class IverksettingValidatorService(
 
     internal fun validerAtForrigeBehandlingErFerdigIverksattMotOppdrag(iverksetting: Iverksetting?) {
         iverksetting?.behandling?.forrigeBehandlingId?.apply {
-            val forrigeResultat = iverksettingsresultatService.hentIverksettResultat(this.somUUID)
+            val forrigeResultat =
+                iverksettingsresultatService.hentIverksettResultat(
+                    fagsystem = iverksetting.fagsak.stønadstype.tilFagsystem(),
+                    behandlingId = this.somUUID,
+                    iverksettingId = iverksetting.behandling.forrigeIverksettingId,
+                )
 
             val forrigeErUtenUtbetalingsperioder =
                 forrigeResultat?.tilkjentYtelseForUtbetaling?.utbetalingsoppdrag?.utbetalingsperiode?.isEmpty() ?: true

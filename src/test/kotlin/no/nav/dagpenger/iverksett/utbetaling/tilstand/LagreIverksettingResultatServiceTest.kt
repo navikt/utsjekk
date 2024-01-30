@@ -24,12 +24,12 @@ internal class LagreIverksettingResultatServiceTest : ServerTest() {
     @Test
     fun `oppdater tilkjent ytelse, forvent ingen unntak`() {
         val tilkjentYtelse = opprettTilkjentYtelse(behandlingsId)
-        tilstandRepositoryService.oppdaterTilkjentYtelseForUtbetaling(behandlingsId, tilkjentYtelse)
+        tilstandRepositoryService.oppdaterTilkjentYtelseForUtbetaling(Fagsystem.DAGPENGER, behandlingsId, tilkjentYtelse)
     }
 
     @Test
     fun `oppdater oppdrag, forvent ingen unntak`() {
         val oppdragResultat = OppdragResultat(oppdragStatus = OppdragStatus.KVITTERT_OK)
-        tilstandRepositoryService.oppdaterOppdragResultat(behandlingsId, oppdragResultat)
+        tilstandRepositoryService.oppdaterOppdragResultat(Fagsystem.DAGPENGER, behandlingsId, oppdragResultat)
     }
 }

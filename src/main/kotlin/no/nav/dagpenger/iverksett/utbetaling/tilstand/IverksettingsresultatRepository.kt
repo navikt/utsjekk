@@ -26,32 +26,73 @@ class IverksettingsresultatRepository(private val jdbcTemplate: JdbcTemplate) {
     }
 
     fun update(iverksettingsresultat: Iverksettingsresultat) {
-        val sql = "update iverksettingsresultat set tilkjentytelseforutbetaling = to_json(?::json), oppdragresultat = to_json(?::json) where behandling_id = ?"
-        jdbcTemplate.update(
-            sql,
-            objectMapper.writeValueAsString(iverksettingsresultat.tilkjentYtelseForUtbetaling),
-            objectMapper.writeValueAsString(iverksettingsresultat.oppdragResultat),
-            iverksettingsresultat.behandlingId,
-        )
-    }
-
-    fun findByIdOrNull(behandlingId: UUID): Iverksettingsresultat? {
-        val sql = "select * from iverksettingsresultat where behandling_id = ?"
-        val resultat = jdbcTemplate.query(sql, IverksettingsresultatRowMapper(), behandlingId)
-        return when (resultat.size) {
-            0 -> null
-            1 -> resultat.first()
-            else -> throw IllegalStateException("Fant flere iverksettingsresultat for behandling $behandlingId")
+        if (iverksettingsresultat.iverksettingId != null) {
+            val sql = "update iverksettingsresultat set tilkjentytelseforutbetaling = to_json(?::json), oppdragresultat = to_json(?::json) where behandling_id = ? and fagsystem = ? and iverksetting_id = ?"
+            jdbcTemplate.update(
+                sql,
+                objectMapper.writeValueAsString(iverksettingsresultat.tilkjentYtelseForUtbetaling),
+                objectMapper.writeValueAsString(iverksettingsresultat.oppdragResultat),
+                iverksettingsresultat.behandlingId,
+                iverksettingsresultat.fagsystem.name,
+                iverksettingsresultat.iverksettingId,
+            )
+        } else {
+            val sql = "update iverksettingsresultat set tilkjentytelseforutbetaling = to_json(?::json), oppdragresultat = to_json(?::json) where behandling_id = ? and fagsystem = ? and iverksetting_id is null"
+            jdbcTemplate.update(
+                sql,
+                objectMapper.writeValueAsString(iverksettingsresultat.tilkjentYtelseForUtbetaling),
+                objectMapper.writeValueAsString(iverksettingsresultat.oppdragResultat),
+                iverksettingsresultat.behandlingId,
+                iverksettingsresultat.fagsystem.name,
+            )
         }
     }
 
-    fun findByIdOrThrow(behandlingId: UUID): Iverksettingsresultat {
-        val sql = "select * from iverksettingsresultat where behandling_id = ?"
-        val resultat = jdbcTemplate.query(sql, IverksettingsresultatRowMapper(), behandlingId)
+    fun findByIdOrNull(
+        fagsystem: Fagsystem,
+        behandlingId: UUID,
+        iverksettingId: String? = null,
+    ): Iverksettingsresultat? {
+        val resultat =
+            hentIverksettingsresultater(iverksettingId, fagsystem, behandlingId)
         return when (resultat.size) {
-            0 -> throw NoSuchElementException("Fant ingen iverksettingsresultat for behandling $behandlingId")
+            0 -> null
             1 -> resultat.first()
-            else -> throw IllegalStateException("Fant flere iverksettingsresultat for behandling $behandlingId")
+            else -> throw IllegalStateException(
+                "Fant flere iverksettingsresultat for fagsystem $fagsystem, behandling $behandlingId og iverksetting $iverksettingId",
+            )
+        }
+    }
+
+    fun findByIdOrThrow(
+        fagsystem: Fagsystem,
+        behandlingId: UUID,
+        iverksettingId: String? = null,
+    ): Iverksettingsresultat {
+        val resultat =
+            hentIverksettingsresultater(iverksettingId, fagsystem, behandlingId)
+        return when (resultat.size) {
+            0 -> throw NoSuchElementException(
+                "Fant ingen iverksettingsresultat for fagsystem $fagsystem, behandling $behandlingId og iverksetting $iverksettingId",
+            )
+            1 -> resultat.first()
+            else -> throw IllegalStateException(
+                "Fant flere iverksettingsresultat for fagsystem $fagsystem, behandling $behandlingId og iverksetting $iverksettingId",
+            )
+        }
+    }
+
+    private fun hentIverksettingsresultater(
+        iverksettingId: String?,
+        fagsystem: Fagsystem,
+        behandlingId: UUID,
+    ): List<Iverksettingsresultat> {
+        return if (iverksettingId != null) {
+            val sql = "select * from iverksettingsresultat where fagsystem = ? and behandling_id = ? and iverksetting_id = ?"
+            jdbcTemplate.query(sql, IverksettingsresultatRowMapper(), fagsystem.name, behandlingId, iverksettingId)
+        } else {
+            val sql = "select * from iverksettingsresultat where fagsystem = ? and behandling_id = ? and iverksetting_id is null"
+            jdbcTemplate.query(sql, IverksettingsresultatRowMapper(), fagsystem.name, behandlingId)
         }
     }
 }

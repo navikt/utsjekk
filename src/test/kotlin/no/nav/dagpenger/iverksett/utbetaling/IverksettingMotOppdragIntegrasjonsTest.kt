@@ -49,7 +49,12 @@ class IverksettingMotOppdragIntegrasjonsTest : ServerTest() {
 
     @Test
     internal fun `start iverksetting, forvent at andelerTilkjentYtelse er lik 1 og har periodeId 1`() {
-        val tilkjentYtelse = iverksettingsresultatService.hentTilkjentYtelse(behandlingid)!!
+        val tilkjentYtelse =
+            iverksettingsresultatService.hentTilkjentYtelse(
+                iverksett.fagsak.stønadstype.tilFagsystem(),
+                behandlingid,
+                iverksett.behandling.iverksettingId,
+            )!!
         assertThat(tilkjentYtelse.andelerTilkjentYtelse).hasSize(1)
         assertThat(tilkjentYtelse.andelerTilkjentYtelse.first().periodeId).isEqualTo(0)
     }
@@ -75,7 +80,12 @@ class IverksettingMotOppdragIntegrasjonsTest : ServerTest() {
         iverksettingService.startIverksetting(iverksettRevurdering)
         iverksettMotOppdrag()
 
-        val tilkjentYtelse = iverksettingsresultatService.hentTilkjentYtelse(behandlingIdRevurdering)!!
+        val tilkjentYtelse =
+            iverksettingsresultatService.hentTilkjentYtelse(
+                iverksettRevurdering.fagsak.stønadstype.tilFagsystem(),
+                behandlingIdRevurdering,
+                iverksettRevurdering.behandling.iverksettingId,
+            )!!
         assertThat(tilkjentYtelse.andelerTilkjentYtelse).hasSize(2)
         assertThat(tilkjentYtelse.andelerTilkjentYtelse.first().periodeId).isEqualTo(0)
         assertThat(tilkjentYtelse.andelerTilkjentYtelse[1].periodeId).isEqualTo(1)
@@ -106,7 +116,12 @@ class IverksettingMotOppdragIntegrasjonsTest : ServerTest() {
         iverksettingService.startIverksetting(iverksettRevurdering)
         iverksettMotOppdrag()
 
-        val tilkjentYtelse = iverksettingsresultatService.hentTilkjentYtelse(behandlingIdRevurdering)!!
+        val tilkjentYtelse =
+            iverksettingsresultatService.hentTilkjentYtelse(
+                iverksettRevurdering.fagsak.stønadstype.tilFagsystem(),
+                behandlingIdRevurdering,
+                iverksettRevurdering.behandling.iverksettingId,
+            )!!
         assertThat(tilkjentYtelse.andelerTilkjentYtelse).hasSize(2)
         assertThat(tilkjentYtelse.andelerTilkjentYtelse.first().periodeId).isEqualTo(1)
         assertThat(tilkjentYtelse.andelerTilkjentYtelse[1].periodeId).isEqualTo(2)
@@ -127,7 +142,12 @@ class IverksettingMotOppdragIntegrasjonsTest : ServerTest() {
         iverksettingService.startIverksetting(iverksettMedOpphør)
         iverksettMotOppdrag()
 
-        val tilkjentYtelse = iverksettingsresultatService.hentTilkjentYtelse(opphørBehandlingId)!!
+        val tilkjentYtelse =
+            iverksettingsresultatService.hentTilkjentYtelse(
+                iverksettMedOpphør.fagsak.stønadstype.tilFagsystem(),
+                opphørBehandlingId,
+                iverksettMedOpphør.behandling.iverksettingId,
+            )!!
         assertThat(tilkjentYtelse.andelerTilkjentYtelse).hasSize(0)
     }
 

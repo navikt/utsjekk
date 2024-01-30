@@ -20,27 +20,39 @@ class IverksettingsresultatService(private val iverksettingsresultatRepository: 
     }
 
     fun oppdaterTilkjentYtelseForUtbetaling(
+        fagsystem: Fagsystem,
         behandlingId: UUID,
         tilkjentYtelseForUtbetaling: TilkjentYtelse,
+        iverksettingId: String? = null,
     ) {
-        val iverksettResultat = iverksettingsresultatRepository.findByIdOrThrow(behandlingId)
+        val iverksettResultat = iverksettingsresultatRepository.findByIdOrThrow(fagsystem, behandlingId, iverksettingId)
         iverksettingsresultatRepository.update(iverksettResultat.copy(tilkjentYtelseForUtbetaling = tilkjentYtelseForUtbetaling))
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     fun oppdaterOppdragResultat(
+        fagsystem: Fagsystem,
         behandlingId: UUID,
         oppdragResultat: OppdragResultat,
+        iverksettingId: String? = null,
     ) {
-        val iverksettResultat = iverksettingsresultatRepository.findByIdOrThrow(behandlingId)
+        val iverksettResultat = iverksettingsresultatRepository.findByIdOrThrow(fagsystem, behandlingId, iverksettingId)
         iverksettingsresultatRepository.update(iverksettResultat.copy(oppdragResultat = oppdragResultat))
     }
 
-    fun hentTilkjentYtelse(behandlingId: UUID): TilkjentYtelse? {
-        return iverksettingsresultatRepository.findByIdOrNull(behandlingId)?.tilkjentYtelseForUtbetaling
+    fun hentTilkjentYtelse(
+        fagsystem: Fagsystem,
+        behandlingId: UUID,
+        iverksettingId: String? = null,
+    ): TilkjentYtelse? {
+        return iverksettingsresultatRepository.findByIdOrNull(fagsystem, behandlingId, iverksettingId)?.tilkjentYtelseForUtbetaling
     }
 
-    fun hentIverksettResultat(behandlingId: UUID): Iverksettingsresultat? {
-        return iverksettingsresultatRepository.findByIdOrNull(behandlingId)
+    fun hentIverksettResultat(
+        fagsystem: Fagsystem,
+        behandlingId: UUID,
+        iverksettingId: String? = null,
+    ): Iverksettingsresultat? {
+        return iverksettingsresultatRepository.findByIdOrNull(fagsystem, behandlingId, iverksettingId)
     }
 }

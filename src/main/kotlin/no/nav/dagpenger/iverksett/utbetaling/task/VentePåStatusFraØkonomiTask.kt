@@ -37,7 +37,12 @@ class VentePåStatusFraØkonomiTask(
                 "Fant ikke iverksetting for fagsystem ${payload.fagsystem}, behandling ${payload.behandlingId.somString}" +
                     " og iverksettingId ${payload.iverksettingId}",
             )
-        val tilkjentYtelse = iverksettingsresultatService.hentTilkjentYtelse(payload.behandlingId.somUUID)
+        val tilkjentYtelse =
+            iverksettingsresultatService.hentTilkjentYtelse(
+                fagsystem = iverksett.fagsak.stønadstype.tilFagsystem(),
+                behandlingId = payload.behandlingId.somUUID,
+                iverksettingId = iverksett.behandling.iverksettingId,
+            )
 
         if (tilkjentYtelse.harIngenUtbetaling()) {
             logger.info(
@@ -51,6 +56,7 @@ class VentePåStatusFraØkonomiTask(
             stønadstype = iverksett.fagsak.stønadstype,
             personident = iverksett.søker.personident,
             behandlingId = payload.behandlingId,
+            iverksettingId = iverksett.behandling.iverksettingId,
         )
     }
 

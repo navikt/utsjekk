@@ -23,18 +23,18 @@ internal class HentIverksettingResultatServiceTest : ServerTest() {
     @BeforeEach
     fun beforeEach() {
         iverksettingsresultatService.opprettTomtResultat(Fagsystem.DAGPENGER, behandlingId)
-        iverksettingsresultatService.oppdaterTilkjentYtelseForUtbetaling(behandlingId, tilkjentYtelse)
+        iverksettingsresultatService.oppdaterTilkjentYtelseForUtbetaling(Fagsystem.DAGPENGER, behandlingId, tilkjentYtelse)
     }
 
     @Test
     fun `hent ekisterende tilkjent ytelse, forvent likhet og ingen unntak`() {
-        val hentetTilkjentYtelse = iverksettingsresultatService.hentTilkjentYtelse(behandlingId)
+        val hentetTilkjentYtelse = iverksettingsresultatService.hentTilkjentYtelse(Fagsystem.DAGPENGER, behandlingId)
         assertThat(hentetTilkjentYtelse).isEqualTo(tilkjentYtelse)
     }
 
     @Test
     fun `hent ikke-eksisterende tilstand, forvent nullverdi i retur og ingen unntak`() {
-        val hentetTilkjentYtelse = iverksettingsresultatService.hentTilkjentYtelse(UUID.randomUUID())
+        val hentetTilkjentYtelse = iverksettingsresultatService.hentTilkjentYtelse(Fagsystem.DAGPENGER, UUID.randomUUID())
         assertThat(hentetTilkjentYtelse).isEqualTo(null)
     }
 
@@ -44,10 +44,10 @@ internal class HentIverksettingResultatServiceTest : ServerTest() {
             IverksettResultatMockBuilder.Builder()
                 .oppdragResultat(OppdragResultat(OppdragStatus.KVITTERT_OK))
                 .build(Fagsystem.DAGPENGER, behandlingId, tilkjentYtelse)
-        iverksettingsresultatService.oppdaterTilkjentYtelseForUtbetaling(behandlingId, tilkjentYtelse)
-        iverksettingsresultatService.oppdaterOppdragResultat(behandlingId, resultat.oppdragResultat!!)
+        iverksettingsresultatService.oppdaterTilkjentYtelseForUtbetaling(Fagsystem.DAGPENGER, behandlingId, tilkjentYtelse)
+        iverksettingsresultatService.oppdaterOppdragResultat(Fagsystem.DAGPENGER, behandlingId, resultat.oppdragResultat!!)
 
-        val iverksettResultat = iverksettingsresultatService.hentIverksettResultat(behandlingId)
+        val iverksettResultat = iverksettingsresultatService.hentIverksettResultat(Fagsystem.DAGPENGER, behandlingId)
         assertThat(iverksettResultat).isEqualTo(resultat)
     }
 }

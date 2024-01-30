@@ -56,13 +56,13 @@ internal class IverksettingMotOppdragTaskTest {
                 sakId,
             ).toDomain()
         every { oppdragClient.iverksettOppdrag(capture(oppdragSlot)) } just Runs
-        every { iverksettingsresultatService.oppdaterTilkjentYtelseForUtbetaling(behandlingId.somUUID, any()) } returns Unit
-        every { iverksettingsresultatService.hentTilkjentYtelse(any<UUID>()) } returns null
+        every { iverksettingsresultatService.oppdaterTilkjentYtelseForUtbetaling(any(), behandlingId.somUUID, any()) } returns Unit
+        every { iverksettingsresultatService.hentTilkjentYtelse(any(), any<UUID>(), any()) } returns null
 
         iverksettMotOppdragTask.doTask(Task(IverksettMotOppdragTask.TYPE, taskPayload, Properties()))
 
         verify(exactly = 1) { oppdragClient.iverksettOppdrag(any()) }
-        verify(exactly = 1) { iverksettingsresultatService.oppdaterTilkjentYtelseForUtbetaling(behandlingId.somUUID, any()) }
+        verify(exactly = 1) { iverksettingsresultatService.oppdaterTilkjentYtelseForUtbetaling(any(), behandlingId.somUUID, any()) }
 
         assertThat(oppdragSlot.captured.fagsystem).isEqualTo(Fagsystem.DAGPENGER)
         assertThat(oppdragSlot.captured.kodeEndring).isEqualTo(Utbetalingsoppdrag.KodeEndring.NY)
@@ -73,13 +73,13 @@ internal class IverksettingMotOppdragTaskTest {
         val oppdragSlot = slot<Utbetalingsoppdrag>()
         every { iverksettingService.hentIverksetting(any(), any()) } returns opphørAvUtbetaling().toDomain()
         every { oppdragClient.iverksettOppdrag(capture(oppdragSlot)) } just Runs
-        every { iverksettingsresultatService.hentIverksettResultat(any()) } returns iverksettResultat()
-        every { iverksettingsresultatService.oppdaterTilkjentYtelseForUtbetaling(any(), any()) } just Runs
+        every { iverksettingsresultatService.hentIverksettResultat(any(), any(), any()) } returns iverksettResultat()
+        every { iverksettingsresultatService.oppdaterTilkjentYtelseForUtbetaling(any(), any(), any()) } just Runs
 
         iverksettMotOppdragTask.doTask(Task(IverksettMotOppdragTask.TYPE, taskPayload, Properties()))
 
         verify(exactly = 1) { oppdragClient.iverksettOppdrag(any()) }
-        verify(exactly = 1) { iverksettingsresultatService.oppdaterTilkjentYtelseForUtbetaling(behandlingId.somUUID, any()) }
+        verify(exactly = 1) { iverksettingsresultatService.oppdaterTilkjentYtelseForUtbetaling(any(), behandlingId.somUUID, any()) }
 
         assertEquals(Utbetalingsoppdrag.KodeEndring.ENDR, oppdragSlot.captured.kodeEndring)
         assertEquals(1, oppdragSlot.captured.utbetalingsperiode.size)

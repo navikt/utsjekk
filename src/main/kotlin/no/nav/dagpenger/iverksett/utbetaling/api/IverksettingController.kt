@@ -8,6 +8,7 @@ import no.nav.dagpenger.iverksett.utbetaling.api.IverksettDtoValidator.valider
 import no.nav.dagpenger.iverksett.utbetaling.api.IverksettTilleggsstønaderDtoValidator.valider
 import no.nav.dagpenger.iverksett.utbetaling.domene.transformer.toDomain
 import no.nav.dagpenger.iverksett.utbetaling.tilstand.IverksettingService
+import no.nav.dagpenger.kontrakter.felles.Fagsystem
 import no.nav.dagpenger.kontrakter.iverksett.IverksettDto
 import no.nav.dagpenger.kontrakter.iverksett.IverksettStatus
 import no.nav.security.token.support.core.api.ProtectedWithClaims
@@ -93,6 +94,7 @@ Det kjøres implisitt en konsistensavstemming av at nye utbetalinger stemmer ove
         return ResponseEntity.accepted().build()
     }
 
+    // TODO: Status-endepunktene må oppdateres slik at de finner fagsystem dynamisk. Se NAV-17991 på Favro
     @GetMapping("{behandlingId}/status", produces = ["application/json"])
     @Operation(summary = "Sjekk status på iverksetting med gitt behandlingId")
     @Tag(name = "Iverksetting")
@@ -101,7 +103,20 @@ Det kjøres implisitt en konsistensavstemming av at nye utbetalinger stemmer ove
     fun hentStatus(
         @PathVariable behandlingId: UUID,
     ): ResponseEntity<IverksettStatus> {
-        val status = iverksettingService.utledStatus(behandlingId)
+        val status = iverksettingService.utledStatus(Fagsystem.DAGPENGER, behandlingId)
+        return status?.let { ResponseEntity(status, HttpStatus.OK) } ?: ResponseEntity(null, HttpStatus.NOT_FOUND)
+    }
+
+    @GetMapping("{behandlingId}/{iverksettingId}/status", produces = ["application/json"])
+    @Operation(summary = "Sjekk status på iverksetting med gitt behandlingId og iverksettingId")
+    @Tag(name = "Iverksetting")
+    @ApiResponse(responseCode = "200", description = "Status returnert i body")
+    @ApiResponse(responseCode = "404", description = "Kunne ikke finne iverksetting")
+    fun hentStatus(
+        @PathVariable behandlingId: UUID,
+        @PathVariable iverksettingId: String,
+    ): ResponseEntity<IverksettStatus> {
+        val status = iverksettingService.utledStatus(Fagsystem.TILLEGGSSTØNADER, behandlingId, iverksettingId)
         return status?.let { ResponseEntity(status, HttpStatus.OK) } ?: ResponseEntity(null, HttpStatus.NOT_FOUND)
     }
 }
