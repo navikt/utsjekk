@@ -90,10 +90,14 @@ fun opprettTilkjentYtelse(
 fun behandlingsdetaljer(
     behandlingId: UUID = UUID.randomUUID(),
     forrigeBehandlingId: UUID? = null,
+    iverksettingId: String? = null,
+    forrigeIverksettingId: String? = null,
 ): Behandlingsdetaljer {
     return Behandlingsdetaljer(
         behandlingId = GeneriskIdSomUUID(behandlingId),
         forrigeBehandlingId = forrigeBehandlingId?.let { GeneriskIdSomUUID(it) },
+        iverksettingId = iverksettingId,
+        forrigeIverksettingId = forrigeIverksettingId,
     )
 }
 
@@ -139,11 +143,13 @@ fun opprettIverksett(
     forrigeBehandlingId: UUID? = null,
     andeler: List<AndelTilkjentYtelse> = listOf(opprettAndelTilkjentYtelse()),
     fagsakId: UUID = UUID.randomUUID(),
+    iverksettingId: String? = null,
+    forrigeIverksettingId: String? = null,
 ): Iverksetting {
     val stønadstype = andeler.firstOrNull()?.stønadsdata?.stønadstype ?: StønadTypeDagpenger.DAGPENGER_ARBEIDSSØKER_ORDINÆR
     return Iverksetting(
         fagsak = Fagsakdetaljer(fagsakId = GeneriskIdSomUUID(fagsakId), stønadstype = stønadstype),
-        behandling = behandlingsdetaljer(behandlingId, forrigeBehandlingId),
+        behandling = behandlingsdetaljer(behandlingId, forrigeBehandlingId, iverksettingId, forrigeIverksettingId),
         søker =
             Søker(
                 personident = "15507600333",
