@@ -107,6 +107,38 @@ internal class IverksettingServiceTest {
     }
 
     @Test
+    fun `hentForrigeIverksett skal hente korrekt iverksetting for iverksettingId på annen behandling`() {
+        val sakId = UUID.randomUUID()
+        val behandlingId1 = UUID.randomUUID()
+        val behandlingId2 = UUID.randomUUID()
+        val iverksettingId1 = "1"
+        val iverksettingId2 = "1"
+        val iverksetting1 = opprettIverksett(behandlingId = behandlingId1, fagsakId = sakId, iverksettingId = iverksettingId1)
+        val iverksetting2 =
+            opprettIverksett(
+                behandlingId = behandlingId2,
+                fagsakId = sakId,
+                iverksettingId = iverksettingId2,
+                forrigeBehandlingId = behandlingId1,
+                forrigeIverksettingId = iverksettingId1,
+            )
+
+        every {
+            iverksettingRepository.findByBehandlingAndIverksetting(behandlingId1, iverksettingId1)
+        } returns listOf(IverksettingEntitet(behandlingId1, iverksetting1))
+        every {
+            iverksettingRepository.findByBehandlingAndIverksetting(behandlingId2, iverksettingId2)
+        } returns listOf(IverksettingEntitet(behandlingId2, iverksetting2))
+
+        val forrigeIverksetting1 = iverksettingService.hentForrigeIverksett(iverksetting1)
+        val forrigeIverksetting2 = iverksettingService.hentForrigeIverksett(iverksetting2)
+
+        assertNull(forrigeIverksetting1)
+        assertNotNull(forrigeIverksetting2)
+        assertEquals(iverksetting1, forrigeIverksetting2)
+    }
+
+    @Test
     fun `hentIverksett skal hente korrekt iverksetting når flere fagsystem har samme behandlingId`() {
         val behandlingId = UUID.randomUUID()
         val iverksettingDagpenger =
