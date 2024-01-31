@@ -31,7 +31,7 @@
         <maven-surefire-plugin.version>3.2.5</maven-surefire-plugin.version>
         <mockk.version>1.13.9</mockk.version>
         <cucumber.version>7.15.0</cucumber.version>
-        <nav.security.token.version>3.2.0</nav.security.token.version>
+        <nav.security.token.version>4.1.0</nav.security.token.version>
         <unleash.version>9.2.0</unleash.version>
     </properties>
 
