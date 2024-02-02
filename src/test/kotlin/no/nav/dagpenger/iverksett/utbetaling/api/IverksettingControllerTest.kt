@@ -1,7 +1,6 @@
 package no.nav.dagpenger.iverksett.utbetaling.api
 
 import no.nav.dagpenger.iverksett.ServerTest
-import no.nav.dagpenger.iverksett.felles.http.advice.Ressurs
 import no.nav.dagpenger.iverksett.utbetaling.util.opprettIverksettDto
 import no.nav.dagpenger.iverksett.utbetaling.util.opprettIverksettTilleggsstønaderDto
 import no.nav.dagpenger.kontrakter.felles.GeneriskIdSomUUID
@@ -67,7 +66,7 @@ class IverksettingControllerTest : ServerTest() {
                     ),
             )
 
-        val responsRammevedtak: ResponseEntity<Ressurs<Nothing>> =
+        val responsRammevedtak: ResponseEntity<Unit> =
             restTemplate.exchange(
                 localhostUrl("/api/iverksetting"),
                 HttpMethod.POST,
