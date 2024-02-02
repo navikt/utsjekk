@@ -48,7 +48,7 @@ fun VedtaksdetaljerTilleggsstønaderDto.toDomain() =
     )
 
 fun List<UtbetalingTilleggsstønaderDto>.tilTilkjentYtelse(): TilkjentYtelse {
-    val andeler = this.sammenslått().map { it.toDomain() }
+    val andeler = this.map { it.toDomain() }
 
     return when (andeler.size) {
         0 -> tomTilkjentYtelse()
@@ -67,28 +67,3 @@ fun UtbetalingTilleggsstønaderDto.toDomain() =
                 stønadstype = this.stønadstype,
             ),
     )
-
-// TODO Må fikse duplikatet når DTO-ene for tilleggsstønader flyttes til kontrakter og vi kan lage felles superklasse
-fun List<UtbetalingTilleggsstønaderDto>.sammenslått(): List<UtbetalingTilleggsstønaderDto> {
-    return this.sortedBy { it.fraOgMedDato }.fold(emptyList()) { utbetalinger, utbetaling ->
-        if (utbetalinger.isEmpty()) {
-            return@fold listOf(utbetaling)
-        }
-
-        val last = utbetalinger.last()
-
-        if (utbetaling.kanSlåsSammen(last)) {
-            utbetalinger.dropLast(1) + listOf(last.copy(tilOgMedDato = utbetaling.tilOgMedDato))
-        } else {
-            utbetalinger + listOf(utbetaling)
-        }
-    }
-}
-
-private fun UtbetalingTilleggsstønaderDto.kanSlåsSammen(forrige: UtbetalingTilleggsstønaderDto): Boolean {
-    return this.beløp == forrige.beløp &&
-        this.brukersNavKontor == forrige.brukersNavKontor &&
-        this.satstype == forrige.satstype &&
-        this.stønadstype == forrige.stønadstype &&
-        this.fraOgMedDato == forrige.tilOgMedDato.plusDays(1)
-}
