@@ -122,7 +122,7 @@ internal class IverksettingMotOppdragTaskTest {
         val iverksett = opprettIverksettDto(behandlingId, sakId).toDomain()
         val sisteAndelIKjede = iverksett.vedtak.tilkjentYtelse.andelerTilkjentYtelse.first().copy(periodeId = 0)
         return Iverksettingsresultat(
-            fagsystem = iverksett.fagsak.stønadstype.tilFagsystem(),
+            fagsystem = iverksett.fagsak.fagsystem,
             behandlingId = behandlingId.somUUID,
             iverksettingId = iverksett.behandling.iverksettingId,
             tilkjentYtelseForUtbetaling =

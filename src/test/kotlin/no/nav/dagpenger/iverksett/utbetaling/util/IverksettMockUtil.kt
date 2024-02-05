@@ -1,6 +1,14 @@
 package no.nav.dagpenger.iverksett.utbetaling.util
 
-import no.nav.dagpenger.iverksett.utbetaling.domene.*
+import no.nav.dagpenger.iverksett.utbetaling.domene.AndelTilkjentYtelse
+import no.nav.dagpenger.iverksett.utbetaling.domene.Behandlingsdetaljer
+import no.nav.dagpenger.iverksett.utbetaling.domene.Fagsakdetaljer
+import no.nav.dagpenger.iverksett.utbetaling.domene.Iverksetting
+import no.nav.dagpenger.iverksett.utbetaling.domene.Iverksettingsresultat
+import no.nav.dagpenger.iverksett.utbetaling.domene.OppdragResultat
+import no.nav.dagpenger.iverksett.utbetaling.domene.Søker
+import no.nav.dagpenger.iverksett.utbetaling.domene.TilkjentYtelse
+import no.nav.dagpenger.iverksett.utbetaling.domene.Vedtaksdetaljer
 import no.nav.dagpenger.kontrakter.felles.BrukersNavKontor
 import no.nav.dagpenger.kontrakter.felles.Fagsystem
 import no.nav.dagpenger.kontrakter.felles.GeneriskId
@@ -128,7 +136,7 @@ fun opprettIverksett(
     fagsak =
         Fagsakdetaljer(
             fagsakId = GeneriskIdSomUUID(UUID.randomUUID()),
-            stønadstype = StønadTypeDagpenger.DAGPENGER_ARBEIDSSØKER_ORDINÆR,
+            fagsystem = Fagsystem.DAGPENGER,
         ),
     behandling = behandlingsdetaljer,
     søker =
@@ -146,9 +154,9 @@ fun opprettIverksett(
     iverksettingId: String? = null,
     forrigeIverksettingId: String? = null,
 ): Iverksetting {
-    val stønadstype = andeler.firstOrNull()?.stønadsdata?.stønadstype ?: StønadTypeDagpenger.DAGPENGER_ARBEIDSSØKER_ORDINÆR
+    val fagsystem = andeler.firstOrNull()?.stønadsdata?.stønadstype?.tilFagsystem() ?: Fagsystem.DAGPENGER
     return Iverksetting(
-        fagsak = Fagsakdetaljer(fagsakId = GeneriskIdSomUUID(fagsakId), stønadstype = stønadstype),
+        fagsak = Fagsakdetaljer(fagsakId = GeneriskIdSomUUID(fagsakId), fagsystem = fagsystem),
         behandling = behandlingsdetaljer(behandlingId, forrigeBehandlingId, iverksettingId, forrigeIverksettingId),
         søker =
             Søker(

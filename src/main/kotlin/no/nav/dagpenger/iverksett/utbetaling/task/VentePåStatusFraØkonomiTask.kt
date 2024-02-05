@@ -39,7 +39,7 @@ class VentePåStatusFraØkonomiTask(
             )
         val tilkjentYtelse =
             iverksettingsresultatService.hentTilkjentYtelse(
-                fagsystem = iverksett.fagsak.stønadstype.tilFagsystem(),
+                fagsystem = iverksett.fagsak.fagsystem,
                 behandlingId = payload.behandlingId.somUUID,
                 iverksettingId = iverksett.behandling.iverksettingId,
             )
@@ -53,7 +53,7 @@ class VentePåStatusFraØkonomiTask(
         }
 
         iverksettingService.sjekkStatusPåIverksettOgOppdaterTilstand(
-            stønadstype = iverksett.fagsak.stønadstype,
+            fagsystem = iverksett.fagsak.fagsystem,
             personident = iverksett.søker.personident,
             behandlingId = payload.behandlingId,
             iverksettingId = iverksett.behandling.iverksettingId,

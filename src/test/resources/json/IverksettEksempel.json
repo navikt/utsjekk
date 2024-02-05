@@ -1,18 +1,16 @@
 {
   "fagsak": {
     "fagsakId": "234bed7c-b1d3-11eb-9999-0242ac130003",
-    "stønadstype": "DAGPENGER_ARBEIDSSØKER_ORDINÆR"
+    "fagsystem": "DAGPENGER"
   },
   "behandling": {
     "forrigeBehandlingId": "999abcde-fabc-11eb-8529-0242ac130003",
-    "behandlingId": "234bed7c-b1d3-11eb-8529-0242ac130003",
-    "relatertBehandlingId": null
+    "behandlingId": "234bed7c-b1d3-11eb-8529-0242ac130003"
   },
   "søker": {
     "personident": "15507600333"
   },
   "vedtak": {
-    "vedtaksresultat": "AVSLÅTT",
     "vedtakstidspunkt": "2021-05-10T01:00:00",
     "saksbehandlerId": "A123456",
     "beslutterId": "B123456",
@@ -36,18 +34,6 @@
           "forrigePeriodeId": null
         }
       ]
-    },
-    "vedtaksperioder": [
-      {
-        "aktivitet": "BARNET_ER_SYKT",
-        "fraOgMed": null,
-        "tilOgMed": null,
-        "periode": {
-          "fom": "2021-06-01",
-          "tom": "2021-06-30"
-        },
-        "periodeType": "HOVEDPERIODE"
-      }
-    ]
+    }
   }
 }

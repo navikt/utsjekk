@@ -52,7 +52,7 @@ class IverksettingValidatorService(
         iverksetting?.behandling?.forrigeBehandlingId?.apply {
             val forrigeResultat =
                 iverksettingsresultatService.hentIverksettResultat(
-                    fagsystem = iverksetting.fagsak.stønadstype.tilFagsystem(),
+                    fagsystem = iverksetting.fagsak.fagsystem,
                     behandlingId = this.somUUID,
                     iverksettingId = iverksetting.behandling.forrigeIverksettingId,
                 )
@@ -72,7 +72,7 @@ class IverksettingValidatorService(
     internal fun validerAtIverksettingIkkeAlleredeErMottatt(iverksetting: Iverksetting) {
         val iverksettinger =
             iverksettingService.hentIverksetting(
-                iverksetting.fagsak.stønadstype.tilFagsystem(),
+                iverksetting.fagsak.fagsystem,
                 iverksetting.behandling.behandlingId.somUUID,
                 iverksetting.behandling.iverksettingId,
             )

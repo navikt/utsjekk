@@ -59,7 +59,7 @@ class IverksettMotOppdragTask(
         val forrigeIverksettResultat =
             iverksett.behandling.forrigeBehandlingId?.let {
                 iverksettingsresultatService.hentIverksettResultat(
-                    fagsystem = iverksett.fagsak.stønadstype.tilFagsystem(),
+                    fagsystem = iverksett.fagsak.fagsystem,
                     behandlingId = it.somUUID,
                     iverksettingId = iverksett.behandling.forrigeIverksettingId,
                 )
@@ -105,7 +105,7 @@ class IverksettMotOppdragTask(
                 beregnetUtbetalingsoppdrag = beregnetUtbetalingsoppdrag,
                 forrigeIverksettingsresultat = forrigeIverksettingsresultat,
                 behandlingId = behandlingId,
-                fagsystem = iverksetting.fagsak.stønadstype.tilFagsystem(),
+                fagsystem = iverksetting.fagsak.fagsystem,
                 iverksettingId = iverksetting.behandling.iverksettingId,
             )
         } else {

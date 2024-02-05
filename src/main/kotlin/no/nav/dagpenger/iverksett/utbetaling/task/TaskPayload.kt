@@ -9,7 +9,7 @@ data class TaskPayload(val fagsystem: Fagsystem, val behandlingId: GeneriskId, v
 
 fun Iverksetting.tilTaskPayload() =
     TaskPayload(
-        fagsystem = this.fagsak.stønadstype.tilFagsystem(),
+        fagsystem = this.fagsak.fagsystem,
         behandlingId = this.behandlingId,
         iverksettingId = this.behandling.iverksettingId,
     )

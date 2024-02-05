@@ -10,8 +10,6 @@ import no.nav.dagpenger.iverksett.utbetaling.featuretoggle.FeatureToggleService
 import no.nav.dagpenger.iverksett.utbetaling.task.tilTaskPayload
 import no.nav.dagpenger.kontrakter.felles.Fagsystem
 import no.nav.dagpenger.kontrakter.felles.GeneriskId
-import no.nav.dagpenger.kontrakter.felles.StønadType
-import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
 import no.nav.dagpenger.kontrakter.felles.objectMapper
 import no.nav.dagpenger.kontrakter.felles.somString
 import no.nav.dagpenger.kontrakter.felles.somUUID
@@ -43,7 +41,7 @@ class IverksettingService(
 
         val iverksettMedRiktigStønadstype =
             iverksetting.copy(
-                fagsak = iverksetting.fagsak.copy(stønadstype = utledStønadstype(iverksetting)),
+                fagsak = iverksetting.fagsak.copy(fagsystem = utledFagsystem(iverksetting)),
             )
         iverksettingRepository.insert(
             IverksettingEntitet(
@@ -53,7 +51,7 @@ class IverksettingService(
         )
 
         iverksettingsresultatService.opprettTomtResultat(
-            fagsystem = iverksetting.fagsak.stønadstype.tilFagsystem(),
+            fagsystem = iverksetting.fagsak.fagsystem,
             behandlingId = iverksetting.behandling.behandlingId.somUUID,
             iverksettingId = iverksetting.behandling.iverksettingId,
         )
@@ -80,7 +78,7 @@ class IverksettingService(
     ): Iverksetting? {
         val iverksettingerForFagsystem =
             iverksettingRepository.findByBehandlingAndIverksetting(behandlingId, iverksettingId)
-                .filter { it.data.fagsak.stønadstype.tilFagsystem() == fagsystem }
+                .filter { it.data.fagsak.fagsystem == fagsystem }
         return when (iverksettingerForFagsystem.size) {
             0 -> null
             1 -> iverksettingerForFagsystem.first().data
@@ -93,13 +91,13 @@ class IverksettingService(
     fun hentForrigeIverksett(iverksetting: Iverksetting): Iverksetting? =
         iverksetting.behandling.forrigeBehandlingId?.let {
             hentIverksetting(
-                fagsystem = iverksetting.fagsak.stønadstype.tilFagsystem(),
+                fagsystem = iverksetting.fagsak.fagsystem,
                 behandlingId = it.somUUID,
                 iverksettingId = iverksetting.behandling.forrigeIverksettingId,
             )
                 ?: throw IllegalStateException(
                     "Fant ikke forrige iverksetting med behandlingId ${iverksetting.behandling.behandlingId} " +
-                        "og forrige behandlingId $it for fagsystem ${iverksetting.fagsak.stønadstype.tilFagsystem()}",
+                        "og forrige behandlingId $it for fagsystem ${iverksetting.fagsak.fagsystem}",
                 )
         }
 
@@ -135,14 +133,14 @@ class IverksettingService(
     }
 
     fun sjekkStatusPåIverksettOgOppdaterTilstand(
-        stønadstype: StønadType,
+        fagsystem: Fagsystem,
         personident: String,
         behandlingId: GeneriskId,
         iverksettingId: String? = null,
     ) {
         val oppdragId =
             OppdragId(
-                fagsystem = stønadstype.tilFagsystem(),
+                fagsystem = fagsystem,
                 personIdent = personident,
                 behandlingId = behandlingId,
             )
@@ -154,7 +152,7 @@ class IverksettingService(
         }
 
         iverksettingsresultatService.oppdaterOppdragResultat(
-            fagsystem = stønadstype.tilFagsystem(),
+            fagsystem = fagsystem,
             behandlingId = behandlingId.somUUID,
             iverksettingId = iverksettingId,
             oppdragResultat = OppdragResultat(oppdragStatus = status),
@@ -167,16 +165,17 @@ class IverksettingService(
     ): Boolean {
         val vedtakForSak =
             iverksettingRepository.findByFagsakId(sakId.somString)
-                .filter { it.data.fagsak.stønadstype.tilFagsystem() == fagsystem }
+                .filter { it.data.fagsak.fagsystem == fagsystem }
         // TODO denne kan også være tom hvis noen sender et rent opphør, vi defaulter da til fagsystem DP
         //  og filteret kan filtrere bort alle tidligere vedtak
         return vedtakForSak.isEmpty()
     }
 
-    private fun utledStønadstype(iverksetting: Iverksetting): StønadType =
-        iverksetting.vedtak.tilkjentYtelse.andelerTilkjentYtelse.firstOrNull()?.stønadsdata?.stønadstype
+    private fun utledFagsystem(iverksetting: Iverksetting): Fagsystem =
+        iverksetting.vedtak.tilkjentYtelse.andelerTilkjentYtelse.firstOrNull()?.stønadsdata?.stønadstype?.tilFagsystem()
             ?: hentForrigeIverksett(iverksetting)?.vedtak?.tilkjentYtelse?.andelerTilkjentYtelse?.firstOrNull()?.stønadsdata?.stønadstype
-            ?: StønadTypeDagpenger.DAGPENGER_ARBEIDSSØKER_ORDINÆR
+                ?.tilFagsystem()
+            ?: Fagsystem.DAGPENGER
 }
 
 fun Task.erAktiv() =

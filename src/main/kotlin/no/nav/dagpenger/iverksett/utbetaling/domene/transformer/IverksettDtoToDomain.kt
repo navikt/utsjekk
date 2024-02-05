@@ -5,7 +5,7 @@ import no.nav.dagpenger.iverksett.utbetaling.domene.Fagsakdetaljer
 import no.nav.dagpenger.iverksett.utbetaling.domene.Iverksetting
 import no.nav.dagpenger.iverksett.utbetaling.domene.Søker
 import no.nav.dagpenger.iverksett.utbetaling.domene.Vedtaksdetaljer
-import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
+import no.nav.dagpenger.kontrakter.felles.Fagsystem
 import no.nav.dagpenger.kontrakter.iverksett.IverksettDto
 import no.nav.dagpenger.kontrakter.iverksett.VedtaksdetaljerDto
 
@@ -32,9 +32,9 @@ fun IverksettDto.toDomain(): Iverksetting {
 fun IverksettDto.tilFagsak(): Fagsakdetaljer {
     return Fagsakdetaljer(
         fagsakId = this.sakId,
-        stønadstype =
-            this.vedtak.utbetalinger.firstOrNull()?.stønadsdata?.stønadstype
-                ?: StønadTypeDagpenger.DAGPENGER_ARBEIDSSØKER_ORDINÆR,
+        fagsystem =
+            this.vedtak.utbetalinger.firstOrNull()?.stønadsdata?.stønadstype?.tilFagsystem()
+                ?: Fagsystem.DAGPENGER,
     )
 }
 

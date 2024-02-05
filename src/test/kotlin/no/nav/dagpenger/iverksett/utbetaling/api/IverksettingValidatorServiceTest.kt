@@ -73,7 +73,7 @@ class IverksettingValidatorServiceTest {
 
         // Burde ikke få samme
         every {
-            iverksettingServiceMock.hentIverksetting(iverksetting.fagsak.stønadstype.tilFagsystem(), iverksetting.behandlingId.somUUID)
+            iverksettingServiceMock.hentIverksetting(iverksetting.fagsak.fagsystem, iverksetting.behandlingId.somUUID)
         } returns iverksetting
 
         assertApiFeil(HttpStatus.CONFLICT) {
@@ -96,7 +96,7 @@ class IverksettingValidatorServiceTest {
         val beregnetUtbetalingsoppdrag = beregnUtbetalingsoppdrag(forrigeIverksetting)
         val forrigeIverksettingsresultat =
             Iverksettingsresultat(
-                fagsystem = forrigeIverksetting.fagsak.stønadstype.tilFagsystem(),
+                fagsystem = forrigeIverksetting.fagsak.fagsystem,
                 behandlingId = forrigeIverksetting.behandlingId.somUUID,
                 iverksettingId = forrigeIverksetting.behandling.iverksettingId,
                 tilkjentYtelseForUtbetaling =

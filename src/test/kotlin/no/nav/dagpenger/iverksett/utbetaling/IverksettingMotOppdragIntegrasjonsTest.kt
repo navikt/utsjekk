@@ -7,6 +7,7 @@ import no.nav.dagpenger.iverksett.utbetaling.tilstand.IverksettingsresultatServi
 import no.nav.dagpenger.iverksett.utbetaling.util.lagAndelTilkjentYtelse
 import no.nav.dagpenger.iverksett.utbetaling.util.opprettAndelTilkjentYtelse
 import no.nav.dagpenger.iverksett.utbetaling.util.opprettIverksett
+import no.nav.dagpenger.kontrakter.felles.Fagsystem
 import no.nav.dagpenger.kontrakter.felles.StønadTypeTiltakspenger
 import no.nav.dagpenger.kontrakter.felles.somUUID
 import no.nav.familie.prosessering.internal.TaskService
@@ -51,7 +52,7 @@ class IverksettingMotOppdragIntegrasjonsTest : ServerTest() {
     internal fun `start iverksetting, forvent at andelerTilkjentYtelse er lik 1 og har periodeId 1`() {
         val tilkjentYtelse =
             iverksettingsresultatService.hentTilkjentYtelse(
-                iverksett.fagsak.stønadstype.tilFagsystem(),
+                iverksett.fagsak.fagsystem,
                 behandlingid,
                 iverksett.behandling.iverksettingId,
             )!!
@@ -82,7 +83,7 @@ class IverksettingMotOppdragIntegrasjonsTest : ServerTest() {
 
         val tilkjentYtelse =
             iverksettingsresultatService.hentTilkjentYtelse(
-                iverksettRevurdering.fagsak.stønadstype.tilFagsystem(),
+                iverksettRevurdering.fagsak.fagsystem,
                 behandlingIdRevurdering,
                 iverksettRevurdering.behandling.iverksettingId,
             )!!
@@ -118,7 +119,7 @@ class IverksettingMotOppdragIntegrasjonsTest : ServerTest() {
 
         val tilkjentYtelse =
             iverksettingsresultatService.hentTilkjentYtelse(
-                iverksettRevurdering.fagsak.stønadstype.tilFagsystem(),
+                iverksettRevurdering.fagsak.fagsystem,
                 behandlingIdRevurdering,
                 iverksettRevurdering.behandling.iverksettingId,
             )!!
@@ -144,7 +145,7 @@ class IverksettingMotOppdragIntegrasjonsTest : ServerTest() {
 
         val tilkjentYtelse =
             iverksettingsresultatService.hentTilkjentYtelse(
-                iverksettMedOpphør.fagsak.stønadstype.tilFagsystem(),
+                iverksettMedOpphør.fagsak.fagsystem,
                 opphørBehandlingId,
                 iverksettMedOpphør.behandling.iverksettingId,
             )!!
@@ -152,7 +153,7 @@ class IverksettingMotOppdragIntegrasjonsTest : ServerTest() {
     }
 
     @Test
-    internal fun `iverksett skal persisteres med korrekt stønadstype`() {
+    internal fun `iverksett skal persisteres med korrekt fagsystem`() {
         val iverksett =
             opprettIverksett(andeler = listOf(opprettAndelTilkjentYtelse(stønadstype = StønadTypeTiltakspenger.JOBBKLUBB)))
 
@@ -160,10 +161,10 @@ class IverksettingMotOppdragIntegrasjonsTest : ServerTest() {
 
         val iverksettPersistert =
             iverksettingService.hentIverksetting(
-                iverksett.fagsak.stønadstype.tilFagsystem(),
+                iverksett.fagsak.fagsystem,
                 iverksett.behandling.behandlingId.somUUID,
             )
-        assertEquals(StønadTypeTiltakspenger.JOBBKLUBB, iverksettPersistert?.fagsak?.stønadstype)
+        assertEquals(Fagsystem.TILTAKSPENGER, iverksettPersistert?.fagsak?.fagsystem)
     }
 
     private fun iverksettMotOppdrag() {

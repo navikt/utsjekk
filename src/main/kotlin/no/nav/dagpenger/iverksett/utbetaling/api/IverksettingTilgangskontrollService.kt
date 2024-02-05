@@ -35,7 +35,7 @@ class IverksettingTilgangskontrollService(
     }
 
     private fun validerFørsteVedtakPåSakSendesAvBeslutter(fagsakdetaljer: Fagsakdetaljer) {
-        if (iverksettingService.erFørsteVedtakPåSak(fagsakdetaljer.fagsakId, fagsakdetaljer.stønadstype.tilFagsystem()) && !erBeslutter()) {
+        if (iverksettingService.erFørsteVedtakPåSak(fagsakdetaljer.fagsakId, fagsakdetaljer.fagsystem) && !erBeslutter()) {
             throw ApiFeil("Første vedtak på en sak må sendes av en ansatt med beslutter-rolle", HttpStatus.FORBIDDEN)
         }
     }
