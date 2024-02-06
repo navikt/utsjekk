@@ -53,9 +53,9 @@ spec:
           - id: {{ groups.prosesseringAdmin }} # 0000-GA-Dagpenger-Prosessering-Admin gir tilgang til prosessering
           - id: {{ groups.saksbehandler }} # 0000-GA-Dagpenger-Saksbehandler
           - id: {{ groups.beslutter }} # 0000-GA-Dagpenger-Beslutter
-      extra:
-        - NAVident
-        - azp_name
+        extra:
+          - NAVident
+          - azp_name
   accessPolicy:
     inbound:
       rules:
