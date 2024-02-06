@@ -85,3 +85,17 @@ prosessering:
 BESLUTTER_GRUPPE: ${BESLUTTER_GRUPPE}
 APP_MED_SYSTEMTILGANG: ${APP_MED_SYSTEMTILGANG}
 PROSESSERING_GRUPPE: ${PROSESSERING_GRUPPE}
+
+konsumenter:
+  dagpenger:
+    fagsystem: "DAGPENGER"
+    klientapp: "dp-vedtak-iverksett"
+    grupper:
+      saksbehandler: "3e28466f-c53d-46da-8b44-a4abc2ad4593"
+      beslutter: "11b8475a-fb12-41aa-b1f6-8497c1b5385b"
+  tiltakspenger:
+    fagsystem: "TILTAKSPENGER"
+    klientapp: "tiltakspenger-utbetaling"
+    grupper:
+      saksbehandler: "TODO"
+      beslutter: "TODO"

@@ -4,10 +4,10 @@ import com.fasterxml.jackson.module.kotlin.KotlinModule
 import no.nav.dagpenger.iverksett.felles.http.ObjectMapperProvider
 import no.nav.dagpenger.iverksett.felles.oppdrag.konfig.RestTemplateAzure
 import no.nav.dagpenger.iverksett.felles.oppdrag.konfig.RetryOAuth2HttpClient
+import no.nav.dagpenger.iverksett.utbetaling.domene.KonsumentConfig
 import no.nav.familie.log.filter.LogFilter
 import no.nav.familie.log.filter.RequestTimeFilter
 import no.nav.familie.prosessering.config.ProsesseringInfoProvider
-import no.nav.security.token.support.client.core.http.OAuth2HttpClient
 import no.nav.security.token.support.client.spring.oauth2.EnableOAuth2Client
 import no.nav.security.token.support.spring.SpringTokenValidationContextHolder
 import no.nav.security.token.support.spring.api.EnableJwtTokenValidation
@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.SpringBootConfiguration
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan
+import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.web.client.RestTemplateBuilder
 import org.springframework.boot.web.servlet.FilterRegistrationBean
 import org.springframework.context.annotation.Bean
@@ -48,6 +49,7 @@ import java.time.temporal.ChronoUnit
 )
 @EnableOAuth2Client(cacheEnabled = true)
 @EnableScheduling
+@EnableConfigurationProperties(KonsumentConfig::class)
 class ApplicationConfig {
     private val logger = LoggerFactory.getLogger(this::class.java)
 
@@ -55,22 +57,20 @@ class ApplicationConfig {
     fun kotlinModule(): KotlinModule = KotlinModule.Builder().build()
 
     @Bean
-    fun logFilter(): FilterRegistrationBean<LogFilter> {
-        logger.info("Registering LogFilter filter")
-        val filterRegistration = FilterRegistrationBean<LogFilter>()
-        filterRegistration.filter = LogFilter()
-        filterRegistration.order = 1
-        return filterRegistration
-    }
+    fun logFilter() =
+        FilterRegistrationBean<LogFilter>().apply {
+            logger.info("Registering LogFilter filter")
+            filter = LogFilter()
+            order = 1
+        }
 
     @Bean
-    fun requestTimeFilter(): FilterRegistrationBean<RequestTimeFilter> {
-        logger.info("Registering RequestTimeFilter filter")
-        val filterRegistration = FilterRegistrationBean<RequestTimeFilter>()
-        filterRegistration.filter = RequestTimeFilter()
-        filterRegistration.order = 2
-        return filterRegistration
-    }
+    fun requestTimeFilter() =
+        FilterRegistrationBean<RequestTimeFilter>().apply {
+            logger.info("Registering RequestTimeFilter filter")
+            filter = RequestTimeFilter()
+            order = 2
+        }
 
     @Bean
     @Primary
@@ -83,13 +83,12 @@ class ApplicationConfig {
      */
     @Bean
     @Primary
-    fun oAuth2HttpClient(): OAuth2HttpClient {
-        return RetryOAuth2HttpClient(
+    fun oAuth2HttpClient() =
+        RetryOAuth2HttpClient(
             RestTemplateBuilder()
                 .setConnectTimeout(Duration.of(2, ChronoUnit.SECONDS))
                 .setReadTimeout(Duration.of(2, ChronoUnit.SECONDS)),
         )
-    }
 
     @Bean
     fun prosesseringInfoProvider(

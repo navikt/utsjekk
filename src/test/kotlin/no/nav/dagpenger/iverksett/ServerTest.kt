@@ -26,7 +26,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 @ActiveProfiles("servertest", "mock-oppdrag", "mock-oauth")
 @EnableMockOAuth2Server
 abstract class ServerTest {
-
     protected val restTemplate = TestRestTemplate(RestTemplateAzure().restTemplateBuilder())
     protected val headers = HttpHeaders()
 
@@ -69,7 +68,10 @@ abstract class ServerTest {
         return "http://localhost:" + getPort() + uri
     }
 
-    protected fun lokalTestToken(saksbehandler: String = "julenissen", grupper: List<String> = emptyList()): String {
+    protected fun lokalTestToken(
+        saksbehandler: String = "julenissen",
+        grupper: List<String> = emptyList(),
+    ): String {
         return TokenUtil.onBehalfOfToken(mockOAuth2Server, saksbehandler, grupper)
     }
 }

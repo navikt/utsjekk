@@ -6,7 +6,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.tags.Tag
 import no.nav.dagpenger.iverksett.utbetaling.api.IverksettDtoValidator.valider
 import no.nav.dagpenger.iverksett.utbetaling.api.IverksettTilleggsstønaderDtoValidator.valider
-import no.nav.dagpenger.iverksett.utbetaling.domene.transformer.tilFagsystem
+import no.nav.dagpenger.iverksett.utbetaling.domene.KonsumentConfig
+import no.nav.dagpenger.iverksett.utbetaling.domene.transformer.IverksettDtoMapper
 import no.nav.dagpenger.iverksett.utbetaling.domene.transformer.toDomain
 import no.nav.dagpenger.iverksett.utbetaling.tilstand.IverksettingService
 import no.nav.dagpenger.kontrakter.felles.Fagsystem
@@ -34,6 +35,8 @@ class IverksettingController(
     private val iverksettingService: IverksettingService,
     private val validatorService: IverksettingValidatorService,
     private val tilgangskontrollService: TilgangskontrollService,
+    private val iverksettDtoMapper: IverksettDtoMapper,
+    private val konsumentConfig: KonsumentConfig,
 ) {
     @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE])
     @Tag(name = "Iverksetting")
@@ -59,7 +62,7 @@ Det kjøres implisitt en konsistensavstemming av at nye utbetalinger stemmer ove
     fun iverksett(
         @RequestBody iverksettDto: IverksettDto,
     ): ResponseEntity<Void> {
-        val iverksett = iverksettDto.toDomain()
+        val iverksett = iverksettDtoMapper.tilDomene(iverksettDto)
         tilgangskontrollService.valider(iverksett.fagsak)
 
         iverksettDto.valider()
@@ -103,7 +106,7 @@ Det kjøres implisitt en konsistensavstemming av at nye utbetalinger stemmer ove
     fun hentStatus(
         @PathVariable behandlingId: UUID,
     ): ResponseEntity<IverksettStatus> {
-        val fagsystem = TokenContext.hentKlientnavn().tilFagsystem()
+        val fagsystem = konsumentConfig.finnFagsystem(TokenContext.hentKlientnavn())
         val status = iverksettingService.utledStatus(fagsystem, behandlingId)
         return status?.let { ResponseEntity(status, HttpStatus.OK) } ?: ResponseEntity(null, HttpStatus.NOT_FOUND)
     }

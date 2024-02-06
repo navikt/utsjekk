@@ -9,7 +9,8 @@ import no.nav.dagpenger.iverksett.utbetaling.api.IverksettingTilgangskontrollSer
 import no.nav.dagpenger.iverksett.utbetaling.api.TokenContext
 import no.nav.dagpenger.iverksett.utbetaling.api.assertApiFeil
 import no.nav.dagpenger.iverksett.utbetaling.domene.IverksettingEntitet
-import no.nav.dagpenger.iverksett.utbetaling.domene.transformer.toDomain
+import no.nav.dagpenger.iverksett.utbetaling.domene.KonsumentConfig
+import no.nav.dagpenger.iverksett.utbetaling.domene.transformer.IverksettDtoMapper
 import no.nav.dagpenger.iverksett.utbetaling.featuretoggle.FeatureToggleService
 import no.nav.dagpenger.iverksett.utbetaling.lagIverksettingEntitet
 import no.nav.dagpenger.iverksett.utbetaling.lagIverksettingsdata
@@ -22,11 +23,14 @@ import no.nav.dagpenger.kontrakter.felles.Fagsystem
 import no.nav.dagpenger.kontrakter.felles.somUUID
 import no.nav.familie.prosessering.internal.TaskService
 import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.springframework.http.HttpStatus
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class IverksettingTilgangskontrollServiceTest {
     private val iverksettingRepository = mockk<IverksettingRepository>()
     private val featureToggleServiceMock = mockk<FeatureToggleService>()
@@ -38,7 +42,15 @@ class IverksettingTilgangskontrollServiceTest {
             oppdragClient = mockk<OppdragClient>(),
             featureToggleService = mockFeatureToggleService(),
         )
+    private val konsumentConfig = mockk<KonsumentConfig>()
+    private val iverksettDtoMapper = IverksettDtoMapper(konsumentConfig)
+
     private lateinit var iverksettingTilgangskontrollService: IverksettingTilgangskontrollService
+
+    @BeforeAll
+    fun initialize() {
+        every { konsumentConfig.finnFagsystem(any()) } returns Fagsystem.DAGPENGER
+    }
 
     @BeforeEach
     fun setup() {
@@ -69,7 +81,7 @@ class IverksettingTilgangskontrollServiceTest {
         every { TokenContext.erSystemtoken() } returns false
 
         assertDoesNotThrow {
-            iverksettingTilgangskontrollService.valider(nåværendeIverksetting.toDomain().fagsak)
+            iverksettingTilgangskontrollService.valider(iverksettDtoMapper.tilDomene(nåværendeIverksetting).fagsak)
         }
     }
 
@@ -81,7 +93,7 @@ class IverksettingTilgangskontrollServiceTest {
         every { TokenContext.erSystemtoken() } returns true
 
         assertApiFeil(HttpStatus.FORBIDDEN) {
-            iverksettingTilgangskontrollService.valider(nåværendeIverksetting.toDomain().fagsak)
+            iverksettingTilgangskontrollService.valider(iverksettDtoMapper.tilDomene(nåværendeIverksetting).fagsak)
         }
     }
 
@@ -101,7 +113,7 @@ class IverksettingTilgangskontrollServiceTest {
         every { TokenContext.erSystemtoken() } returns true
 
         assertApiFeil(HttpStatus.FORBIDDEN) {
-            iverksettingTilgangskontrollService.valider(nåværendeIverksetting.toDomain().fagsak)
+            iverksettingTilgangskontrollService.valider(iverksettDtoMapper.tilDomene(nåværendeIverksetting).fagsak)
         }
     }
 
@@ -116,7 +128,7 @@ class IverksettingTilgangskontrollServiceTest {
         every { TokenContext.hentKlientnavn() } returns APP_MED_SYSTEMTILGANG
 
         assertDoesNotThrow {
-            iverksettingTilgangskontrollService.valider(nåværendeIverksetting.toDomain().fagsak)
+            iverksettingTilgangskontrollService.valider(iverksettDtoMapper.tilDomene(nåværendeIverksetting).fagsak)
         }
     }
 

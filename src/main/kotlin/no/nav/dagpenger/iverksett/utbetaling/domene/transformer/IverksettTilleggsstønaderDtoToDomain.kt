@@ -8,6 +8,7 @@ import no.nav.dagpenger.iverksett.utbetaling.domene.Behandlingsdetaljer
 import no.nav.dagpenger.iverksett.utbetaling.domene.Fagsakdetaljer
 import no.nav.dagpenger.iverksett.utbetaling.domene.Iverksetting
 import no.nav.dagpenger.iverksett.utbetaling.domene.StønadsdataTilleggsstønader
+import no.nav.dagpenger.iverksett.utbetaling.domene.Søker
 import no.nav.dagpenger.iverksett.utbetaling.domene.TilkjentYtelse
 import no.nav.dagpenger.iverksett.utbetaling.domene.Vedtaksdetaljer
 import no.nav.dagpenger.kontrakter.felles.Datoperiode
@@ -16,7 +17,7 @@ import no.nav.dagpenger.kontrakter.felles.Fagsystem
 fun IverksettTilleggsstønaderDto.toDomain(): Iverksetting =
     Iverksetting(
         fagsak = this.tilFagsak(),
-        søker = this.personident.verdi.tilSøker(),
+        søker = Søker(personident = this.personident.verdi),
         behandling = this.tilBehandling(),
         vedtak = this.vedtak.toDomain(),
         forrigeIverksettingBehandlingId = this.forrigeIverksetting?.behandlingId,
