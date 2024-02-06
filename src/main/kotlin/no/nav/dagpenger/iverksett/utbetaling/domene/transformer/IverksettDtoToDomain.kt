@@ -1,5 +1,6 @@
 package no.nav.dagpenger.iverksett.utbetaling.domene.transformer
 
+import no.nav.dagpenger.iverksett.utbetaling.api.TokenContext
 import no.nav.dagpenger.iverksett.utbetaling.domene.Behandlingsdetaljer
 import no.nav.dagpenger.iverksett.utbetaling.domene.Fagsakdetaljer
 import no.nav.dagpenger.iverksett.utbetaling.domene.Iverksetting
@@ -32,9 +33,7 @@ fun IverksettDto.toDomain(): Iverksetting {
 fun IverksettDto.tilFagsak(): Fagsakdetaljer {
     return Fagsakdetaljer(
         fagsakId = this.sakId,
-        fagsystem =
-            this.vedtak.utbetalinger.firstOrNull()?.stønadsdata?.stønadstype?.tilFagsystem()
-                ?: Fagsystem.DAGPENGER,
+        fagsystem = TokenContext.hentKlientnavn().tilFagsystem(),
     )
 }
 
@@ -45,3 +44,11 @@ fun IverksettDto.tilBehandling(): Behandlingsdetaljer =
         behandlingId = this.behandlingId,
         forrigeBehandlingId = this.forrigeIverksetting?.behandlingId,
     )
+
+fun String.tilFagsystem(): Fagsystem {
+    return when (this) {
+        "dp-vedtak-iverksett" -> Fagsystem.DAGPENGER
+        "tiltakspenger-utbetaling" -> Fagsystem.TILTAKSPENGER
+        else -> throw IllegalArgumentException("Fant ikke fagsystem fra klientnavn $this")
+    }
+}

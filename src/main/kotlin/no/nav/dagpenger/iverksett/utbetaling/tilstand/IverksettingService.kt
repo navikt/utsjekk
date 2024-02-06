@@ -166,8 +166,6 @@ class IverksettingService(
         val vedtakForSak =
             iverksettingRepository.findByFagsakId(sakId.somString)
                 .filter { it.data.fagsak.fagsystem == fagsystem }
-        // TODO denne kan også være tom hvis noen sender et rent opphør, vi defaulter da til fagsystem DP
-        //  og filteret kan filtrere bort alle tidligere vedtak
         return vedtakForSak.isEmpty()
     }
 

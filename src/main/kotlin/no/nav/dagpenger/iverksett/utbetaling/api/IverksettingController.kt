@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.tags.Tag
 import no.nav.dagpenger.iverksett.utbetaling.api.IverksettDtoValidator.valider
 import no.nav.dagpenger.iverksett.utbetaling.api.IverksettTilleggsstønaderDtoValidator.valider
+import no.nav.dagpenger.iverksett.utbetaling.domene.transformer.tilFagsystem
 import no.nav.dagpenger.iverksett.utbetaling.domene.transformer.toDomain
 import no.nav.dagpenger.iverksett.utbetaling.tilstand.IverksettingService
 import no.nav.dagpenger.kontrakter.felles.Fagsystem
@@ -94,7 +95,6 @@ Det kjøres implisitt en konsistensavstemming av at nye utbetalinger stemmer ove
         return ResponseEntity.accepted().build()
     }
 
-    // TODO: Status-endepunktene må oppdateres slik at de finner fagsystem dynamisk. Se NAV-17991 på Favro
     @GetMapping("{behandlingId}/status", produces = ["application/json"])
     @Operation(summary = "Sjekk status på iverksetting med gitt behandlingId")
     @Tag(name = "Iverksetting")
@@ -103,7 +103,8 @@ Det kjøres implisitt en konsistensavstemming av at nye utbetalinger stemmer ove
     fun hentStatus(
         @PathVariable behandlingId: UUID,
     ): ResponseEntity<IverksettStatus> {
-        val status = iverksettingService.utledStatus(Fagsystem.DAGPENGER, behandlingId)
+        val fagsystem = TokenContext.hentKlientnavn().tilFagsystem()
+        val status = iverksettingService.utledStatus(fagsystem, behandlingId)
         return status?.let { ResponseEntity(status, HttpStatus.OK) } ?: ResponseEntity(null, HttpStatus.NOT_FOUND)
     }
 

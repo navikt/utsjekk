@@ -1,21 +1,19 @@
 package no.nav.dagpenger.iverksett.utbetaling.tilstand
 
-import com.fasterxml.jackson.module.kotlin.readValue
-import no.nav.dagpenger.iverksett.ResourceLoaderTestUtil
 import no.nav.dagpenger.iverksett.ServerTest
-import no.nav.dagpenger.iverksett.felles.http.ObjectMapperProvider.objectMapper
 import no.nav.dagpenger.iverksett.utbetaling.domene.Iverksetting
 import no.nav.dagpenger.iverksett.utbetaling.domene.behandlingId
-import no.nav.dagpenger.iverksett.utbetaling.domene.transformer.toDomain
 import no.nav.dagpenger.iverksett.utbetaling.lagIverksettingEntitet
+import no.nav.dagpenger.iverksett.utbetaling.lagIverksettingsdata
 import no.nav.dagpenger.kontrakter.felles.somString
 import no.nav.dagpenger.kontrakter.felles.somUUID
-import no.nav.dagpenger.kontrakter.iverksett.IverksettDto
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
+import java.time.LocalDate
+import java.util.UUID
 
 class IverksettingRepositoryTest : ServerTest() {
     @Autowired
@@ -23,8 +21,12 @@ class IverksettingRepositoryTest : ServerTest() {
 
     @Test
     fun `lagre og hent iverksett på fagsakId, forvent likhet`() {
-        val json: String = ResourceLoaderTestUtil.readResource("json/IverksettDtoEksempel.json")
-        val iverksettingData: Iverksetting = objectMapper.readValue<IverksettDto>(json).toDomain()
+        val iverksettingData: Iverksetting =
+            lagIverksettingsdata(
+                sakId = UUID.randomUUID(),
+                behandlingId = UUID.randomUUID(),
+                andelsdatoer = listOf(LocalDate.now(), LocalDate.now().minusDays(15)),
+            )
 
         val fagsakId = iverksettingData.fagsak.fagsakId
         val iverksettListe1 = iverksettingRepository.findByFagsakId(fagsakId.somString)
@@ -39,8 +41,12 @@ class IverksettingRepositoryTest : ServerTest() {
 
     @Test
     fun `lagre og hent iverksett på behandlingId og iverksettingId, forvent likhet`() {
-        val json: String = ResourceLoaderTestUtil.readResource("json/IverksettDtoEksempel.json")
-        val tmp: Iverksetting = objectMapper.readValue<IverksettDto>(json).toDomain()
+        val tmp: Iverksetting =
+            lagIverksettingsdata(
+                sakId = UUID.randomUUID(),
+                behandlingId = UUID.randomUUID(),
+                andelsdatoer = listOf(LocalDate.now(), LocalDate.now().minusDays(15)),
+            )
         val iverksettingData = tmp.copy(behandling = tmp.behandling.copy(iverksettingId = "TEST123"))
 
         val iverksetting =
@@ -63,8 +69,12 @@ class IverksettingRepositoryTest : ServerTest() {
 
     @Test
     fun `lagre og hent iverksett på behandlingId og tom iverksettingId, forvent likhet`() {
-        val json: String = ResourceLoaderTestUtil.readResource("json/IverksettDtoEksempel.json")
-        val iverksettingData: Iverksetting = objectMapper.readValue<IverksettDto>(json).toDomain()
+        val iverksettingData: Iverksetting =
+            lagIverksettingsdata(
+                sakId = UUID.randomUUID(),
+                behandlingId = UUID.randomUUID(),
+                andelsdatoer = listOf(LocalDate.now(), LocalDate.now().minusDays(15)),
+            )
 
         val iverksetting =
             iverksettingRepository.findByBehandlingAndIverksetting(

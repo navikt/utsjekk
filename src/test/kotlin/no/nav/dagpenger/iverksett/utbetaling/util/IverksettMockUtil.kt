@@ -130,13 +130,15 @@ private fun lagTilkjentYtelse(andeler: List<AndelTilkjentYtelse>): TilkjentYtels
     )
 
 fun opprettIverksett(
+    fagsystem: Fagsystem = Fagsystem.DAGPENGER,
+    sakId: UUID? = null,
     behandlingsdetaljer: Behandlingsdetaljer = behandlingsdetaljer(),
     vedtaksdetaljer: Vedtaksdetaljer = vedtaksdetaljer(),
 ) = Iverksetting(
     fagsak =
         Fagsakdetaljer(
-            fagsakId = GeneriskIdSomUUID(UUID.randomUUID()),
-            fagsystem = Fagsystem.DAGPENGER,
+            fagsakId = GeneriskIdSomUUID(sakId ?: UUID.randomUUID()),
+            fagsystem = fagsystem,
         ),
     behandling = behandlingsdetaljer,
     søker =

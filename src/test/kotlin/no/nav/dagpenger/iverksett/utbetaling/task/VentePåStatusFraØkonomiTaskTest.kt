@@ -9,12 +9,11 @@ import io.mockk.verify
 import no.nav.dagpenger.iverksett.felles.oppdrag.OppdragClient
 import no.nav.dagpenger.iverksett.utbetaling.domene.OppdragResultat
 import no.nav.dagpenger.iverksett.utbetaling.domene.TilkjentYtelse
-import no.nav.dagpenger.iverksett.utbetaling.domene.transformer.toDomain
 import no.nav.dagpenger.iverksett.utbetaling.lagIverksettingEntitet
+import no.nav.dagpenger.iverksett.utbetaling.lagIverksettingsdata
 import no.nav.dagpenger.iverksett.utbetaling.tilstand.IverksettingRepository
 import no.nav.dagpenger.iverksett.utbetaling.tilstand.IverksettingService
 import no.nav.dagpenger.iverksett.utbetaling.tilstand.IverksettingsresultatService
-import no.nav.dagpenger.iverksett.utbetaling.util.opprettIverksettDto
 import no.nav.dagpenger.iverksett.util.mockFeatureToggleService
 import no.nav.dagpenger.kontrakter.felles.Fagsystem
 import no.nav.dagpenger.kontrakter.felles.GeneriskId
@@ -62,9 +61,15 @@ internal class VentePåStatusFraØkonomiTaskTest {
 
     @BeforeEach
     internal fun setUp() {
+        val iverksetting =
+            lagIverksettingsdata(
+                sakId = sakId.somUUID,
+                behandlingId = behandlingId.somUUID,
+                andelsdatoer = listOf(LocalDate.now(), LocalDate.now().minusDays(15)),
+            )
         every { oppdragClient.hentStatus(any()) } returns OppdragStatusDto(OppdragStatus.KVITTERT_OK, null)
         every { iverksettingRepository.findByBehandlingAndIverksetting(any(), any()) } returns
-            listOf(lagIverksettingEntitet(opprettIverksettDto(behandlingId, sakId).toDomain()))
+            listOf(lagIverksettingEntitet(iverksetting))
         every { iverksettingsresultatService.oppdaterOppdragResultat(any(), behandlingId.somUUID, any()) } just runs
         every { taskService.save(any()) } answers { firstArg() }
     }

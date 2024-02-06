@@ -18,7 +18,7 @@ import no.nav.dagpenger.iverksett.utbetaling.tilstand.IverksettingService
 import no.nav.dagpenger.iverksett.utbetaling.tilstand.IverksettingsresultatService
 import no.nav.dagpenger.iverksett.utbetaling.util.opprettIverksettDto
 import no.nav.dagpenger.iverksett.util.mockFeatureToggleService
-import no.nav.dagpenger.kontrakter.felles.StønadTypeTiltakspenger
+import no.nav.dagpenger.kontrakter.felles.Fagsystem
 import no.nav.dagpenger.kontrakter.felles.somUUID
 import no.nav.familie.prosessering.internal.TaskService
 import org.junit.jupiter.api.AfterEach
@@ -52,6 +52,7 @@ class IverksettingTilgangskontrollServiceTest {
 
         every { featureToggleServiceMock.isEnabled(any(), any()) } returns true
         mockkObject(TokenContext)
+        every { TokenContext.hentKlientnavn() } returns "dp-vedtak-iverksett"
     }
 
     @AfterEach
@@ -61,7 +62,7 @@ class IverksettingTilgangskontrollServiceTest {
 
     @Test
     fun `skal få OK når rammevedtak sendes av beslutter`() {
-        val nåværendeIverksetting = iverksetting()
+        val nåværendeIverksetting = opprettIverksettDto()
 
         every { iverksettingRepository.findByFagsakId(any()) } returns emptyList()
         every { TokenContext.hentGrupper() } returns listOf(BESLUTTERGRUPPE)
@@ -87,7 +88,8 @@ class IverksettingTilgangskontrollServiceTest {
     @Test
     fun `skal få FORBIDDEN når første vedtak på sak sendes uten beslutter-token og samme sakId finnes for annet fagsystem`() {
         val nåværendeIverksetting = opprettIverksettDto()
-        val eksisterendeIverksettingTiltakspenger = opprettIverksettDto(stønadType = StønadTypeTiltakspenger.JOBBKLUBB).toDomain()
+        val eksisterendeIverksettingTiltakspenger =
+            lagIverksettingsdata(fagsystem = Fagsystem.TILTAKSPENGER, sakId = nåværendeIverksetting.sakId.somUUID)
 
         every { iverksettingRepository.findByFagsakId(any()) } returns
             listOf(
@@ -105,8 +107,8 @@ class IverksettingTilgangskontrollServiceTest {
 
     @Test
     fun `skal få OK når utbetalingsvedtak sendes etter autorisert vedtak`() {
-        val forrigeIverksetting = iverksettData()
-        val nåværendeIverksetting = iverksetting()
+        val forrigeIverksetting = lagIverksettingsdata()
+        val nåværendeIverksetting = opprettIverksettDto()
         val iverksettListe = listOf(lagIverksettingEntitet(forrigeIverksetting))
 
         every { iverksettingRepository.findByFagsakId(any()) } returns iverksettListe
@@ -120,8 +122,7 @@ class IverksettingTilgangskontrollServiceTest {
 
     @Test
     fun `skal få FORBIDDEN når utbetalingsvedtak sendes av ukjent system`() {
-        val forrigeIverksetting = iverksettData()
-        val nåværendeIverksetting = iverksetting()
+        val forrigeIverksetting = lagIverksettingsdata()
         val iverksettListe = listOf(lagIverksettingEntitet(forrigeIverksetting))
 
         every { iverksettingRepository.findByFagsakId(any()) } returns iverksettListe
@@ -129,16 +130,12 @@ class IverksettingTilgangskontrollServiceTest {
         every { TokenContext.hentKlientnavn() } returns "ukjent app"
 
         assertApiFeil(HttpStatus.FORBIDDEN) {
-            iverksettingTilgangskontrollService.valider(nåværendeIverksetting.toDomain().fagsak)
+            iverksettingTilgangskontrollService.valider(lagIverksettingsdata().fagsak)
         }
     }
 
-    private fun iverksettData() = lagIverksettingsdata()
-
-    private fun iverksetting() = opprettIverksettDto()
-
     companion object {
         private const val BESLUTTERGRUPPE = "0000-GA-Beslutter"
-        private const val APP_MED_SYSTEMTILGANG = "dev-gcp:teamdagpenger:dp-vedtak-iverksett"
+        private const val APP_MED_SYSTEMTILGANG = "dp-vedtak-iverksett"
     }
 }

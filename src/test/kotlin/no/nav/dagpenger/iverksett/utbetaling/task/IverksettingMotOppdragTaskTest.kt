@@ -7,19 +7,18 @@ import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
 import no.nav.dagpenger.iverksett.felles.oppdrag.OppdragClient
+import no.nav.dagpenger.iverksett.utbetaling.domene.Iverksetting
 import no.nav.dagpenger.iverksett.utbetaling.domene.Iverksettingsresultat
 import no.nav.dagpenger.iverksett.utbetaling.domene.OppdragResultat
 import no.nav.dagpenger.iverksett.utbetaling.domene.TilkjentYtelse
-import no.nav.dagpenger.iverksett.utbetaling.domene.transformer.toDomain
+import no.nav.dagpenger.iverksett.utbetaling.domene.transformer.tomTilkjentYtelse
+import no.nav.dagpenger.iverksett.utbetaling.lagIverksettingsdata
 import no.nav.dagpenger.iverksett.utbetaling.tilstand.IverksettingService
 import no.nav.dagpenger.iverksett.utbetaling.tilstand.IverksettingsresultatService
-import no.nav.dagpenger.iverksett.utbetaling.util.opprettIverksettDto
 import no.nav.dagpenger.kontrakter.felles.Fagsystem
 import no.nav.dagpenger.kontrakter.felles.GeneriskIdSomUUID
 import no.nav.dagpenger.kontrakter.felles.objectMapper
 import no.nav.dagpenger.kontrakter.felles.somUUID
-import no.nav.dagpenger.kontrakter.iverksett.ForrigeIverksettingDto
-import no.nav.dagpenger.kontrakter.iverksett.IverksettDto
 import no.nav.dagpenger.kontrakter.oppdrag.OppdragStatus
 import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsoppdrag
 import no.nav.familie.prosessering.domene.Task
@@ -28,6 +27,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
+import java.time.LocalDate
 import java.util.Properties
 import java.util.UUID
 
@@ -51,10 +51,11 @@ internal class IverksettingMotOppdragTaskTest {
     internal fun `skal sende utbetaling til oppdrag`() {
         val oppdragSlot = slot<Utbetalingsoppdrag>()
         every { iverksettingService.hentIverksetting(any(), any()) } returns
-            opprettIverksettDto(
-                behandlingId,
-                sakId,
-            ).toDomain()
+            lagIverksettingsdata(
+                sakId = sakId.somUUID,
+                behandlingId = behandlingId.somUUID,
+                andelsdatoer = listOf(LocalDate.now(), LocalDate.now().minusDays(15)),
+            )
         every { oppdragClient.iverksettOppdrag(capture(oppdragSlot)) } just Runs
         every { iverksettingsresultatService.oppdaterTilkjentYtelseForUtbetaling(any(), behandlingId.somUUID, any()) } returns Unit
         every { iverksettingsresultatService.hentTilkjentYtelse(any(), any<UUID>(), any()) } returns null
@@ -71,7 +72,7 @@ internal class IverksettingMotOppdragTaskTest {
     @Test
     internal fun `skal sende opphør av utbetaling til oppdrag`() {
         val oppdragSlot = slot<Utbetalingsoppdrag>()
-        every { iverksettingService.hentIverksetting(any(), any()) } returns opphørAvUtbetaling().toDomain()
+        every { iverksettingService.hentIverksetting(any(), any()) } returns opphørAvUtbetaling()
         every { oppdragClient.iverksettOppdrag(capture(oppdragSlot)) } just Runs
         every { iverksettingsresultatService.hentIverksettResultat(any(), any(), any()) } returns iverksettResultat()
         every { iverksettingsresultatService.oppdaterTilkjentYtelseForUtbetaling(any(), any(), any()) } just Runs
@@ -88,7 +89,7 @@ internal class IverksettingMotOppdragTaskTest {
 
     @Test
     internal fun `skal ikke sende tom utbetaling som ikke skal iverksettes til oppdrag`() {
-        every { iverksettingService.hentIverksetting(any(), any()) } returns tomUtbetaling().toDomain()
+        every { iverksettingService.hentIverksetting(any(), any()) } returns tomUtbetaling()
 
         iverksettMotOppdragTask.doTask(Task(IverksettMotOppdragTask.TYPE, taskPayload, Properties()))
 
@@ -100,7 +101,11 @@ internal class IverksettingMotOppdragTaskTest {
         val taskSlot = slot<Task>()
         val task = Task(IverksettMotOppdragTask.TYPE, taskPayload, Properties())
         every { iverksettingService.hentIverksetting(any(), any()) } returns
-            opprettIverksettDto(behandlingId, sakId).toDomain()
+            lagIverksettingsdata(
+                behandlingId = behandlingId.somUUID,
+                sakId = sakId.somUUID,
+                andelsdatoer = listOf(LocalDate.now(), LocalDate.now().minusDays(15)),
+            )
         every { taskService.save(capture(taskSlot)) } returns task
 
         iverksettMotOppdragTask.onCompletion(task)
@@ -109,17 +114,23 @@ internal class IverksettingMotOppdragTaskTest {
         assertThat(taskSlot.captured.type).isEqualTo(VentePåStatusFraØkonomiTask.TYPE)
     }
 
-    private fun tomUtbetaling(): IverksettDto {
-        val tmpIverksettDto = opprettIverksettDto()
-        return tmpIverksettDto.copy(vedtak = tmpIverksettDto.vedtak.copy(utbetalinger = emptyList()))
+    private fun tomUtbetaling(): Iverksetting {
+        val tmpIverksetting = lagIverksettingsdata()
+        return tmpIverksetting.copy(vedtak = tmpIverksetting.vedtak.copy(tilkjentYtelse = tomTilkjentYtelse()))
     }
 
-    private fun opphørAvUtbetaling(): IverksettDto {
-        return tomUtbetaling().copy(forrigeIverksetting = ForrigeIverksettingDto(behandlingId = behandlingId))
+    private fun opphørAvUtbetaling(): Iverksetting {
+        val tmpIverksetting = tomUtbetaling()
+        return tmpIverksetting.copy(behandling = tmpIverksetting.behandling.copy(forrigeBehandlingId = behandlingId))
     }
 
     private fun iverksettResultat(): Iverksettingsresultat {
-        val iverksett = opprettIverksettDto(behandlingId, sakId).toDomain()
+        val iverksett =
+            lagIverksettingsdata(
+                behandlingId = behandlingId.somUUID,
+                sakId = sakId.somUUID,
+                andelsdatoer = listOf(LocalDate.now(), LocalDate.now().minusDays(15)),
+            )
         val sisteAndelIKjede = iverksett.vedtak.tilkjentYtelse.andelerTilkjentYtelse.first().copy(periodeId = 0)
         return Iverksettingsresultat(
             fagsystem = iverksett.fagsak.fagsystem,
