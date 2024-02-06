@@ -38,9 +38,9 @@ spec:
     - name: SPRING_PROFILES_ACTIVE
       value: {{ springProfil }}
     - name: BESLUTTER_GRUPPE
-      value: {{ groups.beslutter }}
+      value: {{ konsumenter.dagpenger.grupper.beslutter }}
     - name: APP_MED_SYSTEMTILGANG
-      value: {{ systemtilgang_app }}
+      value: {{ konsumenter.dagpenger.klientapp }}
     - name: PROSESSERING_GRUPPE
       value: {{ groups.prosesseringAdmin }}
   envFrom:
@@ -51,8 +51,8 @@ spec:
       claims:
         groups:
           - id: {{ groups.prosesseringAdmin }} # 0000-GA-Dagpenger-Prosessering-Admin gir tilgang til prosessering
-          - id: {{ groups.saksbehandler }} # 0000-GA-Dagpenger-Saksbehandler
-          - id: {{ groups.beslutter }} # 0000-GA-Dagpenger-Beslutter
+          - id: {{ konsumenter.dagpenger.grupper.saksbehandler }} # 0000-GA-Dagpenger-Saksbehandler
+          - id: {{ konsumenter.dagpenger.grupper.beslutter }} # 0000-GA-Dagpenger-Beslutter
         extra:
           - NAVident
           - azp_name
