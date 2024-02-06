@@ -50,6 +50,9 @@ spec:
         groups:
           - id: "928636f4-fd0d-4149-978e-a6fb68bb19de" # 0000-GA-STDAPPS gir tilgang til prosessering
           - id: "97140b9a-07c5-414c-beeb-69824d04c044" # 0000-GA-Dagpenger-Prosessering-Admin gir tilgang til prosessering
+      extra:
+        - NAVident
+        - azp_name
   accessPolicy:
     inbound:
       rules:
