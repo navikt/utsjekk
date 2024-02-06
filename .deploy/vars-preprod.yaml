@@ -10,14 +10,3 @@ db:
   name: "dp-iverksett-2"
 groups:
   prosesseringAdmin: "928636f4-fd0d-4149-978e-a6fb68bb19de" #Dette er 0000-GA-STDAPPS i preprod
-konsumenter:
-  dagpenger:
-    klientapp: "dev-gcp:teamdagpenger:dp-vedtak-iverksett"
-    grupper:
-      saksbehandler: "3e28466f-c53d-46da-8b44-a4abc2ad4593"
-      beslutter: "11b8475a-fb12-41aa-b1f6-8497c1b5385b"
-  tiltakspenger:
-    klientapp: "dev-gcp:tpts:tiltakspenger-utbetaling"
-    grupper:
-      saksbehandler: "TODO"
-      beslutter: "TODO"
