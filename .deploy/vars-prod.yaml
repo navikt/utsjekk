@@ -10,14 +10,5 @@ db:
   name: "dp-iverksett"
 groups:
   prosesseringAdmin: "97140b9a-07c5-414c-beeb-69824d04c044"
-konsumenter:
-  dagpenger:
-    klientapp: "prod-gcp:teamdagpenger:dp-vedtak-iverksett"
-    grupper:
-      saksbehandler: "2e9c63d8-322e-4c1f-b500-a0abb812761c"
-      beslutter: "70d54cad-53a3-4788-bbe3-565096f01da7"
-  tiltakspenger:
-    klientapp: "prod-gcp:tpts:tiltakspenger-utbetaling"
-    grupper:
-      saksbehandler: "TODO"
-      beslutter: "TODO"
+  saksbehandlerDagpenger: "2e9c63d8-322e-4c1f-b500-a0abb812761c"
+  beslutterDagpenger: "70d54cad-53a3-4788-bbe3-565096f01da7"

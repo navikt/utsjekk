@@ -82,20 +82,25 @@ prosessering:
     after:
       weeks: 16
 
-BESLUTTER_GRUPPE: ${BESLUTTER_GRUPPE}
-APP_MED_SYSTEMTILGANG: ${APP_MED_SYSTEMTILGANG}
 PROSESSERING_GRUPPE: ${PROSESSERING_GRUPPE}
+TILLEGGSSTØNADER_BESLUTTER_GRUPPE: TODO
 
 konsumenter:
   dagpenger:
-    fagsystem: "DAGPENGER"
-    klientapp: "dp-vedtak-iverksett"
+    fagsystem: DAGPENGER
+    klientapp: dp-vedtak-iverksett
     grupper:
-      saksbehandler: "3e28466f-c53d-46da-8b44-a4abc2ad4593"
-      beslutter: "11b8475a-fb12-41aa-b1f6-8497c1b5385b"
+      saksbehandler: ${SAKSBEHANDLER_DAGPENGER_GRUPPE}
+      beslutter: ${BESLUTTER_DAGPENGER_GRUPPE}
   tiltakspenger:
-    fagsystem: "TILTAKSPENGER"
-    klientapp: "tiltakspenger-utbetaling"
+    fagsystem: TILTAKSPENGER
+    klientapp: tiltakspenger-utbetaling
     grupper:
-      saksbehandler: "TODO"
-      beslutter: "TODO"
+      saksbehandler: TODO
+      beslutter: TODO
+  tilleggsstønader:
+    fagsystem: TILLEGGSSTØNADER
+    klientapp: TODO
+    grupper:
+      saksbehandler: TODO
+      beslutter: ${TILLEGGSSTØNADER_BESLUTTER_GRUPPE}

@@ -8,6 +8,8 @@ class KonsumentConfig {
     val konsumenter: Map<String, Konsument> = mutableMapOf()
 
     fun finnFagsystem(klientapp: String) = konsumenter.values.first { it.klientapp == klientapp }.fagsystem
+
+    fun configForFagsystem(fagsystem: Fagsystem) = konsumenter.values.first { it.fagsystem == fagsystem }
 }
 
 data class Konsument(

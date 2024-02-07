@@ -7,7 +7,6 @@ import no.nav.dagpenger.kontrakter.felles.GeneriskIdSomUUID
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.web.client.exchange
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
@@ -20,12 +19,9 @@ class IverksettingControllerTest : ServerTest() {
     private val behandlingId = GeneriskIdSomUUID(UUID.randomUUID())
     private val sakId = GeneriskIdSomUUID(UUID.randomUUID())
 
-    @Value("\${BESLUTTER_GRUPPE}")
-    private lateinit var beslutterGruppe: String
-
     @BeforeEach
     fun setUp() {
-        headers.setBearerAuth(lokalTestToken(grupper = listOf(beslutterGruppe)))
+        headers.setBearerAuth(lokalTestToken(grupper = listOf(konsumentConfig.konsumenter["dagpenger"]!!.grupper.beslutter)))
         headers.set(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
     }
 

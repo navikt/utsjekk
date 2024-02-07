@@ -8,7 +8,9 @@ import no.nav.dagpenger.iverksett.felles.oppdrag.OppdragClient
 import no.nav.dagpenger.iverksett.utbetaling.api.IverksettingTilgangskontrollService
 import no.nav.dagpenger.iverksett.utbetaling.api.TokenContext
 import no.nav.dagpenger.iverksett.utbetaling.api.assertApiFeil
+import no.nav.dagpenger.iverksett.utbetaling.domene.Grupper
 import no.nav.dagpenger.iverksett.utbetaling.domene.IverksettingEntitet
+import no.nav.dagpenger.iverksett.utbetaling.domene.Konsument
 import no.nav.dagpenger.iverksett.utbetaling.domene.KonsumentConfig
 import no.nav.dagpenger.iverksett.utbetaling.domene.transformer.IverksettDtoMapper
 import no.nav.dagpenger.iverksett.utbetaling.featuretoggle.FeatureToggleService
@@ -50,6 +52,12 @@ class IverksettingTilgangskontrollServiceTest {
     @BeforeAll
     fun initialize() {
         every { konsumentConfig.finnFagsystem(any()) } returns Fagsystem.DAGPENGER
+        every { konsumentConfig.configForFagsystem(any()) } returns
+            Konsument(
+                fagsystem = Fagsystem.DAGPENGER,
+                klientapp = APP_MED_SYSTEMTILGANG,
+                grupper = Grupper(beslutter = BESLUTTERGRUPPE),
+            )
     }
 
     @BeforeEach
@@ -58,8 +66,7 @@ class IverksettingTilgangskontrollServiceTest {
             IverksettingTilgangskontrollService(
                 iverksettingServiceMock,
                 featureToggleServiceMock,
-                BESLUTTERGRUPPE,
-                APP_MED_SYSTEMTILGANG,
+                konsumentConfig,
             )
 
         every { featureToggleServiceMock.isEnabled(any(), any()) } returns true

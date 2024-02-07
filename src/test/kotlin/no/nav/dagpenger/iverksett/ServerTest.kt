@@ -4,6 +4,7 @@ import com.github.tomakehurst.wiremock.WireMockServer
 import no.nav.dagpenger.iverksett.felles.database.DbContainerInitializer
 import no.nav.dagpenger.iverksett.felles.oppdrag.konfig.RestTemplateAzure
 import no.nav.dagpenger.iverksett.felles.util.TokenUtil
+import no.nav.dagpenger.iverksett.utbetaling.domene.KonsumentConfig
 import no.nav.security.mock.oauth2.MockOAuth2Server
 import no.nav.security.token.support.spring.test.EnableMockOAuth2Server
 import org.junit.jupiter.api.AfterEach
@@ -37,6 +38,9 @@ abstract class ServerTest {
 
     @Autowired
     private lateinit var mockOAuth2Server: MockOAuth2Server
+
+    @Autowired
+    protected lateinit var konsumentConfig: KonsumentConfig
 
     @LocalServerPort
     private var port: Int? = 0
