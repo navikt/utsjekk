@@ -90,14 +90,14 @@ konsumenter:
     fagsystem: DAGPENGER
     klientapp: dp-vedtak-iverksett
     grupper:
-      saksbehandler: ${SAKSBEHANDLER_DAGPENGER_GRUPPE}
-      beslutter: ${BESLUTTER_DAGPENGER_GRUPPE}
+      saksbehandler: ${DAGPENGER_SAKSBEHANDLER_GRUPPE}
+      beslutter: ${DAGPENGER_BESLUTTER_GRUPPE}
   tiltakspenger:
     fagsystem: TILTAKSPENGER
     klientapp: tiltakspenger-utbetaling
     grupper:
-      saksbehandler: TODO
-      beslutter: TODO
+      saksbehandler: ${TILTAKSPENGER_SAKSBEHANDLER_GRUPPE}
+      beslutter: ${TILTAKSPENGER_BESLUTTER_GRUPPE}
   tilleggsstønader:
     fagsystem: TILLEGGSSTØNADER
     klientapp: TODO

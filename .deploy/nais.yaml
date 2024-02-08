@@ -39,10 +39,14 @@ spec:
       value: {{ springProfil }}
     - name: PROSESSERING_GRUPPE
       value: {{ groups.prosesseringAdmin }}
-    - name: SAKSBEHANDLER_DAGPENGER_GRUPPE
+    - name: DAGPENGER_SAKSBEHANDLER_GRUPPE
       value: {{ groups.saksbehandlerDagpenger }}
-    - name: BESLUTTER_DAGPENGER_GRUPPE
+    - name: DAGPENGER_BESLUTTER_GRUPPE
       value: {{ groups.beslutterDagpenger }}
+    - name: TILTAKSPENGER_SAKSBEHANDLER_GRUPPE
+      value: {{ groups.saksbehandlerTiltakspenger }}
+    - name: TILTAKSPENGER_BESLUTTER_GRUPPE
+      value: {{ groups.beslutterTiltakspenger }}
   envFrom:
     - secret: {{ unleash.apiToken }}
   azure:

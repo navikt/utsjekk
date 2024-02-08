@@ -154,7 +154,7 @@ class IverksettingTilgangskontrollServiceTest {
     }
 
     companion object {
-        private const val BESLUTTERGRUPPE = "0000-GA-Beslutter"
+        private const val BESLUTTERGRUPPE = "0000-GA-Test-Beslutter"
         private const val APP_MED_SYSTEMTILGANG = "dp-vedtak-iverksett"
     }
 }
