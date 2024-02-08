@@ -41,6 +41,10 @@ spec:
       value: "dev-gcp:tpts:tiltakspenger-utbetaling"
     - name: PROSESSERING_GRUPPE
       value: "928636f4-fd0d-4149-978e-a6fb68bb19de"
+    - name: SAKSBEHANDLER_DAGPENGER_GRUPPE
+      value: "3e28466f-c53d-46da-8b44-a4abc2ad4593"
+    - name: BESLUTTER_DAGPENGER_GRUPPE
+      value: "11b8475a-fb12-41aa-b1f6-8497c1b5385b"
   envFrom:
     - secret: tiltakspenger-iverksett-unleash-api-token
   azure:
