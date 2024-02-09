@@ -66,14 +66,29 @@ class IverksettMotOppdragTask(
                     ?: error("Kunne ikke finne iverksettresultat for behandlingId=${it.somString}")
             }
 
-        lagOgSendUtbetalingsoppdragOgOppdaterTilkjentYtelse(iverksett, forrigeIverksettResultat, payload.behandlingId)
+        val beregnetUtbetalingsoppdrag = lagUtbetalingsoppdrag(iverksett, forrigeIverksettResultat)
+        if (beregnetUtbetalingsoppdrag.utbetalingsoppdrag.utbetalingsperiode.isNotEmpty()) {
+            val tilkjentYtelse =
+                oppdaterTilkjentYtelse(
+                    tilkjentYtelse = iverksett.vedtak.tilkjentYtelse,
+                    beregnetUtbetalingsoppdrag = beregnetUtbetalingsoppdrag,
+                    forrigeIverksettingsresultat = forrigeIverksettResultat,
+                    behandlingId = payload.behandlingId,
+                    fagsystem = iverksett.fagsak.fagsystem,
+                    iverksettingId = iverksett.behandling.iverksettingId,
+                )
+            iverksettUtbetaling(tilkjentYtelse)
+        } else {
+            log.warn(
+                "Iverksetter ikke noe mot oppdrag. Ingen perioder i utbetalingsoppdraget. behandlingId=${payload.behandlingId.somString}",
+            )
+        }
     }
 
-    private fun lagOgSendUtbetalingsoppdragOgOppdaterTilkjentYtelse(
+    private fun lagUtbetalingsoppdrag(
         iverksetting: Iverksetting,
         forrigeIverksettingsresultat: Iverksettingsresultat?,
-        behandlingId: GeneriskId,
-    ) {
+    ): BeregnetUtbetalingsoppdrag {
         val behandlingsinformasjon =
             Behandlingsinformasjon(
                 saksbehandlerId = iverksetting.vedtak.saksbehandlerId,
@@ -91,36 +106,22 @@ class IverksettMotOppdragTask(
                 ?.mapValues { it.value.tilAndelData() }
                 ?: emptyMap()
 
-        val beregnetUtbetalingsoppdrag =
-            Utbetalingsgenerator.lagUtbetalingsoppdrag(
-                behandlingsinformasjon = behandlingsinformasjon,
-                nyeAndeler = nyeAndeler,
-                forrigeAndeler = forrigeAndeler,
-                sisteAndelPerKjede = sisteAndelPerKjede,
-            )
-
-        if (beregnetUtbetalingsoppdrag.utbetalingsoppdrag.utbetalingsperiode.isNotEmpty()) {
-            oppdaterTilkjentYtelseOgIverksettOppdrag(
-                tilkjentYtelse = iverksetting.vedtak.tilkjentYtelse,
-                beregnetUtbetalingsoppdrag = beregnetUtbetalingsoppdrag,
-                forrigeIverksettingsresultat = forrigeIverksettingsresultat,
-                behandlingId = behandlingId,
-                fagsystem = iverksetting.fagsak.fagsystem,
-                iverksettingId = iverksetting.behandling.iverksettingId,
-            )
-        } else {
-            log.warn("Iverksetter ikke noe mot oppdrag. Ikke utbetalingsoppdrag. behandlingId=${behandlingId.somString}")
-        }
+        return Utbetalingsgenerator.lagUtbetalingsoppdrag(
+            behandlingsinformasjon = behandlingsinformasjon,
+            nyeAndeler = nyeAndeler,
+            forrigeAndeler = forrigeAndeler,
+            sisteAndelPerKjede = sisteAndelPerKjede,
+        )
     }
 
-    private fun oppdaterTilkjentYtelseOgIverksettOppdrag(
+    private fun oppdaterTilkjentYtelse(
         tilkjentYtelse: TilkjentYtelse,
         beregnetUtbetalingsoppdrag: BeregnetUtbetalingsoppdrag,
         forrigeIverksettingsresultat: Iverksettingsresultat?,
         behandlingId: GeneriskId,
         fagsystem: Fagsystem,
         iverksettingId: String? = null,
-    ) {
+    ): TilkjentYtelse {
         val nyeAndelerMedPeriodeId =
             tilkjentYtelse.andelerTilkjentYtelse.map { andel ->
                 val andelData = andel.tilAndelData()
@@ -150,12 +151,15 @@ class IverksettMotOppdragTask(
             iverksettingId = iverksettingId,
             tilkjentYtelseForUtbetaling = nyTilkjentYtelseMedSisteAndelIKjede,
         )
+        return nyTilkjentYtelseMedSisteAndelIKjede
+    }
 
-        nyTilkjentYtelseMedSisteAndelIKjede.utbetalingsoppdrag?.let { utbetalingsoppdrag ->
+    private fun iverksettUtbetaling(tilkjentYtelse: TilkjentYtelse) {
+        tilkjentYtelse.utbetalingsoppdrag?.let { utbetalingsoppdrag ->
             if (utbetalingsoppdrag.utbetalingsperiode.isNotEmpty()) {
                 oppdragClient.iverksettOppdrag(utbetalingsoppdrag)
             } else {
-                log.warn("Iverksetter ikke noe mot oppdrag. Ingen utbetalingsperioder i utbetalingsoppdraget. behandlingId=$behandlingId")
+                log.warn("Iverksetter ikke noe mot oppdrag. Ingen utbetalingsperioder i utbetalingsoppdraget.")
             }
         }
     }
@@ -168,7 +172,7 @@ class IverksettMotOppdragTask(
             tilkjentYtelse.andelerTilkjentYtelse.groupBy {
                 it.stønadsdata
             }.mapValues {
-                it.value.maxBy { it.periodeId!! }
+                it.value.maxBy { andel -> andel.periodeId!! }
             }
 
         val nySisteAndelerPerKjede: Map<Stønadsdata, AndelTilkjentYtelse> =
