@@ -39,14 +39,10 @@ class IverksettingService(
             error("Kan ikke iverksette akkurat nå")
         }
 
-        val iverksettMedRiktigStønadstype =
-            iverksetting.copy(
-                fagsak = iverksetting.fagsak.copy(fagsystem = utledFagsystem(iverksetting)),
-            )
         iverksettingRepository.insert(
             IverksettingEntitet(
                 iverksetting.behandling.behandlingId.somUUID,
-                iverksettMedRiktigStønadstype,
+                iverksetting,
             ),
         )
 
@@ -168,12 +164,6 @@ class IverksettingService(
                 .filter { it.data.fagsak.fagsystem == fagsystem }
         return vedtakForSak.isEmpty()
     }
-
-    private fun utledFagsystem(iverksetting: Iverksetting): Fagsystem =
-        iverksetting.vedtak.tilkjentYtelse.andelerTilkjentYtelse.firstOrNull()?.stønadsdata?.stønadstype?.tilFagsystem()
-            ?: hentForrigeIverksett(iverksetting)?.vedtak?.tilkjentYtelse?.andelerTilkjentYtelse?.firstOrNull()?.stønadsdata?.stønadstype
-                ?.tilFagsystem()
-            ?: Fagsystem.DAGPENGER
 }
 
 fun Task.erAktiv() =
