@@ -20,7 +20,7 @@ class OppdragClientMock {
     fun oppdragClient(): OppdragClient {
         val oppdragClientMock = mockk<OppdragClient>()
 
-        every { oppdragClientMock.grensesnittavstemming(any()) } returns "OK"
+        every { oppdragClientMock.grensesnittavstemming(any()) } just Runs
         every { oppdragClientMock.iverksettOppdrag(any()) } just Runs
         every { oppdragClientMock.hentStatus(any()) } returns OppdragStatusDto(OppdragStatus.KVITTERT_OK, null)
 

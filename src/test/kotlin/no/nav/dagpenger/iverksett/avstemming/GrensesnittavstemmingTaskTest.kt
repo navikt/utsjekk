@@ -1,6 +1,8 @@
 package no.nav.dagpenger.iverksett.avstemming
 
+import io.mockk.Runs
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
@@ -24,7 +26,7 @@ internal class GrensesnittavstemmingTaskTest {
     fun `doTask skal kalle oppdragClient med fradato fra payload og dato for triggerTid som parametere`() {
         val grensesnittavstemmingRequestSlot = slot<GrensesnittavstemmingRequest>()
 
-        every { oppdragClient.grensesnittavstemming(any()) }.returns("ok")
+        every { oppdragClient.grensesnittavstemming(any()) } just Runs
 
         grensesnittavstemmingTask.doTask(
             Task(

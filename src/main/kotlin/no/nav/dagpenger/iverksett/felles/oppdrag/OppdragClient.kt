@@ -31,5 +31,5 @@ class OppdragClient(
     fun hentStatus(oppdragId: OppdragId) = postForEntity<OppdragStatusDto>(getStatusUri, oppdragId)
 
     fun grensesnittavstemming(grensesnittavstemmingRequest: GrensesnittavstemmingRequest) =
-        postForEntity<String>(grensesnittavstemmingUri, grensesnittavstemmingRequest)
+        postForEntity<Unit>(grensesnittavstemmingUri, grensesnittavstemmingRequest)
 }
