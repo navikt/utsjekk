@@ -20,6 +20,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.junit.jupiter.SpringExtension
+import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
 @ContextConfiguration(initializers = [DbContainerInitializer::class])
@@ -77,5 +78,12 @@ abstract class ServerTest {
         grupper: List<String> = emptyList(),
     ): String {
         return TokenUtil.onBehalfOfToken(mockOAuth2Server, saksbehandler, grupper)
+    }
+
+    protected fun lokalClientCredentialsTestToken(
+        accessAsApplication: Boolean,
+        clientId: String = UUID.randomUUID().toString(),
+    ): String {
+        return TokenUtil.clientToken(mockOAuth2Server, accessAsApplication, clientId)
     }
 }
