@@ -2,7 +2,7 @@ package no.nav.dagpenger.iverksett.avstemming
 
 import com.fasterxml.jackson.module.kotlin.readValue
 import no.nav.dagpenger.iverksett.felles.oppdrag.OppdragClient
-import no.nav.dagpenger.kontrakter.felles.StønadType
+import no.nav.dagpenger.kontrakter.felles.Fagsystem
 import no.nav.dagpenger.kontrakter.felles.objectMapper
 import no.nav.dagpenger.kontrakter.oppdrag.GrensesnittavstemmingRequest
 import no.nav.familie.prosessering.AsyncTaskStep
@@ -14,15 +14,14 @@ import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import java.time.LocalDate
 
-data class GrensesnittavstemmingPayload(val fraDato: LocalDate, val stønadstype: StønadType)
+data class GrensesnittavstemmingPayload(val fraDato: LocalDate, val fagsystem: Fagsystem)
 
 @Service
 @TaskStepBeskrivelse(taskStepType = GrensesnittavstemmingTask.TYPE, beskrivelse = "Utfører grensesnittavstemming mot økonomi.")
 class GrensesnittavstemmingTask(
-        private val oppdragClient: OppdragClient,
-        private val taskService: TaskService,
+    private val oppdragClient: OppdragClient,
+    private val taskService: TaskService,
 ) : AsyncTaskStep {
-
     val logger: Logger = LoggerFactory.getLogger(this.javaClass)
 
     override fun doTask(task: Task) {
@@ -30,12 +29,13 @@ class GrensesnittavstemmingTask(
             val fraTidspunkt = fraDato.atStartOfDay()
             val tilTidspunkt = task.triggerTid.toLocalDate().atStartOfDay()
 
-            logger.info("Gjør ${task.id} $stønadstype avstemming mot oppdrag fra $fraTidspunkt til $tilTidspunkt")
-            val grensesnittavstemmingRequest = GrensesnittavstemmingRequest(
-                fagsystem = stønadstype.tilFagsystem(),
-                fra = fraTidspunkt,
-                til = tilTidspunkt,
-            )
+            logger.info("Gjør ${task.id} avstemming for $fagsystem mot oppdrag fra $fraTidspunkt til $tilTidspunkt")
+            val grensesnittavstemmingRequest =
+                GrensesnittavstemmingRequest(
+                    fagsystem = fagsystem,
+                    fra = fraTidspunkt,
+                    til = tilTidspunkt,
+                )
             oppdragClient.grensesnittavstemming(grensesnittavstemmingRequest)
         }
     }
@@ -43,7 +43,7 @@ class GrensesnittavstemmingTask(
     override fun onCompletion(task: Task) {
         val payload = objectMapper.readValue<GrensesnittavstemmingPayload>(task.payload)
         val nesteFradato = task.triggerTid.toLocalDate()
-        opprettGrensesnittavstemmingTask(GrensesnittavstemmingDto(stønadstype = payload.stønadstype, fraDato = nesteFradato))
+        opprettGrensesnittavstemmingTask(GrensesnittavstemmingDto(fagsystem = payload.fagsystem, fraDato = nesteFradato))
     }
 
     fun opprettGrensesnittavstemmingTask(grensesnittavstemmingDto: GrensesnittavstemmingDto) =
@@ -51,7 +51,6 @@ class GrensesnittavstemmingTask(
             .let { taskService.save(it) }
 
     companion object {
-
         const val TYPE = "utførGrensesnittavstemming"
     }
 }

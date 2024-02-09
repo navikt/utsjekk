@@ -5,20 +5,19 @@ import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
 import no.nav.dagpenger.iverksett.felles.oppdrag.OppdragClient
-import java.time.LocalDate
-import java.time.LocalDateTime
-import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
+import no.nav.dagpenger.kontrakter.felles.Fagsystem
 import no.nav.dagpenger.kontrakter.felles.objectMapper
 import no.nav.dagpenger.kontrakter.oppdrag.GrensesnittavstemmingRequest
 import no.nav.familie.prosessering.domene.Task
 import no.nav.familie.prosessering.internal.TaskService
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import java.time.LocalDate
+import java.time.LocalDateTime
 
 internal class GrensesnittavstemmingTaskTest {
-
     private val oppdragClient = mockk<OppdragClient>()
-    val taskService = mockk<TaskService>()
+    private val taskService = mockk<TaskService>()
     private val grensesnittavstemmingTask = GrensesnittavstemmingTask(oppdragClient, taskService)
 
     @Test
@@ -38,7 +37,7 @@ internal class GrensesnittavstemmingTaskTest {
         val capturedGrensesnittRequest = grensesnittavstemmingRequestSlot.captured
         assertThat(capturedGrensesnittRequest.fra).isEqualTo(LocalDate.of(2018, 4, 18).atStartOfDay())
         assertThat(capturedGrensesnittRequest.til).isEqualTo(LocalDate.of(2018, 4, 19).atStartOfDay())
-        assertThat(capturedGrensesnittRequest.fagsystem).isEqualTo(StønadTypeDagpenger.DAGPENGER_ARBEIDSSØKER_ORDINÆR.tilFagsystem())
+        assertThat(capturedGrensesnittRequest.fagsystem).isEqualTo(Fagsystem.DAGPENGER)
     }
 
     @Test
@@ -58,19 +57,18 @@ internal class GrensesnittavstemmingTaskTest {
             objectMapper.writeValueAsString(
                 GrensesnittavstemmingPayload(
                     fraDato = LocalDate.of(2018, 4, 19),
-                    stønadstype = StønadTypeDagpenger.DAGPENGER_ARBEIDSSØKER_ORDINÆR,
+                    fagsystem = Fagsystem.DAGPENGER,
                 ),
             )
         assertThat(slot.captured.payload).isEqualTo(forventetPayload)
     }
 
     companion object {
-
         val payload: String =
             objectMapper.writeValueAsString(
                 GrensesnittavstemmingPayload(
                     fraDato = LocalDate.of(2018, 4, 18),
-                    stønadstype = StønadTypeDagpenger.DAGPENGER_ARBEIDSSØKER_ORDINÆR,
+                    fagsystem = Fagsystem.DAGPENGER,
                 ),
             )
     }
