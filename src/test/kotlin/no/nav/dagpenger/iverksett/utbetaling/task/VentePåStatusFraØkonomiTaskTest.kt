@@ -18,6 +18,7 @@ import no.nav.dagpenger.iverksett.util.mockFeatureToggleService
 import no.nav.dagpenger.kontrakter.felles.Fagsystem
 import no.nav.dagpenger.kontrakter.felles.GeneriskId
 import no.nav.dagpenger.kontrakter.felles.GeneriskIdSomUUID
+import no.nav.dagpenger.kontrakter.felles.Satstype
 import no.nav.dagpenger.kontrakter.felles.objectMapper
 import no.nav.dagpenger.kontrakter.felles.somUUID
 import no.nav.dagpenger.kontrakter.oppdrag.OppdragStatus
@@ -120,7 +121,7 @@ internal class VentePåStatusFraØkonomiTaskTest {
             fom = LocalDate.of(2021, 1, 1),
             tom = LocalDate.of(2021, 6, 1),
             sats = BigDecimal.TEN,
-            satstype = Utbetalingsperiode.Satstype.DAG,
+            satstype = Satstype.DAGLIG,
             utbetalesTil = "x",
             behandlingId = GeneriskIdSomUUID(UUID.randomUUID()),
             utbetalingsgrad = null,

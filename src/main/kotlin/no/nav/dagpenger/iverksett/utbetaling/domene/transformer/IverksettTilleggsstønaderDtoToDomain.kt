@@ -1,8 +1,5 @@
 package no.nav.dagpenger.iverksett.utbetaling.domene.transformer
 
-import no.nav.dagpenger.iverksett.utbetaling.api.IverksettTilleggsstønaderDto
-import no.nav.dagpenger.iverksett.utbetaling.api.UtbetalingTilleggsstønaderDto
-import no.nav.dagpenger.iverksett.utbetaling.api.VedtaksdetaljerTilleggsstønaderDto
 import no.nav.dagpenger.iverksett.utbetaling.domene.AndelTilkjentYtelse
 import no.nav.dagpenger.iverksett.utbetaling.domene.Behandlingsdetaljer
 import no.nav.dagpenger.iverksett.utbetaling.domene.Fagsakdetaljer
@@ -13,6 +10,9 @@ import no.nav.dagpenger.iverksett.utbetaling.domene.TilkjentYtelse
 import no.nav.dagpenger.iverksett.utbetaling.domene.Vedtaksdetaljer
 import no.nav.dagpenger.kontrakter.felles.Datoperiode
 import no.nav.dagpenger.kontrakter.felles.Fagsystem
+import no.nav.dagpenger.kontrakter.iverksett.IverksettTilleggsstønaderDto
+import no.nav.dagpenger.kontrakter.iverksett.UtbetalingTilleggsstønaderDto
+import no.nav.dagpenger.kontrakter.iverksett.VedtaksdetaljerTilleggsstønaderDto
 
 fun IverksettTilleggsstønaderDto.toDomain(): Iverksetting =
     Iverksetting(

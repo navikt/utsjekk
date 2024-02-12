@@ -106,7 +106,7 @@ class ApplicationConfig {
         private fun grupper(): List<String> {
             return try {
                 SpringTokenValidationContextHolder().tokenValidationContext.getClaims("azuread")
-                    ?.get("groups") as List<String>? ?: emptyList()
+                    ?.getAsList("groups") ?: emptyList()
             } catch (e: Exception) {
                 emptyList()
             }

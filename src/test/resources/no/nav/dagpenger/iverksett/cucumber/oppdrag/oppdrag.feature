@@ -14,7 +14,7 @@ Egenskap: Vedtak for førstegangsbehandling
 
     Så forvent følgende utbetalingsoppdrag
       | BehandlingId | Fra dato   | Til dato   | Opphørsdato | Beløp | Kode endring | Er endring | Periode id | Forrige periode id | Satstype |
-      | 1            | 01.03.2021 | 01.03.2021 |             | 700   | NY           | Nei        | 0          |                    | DAG      |
+      | 1            | 01.03.2021 | 01.03.2021 |             | 700   | NY           | Nei        | 0          |                    | DAGLIG   |
 
 
   Scenario: Revurdering uten endring av andeler

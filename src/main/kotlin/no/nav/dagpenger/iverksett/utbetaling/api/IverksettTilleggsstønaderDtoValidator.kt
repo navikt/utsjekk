@@ -1,7 +1,8 @@
 package no.nav.dagpenger.iverksett.utbetaling.api
 
 import no.nav.dagpenger.iverksett.felles.http.advice.ApiFeil
-import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsperiode
+import no.nav.dagpenger.kontrakter.felles.Satstype
+import no.nav.dagpenger.kontrakter.iverksett.IverksettTilleggsstønaderDto
 import org.springframework.http.HttpStatus
 import java.time.YearMonth
 
@@ -61,7 +62,7 @@ object IverksettTilleggsstønaderDtoValidator {
     private fun utbetalingsperioderSamsvarerMedSatstype(iverksettDto: IverksettTilleggsstønaderDto) {
         val satstype = iverksettDto.vedtak.utbetalinger.firstOrNull()?.satstype
 
-        if (satstype == Utbetalingsperiode.Satstype.MND) {
+        if (satstype == Satstype.MÅNEDLIG) {
             val alleFomErStartenAvMåned = iverksettDto.vedtak.utbetalinger.all { it.fraOgMedDato.dayOfMonth == 1 }
             val alleTomErSluttenAvMåned =
                 iverksettDto.vedtak.utbetalinger.all {
@@ -80,7 +81,7 @@ object IverksettTilleggsstønaderDtoValidator {
 
     private fun iverksettingIdSkalEntenIkkeVæreSattEllerVæreSattForNåværendeOgForrige(iverksettDto: IverksettTilleggsstønaderDto) {
         if (iverksettDto.iverksettingId != null && iverksettDto.forrigeIverksetting != null &&
-            iverksettDto.forrigeIverksetting.iverksettingId == null
+            iverksettDto.forrigeIverksetting?.iverksettingId == null
         ) {
             throw ApiFeil(
                 "IverksettingId er satt for nåværende iverksetting, men ikke forrige iverksetting",
@@ -89,7 +90,7 @@ object IverksettTilleggsstønaderDtoValidator {
         }
 
         if (iverksettDto.iverksettingId == null && iverksettDto.forrigeIverksetting != null &&
-            iverksettDto.forrigeIverksetting.iverksettingId != null
+            iverksettDto.forrigeIverksetting?.iverksettingId != null
         ) {
             throw ApiFeil(
                 "IverksettingId er satt for forrige iverksetting, men ikke nåværende iverksetting",

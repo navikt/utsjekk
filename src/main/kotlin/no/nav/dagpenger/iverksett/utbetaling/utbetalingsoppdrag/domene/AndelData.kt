@@ -1,7 +1,7 @@
 package no.nav.dagpenger.iverksett.utbetaling.utbetalingsoppdrag.domene
 
 import no.nav.dagpenger.iverksett.utbetaling.domene.Stønadsdata
-import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsperiode
+import no.nav.dagpenger.kontrakter.felles.Satstype
 import java.time.LocalDate
 
 /**
@@ -12,7 +12,7 @@ data class AndelData(
     val fom: LocalDate,
     val tom: LocalDate,
     val beløp: Int,
-    val satstype: Utbetalingsperiode.Satstype = Utbetalingsperiode.Satstype.DAG,
+    val satstype: Satstype = Satstype.DAGLIG,
     val stønadsdata: Stønadsdata,
     val periodeId: Long? = null,
     val forrigePeriodeId: Long? = null,

@@ -5,10 +5,10 @@ import no.nav.dagpenger.iverksett.utbetaling.domene.StønadsdataDagpenger
 import no.nav.dagpenger.iverksett.utbetaling.utbetalingsoppdrag.cucumber.domeneparser.DomeneparserUtil.groupByBehandlingId
 import no.nav.dagpenger.iverksett.utbetaling.utbetalingsoppdrag.cucumber.domeneparser.IdTIlUUIDHolder.behandlingIdTilUUID
 import no.nav.dagpenger.iverksett.utbetaling.utbetalingsoppdrag.domene.AndelData
+import no.nav.dagpenger.kontrakter.felles.Satstype
 import no.nav.dagpenger.kontrakter.felles.StønadType
 import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
 import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsoppdrag
-import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsperiode
 import org.assertj.core.api.Assertions.assertThat
 import java.time.LocalDate
 import java.util.UUID
@@ -53,8 +53,8 @@ object OppdragParser {
             tom = parseDato(Domenebegrep.TIL_DATO, rad),
             beløp = parseInt(DomenebegrepAndeler.BELØP, rad),
             satstype =
-                parseValgfriEnum<Utbetalingsperiode.Satstype>(DomenebegrepAndeler.SATSTYPE, rad)
-                    ?: Utbetalingsperiode.Satstype.DAG,
+                parseValgfriEnum<Satstype>(DomenebegrepAndeler.SATSTYPE, rad)
+                    ?: Satstype.DAGLIG,
             stønadsdata = stønadsdataDagpenger,
             periodeId = parseValgfriLong(DomenebegrepUtbetalingsoppdrag.PERIODE_ID, rad),
             forrigePeriodeId = parseValgfriLong(DomenebegrepUtbetalingsoppdrag.FORRIGE_PERIODE_ID, rad),
@@ -86,8 +86,8 @@ object OppdragParser {
             tom = parseDato(Domenebegrep.TIL_DATO, it),
             opphør = parseValgfriDato(DomenebegrepUtbetalingsoppdrag.OPPHØRSDATO, it),
             satstype =
-                parseValgfriEnum<Utbetalingsperiode.Satstype>(DomenebegrepAndeler.SATSTYPE, it)
-                    ?: Utbetalingsperiode.Satstype.DAG,
+                parseValgfriEnum<Satstype>(DomenebegrepAndeler.SATSTYPE, it)
+                    ?: Satstype.DAGLIG,
         )
 
     private fun validerAlleKodeEndringerLike(rader: List<Map<String, String>>) {
@@ -143,5 +143,5 @@ data class ForventetUtbetalingsperiode(
     val fom: LocalDate,
     val tom: LocalDate,
     val opphør: LocalDate?,
-    val satstype: Utbetalingsperiode.Satstype,
+    val satstype: Satstype,
 )
