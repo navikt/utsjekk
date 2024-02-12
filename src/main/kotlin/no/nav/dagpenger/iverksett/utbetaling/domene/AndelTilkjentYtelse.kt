@@ -1,13 +1,13 @@
 package no.nav.dagpenger.iverksett.utbetaling.domene
 
-import no.nav.dagpenger.iverksett.utbetaling.api.Satstype
 import no.nav.dagpenger.iverksett.utbetaling.utbetalingsoppdrag.domene.AndelData
 import no.nav.dagpenger.kontrakter.felles.Datoperiode
+import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsperiode
 import java.util.UUID
 
 data class AndelTilkjentYtelse(
     val beløp: Int,
-    val satstype: Satstype = Satstype.DAG,
+    val satstype: Utbetalingsperiode.Satstype = Utbetalingsperiode.Satstype.DAG,
     val periode: Datoperiode,
     val stønadsdata: Stønadsdata,
     val periodeId: Long? = null,

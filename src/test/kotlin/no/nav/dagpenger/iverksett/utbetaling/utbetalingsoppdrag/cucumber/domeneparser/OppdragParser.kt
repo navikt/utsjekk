@@ -17,13 +17,13 @@ object OppdragParser {
     fun mapAndeler(dataTable: DataTable): Map<UUID, List<AndelData>> {
         var index = 0L
         return dataTable.groupByBehandlingId().map { (behandlingId, rader) ->
-            val andeler = parseAndelder(rader, index)
+            val andeler = parseAndeler(rader, index)
             index += andeler.size
             behandlingIdTilUUID[behandlingId.toInt()]!! to andeler
         }.toMap()
     }
 
-    private fun parseAndelder(
+    private fun parseAndeler(
         rader: List<Map<String, String>>,
         forrigeAndelId: Long,
     ): List<AndelData> {
@@ -52,6 +52,9 @@ object OppdragParser {
             fom = parseDato(Domenebegrep.FRA_DATO, rad),
             tom = parseDato(Domenebegrep.TIL_DATO, rad),
             beløp = parseInt(DomenebegrepAndeler.BELØP, rad),
+            satstype =
+                parseValgfriEnum<Utbetalingsperiode.Satstype>(DomenebegrepAndeler.SATSTYPE, rad)
+                    ?: Utbetalingsperiode.Satstype.DAG,
             stønadsdata = stønadsdataDagpenger,
             periodeId = parseValgfriLong(DomenebegrepUtbetalingsoppdrag.PERIODE_ID, rad),
             forrigePeriodeId = parseValgfriLong(DomenebegrepUtbetalingsoppdrag.FORRIGE_PERIODE_ID, rad),

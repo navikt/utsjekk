@@ -52,7 +52,7 @@ internal data class UtbetalingsperiodeMal(
             fom = andel.fom,
             tom = andel.tom,
             sats = BigDecimal(andel.beløp),
-            satstype = Utbetalingsperiode.Satstype.DAG,
+            satstype = andel.satstype,
             utbetalesTil = behandlingsinformasjon.personident,
             behandlingId = behandlingsinformasjon.behandlingId,
         )

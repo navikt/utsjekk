@@ -1,13 +1,13 @@
 package no.nav.dagpenger.iverksett.utbetaling.util
 
 import no.nav.dagpenger.iverksett.utbetaling.api.IverksettTilleggsstønaderDto
-import no.nav.dagpenger.iverksett.utbetaling.api.Satstype
 import no.nav.dagpenger.iverksett.utbetaling.api.UtbetalingTilleggsstønaderDto
 import no.nav.dagpenger.iverksett.utbetaling.api.VedtaksdetaljerTilleggsstønaderDto
 import no.nav.dagpenger.kontrakter.felles.GeneriskId
 import no.nav.dagpenger.kontrakter.felles.GeneriskIdSomString
 import no.nav.dagpenger.kontrakter.felles.Personident
 import no.nav.dagpenger.kontrakter.felles.StønadTypeTilleggsstønader
+import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsperiode
 import java.time.LocalDate
 import java.time.LocalDateTime
 
@@ -43,7 +43,7 @@ fun lagUtbetalingTilleggsstønaderDto(
 ): UtbetalingTilleggsstønaderDto {
     return UtbetalingTilleggsstønaderDto(
         beløp = beløp,
-        satstype = Satstype.MND,
+        satstype = Utbetalingsperiode.Satstype.MND,
         fraOgMedDato = fraOgMed,
         tilOgMedDato = tilOgMed,
         stønadstype = StønadTypeTilleggsstønader.TILSYN_BARN_ENSLIG_FORSØRGER,

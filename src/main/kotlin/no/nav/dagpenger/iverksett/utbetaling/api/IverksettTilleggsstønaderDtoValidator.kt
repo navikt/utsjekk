@@ -1,6 +1,7 @@
 package no.nav.dagpenger.iverksett.utbetaling.api
 
 import no.nav.dagpenger.iverksett.felles.http.advice.ApiFeil
+import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsperiode
 import org.springframework.http.HttpStatus
 import java.time.YearMonth
 
@@ -60,7 +61,7 @@ object IverksettTilleggsstønaderDtoValidator {
     private fun utbetalingsperioderSamsvarerMedSatstype(iverksettDto: IverksettTilleggsstønaderDto) {
         val satstype = iverksettDto.vedtak.utbetalinger.firstOrNull()?.satstype
 
-        if (satstype == Satstype.MND) {
+        if (satstype == Utbetalingsperiode.Satstype.MND) {
             val alleFomErStartenAvMåned = iverksettDto.vedtak.utbetalinger.all { it.fraOgMedDato.dayOfMonth == 1 }
             val alleTomErSluttenAvMåned =
                 iverksettDto.vedtak.utbetalinger.all {

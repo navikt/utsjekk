@@ -5,6 +5,7 @@ import no.nav.dagpenger.kontrakter.felles.BrukersNavKontor
 import no.nav.dagpenger.kontrakter.felles.GeneriskId
 import no.nav.dagpenger.kontrakter.felles.Personident
 import no.nav.dagpenger.kontrakter.felles.StønadTypeTilleggsstønader
+import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsperiode
 import java.time.LocalDate
 import java.time.LocalDateTime
 
@@ -46,19 +47,12 @@ data class VedtaksdetaljerTilleggsstønaderDto(
 data class UtbetalingTilleggsstønaderDto(
     @Schema(description = "Må være et positivt heltall")
     val beløp: Int,
-    val satstype: Satstype,
+    val satstype: Utbetalingsperiode.Satstype,
     val fraOgMedDato: LocalDate,
     val tilOgMedDato: LocalDate,
     val stønadstype: StønadTypeTilleggsstønader,
     val brukersNavKontor: BrukersNavKontor? = null,
 )
-
-@Suppress("unused")
-enum class Satstype {
-    DAG,
-    MND,
-    ENG,
-}
 
 data class ForrigeIverksettingTilleggsstønaderDto(
     @Schema(required = true)
