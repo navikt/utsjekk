@@ -25,6 +25,7 @@ import no.nav.dagpenger.iverksett.utbetaling.utbetalingsoppdrag.domene.AndelMedP
 import no.nav.dagpenger.iverksett.utbetaling.utbetalingsoppdrag.domene.Behandlingsinformasjon
 import no.nav.dagpenger.iverksett.utbetaling.utbetalingsoppdrag.domene.BeregnetUtbetalingsoppdrag
 import no.nav.dagpenger.iverksett.utbetaling.utbetalingsoppdrag.domene.uten0beløp
+import no.nav.dagpenger.kontrakter.felles.Fagsystem
 import no.nav.dagpenger.kontrakter.felles.GeneriskId
 import no.nav.dagpenger.kontrakter.felles.GeneriskIdSomUUID
 import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
@@ -142,6 +143,7 @@ class OppdragSteg {
     private fun lagBehandlingsinformasjon(behandlingId: GeneriskId) =
         Behandlingsinformasjon(
             fagsakId = FAGSAK_ID,
+            fagsystem = Fagsystem.DAGPENGER,
             saksbehandlerId = "saksbehandlerId",
             behandlingId = behandlingId,
             personident = "1",

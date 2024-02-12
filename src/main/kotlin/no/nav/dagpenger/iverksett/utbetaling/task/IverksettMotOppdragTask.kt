@@ -92,6 +92,7 @@ class IverksettMotOppdragTask(
         val behandlingsinformasjon =
             Behandlingsinformasjon(
                 saksbehandlerId = iverksetting.vedtak.saksbehandlerId,
+                fagsystem = iverksetting.fagsak.fagsystem,
                 fagsakId = iverksetting.sakId,
                 behandlingId = iverksetting.behandlingId,
                 personident = iverksetting.personident,

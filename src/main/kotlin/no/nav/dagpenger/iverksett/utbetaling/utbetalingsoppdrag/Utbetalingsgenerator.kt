@@ -8,7 +8,6 @@ import no.nav.dagpenger.iverksett.utbetaling.utbetalingsoppdrag.domene.AndelMedP
 import no.nav.dagpenger.iverksett.utbetaling.utbetalingsoppdrag.domene.Behandlingsinformasjon
 import no.nav.dagpenger.iverksett.utbetaling.utbetalingsoppdrag.domene.BeregnetUtbetalingsoppdrag
 import no.nav.dagpenger.iverksett.utbetaling.utbetalingsoppdrag.domene.uten0beløp
-import no.nav.dagpenger.kontrakter.felles.Fagsystem
 import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsoppdrag
 import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsperiode
 import java.time.LocalDate
@@ -55,16 +54,13 @@ object Utbetalingsgenerator {
         behandlingsinformasjon: Behandlingsinformasjon,
     ): BeregnetUtbetalingsoppdrag {
         val nyeKjeder = lagNyeKjeder(nyeAndeler, forrigeKjeder, sisteAndelPerKjede)
-        val fagsystem =
-            forrigeKjeder.keys.union(nyeAndeler.keys).firstOrNull()?.stønadstype?.tilFagsystem()
-                ?: Fagsystem.DAGPENGER
 
         val utbetalingsoppdrag =
             Utbetalingsoppdrag(
                 saksbehandlerId = behandlingsinformasjon.saksbehandlerId,
                 kodeEndring = kodeEndring(sisteAndelPerKjede),
                 saksnummer = behandlingsinformasjon.fagsakId,
-                fagsystem = fagsystem,
+                fagsystem = behandlingsinformasjon.fagsystem,
                 aktør = behandlingsinformasjon.personident,
                 brukersNavKontor = behandlingsinformasjon.brukersNavKontor,
                 utbetalingsperiode = utbetalingsperioder(behandlingsinformasjon, nyeKjeder),

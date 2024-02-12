@@ -4,21 +4,21 @@ import no.nav.dagpenger.iverksett.utbetaling.domene.StønadsdataDagpenger
 import no.nav.dagpenger.iverksett.utbetaling.domene.StønadsdataTiltakspenger
 import no.nav.dagpenger.iverksett.utbetaling.utbetalingsoppdrag.domene.AndelData
 import no.nav.dagpenger.iverksett.utbetaling.utbetalingsoppdrag.domene.Behandlingsinformasjon
+import no.nav.dagpenger.kontrakter.felles.Fagsystem
 import no.nav.dagpenger.kontrakter.felles.GeneriskIdSomUUID
 import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
 import no.nav.dagpenger.kontrakter.felles.StønadTypeTiltakspenger
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
-import java.util.*
+import java.util.UUID
 
 class UtbetalingsgeneratorTest {
     companion object {
-        private val FAGSYSTEM_TP = StønadTypeTiltakspenger.JOBBKLUBB.tilFagsystem()
-        private val FAGSYSTEM_DP = StønadTypeDagpenger.DAGPENGER_ARBEIDSSØKER_ORDINÆR.tilFagsystem()
         private val behandlingsinformasjon =
             Behandlingsinformasjon(
                 saksbehandlerId = "A123456",
+                fagsystem = Fagsystem.DAGPENGER,
                 fagsakId = GeneriskIdSomUUID(UUID.randomUUID()),
                 behandlingId = GeneriskIdSomUUID(UUID.randomUUID()),
                 personident = "12345678911",
@@ -38,16 +38,17 @@ class UtbetalingsgeneratorTest {
     fun `utbetaling for tiltakspenger skal ha fagsystem tiltakspenger`() {
         val nyeAndeler =
             listOf(basisAndelData.copy(stønadsdata = StønadsdataTiltakspenger(StønadTypeTiltakspenger.JOBBKLUBB)))
+        val behandlingsinformasjonTiltakspenger = behandlingsinformasjon.copy(fagsystem = Fagsystem.TILTAKSPENGER)
 
         val beregnetUtbetalingsoppdrag =
             Utbetalingsgenerator.lagUtbetalingsoppdrag(
-                behandlingsinformasjon = behandlingsinformasjon,
+                behandlingsinformasjon = behandlingsinformasjonTiltakspenger,
                 nyeAndeler = nyeAndeler,
                 forrigeAndeler = emptyList(),
                 sisteAndelPerKjede = emptyMap(),
             )
 
-        assertEquals(FAGSYSTEM_TP, beregnetUtbetalingsoppdrag.utbetalingsoppdrag.fagsystem)
+        assertEquals(Fagsystem.TILTAKSPENGER, beregnetUtbetalingsoppdrag.utbetalingsoppdrag.fagsystem)
     }
 
     @Test
@@ -61,6 +62,6 @@ class UtbetalingsgeneratorTest {
                 sisteAndelPerKjede = mapOf(StønadsdataDagpenger(StønadTypeDagpenger.DAGPENGER_ARBEIDSSØKER_ORDINÆR) to forrigeAndel),
             )
 
-        assertEquals(FAGSYSTEM_DP, beregnetUtbetalingsoppdrag.utbetalingsoppdrag.fagsystem)
+        assertEquals(Fagsystem.DAGPENGER, beregnetUtbetalingsoppdrag.utbetalingsoppdrag.fagsystem)
     }
 }
