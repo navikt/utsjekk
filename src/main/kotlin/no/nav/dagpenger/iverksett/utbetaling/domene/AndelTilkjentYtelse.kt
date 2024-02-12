@@ -22,6 +22,7 @@ fun AndelTilkjentYtelse.tilAndelData() =
         fom = this.periode.fom,
         tom = this.periode.tom,
         beløp = this.beløp,
+        satstype = this.satstype,
         stønadsdata = this.stønadsdata,
         periodeId = this.periodeId,
         forrigePeriodeId = this.forrigePeriodeId,
