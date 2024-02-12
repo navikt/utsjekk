@@ -1,8 +1,8 @@
 package no.nav.dagpenger.iverksett.utbetaling.utbetalingsoppdrag
 
 import no.nav.dagpenger.iverksett.utbetaling.domene.Stønadsdata
+import no.nav.dagpenger.iverksett.utbetaling.utbetalingsoppdrag.AndelValidator.validerAndeler
 import no.nav.dagpenger.iverksett.utbetaling.utbetalingsoppdrag.BeståendeAndelerBeregner.finnBeståendeAndeler
-import no.nav.dagpenger.iverksett.utbetaling.utbetalingsoppdrag.OppdragBeregnerUtil.validerAndeler
 import no.nav.dagpenger.iverksett.utbetaling.utbetalingsoppdrag.domene.AndelData
 import no.nav.dagpenger.iverksett.utbetaling.utbetalingsoppdrag.domene.AndelMedPeriodeId
 import no.nav.dagpenger.iverksett.utbetaling.utbetalingsoppdrag.domene.Behandlingsinformasjon
