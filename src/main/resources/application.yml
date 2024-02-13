@@ -94,7 +94,7 @@ konsumenter:
       beslutter: ${DAGPENGER_BESLUTTER_GRUPPE}
   tiltakspenger:
     fagsystem: TILTAKSPENGER
-    klientapp: tiltakspenger-iverksett
+    klientapp: tiltakspenger-utbetaling
     grupper:
       saksbehandler: ${TILTAKSPENGER_SAKSBEHANDLER_GRUPPE}
       beslutter: ${TILTAKSPENGER_BESLUTTER_GRUPPE}
