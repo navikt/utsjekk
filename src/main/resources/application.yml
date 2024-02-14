@@ -100,7 +100,7 @@ konsumenter:
       beslutter: ${TILTAKSPENGER_BESLUTTER_GRUPPE}
   tilleggsstønader:
     fagsystem: TILLEGGSSTØNADER
-    klientapp: TODO
+    klientapp: dp-iverksett
     grupper:
       saksbehandler: TODO
       beslutter: ${TILLEGGSSTØNADER_BESLUTTER_GRUPPE}
