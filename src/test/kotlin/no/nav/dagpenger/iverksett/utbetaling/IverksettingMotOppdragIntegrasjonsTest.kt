@@ -1,6 +1,7 @@
 package no.nav.dagpenger.iverksett.utbetaling
 
 import no.nav.dagpenger.iverksett.ServerTest
+import no.nav.dagpenger.iverksett.utbetaling.domene.sakId
 import no.nav.dagpenger.iverksett.utbetaling.task.IverksettMotOppdragTask
 import no.nav.dagpenger.iverksett.utbetaling.tilstand.IverksettingService
 import no.nav.dagpenger.iverksett.utbetaling.tilstand.IverksettingsresultatService
@@ -8,6 +9,7 @@ import no.nav.dagpenger.iverksett.utbetaling.util.lagAndelTilkjentYtelse
 import no.nav.dagpenger.iverksett.utbetaling.util.opprettAndelTilkjentYtelse
 import no.nav.dagpenger.iverksett.utbetaling.util.opprettIverksett
 import no.nav.dagpenger.kontrakter.felles.Fagsystem
+import no.nav.dagpenger.kontrakter.felles.GeneriskIdSomUUID
 import no.nav.dagpenger.kontrakter.felles.StønadTypeTiltakspenger
 import no.nav.dagpenger.kontrakter.felles.somUUID
 import no.nav.familie.prosessering.internal.TaskService
@@ -32,7 +34,7 @@ class IverksettingMotOppdragIntegrasjonsTest : ServerTest() {
     @Autowired
     lateinit var iverksettMotOppdragTask: IverksettMotOppdragTask
 
-    private val behandlingid: UUID = UUID.randomUUID()
+    private val behandlingid = GeneriskIdSomUUID(UUID.randomUUID())
     private val førsteAndel =
         lagAndelTilkjentYtelse(
             beløp = 1000,
@@ -53,7 +55,7 @@ class IverksettingMotOppdragIntegrasjonsTest : ServerTest() {
         val tilkjentYtelse =
             iverksettingsresultatService.hentTilkjentYtelse(
                 iverksett.fagsak.fagsystem,
-                behandlingid,
+                behandlingid.somUUID,
                 iverksett.behandling.iverksettingId,
             )!!
         assertThat(tilkjentYtelse.andelerTilkjentYtelse).hasSize(1)
@@ -62,7 +64,7 @@ class IverksettingMotOppdragIntegrasjonsTest : ServerTest() {
 
     @Test
     internal fun `revurdering med en ny periode, forvent at den nye perioden har peker på den forrige`() {
-        val behandlingIdRevurdering = UUID.randomUUID()
+        val behandlingIdRevurdering = GeneriskIdSomUUID(UUID.randomUUID())
         val iverksettRevurdering =
             opprettIverksett(
                 behandlingIdRevurdering,
@@ -84,7 +86,7 @@ class IverksettingMotOppdragIntegrasjonsTest : ServerTest() {
         val tilkjentYtelse =
             iverksettingsresultatService.hentTilkjentYtelse(
                 iverksettRevurdering.fagsak.fagsystem,
-                behandlingIdRevurdering,
+                behandlingIdRevurdering.somUUID,
                 iverksettRevurdering.behandling.iverksettingId,
             )!!
         assertThat(tilkjentYtelse.andelerTilkjentYtelse).hasSize(2)
@@ -95,7 +97,7 @@ class IverksettingMotOppdragIntegrasjonsTest : ServerTest() {
 
     @Test
     internal fun `revurdering der beløpet på den første endres, og en ny legges til, forvent at den første perioden erstattes`() {
-        val behandlingIdRevurdering = UUID.randomUUID()
+        val behandlingIdRevurdering = GeneriskIdSomUUID(UUID.randomUUID())
         val iverksettRevurdering =
             opprettIverksett(
                 behandlingId = behandlingIdRevurdering,
@@ -120,7 +122,7 @@ class IverksettingMotOppdragIntegrasjonsTest : ServerTest() {
         val tilkjentYtelse =
             iverksettingsresultatService.hentTilkjentYtelse(
                 iverksettRevurdering.fagsak.fagsystem,
-                behandlingIdRevurdering,
+                behandlingIdRevurdering.somUUID,
                 iverksettRevurdering.behandling.iverksettingId,
             )!!
         assertThat(tilkjentYtelse.andelerTilkjentYtelse).hasSize(2)
@@ -131,7 +133,7 @@ class IverksettingMotOppdragIntegrasjonsTest : ServerTest() {
 
     @Test
     internal fun `iverksett med opphør, forventer ingen andeler`() {
-        val opphørBehandlingId = UUID.randomUUID()
+        val opphørBehandlingId = GeneriskIdSomUUID(UUID.randomUUID())
         val iverksettMedOpphør =
             opprettIverksett(
                 opphørBehandlingId,
@@ -146,7 +148,7 @@ class IverksettingMotOppdragIntegrasjonsTest : ServerTest() {
         val tilkjentYtelse =
             iverksettingsresultatService.hentTilkjentYtelse(
                 iverksettMedOpphør.fagsak.fagsystem,
-                opphørBehandlingId,
+                opphørBehandlingId.somUUID,
                 iverksettMedOpphør.behandling.iverksettingId,
             )!!
         assertThat(tilkjentYtelse.andelerTilkjentYtelse).hasSize(0)
@@ -161,8 +163,9 @@ class IverksettingMotOppdragIntegrasjonsTest : ServerTest() {
 
         val iverksettPersistert =
             iverksettingService.hentIverksetting(
-                iverksett.fagsak.fagsystem,
-                iverksett.behandling.behandlingId.somUUID,
+                fagsystem = iverksett.fagsak.fagsystem,
+                sakId = iverksett.sakId,
+                behandlingId = iverksett.behandling.behandlingId,
             )
         assertEquals(Fagsystem.TILTAKSPENGER, iverksettPersistert?.fagsak?.fagsystem)
     }

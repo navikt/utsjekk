@@ -149,17 +149,23 @@ fun opprettIverksett(
 )
 
 fun opprettIverksett(
-    behandlingId: UUID = UUID.randomUUID(),
-    forrigeBehandlingId: UUID? = null,
+    behandlingId: GeneriskId = GeneriskIdSomUUID(UUID.randomUUID()),
+    forrigeBehandlingId: GeneriskId? = null,
     andeler: List<AndelTilkjentYtelse> = listOf(opprettAndelTilkjentYtelse()),
-    fagsakId: UUID = UUID.randomUUID(),
+    sakId: GeneriskId = GeneriskIdSomUUID(UUID.randomUUID()),
     iverksettingId: String? = null,
     forrigeIverksettingId: String? = null,
 ): Iverksetting {
     val fagsystem = andeler.firstOrNull()?.stønadsdata?.stønadstype?.tilFagsystem() ?: Fagsystem.DAGPENGER
     return Iverksetting(
-        fagsak = Fagsakdetaljer(fagsakId = GeneriskIdSomUUID(fagsakId), fagsystem = fagsystem),
-        behandling = behandlingsdetaljer(behandlingId, forrigeBehandlingId, iverksettingId, forrigeIverksettingId),
+        fagsak = Fagsakdetaljer(fagsakId = sakId, fagsystem = fagsystem),
+        behandling =
+            Behandlingsdetaljer(
+                behandlingId = behandlingId,
+                iverksettingId = iverksettingId,
+                forrigeBehandlingId = forrigeBehandlingId,
+                forrigeIverksettingId = forrigeIverksettingId,
+            ),
         søker =
             Søker(
                 personident = "15507600333",
@@ -168,7 +174,7 @@ fun opprettIverksett(
             vedtaksdetaljer(
                 andeler = andeler,
             ),
-        forrigeIverksettingBehandlingId = forrigeBehandlingId?.let { GeneriskIdSomUUID(it) },
+        forrigeIverksettingBehandlingId = forrigeBehandlingId,
     )
 }
 

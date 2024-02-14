@@ -31,7 +31,8 @@ class VentePåStatusFraØkonomiTask(
         val iverksett =
             iverksettingService.hentIverksetting(
                 fagsystem = payload.fagsystem,
-                behandlingId = payload.behandlingId.somUUID,
+                sakId = payload.sakId,
+                behandlingId = payload.behandlingId,
                 iverksettingId = payload.iverksettingId,
             ) ?: error(
                 "Fant ikke iverksetting for fagsystem ${payload.fagsystem}, behandling ${payload.behandlingId.somString}" +

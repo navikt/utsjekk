@@ -72,9 +72,10 @@ class IverksettingValidatorService(
     internal fun validerAtIverksettingIkkeAlleredeErMottatt(iverksetting: Iverksetting) {
         val iverksettinger =
             iverksettingService.hentIverksetting(
-                iverksetting.fagsak.fagsystem,
-                iverksetting.behandling.behandlingId.somUUID,
-                iverksetting.behandling.iverksettingId,
+                fagsystem = iverksetting.fagsak.fagsystem,
+                sakId = iverksetting.fagsak.fagsakId,
+                behandlingId = iverksetting.behandling.behandlingId,
+                iverksettingId = iverksetting.behandling.iverksettingId,
             )
         if (iverksettinger != null) {
             throw ApiFeil(

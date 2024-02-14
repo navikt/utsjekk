@@ -73,7 +73,11 @@ class IverksettingValidatorServiceTest {
 
         // Burde ikke få samme
         every {
-            iverksettingServiceMock.hentIverksetting(iverksetting.fagsak.fagsystem, iverksetting.behandlingId.somUUID)
+            iverksettingServiceMock.hentIverksetting(
+                fagsystem = iverksetting.fagsak.fagsystem,
+                sakId = iverksetting.sakId,
+                behandlingId = iverksetting.behandlingId,
+            )
         } returns iverksetting
 
         assertApiFeil(HttpStatus.CONFLICT) {

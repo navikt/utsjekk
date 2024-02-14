@@ -37,8 +37,15 @@ internal class IverksettingMotOppdragTaskTest {
     val iverksettingService = mockk<IverksettingService>()
     val iverksettingsresultatService = mockk<IverksettingsresultatService>()
     val behandlingId = GeneriskIdSomUUID(UUID.randomUUID())
-    val taskPayload = objectMapper.writeValueAsString(TaskPayload(fagsystem = Fagsystem.DAGPENGER, behandlingId = behandlingId))
     val sakId = GeneriskIdSomUUID(UUID.randomUUID())
+    val taskPayload =
+        objectMapper.writeValueAsString(
+            TaskPayload(
+                fagsystem = Fagsystem.DAGPENGER,
+                sakId = sakId,
+                behandlingId = behandlingId,
+            ),
+        )
     private val iverksettMotOppdragTask =
         IverksettMotOppdragTask(
             iverksettingService = iverksettingService,
@@ -50,20 +57,32 @@ internal class IverksettingMotOppdragTaskTest {
     @Test
     internal fun `skal sende utbetaling til oppdrag`() {
         val oppdragSlot = slot<Utbetalingsoppdrag>()
-        every { iverksettingService.hentIverksetting(any(), any()) } returns
+        every { iverksettingService.hentIverksetting(any(), any(), any()) } returns
             lagIverksettingsdata(
                 sakId = sakId.somUUID,
                 behandlingId = behandlingId.somUUID,
                 andelsdatoer = listOf(LocalDate.now(), LocalDate.now().minusDays(15)),
             )
         every { oppdragClient.iverksettOppdrag(capture(oppdragSlot)) } just Runs
-        every { iverksettingsresultatService.oppdaterTilkjentYtelseForUtbetaling(any(), behandlingId.somUUID, any()) } returns Unit
+        every {
+            iverksettingsresultatService.oppdaterTilkjentYtelseForUtbetaling(
+                any(),
+                behandlingId.somUUID,
+                any(),
+            )
+        } returns Unit
         every { iverksettingsresultatService.hentTilkjentYtelse(any(), any<UUID>(), any()) } returns null
 
         iverksettMotOppdragTask.doTask(Task(IverksettMotOppdragTask.TYPE, taskPayload, Properties()))
 
         verify(exactly = 1) { oppdragClient.iverksettOppdrag(any()) }
-        verify(exactly = 1) { iverksettingsresultatService.oppdaterTilkjentYtelseForUtbetaling(any(), behandlingId.somUUID, any()) }
+        verify(exactly = 1) {
+            iverksettingsresultatService.oppdaterTilkjentYtelseForUtbetaling(
+                any(),
+                behandlingId.somUUID,
+                any(),
+            )
+        }
 
         assertThat(oppdragSlot.captured.fagsystem).isEqualTo(Fagsystem.DAGPENGER)
         assertThat(oppdragSlot.captured.kodeEndring).isEqualTo(Utbetalingsoppdrag.KodeEndring.NY)
@@ -72,7 +91,7 @@ internal class IverksettingMotOppdragTaskTest {
     @Test
     internal fun `skal sende opphør av utbetaling til oppdrag`() {
         val oppdragSlot = slot<Utbetalingsoppdrag>()
-        every { iverksettingService.hentIverksetting(any(), any()) } returns opphørAvUtbetaling()
+        every { iverksettingService.hentIverksetting(any(), any(), any()) } returns opphørAvUtbetaling()
         every { oppdragClient.iverksettOppdrag(capture(oppdragSlot)) } just Runs
         every { iverksettingsresultatService.hentIverksettResultat(any(), any(), any()) } returns iverksettResultat()
         every { iverksettingsresultatService.oppdaterTilkjentYtelseForUtbetaling(any(), any(), any()) } just Runs
@@ -80,7 +99,13 @@ internal class IverksettingMotOppdragTaskTest {
         iverksettMotOppdragTask.doTask(Task(IverksettMotOppdragTask.TYPE, taskPayload, Properties()))
 
         verify(exactly = 1) { oppdragClient.iverksettOppdrag(any()) }
-        verify(exactly = 1) { iverksettingsresultatService.oppdaterTilkjentYtelseForUtbetaling(any(), behandlingId.somUUID, any()) }
+        verify(exactly = 1) {
+            iverksettingsresultatService.oppdaterTilkjentYtelseForUtbetaling(
+                any(),
+                behandlingId.somUUID,
+                any(),
+            )
+        }
 
         assertEquals(Utbetalingsoppdrag.KodeEndring.ENDR, oppdragSlot.captured.kodeEndring)
         assertEquals(1, oppdragSlot.captured.utbetalingsperiode.size)
@@ -89,7 +114,7 @@ internal class IverksettingMotOppdragTaskTest {
 
     @Test
     internal fun `skal ikke sende tom utbetaling som ikke skal iverksettes til oppdrag`() {
-        every { iverksettingService.hentIverksetting(any(), any()) } returns tomUtbetaling()
+        every { iverksettingService.hentIverksetting(any(), any(), any()) } returns tomUtbetaling()
 
         iverksettMotOppdragTask.doTask(Task(IverksettMotOppdragTask.TYPE, taskPayload, Properties()))
 
@@ -100,7 +125,7 @@ internal class IverksettingMotOppdragTaskTest {
     internal fun `skal opprette ny task når den er ferdig`() {
         val taskSlot = slot<Task>()
         val task = Task(IverksettMotOppdragTask.TYPE, taskPayload, Properties())
-        every { iverksettingService.hentIverksetting(any(), any()) } returns
+        every { iverksettingService.hentIverksetting(any(), any(), any()) } returns
             lagIverksettingsdata(
                 behandlingId = behandlingId.somUUID,
                 sakId = sakId.somUUID,

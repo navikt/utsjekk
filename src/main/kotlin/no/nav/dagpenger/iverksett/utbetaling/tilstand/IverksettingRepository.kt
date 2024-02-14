@@ -22,29 +22,37 @@ class IverksettingRepository(private val jdbcTemplate: JdbcTemplate) {
         return jdbcTemplate.query(sql, IverksettingRowMapper(), fagsakId)
     }
 
-    fun findByBehandlingAndIverksetting(
+    fun findByFagsakAndBehandlingAndIverksetting(
+        fagsakId: String,
         behandlingId: UUID,
         iverksettingId: String?,
     ): List<IverksettingEntitet> {
         return if (iverksettingId != null) {
-            findByBehandlingIdAndIverksettingId(behandlingId, iverksettingId)
+            findByFagsakIdAndBehandlingIdAndIverksettingId(fagsakId, behandlingId, iverksettingId)
         } else {
-            findByBehandlingId(behandlingId)
+            findByFagsakIdAndBehandlingId(fagsakId, behandlingId)
         }
     }
 
-    private fun findByBehandlingIdAndIverksettingId(
+    private fun findByFagsakIdAndBehandlingIdAndIverksettingId(
+        fagsakId: String,
         behandlingId: UUID,
         iverksettingId: String,
     ): List<IverksettingEntitet> {
-        val sql = "select behandling_id, data from iverksetting where behandling_id = ? and data -> 'behandling' ->> 'iverksettingId' = ?"
-        return jdbcTemplate.query(sql, IverksettingRowMapper(), behandlingId, iverksettingId)
+        val sql =
+            "select behandling_id, data from iverksetting where behandling_id = ? " +
+                "and data -> 'fagsak' -> 'fagsakId' ->> 'id' = ? and data -> 'behandling' ->> 'iverksettingId' = ?"
+        return jdbcTemplate.query(sql, IverksettingRowMapper(), behandlingId, fagsakId, iverksettingId)
     }
 
-    private fun findByBehandlingId(behandlingId: UUID): List<IverksettingEntitet> {
+    private fun findByFagsakIdAndBehandlingId(
+        fagsakId: String,
+        behandlingId: UUID,
+    ): List<IverksettingEntitet> {
         val sql =
-            "select behandling_id, data from iverksetting where behandling_id = ? and data -> 'behandling' ->> 'iverksettingId' is null"
-        return jdbcTemplate.query(sql, IverksettingRowMapper(), behandlingId)
+            "select behandling_id, data from iverksetting where behandling_id = ? " +
+                "and data -> 'fagsak' -> 'fagsakId' ->> 'id' = ? and data -> 'behandling' ->> 'iverksettingId' is null"
+        return jdbcTemplate.query(sql, IverksettingRowMapper(), behandlingId, fagsakId)
     }
 }
 

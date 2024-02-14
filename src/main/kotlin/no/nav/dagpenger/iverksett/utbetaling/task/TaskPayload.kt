@@ -5,11 +5,17 @@ import no.nav.dagpenger.iverksett.utbetaling.domene.behandlingId
 import no.nav.dagpenger.kontrakter.felles.Fagsystem
 import no.nav.dagpenger.kontrakter.felles.GeneriskId
 
-data class TaskPayload(val fagsystem: Fagsystem, val behandlingId: GeneriskId, val iverksettingId: String? = null)
+data class TaskPayload(
+    val fagsystem: Fagsystem,
+    val sakId: GeneriskId,
+    val behandlingId: GeneriskId,
+    val iverksettingId: String? = null,
+)
 
 fun Iverksetting.tilTaskPayload() =
     TaskPayload(
         fagsystem = this.fagsak.fagsystem,
+        sakId = this.fagsak.fagsakId,
         behandlingId = this.behandlingId,
         iverksettingId = this.behandling.iverksettingId,
     )

@@ -48,7 +48,8 @@ class IverksettMotOppdragTask(
         val iverksett =
             iverksettingService.hentIverksetting(
                 fagsystem = payload.fagsystem,
-                behandlingId = payload.behandlingId.somUUID,
+                sakId = payload.sakId,
+                behandlingId = payload.behandlingId,
                 iverksettingId = payload.iverksettingId,
             )
                 ?: error(

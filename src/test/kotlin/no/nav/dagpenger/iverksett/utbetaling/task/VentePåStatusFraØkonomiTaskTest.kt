@@ -43,8 +43,15 @@ internal class VentePåStatusFraØkonomiTaskTest {
     private val taskService = mockk<TaskService>()
     private val iverksettingsresultatService = mockk<IverksettingsresultatService>()
     private val behandlingId: GeneriskId = GeneriskIdSomUUID(UUID.randomUUID())
-    private val taskPayload = objectMapper.writeValueAsString(TaskPayload(fagsystem = Fagsystem.DAGPENGER, behandlingId = behandlingId))
     private val sakId: GeneriskId = GeneriskIdSomUUID(UUID.randomUUID())
+    private val taskPayload =
+        objectMapper.writeValueAsString(
+            TaskPayload(
+                fagsystem = Fagsystem.DAGPENGER,
+                sakId = sakId,
+                behandlingId = behandlingId,
+            ),
+        )
     private val iverksettingService =
         IverksettingService(
             taskService = taskService,
@@ -69,7 +76,7 @@ internal class VentePåStatusFraØkonomiTaskTest {
                 andelsdatoer = listOf(LocalDate.now(), LocalDate.now().minusDays(15)),
             )
         every { oppdragClient.hentStatus(any()) } returns OppdragStatusDto(OppdragStatus.KVITTERT_OK, null)
-        every { iverksettingRepository.findByBehandlingAndIverksetting(any(), any()) } returns
+        every { iverksettingRepository.findByFagsakAndBehandlingAndIverksetting(any(), any(), any()) } returns
             listOf(lagIverksettingEntitet(iverksetting))
         every { iverksettingsresultatService.oppdaterOppdragResultat(any(), behandlingId.somUUID, any()) } just runs
         every { taskService.save(any()) } answers { firstArg() }
@@ -99,7 +106,13 @@ internal class VentePåStatusFraØkonomiTaskTest {
 
     @Test
     internal fun `Skal ikke gjøre noe hvis ingen utbetalingoppdrag på tilkjent ytelse`() {
-        every { iverksettingsresultatService.hentTilkjentYtelse(any(), behandlingId.somUUID, any()) } returns tilkjentYtelse()
+        every {
+            iverksettingsresultatService.hentTilkjentYtelse(
+                any(),
+                behandlingId.somUUID,
+                any(),
+            )
+        } returns tilkjentYtelse()
 
         runTask(Task(IverksettMotOppdragTask.TYPE, taskPayload, Properties()))
 

@@ -5,6 +5,7 @@ import no.nav.dagpenger.iverksett.felles.oppdrag.OppdragClient
 import no.nav.dagpenger.iverksett.utbetaling.domene.Iverksetting
 import no.nav.dagpenger.iverksett.utbetaling.domene.IverksettingEntitet
 import no.nav.dagpenger.iverksett.utbetaling.domene.OppdragResultat
+import no.nav.dagpenger.iverksett.utbetaling.domene.sakId
 import no.nav.dagpenger.iverksett.utbetaling.featuretoggle.FeatureToggleConfig
 import no.nav.dagpenger.iverksett.utbetaling.featuretoggle.FeatureToggleService
 import no.nav.dagpenger.iverksett.utbetaling.task.tilTaskPayload
@@ -69,11 +70,12 @@ class IverksettingService(
 
     fun hentIverksetting(
         fagsystem: Fagsystem,
-        behandlingId: UUID,
+        sakId: GeneriskId,
+        behandlingId: GeneriskId,
         iverksettingId: String? = null,
     ): Iverksetting? {
         val iverksettingerForFagsystem =
-            iverksettingRepository.findByBehandlingAndIverksetting(behandlingId, iverksettingId)
+            iverksettingRepository.findByFagsakAndBehandlingAndIverksetting(sakId.somString, behandlingId.somUUID, iverksettingId)
                 .filter { it.data.fagsak.fagsystem == fagsystem }
         return when (iverksettingerForFagsystem.size) {
             0 -> null
@@ -88,7 +90,8 @@ class IverksettingService(
         iverksetting.behandling.forrigeBehandlingId?.let {
             hentIverksetting(
                 fagsystem = iverksetting.fagsak.fagsystem,
-                behandlingId = it.somUUID,
+                sakId = iverksetting.sakId,
+                behandlingId = it,
                 iverksettingId = iverksetting.behandling.forrigeIverksettingId,
             )
                 ?: throw IllegalStateException(
