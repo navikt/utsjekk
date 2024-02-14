@@ -78,14 +78,14 @@ internal class VentePåStatusFraØkonomiTaskTest {
         every { oppdragClient.hentStatus(any()) } returns OppdragStatusDto(OppdragStatus.KVITTERT_OK, null)
         every { iverksettingRepository.findByFagsakAndBehandlingAndIverksetting(any(), any(), any()) } returns
             listOf(lagIverksettingEntitet(iverksetting))
-        every { iverksettingsresultatService.oppdaterOppdragResultat(any(), behandlingId.somUUID, any()) } just runs
+        every { iverksettingsresultatService.oppdaterOppdragResultat(any(), any(), behandlingId.somUUID, any()) } just runs
         every { taskService.save(any()) } answers { firstArg() }
     }
 
     @Test
     internal fun `kjør doTask for VentePåStatusFraØkonomiTask, forvent ingen unntak`() {
         val oppdragResultatSlot = slot<OppdragResultat>()
-        every { iverksettingsresultatService.hentTilkjentYtelse(any(), behandlingId.somUUID, any()) } returns
+        every { iverksettingsresultatService.hentTilkjentYtelse(any(), any(), behandlingId.somUUID, any()) } returns
             tilkjentYtelse(
                 listOf(
                     utbetalingsperiode,
@@ -97,6 +97,7 @@ internal class VentePåStatusFraØkonomiTaskTest {
         verify(exactly = 1) {
             iverksettingsresultatService.oppdaterOppdragResultat(
                 any(),
+                sakId,
                 behandlingId.somUUID,
                 capture(oppdragResultatSlot),
             )
@@ -109,6 +110,7 @@ internal class VentePåStatusFraØkonomiTaskTest {
         every {
             iverksettingsresultatService.hentTilkjentYtelse(
                 any(),
+                sakId,
                 behandlingId.somUUID,
                 any(),
             )
@@ -116,7 +118,7 @@ internal class VentePåStatusFraØkonomiTaskTest {
 
         runTask(Task(IverksettMotOppdragTask.TYPE, taskPayload, Properties()))
 
-        verify(exactly = 0) { iverksettingsresultatService.oppdaterOppdragResultat(any(), behandlingId.somUUID, any()) }
+        verify(exactly = 0) { iverksettingsresultatService.oppdaterOppdragResultat(any(), sakId, behandlingId.somUUID, any()) }
     }
 
     private fun runTask(task: Task) {

@@ -99,29 +99,31 @@ Det kjøres implisitt en konsistensavstemming av at nye utbetalinger stemmer ove
         return ResponseEntity.accepted().build()
     }
 
-    @GetMapping("{behandlingId}/status", produces = ["application/json"])
+    @GetMapping("{sakId}/{behandlingId}/status", produces = ["application/json"])
     @Operation(summary = "Sjekk status på iverksetting med gitt behandlingId")
     @Tag(name = "Iverksetting")
     @ApiResponse(responseCode = "200", description = "Status returnert i body")
     @ApiResponse(responseCode = "404", description = "Kunne ikke finne iverksetting")
     fun hentStatus(
+        @PathVariable sakId: String,
         @PathVariable behandlingId: UUID,
     ): ResponseEntity<IverksettStatus> {
         val fagsystem = konsumentConfig.finnFagsystem(TokenContext.hentKlientnavn())
-        val status = iverksettingService.utledStatus(fagsystem, behandlingId)
+        val status = iverksettingService.utledStatus(fagsystem, sakId, behandlingId)
         return status?.let { ResponseEntity(status, HttpStatus.OK) } ?: ResponseEntity(null, HttpStatus.NOT_FOUND)
     }
 
-    @GetMapping("{behandlingId}/{iverksettingId}/status", produces = ["application/json"])
+    @GetMapping("{sakId}/{behandlingId}/{iverksettingId}/status", produces = ["application/json"])
     @Operation(summary = "Sjekk status på iverksetting med gitt behandlingId og iverksettingId")
     @Tag(name = "Iverksetting")
     @ApiResponse(responseCode = "200", description = "Status returnert i body")
     @ApiResponse(responseCode = "404", description = "Kunne ikke finne iverksetting")
     fun hentStatus(
+        @PathVariable sakId: String,
         @PathVariable behandlingId: UUID,
         @PathVariable iverksettingId: String,
     ): ResponseEntity<IverksettStatus> {
-        val status = iverksettingService.utledStatus(Fagsystem.TILLEGGSSTØNADER, behandlingId, iverksettingId)
+        val status = iverksettingService.utledStatus(Fagsystem.TILLEGGSSTØNADER, sakId, behandlingId, iverksettingId)
         return status?.let { ResponseEntity(status, HttpStatus.OK) } ?: ResponseEntity(null, HttpStatus.NOT_FOUND)
     }
 }

@@ -186,15 +186,17 @@ class IverksettResultatMockBuilder {
 
         fun build(
             fagsystem: Fagsystem,
+            sakId: GeneriskId,
             behandlingId: UUID,
             tilkjentYtelse: TilkjentYtelse?,
             iverksettingId: String? = null,
         ) = Iverksettingsresultat(
-            fagsystem,
-            behandlingId,
-            iverksettingId,
-            tilkjentYtelse,
-            oppdragResultat,
+            fagsystem = fagsystem,
+            sakId = sakId,
+            behandlingId = behandlingId,
+            iverksettingId = iverksettingId,
+            tilkjentYtelseForUtbetaling = tilkjentYtelse,
+            oppdragResultat = oppdragResultat,
         )
     }
 }

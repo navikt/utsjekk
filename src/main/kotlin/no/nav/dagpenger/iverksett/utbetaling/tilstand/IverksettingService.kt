@@ -11,6 +11,8 @@ import no.nav.dagpenger.iverksett.utbetaling.featuretoggle.FeatureToggleService
 import no.nav.dagpenger.iverksett.utbetaling.task.tilTaskPayload
 import no.nav.dagpenger.kontrakter.felles.Fagsystem
 import no.nav.dagpenger.kontrakter.felles.GeneriskId
+import no.nav.dagpenger.kontrakter.felles.GeneriskIdSomString
+import no.nav.dagpenger.kontrakter.felles.GeneriskIdSomUUID
 import no.nav.dagpenger.kontrakter.felles.objectMapper
 import no.nav.dagpenger.kontrakter.felles.somString
 import no.nav.dagpenger.kontrakter.felles.somUUID
@@ -49,6 +51,7 @@ class IverksettingService(
 
         iverksettingsresultatService.opprettTomtResultat(
             fagsystem = iverksetting.fagsak.fagsystem,
+            sakId = iverksetting.sakId,
             behandlingId = iverksetting.behandling.behandlingId.somUUID,
             iverksettingId = iverksetting.behandling.iverksettingId,
         )
@@ -104,12 +107,14 @@ class IverksettingService(
 
     fun utledStatus(
         fagsystem: Fagsystem,
+        sakId: String,
         behandlingId: UUID,
         iverksettingId: String? = null,
     ): IverksettStatus? {
         val iverksettResultat =
             iverksettingsresultatService.hentIverksettResultat(
                 fagsystem = fagsystem,
+                sakId = sakId.tilGeneriskId(),
                 behandlingId = behandlingId,
                 iverksettingId = iverksettingId,
             )
@@ -133,6 +138,7 @@ class IverksettingService(
 
     fun sjekkStatusPåIverksettOgOppdaterTilstand(
         fagsystem: Fagsystem,
+        sakId: GeneriskId,
         personident: String,
         behandlingId: GeneriskId,
         iverksettingId: String? = null,
@@ -152,6 +158,7 @@ class IverksettingService(
 
         iverksettingsresultatService.oppdaterOppdragResultat(
             fagsystem = fagsystem,
+            sakId = sakId,
             behandlingId = behandlingId.somUUID,
             iverksettingId = iverksettingId,
             oppdragResultat = OppdragResultat(oppdragStatus = status),
@@ -173,3 +180,9 @@ fun Task.erAktiv() =
     this.status != Status.AVVIKSHÅNDTERT &&
         this.status != Status.MANUELL_OPPFØLGING &&
         this.status != Status.FERDIG
+
+private fun String.tilGeneriskId(): GeneriskId =
+    Result.runCatching { UUID.fromString(this@tilGeneriskId) }.fold(
+        onSuccess = { GeneriskIdSomUUID(it) },
+        onFailure = { GeneriskIdSomString(this) },
+    )

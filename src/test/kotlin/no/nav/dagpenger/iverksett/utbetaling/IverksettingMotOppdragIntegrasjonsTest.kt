@@ -35,6 +35,7 @@ class IverksettingMotOppdragIntegrasjonsTest : ServerTest() {
     lateinit var iverksettMotOppdragTask: IverksettMotOppdragTask
 
     private val behandlingid = GeneriskIdSomUUID(UUID.randomUUID())
+    private val sakId = GeneriskIdSomUUID(UUID.randomUUID())
     private val førsteAndel =
         lagAndelTilkjentYtelse(
             beløp = 1000,
@@ -42,7 +43,7 @@ class IverksettingMotOppdragIntegrasjonsTest : ServerTest() {
             tilOgMed = LocalDate.of(2021, 1, 31),
         )
     private val iverksett =
-        opprettIverksett(behandlingid, andeler = listOf(førsteAndel))
+        opprettIverksett(sakId = sakId, behandlingId = behandlingid, andeler = listOf(førsteAndel))
 
     @BeforeEach
     internal fun setUp() {
@@ -54,9 +55,10 @@ class IverksettingMotOppdragIntegrasjonsTest : ServerTest() {
     internal fun `start iverksetting, forvent at andelerTilkjentYtelse er lik 1 og har periodeId 1`() {
         val tilkjentYtelse =
             iverksettingsresultatService.hentTilkjentYtelse(
-                iverksett.fagsak.fagsystem,
-                behandlingid.somUUID,
-                iverksett.behandling.iverksettingId,
+                fagsystem = iverksett.fagsak.fagsystem,
+                sakId = iverksett.sakId,
+                behandlingId = behandlingid.somUUID,
+                iverksettingId = iverksett.behandling.iverksettingId,
             )!!
         assertThat(tilkjentYtelse.andelerTilkjentYtelse).hasSize(1)
         assertThat(tilkjentYtelse.andelerTilkjentYtelse.first().periodeId).isEqualTo(0)
@@ -67,16 +69,18 @@ class IverksettingMotOppdragIntegrasjonsTest : ServerTest() {
         val behandlingIdRevurdering = GeneriskIdSomUUID(UUID.randomUUID())
         val iverksettRevurdering =
             opprettIverksett(
-                behandlingIdRevurdering,
-                behandlingid,
-                listOf(
-                    førsteAndel,
-                    lagAndelTilkjentYtelse(
-                        beløp = 1000,
-                        fraOgMed = LocalDate.now(),
-                        tilOgMed = LocalDate.now().plusMonths(1),
+                sakId = sakId,
+                behandlingId = behandlingIdRevurdering,
+                forrigeBehandlingId = behandlingid,
+                andeler =
+                    listOf(
+                        førsteAndel,
+                        lagAndelTilkjentYtelse(
+                            beløp = 1000,
+                            fraOgMed = LocalDate.now(),
+                            tilOgMed = LocalDate.now().plusMonths(1),
+                        ),
                     ),
-                ),
             )
 
         taskService.deleteAll(taskService.findAll())
@@ -85,9 +89,10 @@ class IverksettingMotOppdragIntegrasjonsTest : ServerTest() {
 
         val tilkjentYtelse =
             iverksettingsresultatService.hentTilkjentYtelse(
-                iverksettRevurdering.fagsak.fagsystem,
-                behandlingIdRevurdering.somUUID,
-                iverksettRevurdering.behandling.iverksettingId,
+                fagsystem = iverksettRevurdering.fagsak.fagsystem,
+                sakId = iverksettRevurdering.sakId,
+                behandlingId = behandlingIdRevurdering.somUUID,
+                iverksettingId = iverksettRevurdering.behandling.iverksettingId,
             )!!
         assertThat(tilkjentYtelse.andelerTilkjentYtelse).hasSize(2)
         assertThat(tilkjentYtelse.andelerTilkjentYtelse.first().periodeId).isEqualTo(0)
@@ -100,6 +105,7 @@ class IverksettingMotOppdragIntegrasjonsTest : ServerTest() {
         val behandlingIdRevurdering = GeneriskIdSomUUID(UUID.randomUUID())
         val iverksettRevurdering =
             opprettIverksett(
+                sakId = sakId,
                 behandlingId = behandlingIdRevurdering,
                 forrigeBehandlingId = behandlingid,
                 andeler =
@@ -121,9 +127,10 @@ class IverksettingMotOppdragIntegrasjonsTest : ServerTest() {
 
         val tilkjentYtelse =
             iverksettingsresultatService.hentTilkjentYtelse(
-                iverksettRevurdering.fagsak.fagsystem,
-                behandlingIdRevurdering.somUUID,
-                iverksettRevurdering.behandling.iverksettingId,
+                fagsystem = iverksettRevurdering.fagsak.fagsystem,
+                sakId = iverksettRevurdering.sakId,
+                behandlingId = behandlingIdRevurdering.somUUID,
+                iverksettingId = iverksettRevurdering.behandling.iverksettingId,
             )!!
         assertThat(tilkjentYtelse.andelerTilkjentYtelse).hasSize(2)
         assertThat(tilkjentYtelse.andelerTilkjentYtelse.first().periodeId).isEqualTo(1)
@@ -136,9 +143,10 @@ class IverksettingMotOppdragIntegrasjonsTest : ServerTest() {
         val opphørBehandlingId = GeneriskIdSomUUID(UUID.randomUUID())
         val iverksettMedOpphør =
             opprettIverksett(
-                opphørBehandlingId,
-                behandlingid,
-                emptyList(),
+                sakId = sakId,
+                behandlingId = opphørBehandlingId,
+                forrigeBehandlingId = behandlingid,
+                andeler = emptyList(),
             )
 
         taskService.deleteAll(taskService.findAll())
@@ -147,9 +155,10 @@ class IverksettingMotOppdragIntegrasjonsTest : ServerTest() {
 
         val tilkjentYtelse =
             iverksettingsresultatService.hentTilkjentYtelse(
-                iverksettMedOpphør.fagsak.fagsystem,
-                opphørBehandlingId.somUUID,
-                iverksettMedOpphør.behandling.iverksettingId,
+                fagsystem = iverksettMedOpphør.fagsak.fagsystem,
+                sakId = iverksettMedOpphør.sakId,
+                behandlingId = opphørBehandlingId.somUUID,
+                iverksettingId = iverksettMedOpphør.behandling.iverksettingId,
             )!!
         assertThat(tilkjentYtelse.andelerTilkjentYtelse).hasSize(0)
     }

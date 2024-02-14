@@ -53,6 +53,7 @@ class IverksettingValidatorService(
             val forrigeResultat =
                 iverksettingsresultatService.hentIverksettResultat(
                     fagsystem = iverksetting.fagsak.fagsystem,
+                    sakId = iverksetting.sakId,
                     behandlingId = this.somUUID,
                     iverksettingId = iverksetting.behandling.forrigeIverksettingId,
                 )

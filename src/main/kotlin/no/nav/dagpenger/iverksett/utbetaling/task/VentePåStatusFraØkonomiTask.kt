@@ -1,6 +1,7 @@
 package no.nav.dagpenger.iverksett.utbetaling.task
 
 import no.nav.dagpenger.iverksett.utbetaling.domene.TilkjentYtelse
+import no.nav.dagpenger.iverksett.utbetaling.domene.sakId
 import no.nav.dagpenger.iverksett.utbetaling.tilstand.IverksettingService
 import no.nav.dagpenger.iverksett.utbetaling.tilstand.IverksettingsresultatService
 import no.nav.dagpenger.kontrakter.felles.objectMapper
@@ -41,6 +42,7 @@ class VentePåStatusFraØkonomiTask(
         val tilkjentYtelse =
             iverksettingsresultatService.hentTilkjentYtelse(
                 fagsystem = iverksett.fagsak.fagsystem,
+                sakId = payload.sakId,
                 behandlingId = payload.behandlingId.somUUID,
                 iverksettingId = iverksett.behandling.iverksettingId,
             )
@@ -55,6 +57,7 @@ class VentePåStatusFraØkonomiTask(
 
         iverksettingService.sjekkStatusPåIverksettOgOppdaterTilstand(
             fagsystem = iverksett.fagsak.fagsystem,
+            sakId = iverksett.sakId,
             personident = iverksett.søker.personident,
             behandlingId = payload.behandlingId,
             iverksettingId = iverksett.behandling.iverksettingId,

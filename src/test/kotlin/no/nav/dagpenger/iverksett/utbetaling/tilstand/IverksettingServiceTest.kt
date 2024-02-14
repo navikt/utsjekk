@@ -43,39 +43,57 @@ internal class IverksettingServiceTest {
 
     @Test
     fun `la IverksettResultat ha felt kun satt for tilkjent ytelse, forvent status SENDT_TIL_OPPDRAG`() {
-        val behandlingsId = UUID.randomUUID()
-        val tilkjentYtelse = opprettTilkjentYtelse(behandlingsId)
-        every { iverksettingsresultatService.hentIverksettResultat(any(), behandlingsId, any()) } returns
+        val behandlingId = UUID.randomUUID()
+        val sakId = GeneriskIdSomUUID(UUID.randomUUID())
+        val tilkjentYtelse = opprettTilkjentYtelse(behandlingId)
+        every { iverksettingsresultatService.hentIverksettResultat(any(), sakId, behandlingId, any()) } returns
             IverksettResultatMockBuilder.Builder()
-                .build(Fagsystem.DAGPENGER, behandlingsId, tilkjentYtelse)
+                .build(Fagsystem.DAGPENGER, sakId, behandlingId, tilkjentYtelse)
 
-        val status = iverksettingService.utledStatus(Fagsystem.DAGPENGER, behandlingsId)
+        val status =
+            iverksettingService.utledStatus(
+                fagsystem = Fagsystem.DAGPENGER,
+                sakId = sakId.somString,
+                behandlingId = behandlingId,
+            )
         assertEquals(IverksettStatus.SENDT_TIL_OPPDRAG, status)
     }
 
     @Test
     fun `la IverksettResultat ha tilkjent ytelse, oppdrag, og oppdragsresultat satt, forvent status FEILET_MOT_OPPDRAG`() {
         val behandlingsId = UUID.randomUUID()
+        val sakId = GeneriskIdSomUUID(UUID.randomUUID())
         val tilkjentYtelse = opprettTilkjentYtelse(behandlingsId)
-        every { iverksettingsresultatService.hentIverksettResultat(any(), behandlingsId, any()) } returns
+        every { iverksettingsresultatService.hentIverksettResultat(any(), sakId, behandlingsId, any()) } returns
             IverksettResultatMockBuilder.Builder()
                 .oppdragResultat(OppdragResultat(OppdragStatus.KVITTERT_FUNKSJONELL_FEIL))
-                .build(Fagsystem.DAGPENGER, behandlingsId, tilkjentYtelse)
+                .build(Fagsystem.DAGPENGER, sakId, behandlingsId, tilkjentYtelse)
 
-        val status = iverksettingService.utledStatus(Fagsystem.DAGPENGER, behandlingsId)
+        val status =
+            iverksettingService.utledStatus(
+                fagsystem = Fagsystem.DAGPENGER,
+                sakId = sakId.somString,
+                behandlingId = behandlingsId,
+            )
         assertEquals(IverksettStatus.FEILET_MOT_OPPDRAG, status)
     }
 
     @Test
     fun `la IverksettResultat ha felt satt for tilkjent ytelse, oppdrag med kvittert_ok, forvent status OK`() {
         val behandlingsId = UUID.randomUUID()
+        val sakId = GeneriskIdSomUUID(UUID.randomUUID())
         val tilkjentYtelse = opprettTilkjentYtelse(behandlingsId)
-        every { iverksettingsresultatService.hentIverksettResultat(any(), behandlingsId, any()) } returns
+        every { iverksettingsresultatService.hentIverksettResultat(any(), sakId, behandlingsId, any()) } returns
             IverksettResultatMockBuilder.Builder()
                 .oppdragResultat(OppdragResultat(OppdragStatus.KVITTERT_OK))
-                .build(Fagsystem.DAGPENGER, behandlingsId, tilkjentYtelse)
+                .build(Fagsystem.DAGPENGER, sakId, behandlingsId, tilkjentYtelse)
 
-        val status = iverksettingService.utledStatus(Fagsystem.DAGPENGER, behandlingsId)
+        val status =
+            iverksettingService.utledStatus(
+                fagsystem = Fagsystem.DAGPENGER,
+                sakId = sakId.somString,
+                behandlingId = behandlingsId,
+            )
         assertEquals(IverksettStatus.OK, status)
     }
 

@@ -11,6 +11,7 @@ import no.nav.dagpenger.iverksett.utbetaling.domene.Iverksetting
 import no.nav.dagpenger.iverksett.utbetaling.domene.Iverksettingsresultat
 import no.nav.dagpenger.iverksett.utbetaling.domene.OppdragResultat
 import no.nav.dagpenger.iverksett.utbetaling.domene.TilkjentYtelse
+import no.nav.dagpenger.iverksett.utbetaling.domene.sakId
 import no.nav.dagpenger.iverksett.utbetaling.domene.transformer.tomTilkjentYtelse
 import no.nav.dagpenger.iverksett.utbetaling.lagIverksettingsdata
 import no.nav.dagpenger.iverksett.utbetaling.tilstand.IverksettingService
@@ -67,11 +68,12 @@ internal class IverksettingMotOppdragTaskTest {
         every {
             iverksettingsresultatService.oppdaterTilkjentYtelseForUtbetaling(
                 any(),
+                sakId,
                 behandlingId.somUUID,
                 any(),
             )
         } returns Unit
-        every { iverksettingsresultatService.hentTilkjentYtelse(any(), any<UUID>(), any()) } returns null
+        every { iverksettingsresultatService.hentTilkjentYtelse(any(), any(), any<UUID>(), any()) } returns null
 
         iverksettMotOppdragTask.doTask(Task(IverksettMotOppdragTask.TYPE, taskPayload, Properties()))
 
@@ -79,6 +81,7 @@ internal class IverksettingMotOppdragTaskTest {
         verify(exactly = 1) {
             iverksettingsresultatService.oppdaterTilkjentYtelseForUtbetaling(
                 any(),
+                sakId,
                 behandlingId.somUUID,
                 any(),
             )
@@ -94,7 +97,7 @@ internal class IverksettingMotOppdragTaskTest {
         every { iverksettingService.hentIverksetting(any(), any(), any()) } returns opphørAvUtbetaling()
         every { oppdragClient.iverksettOppdrag(capture(oppdragSlot)) } just Runs
         every { iverksettingsresultatService.hentIverksettResultat(any(), any(), any()) } returns iverksettResultat()
-        every { iverksettingsresultatService.oppdaterTilkjentYtelseForUtbetaling(any(), any(), any()) } just Runs
+        every { iverksettingsresultatService.oppdaterTilkjentYtelseForUtbetaling(any(), any(), any(), any()) } just Runs
 
         iverksettMotOppdragTask.doTask(Task(IverksettMotOppdragTask.TYPE, taskPayload, Properties()))
 
@@ -102,6 +105,7 @@ internal class IverksettingMotOppdragTaskTest {
         verify(exactly = 1) {
             iverksettingsresultatService.oppdaterTilkjentYtelseForUtbetaling(
                 any(),
+                sakId,
                 behandlingId.somUUID,
                 any(),
             )
@@ -140,7 +144,7 @@ internal class IverksettingMotOppdragTaskTest {
     }
 
     private fun tomUtbetaling(): Iverksetting {
-        val tmpIverksetting = lagIverksettingsdata()
+        val tmpIverksetting = lagIverksettingsdata(sakId = sakId.somUUID)
         return tmpIverksetting.copy(vedtak = tmpIverksetting.vedtak.copy(tilkjentYtelse = tomTilkjentYtelse()))
     }
 
@@ -159,6 +163,7 @@ internal class IverksettingMotOppdragTaskTest {
         val sisteAndelIKjede = iverksett.vedtak.tilkjentYtelse.andelerTilkjentYtelse.first().copy(periodeId = 0)
         return Iverksettingsresultat(
             fagsystem = iverksett.fagsak.fagsystem,
+            sakId = iverksett.sakId,
             behandlingId = behandlingId.somUUID,
             iverksettingId = iverksett.behandling.iverksettingId,
             tilkjentYtelseForUtbetaling =

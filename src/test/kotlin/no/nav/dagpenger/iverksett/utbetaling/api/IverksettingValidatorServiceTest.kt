@@ -94,6 +94,7 @@ class IverksettingValidatorServiceTest {
             )
         val nåværendeIverksetting =
             lagIverksettingsdata(
+                sakId = forrigeIverksetting.sakId.somUUID,
                 forrigeBehandlingId = forrigeIverksetting.behandlingId.somUUID,
             )
 
@@ -101,6 +102,7 @@ class IverksettingValidatorServiceTest {
         val forrigeIverksettingsresultat =
             Iverksettingsresultat(
                 fagsystem = forrigeIverksetting.fagsak.fagsystem,
+                sakId = forrigeIverksetting.sakId,
                 behandlingId = forrigeIverksetting.behandlingId.somUUID,
                 iverksettingId = forrigeIverksetting.behandling.iverksettingId,
                 tilkjentYtelseForUtbetaling =
@@ -113,6 +115,7 @@ class IverksettingValidatorServiceTest {
         every {
             iverksettingsresultatServiceMock.hentIverksettResultat(
                 forrigeIverksettingsresultat.fagsystem,
+                forrigeIverksettingsresultat.sakId,
                 forrigeIverksettingsresultat.behandlingId,
                 forrigeIverksettingsresultat.iverksettingId,
             )

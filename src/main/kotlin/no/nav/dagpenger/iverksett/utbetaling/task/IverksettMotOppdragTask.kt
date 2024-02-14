@@ -61,6 +61,7 @@ class IverksettMotOppdragTask(
             iverksett.behandling.forrigeBehandlingId?.let {
                 iverksettingsresultatService.hentIverksettResultat(
                     fagsystem = iverksett.fagsak.fagsystem,
+                    sakId = iverksett.sakId,
                     behandlingId = it.somUUID,
                     iverksettingId = iverksett.behandling.forrigeIverksettingId,
                 )
@@ -76,6 +77,7 @@ class IverksettMotOppdragTask(
                     forrigeIverksettingsresultat = forrigeIverksettResultat,
                     behandlingId = payload.behandlingId,
                     fagsystem = iverksett.fagsak.fagsystem,
+                    sakId = iverksett.sakId,
                     iverksettingId = iverksett.behandling.iverksettingId,
                 )
             iverksettUtbetaling(tilkjentYtelse)
@@ -122,6 +124,7 @@ class IverksettMotOppdragTask(
         forrigeIverksettingsresultat: Iverksettingsresultat?,
         behandlingId: GeneriskId,
         fagsystem: Fagsystem,
+        sakId: GeneriskId,
         iverksettingId: String? = null,
     ): TilkjentYtelse {
         val nyeAndelerMedPeriodeId =
@@ -149,6 +152,7 @@ class IverksettMotOppdragTask(
 
         iverksettingsresultatService.oppdaterTilkjentYtelseForUtbetaling(
             fagsystem = fagsystem,
+            sakId = sakId,
             behandlingId = behandlingId.somUUID,
             iverksettingId = iverksettingId,
             tilkjentYtelseForUtbetaling = nyTilkjentYtelseMedSisteAndelIKjede,
