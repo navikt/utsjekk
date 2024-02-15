@@ -32,14 +32,15 @@ import java.time.LocalDate
 import java.util.Properties
 import java.util.UUID
 
-internal class IverksettingMotOppdragTaskTest {
+internal class IverksettMotOppdragTaskTest {
     private val oppdragClient = mockk<OppdragClient>()
-    val taskService = mockk<TaskService>()
-    val iverksettingService = mockk<IverksettingService>()
-    val iverksettingsresultatService = mockk<IverksettingsresultatService>()
-    val behandlingId = GeneriskIdSomUUID(UUID.randomUUID())
-    val sakId = GeneriskIdSomUUID(UUID.randomUUID())
-    val taskPayload =
+    private val taskService = mockk<TaskService>()
+    private val iverksettingService = mockk<IverksettingService>()
+    private val iverksettingsresultatService = mockk<IverksettingsresultatService>()
+
+    private val behandlingId = GeneriskIdSomUUID(UUID.randomUUID())
+    private val sakId = GeneriskIdSomUUID(UUID.randomUUID())
+    private val taskPayload =
         objectMapper.writeValueAsString(
             TaskPayload(
                 fagsystem = Fagsystem.DAGPENGER,
@@ -58,6 +59,7 @@ internal class IverksettingMotOppdragTaskTest {
     @Test
     internal fun `skal sende utbetaling til oppdrag`() {
         val oppdragSlot = slot<Utbetalingsoppdrag>()
+
         every { iverksettingService.hentIverksetting(any(), any(), any()) } returns
             lagIverksettingsdata(
                 sakId = sakId.somUUID,
@@ -94,9 +96,10 @@ internal class IverksettingMotOppdragTaskTest {
     @Test
     internal fun `skal sende opphør av utbetaling til oppdrag`() {
         val oppdragSlot = slot<Utbetalingsoppdrag>()
+
         every { iverksettingService.hentIverksetting(any(), any(), any()) } returns opphørAvUtbetaling()
         every { oppdragClient.iverksettOppdrag(capture(oppdragSlot)) } just Runs
-        every { iverksettingsresultatService.hentIverksettResultat(any(), any(), any()) } returns iverksettResultat()
+        every { iverksettingsresultatService.hentIverksettResultat(any(), any(), any()) } returns iverksettingsresultat()
         every { iverksettingsresultatService.oppdaterTilkjentYtelseForUtbetaling(any(), any(), any(), any()) } just Runs
 
         iverksettMotOppdragTask.doTask(Task(IverksettMotOppdragTask.TYPE, taskPayload, Properties()))
@@ -129,6 +132,7 @@ internal class IverksettingMotOppdragTaskTest {
     internal fun `skal opprette ny task når den er ferdig`() {
         val taskSlot = slot<Task>()
         val task = Task(IverksettMotOppdragTask.TYPE, taskPayload, Properties())
+
         every { iverksettingService.hentIverksetting(any(), any(), any()) } returns
             lagIverksettingsdata(
                 behandlingId = behandlingId.somUUID,
@@ -153,7 +157,7 @@ internal class IverksettingMotOppdragTaskTest {
         return tmpIverksetting.copy(behandling = tmpIverksetting.behandling.copy(forrigeBehandlingId = behandlingId))
     }
 
-    private fun iverksettResultat(): Iverksettingsresultat {
+    private fun iverksettingsresultat(): Iverksettingsresultat {
         val iverksett =
             lagIverksettingsdata(
                 behandlingId = behandlingId.somUUID,

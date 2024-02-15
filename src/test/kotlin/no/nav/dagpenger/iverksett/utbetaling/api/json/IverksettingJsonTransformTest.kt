@@ -4,7 +4,7 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import no.nav.dagpenger.iverksett.ResourceLoaderTestUtil
 import no.nav.dagpenger.iverksett.felles.http.ObjectMapperProvider.objectMapper
 import no.nav.dagpenger.iverksett.utbetaling.domene.Iverksetting
-import no.nav.dagpenger.iverksett.utbetaling.util.opprettIverksett
+import no.nav.dagpenger.iverksett.utbetaling.util.enIverksetting
 import no.nav.dagpenger.kontrakter.felles.GeneriskIdSomUUID
 import no.nav.dagpenger.kontrakter.iverksett.IverksettDto
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -35,8 +35,8 @@ class IverksettingJsonTransformTest {
     @Test
     internal fun `deserialiser iverksettDagpenger til json og serialiser tilbake til object, forvent likhet`() {
         val behandlingId = GeneriskIdSomUUID(UUID.randomUUID())
-        val iverksett = opprettIverksett(behandlingId)
-        val parsetIverksetting = objectMapper.readValue<Iverksetting>(objectMapper.writeValueAsString(iverksett))
-        assertEquals(iverksett, parsetIverksetting)
+        val iverksetting = enIverksetting(behandlingId)
+        val parsetIverksetting = objectMapper.readValue<Iverksetting>(objectMapper.writeValueAsString(iverksetting))
+        assertEquals(iverksetting, parsetIverksetting)
     }
 }

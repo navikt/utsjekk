@@ -5,10 +5,11 @@ import io.mockk.mockk
 import no.nav.dagpenger.iverksett.felles.oppdrag.OppdragClient
 import no.nav.dagpenger.iverksett.utbetaling.domene.IverksettingEntitet
 import no.nav.dagpenger.iverksett.utbetaling.domene.OppdragResultat
-import no.nav.dagpenger.iverksett.utbetaling.util.IverksettResultatMockBuilder
-import no.nav.dagpenger.iverksett.utbetaling.util.opprettAndelTilkjentYtelse
-import no.nav.dagpenger.iverksett.utbetaling.util.opprettIverksett
-import no.nav.dagpenger.iverksett.utbetaling.util.opprettTilkjentYtelse
+import no.nav.dagpenger.iverksett.utbetaling.util.enAndelTilkjentYtelse
+import no.nav.dagpenger.iverksett.utbetaling.util.enIverksetting
+import no.nav.dagpenger.iverksett.utbetaling.util.enTilkjentYtelse
+import no.nav.dagpenger.iverksett.utbetaling.util.etIverksettingsresultat
+import no.nav.dagpenger.iverksett.utbetaling.util.etTomtUtbetalingsoppdrag
 import no.nav.dagpenger.iverksett.util.mockFeatureToggleService
 import no.nav.dagpenger.kontrakter.felles.Fagsystem
 import no.nav.dagpenger.kontrakter.felles.GeneriskIdSomString
@@ -27,12 +28,12 @@ import org.junit.jupiter.api.Test
 import java.util.UUID
 
 internal class IverksettingServiceTest {
-    val iverksettingsresultatService = mockk<IverksettingsresultatService>()
-    val taskService = mockk<TaskService>()
-    val iverksettingRepository = mockk<IverksettingRepository>()
+    private val iverksettingsresultatService = mockk<IverksettingsresultatService>()
+    private val taskService = mockk<TaskService>()
+    private val iverksettingRepository = mockk<IverksettingRepository>()
     private val oppdragClient = mockk<OppdragClient>()
 
-    private var iverksettingService: IverksettingService =
+    private val iverksettingService: IverksettingService =
         IverksettingService(
             taskService = taskService,
             iverksettingsresultatService = iverksettingsresultatService,
@@ -42,57 +43,87 @@ internal class IverksettingServiceTest {
         )
 
     @Test
-    fun `la IverksettResultat ha felt kun satt for tilkjent ytelse, forvent status SENDT_TIL_OPPDRAG`() {
+    fun `forventer status SENDT_TIL_OPPDRAG for resultat med tilkjent ytelse`() {
         val behandlingId = UUID.randomUUID()
-        val sakId = GeneriskIdSomUUID(UUID.randomUUID())
-        val tilkjentYtelse = opprettTilkjentYtelse(behandlingId)
-        every { iverksettingsresultatService.hentIverksettResultat(any(), sakId, behandlingId, any()) } returns
-            IverksettResultatMockBuilder.Builder()
-                .build(Fagsystem.DAGPENGER, sakId, behandlingId, tilkjentYtelse)
+        val resultat =
+            etIverksettingsresultat(
+                behandlingId = behandlingId,
+                tilkjentYtelse = enTilkjentYtelse(behandlingId),
+            )
+
+        every {
+            iverksettingsresultatService.hentIverksettResultat(
+                any(),
+                resultat.sakId,
+                resultat.behandlingId,
+                any(),
+            )
+        } returns resultat
 
         val status =
             iverksettingService.utledStatus(
-                fagsystem = Fagsystem.DAGPENGER,
-                sakId = sakId.somString,
-                behandlingId = behandlingId,
+                fagsystem = resultat.fagsystem,
+                sakId = resultat.sakId.somString,
+                behandlingId = resultat.behandlingId,
             )
+
         assertEquals(IverksettStatus.SENDT_TIL_OPPDRAG, status)
     }
 
     @Test
-    fun `la IverksettResultat ha tilkjent ytelse, oppdrag, og oppdragsresultat satt, forvent status FEILET_MOT_OPPDRAG`() {
-        val behandlingsId = UUID.randomUUID()
-        val sakId = GeneriskIdSomUUID(UUID.randomUUID())
-        val tilkjentYtelse = opprettTilkjentYtelse(behandlingsId)
-        every { iverksettingsresultatService.hentIverksettResultat(any(), sakId, behandlingsId, any()) } returns
-            IverksettResultatMockBuilder.Builder()
-                .oppdragResultat(OppdragResultat(OppdragStatus.KVITTERT_FUNKSJONELL_FEIL))
-                .build(Fagsystem.DAGPENGER, sakId, behandlingsId, tilkjentYtelse)
+    fun `forventer status FEILET_MOT_OPPDRAG for resultat med oppdragsresultat med status KVITTERT_FUNKSJONELL_FEIL`() {
+        val behandlingId = UUID.randomUUID()
+        val resultat =
+            etIverksettingsresultat(
+                behandlingId = behandlingId,
+                tilkjentYtelse = enTilkjentYtelse(behandlingId),
+                oppdragResultat = OppdragResultat(OppdragStatus.KVITTERT_FUNKSJONELL_FEIL),
+            )
+
+        every {
+            iverksettingsresultatService.hentIverksettResultat(
+                any(),
+                resultat.sakId,
+                resultat.behandlingId,
+                any(),
+            )
+        } returns resultat
 
         val status =
             iverksettingService.utledStatus(
-                fagsystem = Fagsystem.DAGPENGER,
-                sakId = sakId.somString,
-                behandlingId = behandlingsId,
+                fagsystem = resultat.fagsystem,
+                sakId = resultat.sakId.somString,
+                behandlingId = resultat.behandlingId,
             )
+
         assertEquals(IverksettStatus.FEILET_MOT_OPPDRAG, status)
     }
 
     @Test
-    fun `la IverksettResultat ha felt satt for tilkjent ytelse, oppdrag med kvittert_ok, forvent status OK`() {
-        val behandlingsId = UUID.randomUUID()
-        val sakId = GeneriskIdSomUUID(UUID.randomUUID())
-        val tilkjentYtelse = opprettTilkjentYtelse(behandlingsId)
-        every { iverksettingsresultatService.hentIverksettResultat(any(), sakId, behandlingsId, any()) } returns
-            IverksettResultatMockBuilder.Builder()
-                .oppdragResultat(OppdragResultat(OppdragStatus.KVITTERT_OK))
-                .build(Fagsystem.DAGPENGER, sakId, behandlingsId, tilkjentYtelse)
+    fun `forventer status OK for resultat med tilkjent ytelse og oppdrag som er kvittert ok`() {
+        val behandlingId = UUID.randomUUID()
+        val resultat =
+            etIverksettingsresultat(
+                behandlingId = behandlingId,
+                tilkjentYtelse = enTilkjentYtelse(behandlingId),
+                oppdragResultat = OppdragResultat(OppdragStatus.KVITTERT_OK),
+            )
+
+        every {
+            iverksettingsresultatService.hentIverksettResultat(
+                any(),
+                resultat.sakId,
+                resultat.behandlingId,
+                any(),
+            )
+        } returns
+            resultat
 
         val status =
             iverksettingService.utledStatus(
-                fagsystem = Fagsystem.DAGPENGER,
-                sakId = sakId.somString,
-                behandlingId = behandlingsId,
+                fagsystem = resultat.fagsystem,
+                sakId = resultat.sakId.somString,
+                behandlingId = resultat.behandlingId,
             )
         assertEquals(IverksettStatus.OK, status)
     }
@@ -104,9 +135,9 @@ internal class IverksettingServiceTest {
         val iverksettingId1 = "IVERK-1"
         val iverksettingId2 = "IVERK-2"
         val iverksetting1 =
-            opprettIverksett(behandlingId = behandlingId, sakId = sakId, iverksettingId = iverksettingId1)
+            enIverksetting(behandlingId = behandlingId, sakId = sakId, iverksettingId = iverksettingId1)
         val iverksetting2 =
-            opprettIverksett(
+            enIverksetting(
                 behandlingId = behandlingId,
                 sakId = sakId,
                 iverksettingId = iverksettingId2,
@@ -145,9 +176,9 @@ internal class IverksettingServiceTest {
         val iverksettingId1 = "1"
         val iverksettingId2 = "1"
         val iverksetting1 =
-            opprettIverksett(behandlingId = behandlingId1, sakId = sakId, iverksettingId = iverksettingId1)
+            enIverksetting(behandlingId = behandlingId1, sakId = sakId, iverksettingId = iverksettingId1)
         val iverksetting2 =
-            opprettIverksett(
+            enIverksetting(
                 behandlingId = behandlingId2,
                 sakId = sakId,
                 iverksettingId = iverksettingId2,
@@ -183,14 +214,14 @@ internal class IverksettingServiceTest {
         val behandlingId = GeneriskIdSomUUID(UUID.randomUUID())
         val sakId = GeneriskIdSomUUID(UUID.randomUUID())
         val iverksettingDagpenger =
-            opprettIverksett(
+            enIverksetting(
                 behandlingId = behandlingId,
-                andeler = listOf(opprettAndelTilkjentYtelse(stønadstype = StønadTypeDagpenger.DAGPENGER_ARBEIDSSØKER_ORDINÆR)),
+                andeler = listOf(enAndelTilkjentYtelse(stønadstype = StønadTypeDagpenger.DAGPENGER_ARBEIDSSØKER_ORDINÆR)),
             )
         val iverksettingTiltakspenger =
-            opprettIverksett(
+            enIverksetting(
                 behandlingId = behandlingId,
-                andeler = listOf(opprettAndelTilkjentYtelse(stønadstype = StønadTypeTiltakspenger.JOBBKLUBB)),
+                andeler = listOf(enAndelTilkjentYtelse(stønadstype = StønadTypeTiltakspenger.JOBBKLUBB)),
             )
 
         every {
@@ -222,12 +253,12 @@ internal class IverksettingServiceTest {
         val sakId1 = GeneriskIdSomString("1")
         val sakId2 = GeneriskIdSomString("2")
         val iverksettingSak1 =
-            opprettIverksett(
+            enIverksetting(
                 sakId = sakId1,
                 behandlingId = behandlingId,
             )
         val iverksettingSak2 =
-            opprettIverksett(
+            enIverksetting(
                 sakId = sakId2,
                 behandlingId = behandlingId,
             )

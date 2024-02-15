@@ -19,7 +19,7 @@ import no.nav.dagpenger.iverksett.utbetaling.lagIverksettingsdata
 import no.nav.dagpenger.iverksett.utbetaling.tilstand.IverksettingRepository
 import no.nav.dagpenger.iverksett.utbetaling.tilstand.IverksettingService
 import no.nav.dagpenger.iverksett.utbetaling.tilstand.IverksettingsresultatService
-import no.nav.dagpenger.iverksett.utbetaling.util.opprettIverksettDto
+import no.nav.dagpenger.iverksett.utbetaling.util.enIverksettDto
 import no.nav.dagpenger.iverksett.util.mockFeatureToggleService
 import no.nav.dagpenger.kontrakter.felles.Fagsystem
 import no.nav.dagpenger.kontrakter.felles.somUUID
@@ -81,7 +81,7 @@ class IverksettingTilgangskontrollServiceTest {
 
     @Test
     fun `skal få OK når rammevedtak sendes av beslutter`() {
-        val nåværendeIverksetting = opprettIverksettDto()
+        val nåværendeIverksetting = enIverksettDto()
 
         every { iverksettingRepository.findByFagsakId(any()) } returns emptyList()
         every { TokenContext.hentGrupper() } returns listOf(BESLUTTERGRUPPE)
@@ -94,7 +94,7 @@ class IverksettingTilgangskontrollServiceTest {
 
     @Test
     fun `skal få FORBIDDEN når første vedtak på sak sendes uten beslutter-token`() {
-        val nåværendeIverksetting = opprettIverksettDto()
+        val nåværendeIverksetting = enIverksettDto()
 
         every { iverksettingRepository.findByFagsakId(any()) } returns emptyList()
         every { TokenContext.erSystemtoken() } returns true
@@ -106,7 +106,7 @@ class IverksettingTilgangskontrollServiceTest {
 
     @Test
     fun `skal få FORBIDDEN når første vedtak på sak sendes uten beslutter-token og samme sakId finnes for annet fagsystem`() {
-        val nåværendeIverksetting = opprettIverksettDto()
+        val nåværendeIverksetting = enIverksettDto()
         val eksisterendeIverksettingTiltakspenger =
             lagIverksettingsdata(fagsystem = Fagsystem.TILTAKSPENGER, sakId = nåværendeIverksetting.sakId.somUUID)
 
@@ -127,7 +127,7 @@ class IverksettingTilgangskontrollServiceTest {
     @Test
     fun `skal få OK når utbetalingsvedtak sendes etter autorisert vedtak`() {
         val forrigeIverksetting = lagIverksettingsdata()
-        val nåværendeIverksetting = opprettIverksettDto()
+        val nåværendeIverksetting = enIverksettDto()
         val iverksettListe = listOf(lagIverksettingEntitet(forrigeIverksetting))
 
         every { iverksettingRepository.findByFagsakId(any()) } returns iverksettListe

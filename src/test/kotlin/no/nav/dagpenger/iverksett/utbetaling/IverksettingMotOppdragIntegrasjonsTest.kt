@@ -5,9 +5,9 @@ import no.nav.dagpenger.iverksett.utbetaling.domene.sakId
 import no.nav.dagpenger.iverksett.utbetaling.task.IverksettMotOppdragTask
 import no.nav.dagpenger.iverksett.utbetaling.tilstand.IverksettingService
 import no.nav.dagpenger.iverksett.utbetaling.tilstand.IverksettingsresultatService
+import no.nav.dagpenger.iverksett.utbetaling.util.enAndelTilkjentYtelse
+import no.nav.dagpenger.iverksett.utbetaling.util.enIverksetting
 import no.nav.dagpenger.iverksett.utbetaling.util.lagAndelTilkjentYtelse
-import no.nav.dagpenger.iverksett.utbetaling.util.opprettAndelTilkjentYtelse
-import no.nav.dagpenger.iverksett.utbetaling.util.opprettIverksett
 import no.nav.dagpenger.kontrakter.felles.Fagsystem
 import no.nav.dagpenger.kontrakter.felles.GeneriskIdSomUUID
 import no.nav.dagpenger.kontrakter.felles.StønadTypeTiltakspenger
@@ -43,7 +43,7 @@ class IverksettingMotOppdragIntegrasjonsTest : ServerTest() {
             tilOgMed = LocalDate.of(2021, 1, 31),
         )
     private val iverksett =
-        opprettIverksett(sakId = sakId, behandlingId = behandlingid, andeler = listOf(førsteAndel))
+        enIverksetting(sakId = sakId, behandlingId = behandlingid, andeler = listOf(førsteAndel))
 
     @BeforeEach
     internal fun setUp() {
@@ -68,7 +68,7 @@ class IverksettingMotOppdragIntegrasjonsTest : ServerTest() {
     internal fun `revurdering med en ny periode, forvent at den nye perioden har peker på den forrige`() {
         val behandlingIdRevurdering = GeneriskIdSomUUID(UUID.randomUUID())
         val iverksettRevurdering =
-            opprettIverksett(
+            enIverksetting(
                 sakId = sakId,
                 behandlingId = behandlingIdRevurdering,
                 forrigeBehandlingId = behandlingid,
@@ -104,7 +104,7 @@ class IverksettingMotOppdragIntegrasjonsTest : ServerTest() {
     internal fun `revurdering der beløpet på den første endres, og en ny legges til, forvent at den første perioden erstattes`() {
         val behandlingIdRevurdering = GeneriskIdSomUUID(UUID.randomUUID())
         val iverksettRevurdering =
-            opprettIverksett(
+            enIverksetting(
                 sakId = sakId,
                 behandlingId = behandlingIdRevurdering,
                 forrigeBehandlingId = behandlingid,
@@ -142,7 +142,7 @@ class IverksettingMotOppdragIntegrasjonsTest : ServerTest() {
     internal fun `iverksett med opphør, forventer ingen andeler`() {
         val opphørBehandlingId = GeneriskIdSomUUID(UUID.randomUUID())
         val iverksettMedOpphør =
-            opprettIverksett(
+            enIverksetting(
                 sakId = sakId,
                 behandlingId = opphørBehandlingId,
                 forrigeBehandlingId = behandlingid,
@@ -166,7 +166,7 @@ class IverksettingMotOppdragIntegrasjonsTest : ServerTest() {
     @Test
     internal fun `iverksett skal persisteres med korrekt fagsystem`() {
         val iverksett =
-            opprettIverksett(andeler = listOf(opprettAndelTilkjentYtelse(stønadstype = StønadTypeTiltakspenger.JOBBKLUBB)))
+            enIverksetting(andeler = listOf(enAndelTilkjentYtelse(stønadstype = StønadTypeTiltakspenger.JOBBKLUBB)))
 
         iverksettingService.startIverksetting(iverksett)
 

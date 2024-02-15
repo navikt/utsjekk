@@ -7,8 +7,8 @@ import no.nav.dagpenger.iverksett.utbetaling.api.IverksettDtoValidator.ingenUtbe
 import no.nav.dagpenger.iverksett.utbetaling.api.IverksettDtoValidator.utbetalingerHarIngenBeløpOverMaksgrense
 import no.nav.dagpenger.iverksett.utbetaling.api.IverksettDtoValidator.utbetalingerHarKunPositiveBeløp
 import no.nav.dagpenger.iverksett.utbetaling.api.IverksettDtoValidator.utbetalingsperioderOverlapperIkkeITid
+import no.nav.dagpenger.iverksett.utbetaling.util.enIverksettDto
 import no.nav.dagpenger.iverksett.utbetaling.util.lagUtbetalingDto
-import no.nav.dagpenger.iverksett.utbetaling.util.opprettIverksettDto
 import no.nav.dagpenger.kontrakter.felles.BrukersNavKontor
 import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
 import no.nav.dagpenger.kontrakter.felles.StønadTypeTiltakspenger
@@ -24,7 +24,7 @@ import java.time.LocalDate
 class IverksettingDtoValidatorTest {
     @Test
     fun `skal få BAD_REQUEST hvis beløp på utbetaling er negativt`() {
-        val iverksettDto = opprettIverksettDto(andelsbeløp = -5)
+        val iverksettDto = enIverksettDto(andelsbeløp = -5)
 
         assertApiFeil(HttpStatus.BAD_REQUEST) {
             utbetalingerHarKunPositiveBeløp(iverksettDto)
@@ -33,7 +33,7 @@ class IverksettingDtoValidatorTest {
 
     @Test
     fun `skal få BAD_REQUEST hvis beløp på utbetaling er null`() {
-        val iverksettDto = opprettIverksettDto(andelsbeløp = 0)
+        val iverksettDto = enIverksettDto(andelsbeløp = 0)
 
         assertApiFeil(HttpStatus.BAD_REQUEST) {
             utbetalingerHarKunPositiveBeløp(iverksettDto)
@@ -42,7 +42,7 @@ class IverksettingDtoValidatorTest {
 
     @Test
     fun `skal få BAD_REQUEST hvis beløp på utbetaling er over maksgrense`() {
-        val iverksettDto = opprettIverksettDto(andelsbeløp = 20000)
+        val iverksettDto = enIverksettDto(andelsbeløp = 20000)
 
         assertApiFeil(HttpStatus.BAD_REQUEST) {
             utbetalingerHarIngenBeløpOverMaksgrense(iverksettDto)
@@ -51,7 +51,7 @@ class IverksettingDtoValidatorTest {
 
     @Test
     fun `skal få BAD_REQUEST hvis tom kommer før fom i utbetalingsperiode`() {
-        val tmpIverksettDto = opprettIverksettDto()
+        val tmpIverksettDto = enIverksettDto()
         val iverksettDto =
             tmpIverksettDto.copy(
                 vedtak =
@@ -74,7 +74,7 @@ class IverksettingDtoValidatorTest {
 
     @Test
     fun `Utbetalingsperioder med lik stønadsdata som overlapper skal gi BAD_REQUEST`() {
-        val tmpIverksettDto = opprettIverksettDto()
+        val tmpIverksettDto = enIverksettDto()
         val iverksettDto =
             tmpIverksettDto.copy(
                 vedtak =
@@ -102,7 +102,7 @@ class IverksettingDtoValidatorTest {
 
     @Test
     fun `Utbetalingsperioder med ulik stønadsdata som overlapper skal ikke gi ApiFeil`() {
-        val tmpIverksettDto = opprettIverksettDto()
+        val tmpIverksettDto = enIverksettDto()
         val iverksettDto =
             tmpIverksettDto.copy(
                 vedtak =
@@ -136,7 +136,7 @@ class IverksettingDtoValidatorTest {
 
     @Test
     fun `Ferietillegg til avdød for stønadstype EØS skal gi BAD_REQUEST`() {
-        val iverksettDto = opprettIverksettDto(stønadType = StønadTypeDagpenger.DAGPENGER_EØS, ferietillegg = Ferietillegg.AVDØD)
+        val iverksettDto = enIverksettDto(stønadType = StønadTypeDagpenger.DAGPENGER_EØS, ferietillegg = Ferietillegg.AVDØD)
 
         assertApiFeil(HttpStatus.BAD_REQUEST) {
             ingenUtbetalingsperioderHarStønadstypeEØSOgFerietilleggTilAvdød(iverksettDto)
@@ -145,7 +145,7 @@ class IverksettingDtoValidatorTest {
 
     @Test
     fun `Skal få BAD_REQUEST når brukers NAV-kontor ikke er satt for tiltakspenger`() {
-        val iverksettDto = opprettIverksettDto(stønadType = StønadTypeTiltakspenger.JOBBKLUBB)
+        val iverksettDto = enIverksettDto(stønadType = StønadTypeTiltakspenger.JOBBKLUBB)
 
         assertApiFeil(HttpStatus.BAD_REQUEST) {
             brukersNavKontorErSattForTiltakspenger(iverksettDto)
@@ -155,7 +155,7 @@ class IverksettingDtoValidatorTest {
     @Test
     fun `Skal få OK når brukers NAV-kontor er satt for tiltakspenger`() {
         val iverksettDto =
-            opprettIverksettDto(
+            enIverksettDto(
                 stønadType = StønadTypeTiltakspenger.JOBBKLUBB,
                 brukersNavKontor = BrukersNavKontor("4444", LocalDate.now()),
             )

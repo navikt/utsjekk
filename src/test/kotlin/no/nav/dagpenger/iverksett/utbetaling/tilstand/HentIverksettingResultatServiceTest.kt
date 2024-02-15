@@ -3,8 +3,8 @@ package no.nav.dagpenger.iverksett.utbetaling.tilstand
 import no.nav.dagpenger.iverksett.ServerTest
 import no.nav.dagpenger.iverksett.utbetaling.domene.OppdragResultat
 import no.nav.dagpenger.iverksett.utbetaling.domene.TilkjentYtelse
-import no.nav.dagpenger.iverksett.utbetaling.util.IverksettResultatMockBuilder
-import no.nav.dagpenger.iverksett.utbetaling.util.opprettTilkjentYtelse
+import no.nav.dagpenger.iverksett.utbetaling.util.enTilkjentYtelse
+import no.nav.dagpenger.iverksett.utbetaling.util.etIverksettingsresultat
 import no.nav.dagpenger.kontrakter.felles.Fagsystem
 import no.nav.dagpenger.kontrakter.felles.GeneriskIdSomString
 import no.nav.dagpenger.kontrakter.felles.GeneriskIdSomUUID
@@ -24,7 +24,7 @@ internal class HentIverksettingResultatServiceTest : ServerTest() {
 
     private val behandlingId: UUID = UUID.randomUUID()
     private val sakId = GeneriskIdSomUUID(UUID.randomUUID())
-    private val tilkjentYtelse: TilkjentYtelse = opprettTilkjentYtelse(behandlingId)
+    private val tilkjentYtelse: TilkjentYtelse = enTilkjentYtelse(behandlingId)
 
     @BeforeEach
     fun beforeEach() {
@@ -151,9 +151,14 @@ internal class HentIverksettingResultatServiceTest : ServerTest() {
     @Test
     fun `lagre tilkjentYtelse, hent IverksettResultat med riktig behandlingId`() {
         val resultat =
-            IverksettResultatMockBuilder.Builder()
-                .oppdragResultat(OppdragResultat(OppdragStatus.KVITTERT_OK))
-                .build(Fagsystem.DAGPENGER, sakId, behandlingId, tilkjentYtelse)
+            etIverksettingsresultat(
+                fagsystem = Fagsystem.DAGPENGER,
+                sakId = sakId,
+                behandlingId = behandlingId,
+                tilkjentYtelse = tilkjentYtelse,
+                oppdragResultat = OppdragResultat(OppdragStatus.KVITTERT_OK),
+            )
+
         iverksettingsresultatService.oppdaterTilkjentYtelseForUtbetaling(Fagsystem.DAGPENGER, sakId, behandlingId, tilkjentYtelse)
         iverksettingsresultatService.oppdaterOppdragResultat(Fagsystem.DAGPENGER, sakId, behandlingId, resultat.oppdragResultat!!)
 

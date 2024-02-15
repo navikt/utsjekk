@@ -2,7 +2,7 @@ package no.nav.dagpenger.iverksett.utbetaling.tilstand
 
 import no.nav.dagpenger.iverksett.ServerTest
 import no.nav.dagpenger.iverksett.utbetaling.domene.OppdragResultat
-import no.nav.dagpenger.iverksett.utbetaling.util.opprettTilkjentYtelse
+import no.nav.dagpenger.iverksett.utbetaling.util.enTilkjentYtelse
 import no.nav.dagpenger.kontrakter.felles.Fagsystem
 import no.nav.dagpenger.kontrakter.felles.GeneriskIdSomUUID
 import no.nav.dagpenger.kontrakter.oppdrag.OppdragStatus
@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertDoesNotThrow
 import org.springframework.beans.factory.annotation.Autowired
 import java.util.UUID
 
@@ -30,14 +31,15 @@ internal class LagreIverksettingResultatServiceTest : ServerTest() {
     }
 
     @Test
-    fun `oppdater tilkjent ytelse, forvent ingen unntak`() {
-        val tilkjentYtelse = opprettTilkjentYtelse(behandlingsId)
-        iverksettingsresultatService.oppdaterTilkjentYtelseForUtbetaling(
-            fagsystem = Fagsystem.DAGPENGER,
-            sakId = sakId,
-            behandlingId = behandlingsId,
-            tilkjentYtelseForUtbetaling = tilkjentYtelse,
-        )
+    fun `oppdater tilkjent ytelse`() {
+        assertDoesNotThrow {
+            iverksettingsresultatService.oppdaterTilkjentYtelseForUtbetaling(
+                fagsystem = Fagsystem.DAGPENGER,
+                sakId = sakId,
+                behandlingId = behandlingsId,
+                tilkjentYtelseForUtbetaling = enTilkjentYtelse(behandlingsId),
+            )
+        }
     }
 
     @Test
@@ -47,12 +49,11 @@ internal class LagreIverksettingResultatServiceTest : ServerTest() {
             sakId = sakId,
             behandlingId = behandlingsId,
         )
-        val tilkjentYtelse = opprettTilkjentYtelse(behandlingsId)
         iverksettingsresultatService.oppdaterTilkjentYtelseForUtbetaling(
             fagsystem = Fagsystem.DAGPENGER,
             sakId = sakId,
             behandlingId = behandlingsId,
-            tilkjentYtelseForUtbetaling = tilkjentYtelse,
+            tilkjentYtelseForUtbetaling = enTilkjentYtelse(behandlingsId),
         )
 
         val tilkjentYtelseDagpenger =
@@ -82,7 +83,7 @@ internal class LagreIverksettingResultatServiceTest : ServerTest() {
             behandlingId = behandlingsId,
             iverksettingId = iverksettingId1,
         )
-        val tilkjentYtelse = opprettTilkjentYtelse(behandlingsId)
+        val tilkjentYtelse = enTilkjentYtelse(behandlingsId)
         iverksettingsresultatService.oppdaterTilkjentYtelseForUtbetaling(
             fagsystem = Fagsystem.TILLEGGSSTØNADER,
             sakId = sakId,

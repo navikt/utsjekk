@@ -1,7 +1,7 @@
 package no.nav.dagpenger.iverksett.utbetaling.api
 
 import no.nav.dagpenger.iverksett.ServerTest
-import no.nav.dagpenger.iverksett.utbetaling.util.opprettIverksettDto
+import no.nav.dagpenger.iverksett.utbetaling.util.enIverksettDto
 import no.nav.dagpenger.iverksett.utbetaling.util.opprettIverksettTilleggsstønaderDto
 import no.nav.dagpenger.kontrakter.felles.GeneriskIdSomUUID
 import org.assertj.core.api.Assertions.assertThat
@@ -26,8 +26,8 @@ class IverksettingControllerTest : ServerTest() {
     }
 
     @Test
-    internal fun `starte iverksetting gir 202 Accepted`() {
-        val iverksettJson = opprettIverksettDto(behandlingId = behandlingId, sakId = sakId)
+    fun `starte iverksetting gir 202 Accepted`() {
+        val iverksettJson = enIverksettDto(behandlingId = behandlingId, sakId = sakId)
 
         val respons: ResponseEntity<Any> =
             restTemplate.exchange(
@@ -39,7 +39,7 @@ class IverksettingControllerTest : ServerTest() {
     }
 
     @Test
-    internal fun `starte iverksetting for tilleggsstønader gir 202 Accepted`() {
+    fun `starte iverksetting for tilleggsstønader gir 202 Accepted`() {
         val iverksettJson = opprettIverksettTilleggsstønaderDto(behandlingId = behandlingId, sakId = sakId)
 
         val respons: ResponseEntity<Any> =
@@ -52,8 +52,8 @@ class IverksettingControllerTest : ServerTest() {
     }
 
     @Test
-    internal fun `Innvilget rammevedtak uten tilkjent ytelse gir 202 Accepted`() {
-        val iverksettJson = opprettIverksettDto(behandlingId = behandlingId, sakId = sakId)
+    fun `Innvilget rammevedtak uten tilkjent ytelse gir 202 Accepted`() {
+        val iverksettJson = enIverksettDto(behandlingId = behandlingId, sakId = sakId)
         val rammevedtak =
             iverksettJson.copy(
                 vedtak =
