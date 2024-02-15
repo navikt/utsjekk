@@ -11,41 +11,38 @@ import no.nav.dagpenger.kontrakter.iverksett.VedtaksdetaljerTilleggsstønaderDto
 import java.time.LocalDate
 import java.time.LocalDateTime
 
-fun opprettIverksettTilleggsstønaderDto(
+fun enIverksettTilleggsstønaderDto(
     behandlingId: GeneriskId = GeneriskIdSomString("TEST123"),
     sakId: GeneriskId = GeneriskIdSomString("TEST456"),
     andelsbeløp: Int = 500,
-): IverksettTilleggsstønaderDto {
-    val andelTilkjentYtelse =
-        lagUtbetalingTilleggsstønaderDto(
-            beløp = andelsbeløp,
-        )
+    iverksettingId: String? = null,
+) = IverksettTilleggsstønaderDto(
+    behandlingId = behandlingId,
+    iverksettingId = iverksettingId,
+    sakId = sakId,
+    personident = Personident("15507600333"),
+    vedtak =
+        VedtaksdetaljerTilleggsstønaderDto(
+            vedtakstidspunkt = LocalDateTime.of(2021, 5, 12, 0, 0),
+            saksbehandlerId = "A12345",
+            beslutterId = "B23456",
+            utbetalinger =
+                listOf(
+                    enUtbetalingTilleggsstønaderDto(
+                        beløp = andelsbeløp,
+                    ),
+                ),
+        ),
+)
 
-    return IverksettTilleggsstønaderDto(
-        behandlingId = behandlingId,
-        iverksettingId = null,
-        sakId = sakId,
-        personident = Personident("15507600333"),
-        vedtak =
-            VedtaksdetaljerTilleggsstønaderDto(
-                vedtakstidspunkt = LocalDateTime.of(2021, 5, 12, 0, 0),
-                saksbehandlerId = "A12345",
-                beslutterId = "B23456",
-                utbetalinger = listOf(andelTilkjentYtelse),
-            ),
-    )
-}
-
-fun lagUtbetalingTilleggsstønaderDto(
+fun enUtbetalingTilleggsstønaderDto(
     beløp: Int,
     fraOgMed: LocalDate = LocalDate.of(2024, 1, 1),
     tilOgMed: LocalDate = LocalDate.of(2024, 1, 31),
-): UtbetalingTilleggsstønaderDto {
-    return UtbetalingTilleggsstønaderDto(
-        beløp = beløp,
-        satstype = Satstype.MÅNEDLIG,
-        fraOgMedDato = fraOgMed,
-        tilOgMedDato = tilOgMed,
-        stønadstype = StønadTypeTilleggsstønader.TILSYN_BARN_ENSLIG_FORSØRGER,
-    )
-}
+) = UtbetalingTilleggsstønaderDto(
+    beløp = beløp,
+    satstype = Satstype.MÅNEDLIG,
+    fraOgMedDato = fraOgMed,
+    tilOgMedDato = tilOgMed,
+    stønadstype = StønadTypeTilleggsstønader.TILSYN_BARN_ENSLIG_FORSØRGER,
+)

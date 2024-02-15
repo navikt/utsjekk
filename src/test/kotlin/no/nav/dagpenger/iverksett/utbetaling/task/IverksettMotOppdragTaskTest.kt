@@ -7,7 +7,6 @@ import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
 import no.nav.dagpenger.iverksett.felles.oppdrag.OppdragClient
-import no.nav.dagpenger.iverksett.utbetaling.domene.Iverksetting
 import no.nav.dagpenger.iverksett.utbetaling.domene.Iverksettingsresultat
 import no.nav.dagpenger.iverksett.utbetaling.domene.OppdragResultat
 import no.nav.dagpenger.iverksett.utbetaling.domene.TilkjentYtelse
@@ -99,7 +98,7 @@ internal class IverksettMotOppdragTaskTest {
 
         every { iverksettingService.hentIverksetting(any(), any(), any()) } returns opphørAvUtbetaling()
         every { oppdragClient.iverksettOppdrag(capture(oppdragSlot)) } just Runs
-        every { iverksettingsresultatService.hentIverksettResultat(any(), any(), any()) } returns iverksettingsresultat()
+        every { iverksettingsresultatService.hentIverksettResultat(any(), any(), any()) } returns iverksettingsresultat
         every { iverksettingsresultatService.oppdaterTilkjentYtelseForUtbetaling(any(), any(), any(), any()) } just Runs
 
         iverksettMotOppdragTask.doTask(Task(IverksettMotOppdragTask.TYPE, taskPayload, Properties()))
@@ -122,6 +121,8 @@ internal class IverksettMotOppdragTaskTest {
     @Test
     internal fun `skal ikke sende tom utbetaling som ikke skal iverksettes til oppdrag`() {
         every { iverksettingService.hentIverksetting(any(), any(), any()) } returns tomUtbetaling()
+        every { iverksettingsresultatService.oppdaterTilkjentYtelseForUtbetaling(any(), any(), any(), any()) } just Runs
+        every { iverksettingsresultatService.oppdaterOppdragResultat(any(), any(), any(), any(), any()) } just Runs
 
         iverksettMotOppdragTask.doTask(Task(IverksettMotOppdragTask.TYPE, taskPayload, Properties()))
 
@@ -147,29 +148,29 @@ internal class IverksettMotOppdragTaskTest {
         assertThat(taskSlot.captured.type).isEqualTo(VentePåStatusFraØkonomiTask.TYPE)
     }
 
-    private fun tomUtbetaling(): Iverksetting {
-        val tmpIverksetting = lagIverksettingsdata(sakId = sakId.somUUID)
-        return tmpIverksetting.copy(vedtak = tmpIverksetting.vedtak.copy(tilkjentYtelse = tomTilkjentYtelse()))
-    }
+    private fun tomUtbetaling() =
+        lagIverksettingsdata(sakId = sakId.somUUID).let {
+            it.copy(vedtak = it.vedtak.copy(tilkjentYtelse = tomTilkjentYtelse()))
+        }
 
-    private fun opphørAvUtbetaling(): Iverksetting {
-        val tmpIverksetting = tomUtbetaling()
-        return tmpIverksetting.copy(behandling = tmpIverksetting.behandling.copy(forrigeBehandlingId = behandlingId))
-    }
+    private fun opphørAvUtbetaling() =
+        tomUtbetaling().let {
+            it.copy(behandling = it.behandling.copy(forrigeBehandlingId = behandlingId))
+        }
 
-    private fun iverksettingsresultat(): Iverksettingsresultat {
-        val iverksett =
+    private val iverksettingsresultat get(): Iverksettingsresultat {
+        val iverksetting =
             lagIverksettingsdata(
                 behandlingId = behandlingId.somUUID,
                 sakId = sakId.somUUID,
                 andelsdatoer = listOf(LocalDate.now(), LocalDate.now().minusDays(15)),
             )
-        val sisteAndelIKjede = iverksett.vedtak.tilkjentYtelse.andelerTilkjentYtelse.first().copy(periodeId = 0)
+        val sisteAndelIKjede = iverksetting.vedtak.tilkjentYtelse.andelerTilkjentYtelse.first().copy(periodeId = 0)
         return Iverksettingsresultat(
-            fagsystem = iverksett.fagsak.fagsystem,
-            sakId = iverksett.sakId,
+            fagsystem = iverksetting.fagsak.fagsystem,
+            sakId = iverksetting.sakId,
             behandlingId = behandlingId.somUUID,
-            iverksettingId = iverksett.behandling.iverksettingId,
+            iverksettingId = iverksetting.behandling.iverksettingId,
             tilkjentYtelseForUtbetaling =
                 TilkjentYtelse(
                     andelerTilkjentYtelse =

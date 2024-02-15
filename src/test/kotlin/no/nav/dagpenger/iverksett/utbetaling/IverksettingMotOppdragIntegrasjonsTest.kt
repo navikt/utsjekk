@@ -1,6 +1,9 @@
 package no.nav.dagpenger.iverksett.utbetaling
 
 import no.nav.dagpenger.iverksett.ServerTest
+import no.nav.dagpenger.iverksett.utbetaling.domene.AndelTilkjentYtelse
+import no.nav.dagpenger.iverksett.utbetaling.domene.Iverksetting
+import no.nav.dagpenger.iverksett.utbetaling.domene.behandlingId
 import no.nav.dagpenger.iverksett.utbetaling.domene.sakId
 import no.nav.dagpenger.iverksett.utbetaling.task.IverksettMotOppdragTask
 import no.nav.dagpenger.iverksett.utbetaling.tilstand.IverksettingService
@@ -8,14 +11,17 @@ import no.nav.dagpenger.iverksett.utbetaling.tilstand.IverksettingsresultatServi
 import no.nav.dagpenger.iverksett.utbetaling.util.enAndelTilkjentYtelse
 import no.nav.dagpenger.iverksett.utbetaling.util.enIverksetting
 import no.nav.dagpenger.iverksett.utbetaling.util.lagAndelTilkjentYtelse
+import no.nav.dagpenger.iverksett.utbetaling.util.vedtaksdetaljer
 import no.nav.dagpenger.kontrakter.felles.Fagsystem
+import no.nav.dagpenger.kontrakter.felles.GeneriskId
 import no.nav.dagpenger.kontrakter.felles.GeneriskIdSomUUID
 import no.nav.dagpenger.kontrakter.felles.StønadTypeTiltakspenger
+import no.nav.dagpenger.kontrakter.felles.somString
 import no.nav.dagpenger.kontrakter.felles.somUUID
+import no.nav.dagpenger.kontrakter.iverksett.IverksettStatus
 import no.nav.familie.prosessering.internal.TaskService
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import java.time.LocalDate
@@ -34,47 +40,30 @@ class IverksettingMotOppdragIntegrasjonsTest : ServerTest() {
     @Autowired
     lateinit var iverksettMotOppdragTask: IverksettMotOppdragTask
 
-    private val behandlingid = GeneriskIdSomUUID(UUID.randomUUID())
-    private val sakId = GeneriskIdSomUUID(UUID.randomUUID())
-    private val førsteAndel =
-        lagAndelTilkjentYtelse(
-            beløp = 1000,
-            fraOgMed = LocalDate.of(2021, 1, 1),
-            tilOgMed = LocalDate.of(2021, 1, 31),
-        )
-    private val iverksett =
-        enIverksetting(sakId = sakId, behandlingId = behandlingid, andeler = listOf(førsteAndel))
+    @Test
+    fun `start iverksetting med 1 andel`() {
+        val iverksetting = startIverksetting()
 
-    @BeforeEach
-    internal fun setUp() {
-        iverksettingService.startIverksetting(iverksett)
-        iverksettMotOppdrag()
+        hentPersistertTilkjentYtelse(iverksetting).also {
+            assertEquals(1, it.andelerTilkjentYtelse.size)
+            assertEquals(0, it.andelerTilkjentYtelse.first().periodeId)
+        }
     }
 
     @Test
-    internal fun `start iverksetting, forvent at andelerTilkjentYtelse er lik 1 og har periodeId 1`() {
-        val tilkjentYtelse =
-            iverksettingsresultatService.hentTilkjentYtelse(
-                fagsystem = iverksett.fagsak.fagsystem,
-                sakId = iverksett.sakId,
-                behandlingId = behandlingid.somUUID,
-                iverksettingId = iverksett.behandling.iverksettingId,
-            )!!
-        assertThat(tilkjentYtelse.andelerTilkjentYtelse).hasSize(1)
-        assertThat(tilkjentYtelse.andelerTilkjentYtelse.first().periodeId).isEqualTo(0)
-    }
-
-    @Test
-    internal fun `revurdering med en ny periode, forvent at den nye perioden har peker på den forrige`() {
-        val behandlingIdRevurdering = GeneriskIdSomUUID(UUID.randomUUID())
-        val iverksettRevurdering =
+    fun `revurdering med en ny periode, forvent at den nye perioden har peker på den forrige`() {
+        val iverksetting = startIverksetting()
+        val iverksettingMedRevurdering =
             enIverksetting(
-                sakId = sakId,
-                behandlingId = behandlingIdRevurdering,
-                forrigeBehandlingId = behandlingid,
+                sakId = iverksetting.sakId,
+                forrigeBehandlingId = iverksetting.behandlingId,
                 andeler =
                     listOf(
-                        førsteAndel,
+                        lagAndelTilkjentYtelse(
+                            beløp = 1000,
+                            fraOgMed = LocalDate.of(2021, 1, 1),
+                            tilOgMed = LocalDate.of(2021, 1, 31),
+                        ),
                         lagAndelTilkjentYtelse(
                             beløp = 1000,
                             fraOgMed = LocalDate.now(),
@@ -83,35 +72,29 @@ class IverksettingMotOppdragIntegrasjonsTest : ServerTest() {
                     ),
             )
 
-        taskService.deleteAll(taskService.findAll())
-        iverksettingService.startIverksetting(iverksettRevurdering)
-        iverksettMotOppdrag()
+        startIverksetting(iverksettingMedRevurdering)
 
-        val tilkjentYtelse =
-            iverksettingsresultatService.hentTilkjentYtelse(
-                fagsystem = iverksettRevurdering.fagsak.fagsystem,
-                sakId = iverksettRevurdering.sakId,
-                behandlingId = behandlingIdRevurdering.somUUID,
-                iverksettingId = iverksettRevurdering.behandling.iverksettingId,
-            )!!
-        assertThat(tilkjentYtelse.andelerTilkjentYtelse).hasSize(2)
-        assertThat(tilkjentYtelse.andelerTilkjentYtelse.first().periodeId).isEqualTo(0)
-        assertThat(tilkjentYtelse.andelerTilkjentYtelse[1].periodeId).isEqualTo(1)
-        assertThat(tilkjentYtelse.andelerTilkjentYtelse[1].forrigePeriodeId).isEqualTo(0)
+        hentPersistertTilkjentYtelse(iverksettingMedRevurdering).also {
+            assertEquals(2, it.andelerTilkjentYtelse.size)
+            assertEquals(0, it.andelerTilkjentYtelse.first().periodeId)
+            assertEquals(1, it.andelerTilkjentYtelse[1].periodeId)
+            assertEquals(0, it.andelerTilkjentYtelse[1].forrigePeriodeId)
+        }
     }
 
     @Test
-    internal fun `revurdering der beløpet på den første endres, og en ny legges til, forvent at den første perioden erstattes`() {
-        val behandlingIdRevurdering = GeneriskIdSomUUID(UUID.randomUUID())
-        val iverksettRevurdering =
+    fun `revurdering der beløpet på den første endres, og en ny legges til, forvent at den første perioden erstattes`() {
+        val iverksetting = startIverksetting()
+        val iverksettingMedRevurdering =
             enIverksetting(
-                sakId = sakId,
-                behandlingId = behandlingIdRevurdering,
-                forrigeBehandlingId = behandlingid,
+                sakId = iverksetting.sakId,
+                forrigeBehandlingId = iverksetting.behandlingId,
                 andeler =
                     listOf(
-                        førsteAndel.copy(
+                        lagAndelTilkjentYtelse(
                             beløp = 299,
+                            fraOgMed = LocalDate.of(2021, 1, 1),
+                            tilOgMed = LocalDate.of(2021, 1, 31),
                         ),
                         lagAndelTilkjentYtelse(
                             beløp = 1000,
@@ -121,67 +104,109 @@ class IverksettingMotOppdragIntegrasjonsTest : ServerTest() {
                     ),
             )
 
-        taskService.deleteAll(taskService.findAll())
-        iverksettingService.startIverksetting(iverksettRevurdering)
-        iverksettMotOppdrag()
+        startIverksetting(iverksettingMedRevurdering)
 
-        val tilkjentYtelse =
-            iverksettingsresultatService.hentTilkjentYtelse(
-                fagsystem = iverksettRevurdering.fagsak.fagsystem,
-                sakId = iverksettRevurdering.sakId,
-                behandlingId = behandlingIdRevurdering.somUUID,
-                iverksettingId = iverksettRevurdering.behandling.iverksettingId,
-            )!!
-        assertThat(tilkjentYtelse.andelerTilkjentYtelse).hasSize(2)
-        assertThat(tilkjentYtelse.andelerTilkjentYtelse.first().periodeId).isEqualTo(1)
-        assertThat(tilkjentYtelse.andelerTilkjentYtelse[1].periodeId).isEqualTo(2)
-        assertThat(tilkjentYtelse.andelerTilkjentYtelse[1].forrigePeriodeId).isEqualTo(1)
+        hentPersistertTilkjentYtelse(iverksettingMedRevurdering).also {
+            assertEquals(2, it.andelerTilkjentYtelse.size)
+            assertEquals(1, it.andelerTilkjentYtelse.first().periodeId)
+            assertEquals(2, it.andelerTilkjentYtelse[1].periodeId)
+            assertEquals(1, it.andelerTilkjentYtelse[1].forrigePeriodeId)
+        }
     }
 
     @Test
-    internal fun `iverksett med opphør, forventer ingen andeler`() {
-        val opphørBehandlingId = GeneriskIdSomUUID(UUID.randomUUID())
-        val iverksettMedOpphør =
+    fun `iverksetting med opphør, forventer ingen andeler`() {
+        val iverksetting = startIverksetting()
+        val iverksettingMedOpphør =
             enIverksetting(
-                sakId = sakId,
-                behandlingId = opphørBehandlingId,
-                forrigeBehandlingId = behandlingid,
+                sakId = iverksetting.sakId,
+                forrigeBehandlingId = iverksetting.behandlingId,
                 andeler = emptyList(),
             )
 
-        taskService.deleteAll(taskService.findAll())
-        iverksettingService.startIverksetting(iverksettMedOpphør)
-        iverksettMotOppdrag()
+        startIverksetting(iverksettingMedOpphør)
 
-        val tilkjentYtelse =
-            iverksettingsresultatService.hentTilkjentYtelse(
-                fagsystem = iverksettMedOpphør.fagsak.fagsystem,
-                sakId = iverksettMedOpphør.sakId,
-                behandlingId = opphørBehandlingId.somUUID,
-                iverksettingId = iverksettMedOpphør.behandling.iverksettingId,
-            )!!
-        assertThat(tilkjentYtelse.andelerTilkjentYtelse).hasSize(0)
+        hentPersistertTilkjentYtelse(iverksettingMedOpphør).also {
+            assertEquals(0, it.andelerTilkjentYtelse.size)
+        }
     }
 
     @Test
-    internal fun `iverksett skal persisteres med korrekt fagsystem`() {
-        val iverksett =
-            enIverksetting(andeler = listOf(enAndelTilkjentYtelse(stønadstype = StønadTypeTiltakspenger.JOBBKLUBB)))
+    fun `iverksett skal persisteres med korrekt fagsystem`() {
+        val iverksetting = startIverksetting(andeler = listOf(enAndelTilkjentYtelse(stønadstype = StønadTypeTiltakspenger.JOBBKLUBB)))
 
-        iverksettingService.startIverksetting(iverksett)
-
-        val iverksettPersistert =
-            iverksettingService.hentIverksetting(
-                fagsystem = iverksett.fagsak.fagsystem,
-                sakId = iverksett.sakId,
-                behandlingId = iverksett.behandling.behandlingId,
-            )
-        assertEquals(Fagsystem.TILTAKSPENGER, iverksettPersistert?.fagsak?.fagsystem)
+        hentPersistertIverksetting(iverksetting).also {
+            assertEquals(Fagsystem.TILTAKSPENGER, it?.fagsak?.fagsystem)
+        }
     }
 
-    private fun iverksettMotOppdrag() {
-        val tasks = taskService.findAll()
-        assertThat(tasks).hasSize(1)
-        iverksettMotOppdragTask.doTask(tasks.first())
+    @Test
+    fun `iverksetting uten utbetaling skal få status UTBETALES_IKKE`() {
+        val iverksetting = startIverksetting(enIverksetting(vedtaksdetaljer = vedtaksdetaljer(andeler = emptyList())))
+        val status = utledStatus(iverksetting)
+
+        assertEquals(IverksettStatus.OK_UTEN_UTBETALING, status)
     }
+
+    private fun startIverksetting(
+        sakId: GeneriskId = GeneriskIdSomUUID(UUID.randomUUID()),
+        behandlingId: GeneriskId = GeneriskIdSomUUID(UUID.randomUUID()),
+        andeler: List<AndelTilkjentYtelse> =
+            listOf(
+                lagAndelTilkjentYtelse(
+                    beløp = 1000,
+                    fraOgMed = LocalDate.of(2021, 1, 1),
+                    tilOgMed = LocalDate.of(2021, 1, 31),
+                ),
+            ),
+    ) = startIverksetting(
+        enIverksetting(
+            sakId = sakId,
+            behandlingId = behandlingId,
+            andeler = andeler,
+        ),
+    )
+
+    private fun startIverksetting(iverksetting: Iverksetting): Iverksetting {
+        iverksettingService.startIverksetting(iverksetting)
+
+        taskService.findAll().let { tasks ->
+            assertThat(tasks).hasSize(1)
+            iverksettMotOppdragTask.doTask(tasks.first())
+        }
+
+        taskService.deleteAll(taskService.findAll())
+
+        return iverksetting
+    }
+
+    private fun hentPersistertIverksetting(iverksetting: Iverksetting) =
+        iverksettingService.hentIverksetting(
+            fagsystem = iverksetting.fagsak.fagsystem,
+            sakId = iverksetting.sakId,
+            behandlingId = iverksetting.behandling.behandlingId,
+        )
+
+    private fun hentPersistertTilkjentYtelse(iverksetting: Iverksetting) =
+        requireNotNull(
+            iverksettingsresultatService.hentTilkjentYtelse(
+                fagsystem = iverksetting.fagsak.fagsystem,
+                sakId = iverksetting.sakId,
+                behandlingId = iverksetting.behandlingId.somUUID,
+                iverksettingId = iverksetting.behandling.iverksettingId,
+            ),
+        ) {
+            "Fant ikke tilkjent ytelse. Sjekk at testen din faktisk behandler en iverksetting"
+        }
+
+    private fun utledStatus(iverksetting: Iverksetting) =
+        requireNotNull(
+            iverksettingService.utledStatus(
+                fagsystem = iverksetting.fagsak.fagsystem,
+                sakId = iverksetting.sakId.somString,
+                behandlingId = iverksetting.behandlingId.somUUID,
+            ),
+        ) {
+            "Fant ikke status for iverksetting. Sjekk at testen din faktisk behandler en iverksetting"
+        }
 }

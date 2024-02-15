@@ -78,7 +78,7 @@ internal class VentePåStatusFraØkonomiTaskTest {
         every { oppdragClient.hentStatus(any()) } returns OppdragStatusDto(OppdragStatus.KVITTERT_OK, null)
         every { iverksettingRepository.findByFagsakAndBehandlingAndIverksetting(any(), any(), any()) } returns
             listOf(lagIverksettingEntitet(iverksetting))
-        every { iverksettingsresultatService.oppdaterOppdragResultat(any(), any(), behandlingId.somUUID, any()) } just runs
+        every { iverksettingsresultatService.oppdaterOppdragResultat(any(), any(), behandlingId.somUUID, any(), any()) } just runs
         every { taskService.save(any()) } answers { firstArg() }
     }
 
@@ -100,6 +100,7 @@ internal class VentePåStatusFraØkonomiTaskTest {
                 sakId,
                 behandlingId.somUUID,
                 capture(oppdragResultatSlot),
+                any(),
             )
         }
         assertThat(oppdragResultatSlot.captured.oppdragStatus).isEqualTo(OppdragStatus.KVITTERT_OK)
@@ -118,7 +119,7 @@ internal class VentePåStatusFraØkonomiTaskTest {
 
         runTask(Task(IverksettMotOppdragTask.TYPE, taskPayload, Properties()))
 
-        verify(exactly = 0) { iverksettingsresultatService.oppdaterOppdragResultat(any(), sakId, behandlingId.somUUID, any()) }
+        verify(exactly = 0) { iverksettingsresultatService.oppdaterOppdragResultat(any(), sakId, behandlingId.somUUID, any(), any()) }
     }
 
     private fun runTask(task: Task) {

@@ -5,6 +5,7 @@ import no.nav.dagpenger.iverksett.felles.opprettNesteTask
 import no.nav.dagpenger.iverksett.utbetaling.domene.AndelTilkjentYtelse
 import no.nav.dagpenger.iverksett.utbetaling.domene.Iverksetting
 import no.nav.dagpenger.iverksett.utbetaling.domene.Iverksettingsresultat
+import no.nav.dagpenger.iverksett.utbetaling.domene.OppdragResultat
 import no.nav.dagpenger.iverksett.utbetaling.domene.Stønadsdata
 import no.nav.dagpenger.iverksett.utbetaling.domene.TilkjentYtelse
 import no.nav.dagpenger.iverksett.utbetaling.domene.behandlingId
@@ -22,6 +23,7 @@ import no.nav.dagpenger.kontrakter.felles.GeneriskId
 import no.nav.dagpenger.kontrakter.felles.objectMapper
 import no.nav.dagpenger.kontrakter.felles.somString
 import no.nav.dagpenger.kontrakter.felles.somUUID
+import no.nav.dagpenger.kontrakter.oppdrag.OppdragStatus
 import no.nav.familie.prosessering.AsyncTaskStep
 import no.nav.familie.prosessering.TaskStepBeskrivelse
 import no.nav.familie.prosessering.domene.Task
@@ -45,7 +47,8 @@ class IverksettMotOppdragTask(
 
     override fun doTask(task: Task) {
         val payload = objectMapper.readValue(task.payload, TaskPayload::class.java)
-        val iverksett =
+
+        val iverksetting =
             iverksettingService.hentIverksetting(
                 fagsystem = payload.fagsystem,
                 sakId = payload.sakId,
@@ -58,30 +61,39 @@ class IverksettMotOppdragTask(
                 )
 
         val forrigeIverksettResultat =
-            iverksett.behandling.forrigeBehandlingId?.let {
+            iverksetting.behandling.forrigeBehandlingId?.let {
                 iverksettingsresultatService.hentIverksettResultat(
-                    fagsystem = iverksett.fagsak.fagsystem,
-                    sakId = iverksett.sakId,
+                    fagsystem = iverksetting.fagsak.fagsystem,
+                    sakId = iverksetting.sakId,
                     behandlingId = it.somUUID,
-                    iverksettingId = iverksett.behandling.forrigeIverksettingId,
+                    iverksettingId = iverksetting.behandling.forrigeIverksettingId,
                 )
                     ?: error("Kunne ikke finne iverksettresultat for behandlingId=${it.somString}")
             }
 
-        val beregnetUtbetalingsoppdrag = lagUtbetalingsoppdrag(iverksett, forrigeIverksettResultat)
+        val beregnetUtbetalingsoppdrag = lagUtbetalingsoppdrag(iverksetting, forrigeIverksettResultat)
+
+        val tilkjentYtelse =
+            oppdaterTilkjentYtelse(
+                tilkjentYtelse = iverksetting.vedtak.tilkjentYtelse,
+                beregnetUtbetalingsoppdrag = beregnetUtbetalingsoppdrag,
+                forrigeIverksettingsresultat = forrigeIverksettResultat,
+                behandlingId = payload.behandlingId,
+                fagsystem = iverksetting.fagsak.fagsystem,
+                sakId = iverksetting.sakId,
+                iverksettingId = iverksetting.behandling.iverksettingId,
+            )
+
         if (beregnetUtbetalingsoppdrag.utbetalingsoppdrag.utbetalingsperiode.isNotEmpty()) {
-            val tilkjentYtelse =
-                oppdaterTilkjentYtelse(
-                    tilkjentYtelse = iverksett.vedtak.tilkjentYtelse,
-                    beregnetUtbetalingsoppdrag = beregnetUtbetalingsoppdrag,
-                    forrigeIverksettingsresultat = forrigeIverksettResultat,
-                    behandlingId = payload.behandlingId,
-                    fagsystem = iverksett.fagsak.fagsystem,
-                    sakId = iverksett.sakId,
-                    iverksettingId = iverksett.behandling.iverksettingId,
-                )
             iverksettUtbetaling(tilkjentYtelse)
         } else {
+            iverksettingsresultatService.oppdaterOppdragResultat(
+                fagsystem = iverksetting.fagsak.fagsystem,
+                sakId = iverksetting.sakId,
+                behandlingId = iverksetting.behandlingId.somUUID,
+                oppdragResultat = OppdragResultat(OppdragStatus.OK_UTEN_UTBETALING),
+                iverksettingId = iverksetting.behandling.iverksettingId,
+            )
             log.warn(
                 "Iverksetter ikke noe mot oppdrag. Ingen perioder i utbetalingsoppdraget. behandlingId=${payload.behandlingId.somString}",
             )
@@ -157,6 +169,7 @@ class IverksettMotOppdragTask(
             iverksettingId = iverksettingId,
             tilkjentYtelseForUtbetaling = nyTilkjentYtelseMedSisteAndelIKjede,
         )
+
         return nyTilkjentYtelseMedSisteAndelIKjede
     }
 

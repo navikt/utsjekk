@@ -125,7 +125,43 @@ internal class IverksettingServiceTest {
                 sakId = resultat.sakId.somString,
                 behandlingId = resultat.behandlingId,
             )
+
         assertEquals(IverksettStatus.OK, status)
+    }
+
+    @Test
+    fun `forventer status OK_UTEN_UTBETALING for resultat med tom tilkjent ytelse uten kvittering fra oppdrag`() {
+        val behandlingId = UUID.randomUUID()
+        val resultat =
+            etIverksettingsresultat(
+                behandlingId = behandlingId,
+                tilkjentYtelse =
+                    enTilkjentYtelse(
+                        behandlingId = behandlingId,
+                        andeler = emptyList(),
+                        utbetalingsoppdrag = etTomtUtbetalingsoppdrag(),
+                    ),
+                oppdragResultat = OppdragResultat(OppdragStatus.OK_UTEN_UTBETALING),
+            )
+
+        every {
+            iverksettingsresultatService.hentIverksettResultat(
+                any(),
+                resultat.sakId,
+                resultat.behandlingId,
+                any(),
+            )
+        } returns
+            resultat
+
+        val status =
+            iverksettingService.utledStatus(
+                fagsystem = resultat.fagsystem,
+                sakId = resultat.sakId.somString,
+                behandlingId = resultat.behandlingId,
+            )
+
+        assertEquals(IverksettStatus.OK_UTEN_UTBETALING, status)
     }
 
     @Test

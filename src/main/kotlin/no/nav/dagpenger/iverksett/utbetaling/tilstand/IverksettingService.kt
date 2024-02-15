@@ -111,28 +111,31 @@ class IverksettingService(
         behandlingId: UUID,
         iverksettingId: String? = null,
     ): IverksettStatus? {
-        val iverksettResultat =
+        val resultat =
             iverksettingsresultatService.hentIverksettResultat(
                 fagsystem = fagsystem,
                 sakId = sakId.tilGeneriskId(),
                 behandlingId = behandlingId,
                 iverksettingId = iverksettingId,
             )
-        return iverksettResultat?.let {
-            it.oppdragResultat?.let { oppdragResultat ->
-                return when (oppdragResultat.oppdragStatus) {
-                    OppdragStatus.KVITTERT_OK -> IverksettStatus.OK
-                    OppdragStatus.LAGT_PÅ_KØ -> IverksettStatus.SENDT_TIL_OPPDRAG
-                    else -> IverksettStatus.FEILET_MOT_OPPDRAG
-                }
+
+        if (resultat == null) {
+            return null
+        }
+
+        if (resultat.oppdragResultat != null) {
+            return when (resultat.oppdragResultat.oppdragStatus) {
+                OppdragStatus.KVITTERT_OK -> IverksettStatus.OK
+                OppdragStatus.LAGT_PÅ_KØ -> IverksettStatus.SENDT_TIL_OPPDRAG
+                OppdragStatus.OK_UTEN_UTBETALING -> IverksettStatus.OK_UTEN_UTBETALING
+                else -> IverksettStatus.FEILET_MOT_OPPDRAG
             }
-            it.tilkjentYtelseForUtbetaling?.let { ty ->
-                if (ty.utbetalingsoppdrag?.utbetalingsperiode?.isEmpty() == true) {
-                    return IverksettStatus.OK
-                }
-                return IverksettStatus.SENDT_TIL_OPPDRAG
-            }
-            return IverksettStatus.IKKE_PAABEGYNT
+        }
+
+        return if (resultat.tilkjentYtelseForUtbetaling != null) {
+            IverksettStatus.SENDT_TIL_OPPDRAG
+        } else {
+            IverksettStatus.IKKE_PÅBEGYNT
         }
     }
 

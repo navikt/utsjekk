@@ -29,18 +29,25 @@ internal class HentIverksettingResultatServiceTest : ServerTest() {
     @BeforeEach
     fun beforeEach() {
         iverksettingsresultatService.opprettTomtResultat(Fagsystem.DAGPENGER, sakId, behandlingId)
-        iverksettingsresultatService.oppdaterTilkjentYtelseForUtbetaling(Fagsystem.DAGPENGER, sakId, behandlingId, tilkjentYtelse)
+        iverksettingsresultatService.oppdaterTilkjentYtelseForUtbetaling(
+            Fagsystem.DAGPENGER,
+            sakId,
+            behandlingId,
+            tilkjentYtelse,
+        )
     }
 
     @Test
     fun `hent ekisterende tilkjent ytelse, forvent likhet og ingen unntak`() {
-        val hentetTilkjentYtelse = iverksettingsresultatService.hentTilkjentYtelse(Fagsystem.DAGPENGER, sakId, behandlingId)
+        val hentetTilkjentYtelse =
+            iverksettingsresultatService.hentTilkjentYtelse(Fagsystem.DAGPENGER, sakId, behandlingId)
         assertEquals(tilkjentYtelse, hentetTilkjentYtelse)
     }
 
     @Test
     fun `hent ikke-eksisterende tilstand, forvent nullverdi i retur og ingen unntak`() {
-        val hentetTilkjentYtelse = iverksettingsresultatService.hentTilkjentYtelse(Fagsystem.DAGPENGER, sakId, UUID.randomUUID())
+        val hentetTilkjentYtelse =
+            iverksettingsresultatService.hentTilkjentYtelse(Fagsystem.DAGPENGER, sakId, UUID.randomUUID())
         assertNull(hentetTilkjentYtelse)
     }
 
@@ -159,10 +166,22 @@ internal class HentIverksettingResultatServiceTest : ServerTest() {
                 oppdragResultat = OppdragResultat(OppdragStatus.KVITTERT_OK),
             )
 
-        iverksettingsresultatService.oppdaterTilkjentYtelseForUtbetaling(Fagsystem.DAGPENGER, sakId, behandlingId, tilkjentYtelse)
-        iverksettingsresultatService.oppdaterOppdragResultat(Fagsystem.DAGPENGER, sakId, behandlingId, resultat.oppdragResultat!!)
+        iverksettingsresultatService.oppdaterTilkjentYtelseForUtbetaling(
+            fagsystem = Fagsystem.DAGPENGER,
+            sakId = sakId,
+            behandlingId = behandlingId,
+            tilkjentYtelseForUtbetaling = tilkjentYtelse,
+        )
+        iverksettingsresultatService.oppdaterOppdragResultat(
+            fagsystem = Fagsystem.DAGPENGER,
+            sakId = sakId,
+            behandlingId = behandlingId,
+            oppdragResultat = resultat.oppdragResultat!!,
+            iverksettingId = null,
+        )
 
-        val iverksettResultat = iverksettingsresultatService.hentIverksettResultat(Fagsystem.DAGPENGER, sakId, behandlingId)
+        val iverksettResultat =
+            iverksettingsresultatService.hentIverksettResultat(Fagsystem.DAGPENGER, sakId, behandlingId)
         assertEquals(resultat, iverksettResultat)
     }
 }

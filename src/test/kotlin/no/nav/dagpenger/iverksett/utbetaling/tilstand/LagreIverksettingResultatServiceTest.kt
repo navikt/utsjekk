@@ -125,6 +125,7 @@ internal class LagreIverksettingResultatServiceTest : ServerTest() {
             sakId = sakId,
             behandlingId = behandlingsId,
             oppdragResultat = oppdragResultat,
+            iverksettingId = null,
         )
     }
 }

@@ -38,7 +38,7 @@ class IverksettingsresultatService(private val iverksettingsresultatRepository: 
         sakId: GeneriskId,
         behandlingId: UUID,
         oppdragResultat: OppdragResultat,
-        iverksettingId: String? = null,
+        iverksettingId: String?,
     ) {
         val iverksettResultat = iverksettingsresultatRepository.findByIdOrThrow(fagsystem, sakId, behandlingId, iverksettingId)
         iverksettingsresultatRepository.update(iverksettResultat.copy(oppdragResultat = oppdragResultat))
