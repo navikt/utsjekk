@@ -47,6 +47,8 @@ spec:
       value: {{ groups.saksbehandlerTiltakspenger }}
     - name: TILTAKSPENGER_BESLUTTER_GRUPPE
       value: {{ groups.beslutterTiltakspenger }}
+    - name: TILLEGGSSTØNADER_BESLUTTER_GRUPPE
+      value: {{ groups.beslutterTilleggsstønader }}
   envFrom:
     - secret: {{ unleash.apiToken }}
   azure:
@@ -67,6 +69,8 @@ spec:
         - application: dp-vedtak-iverksett
         - application: dp-prosessering #frontend for task-rammeverket
         - application: dp-behandling
+        - application: tilleggsstonader-sak
+          namespace: tilleggsstonader
     outbound:
       rules:
         - application: dp-oppdrag

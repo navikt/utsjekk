@@ -83,7 +83,6 @@ prosessering:
       weeks: 16
 
 PROSESSERING_GRUPPE: ${PROSESSERING_GRUPPE}
-TILLEGGSSTØNADER_BESLUTTER_GRUPPE: TODO
 
 konsumenter:
   dagpenger:
@@ -100,7 +99,7 @@ konsumenter:
       beslutter: ${TILTAKSPENGER_BESLUTTER_GRUPPE}
   tilleggsstønader:
     fagsystem: TILLEGGSSTØNADER
-    klientapp: dp-iverksett
+    klientapp: tilleggsstonader-sak
     grupper:
       saksbehandler: TODO
       beslutter: ${TILLEGGSSTØNADER_BESLUTTER_GRUPPE}
