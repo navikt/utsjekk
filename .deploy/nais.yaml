@@ -47,7 +47,7 @@ spec:
       value: {{ groups.saksbehandlerTiltakspenger }}
     - name: TILTAKSPENGER_BESLUTTER_GRUPPE
       value: {{ groups.beslutterTiltakspenger }}
-    - name: TILLEGGSSTØNADER_BESLUTTER_GRUPPE
+    - name: TILLEGGSSTONADER_BESLUTTER_GRUPPE
       value: {{ groups.beslutterTilleggsstønader }}
   envFrom:
     - secret: {{ unleash.apiToken }}

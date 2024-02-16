@@ -102,4 +102,4 @@ konsumenter:
     klientapp: tilleggsstonader-sak
     grupper:
       saksbehandler: TODO
-      beslutter: ${TILLEGGSSTØNADER_BESLUTTER_GRUPPE}
+      beslutter: ${TILLEGGSSTONADER_BESLUTTER_GRUPPE}
