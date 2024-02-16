@@ -73,7 +73,7 @@ Det kjøres implisitt en konsistensavstemming av at nye utbetalinger stemmer ove
         return ResponseEntity.accepted().build()
     }
 
-    @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE], path = ["/tilleggsstønader"])
+    @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE], path = ["/tilleggsstonader"])
     @Tag(name = "Iverksetting for tilleggsstønader")
     @Operation(
         summary = "Start iverksetting av vedtak",

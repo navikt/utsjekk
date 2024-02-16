@@ -65,7 +65,7 @@ class IverksettingControllerTest : ServerTest() {
             )
 
         restTemplate.exchange<Unit>(
-            localhostUrl("/api/iverksetting/tilleggsstønader"),
+            localhostUrl("/api/iverksetting/tilleggsstonader"),
             HttpMethod.POST,
             HttpEntity(dto, headers),
         ).also {
