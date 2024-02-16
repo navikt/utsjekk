@@ -1,14 +1,10 @@
 name: Tiltakspenger build-Deploy dev
 on:
-  workflow_dispatch:
-    inputs:
-      environment:
-        type: choice
-        description: Environment
-        required: true
-        default: dev
-        options:
-          - dev
+  push:
+    branches-ignore:
+      - 'gh-pages'
+      - 'docs'
+      - 'dependabot/**'
 
 env:
   IMAGE: ghcr.io/${{ github.repository }}:${{ github.sha }}
