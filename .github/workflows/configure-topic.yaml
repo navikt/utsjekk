@@ -5,8 +5,8 @@ on:
     branches:
       - main
     paths:
-      - 'deploy/topic-dev.yml'
-      - 'deploy/topic-prod.yml'
+      - '.deploy/topic-dev.yml'
+      - '.deploy/topic-prod.yml'
 
 jobs:
   applyDev:
