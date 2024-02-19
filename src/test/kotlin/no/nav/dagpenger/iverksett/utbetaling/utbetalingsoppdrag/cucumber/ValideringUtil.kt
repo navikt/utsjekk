@@ -8,15 +8,18 @@ import no.nav.dagpenger.iverksett.utbetaling.utbetalingsoppdrag.domene.BeregnetU
 import java.util.UUID
 
 object ValideringUtil {
-
-    fun assertSjekkBehandlingIder(dataTable: DataTable, utbetalingsoppdrag: MutableMap<UUID, BeregnetUtbetalingsoppdrag>) {
-        val eksisterendeBehandlingId = utbetalingsoppdrag.filter {
-            it.value.utbetalingsoppdrag.utbetalingsperiode.isNotEmpty()
-        }.keys
-        val forventedeBehandlingId = dataTable.asMaps()
-            .map { behandlingIdTilUUID[parseLong(Domenebegrep.BEHANDLING_ID, it).toInt()] }
-            .toSet()
+    fun assertSjekkBehandlingIder(
+        dataTable: DataTable,
+        utbetalingsoppdrag: MutableMap<UUID, BeregnetUtbetalingsoppdrag>,
+    ) {
+        val eksisterendeBehandlingId =
+            utbetalingsoppdrag.filter { it.value.utbetalingsoppdrag.utbetalingsperiode.isNotEmpty() }.keys
+        val forventedeBehandlingId =
+            dataTable.asMaps()
+                .map { behandlingIdTilUUID[parseLong(Domenebegrep.BEHANDLING_ID, it).toInt()] }
+                .toSet()
         val ukontrollerteBehandlingId = eksisterendeBehandlingId.filterNot { forventedeBehandlingId.contains(it) }
+
         if (ukontrollerteBehandlingId.isNotEmpty()) {
             error("Har ikke kontrollert behandlingene:$ukontrollerteBehandlingId")
         }

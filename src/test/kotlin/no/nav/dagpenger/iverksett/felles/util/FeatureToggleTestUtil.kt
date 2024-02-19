@@ -1,4 +1,4 @@
-package no.nav.dagpenger.iverksett.util
+package no.nav.dagpenger.iverksett.felles.util
 
 import io.mockk.every
 import io.mockk.mockk

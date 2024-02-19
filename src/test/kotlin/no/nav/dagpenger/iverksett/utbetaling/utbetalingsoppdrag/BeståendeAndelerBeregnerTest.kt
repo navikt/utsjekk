@@ -3,312 +3,347 @@ package no.nav.dagpenger.iverksett.utbetaling.utbetalingsoppdrag
 import no.nav.dagpenger.iverksett.utbetaling.domene.StønadsdataDagpenger
 import no.nav.dagpenger.iverksett.utbetaling.utbetalingsoppdrag.BeståendeAndelerBeregner.finnBeståendeAndeler
 import no.nav.dagpenger.iverksett.utbetaling.utbetalingsoppdrag.domene.AndelData
-import org.assertj.core.api.Assertions.assertThat
+import no.nav.dagpenger.iverksett.utbetaling.util.april
+import no.nav.dagpenger.iverksett.utbetaling.util.februar
+import no.nav.dagpenger.iverksett.utbetaling.util.januar
+import no.nav.dagpenger.iverksett.utbetaling.util.mai
+import no.nav.dagpenger.iverksett.utbetaling.util.mars
+import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNull
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
-import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
 
 class BeståendeAndelerBeregnerTest {
-    companion object {
-        private val JAN_8 = LocalDate.of(2021, 1, 8)
-        private val FEB_5 = LocalDate.of(2021, 2, 5)
-        private val MARS_13 = LocalDate.of(2021, 3, 13)
-        private val APRIL_21 = LocalDate.of(2021, 4, 21)
-        private val MAI_31 = LocalDate.of(2021, 5, 31)
-    }
-
     @Test
     fun `ingen endring mellom 2 andeler`() {
-        val jan = lagAndel(JAN_8, JAN_8, 1, periodeId = 0)
+        val jan = lagAndel(8.januar, 8.januar, 1, periodeId = 0)
         val forrige = listOf(jan)
-        val ny = listOf(lagAndel(JAN_8, JAN_8, 1))
+        val ny = listOf(lagAndel(8.januar, 8.januar, 1))
 
         val beståendeAndeler = finnBeståendeAndeler(forrige, ny, null)
 
-        assertThat(beståendeAndeler.opphørFra).isNull()
-        assertThat(beståendeAndeler.andeler).containsExactly(jan)
+        assertNull(beståendeAndeler.opphørFra)
+        assertEquals(1, beståendeAndeler.andeler.size)
+        assertTrue(beståendeAndeler.andeler.contains(jan))
     }
 
     @Test
     fun `en ny andel`() {
-        val forrige = listOf(lagAndel(JAN_8, JAN_8, 1, periodeId = 0))
-        val ny = listOf(
-            lagAndel(JAN_8, JAN_8, 1),
-            lagAndel(FEB_5, FEB_5, 1),
-        )
+        val forrige = listOf(lagAndel(8.januar, 8.januar, 1, periodeId = 0))
+        val ny =
+            listOf(
+                lagAndel(8.januar, 8.januar, 1),
+                lagAndel(5.februar, 5.februar, 1),
+            )
 
         val beståendeAndeler = finnBeståendeAndeler(forrige, ny, null)
 
-        assertThat(beståendeAndeler.opphørFra).isNull()
-        assertThat(beståendeAndeler.andeler).containsExactlyElementsOf(forrige)
+        assertNull(beståendeAndeler.opphørFra)
+        assertEquals(1, beståendeAndeler.andeler.size)
+        assertEquals(forrige, beståendeAndeler.andeler)
     }
 
     @Test
     fun `fra 0 til 1 andel`() {
         val forrige = listOf<AndelData>()
-        val ny = listOf(
-            lagAndel(JAN_8, JAN_8, 1),
-        )
+        val ny =
+            listOf(
+                lagAndel(8.januar, 8.januar, 1),
+            )
 
         val beståendeAndeler = finnBeståendeAndeler(forrige, ny, null)
 
-        assertThat(beståendeAndeler.opphørFra).isNull()
-        assertThat(beståendeAndeler.andeler).isEmpty()
+        assertNull(beståendeAndeler.opphørFra)
+        assertTrue(beståendeAndeler.andeler.isEmpty())
     }
 
     @Test
     fun `en ny andel mellom tidligere perioder`() {
-        val januar = lagAndel(JAN_8, JAN_8, 1, periodeId = 0)
-        val forrige = listOf(
-            januar,
-            lagAndel(MARS_13, MARS_13, 1, periodeId = 1, forrigePeriodeId = 0),
-        )
-        val ny = listOf(
-            lagAndel(JAN_8, JAN_8, 1),
-            lagAndel(FEB_5, FEB_5, 1),
-            lagAndel(MARS_13, MARS_13, 1),
-        )
+        val januar = lagAndel(8.januar, 8.januar, 1, periodeId = 0)
+        val forrige =
+            listOf(
+                januar,
+                lagAndel(13.mars, 13.mars, 1, periodeId = 1, forrigePeriodeId = 0),
+            )
+        val ny =
+            listOf(
+                lagAndel(8.januar, 8.januar, 1),
+                lagAndel(5.februar, 5.februar, 1),
+                lagAndel(13.mars, 13.mars, 1),
+            )
 
         val beståendeAndeler = finnBeståendeAndeler(forrige, ny, null)
 
-        assertThat(beståendeAndeler.opphørFra).isNull()
-        assertThat(beståendeAndeler.andeler).containsExactly(januar)
+        assertNull(beståendeAndeler.opphørFra)
+        assertEquals(1, beståendeAndeler.andeler.size)
+        assertTrue(beståendeAndeler.andeler.contains(januar))
     }
 
     @Test
     fun `fjernet en andel mellom tidligere perioder`() {
-        val januar = lagAndel(JAN_8, JAN_8, 1, periodeId = 0)
-        val forrige = listOf(
-            januar,
-            lagAndel(FEB_5, FEB_5, 1, periodeId = 1, forrigePeriodeId = 0),
-            lagAndel(MARS_13, MARS_13, 1, periodeId = 2, forrigePeriodeId = 1),
-        )
-        val ny = listOf(
-            lagAndel(JAN_8, JAN_8, 1),
-            lagAndel(MARS_13, MARS_13, 1),
-        )
+        val januar = lagAndel(8.januar, 8.januar, 1, periodeId = 0)
+        val forrige =
+            listOf(
+                januar,
+                lagAndel(5.februar, 5.februar, 1, periodeId = 1, forrigePeriodeId = 0),
+                lagAndel(13.mars, 13.mars, 1, periodeId = 2, forrigePeriodeId = 1),
+            )
+        val ny =
+            listOf(
+                lagAndel(8.januar, 8.januar, 1),
+                lagAndel(13.mars, 13.mars, 1),
+            )
 
         val beståendeAndeler = finnBeståendeAndeler(forrige, ny, null)
 
-        assertThat(beståendeAndeler.opphørFra).isEqualTo(FEB_5)
-        assertThat(beståendeAndeler.andeler).containsExactly(januar)
+        assertEquals(5.februar, beståendeAndeler.opphørFra)
+        assertEquals(1, beståendeAndeler.andeler.size)
+        assertTrue(beståendeAndeler.andeler.contains(januar))
     }
 
     @Test
     fun `fjernet en andel`() {
-        val januar = lagAndel(JAN_8, JAN_8, 1, periodeId = 0)
-        val forrige = listOf(januar, lagAndel(FEB_5, FEB_5, 1, periodeId = 1, forrigePeriodeId = 0))
-        val ny = listOf(lagAndel(JAN_8, JAN_8, 1))
+        val januar = lagAndel(8.januar, 8.januar, 1, periodeId = 0)
+        val forrige = listOf(januar, lagAndel(5.februar, 5.februar, 1, periodeId = 1, forrigePeriodeId = 0))
+        val ny = listOf(lagAndel(8.januar, 8.januar, 1))
 
         val beståendeAndeler = finnBeståendeAndeler(forrige, ny, null)
 
-        assertThat(beståendeAndeler.opphørFra).isEqualTo(FEB_5)
-        assertThat(beståendeAndeler.andeler).containsExactly(januar)
+        assertEquals(5.februar, beståendeAndeler.opphørFra)
+        assertEquals(1, beståendeAndeler.andeler.size)
+        assertTrue(beståendeAndeler.andeler.contains(januar))
     }
 
     @Test
     fun `avkortet en andel`() {
-        val forrige = listOf(lagAndel(JAN_8, FEB_5, 1, periodeId = 0))
-        val ny = listOf(lagAndel(JAN_8, JAN_8, 1))
+        val forrige = listOf(lagAndel(8.januar, 5.februar, 1, periodeId = 0))
+        val ny = listOf(lagAndel(8.januar, 8.januar, 1))
 
         val beståendeAndeler = finnBeståendeAndeler(forrige, ny, null)
 
-        assertThat(beståendeAndeler.opphørFra).isEqualTo(JAN_8.plusDays(1))
-        assertThat(beståendeAndeler.andeler)
-            .containsExactly(lagAndel(JAN_8, JAN_8, 1, periodeId = 0))
+        assertEquals(8.januar.plusDays(1), beståendeAndeler.opphørFra)
+        assertEquals(1, beståendeAndeler.andeler.size)
+        assertTrue(beståendeAndeler.andeler.contains(lagAndel(8.januar, 8.januar, 1, periodeId = 0)))
     }
 
     @Test
     fun `avkortet en lengre andel`() {
-        val forrige = listOf(lagAndel(JAN_8, MAI_31, 1, periodeId = 0))
-        val ny = listOf(lagAndel(JAN_8, FEB_5, 1))
+        val forrige = listOf(lagAndel(8.januar, 31.mai, 1, periodeId = 0))
+        val ny = listOf(lagAndel(8.januar, 5.februar, 1))
 
         val beståendeAndeler = finnBeståendeAndeler(forrige, ny, null)
 
-        assertThat(beståendeAndeler.opphørFra).isEqualTo(FEB_5.plusDays(1))
-        assertThat(beståendeAndeler.andeler)
-            .containsExactly(lagAndel(JAN_8, FEB_5, 1, periodeId = 0))
+        assertEquals(5.februar.plusDays(1), beståendeAndeler.opphørFra)
+        assertEquals(1, beståendeAndeler.andeler.size)
+        assertTrue(beståendeAndeler.andeler.contains(lagAndel(8.januar, 5.februar, 1, periodeId = 0)))
     }
 
     // TODO er dette et reell case?
     @Test
     fun `forlenget en andel`() {
-        val forrige = listOf(lagAndel(JAN_8, JAN_8, 1, periodeId = 0))
-        val ny = listOf(lagAndel(JAN_8, FEB_5, 1))
+        val forrige = listOf(lagAndel(8.januar, 8.januar, 1, periodeId = 0))
+        val ny = listOf(lagAndel(8.januar, 5.februar, 1))
 
         val beståendeAndeler = finnBeståendeAndeler(forrige, ny, null)
 
-        assertThat(beståendeAndeler.opphørFra).isNull()
-        assertThat(beståendeAndeler.andeler).isEmpty()
+        assertNull(beståendeAndeler.opphørFra)
+        assertTrue(beståendeAndeler.andeler.isEmpty())
     }
 
     @Test
     fun `nytt beløp for periode`() {
-        val forrige = listOf(
-            lagAndel(JAN_8, FEB_5, 1, periodeId = 0),
-        )
-        val ny = listOf(
-            lagAndel(JAN_8, FEB_5, 2),
-        )
+        val forrige =
+            listOf(
+                lagAndel(8.januar, 5.februar, 1, periodeId = 0),
+            )
+        val ny =
+            listOf(
+                lagAndel(8.januar, 5.februar, 2),
+            )
 
         val beståendeAndeler = finnBeståendeAndeler(forrige, ny, null)
 
-        assertThat(beståendeAndeler.opphørFra).isNull()
-        assertThat(beståendeAndeler.andeler).isEmpty()
+        assertNull(beståendeAndeler.opphørFra)
+        assertTrue(beståendeAndeler.andeler.isEmpty())
     }
 
     @Test
     fun `avkortet periode og nytt beløp`() {
-        val forrige = listOf(
-            lagAndel(JAN_8, FEB_5, 1, periodeId = 0),
-        )
-        val ny = listOf(
-            lagAndel(JAN_8, JAN_8, 2),
-        )
+        val forrige =
+            listOf(
+                lagAndel(8.januar, 5.februar, 1, periodeId = 0),
+            )
+        val ny =
+            listOf(
+                lagAndel(8.januar, 8.januar, 2),
+            )
 
         val beståendeAndeler = finnBeståendeAndeler(forrige, ny, null)
 
-        assertThat(beståendeAndeler.opphørFra).isNull()
-        assertThat(beståendeAndeler.andeler).isEmpty()
+        assertNull(beståendeAndeler.opphørFra)
+        assertTrue(beståendeAndeler.andeler.isEmpty())
     }
 
     @Test
     fun `forlenget periode og nytt beløp`() {
-        val forrige = listOf(
-            lagAndel(JAN_8, JAN_8, 1, periodeId = 0),
-        )
-        val ny = listOf(
-            lagAndel(JAN_8, FEB_5, 2),
-        )
+        val forrige =
+            listOf(
+                lagAndel(8.januar, 8.januar, 1, periodeId = 0),
+            )
+        val ny =
+            listOf(
+                lagAndel(8.januar, 5.februar, 2),
+            )
 
         val beståendeAndeler = finnBeståendeAndeler(forrige, ny, null)
 
-        assertThat(beståendeAndeler.opphørFra).isNull()
-        assertThat(beståendeAndeler.andeler).isEmpty()
+        assertNull(beståendeAndeler.opphørFra)
+        assertTrue(beståendeAndeler.andeler.isEmpty())
     }
 
     @Test
     fun `nytt beløp fra feb`() {
-        val ny_jan_dato = JAN_8.plusDays(20)
-        val forrige = listOf(
-            lagAndel(JAN_8, FEB_5, 1, periodeId = 0),
-        )
-        val ny = listOf(
-            lagAndel(JAN_8, ny_jan_dato, 1),
-            lagAndel(ny_jan_dato.plusDays(1), FEB_5, 2),
-        )
+        val januar = 8.januar.plusDays(20)
+        val forrige =
+            listOf(
+                lagAndel(8.januar, 5.februar, 1, periodeId = 0),
+            )
+        val ny =
+            listOf(
+                lagAndel(8.januar, januar, 1),
+                lagAndel(januar.plusDays(1), 5.februar, 2),
+            )
 
         val beståendeAndeler = finnBeståendeAndeler(forrige, ny, null)
 
-        assertThat(beståendeAndeler.opphørFra).isNull()
-        assertThat(beståendeAndeler.andeler)
-            .containsExactly(lagAndel(JAN_8, ny_jan_dato, 1, periodeId = 0))
+        assertNull(beståendeAndeler.opphørFra)
+        assertEquals(1, beståendeAndeler.andeler.size)
+        assertTrue(beståendeAndeler.andeler.contains(lagAndel(8.januar, januar, 1, periodeId = 0)))
     }
 
     @Test
     fun `første andelen får tidligere fom, og en ny andel avkorter`() {
-        val forrige = listOf(
-            lagAndel(FEB_5, MAI_31, 1, periodeId = 0),
-        )
-        val ny = listOf(
-            lagAndel(JAN_8, MARS_13, 1),
-            lagAndel(APRIL_21, MAI_31, 2),
-        )
+        val forrige =
+            listOf(
+                lagAndel(5.februar, 31.mai, 1, periodeId = 0),
+            )
+        val ny =
+            listOf(
+                lagAndel(8.januar, 13.mars, 1),
+                lagAndel(21.april, 31.mai, 2),
+            )
 
         val beståendeAndeler = finnBeståendeAndeler(forrige, ny, null)
 
-        assertThat(beståendeAndeler.opphørFra).isNull()
-        assertThat(beståendeAndeler.andeler).isEmpty()
+        assertNull(beståendeAndeler.opphørFra)
+        assertTrue(beståendeAndeler.andeler.isEmpty())
     }
 
     @Test
     fun `får nytt beløp fra del av første perioden`() {
-        val ny_januar_dato = JAN_8.plusDays(5)
-        val forrige = listOf(
-            lagAndel(JAN_8, FEB_5, 1, periodeId = 0),
-            lagAndel(MARS_13, APRIL_21, 1, periodeId = 1, forrigePeriodeId = 0),
-        )
-        val ny = listOf(
-            lagAndel(JAN_8, ny_januar_dato, 1),
-            lagAndel(ny_januar_dato.plusDays(1), FEB_5, 2),
-            lagAndel(MARS_13, APRIL_21, 2),
-        )
+        val januar = 8.januar.plusDays(5)
+        val forrige =
+            listOf(
+                lagAndel(8.januar, 5.februar, 1, periodeId = 0),
+                lagAndel(13.mars, 21.april, 1, periodeId = 1, forrigePeriodeId = 0),
+            )
+        val ny =
+            listOf(
+                lagAndel(8.januar, januar, 1),
+                lagAndel(januar.plusDays(1), 5.februar, 2),
+                lagAndel(13.mars, 21.april, 2),
+            )
 
         val beståendeAndeler = finnBeståendeAndeler(forrige, ny, null)
 
-        assertThat(beståendeAndeler.opphørFra).isNull()
-        assertThat(beståendeAndeler.andeler)
-            .containsExactly(lagAndel(JAN_8, ny_januar_dato, 1, periodeId = 0))
+        assertNull(beståendeAndeler.opphørFra)
+        assertEquals(1, beståendeAndeler.andeler.size)
+        assertTrue(beståendeAndeler.andeler.contains(lagAndel(8.januar, januar, 1, periodeId = 0)))
     }
 
     @Test
     fun `avkorter den første perioden og beholden den andre`() {
-        val forrige = listOf(
-            lagAndel(JAN_8, FEB_5, 1, periodeId = 0),
-            lagAndel(MARS_13, APRIL_21, 1, periodeId = 1, forrigePeriodeId = 0),
-        )
-        val ny = listOf(
-            lagAndel(JAN_8, JAN_8, 1),
-            lagAndel(MARS_13, APRIL_21, 2),
-        )
+        val forrige =
+            listOf(
+                lagAndel(8.januar, 5.februar, 1, periodeId = 0),
+                lagAndel(13.mars, 21.april, 1, periodeId = 1, forrigePeriodeId = 0),
+            )
+        val ny =
+            listOf(
+                lagAndel(8.januar, 8.januar, 1),
+                lagAndel(13.mars, 21.april, 2),
+            )
 
         val beståendeAndeler = finnBeståendeAndeler(forrige, ny, null)
 
-        assertThat(beståendeAndeler.opphørFra).isEqualTo(JAN_8.plusDays(1))
-        assertThat(beståendeAndeler.andeler)
-            .containsExactly(lagAndel(JAN_8, JAN_8, 1, periodeId = 0))
+        assertEquals(8.januar.plusDays(1), beståendeAndeler.opphørFra)
+        assertEquals(1, beståendeAndeler.andeler.size)
+        assertTrue(beståendeAndeler.andeler.contains(lagAndel(8.januar, 8.januar, 1, periodeId = 0)))
     }
 
     @Test
     fun `forlenger den første perioden og beholden den andre`() {
-        val forrige = listOf(
-            lagAndel(JAN_8, JAN_8, 1, periodeId = 0),
-            lagAndel(MARS_13, APRIL_21, 1, periodeId = 1, forrigePeriodeId = 0),
-        )
-        val ny = listOf(
-            lagAndel(JAN_8, FEB_5, 1),
-            lagAndel(MARS_13, APRIL_21, 2),
-        )
+        val forrige =
+            listOf(
+                lagAndel(8.januar, 8.januar, 1, periodeId = 0),
+                lagAndel(13.mars, 21.april, 1, periodeId = 1, forrigePeriodeId = 0),
+            )
+        val ny =
+            listOf(
+                lagAndel(8.januar, 5.februar, 1),
+                lagAndel(13.mars, 21.april, 2),
+            )
 
         val beståendeAndeler = finnBeståendeAndeler(forrige, ny, null)
 
-        assertThat(beståendeAndeler.opphørFra).isNull()
-        assertThat(beståendeAndeler.andeler).isEmpty()
+        assertNull(beståendeAndeler.opphørFra)
+        assertTrue(beståendeAndeler.andeler.isEmpty())
     }
 
     @Test
     fun `første andelen får senere fom, og en ny andel avkorter`() {
-        val forrige = listOf(
-            lagAndel(JAN_8, MAI_31, 1, periodeId = 0),
-        )
-        val ny = listOf(
-            lagAndel(FEB_5, MARS_13, 1),
-            lagAndel(APRIL_21, MAI_31, 2),
-        )
+        val forrige =
+            listOf(
+                lagAndel(8.januar, 31.mai, 1, periodeId = 0),
+            )
+        val ny =
+            listOf(
+                lagAndel(5.februar, 13.mars, 1),
+                lagAndel(21.april, 31.mai, 2),
+            )
 
         val beståendeAndeler = finnBeståendeAndeler(forrige, ny, null)
 
-        assertThat(beståendeAndeler.opphørFra).isEqualTo(JAN_8)
-        assertThat(beståendeAndeler.andeler).isEmpty()
+        assertEquals(8.januar, beståendeAndeler.opphørFra)
+        assertTrue(beståendeAndeler.andeler.isEmpty())
     }
 
     @Test
     fun `avkorter periode 2`() {
-        val forrige = listOf(
-            lagAndel(JAN_8, JAN_8, 1, periodeId = 0),
-            lagAndel(FEB_5, MARS_13, 1, periodeId = 1, forrigePeriodeId = 0),
-        )
-        val ny = listOf(
-            lagAndel(JAN_8, JAN_8, 1),
-            lagAndel(FEB_5, FEB_5, 1),
-        )
+        val forrige =
+            listOf(
+                lagAndel(8.januar, 8.januar, 1, periodeId = 0),
+                lagAndel(5.februar, 13.mars, 1, periodeId = 1, forrigePeriodeId = 0),
+            )
+        val ny =
+            listOf(
+                lagAndel(8.januar, 8.januar, 1),
+                lagAndel(5.februar, 5.februar, 1),
+            )
 
         val beståendeAndeler = finnBeståendeAndeler(forrige, ny, null)
 
-        assertThat(beståendeAndeler.opphørFra).isEqualTo(FEB_5.plusDays(1))
-        assertThat(beståendeAndeler.andeler).containsExactly(
-            lagAndel(JAN_8, JAN_8, 1, periodeId = 0),
-            lagAndel(FEB_5, FEB_5, 1, periodeId = 1, forrigePeriodeId = 0),
+        assertEquals(5.februar.plusDays(1), beståendeAndeler.opphørFra)
+        assertEquals(2, beståendeAndeler.andeler.size)
+        assertTrue(
+            beståendeAndeler.andeler.containsAll(
+                listOf(
+                    lagAndel(8.januar, 8.januar, 1, periodeId = 0),
+                    lagAndel(5.februar, 5.februar, 1, periodeId = 1, forrigePeriodeId = 0),
+                ),
+            ),
         )
     }
 
@@ -319,15 +354,13 @@ class BeståendeAndelerBeregnerTest {
         periodeId: Long? = null,
         forrigePeriodeId: Long? = null,
         type: StønadTypeDagpenger = StønadTypeDagpenger.DAGPENGER_ARBEIDSSØKER_ORDINÆR,
-    ): AndelData {
-        return AndelData(
-            id = "0",
-            fom = fom,
-            tom = tom,
-            beløp = beløp,
-            stønadsdata = StønadsdataDagpenger(type),
-            periodeId = periodeId,
-            forrigePeriodeId = forrigePeriodeId,
-        )
-    }
+    ) = AndelData(
+        id = "0",
+        fom = fom,
+        tom = tom,
+        beløp = beløp,
+        stønadsdata = StønadsdataDagpenger(type),
+        periodeId = periodeId,
+        forrigePeriodeId = forrigePeriodeId,
+    )
 }

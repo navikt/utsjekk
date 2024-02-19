@@ -12,8 +12,6 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.UUID
 
-fun Int.mai(år: Int) = LocalDate.of(år, 5, this)
-
 fun lagIverksettingsdata(
     fagsystem: Fagsystem = Fagsystem.DAGPENGER,
     sakId: UUID? = null,

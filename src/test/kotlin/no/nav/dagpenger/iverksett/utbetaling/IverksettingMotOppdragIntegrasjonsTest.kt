@@ -20,7 +20,6 @@ import no.nav.dagpenger.kontrakter.felles.somString
 import no.nav.dagpenger.kontrakter.felles.somUUID
 import no.nav.dagpenger.kontrakter.iverksett.IverksettStatus
 import no.nav.familie.prosessering.internal.TaskService
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -171,7 +170,7 @@ class IverksettingMotOppdragIntegrasjonsTest : ServerTest() {
         iverksettingService.startIverksetting(iverksetting)
 
         taskService.findAll().let { tasks ->
-            assertThat(tasks).hasSize(1)
+            assertEquals(1, tasks.size)
             iverksettMotOppdragTask.doTask(tasks.first())
         }
 

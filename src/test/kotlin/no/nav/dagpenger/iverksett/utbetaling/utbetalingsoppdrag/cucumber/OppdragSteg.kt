@@ -4,7 +4,6 @@ import io.cucumber.datatable.DataTable
 import io.cucumber.java.no.Gitt
 import io.cucumber.java.no.Når
 import io.cucumber.java.no.Så
-import no.nav.dagpenger.iverksett.utbetaling.domene.Stønadsdata
 import no.nav.dagpenger.iverksett.utbetaling.domene.StønadsdataDagpenger
 import no.nav.dagpenger.iverksett.utbetaling.domene.StønadsdataTiltakspenger
 import no.nav.dagpenger.iverksett.utbetaling.utbetalingsoppdrag.Utbetalingsgenerator
@@ -32,9 +31,9 @@ import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
 import no.nav.dagpenger.kontrakter.felles.StønadTypeTiltakspenger
 import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsoppdrag
 import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsperiode
-import org.assertj.core.api.Assertions.assertThat
-import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.assertThrows
 import org.slf4j.LoggerFactory
 import java.time.LocalDate
 import java.util.UUID
@@ -84,14 +83,17 @@ class OppdragSteg {
 
     @Når("beregner utbetalingsoppdrag kjøres kastes exception")
     fun `lagTilkjentYtelseMedUtbetalingsoppdrag kjøres kastes exception`(dataTable: DataTable) {
-        val throwable = catchThrowable { `beregner utbetalingsoppdrag`() }
+        val throwable =
+            assertThrows<Throwable> {
+                `beregner utbetalingsoppdrag`()
+            }
         dataTable.asMaps().let { rader ->
             if (rader.size > 1) {
                 error("Kan maks inneholde en rad")
             }
-            rader.firstOrNull()?.let { rad ->
-                rad["Exception"]?.let { assertThat(throwable::class.java.simpleName).isEqualTo(it) }
-                rad["Melding"]?.let { assertThat(throwable.message).contains(it) }
+            rader.firstOrNull()!!.let { rad ->
+                assertEquals(rad["Exception"], throwable::class.java.simpleName)
+                assertTrue(throwable.message!!.contains(rad["Melding"]!!))
             }
         }
     }
@@ -105,8 +107,10 @@ class OppdragSteg {
     @Så("forvent følgende andeler med periodeId")
     fun `forvent følgende andeler med periodeId`(dataTable: DataTable) {
         val groupByBehandlingId = dataTable.groupByBehandlingId()
+
         groupByBehandlingId.forEach { (behandlingId, rader) ->
-            val beregnedeAndeler = beregnetUtbetalingsoppdrag.getValue(behandlingIdTilUUID[behandlingId.toInt()]!!).andeler
+            val beregnedeAndeler =
+                beregnetUtbetalingsoppdrag.getValue(behandlingIdTilUUID[behandlingId.toInt()]!!).andeler
             val forventedeAndeler =
                 rader.map { rad ->
                     AndelMedPeriodeId(
@@ -115,10 +119,12 @@ class OppdragSteg {
                         forrigePeriodeId = parseValgfriLong(DomenebegrepUtbetalingsoppdrag.FORRIGE_PERIODE_ID, rad),
                     )
                 }
-            assertThat(beregnedeAndeler).containsExactlyElementsOf(forventedeAndeler)
+            assertEquals(forventedeAndeler, beregnedeAndeler)
         }
-        assertThat(beregnetUtbetalingsoppdrag.values.map { it.andeler }.filter { it.isNotEmpty() })
-            .hasSize(groupByBehandlingId.size)
+
+        val ikkeTommeUtbetalingsoppdrag =
+            beregnetUtbetalingsoppdrag.values.map { it.andeler }.filter { it.isNotEmpty() }
+        assertEquals(groupByBehandlingId.size, ikkeTommeUtbetalingsoppdrag.size)
     }
 
     private fun opprettBehandlingsinformasjon(dataTable: DataTable) {
@@ -135,7 +141,8 @@ class OppdragSteg {
         dataTable.groupByBehandlingId().forEach { (behandlingId, _) ->
             val behandlingIdAsUUID = behandlingIdTilUUID[behandlingId.toInt()]!!
             if (!behandlingsinformasjon.containsKey(behandlingIdAsUUID)) {
-                behandlingsinformasjon[behandlingIdAsUUID] = lagBehandlingsinformasjon(GeneriskIdSomUUID(behandlingIdAsUUID))
+                behandlingsinformasjon[behandlingIdAsUUID] =
+                    lagBehandlingsinformasjon(GeneriskIdSomUUID(behandlingIdAsUUID))
             }
         }
     }
@@ -158,6 +165,7 @@ class OppdragSteg {
         val behandlingId = andeler.key
         val sisteOffsetPerIdent = gjeldendeForrigeOffsetForKjede(acc)
         val behandlingsinformasjon1 = behandlingsinformasjon.getValue(behandlingId)
+
         return Utbetalingsgenerator.lagUtbetalingsoppdrag(
             behandlingsinformasjon = behandlingsinformasjon1,
             nyeAndeler = andeler.value,
@@ -170,18 +178,20 @@ class OppdragSteg {
      * Når vi henter forrige offset for en kjede så må vi hente max periodeId, men den første hendelsen av den typen
      * Dette då vi i noen tilfeller opphører en peride, som beholder den samme periodeId'n
      */
-    private fun gjeldendeForrigeOffsetForKjede(forrigeKjeder: List<Pair<UUID, List<AndelData>>>): Map<Stønadsdata, AndelData> {
-        return forrigeKjeder.flatMap { it.second }
+    private fun gjeldendeForrigeOffsetForKjede(forrigeKjeder: List<Pair<UUID, List<AndelData>>>) =
+        forrigeKjeder.flatMap { it.second }
             .uten0beløp()
             .groupBy { it.stønadsdata }
-            .mapValues { it.value.sortedWith(compareByDescending<AndelData> { it.periodeId!! }.thenByDescending { it.tom }).first() }
-    }
+            .mapValues { (_, value) ->
+                value.sortedWith(compareByDescending<AndelData> { it.periodeId!! }.thenByDescending { it.tom }).first()
+            }
 
     private fun oppdaterAndelerMedPeriodeId(
         beregnUtbetalingsoppdrag: BeregnetUtbetalingsoppdrag,
         andelPåBehandlingId: Map.Entry<UUID, List<AndelData>>,
     ): List<AndelData> {
         val andelerPerId = beregnUtbetalingsoppdrag.andeler.associateBy { it.id }
+
         return andelPåBehandlingId.value.map {
             if (it.beløp == 0) {
                 it
@@ -200,6 +210,7 @@ class OppdragSteg {
         beregnetUtbetalingsoppdrag: MutableMap<UUID, BeregnetUtbetalingsoppdrag>,
     ) {
         val forventedeUtbetalingsoppdrag = OppdragParser.mapForventetUtbetalingsoppdrag(dataTable)
+
         forventedeUtbetalingsoppdrag.forEach { forventetUtbetalingsoppdrag ->
             val behandlingId = behandlingIdTilUUID[forventetUtbetalingsoppdrag.behandlingId.toInt()]
             val utbetalingsoppdrag =
@@ -228,7 +239,8 @@ class OppdragSteg {
                 throw e
             }
         }
-        assertThat(utbetalingsoppdrag.utbetalingsperiode).hasSize(forventetUtbetalingsoppdrag.utbetalingsperiode.size)
+
+        assertEquals(forventetUtbetalingsoppdrag.utbetalingsperiode.size, utbetalingsoppdrag.utbetalingsperiode.size)
     }
 }
 
@@ -242,31 +254,17 @@ private fun assertUtbetalingsperiode(
         } else {
             StønadsdataTiltakspenger(forventetUtbetalingsperiode.ytelse as StønadTypeTiltakspenger, false)
         }
-    assertThat(utbetalingsperiode.erEndringPåEksisterendePeriode)
-        .`as`("erEndringPåEksisterendePeriode")
-        .isEqualTo(forventetUtbetalingsperiode.erEndringPåEksisterendePeriode)
-    assertThat(utbetalingsperiode.klassifisering)
-        .`as`("klassifisering")
-        .isEqualTo(forventetStønadsdata.tilKlassifisering())
-    assertThat(utbetalingsperiode.periodeId)
-        .`as`("periodeId")
-        .isEqualTo(forventetUtbetalingsperiode.periodeId)
-    assertThat(utbetalingsperiode.forrigePeriodeId)
-        .`as`("forrigePeriodeId")
-        .isEqualTo(forventetUtbetalingsperiode.forrigePeriodeId)
-    assertThat(utbetalingsperiode.sats.toInt())
-        .`as`("sats")
-        .isEqualTo(forventetUtbetalingsperiode.sats)
-    assertThat(utbetalingsperiode.satstype)
-        .`as`("satsType")
-        .isEqualTo(forventetUtbetalingsperiode.satstype)
-    assertThat(utbetalingsperiode.fom)
-        .`as`("fom")
-        .isEqualTo(forventetUtbetalingsperiode.fom)
-    assertThat(utbetalingsperiode.tom)
-        .`as`("tom")
-        .isEqualTo(forventetUtbetalingsperiode.tom)
-    assertThat(utbetalingsperiode.opphør?.fom)
-        .`as`("opphør")
-        .isEqualTo(forventetUtbetalingsperiode.opphør)
+
+    assertEquals(
+        forventetUtbetalingsperiode.erEndringPåEksisterendePeriode,
+        utbetalingsperiode.erEndringPåEksisterendePeriode,
+    )
+    assertEquals(forventetStønadsdata.tilKlassifisering(), utbetalingsperiode.klassifisering)
+    assertEquals(forventetUtbetalingsperiode.periodeId, utbetalingsperiode.periodeId)
+    assertEquals(forventetUtbetalingsperiode.forrigePeriodeId, utbetalingsperiode.forrigePeriodeId)
+    assertEquals(forventetUtbetalingsperiode.sats, utbetalingsperiode.sats.toInt())
+    assertEquals(forventetUtbetalingsperiode.satstype, utbetalingsperiode.satstype)
+    assertEquals(forventetUtbetalingsperiode.fom, utbetalingsperiode.fom)
+    assertEquals(forventetUtbetalingsperiode.tom, utbetalingsperiode.tom)
+    assertEquals(forventetUtbetalingsperiode.opphør, utbetalingsperiode.opphør?.fom)
 }

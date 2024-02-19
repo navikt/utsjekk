@@ -23,7 +23,6 @@ import no.nav.dagpenger.kontrakter.oppdrag.OppdragStatus
 import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsoppdrag
 import no.nav.familie.prosessering.domene.Task
 import no.nav.familie.prosessering.internal.TaskService
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
@@ -88,8 +87,8 @@ internal class IverksettMotOppdragTaskTest {
             )
         }
 
-        assertThat(oppdragSlot.captured.fagsystem).isEqualTo(Fagsystem.DAGPENGER)
-        assertThat(oppdragSlot.captured.kodeEndring).isEqualTo(Utbetalingsoppdrag.KodeEndring.NY)
+        assertEquals(Fagsystem.DAGPENGER, oppdragSlot.captured.fagsystem)
+        assertEquals(Utbetalingsoppdrag.KodeEndring.NY, oppdragSlot.captured.kodeEndring)
     }
 
     @Test
@@ -144,8 +143,8 @@ internal class IverksettMotOppdragTaskTest {
 
         iverksettMotOppdragTask.onCompletion(task)
 
-        assertThat(taskSlot.captured.payload).isEqualTo(taskPayload)
-        assertThat(taskSlot.captured.type).isEqualTo(VentePåStatusFraØkonomiTask.TYPE)
+        assertEquals(taskPayload, taskSlot.captured.payload)
+        assertEquals(VentePåStatusFraØkonomiTask.TYPE, taskSlot.captured.type)
     }
 
     private fun tomUtbetaling() =

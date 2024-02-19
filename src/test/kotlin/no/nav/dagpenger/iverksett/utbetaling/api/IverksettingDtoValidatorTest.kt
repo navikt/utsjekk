@@ -14,8 +14,7 @@ import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
 import no.nav.dagpenger.kontrakter.felles.StønadTypeTiltakspenger
 import no.nav.dagpenger.kontrakter.iverksett.Ferietillegg
 import no.nav.dagpenger.kontrakter.iverksett.StønadsdataTiltakspengerDto
-import org.assertj.core.api.Assertions.assertThat
-import org.assertj.core.api.Assertions.fail
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.springframework.http.HttpStatus
@@ -172,8 +171,8 @@ fun assertApiFeil(
 ) {
     try {
         block()
-        fail("Forventet ApiFeil, men fikk det ikke")
+        error("Forventet ApiFeil, men fikk det ikke")
     } catch (e: ApiFeil) {
-        assertThat(e.httpStatus).isEqualTo(httpStatus)
+        assertEquals(httpStatus, e.httpStatus)
     }
 }

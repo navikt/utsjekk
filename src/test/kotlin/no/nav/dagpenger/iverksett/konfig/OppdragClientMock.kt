@@ -17,13 +17,10 @@ import org.springframework.context.annotation.Profile
 class OppdragClientMock {
     @Bean
     @Primary
-    fun oppdragClient(): OppdragClient {
-        val oppdragClientMock = mockk<OppdragClient>()
-
-        every { oppdragClientMock.grensesnittavstemming(any()) } just Runs
-        every { oppdragClientMock.iverksettOppdrag(any()) } just Runs
-        every { oppdragClientMock.hentStatus(any()) } returns OppdragStatusDto(OppdragStatus.KVITTERT_OK, null)
-
-        return oppdragClientMock
-    }
+    fun oppdragClient() =
+        mockk<OppdragClient>().also {
+            every { it.grensesnittavstemming(any()) } just Runs
+            every { it.iverksettOppdrag(any()) } just Runs
+            every { it.hentStatus(any()) } returns OppdragStatusDto(OppdragStatus.KVITTERT_OK, null)
+        }
 }

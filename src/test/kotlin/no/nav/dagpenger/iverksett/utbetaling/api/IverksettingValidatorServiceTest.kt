@@ -10,12 +10,12 @@ import no.nav.dagpenger.iverksett.utbetaling.domene.personident
 import no.nav.dagpenger.iverksett.utbetaling.domene.sakId
 import no.nav.dagpenger.iverksett.utbetaling.domene.tilAndelData
 import no.nav.dagpenger.iverksett.utbetaling.lagIverksettingsdata
-import no.nav.dagpenger.iverksett.utbetaling.mai
 import no.nav.dagpenger.iverksett.utbetaling.tilstand.IverksettingService
 import no.nav.dagpenger.iverksett.utbetaling.tilstand.IverksettingsresultatService
 import no.nav.dagpenger.iverksett.utbetaling.utbetalingsoppdrag.Utbetalingsgenerator
 import no.nav.dagpenger.iverksett.utbetaling.utbetalingsoppdrag.domene.Behandlingsinformasjon
 import no.nav.dagpenger.iverksett.utbetaling.utbetalingsoppdrag.domene.BeregnetUtbetalingsoppdrag
+import no.nav.dagpenger.iverksett.utbetaling.util.mai
 import no.nav.dagpenger.kontrakter.felles.somUUID
 import no.nav.dagpenger.kontrakter.oppdrag.OppdragStatus
 import org.junit.jupiter.api.BeforeEach
@@ -89,7 +89,7 @@ class IverksettingValidatorServiceTest {
     fun `skal få CONFLICT når forrige iverksetting ikke er ferdig og OK mot oppdrag`() {
         val forrigeIverksetting =
             lagIverksettingsdata(
-                andelsdatoer = listOf(1.mai(2023), 2.mai(2023)),
+                andelsdatoer = listOf(1.mai, 2.mai),
                 beløp = 300,
             )
         val nåværendeIverksetting =

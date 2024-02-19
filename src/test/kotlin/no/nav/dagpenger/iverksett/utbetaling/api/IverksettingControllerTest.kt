@@ -11,7 +11,6 @@ import no.nav.dagpenger.kontrakter.iverksett.IverksettDto
 import no.nav.dagpenger.kontrakter.iverksett.IverksettStatus
 import no.nav.dagpenger.kontrakter.iverksett.VedtaksdetaljerDto
 import no.nav.familie.prosessering.internal.TaskService
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -52,7 +51,8 @@ class IverksettingControllerTest : ServerTest() {
                 HttpMethod.POST,
                 HttpEntity(iverksettJson, headers),
             )
-        assertThat(respons.statusCode.value()).isEqualTo(202)
+
+        assertEquals(HttpStatus.ACCEPTED, respons.statusCode)
     }
 
     @Test

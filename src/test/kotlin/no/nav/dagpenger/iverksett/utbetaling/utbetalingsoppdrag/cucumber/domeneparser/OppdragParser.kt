@@ -9,7 +9,7 @@ import no.nav.dagpenger.kontrakter.felles.Satstype
 import no.nav.dagpenger.kontrakter.felles.StønadType
 import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
 import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsoppdrag
-import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Assertions.assertEquals
 import java.time.LocalDate
 import java.util.UUID
 
@@ -93,28 +93,15 @@ object OppdragParser {
     private fun validerAlleKodeEndringerLike(rader: List<Map<String, String>>) {
         rader.map { parseEnum<Utbetalingsoppdrag.KodeEndring>(DomenebegrepUtbetalingsoppdrag.KODE_ENDRING, it) }
             .zipWithNext().forEach {
-                assertThat(it.first).isEqualTo(it.second)
-                    .withFailMessage("Alle kodeendringer for en og samme oppdrag må være lik ${it.first} -> ${it.second}")
+                assertEquals(it.second, it.first)
             }
     }
-
-    private fun parseFødselsnummer(rad: Map<String, String>): String {
-        val id = (parseValgfriInt(DomenebegrepAndeler.IDENT, rad) ?: 1).toString()
-        return id.padStart(11, '0')
-    }
-}
-
-enum class DomenebegrepBehandlingsinformasjon(override val nøkkel: String) : Domenenøkkel {
-    OPPHØR_FRA("Opphør fra"),
-    YTELSE("Ytelse"),
 }
 
 enum class DomenebegrepAndeler(override val nøkkel: String) : Domenenøkkel {
     YTELSE_TYPE("Ytelse"),
     UTEN_ANDELER("Uten andeler"),
     BELØP("Beløp"),
-    KILDEBEHANDLING_ID("Kildebehandling"),
-    IDENT("Ident"),
     SATSTYPE("Satstype"),
 }
 

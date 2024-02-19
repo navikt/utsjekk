@@ -1,13 +1,12 @@
 package no.nav.dagpenger.iverksett.avstemming
 
-import no.nav.dagpenger.iverksett.avstemming.VirkedagerProvider
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
 
 class VirkedagerProviderTest {
-    val skjærTorsdag2021 = LocalDate.of(2021, 4, 1)
-    val skjærTorsdag2022 = LocalDate.of(2022, 4, 14)
+    private val skjærTorsdag2021 = LocalDate.of(2021, 4, 1)
+    private val skjærTorsdag2022 = LocalDate.of(2022, 4, 14)
 
     @Test
     fun `Hent virkedag allmenlig måndag`() {

@@ -3,6 +3,7 @@ package no.nav.dagpenger.iverksett.utbetaling.tilstand
 import io.mockk.every
 import io.mockk.mockk
 import no.nav.dagpenger.iverksett.felles.oppdrag.OppdragClient
+import no.nav.dagpenger.iverksett.felles.util.mockFeatureToggleService
 import no.nav.dagpenger.iverksett.utbetaling.domene.IverksettingEntitet
 import no.nav.dagpenger.iverksett.utbetaling.domene.OppdragResultat
 import no.nav.dagpenger.iverksett.utbetaling.util.enAndelTilkjentYtelse
@@ -10,7 +11,6 @@ import no.nav.dagpenger.iverksett.utbetaling.util.enIverksetting
 import no.nav.dagpenger.iverksett.utbetaling.util.enTilkjentYtelse
 import no.nav.dagpenger.iverksett.utbetaling.util.etIverksettingsresultat
 import no.nav.dagpenger.iverksett.utbetaling.util.etTomtUtbetalingsoppdrag
-import no.nav.dagpenger.iverksett.util.mockFeatureToggleService
 import no.nav.dagpenger.kontrakter.felles.Fagsystem
 import no.nav.dagpenger.kontrakter.felles.GeneriskIdSomString
 import no.nav.dagpenger.kontrakter.felles.GeneriskIdSomUUID

@@ -8,7 +8,6 @@ import no.nav.dagpenger.iverksett.utbetaling.lagIverksettingEntitet
 import no.nav.dagpenger.iverksett.utbetaling.lagIverksettingsdata
 import no.nav.dagpenger.kontrakter.felles.somString
 import no.nav.dagpenger.kontrakter.felles.somUUID
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
@@ -29,15 +28,16 @@ class IverksettingRepositoryTest : ServerTest() {
                 andelsdatoer = listOf(LocalDate.now(), LocalDate.now().minusDays(15)),
             )
 
-        val fagsakId = iverksettingData.fagsak.fagsakId
-        val iverksettListe1 = iverksettingRepository.findByFagsakId(fagsakId.somString)
-        assertEquals(0, iverksettListe1.size)
+        iverksettingRepository.findByFagsakId(iverksettingData.fagsak.fagsakId.somString).also {
+            assertEquals(0, it.size)
+        }
 
         val iverksett = iverksettingRepository.insert(lagIverksettingEntitet(iverksettingData))
 
-        val iverksettListe2 = iverksettingRepository.findByFagsakId(fagsakId.somString)
-        assertEquals(1, iverksettListe2.size)
-        assertThat(iverksett).usingRecursiveComparison().isEqualTo(iverksettListe2[0])
+        iverksettingRepository.findByFagsakId(iverksettingData.fagsak.fagsakId.somString).also {
+            assertEquals(1, it.size)
+            assertEquals(it[0], iverksett)
+        }
     }
 
     @Test

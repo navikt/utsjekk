@@ -12,7 +12,7 @@ import no.nav.dagpenger.kontrakter.felles.objectMapper
 import no.nav.dagpenger.kontrakter.oppdrag.GrensesnittavstemmingRequest
 import no.nav.familie.prosessering.domene.Task
 import no.nav.familie.prosessering.internal.TaskService
-import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -35,11 +35,13 @@ internal class GrensesnittavstemmingTaskTest {
                 triggerTid = LocalDateTime.of(2018, 4, 19, 8, 0),
             ),
         )
+
         verify(exactly = 1) { oppdragClient.grensesnittavstemming(capture(grensesnittavstemmingRequestSlot)) }
-        val capturedGrensesnittRequest = grensesnittavstemmingRequestSlot.captured
-        assertThat(capturedGrensesnittRequest.fra).isEqualTo(LocalDate.of(2018, 4, 18).atStartOfDay())
-        assertThat(capturedGrensesnittRequest.til).isEqualTo(LocalDate.of(2018, 4, 19).atStartOfDay())
-        assertThat(capturedGrensesnittRequest.fagsystem).isEqualTo(Fagsystem.DAGPENGER)
+        grensesnittavstemmingRequestSlot.captured.also { request ->
+            assertEquals(LocalDate.of(2018, 4, 18).atStartOfDay(), request.fra)
+            assertEquals(LocalDate.of(2018, 4, 19).atStartOfDay(), request.til)
+            assertEquals(Fagsystem.DAGPENGER, request.fagsystem)
+        }
     }
 
     @Test
@@ -62,7 +64,8 @@ internal class GrensesnittavstemmingTaskTest {
                     fagsystem = Fagsystem.DAGPENGER,
                 ),
             )
-        assertThat(slot.captured.payload).isEqualTo(forventetPayload)
+
+        assertEquals(forventetPayload, slot.captured.payload)
     }
 
     companion object {
