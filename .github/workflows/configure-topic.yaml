@@ -7,6 +7,7 @@ on:
     paths:
       - '.deploy/topic-dev.yaml'
       - '.deploy/topic-prod.yaml'
+      - '.github/workflows/configure-topic.yaml'
 
 jobs:
   applyDev:
