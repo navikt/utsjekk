@@ -19,7 +19,7 @@ jobs:
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-gcp
-          RESOURCE: deploy/topic-dev.yaml
+          RESOURCE: .deploy/topic-dev.yaml
 
 #  applyProd:
 #    name: Apply prod-gcp
@@ -30,4 +30,4 @@ jobs:
 #        env:
 #          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
 #          CLUSTER: prod-gcp
-#          RESOURCE: deploy/topic-prod.yaml
+#          RESOURCE: .deploy/topic-prod.yaml
