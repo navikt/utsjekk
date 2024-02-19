@@ -13,3 +13,5 @@ groups:
   saksbehandlerDagpenger: "3e28466f-c53d-46da-8b44-a4abc2ad4593"
   beslutterDagpenger: "11b8475a-fb12-41aa-b1f6-8497c1b5385b"
   beslutterTilleggsstønader: "31a99292-9461-40bf-b2d0-a815697dfbb4"
+kafka:
+  pool: nav-dev

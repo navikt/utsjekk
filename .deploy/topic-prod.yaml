@@ -1,0 +1,13 @@
+apiVersion: kafka.nais.io/v1
+kind: Topic
+metadata:
+  name: iverksetting-status-v1
+  namespace: teamdagpenger
+  labels:
+    team: teamdagpenger
+spec:
+  pool: nav-prod
+  acl:
+    - team: teamdagpenger
+      application: dp-iverksett
+      access: readwrite

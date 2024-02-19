@@ -34,6 +34,8 @@ spec:
   secureLogs:
     enabled: true
   leaderElection: true
+  kafka:
+    pool: {{ kafka.pool }}
   env:
     - name: SPRING_PROFILES_ACTIVE
       value: {{ springProfil }}
