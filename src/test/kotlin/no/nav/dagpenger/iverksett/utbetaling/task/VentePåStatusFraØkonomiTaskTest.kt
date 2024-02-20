@@ -156,6 +156,7 @@ internal class VentePåStatusFraØkonomiTaskTest {
                     saksbehandlerId = "",
                     avstemmingstidspunkt = LocalDateTime.now(),
                     utbetalingsperiode = utbetalingsperioder,
+                    iverksettingId = null,
                 ),
             andelerTilkjentYtelse = listOf(),
         )

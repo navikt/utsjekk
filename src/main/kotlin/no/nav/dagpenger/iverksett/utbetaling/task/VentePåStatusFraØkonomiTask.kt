@@ -58,7 +58,6 @@ class VentePåStatusFraØkonomiTask(
         iverksettingService.sjekkStatusPåIverksettOgOppdaterTilstand(
             fagsystem = iverksett.fagsak.fagsystem,
             sakId = iverksett.sakId,
-            personident = iverksett.søker.personident,
             behandlingId = payload.behandlingId,
             iverksettingId = iverksett.behandling.iverksettingId,
         )

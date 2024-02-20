@@ -64,6 +64,7 @@ object Utbetalingsgenerator {
                 aktør = behandlingsinformasjon.personident,
                 brukersNavKontor = behandlingsinformasjon.brukersNavKontor,
                 utbetalingsperiode = utbetalingsperioder(behandlingsinformasjon, nyeKjeder),
+                iverksettingId = behandlingsinformasjon.iverksettingId,
             )
 
         return BeregnetUtbetalingsoppdrag(

@@ -113,6 +113,7 @@ class IverksettMotOppdragTask(
                 personident = iverksetting.personident,
                 brukersNavKontor = iverksetting.vedtak.brukersNavKontor,
                 vedtaksdato = iverksetting.vedtak.vedtakstidspunkt.toLocalDate(),
+                iverksettingId = iverksetting.behandling.iverksettingId,
             )
 
         val nyeAndeler = iverksetting.vedtak.tilkjentYtelse.lagAndelData()
@@ -215,8 +216,8 @@ class IverksettMotOppdragTask(
         forrigeSisteAndelPerKjede: Map<Stønadsdata, AndelTilkjentYtelse>,
     ) = (nySisteAndePerKjede.asSequence() + forrigeSisteAndelPerKjede.asSequence())
         .groupBy({ it.key }, { it.value })
-        .mapValues {
-            it.value.sortedWith(
+        .mapValues { entry ->
+            entry.value.sortedWith(
                 compareByDescending<AndelTilkjentYtelse> { it.periodeId }.thenByDescending { it.periode.tom },
             ).first()
         }

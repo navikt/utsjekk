@@ -17,7 +17,7 @@ import no.nav.dagpenger.kontrakter.felles.objectMapper
 import no.nav.dagpenger.kontrakter.felles.somString
 import no.nav.dagpenger.kontrakter.felles.somUUID
 import no.nav.dagpenger.kontrakter.iverksett.IverksettStatus
-import no.nav.dagpenger.kontrakter.oppdrag.OppdragId
+import no.nav.dagpenger.kontrakter.oppdrag.OppdragIdDto
 import no.nav.dagpenger.kontrakter.oppdrag.OppdragStatus
 import no.nav.familie.prosessering.domene.Status
 import no.nav.familie.prosessering.domene.Task
@@ -142,15 +142,15 @@ class IverksettingService(
     fun sjekkStatusPåIverksettOgOppdaterTilstand(
         fagsystem: Fagsystem,
         sakId: GeneriskId,
-        personident: String,
         behandlingId: GeneriskId,
         iverksettingId: String? = null,
     ) {
         val oppdragId =
-            OppdragId(
+            OppdragIdDto(
                 fagsystem = fagsystem,
-                personIdent = personident,
+                sakId = sakId,
                 behandlingId = behandlingId,
+                iverksettingId = iverksettingId,
             )
 
         val (status, melding) = oppdragClient.hentStatus(oppdragId)

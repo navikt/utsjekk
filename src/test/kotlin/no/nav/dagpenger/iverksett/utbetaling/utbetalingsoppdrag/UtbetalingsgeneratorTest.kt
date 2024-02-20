@@ -23,6 +23,7 @@ class UtbetalingsgeneratorTest {
                 behandlingId = GeneriskIdSomUUID(UUID.randomUUID()),
                 personident = "12345678911",
                 vedtaksdato = LocalDate.now(),
+                iverksettingId = null,
             )
         private val basisAndelData =
             AndelData(

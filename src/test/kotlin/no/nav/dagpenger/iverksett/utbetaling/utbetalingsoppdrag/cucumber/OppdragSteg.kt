@@ -155,6 +155,7 @@ class OppdragSteg {
             behandlingId = behandlingId,
             personident = "1",
             vedtaksdato = LocalDate.now(),
+            iverksettingId = null,
         )
 
     private fun beregnUtbetalingsoppdrag(

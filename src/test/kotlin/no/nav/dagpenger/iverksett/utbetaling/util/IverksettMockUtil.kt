@@ -198,4 +198,5 @@ fun etTomtUtbetalingsoppdrag() =
         saksnummer = GeneriskIdSomUUID(UUID.randomUUID()),
         saksbehandlerId = "en-saksbehandler",
         utbetalingsperiode = emptyList(),
+        iverksettingId = null,
     )

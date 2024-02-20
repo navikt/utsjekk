@@ -2,7 +2,7 @@ package no.nav.dagpenger.iverksett.felles.oppdrag
 
 import no.nav.dagpenger.iverksett.felles.oppdrag.konfig.AbstractRestClient
 import no.nav.dagpenger.kontrakter.oppdrag.GrensesnittavstemmingRequest
-import no.nav.dagpenger.kontrakter.oppdrag.OppdragId
+import no.nav.dagpenger.kontrakter.oppdrag.OppdragIdDto
 import no.nav.dagpenger.kontrakter.oppdrag.OppdragStatusDto
 import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsoppdrag
 import org.springframework.beans.factory.annotation.Qualifier
@@ -28,7 +28,7 @@ class OppdragClient(
 
     fun iverksettOppdrag(utbetalingsoppdrag: Utbetalingsoppdrag) = postForEntity<Unit>(postOppdragUri, utbetalingsoppdrag)
 
-    fun hentStatus(oppdragId: OppdragId) = postForEntity<OppdragStatusDto>(getStatusUri, oppdragId)
+    fun hentStatus(oppdragId: OppdragIdDto) = postForEntity<OppdragStatusDto>(getStatusUri, oppdragId)
 
     fun grensesnittavstemming(grensesnittavstemmingRequest: GrensesnittavstemmingRequest) =
         postForEntity<Unit>(grensesnittavstemmingUri, grensesnittavstemmingRequest)
