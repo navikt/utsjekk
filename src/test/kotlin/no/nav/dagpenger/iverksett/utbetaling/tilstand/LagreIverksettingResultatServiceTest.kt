@@ -27,6 +27,7 @@ internal class LagreIverksettingResultatServiceTest : ServerTest() {
             fagsystem = Fagsystem.DAGPENGER,
             sakId = sakId,
             behandlingId = behandlingsId,
+            iverksettingId = null,
         )
     }
 
@@ -38,6 +39,7 @@ internal class LagreIverksettingResultatServiceTest : ServerTest() {
                 sakId = sakId,
                 behandlingId = behandlingsId,
                 tilkjentYtelseForUtbetaling = enTilkjentYtelse(behandlingsId),
+                iverksettingId = null,
             )
         }
     }
@@ -48,12 +50,14 @@ internal class LagreIverksettingResultatServiceTest : ServerTest() {
             fagsystem = Fagsystem.TILTAKSPENGER,
             sakId = sakId,
             behandlingId = behandlingsId,
+            iverksettingId = null,
         )
         iverksettingsresultatService.oppdaterTilkjentYtelseForUtbetaling(
             fagsystem = Fagsystem.DAGPENGER,
             sakId = sakId,
             behandlingId = behandlingsId,
             tilkjentYtelseForUtbetaling = enTilkjentYtelse(behandlingsId),
+            iverksettingId = null,
         )
 
         val tilkjentYtelseDagpenger =
@@ -61,12 +65,14 @@ internal class LagreIverksettingResultatServiceTest : ServerTest() {
                 fagsystem = Fagsystem.DAGPENGER,
                 sakId = sakId,
                 behandlingId = behandlingsId,
+                iverksettingId = null,
             )
         val tilkjentYtelseTiltakspenger =
             iverksettingsresultatService.hentTilkjentYtelse(
                 fagsystem = Fagsystem.TILTAKSPENGER,
                 sakId = sakId,
                 behandlingId = behandlingsId,
+                iverksettingId = null,
             )
 
         assertNotNull(tilkjentYtelseDagpenger)

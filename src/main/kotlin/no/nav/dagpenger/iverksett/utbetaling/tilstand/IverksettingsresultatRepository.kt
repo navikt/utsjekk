@@ -83,10 +83,15 @@ class IverksettingsresultatRepository(private val jdbcTemplate: JdbcTemplate) {
         fagsystem: Fagsystem,
         sakId: GeneriskId,
         behandlingId: UUID,
-        iverksettingId: String? = null,
+        iverksettingId: String?,
     ): Iverksettingsresultat {
         val resultat =
-            hentIverksettingsresultater(iverksettingId, fagsystem, sakId, behandlingId)
+            hentIverksettingsresultater(
+                iverksettingId = iverksettingId,
+                fagsystem = fagsystem,
+                sakId = sakId,
+                behandlingId = behandlingId,
+            )
         return when (resultat.size) {
             0 -> throw NoSuchElementException(
                 "Fant ingen iverksettingsresultat for fagsystem $fagsystem, sak ${sakId.somString}, " +

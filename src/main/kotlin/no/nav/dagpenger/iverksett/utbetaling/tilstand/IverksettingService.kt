@@ -109,7 +109,7 @@ class IverksettingService(
         fagsystem: Fagsystem,
         sakId: String,
         behandlingId: UUID,
-        iverksettingId: String? = null,
+        iverksettingId: String?,
     ): IverksettStatus? {
         val resultat =
             iverksettingsresultatService.hentIverksettResultat(

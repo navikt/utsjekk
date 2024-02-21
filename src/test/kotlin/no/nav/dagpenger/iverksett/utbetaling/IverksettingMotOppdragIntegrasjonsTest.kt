@@ -23,7 +23,6 @@ import no.nav.dagpenger.kontrakter.felles.somUUID
 import no.nav.dagpenger.kontrakter.iverksett.IverksettStatus
 import no.nav.familie.prosessering.internal.TaskService
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import java.time.LocalDate
@@ -151,27 +150,7 @@ class IverksettingMotOppdragIntegrasjonsTest : ServerTest() {
         assertEquals(IverksettStatus.OK_UTEN_UTBETALING, status)
     }
 
-    private fun startIverksetting(
-        sakId: GeneriskId = GeneriskIdSomUUID(UUID.randomUUID()),
-        behandlingId: GeneriskId = GeneriskIdSomUUID(UUID.randomUUID()),
-        andeler: List<AndelTilkjentYtelse> =
-            listOf(
-                lagAndelTilkjentYtelse(
-                    beløp = 1000,
-                    fraOgMed = LocalDate.of(2021, 1, 1),
-                    tilOgMed = LocalDate.of(2021, 1, 31),
-                ),
-            ),
-    ) = startIverksetting(
-        enIverksetting(
-            sakId = sakId,
-            behandlingId = behandlingId,
-            andeler = andeler,
-        ),
-    )
-
     @Test
-    @Disabled
     fun `iverksetting for tilleggsstønader uten utbetaling skal gå ok`() {
         val iverksetting =
             startIverksetting(
@@ -190,6 +169,25 @@ class IverksettingMotOppdragIntegrasjonsTest : ServerTest() {
 
         assertEquals(IverksettStatus.OK_UTEN_UTBETALING, status)
     }
+
+    private fun startIverksetting(
+        sakId: GeneriskId = GeneriskIdSomUUID(UUID.randomUUID()),
+        behandlingId: GeneriskId = GeneriskIdSomUUID(UUID.randomUUID()),
+        andeler: List<AndelTilkjentYtelse> =
+            listOf(
+                lagAndelTilkjentYtelse(
+                    beløp = 1000,
+                    fraOgMed = LocalDate.of(2021, 1, 1),
+                    tilOgMed = LocalDate.of(2021, 1, 31),
+                ),
+            ),
+    ) = startIverksetting(
+        enIverksetting(
+            sakId = sakId,
+            behandlingId = behandlingId,
+            andeler = andeler,
+        ),
+    )
 
     private fun startIverksetting(iverksetting: Iverksetting): Iverksetting {
         iverksettingService.startIverksetting(iverksetting)
@@ -229,6 +227,7 @@ class IverksettingMotOppdragIntegrasjonsTest : ServerTest() {
                 fagsystem = iverksetting.fagsak.fagsystem,
                 sakId = iverksetting.sakId.somString,
                 behandlingId = iverksetting.behandlingId.somUUID,
+                iverksettingId = iverksetting.behandling.iverksettingId,
             ),
         ) {
             "Fant ikke status for iverksetting. Sjekk at testen din faktisk behandler en iverksetting"

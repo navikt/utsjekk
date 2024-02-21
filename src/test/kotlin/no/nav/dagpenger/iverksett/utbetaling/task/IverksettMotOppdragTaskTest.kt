@@ -71,6 +71,7 @@ internal class IverksettMotOppdragTaskTest {
                 sakId,
                 behandlingId.somUUID,
                 any(),
+                null,
             )
         } returns Unit
         every { iverksettingsresultatService.hentTilkjentYtelse(any(), any(), any<UUID>(), any()) } returns null
@@ -84,6 +85,7 @@ internal class IverksettMotOppdragTaskTest {
                 sakId,
                 behandlingId.somUUID,
                 any(),
+                null,
             )
         }
 
@@ -97,8 +99,8 @@ internal class IverksettMotOppdragTaskTest {
 
         every { iverksettingService.hentIverksetting(any(), any(), any()) } returns opphørAvUtbetaling()
         every { oppdragClient.iverksettOppdrag(capture(oppdragSlot)) } just Runs
-        every { iverksettingsresultatService.hentIverksettResultat(any(), any(), any()) } returns iverksettingsresultat
-        every { iverksettingsresultatService.oppdaterTilkjentYtelseForUtbetaling(any(), any(), any(), any()) } just Runs
+        every { iverksettingsresultatService.hentIverksettResultat(any(), any(), any(), null) } returns iverksettingsresultat
+        every { iverksettingsresultatService.oppdaterTilkjentYtelseForUtbetaling(any(), any(), any(), any(), null) } just Runs
 
         iverksettMotOppdragTask.doTask(Task(IverksettMotOppdragTask.TYPE, taskPayload, Properties()))
 
@@ -109,6 +111,7 @@ internal class IverksettMotOppdragTaskTest {
                 sakId,
                 behandlingId.somUUID,
                 any(),
+                null,
             )
         }
 
@@ -120,7 +123,7 @@ internal class IverksettMotOppdragTaskTest {
     @Test
     internal fun `skal ikke sende tom utbetaling som ikke skal iverksettes til oppdrag`() {
         every { iverksettingService.hentIverksetting(any(), any(), any()) } returns tomUtbetaling()
-        every { iverksettingsresultatService.oppdaterTilkjentYtelseForUtbetaling(any(), any(), any(), any()) } just Runs
+        every { iverksettingsresultatService.oppdaterTilkjentYtelseForUtbetaling(any(), any(), any(), any(), null) } just Runs
         every { iverksettingsresultatService.oppdaterOppdragResultat(any(), any(), any(), any(), any()) } just Runs
 
         iverksettMotOppdragTask.doTask(Task(IverksettMotOppdragTask.TYPE, taskPayload, Properties()))

@@ -4,12 +4,16 @@ import no.nav.dagpenger.iverksett.ServerTest
 import no.nav.dagpenger.iverksett.utbetaling.task.IverksettMotOppdragTask
 import no.nav.dagpenger.iverksett.utbetaling.util.enIverksettDto
 import no.nav.dagpenger.iverksett.utbetaling.util.enIverksettTilleggsstønaderDto
+import no.nav.dagpenger.kontrakter.felles.GeneriskIdSomString
 import no.nav.dagpenger.kontrakter.felles.GeneriskIdSomUUID
 import no.nav.dagpenger.kontrakter.felles.Personident
+import no.nav.dagpenger.kontrakter.felles.somString
 import no.nav.dagpenger.kontrakter.felles.somUUID
 import no.nav.dagpenger.kontrakter.iverksett.IverksettDto
 import no.nav.dagpenger.kontrakter.iverksett.IverksettStatus
+import no.nav.dagpenger.kontrakter.iverksett.IverksettTilleggsstønaderDto
 import no.nav.dagpenger.kontrakter.iverksett.VedtaksdetaljerDto
+import no.nav.dagpenger.kontrakter.iverksett.VedtaksdetaljerTilleggsstønaderDto
 import no.nav.familie.prosessering.internal.TaskService
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
@@ -101,12 +105,10 @@ class IverksettingControllerTest : ServerTest() {
                     ),
             )
 
-        val rammevedtak = dto.copy(vedtak = dto.vedtak.copy(utbetalinger = emptyList()))
-
         restTemplate.exchange<Unit>(
             localhostUrl("/api/iverksetting"),
             HttpMethod.POST,
-            HttpEntity(rammevedtak, headers),
+            HttpEntity(dto, headers),
         ).also {
             assertEquals(HttpStatus.ACCEPTED, it.statusCode)
         }
@@ -115,6 +117,47 @@ class IverksettingControllerTest : ServerTest() {
 
         restTemplate.exchange<IverksettStatus>(
             localhostUrl("/api/iverksetting/${sakId.somUUID}/${behandlingId.somUUID}/status"),
+            HttpMethod.GET,
+            HttpEntity(null, headers),
+        ).also {
+            assertEquals(HttpStatus.OK, it.statusCode)
+            assertEquals(IverksettStatus.OK_UTEN_UTBETALING, it.body)
+        }
+    }
+
+    @Test
+    fun `start iverksetting av rammevedtak for tilleggsstønader uten utbetaling`() {
+        val behandlingId = GeneriskIdSomUUID(UUID.fromString("c2502e75-6e78-40fa-9124-6549341855b4"))
+        val sakId = GeneriskIdSomString("988777274")
+        val iverksettingId = "c2502e75-6e78-40fa-9124-6549341855b4"
+
+        val dto =
+            IverksettTilleggsstønaderDto(
+                behandlingId = behandlingId,
+                sakId = sakId,
+                personident = Personident("18498636957"),
+                vedtak =
+                    VedtaksdetaljerTilleggsstønaderDto(
+                        beslutterId = "Z994230",
+                        saksbehandlerId = "Z994230",
+                        utbetalinger = emptyList(),
+                        vedtakstidspunkt = LocalDateTime.of(2024, 2, 19, 13, 10),
+                    ),
+                iverksettingId = iverksettingId,
+            )
+
+        restTemplate.exchange<Unit>(
+            localhostUrl("/api/iverksetting/tilleggsstonader"),
+            HttpMethod.POST,
+            HttpEntity(dto, headers),
+        ).also {
+            assertEquals(HttpStatus.ACCEPTED, it.statusCode)
+        }
+
+        kjørTasks()
+
+        restTemplate.exchange<IverksettStatus>(
+            localhostUrl("/api/iverksetting/${sakId.somString}/${behandlingId.somUUID}/$iverksettingId/status"),
             HttpMethod.GET,
             HttpEntity(null, headers),
         ).also {

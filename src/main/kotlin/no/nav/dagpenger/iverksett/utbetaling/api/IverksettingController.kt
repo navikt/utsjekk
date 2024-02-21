@@ -109,7 +109,13 @@ Det kjøres implisitt en konsistensavstemming av at nye utbetalinger stemmer ove
         @PathVariable behandlingId: UUID,
     ): ResponseEntity<IverksettStatus> {
         val fagsystem = konsumentConfig.finnFagsystem(TokenContext.hentKlientnavn())
-        val status = iverksettingService.utledStatus(fagsystem, sakId, behandlingId)
+        val status =
+            iverksettingService.utledStatus(
+                fagsystem = fagsystem,
+                sakId = sakId,
+                behandlingId = behandlingId,
+                iverksettingId = null,
+            )
         return status?.let { ResponseEntity(status, HttpStatus.OK) } ?: ResponseEntity(null, HttpStatus.NOT_FOUND)
     }
 
@@ -123,7 +129,13 @@ Det kjøres implisitt en konsistensavstemming av at nye utbetalinger stemmer ove
         @PathVariable behandlingId: UUID,
         @PathVariable iverksettingId: String,
     ): ResponseEntity<IverksettStatus> {
-        val status = iverksettingService.utledStatus(Fagsystem.TILLEGGSSTØNADER, sakId, behandlingId, iverksettingId)
+        val status =
+            iverksettingService.utledStatus(
+                fagsystem = Fagsystem.TILLEGGSSTØNADER,
+                sakId = sakId,
+                behandlingId = behandlingId,
+                iverksettingId = iverksettingId,
+            )
         return status?.let { ResponseEntity(status, HttpStatus.OK) } ?: ResponseEntity(null, HttpStatus.NOT_FOUND)
     }
 }

@@ -138,7 +138,7 @@ class IverksettMotOppdragTask(
         behandlingId: GeneriskId,
         fagsystem: Fagsystem,
         sakId: GeneriskId,
-        iverksettingId: String? = null,
+        iverksettingId: String?,
     ): TilkjentYtelse {
         val nyeAndelerMedPeriodeId =
             tilkjentYtelse.andelerTilkjentYtelse.map { andel ->

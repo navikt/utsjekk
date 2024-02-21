@@ -28,26 +28,27 @@ internal class HentIverksettingResultatServiceTest : ServerTest() {
 
     @BeforeEach
     fun beforeEach() {
-        iverksettingsresultatService.opprettTomtResultat(Fagsystem.DAGPENGER, sakId, behandlingId)
+        iverksettingsresultatService.opprettTomtResultat(Fagsystem.DAGPENGER, sakId, behandlingId, null)
         iverksettingsresultatService.oppdaterTilkjentYtelseForUtbetaling(
             Fagsystem.DAGPENGER,
             sakId,
             behandlingId,
             tilkjentYtelse,
+            null,
         )
     }
 
     @Test
     fun `hent ekisterende tilkjent ytelse, forvent likhet og ingen unntak`() {
         val hentetTilkjentYtelse =
-            iverksettingsresultatService.hentTilkjentYtelse(Fagsystem.DAGPENGER, sakId, behandlingId)
+            iverksettingsresultatService.hentTilkjentYtelse(Fagsystem.DAGPENGER, sakId, behandlingId, null)
         assertEquals(tilkjentYtelse, hentetTilkjentYtelse)
     }
 
     @Test
     fun `hent ikke-eksisterende tilstand, forvent nullverdi i retur og ingen unntak`() {
         val hentetTilkjentYtelse =
-            iverksettingsresultatService.hentTilkjentYtelse(Fagsystem.DAGPENGER, sakId, UUID.randomUUID())
+            iverksettingsresultatService.hentTilkjentYtelse(Fagsystem.DAGPENGER, sakId, UUID.randomUUID(), null)
         assertNull(hentetTilkjentYtelse)
     }
 
@@ -96,17 +97,20 @@ internal class HentIverksettingResultatServiceTest : ServerTest() {
             fagsystem = Fagsystem.TILLEGGSSTØNADER,
             sakId = sakId,
             behandlingId = behandlingId,
+            iverksettingId = null,
         )
         iverksettingsresultatService.oppdaterTilkjentYtelseForUtbetaling(
             fagsystem = Fagsystem.TILLEGGSSTØNADER,
             sakId = sakId,
             behandlingId = behandlingId,
             tilkjentYtelseForUtbetaling = tilkjentYtelse,
+            iverksettingId = null,
         )
         iverksettingsresultatService.opprettTomtResultat(
             fagsystem = Fagsystem.TILTAKSPENGER,
             sakId = sakId,
             behandlingId = behandlingId,
+            iverksettingId = null,
         )
 
         val iverksettingTilleggsstønader =
@@ -114,6 +118,7 @@ internal class HentIverksettingResultatServiceTest : ServerTest() {
                 fagsystem = Fagsystem.TILLEGGSSTØNADER,
                 sakId = sakId,
                 behandlingId = behandlingId,
+                iverksettingId = null,
             )
 
         assertNotNull(iverksettingTilleggsstønader)
@@ -130,17 +135,20 @@ internal class HentIverksettingResultatServiceTest : ServerTest() {
             fagsystem = Fagsystem.TILLEGGSSTØNADER,
             sakId = sakId1,
             behandlingId = behandlingId.somUUID,
+            iverksettingId = null,
         )
         iverksettingsresultatService.oppdaterTilkjentYtelseForUtbetaling(
             fagsystem = Fagsystem.TILLEGGSSTØNADER,
             sakId = sakId1,
             behandlingId = behandlingId.somUUID,
             tilkjentYtelseForUtbetaling = tilkjentYtelse,
+            iverksettingId = null,
         )
         iverksettingsresultatService.opprettTomtResultat(
             fagsystem = Fagsystem.TILLEGGSSTØNADER,
             sakId = sakId2,
             behandlingId = behandlingId.somUUID,
+            iverksettingId = null,
         )
 
         val iverksettingSak1 =
@@ -148,6 +156,7 @@ internal class HentIverksettingResultatServiceTest : ServerTest() {
                 fagsystem = Fagsystem.TILLEGGSSTØNADER,
                 sakId = sakId1,
                 behandlingId = behandlingId.somUUID,
+                iverksettingId = null,
             )
 
         assertNotNull(iverksettingSak1)
@@ -171,6 +180,7 @@ internal class HentIverksettingResultatServiceTest : ServerTest() {
             sakId = sakId,
             behandlingId = behandlingId,
             tilkjentYtelseForUtbetaling = tilkjentYtelse,
+            iverksettingId = null,
         )
         iverksettingsresultatService.oppdaterOppdragResultat(
             fagsystem = Fagsystem.DAGPENGER,
@@ -181,7 +191,7 @@ internal class HentIverksettingResultatServiceTest : ServerTest() {
         )
 
         val iverksettResultat =
-            iverksettingsresultatService.hentIverksettResultat(Fagsystem.DAGPENGER, sakId, behandlingId)
+            iverksettingsresultatService.hentIverksettResultat(Fagsystem.DAGPENGER, sakId, behandlingId, null)
         assertEquals(resultat, iverksettResultat)
     }
 }

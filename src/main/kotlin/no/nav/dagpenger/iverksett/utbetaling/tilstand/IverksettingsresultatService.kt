@@ -16,17 +16,18 @@ class IverksettingsresultatService(private val iverksettingsresultatRepository: 
         fagsystem: Fagsystem,
         sakId: GeneriskId,
         behandlingId: UUID,
-        iverksettingId: String? = null,
+        iverksettingId: String?,
     ) {
         iverksettingsresultatRepository.insert(Iverksettingsresultat(fagsystem, sakId, behandlingId, iverksettingId))
     }
 
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     fun oppdaterTilkjentYtelseForUtbetaling(
         fagsystem: Fagsystem,
         sakId: GeneriskId,
         behandlingId: UUID,
         tilkjentYtelseForUtbetaling: TilkjentYtelse,
-        iverksettingId: String? = null,
+        iverksettingId: String?,
     ) {
         val iverksettResultat = iverksettingsresultatRepository.findByIdOrThrow(fagsystem, sakId, behandlingId, iverksettingId)
         iverksettingsresultatRepository.update(iverksettResultat.copy(tilkjentYtelseForUtbetaling = tilkjentYtelseForUtbetaling))
@@ -48,7 +49,7 @@ class IverksettingsresultatService(private val iverksettingsresultatRepository: 
         fagsystem: Fagsystem,
         sakId: GeneriskId,
         behandlingId: UUID,
-        iverksettingId: String? = null,
+        iverksettingId: String?,
     ): TilkjentYtelse? {
         return iverksettingsresultatRepository.findByIdOrNull(fagsystem, sakId, behandlingId, iverksettingId)?.tilkjentYtelseForUtbetaling
     }
@@ -57,7 +58,7 @@ class IverksettingsresultatService(private val iverksettingsresultatRepository: 
         fagsystem: Fagsystem,
         sakId: GeneriskId,
         behandlingId: UUID,
-        iverksettingId: String? = null,
+        iverksettingId: String?,
     ): Iverksettingsresultat? {
         return iverksettingsresultatRepository.findByIdOrNull(fagsystem, sakId, behandlingId, iverksettingId)
     }

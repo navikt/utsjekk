@@ -65,6 +65,7 @@ internal class IverksettingServiceTest {
                 fagsystem = resultat.fagsystem,
                 sakId = resultat.sakId.somString,
                 behandlingId = resultat.behandlingId,
+                iverksettingId = resultat.iverksettingId,
             )
 
         assertEquals(IverksettStatus.SENDT_TIL_OPPDRAG, status)
@@ -94,6 +95,7 @@ internal class IverksettingServiceTest {
                 fagsystem = resultat.fagsystem,
                 sakId = resultat.sakId.somString,
                 behandlingId = resultat.behandlingId,
+                iverksettingId = resultat.iverksettingId,
             )
 
         assertEquals(IverksettStatus.FEILET_MOT_OPPDRAG, status)
@@ -124,6 +126,7 @@ internal class IverksettingServiceTest {
                 fagsystem = resultat.fagsystem,
                 sakId = resultat.sakId.somString,
                 behandlingId = resultat.behandlingId,
+                iverksettingId = resultat.iverksettingId,
             )
 
         assertEquals(IverksettStatus.OK, status)
@@ -159,6 +162,7 @@ internal class IverksettingServiceTest {
                 fagsystem = resultat.fagsystem,
                 sakId = resultat.sakId.somString,
                 behandlingId = resultat.behandlingId,
+                iverksettingId = resultat.iverksettingId,
             )
 
         assertEquals(IverksettStatus.OK_UTEN_UTBETALING, status)
