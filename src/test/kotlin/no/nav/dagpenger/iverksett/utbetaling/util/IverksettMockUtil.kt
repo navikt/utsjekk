@@ -120,13 +120,13 @@ private fun enTilkjentYtelse(andeler: List<AndelTilkjentYtelse>): TilkjentYtelse
 
 fun enIverksetting(
     fagsystem: Fagsystem = Fagsystem.DAGPENGER,
-    sakId: UUID? = null,
+    sakId: GeneriskId? = null,
     behandlingsdetaljer: Behandlingsdetaljer = behandlingsdetaljer(),
     vedtaksdetaljer: Vedtaksdetaljer = vedtaksdetaljer(),
 ) = Iverksetting(
     fagsak =
         Fagsakdetaljer(
-            fagsakId = GeneriskIdSomUUID(sakId ?: UUID.randomUUID()),
+            fagsakId = sakId ?: GeneriskIdSomUUID(UUID.randomUUID()),
             fagsystem = fagsystem,
         ),
     behandling = behandlingsdetaljer,

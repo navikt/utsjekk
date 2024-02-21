@@ -8,12 +8,14 @@ import no.nav.dagpenger.iverksett.utbetaling.domene.sakId
 import no.nav.dagpenger.iverksett.utbetaling.task.IverksettMotOppdragTask
 import no.nav.dagpenger.iverksett.utbetaling.tilstand.IverksettingService
 import no.nav.dagpenger.iverksett.utbetaling.tilstand.IverksettingsresultatService
+import no.nav.dagpenger.iverksett.utbetaling.util.behandlingsdetaljer
 import no.nav.dagpenger.iverksett.utbetaling.util.enAndelTilkjentYtelse
 import no.nav.dagpenger.iverksett.utbetaling.util.enIverksetting
 import no.nav.dagpenger.iverksett.utbetaling.util.lagAndelTilkjentYtelse
 import no.nav.dagpenger.iverksett.utbetaling.util.vedtaksdetaljer
 import no.nav.dagpenger.kontrakter.felles.Fagsystem
 import no.nav.dagpenger.kontrakter.felles.GeneriskId
+import no.nav.dagpenger.kontrakter.felles.GeneriskIdSomString
 import no.nav.dagpenger.kontrakter.felles.GeneriskIdSomUUID
 import no.nav.dagpenger.kontrakter.felles.StønadTypeTiltakspenger
 import no.nav.dagpenger.kontrakter.felles.somString
@@ -21,6 +23,7 @@ import no.nav.dagpenger.kontrakter.felles.somUUID
 import no.nav.dagpenger.kontrakter.iverksett.IverksettStatus
 import no.nav.familie.prosessering.internal.TaskService
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import java.time.LocalDate
@@ -132,7 +135,8 @@ class IverksettingMotOppdragIntegrasjonsTest : ServerTest() {
 
     @Test
     fun `iverksett skal persisteres med korrekt fagsystem`() {
-        val iverksetting = startIverksetting(andeler = listOf(enAndelTilkjentYtelse(stønadstype = StønadTypeTiltakspenger.JOBBKLUBB)))
+        val iverksetting =
+            startIverksetting(andeler = listOf(enAndelTilkjentYtelse(stønadstype = StønadTypeTiltakspenger.JOBBKLUBB)))
 
         hentPersistertIverksetting(iverksetting).also {
             assertEquals(Fagsystem.TILTAKSPENGER, it?.fagsak?.fagsystem)
@@ -165,6 +169,27 @@ class IverksettingMotOppdragIntegrasjonsTest : ServerTest() {
             andeler = andeler,
         ),
     )
+
+    @Test
+    @Disabled
+    fun `iverksetting for tilleggsstønader uten utbetaling skal gå ok`() {
+        val iverksetting =
+            startIverksetting(
+                enIverksetting(
+                    fagsystem = Fagsystem.TILLEGGSSTØNADER,
+                    sakId = GeneriskIdSomString("54321"),
+                    behandlingsdetaljer =
+                        behandlingsdetaljer(
+                            behandlingId = UUID.fromString("4ea75432-f1f7-4a36-9bc5-498023000af4"),
+                            iverksettingId = "9f6eaa12-6b32-42a2-bde9-4b520833443d",
+                        ),
+                    vedtaksdetaljer = vedtaksdetaljer(andeler = emptyList()),
+                ),
+            )
+        val status = utledStatus(iverksetting)
+
+        assertEquals(IverksettStatus.OK_UTEN_UTBETALING, status)
+    }
 
     private fun startIverksetting(iverksetting: Iverksetting): Iverksetting {
         iverksettingService.startIverksetting(iverksetting)

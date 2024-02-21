@@ -7,6 +7,7 @@ import no.nav.dagpenger.iverksett.utbetaling.util.enIverksetting
 import no.nav.dagpenger.iverksett.utbetaling.util.lagAndelTilkjentYtelse
 import no.nav.dagpenger.iverksett.utbetaling.util.vedtaksdetaljer
 import no.nav.dagpenger.kontrakter.felles.Fagsystem
+import no.nav.dagpenger.kontrakter.felles.GeneriskIdSomUUID
 import no.nav.dagpenger.kontrakter.felles.somUUID
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -22,7 +23,7 @@ fun lagIverksettingsdata(
     vedtakstidspunkt: LocalDateTime = LocalDateTime.now(),
 ) = enIverksetting(
     fagsystem = fagsystem,
-    sakId = sakId,
+    sakId = sakId?.let { GeneriskIdSomUUID(it) },
     behandlingsdetaljer =
         behandlingsdetaljer(
             behandlingId = behandlingId ?: UUID.randomUUID(),
