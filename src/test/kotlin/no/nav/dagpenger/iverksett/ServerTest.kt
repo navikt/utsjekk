@@ -4,6 +4,7 @@ import com.github.tomakehurst.wiremock.WireMockServer
 import no.nav.dagpenger.iverksett.felles.database.DbContainerInitializer
 import no.nav.dagpenger.iverksett.felles.oppdrag.konfig.RestTemplateAzure
 import no.nav.dagpenger.iverksett.felles.util.TokenUtil
+import no.nav.dagpenger.iverksett.status.KafkaContainerInitializer
 import no.nav.dagpenger.iverksett.utbetaling.domene.KonsumentConfig
 import no.nav.security.mock.oauth2.MockOAuth2Server
 import no.nav.security.token.support.spring.test.EnableMockOAuth2Server
@@ -23,7 +24,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
-@ContextConfiguration(initializers = [DbContainerInitializer::class])
+@ContextConfiguration(initializers = [DbContainerInitializer::class, KafkaContainerInitializer::class])
 @SpringBootTest(classes = [ApplicationLocal::class], webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("servertest", "mock-oppdrag", "mock-oauth")
 @EnableMockOAuth2Server

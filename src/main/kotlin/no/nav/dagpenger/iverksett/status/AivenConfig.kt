@@ -2,35 +2,31 @@ package no.nav.dagpenger.iverksett.status
 
 import org.apache.kafka.clients.CommonClientConfigs
 import org.apache.kafka.clients.consumer.ConsumerConfig
+import org.apache.kafka.clients.producer.KafkaProducer
 import org.apache.kafka.clients.producer.ProducerConfig
 import org.apache.kafka.common.config.SslConfigs
 import org.apache.kafka.common.security.auth.SecurityProtocol
+import org.apache.kafka.common.serialization.StringSerializer
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
 import java.util.Properties
 
+@Configuration
 class AivenConfig(
-    private val brokers: List<String>,
-    private val truststorePath: String,
-    private val truststorePw: String,
-    private val keystorePath: String,
-    private val keystorePw: String,
+    @Value("\${KAFKA_BROKERS}") private val kafkaBrokers: String,
+    @Value("\${KAFKA_TRUSTSTORE_PATH}") private val truststorePath: String,
+    @Value("\${KAFKA_CREDSTORE_PASSWORD}") private val credstorePassword: String,
+    @Value("\${KAFKA_KEYSTORE_PATH}") private val keystorePath: String,
 ) {
-    companion object {
-        val default: AivenConfig
-            get() {
-                val env = System.getenv()
-                return AivenConfig(
-                    brokers = env.getValue("KAFKA_BROKERS").split(',').map(String::trim),
-                    truststorePath = env.getValue("KAFKA_TRUSTSTORE_PATH"),
-                    truststorePw = env.getValue("KAFKA_CREDSTORE_PASSWORD"),
-                    keystorePath = env.getValue("KAFKA_KEYSTORE_PATH"),
-                    keystorePw = env.getValue("KAFKA_CREDSTORE_PASSWORD"),
-                )
-            }
-    }
+    private val brokers = kafkaBrokers.split(',').map(String::trim)
 
     init {
         check(brokers.isNotEmpty())
     }
+
+    @Bean
+    fun kafkaProducer(): KafkaProducer<String, String> = KafkaProducer(producerConfig(), StringSerializer(), StringSerializer())
 
     fun producerConfig(properties: Properties? = null) =
         Properties().apply {
@@ -59,8 +55,8 @@ class AivenConfig(
             put(SslConfigs.SSL_TRUSTSTORE_TYPE_CONFIG, "jks")
             put(SslConfigs.SSL_KEYSTORE_TYPE_CONFIG, "PKCS12")
             put(SslConfigs.SSL_TRUSTSTORE_LOCATION_CONFIG, truststorePath)
-            put(SslConfigs.SSL_TRUSTSTORE_PASSWORD_CONFIG, truststorePw)
+            put(SslConfigs.SSL_TRUSTSTORE_PASSWORD_CONFIG, credstorePassword)
             put(SslConfigs.SSL_KEYSTORE_LOCATION_CONFIG, keystorePath)
-            put(SslConfigs.SSL_KEYSTORE_PASSWORD_CONFIG, keystorePw)
+            put(SslConfigs.SSL_KEYSTORE_PASSWORD_CONFIG, credstorePassword)
         }
 }
