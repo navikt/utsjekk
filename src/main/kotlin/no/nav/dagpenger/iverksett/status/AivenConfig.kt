@@ -1,7 +1,7 @@
 package no.nav.dagpenger.iverksett.status
 
+import no.nav.dagpenger.iverksett.felles.KjørerPåNais
 import org.apache.kafka.clients.CommonClientConfigs
-import org.apache.kafka.clients.consumer.ConsumerConfig
 import org.apache.kafka.clients.producer.KafkaProducer
 import org.apache.kafka.clients.producer.ProducerConfig
 import org.apache.kafka.common.config.SslConfigs
@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Configuration
 import java.util.Properties
 
 @Configuration
+@KjørerPåNais
 class AivenConfig(
     @Value("\${KAFKA_BROKERS}") private val kafkaBrokers: String,
     @Value("\${KAFKA_TRUSTSTORE_PATH}") private val truststorePath: String,
@@ -36,16 +37,6 @@ class AivenConfig(
             put(ProducerConfig.MAX_IN_FLIGHT_REQUESTS_PER_CONNECTION, "1")
             properties?.let { putAll(it) }
         }
-
-    fun consumerConfig(
-        groupId: String,
-        properties: Properties? = null,
-    ) = Properties().apply {
-        putAll(kafkaBaseConfig())
-        put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "true")
-        properties?.let { putAll(it) }
-        put(ConsumerConfig.GROUP_ID_CONFIG, groupId)
-    }
 
     private fun kafkaBaseConfig() =
         Properties().apply {
