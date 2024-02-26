@@ -58,11 +58,11 @@ object Utbetalingsgenerator {
         val utbetalingsoppdrag =
             Utbetalingsoppdrag(
                 saksbehandlerId = behandlingsinformasjon.saksbehandlerId,
-                kodeEndring = kodeEndring(sisteAndelPerKjede),
+                erFørsteUtbetalingPåSak = erFørsteUtbetalingPåSak(sisteAndelPerKjede),
                 saksnummer = behandlingsinformasjon.fagsakId,
                 fagsystem = behandlingsinformasjon.fagsystem,
                 aktør = behandlingsinformasjon.personident,
-                brukersNavKontor = behandlingsinformasjon.brukersNavKontor,
+                brukersNavKontor = behandlingsinformasjon.brukersNavKontor?.enhet,
                 utbetalingsperiode = utbetalingsperioder(behandlingsinformasjon, nyeKjeder),
                 iverksettingId = behandlingsinformasjon.iverksettingId,
             )
@@ -135,12 +135,7 @@ object Utbetalingsgenerator {
                 }
         }
 
-    // Hos økonomi skiller man på endring på oppdragsnivå 110 og på linjenivå 150 (periodenivå).
-    // Da de har opplevd å motta
-    // UEND på oppdrag som skulle vært ENDR anbefaler de at kun ENDR brukes når sak
-    // ikke er ny, så man slipper å forholde seg til om det er endring over 150-nivå eller ikke.
-    private fun kodeEndring(sisteAndelMedPeriodeId: Map<Stønadsdata, AndelData>) =
-        if (sisteAndelMedPeriodeId.isEmpty()) Utbetalingsoppdrag.KodeEndring.NY else Utbetalingsoppdrag.KodeEndring.ENDR
+    private fun erFørsteUtbetalingPåSak(sisteAndelMedPeriodeId: Map<Stønadsdata, AndelData>) = sisteAndelMedPeriodeId.isEmpty()
 
     private fun beregnNyKjede(
         forrige: List<AndelData>,

@@ -24,7 +24,9 @@ import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsoppdrag
 import no.nav.familie.prosessering.domene.Task
 import no.nav.familie.prosessering.internal.TaskService
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
 import java.util.Properties
@@ -90,7 +92,7 @@ internal class IverksettMotOppdragTaskTest {
         }
 
         assertEquals(Fagsystem.DAGPENGER, oppdragSlot.captured.fagsystem)
-        assertEquals(Utbetalingsoppdrag.KodeEndring.NY, oppdragSlot.captured.kodeEndring)
+        assertTrue(oppdragSlot.captured.erFørsteUtbetalingPåSak)
     }
 
     @Test
@@ -115,7 +117,7 @@ internal class IverksettMotOppdragTaskTest {
             )
         }
 
-        assertEquals(Utbetalingsoppdrag.KodeEndring.ENDR, oppdragSlot.captured.kodeEndring)
+        assertFalse(oppdragSlot.captured.erFørsteUtbetalingPåSak)
         assertEquals(1, oppdragSlot.captured.utbetalingsperiode.size)
         assertNotNull(oppdragSlot.captured.utbetalingsperiode.first().opphør)
     }

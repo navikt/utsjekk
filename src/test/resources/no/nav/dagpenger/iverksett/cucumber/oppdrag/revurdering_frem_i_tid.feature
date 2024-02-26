@@ -13,7 +13,7 @@ Egenskap: Revurdering frem i tid
     Når beregner utbetalingsoppdrag
 
     Så forvent følgende utbetalingsoppdrag
-      | BehandlingId | Fra dato   | Til dato   | Opphørsdato | Beløp | Kode endring | Er endring | Periode id | Forrige periode id |
-      | 1            | 01.02.2021 | 01.02.2021 |             | 700   | NY           | Nei        | 0          |                    |
-      | 2            | 01.02.2021 | 01.02.2021 | 01.02.2021  | 700   | ENDR         | Ja         | 0          |                    |
-      | 2            | 01.03.2021 | 01.03.2021 |             | 600   | ENDR         | Nei        | 1          | 0                  |
+      | BehandlingId | Fra dato   | Til dato   | Opphørsdato | Beløp | Første utbetaling sak | Er endring | Periode id | Forrige periode id |
+      | 1            | 01.02.2021 | 01.02.2021 |             | 700   | Ja                    | Nei        | 0          |                    |
+      | 2            | 01.02.2021 | 01.02.2021 | 01.02.2021  | 700   | Nei                   | Ja         | 0          |                    |
+      | 2            | 01.03.2021 | 01.03.2021 |             | 600   | Nei                   | Nei        | 1          | 0                  |

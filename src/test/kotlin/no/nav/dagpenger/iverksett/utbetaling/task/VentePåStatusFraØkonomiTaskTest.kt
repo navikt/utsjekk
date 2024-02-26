@@ -24,7 +24,6 @@ import no.nav.dagpenger.kontrakter.felles.somUUID
 import no.nav.dagpenger.kontrakter.oppdrag.OppdragStatus
 import no.nav.dagpenger.kontrakter.oppdrag.OppdragStatusDto
 import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsoppdrag
-import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsoppdrag.KodeEndring.NY
 import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsperiode
 import no.nav.familie.prosessering.domene.Task
 import no.nav.familie.prosessering.internal.TaskService
@@ -149,7 +148,7 @@ internal class VentePåStatusFraØkonomiTaskTest {
             id = UUID.randomUUID(),
             utbetalingsoppdrag =
                 Utbetalingsoppdrag(
-                    kodeEndring = NY,
+                    erFørsteUtbetalingPåSak = true,
                     fagsystem = Fagsystem.DAGPENGER,
                     saksnummer = GeneriskIdSomUUID(UUID.randomUUID()),
                     aktør = "",

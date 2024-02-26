@@ -13,9 +13,9 @@ Egenskap: Forlenge periode
     Når beregner utbetalingsoppdrag
 
     Så forvent følgende utbetalingsoppdrag
-      | BehandlingId | Fra dato   | Til dato   | Opphørsdato | Beløp | Kode endring | Er endring | Periode id | Forrige periode id |
-      | 1            | 02.06.2023 | 15.07.2023 |             | 800   | NY           | Nei        | 0          |                    |
-      | 2            | 02.06.2023 | 15.08.2023 |             | 800   | ENDR         | Nei        | 1          | 0                  |
+      | BehandlingId | Fra dato   | Til dato   | Opphørsdato | Beløp | Første utbetaling sak | Er endring | Periode id | Forrige periode id |
+      | 1            | 02.06.2023 | 15.07.2023 |             | 800   | Ja                    | Nei        | 0          |                    |
+      | 2            | 02.06.2023 | 15.08.2023 |             | 800   | Nei                   | Nei        | 1          | 0                  |
 
   Scenario: Periode med månedssats forlenges i slutten.
 
@@ -27,9 +27,9 @@ Egenskap: Forlenge periode
     Når beregner utbetalingsoppdrag
 
     Så forvent følgende utbetalingsoppdrag
-      | BehandlingId | Fra dato   | Til dato   | Opphørsdato | Beløp | Kode endring | Er endring | Periode id | Forrige periode id | Satstype |
-      | 1            | 01.06.2023 | 31.07.2023 |             | 800   | NY           | Nei        | 0          |                    | MÅNEDLIG |
-      | 2            | 01.06.2023 | 31.08.2023 |             | 800   | ENDR         | Nei        | 1          | 0                  | MÅNEDLIG |
+      | BehandlingId | Fra dato   | Til dato   | Opphørsdato | Beløp | Første utbetaling sak | Er endring | Periode id | Forrige periode id | Satstype |
+      | 1            | 01.06.2023 | 31.07.2023 |             | 800   | Ja                    | Nei        | 0          |                    | MÅNEDLIG |
+      | 2            | 01.06.2023 | 31.08.2023 |             | 800   | Nei                   | Nei        | 1          | 0                  | MÅNEDLIG |
 
   Scenario: Periode med månedssats utvides i starten.
 
@@ -41,9 +41,9 @@ Egenskap: Forlenge periode
     Når beregner utbetalingsoppdrag
 
     Så forvent følgende utbetalingsoppdrag
-      | BehandlingId | Fra dato   | Til dato   | Opphørsdato | Beløp | Kode endring | Er endring | Periode id | Forrige periode id | Satstype |
-      | 1            | 01.06.2023 | 31.07.2023 |             | 800   | NY           | Nei        | 0          |                    | MÅNEDLIG |
-      | 2            | 01.05.2023 | 31.07.2023 |             | 800   | ENDR         | Nei        | 1          | 0                  | MÅNEDLIG |
+      | BehandlingId | Fra dato   | Til dato   | Opphørsdato | Beløp | Første utbetaling sak | Er endring | Periode id | Forrige periode id | Satstype |
+      | 1            | 01.06.2023 | 31.07.2023 |             | 800   | Ja                    | Nei        | 0          |                    | MÅNEDLIG |
+      | 2            | 01.05.2023 | 31.07.2023 |             | 800   | Nei                   | Nei        | 1          | 0                  | MÅNEDLIG |
 
   Scenario: Periode med månedssats utvides i begge ender.
 
@@ -55,9 +55,9 @@ Egenskap: Forlenge periode
     Når beregner utbetalingsoppdrag
 
     Så forvent følgende utbetalingsoppdrag
-      | BehandlingId | Fra dato   | Til dato   | Opphørsdato | Beløp | Kode endring | Er endring | Periode id | Forrige periode id | Satstype |
-      | 1            | 01.06.2023 | 31.07.2023 |             | 800   | NY           | Nei        | 0          |                    | MÅNEDLIG |
-      | 2            | 01.05.2023 | 31.08.2023 |             | 800   | ENDR         | Nei        | 1          | 0                  | MÅNEDLIG |
+      | BehandlingId | Fra dato   | Til dato   | Opphørsdato | Beløp | Første utbetaling sak | Er endring | Periode id | Forrige periode id | Satstype |
+      | 1            | 01.06.2023 | 31.07.2023 |             | 800   | Ja                    | Nei        | 0          |                    | MÅNEDLIG |
+      | 2            | 01.05.2023 | 31.08.2023 |             | 800   | Nei                   | Nei        | 1          | 0                  | MÅNEDLIG |
 
   Scenario: Utbetaling med flere perioder der den første perioden forlenges.
 
@@ -71,11 +71,11 @@ Egenskap: Forlenge periode
     Når beregner utbetalingsoppdrag
 
     Så forvent følgende utbetalingsoppdrag
-      | BehandlingId | Fra dato   | Til dato   | Opphørsdato | Beløp | Kode endring | Er endring | Periode id | Forrige periode id | Satstype |
-      | 1            | 01.06.2023 | 31.07.2023 |             | 800   | NY           | Nei        | 0          |                    | MÅNEDLIG |
-      | 1            | 01.10.2023 | 31.10.2023 |             | 800   | NY           | Nei        | 1          | 0                  | MÅNEDLIG |
-      | 2            | 01.06.2023 | 31.08.2023 |             | 800   | ENDR         | Nei        | 2          | 1                  | MÅNEDLIG |
-      | 2            | 01.10.2023 | 31.10.2023 |             | 800   | ENDR         | Nei        | 3          | 2                  | MÅNEDLIG |
+      | BehandlingId | Fra dato   | Til dato   | Opphørsdato | Beløp | Første utbetaling sak | Er endring | Periode id | Forrige periode id | Satstype |
+      | 1            | 01.06.2023 | 31.07.2023 |             | 800   | Ja                    | Nei        | 0          |                    | MÅNEDLIG |
+      | 1            | 01.10.2023 | 31.10.2023 |             | 800   | Ja                    | Nei        | 1          | 0                  | MÅNEDLIG |
+      | 2            | 01.06.2023 | 31.08.2023 |             | 800   | Nei                   | Nei        | 2          | 1                  | MÅNEDLIG |
+      | 2            | 01.10.2023 | 31.10.2023 |             | 800   | Nei                   | Nei        | 3          | 2                  | MÅNEDLIG |
 
   Scenario: Utbetaling med flere perioder der den andre perioden utvides i starten.
 
@@ -89,7 +89,7 @@ Egenskap: Forlenge periode
     Når beregner utbetalingsoppdrag
 
     Så forvent følgende utbetalingsoppdrag
-      | BehandlingId | Fra dato   | Til dato   | Opphørsdato | Beløp | Kode endring | Er endring | Periode id | Forrige periode id | Satstype |
-      | 1            | 01.06.2023 | 31.07.2023 |             | 800   | NY           | Nei        | 0          |                    | MÅNEDLIG |
-      | 1            | 01.10.2023 | 31.10.2023 |             | 800   | NY           | Nei        | 1          | 0                  | MÅNEDLIG |
-      | 2            | 01.09.2023 | 31.10.2023 |             | 800   | ENDR         | Nei        | 2          | 1                  | MÅNEDLIG |
+      | BehandlingId | Fra dato   | Til dato   | Opphørsdato | Beløp | Første utbetaling sak | Er endring | Periode id | Forrige periode id | Satstype |
+      | 1            | 01.06.2023 | 31.07.2023 |             | 800   | Ja                    | Nei        | 0          |                    | MÅNEDLIG |
+      | 1            | 01.10.2023 | 31.10.2023 |             | 800   | Ja                    | Nei        | 1          | 0                  | MÅNEDLIG |
+      | 2            | 01.09.2023 | 31.10.2023 |             | 800   | Nei                   | Nei        | 2          | 1                  | MÅNEDLIG |

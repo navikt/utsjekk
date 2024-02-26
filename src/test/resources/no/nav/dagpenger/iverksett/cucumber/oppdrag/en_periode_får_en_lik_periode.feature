@@ -13,5 +13,5 @@ Egenskap: Har en periode, legger til en ny periode som er lik den forrige
     Når beregner utbetalingsoppdrag
 
     Så forvent følgende utbetalingsoppdrag
-      | BehandlingId | Fra dato   | Til dato   | Opphørsdato | Beløp | Kode endring | Er endring | Periode id | Forrige periode id |
-      | 1            | 01.02.2021 | 31.03.2021 |             | 700   | NY           | Nei        | 0          |                    |
+      | BehandlingId | Fra dato   | Til dato   | Opphørsdato | Beløp | Første utbetaling sak | Er endring | Periode id | Forrige periode id |
+      | 1            | 01.02.2021 | 31.03.2021 |             | 700   | Ja                    | Nei        | 0          |                    |

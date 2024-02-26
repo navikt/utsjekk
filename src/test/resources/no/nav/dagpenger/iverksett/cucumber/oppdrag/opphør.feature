@@ -13,9 +13,9 @@ Egenskap: Opphør
     Når beregner utbetalingsoppdrag
 
     Så forvent følgende utbetalingsoppdrag
-      | BehandlingId | Fra dato   | Til dato   | Opphørsdato | Beløp | Kode endring | Er endring | Periode id | Forrige periode id |
-      | 1            | 01.03.2021 | 01.03.2021 |             | 700   | NY           | Nei        | 0          |                    |
-      | 2            | 01.03.2021 | 01.03.2021 | 01.03.2021  | 700   | ENDR         | Ja         | 0          |                    |
+      | BehandlingId | Fra dato   | Til dato   | Opphørsdato | Beløp | Første utbetaling sak | Er endring | Periode id | Forrige periode id |
+      | 1            | 01.03.2021 | 01.03.2021 |             | 700   | Ja                    | Nei        | 0          |                    |
+      | 2            | 01.03.2021 | 01.03.2021 | 01.03.2021  | 700   | Nei                   | Ja         | 0          |                    |
 
   Scenario: Opphør en periode med månedssats
 
@@ -27,9 +27,9 @@ Egenskap: Opphør
     Når beregner utbetalingsoppdrag
 
     Så forvent følgende utbetalingsoppdrag
-      | BehandlingId | Fra dato   | Til dato   | Opphørsdato | Beløp | Kode endring | Er endring | Periode id | Forrige periode id | Satstype |
-      | 1            | 01.03.2021 | 31.03.2021 |             | 700   | NY           | Nei        | 0          |                    | MÅNEDLIG |
-      | 2            | 01.03.2021 | 31.03.2021 | 01.03.2021  | 700   | ENDR         | Ja         | 0          |                    | MÅNEDLIG |
+      | BehandlingId | Fra dato   | Til dato   | Opphørsdato | Beløp | Første utbetaling sak | Er endring | Periode id | Forrige periode id | Satstype |
+      | 1            | 01.03.2021 | 31.03.2021 |             | 700   | Ja                    | Nei        | 0          |                    | MÅNEDLIG |
+      | 2            | 01.03.2021 | 31.03.2021 | 01.03.2021  | 700   | Nei                   | Ja         | 0          |                    | MÅNEDLIG |
 
   Scenario: Opphør en av 2 perioder
 
@@ -42,10 +42,10 @@ Egenskap: Opphør
     Når beregner utbetalingsoppdrag
 
     Så forvent følgende utbetalingsoppdrag
-      | BehandlingId | Fra dato   | Til dato   | Opphørsdato | Beløp | Kode endring | Er endring | Periode id | Forrige periode id |
-      | 1            | 01.03.2021 | 01.03.2021 |             | 700   | NY           | Nei        | 0          |                    |
-      | 1            | 01.04.2021 | 01.04.2021 |             | 800   | NY           | Nei        | 1          | 0                  |
-      | 2            | 01.04.2021 | 01.04.2021 | 01.04.2021  | 800   | ENDR         | Ja         | 1          | 0                  |
+      | BehandlingId | Fra dato   | Til dato   | Opphørsdato | Beløp | Første utbetaling sak | Er endring | Periode id | Forrige periode id |
+      | 1            | 01.03.2021 | 01.03.2021 |             | 700   | Ja                    | Nei        | 0          |                    |
+      | 1            | 01.04.2021 | 01.04.2021 |             | 800   | Ja                    | Nei        | 1          | 0                  |
+      | 2            | 01.04.2021 | 01.04.2021 | 01.04.2021  | 800   | Nei                   | Ja         | 1          | 0                  |
 
   Scenario: Opphører den siste av to perioder
 
@@ -58,10 +58,10 @@ Egenskap: Opphør
     Når beregner utbetalingsoppdrag
 
     Så forvent følgende utbetalingsoppdrag
-      | BehandlingId | Fra dato   | Til dato   | Opphørsdato | Beløp | Kode endring | Er endring | Periode id | Forrige periode id |
-      | 1            | 01.03.2021 | 31.03.2021 |             | 700   | NY           | Nei        | 0          |                    |
-      | 1            | 01.04.2021 | 30.04.2021 |             | 800   | NY           | Nei        | 1          | 0                  |
-      | 2            | 01.04.2021 | 30.04.2021 | 01.04.2021  | 800   | ENDR         | Ja         | 1          | 0                  |
+      | BehandlingId | Fra dato   | Til dato   | Opphørsdato | Beløp | Første utbetaling sak | Er endring | Periode id | Forrige periode id |
+      | 1            | 01.03.2021 | 31.03.2021 |             | 700   | Ja                    | Nei        | 0          |                    |
+      | 1            | 01.04.2021 | 30.04.2021 |             | 800   | Ja                    | Nei        | 1          | 0                  |
+      | 2            | 01.04.2021 | 30.04.2021 | 01.04.2021  | 800   | Nei                   | Ja         | 1          | 0                  |
 
   Scenario: Opphører en lang periode
 
@@ -73,9 +73,9 @@ Egenskap: Opphør
     Når beregner utbetalingsoppdrag
 
     Så forvent følgende utbetalingsoppdrag
-      | BehandlingId | Fra dato   | Til dato   | Opphørsdato | Beløp | Kode endring | Er endring | Periode id | Forrige periode id |
-      | 1            | 01.03.2021 | 01.06.2021 |             | 700   | NY           | Nei        | 0          |                    |
-      | 2            | 01.03.2021 | 01.06.2021 | 02.04.2021  | 700   | ENDR         | Ja         | 0          |                    |
+      | BehandlingId | Fra dato   | Til dato   | Opphørsdato | Beløp | Første utbetaling sak | Er endring | Periode id | Forrige periode id |
+      | 1            | 01.03.2021 | 01.06.2021 |             | 700   | Ja                    | Nei        | 0          |                    |
+      | 2            | 01.03.2021 | 01.06.2021 | 02.04.2021  | 700   | Nei                   | Ja         | 0          |                    |
 
   Scenario: Opphører en lang periode med månedssats
 
@@ -87,9 +87,9 @@ Egenskap: Opphør
     Når beregner utbetalingsoppdrag
 
     Så forvent følgende utbetalingsoppdrag
-      | BehandlingId | Fra dato   | Til dato   | Opphørsdato | Beløp | Kode endring | Er endring | Periode id | Forrige periode id | Satstype |
-      | 1            | 01.03.2021 | 30.06.2021 |             | 700   | NY           | Nei        | 0          |                    | MÅNEDLIG |
-      | 2            | 01.03.2021 | 30.06.2021 | 01.04.2021  | 700   | ENDR         | Ja         | 0          |                    | MÅNEDLIG |
+      | BehandlingId | Fra dato   | Til dato   | Opphørsdato | Beløp | Første utbetaling sak | Er endring | Periode id | Forrige periode id | Satstype |
+      | 1            | 01.03.2021 | 30.06.2021 |             | 700   | Ja                    | Nei        | 0          |                    | MÅNEDLIG |
+      | 2            | 01.03.2021 | 30.06.2021 | 01.04.2021  | 700   | Nei                   | Ja         | 0          |                    | MÅNEDLIG |
 
   Scenario: Opphør en tidligere periode da vi kun har med den andre av 2 perioder
 
@@ -102,11 +102,11 @@ Egenskap: Opphør
     Når beregner utbetalingsoppdrag
 
     Så forvent følgende utbetalingsoppdrag
-      | BehandlingId | Fra dato   | Til dato   | Opphørsdato | Beløp | Kode endring | Er endring | Periode id | Forrige periode id |
-      | 1            | 01.03.2021 | 01.03.2021 |             | 700   | NY           | Nei        | 0          |                    |
-      | 1            | 01.04.2021 | 01.04.2021 |             | 700   | NY           | Nei        | 1          | 0                  |
-      | 2            | 01.04.2021 | 01.04.2021 | 01.03.2021  | 700   | ENDR         | Ja         | 1          | 0                  |
-      | 2            | 01.04.2021 | 01.04.2021 |             | 700   | ENDR         | Nei        | 2          | 1                  |
+      | BehandlingId | Fra dato   | Til dato   | Opphørsdato | Beløp | Første utbetaling sak | Er endring | Periode id | Forrige periode id |
+      | 1            | 01.03.2021 | 01.03.2021 |             | 700   | Ja                    | Nei        | 0          |                    |
+      | 1            | 01.04.2021 | 01.04.2021 |             | 700   | Ja                    | Nei        | 1          | 0                  |
+      | 2            | 01.04.2021 | 01.04.2021 | 01.03.2021  | 700   | Nei                   | Ja         | 1          | 0                  |
+      | 2            | 01.04.2021 | 01.04.2021 |             | 700   | Nei                   | Nei        | 2          | 1                  |
 
   Scenario: Opphører den første av to perioder
 
@@ -119,11 +119,11 @@ Egenskap: Opphør
     Når beregner utbetalingsoppdrag
 
     Så forvent følgende utbetalingsoppdrag
-      | BehandlingId | Fra dato   | Til dato   | Opphørsdato | Beløp | Kode endring | Er endring | Periode id | Forrige periode id | Satstype |
-      | 1            | 01.03.2021 | 31.03.2021 |             | 700   | NY           | Nei        | 0          |                    | MÅNEDLIG |
-      | 1            | 01.04.2021 | 30.04.2021 |             | 700   | NY           | Nei        | 1          | 0                  | MÅNEDLIG |
-      | 2            | 01.04.2021 | 30.04.2021 | 01.03.2021  | 700   | ENDR         | Ja         | 1          | 0                  | MÅNEDLIG |
-      | 2            | 01.04.2021 | 30.04.2021 |             | 700   | ENDR         | Nei        | 2          | 1                  | MÅNEDLIG |
+      | BehandlingId | Fra dato   | Til dato   | Opphørsdato | Beløp | Første utbetaling sak | Er endring | Periode id | Forrige periode id | Satstype |
+      | 1            | 01.03.2021 | 31.03.2021 |             | 700   | Ja                    | Nei        | 0          |                    | MÅNEDLIG |
+      | 1            | 01.04.2021 | 30.04.2021 |             | 700   | Ja                    | Nei        | 1          | 0                  | MÅNEDLIG |
+      | 2            | 01.04.2021 | 30.04.2021 | 01.03.2021  | 700   | Nei                   | Ja         | 1          | 0                  | MÅNEDLIG |
+      | 2            | 01.04.2021 | 30.04.2021 |             | 700   | Nei                   | Nei        | 2          | 1                  | MÅNEDLIG |
 
   Scenario: Opphører den første av to perioder der det er tid i mellom periodene
 
@@ -136,11 +136,11 @@ Egenskap: Opphør
     Når beregner utbetalingsoppdrag
 
     Så forvent følgende utbetalingsoppdrag
-      | BehandlingId | Fra dato   | Til dato   | Opphørsdato | Beløp | Kode endring | Er endring | Periode id | Forrige periode id | Satstype |
-      | 1            | 01.03.2021 | 31.03.2021 |             | 700   | NY           | Nei        | 0          |                    | MÅNEDLIG |
-      | 1            | 01.06.2021 | 30.06.2021 |             | 700   | NY           | Nei        | 1          | 0                  | MÅNEDLIG |
-      | 2            | 01.06.2021 | 30.06.2021 | 01.03.2021  | 700   | ENDR         | Ja         | 1          | 0                  | MÅNEDLIG |
-      | 2            | 01.06.2021 | 30.06.2021 |             | 700   | ENDR         | Nei        | 2          | 1                  | MÅNEDLIG |
+      | BehandlingId | Fra dato   | Til dato   | Opphørsdato | Beløp | Første utbetaling sak | Er endring | Periode id | Forrige periode id | Satstype |
+      | 1            | 01.03.2021 | 31.03.2021 |             | 700   | Ja                    | Nei        | 0          |                    | MÅNEDLIG |
+      | 1            | 01.06.2021 | 30.06.2021 |             | 700   | Ja                    | Nei        | 1          | 0                  | MÅNEDLIG |
+      | 2            | 01.06.2021 | 30.06.2021 | 01.03.2021  | 700   | Nei                   | Ja         | 1          | 0                  | MÅNEDLIG |
+      | 2            | 01.06.2021 | 30.06.2021 |             | 700   | Nei                   | Nei        | 2          | 1                  | MÅNEDLIG |
 
   Scenario: Opphører den siste av to perioder der det er tid i mellom periodene
 
@@ -153,7 +153,7 @@ Egenskap: Opphør
     Når beregner utbetalingsoppdrag
 
     Så forvent følgende utbetalingsoppdrag
-      | BehandlingId | Fra dato   | Til dato   | Opphørsdato | Beløp | Kode endring | Er endring | Periode id | Forrige periode id | Satstype |
-      | 1            | 01.03.2021 | 31.03.2021 |             | 700   | NY           | Nei        | 0          |                    | MÅNEDLIG |
-      | 1            | 01.06.2021 | 30.06.2021 |             | 700   | NY           | Nei        | 1          | 0                  | MÅNEDLIG |
-      | 2            | 01.06.2021 | 30.06.2021 | 01.06.2021  | 700   | ENDR         | Ja         | 1          | 0                  | MÅNEDLIG |
+      | BehandlingId | Fra dato   | Til dato   | Opphørsdato | Beløp | Første utbetaling sak | Er endring | Periode id | Forrige periode id | Satstype |
+      | 1            | 01.03.2021 | 31.03.2021 |             | 700   | Ja                    | Nei        | 0          |                    | MÅNEDLIG |
+      | 1            | 01.06.2021 | 30.06.2021 |             | 700   | Ja                    | Nei        | 1          | 0                  | MÅNEDLIG |
+      | 2            | 01.06.2021 | 30.06.2021 | 01.06.2021  | 700   | Nei                   | Ja         | 1          | 0                  | MÅNEDLIG |

@@ -17,8 +17,8 @@ Egenskap: Revurderer og sletter periode 2, revurdererer på nytt og skal da bygg
     Når beregner utbetalingsoppdrag
 
     Så forvent følgende utbetalingsoppdrag
-      | BehandlingId | Fra dato   | Til dato   | Opphørsdato | Beløp | Kode endring | Er endring | Periode id | Forrige periode id |
-      | 1            | 01.03.2021 | 01.03.2021 |             | 700   | NY           | Nei        | 0          |                    |
-      | 1            | 01.04.2021 | 01.04.2021 |             | 800   | NY           | Nei        | 1          | 0                  |
-      | 2            | 01.04.2021 | 01.04.2021 | 01.04.2021  | 800   | ENDR         | Ja         | 1          | 0                  |
-      | 3            | 01.04.2021 | 01.04.2021 |             | 800   | ENDR         | Nei        | 2          | 1                  |
+      | BehandlingId | Fra dato   | Til dato   | Opphørsdato | Beløp | Første utbetaling sak | Er endring | Periode id | Forrige periode id |
+      | 1            | 01.03.2021 | 01.03.2021 |             | 700   | Ja                    | Nei        | 0          |                    |
+      | 1            | 01.04.2021 | 01.04.2021 |             | 800   | Ja                    | Nei        | 1          | 0                  |
+      | 2            | 01.04.2021 | 01.04.2021 | 01.04.2021  | 800   | Nei                   | Ja         | 1          | 0                  |
+      | 3            | 01.04.2021 | 01.04.2021 |             | 800   | Nei                   | Nei        | 2          | 1                  |

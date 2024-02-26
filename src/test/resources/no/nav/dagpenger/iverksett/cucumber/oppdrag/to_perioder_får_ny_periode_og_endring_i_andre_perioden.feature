@@ -19,9 +19,9 @@ Egenskap: 2 perioder får en ny periode og en endring
     Når beregner utbetalingsoppdrag
 
     Så forvent følgende utbetalingsoppdrag
-      | BehandlingId | Fra dato   | Til dato   | Opphørsdato | Beløp | Kode endring | Er endring | Periode id | Forrige periode id |
-      | 1            | 01.02.2021 | 30.04.2021 |             | 700   | NY           | Nei        | 0          |                    |
-      | 1            | 01.05.2021 | 31.07.2021 |             | 900   | NY           | Nei        | 1          | 0                  |
-      | 2            | 01.08.2021 | 30.09.2021 |             | 100   | ENDR         | Nei        | 2          | 1                  |
-      | 3            | 01.08.2021 | 30.09.2021 | 01.07.2021  | 100   | ENDR         | Ja         | 2          | 1                  |
-      | 3            | 01.08.2021 | 30.09.2021 |             | 100   | ENDR         | Nei        | 3          | 2                  |
+      | BehandlingId | Fra dato   | Til dato   | Opphørsdato | Beløp | Første utbetaling sak | Er endring | Periode id | Forrige periode id |
+      | 1            | 01.02.2021 | 30.04.2021 |             | 700   | Ja                    | Nei        | 0          |                    |
+      | 1            | 01.05.2021 | 31.07.2021 |             | 900   | Ja                    | Nei        | 1          | 0                  |
+      | 2            | 01.08.2021 | 30.09.2021 |             | 100   | Nei                   | Nei        | 2          | 1                  |
+      | 3            | 01.08.2021 | 30.09.2021 | 01.07.2021  | 100   | Nei                   | Ja         | 2          | 1                  |
+      | 3            | 01.08.2021 | 30.09.2021 |             | 100   | Nei                   | Nei        | 3          | 2                  |

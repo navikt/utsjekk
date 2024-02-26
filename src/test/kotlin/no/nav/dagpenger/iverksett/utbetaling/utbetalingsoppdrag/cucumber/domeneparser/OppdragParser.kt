@@ -8,7 +8,6 @@ import no.nav.dagpenger.iverksett.utbetaling.utbetalingsoppdrag.domene.AndelData
 import no.nav.dagpenger.kontrakter.felles.Satstype
 import no.nav.dagpenger.kontrakter.felles.StønadType
 import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
-import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsoppdrag
 import org.junit.jupiter.api.Assertions.assertEquals
 import java.time.LocalDate
 import java.util.UUID
@@ -67,7 +66,7 @@ object OppdragParser {
             validerAlleKodeEndringerLike(rader)
             ForventetUtbetalingsoppdrag(
                 behandlingId = behandlingId,
-                kodeEndring = parseEnum(DomenebegrepUtbetalingsoppdrag.KODE_ENDRING, rad),
+                erFørsteUtbetalingPåSak = parseBoolean(DomenebegrepUtbetalingsoppdrag.FØRSTE_UTBETALING_SAK, rad),
                 utbetalingsperiode = rader.map { mapForventetUtbetalingsperiode(it) },
             )
         }
@@ -91,7 +90,7 @@ object OppdragParser {
         )
 
     private fun validerAlleKodeEndringerLike(rader: List<Map<String, String>>) {
-        rader.map { parseEnum<Utbetalingsoppdrag.KodeEndring>(DomenebegrepUtbetalingsoppdrag.KODE_ENDRING, it) }
+        rader.map { parseBoolean(DomenebegrepUtbetalingsoppdrag.FØRSTE_UTBETALING_SAK, it) }
             .zipWithNext().forEach {
                 assertEquals(it.second, it.first)
             }
@@ -106,7 +105,7 @@ enum class DomenebegrepAndeler(override val nøkkel: String) : Domenenøkkel {
 }
 
 enum class DomenebegrepUtbetalingsoppdrag(override val nøkkel: String) : Domenenøkkel {
-    KODE_ENDRING("Kode endring"),
+    FØRSTE_UTBETALING_SAK("Første utbetaling sak"),
     ER_ENDRING("Er endring"),
     PERIODE_ID("Periode id"),
     FORRIGE_PERIODE_ID("Forrige periode id"),
@@ -117,7 +116,7 @@ enum class DomenebegrepUtbetalingsoppdrag(override val nøkkel: String) : Domene
 
 data class ForventetUtbetalingsoppdrag(
     val behandlingId: Long,
-    val kodeEndring: Utbetalingsoppdrag.KodeEndring,
+    val erFørsteUtbetalingPåSak: Boolean,
     val utbetalingsperiode: List<ForventetUtbetalingsperiode>,
 )
 

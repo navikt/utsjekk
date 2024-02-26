@@ -188,12 +188,8 @@ fun etTomtUtbetalingsoppdrag() =
     Utbetalingsoppdrag(
         aktør = "en-aktør",
         avstemmingstidspunkt = LocalDateTime.now(),
-        brukersNavKontor =
-            BrukersNavKontor(
-                enhet = "",
-                gjelderFom = LocalDate.now(),
-            ),
-        kodeEndring = Utbetalingsoppdrag.KodeEndring.NY,
+        brukersNavKontor = null,
+        erFørsteUtbetalingPåSak = true,
         fagsystem = Fagsystem.DAGPENGER,
         saksnummer = GeneriskIdSomUUID(UUID.randomUUID()),
         saksbehandlerId = "en-saksbehandler",

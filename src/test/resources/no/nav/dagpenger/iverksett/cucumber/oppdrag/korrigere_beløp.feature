@@ -15,9 +15,9 @@ Egenskap: Korrigere beløp tilbake i tid
     Når beregner utbetalingsoppdrag
 
     Så forvent følgende utbetalingsoppdrag
-      | BehandlingId | Fra dato   | Til dato   | Opphørsdato | Beløp | Kode endring | Er endring | Periode id | Forrige periode id |
-      | 1            | 02.06.2023 | 15.08.2023 |             | 800   | NY           | Nei        | 0          |                    |
-      | 2            | 16.07.2023 | 15.08.2023 |             | 400   | ENDR         | Nei        | 1          | 0                  |
+      | BehandlingId | Fra dato   | Til dato   | Opphørsdato | Beløp | Første utbetaling sak | Er endring | Periode id | Forrige periode id |
+      | 1            | 02.06.2023 | 15.08.2023 |             | 800   | Ja                    | Nei        | 0          |                    |
+      | 2            | 16.07.2023 | 15.08.2023 |             | 400   | Nei                   | Nei        | 1          | 0                  |
 
   Scenario: Endrer beløp fra en gitt dato for utbetaling med månedssats
 
@@ -30,9 +30,9 @@ Egenskap: Korrigere beløp tilbake i tid
     Når beregner utbetalingsoppdrag
 
     Så forvent følgende utbetalingsoppdrag
-      | BehandlingId | Fra dato   | Til dato   | Opphørsdato | Beløp | Kode endring | Er endring | Periode id | Forrige periode id | Satstype |
-      | 1            | 01.06.2023 | 31.08.2023 |             | 800   | NY           | Nei        | 0          |                    | MÅNEDLIG |
-      | 2            | 01.08.2023 | 31.08.2023 |             | 400   | ENDR         | Nei        | 1          | 0                  | MÅNEDLIG |
+      | BehandlingId | Fra dato   | Til dato   | Opphørsdato | Beløp | Første utbetaling sak | Er endring | Periode id | Forrige periode id | Satstype |
+      | 1            | 01.06.2023 | 31.08.2023 |             | 800   | Ja                    | Nei        | 0          |                    | MÅNEDLIG |
+      | 2            | 01.08.2023 | 31.08.2023 |             | 400   | Nei                   | Nei        | 1          | 0                  | MÅNEDLIG |
 
   Scenario: Endrer beløp for en hel periode med månedssats
 
@@ -44,6 +44,6 @@ Egenskap: Korrigere beløp tilbake i tid
     Når beregner utbetalingsoppdrag
 
     Så forvent følgende utbetalingsoppdrag
-      | BehandlingId | Fra dato   | Til dato   | Opphørsdato | Beløp | Kode endring | Er endring | Periode id | Forrige periode id | Satstype |
-      | 1            | 01.06.2023 | 31.08.2023 |             | 800   | NY           | Nei        | 0          |                    | MÅNEDLIG |
-      | 2            | 01.06.2023 | 31.08.2023 |             | 400   | ENDR         | Nei        | 1          | 0                  | MÅNEDLIG |
+      | BehandlingId | Fra dato   | Til dato   | Opphørsdato | Beløp | Første utbetaling sak | Er endring | Periode id | Forrige periode id | Satstype |
+      | 1            | 01.06.2023 | 31.08.2023 |             | 800   | Ja                    | Nei        | 0          |                    | MÅNEDLIG |
+      | 2            | 01.06.2023 | 31.08.2023 |             | 400   | Nei                   | Nei        | 1          | 0                  | MÅNEDLIG |

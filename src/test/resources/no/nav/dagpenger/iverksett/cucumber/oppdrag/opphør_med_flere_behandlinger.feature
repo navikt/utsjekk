@@ -14,10 +14,10 @@ Egenskap: Opphør med endringer over flere behandlinger
     Når beregner utbetalingsoppdrag
 
     Så forvent følgende utbetalingsoppdrag
-      | BehandlingId | Fra dato   | Til dato   | Opphørsdato | Beløp | Kode endring | Er endring | Periode id | Forrige periode id |
-      | 1            | 01.03.2021 | 01.03.2021 |             | 700   | NY           | Nei        | 0          |                    |
-      | 2            | 01.03.2021 | 01.03.2021 | 01.03.2021  | 700   | ENDR         | Ja         | 0          |                    |
-      | 3            | 01.03.2021 | 01.03.2021 |             | 700   | ENDR         | Nei        | 1          | 0                  |
+      | BehandlingId | Fra dato   | Til dato   | Opphørsdato | Beløp | Første utbetaling sak | Er endring | Periode id | Forrige periode id |
+      | 1            | 01.03.2021 | 01.03.2021 |             | 700   | Ja                    | Nei        | 0          |                    |
+      | 2            | 01.03.2021 | 01.03.2021 | 01.03.2021  | 700   | Nei                   | Ja         | 0          |                    |
+      | 3            | 01.03.2021 | 01.03.2021 |             | 700   | Nei                   | Nei        | 1          | 0                  |
 
   Scenario: 2 opphør etter hverandre på ulike perioder
 
@@ -33,12 +33,12 @@ Egenskap: Opphør med endringer over flere behandlinger
     Når beregner utbetalingsoppdrag
 
     Så forvent følgende utbetalingsoppdrag
-      | BehandlingId | Fra dato   | Til dato   | Opphørsdato | Beløp | Kode endring | Er endring | Periode id | Forrige periode id |
-      | 1            | 01.03.2021 | 01.03.2021 |             | 700   | NY           | Nei        | 0          |                    |
-      | 1            | 01.04.2021 | 01.04.2021 |             | 800   | NY           | Nei        | 1          | 0                  |
-      | 1            | 01.05.2021 | 01.05.2021 |             | 900   | NY           | Nei        | 2          | 1                  |
-      | 2            | 01.05.2021 | 01.05.2021 | 01.05.2021  | 900   | ENDR         | Ja         | 2          | 1                  |
-      | 3            | 01.05.2021 | 01.05.2021 | 01.04.2021  | 900   | ENDR         | Ja         | 2          | 1                  |
+      | BehandlingId | Fra dato   | Til dato   | Opphørsdato | Beløp | Første utbetaling sak | Er endring | Periode id | Forrige periode id |
+      | 1            | 01.03.2021 | 01.03.2021 |             | 700   | Ja                    | Nei        | 0          |                    |
+      | 1            | 01.04.2021 | 01.04.2021 |             | 800   | Ja                    | Nei        | 1          | 0                  |
+      | 1            | 01.05.2021 | 01.05.2021 |             | 900   | Ja                    | Nei        | 2          | 1                  |
+      | 2            | 01.05.2021 | 01.05.2021 | 01.05.2021  | 900   | Nei                   | Ja         | 2          | 1                  |
+      | 3            | 01.05.2021 | 01.05.2021 | 01.04.2021  | 900   | Nei                   | Ja         | 2          | 1                  |
 
 
   Scenario: Opphør mellom 2 andeler
@@ -52,10 +52,10 @@ Egenskap: Opphør med endringer over flere behandlinger
     Når beregner utbetalingsoppdrag
 
     Så forvent følgende utbetalingsoppdrag
-      | BehandlingId | Fra dato   | Til dato   | Opphørsdato | Beløp | Kode endring | Er endring | Periode id | Forrige periode id |
-      | 1            | 01.03.2021 | 01.08.2021 |             | 700   | NY           | Nei        | 0          |                    |
-      | 2            | 01.03.2021 | 01.08.2021 | 02.04.2021  | 700   | ENDR         | Ja         | 0          |                    |
-      | 2            | 01.07.2021 | 01.08.2021 |             | 700   | ENDR         | Nei        | 1          | 0                  |
+      | BehandlingId | Fra dato   | Til dato   | Opphørsdato | Beløp | Første utbetaling sak | Er endring | Periode id | Forrige periode id |
+      | 1            | 01.03.2021 | 01.08.2021 |             | 700   | Ja                    | Nei        | 0          |                    |
+      | 2            | 01.03.2021 | 01.08.2021 | 02.04.2021  | 700   | Nei                   | Ja         | 0          |                    |
+      | 2            | 01.07.2021 | 01.08.2021 |             | 700   | Nei                   | Nei        | 1          | 0                  |
 
   Scenario: Avkorter en periode, som man sen opphører. Her må opphøret ha peiling på siste andelen med riktig tom
 
@@ -70,11 +70,11 @@ Egenskap: Opphør med endringer over flere behandlinger
     Når beregner utbetalingsoppdrag
 
     Så forvent følgende utbetalingsoppdrag
-      | BehandlingId | Fra dato   | Til dato   | Opphørsdato | Beløp | Kode endring | Er endring | Periode id | Forrige periode id |
-      | 1            | 01.03.2021 | 01.03.2021 |             | 700   | NY           | Nei        | 0          |                    |
-      | 1            | 01.04.2021 | 01.08.2021 |             | 700   | NY           | Nei        | 1          | 0                  |
-      | 2            | 01.04.2021 | 01.08.2021 | 02.05.2021  | 700   | ENDR         | Ja         | 1          | 0                  |
-      | 3            | 01.04.2021 | 01.08.2021 | 01.04.2021  | 700   | ENDR         | Ja         | 1          | 0                  |
+      | BehandlingId | Fra dato   | Til dato   | Opphørsdato | Beløp | Første utbetaling sak | Er endring | Periode id | Forrige periode id |
+      | 1            | 01.03.2021 | 01.03.2021 |             | 700   | Ja                    | Nei        | 0          |                    |
+      | 1            | 01.04.2021 | 01.08.2021 |             | 700   | Ja                    | Nei        | 1          | 0                  |
+      | 2            | 01.04.2021 | 01.08.2021 | 02.05.2021  | 700   | Nei                   | Ja         | 1          | 0                  |
+      | 3            | 01.04.2021 | 01.08.2021 | 01.04.2021  | 700   | Nei                   | Ja         | 1          | 0                  |
 
     Så forvent følgende andeler med periodeId
       | BehandlingId | Id | Periode id | Forrige periode id |
@@ -95,7 +95,7 @@ Egenskap: Opphør med endringer over flere behandlinger
     Når beregner utbetalingsoppdrag
 
     Så forvent følgende utbetalingsoppdrag
-      | BehandlingId | Fra dato   | Til dato   | Opphørsdato | Beløp | Kode endring | Er endring | Periode id | Forrige periode id |
-      | 1            | 02.06.2023 | 15.08.2023 |             | 700   | NY           | Nei        | 0          |                    |
-      | 2            | 02.06.2023 | 15.08.2023 | 16.07.2023  | 700   | ENDR         | Ja         | 0          |                    |
-      | 3            | 02.06.2023 | 15.08.2023 | 16.06.2023  | 700   | ENDR         | Ja         | 0          |                    |
+      | BehandlingId | Fra dato   | Til dato   | Opphørsdato | Beløp | Første utbetaling sak | Er endring | Periode id | Forrige periode id |
+      | 1            | 02.06.2023 | 15.08.2023 |             | 700   | Ja                    | Nei        | 0          |                    |
+      | 2            | 02.06.2023 | 15.08.2023 | 16.07.2023  | 700   | Nei                   | Ja         | 0          |                    |
+      | 3            | 02.06.2023 | 15.08.2023 | 16.06.2023  | 700   | Nei                   | Ja         | 0          |                    |

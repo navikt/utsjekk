@@ -230,7 +230,7 @@ class OppdragSteg {
         forventetUtbetalingsoppdrag: ForventetUtbetalingsoppdrag,
         utbetalingsoppdrag: Utbetalingsoppdrag,
     ) {
-        assertEquals(utbetalingsoppdrag.kodeEndring, forventetUtbetalingsoppdrag.kodeEndring)
+        assertEquals(forventetUtbetalingsoppdrag.erFørsteUtbetalingPåSak, utbetalingsoppdrag.erFørsteUtbetalingPåSak)
         forventetUtbetalingsoppdrag.utbetalingsperiode.forEachIndexed { index, forventetUtbetalingsperiode ->
             val utbetalingsperiode = utbetalingsoppdrag.utbetalingsperiode[index]
             try {
