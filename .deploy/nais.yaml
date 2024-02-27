@@ -71,6 +71,8 @@ spec:
         - application: dp-vedtak-iverksett
         - application: dp-prosessering #frontend for task-rammeverket
         - application: dp-behandling
+        - application: tiltakspenger-utbetaling
+          namespace: tpts
         - application: tilleggsstonader-sak
           namespace: tilleggsstonader
     outbound:
