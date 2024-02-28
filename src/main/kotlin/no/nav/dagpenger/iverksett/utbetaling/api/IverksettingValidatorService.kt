@@ -26,7 +26,7 @@ class IverksettingValidatorService(
     internal fun validerAtIverksettingErForSammeSakOgPersonSomForrige(iverksetting: Iverksetting) {
         val forrigeIverksett =
             try {
-                iverksettingService.hentForrigeIverksett(iverksetting)
+                iverksettingService.hentForrigeIverksetting(iverksetting)
             } catch (e: IllegalStateException) {
                 throw ApiFeil(e.message ?: "Fant ikke forrige iverksetting", HttpStatus.CONFLICT)
             }
@@ -51,7 +51,7 @@ class IverksettingValidatorService(
     internal fun validerAtForrigeBehandlingErFerdigIverksattMotOppdrag(iverksetting: Iverksetting?) {
         iverksetting?.behandling?.forrigeBehandlingId?.apply {
             val forrigeResultat =
-                iverksettingsresultatService.hentIverksettResultat(
+                iverksettingsresultatService.hentIverksettingsresultat(
                     fagsystem = iverksetting.fagsak.fagsystem,
                     sakId = iverksetting.sakId,
                     behandlingId = this.somUUID,

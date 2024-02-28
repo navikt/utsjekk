@@ -78,7 +78,7 @@ internal class HentIverksettingResultatServiceTest : Integrasjonstest() {
         )
 
         val iverksetting2 =
-            iverksettingsresultatService.hentIverksettResultat(
+            iverksettingsresultatService.hentIverksettingsresultat(
                 fagsystem = Fagsystem.TILLEGGSSTØNADER,
                 sakId = sakId,
                 behandlingId = behandlingId,
@@ -114,7 +114,7 @@ internal class HentIverksettingResultatServiceTest : Integrasjonstest() {
         )
 
         val iverksettingTilleggsstønader =
-            iverksettingsresultatService.hentIverksettResultat(
+            iverksettingsresultatService.hentIverksettingsresultat(
                 fagsystem = Fagsystem.TILLEGGSSTØNADER,
                 sakId = sakId,
                 behandlingId = behandlingId,
@@ -152,7 +152,7 @@ internal class HentIverksettingResultatServiceTest : Integrasjonstest() {
         )
 
         val iverksettingSak1 =
-            iverksettingsresultatService.hentIverksettResultat(
+            iverksettingsresultatService.hentIverksettingsresultat(
                 fagsystem = Fagsystem.TILLEGGSSTØNADER,
                 sakId = sakId1,
                 behandlingId = behandlingId.somUUID,
@@ -191,7 +191,7 @@ internal class HentIverksettingResultatServiceTest : Integrasjonstest() {
         )
 
         val iverksettResultat =
-            iverksettingsresultatService.hentIverksettResultat(Fagsystem.DAGPENGER, sakId, behandlingId, null)
+            iverksettingsresultatService.hentIverksettingsresultat(Fagsystem.DAGPENGER, sakId, behandlingId, null)
         assertEquals(resultat, iverksettResultat)
     }
 }

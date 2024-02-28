@@ -89,7 +89,7 @@ class IverksettingService(
         }
     }
 
-    fun hentForrigeIverksett(iverksetting: Iverksetting): Iverksetting? =
+    fun hentForrigeIverksetting(iverksetting: Iverksetting): Iverksetting? =
         iverksetting.behandling.forrigeBehandlingId?.let {
             hentIverksetting(
                 fagsystem = iverksetting.fagsak.fagsystem,
@@ -112,7 +112,7 @@ class IverksettingService(
         iverksettingId: String?,
     ): IverksettStatus? {
         val resultat =
-            iverksettingsresultatService.hentIverksettResultat(
+            iverksettingsresultatService.hentIverksettingsresultat(
                 fagsystem = fagsystem,
                 sakId = sakId.tilGeneriskId(),
                 behandlingId = behandlingId,

@@ -101,7 +101,7 @@ internal class IverksettMotOppdragTaskTest {
 
         every { iverksettingService.hentIverksetting(any(), any(), any()) } returns opphørAvUtbetaling()
         every { oppdragClient.iverksettOppdrag(capture(oppdragSlot)) } just Runs
-        every { iverksettingsresultatService.hentIverksettResultat(any(), any(), any(), null) } returns iverksettingsresultat
+        every { iverksettingsresultatService.hentIverksettingsresultat(any(), any(), any(), null) } returns iverksettingsresultat
         every { iverksettingsresultatService.oppdaterTilkjentYtelseForUtbetaling(any(), any(), any(), any(), null) } just Runs
 
         iverksettMotOppdragTask.doTask(Task(IverksettMotOppdragTask.TYPE, taskPayload, Properties()))

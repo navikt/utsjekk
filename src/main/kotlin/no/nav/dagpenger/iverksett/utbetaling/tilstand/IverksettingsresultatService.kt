@@ -54,7 +54,7 @@ class IverksettingsresultatService(private val iverksettingsresultatRepository: 
         return iverksettingsresultatRepository.findByIdOrNull(fagsystem, sakId, behandlingId, iverksettingId)?.tilkjentYtelseForUtbetaling
     }
 
-    fun hentIverksettResultat(
+    fun hentIverksettingsresultat(
         fagsystem: Fagsystem,
         sakId: GeneriskId,
         behandlingId: UUID,

@@ -52,7 +52,7 @@ internal class IverksettingServiceTest {
             )
 
         every {
-            iverksettingsresultatService.hentIverksettResultat(
+            iverksettingsresultatService.hentIverksettingsresultat(
                 any(),
                 resultat.sakId,
                 resultat.behandlingId,
@@ -82,7 +82,7 @@ internal class IverksettingServiceTest {
             )
 
         every {
-            iverksettingsresultatService.hentIverksettResultat(
+            iverksettingsresultatService.hentIverksettingsresultat(
                 any(),
                 resultat.sakId,
                 resultat.behandlingId,
@@ -112,7 +112,7 @@ internal class IverksettingServiceTest {
             )
 
         every {
-            iverksettingsresultatService.hentIverksettResultat(
+            iverksettingsresultatService.hentIverksettingsresultat(
                 any(),
                 resultat.sakId,
                 resultat.behandlingId,
@@ -148,7 +148,7 @@ internal class IverksettingServiceTest {
             )
 
         every {
-            iverksettingsresultatService.hentIverksettResultat(
+            iverksettingsresultatService.hentIverksettingsresultat(
                 any(),
                 resultat.sakId,
                 resultat.behandlingId,
@@ -200,8 +200,8 @@ internal class IverksettingServiceTest {
             )
         } returns listOf(IverksettingEntitet(behandlingId.somUUID, iverksetting2))
 
-        val forrigeIverksetting1 = iverksettingService.hentForrigeIverksett(iverksetting1)
-        val forrigeIverksetting2 = iverksettingService.hentForrigeIverksett(iverksetting2)
+        val forrigeIverksetting1 = iverksettingService.hentForrigeIverksetting(iverksetting1)
+        val forrigeIverksetting2 = iverksettingService.hentForrigeIverksetting(iverksetting2)
 
         assertNull(forrigeIverksetting1)
         assertNotNull(forrigeIverksetting2)
@@ -241,8 +241,8 @@ internal class IverksettingServiceTest {
             )
         } returns listOf(IverksettingEntitet(behandlingId2.somUUID, iverksetting2))
 
-        val forrigeIverksetting1 = iverksettingService.hentForrigeIverksett(iverksetting1)
-        val forrigeIverksetting2 = iverksettingService.hentForrigeIverksett(iverksetting2)
+        val forrigeIverksetting1 = iverksettingService.hentForrigeIverksetting(iverksetting1)
+        val forrigeIverksetting2 = iverksettingService.hentForrigeIverksetting(iverksetting2)
 
         assertNull(forrigeIverksetting1)
         assertNotNull(forrigeIverksetting2)

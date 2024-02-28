@@ -43,7 +43,7 @@ class IverksettingValidatorServiceTest {
             lagIverksettingsdata(
                 forrigeBehandlingId = forrigeIverksetting.behandlingId.somUUID,
             )
-        every { iverksettingServiceMock.hentForrigeIverksett(nåværendeIverksetting) } returns forrigeIverksetting
+        every { iverksettingServiceMock.hentForrigeIverksetting(nåværendeIverksetting) } returns forrigeIverksetting
 
         assertApiFeil(HttpStatus.BAD_REQUEST) {
             iverksettingValidatorService.validerAtIverksettingErForSammeSakOgPersonSomForrige(nåværendeIverksetting)
@@ -60,7 +60,7 @@ class IverksettingValidatorServiceTest {
                 forrigeIverksettingBehandlingId = forrigeIverksetting.behandlingId,
                 søker = iverksettingTmp.søker.copy(personident = "12345678911"),
             )
-        every { iverksettingServiceMock.hentForrigeIverksett(nåværendeIverksetting) } returns forrigeIverksetting
+        every { iverksettingServiceMock.hentForrigeIverksetting(nåværendeIverksetting) } returns forrigeIverksetting
 
         assertApiFeil(HttpStatus.BAD_REQUEST) {
             iverksettingValidatorService.validerAtIverksettingErForSammeSakOgPersonSomForrige(nåværendeIverksetting)
@@ -113,7 +113,7 @@ class IverksettingValidatorServiceTest {
             )
 
         every {
-            iverksettingsresultatServiceMock.hentIverksettResultat(
+            iverksettingsresultatServiceMock.hentIverksettingsresultat(
                 forrigeIverksettingsresultat.fagsystem,
                 forrigeIverksettingsresultat.sakId,
                 forrigeIverksettingsresultat.behandlingId,
