@@ -8,6 +8,7 @@ import no.nav.dagpenger.kontrakter.felles.somString
 import no.nav.dagpenger.kontrakter.iverksett.IverksettStatus
 import org.apache.kafka.clients.producer.KafkaProducer
 import org.apache.kafka.clients.producer.ProducerRecord
+import org.apache.kafka.clients.producer.RecordMetadata
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 
@@ -19,7 +20,7 @@ class StatusEndretProdusent(
     fun sendStatusEndretEvent(
         iverksetting: Iverksetting,
         iverksettStatus: IverksettStatus,
-    ) {
+    ): RecordMetadata? {
         val melding =
             StatusEndretMelding(
                 sakId = iverksetting.sakId.somString,
@@ -29,6 +30,6 @@ class StatusEndretProdusent(
                 status = iverksettStatus,
             )
 
-        producer.send(ProducerRecord(topic, iverksetting.søker.personident, objectMapper.writeValueAsString(melding)))
+        return producer.send(ProducerRecord(topic, iverksetting.søker.personident, objectMapper.writeValueAsString(melding))).get()
     }
 }
