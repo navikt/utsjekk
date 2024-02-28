@@ -5,8 +5,7 @@ on:
     branches:
       - main
     paths:
-      - '.deploy/topic-dev.yaml'
-      - '.deploy/topic-prod.yaml'
+      - '.deploy/topic.yaml'
       - '.github/workflows/configure-topic.yaml'
 
 jobs:
@@ -19,15 +18,17 @@ jobs:
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-gcp
-          RESOURCE: .deploy/topic-dev.yaml
+          RESOURCE: .deploy/topic.yaml
+          VARS: .deploy/vars-dev.yaml
 
-#  applyProd:
-#    name: Apply prod-gcp
-#    runs-on: ubuntu-latest
-#    steps:
-#      - uses: actions/checkout@v4
-#      - uses: nais/deploy/actions/deploy@v2
-#        env:
-#          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
-#          CLUSTER: prod-gcp
-#          RESOURCE: .deploy/topic-prod.yaml
+  applyProd:
+    name: Apply prod-gcp
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: nais/deploy/actions/deploy@v2
+        env:
+          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+          CLUSTER: prod-gcp
+          RESOURCE: .deploy/topic.yaml
+          VARS: .deploy/vars-prod.yaml

@@ -6,7 +6,7 @@ metadata:
   labels:
     team: teamdagpenger
 spec:
-  pool: nav-prod
+  pool: {{ kafka.pool }}
   acl:
     - team: teamdagpenger
       application: dp-iverksett

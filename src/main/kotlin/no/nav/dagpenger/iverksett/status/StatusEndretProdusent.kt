@@ -8,14 +8,14 @@ import no.nav.dagpenger.kontrakter.felles.somString
 import no.nav.dagpenger.kontrakter.iverksett.IverksettStatus
 import org.apache.kafka.clients.producer.KafkaProducer
 import org.apache.kafka.clients.producer.ProducerRecord
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 
 @Component
-class StatusEndretProdusent(private val producer: KafkaProducer<String, String>) {
-    companion object {
-        private const val TOPIC = "teamdagpenger.iverksetting-status-v1"
-    }
-
+class StatusEndretProdusent(
+    private val producer: KafkaProducer<String, String>,
+    @Value("\${kafka.config.topic}") private val topic: String,
+) {
     fun sendStatusEndretEvent(
         iverksetting: Iverksetting,
         iverksettStatus: IverksettStatus,
@@ -28,6 +28,7 @@ class StatusEndretProdusent(private val producer: KafkaProducer<String, String>)
                 fagsystem = iverksetting.fagsak.fagsystem,
                 status = iverksettStatus,
             )
-        producer.send(ProducerRecord(TOPIC, iverksetting.søker.personident, objectMapper.writeValueAsString(melding)))
+
+        producer.send(ProducerRecord(topic, iverksetting.søker.personident, objectMapper.writeValueAsString(melding)))
     }
 }
