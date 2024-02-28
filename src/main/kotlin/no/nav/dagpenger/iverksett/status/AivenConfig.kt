@@ -16,7 +16,7 @@ import java.util.Properties
 @KjørerPåNais
 class AivenConfig(
     @Value("\${kafka.brokers}") private val kafkaBrokers: String,
-    @Value("\${kafka.trustorePath}") private val truststorePath: String,
+    @Value("\${kafka.truststorePath}") private val truststorePath: String,
     @Value("\${kafka.credstorePassword}") private val credstorePassword: String,
     @Value("\${kafka.keystorePath}") private val keystorePath: String,
 ) {
