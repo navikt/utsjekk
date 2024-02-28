@@ -19,7 +19,7 @@ jobs:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-gcp
           RESOURCE: .deploy/topic.yaml
-          VARS: .deploy/vars-dev.yaml
+          VARS: .deploy/vars-preprod.yaml
 
   applyProd:
     name: Apply prod-gcp
