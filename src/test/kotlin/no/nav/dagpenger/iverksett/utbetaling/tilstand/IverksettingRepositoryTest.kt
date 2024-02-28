@@ -1,6 +1,6 @@
 package no.nav.dagpenger.iverksett.utbetaling.tilstand
 
-import no.nav.dagpenger.iverksett.ServerTest
+import no.nav.dagpenger.iverksett.Integrasjonstest
 import no.nav.dagpenger.iverksett.utbetaling.domene.Iverksetting
 import no.nav.dagpenger.iverksett.utbetaling.domene.behandlingId
 import no.nav.dagpenger.iverksett.utbetaling.domene.sakId
@@ -15,7 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import java.time.LocalDate
 import java.util.UUID
 
-class IverksettingRepositoryTest : ServerTest() {
+class IverksettingRepositoryTest : Integrasjonstest() {
     @Autowired
     private lateinit var iverksettingRepository: IverksettingRepository
 

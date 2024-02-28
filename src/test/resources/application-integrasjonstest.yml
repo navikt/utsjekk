@@ -30,7 +30,10 @@ DAGPENGER_BESLUTTER_GRUPPE: 0000-GA-Test-Beslutter
 TILTAKSPENGER_BESLUTTER_GRUPPE: 0000-GA-Test-Beslutter
 TILLEGGSSTONADER_BESLUTTER_GRUPPE: 0000-GA-Test-Beslutter
 
-KAFKA_BROKERS: "denne-skal-overskrives"
-KAFKA_TRUSTSTORE_PATH: "/var/run/secrets/nais.io/kafka/client.truststore.jks"
-KAFKA_KEYSTORE_PATH: "/var/run/secrets/nais.io/kafka/client.keystore.p12"
-KAFKA_CREDSTORE_PASSWORD: "1234"
+kafka:
+  config:
+    topic: "test_topic"
+  brokers: "denne-skal-overskrives"
+  truststorePath: "/var/run/secrets/nais.io/kafka/client.truststore.jks"
+  keystorePath: "/var/run/secrets/nais.io/kafka/client.keystore.p12"
+  credstorePassword: "1234"

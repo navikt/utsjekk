@@ -1,6 +1,6 @@
 package no.nav.dagpenger.iverksett.avstemming
 
-import no.nav.dagpenger.iverksett.ServerTest
+import no.nav.dagpenger.iverksett.Integrasjonstest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -10,7 +10,7 @@ import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 
-class AvstemmingControllerTest : ServerTest() {
+class AvstemmingControllerTest : Integrasjonstest() {
     @BeforeEach
     fun setUp() {
         headers.setBearerAuth(lokalClientCredentialsTestToken(accessAsApplication = true))

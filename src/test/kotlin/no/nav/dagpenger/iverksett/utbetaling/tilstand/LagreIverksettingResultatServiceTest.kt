@@ -1,6 +1,6 @@
 package no.nav.dagpenger.iverksett.utbetaling.tilstand
 
-import no.nav.dagpenger.iverksett.ServerTest
+import no.nav.dagpenger.iverksett.Integrasjonstest
 import no.nav.dagpenger.iverksett.utbetaling.domene.OppdragResultat
 import no.nav.dagpenger.iverksett.utbetaling.util.enTilkjentYtelse
 import no.nav.dagpenger.kontrakter.felles.Fagsystem
@@ -14,7 +14,7 @@ import org.junit.jupiter.api.assertDoesNotThrow
 import org.springframework.beans.factory.annotation.Autowired
 import java.util.UUID
 
-internal class LagreIverksettingResultatServiceTest : ServerTest() {
+internal class LagreIverksettingResultatServiceTest : Integrasjonstest() {
     @Autowired
     private lateinit var iverksettingsresultatService: IverksettingsresultatService
 

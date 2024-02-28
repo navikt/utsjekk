@@ -1,6 +1,7 @@
 package no.nav.dagpenger.iverksett
 
 import com.github.tomakehurst.wiremock.WireMockServer
+import no.nav.dagpenger.iverksett.felles.Profiler
 import no.nav.dagpenger.iverksett.felles.database.DbContainerInitializer
 import no.nav.dagpenger.iverksett.felles.oppdrag.konfig.RestTemplateAzure
 import no.nav.dagpenger.iverksett.felles.util.TokenUtil
@@ -26,9 +27,9 @@ import java.util.UUID
 @ExtendWith(SpringExtension::class)
 @ContextConfiguration(initializers = [DbContainerInitializer::class, KafkaContainerInitializer::class])
 @SpringBootTest(classes = [ApplicationLocal::class], webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ActiveProfiles("servertest", "mock-oppdrag", "mock-oauth")
+@ActiveProfiles(Profiler.INTEGRASJONSTEST, Profiler.MOCK_OPPDRAG, Profiler.MOCK_OAUTH)
 @EnableMockOAuth2Server
-abstract class ServerTest {
+abstract class Integrasjonstest {
     protected val restTemplate = TestRestTemplate(RestTemplateAzure().restTemplateBuilder())
     protected val headers = HttpHeaders()
 

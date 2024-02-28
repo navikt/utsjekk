@@ -15,10 +15,10 @@ import java.util.Properties
 @Configuration
 @KjørerPåNais
 class AivenConfig(
-    @Value("\${KAFKA_BROKERS}") private val kafkaBrokers: String,
-    @Value("\${KAFKA_TRUSTSTORE_PATH}") private val truststorePath: String,
-    @Value("\${KAFKA_CREDSTORE_PASSWORD}") private val credstorePassword: String,
-    @Value("\${KAFKA_KEYSTORE_PATH}") private val keystorePath: String,
+    @Value("\${kafka.brokers}") private val kafkaBrokers: String,
+    @Value("\${kafka.trustorePath}") private val truststorePath: String,
+    @Value("\${kafka.credstorePassword}") private val credstorePassword: String,
+    @Value("\${kafka.keystorePath}") private val keystorePath: String,
 ) {
     private val brokers = kafkaBrokers.split(',').map(String::trim)
 
@@ -27,18 +27,9 @@ class AivenConfig(
     }
 
     @Bean
-    fun kafkaProducer(): KafkaProducer<String, String> = KafkaProducer(producerConfig(), StringSerializer(), StringSerializer())
+    fun kafkaProducer(): KafkaProducer<String, String> = KafkaProducer(producerConfig, StringSerializer(), StringSerializer())
 
-    fun producerConfig(properties: Properties? = null) =
-        Properties().apply {
-            putAll(kafkaBaseConfig())
-            put(ProducerConfig.ACKS_CONFIG, "all")
-            put(ProducerConfig.LINGER_MS_CONFIG, "0")
-            put(ProducerConfig.MAX_IN_FLIGHT_REQUESTS_PER_CONNECTION, "1")
-            properties?.let { putAll(it) }
-        }
-
-    private fun kafkaBaseConfig() =
+    private val producerConfig get() =
         Properties().apply {
             put(CommonClientConfigs.BOOTSTRAP_SERVERS_CONFIG, brokers)
             put(CommonClientConfigs.SECURITY_PROTOCOL_CONFIG, SecurityProtocol.SSL.name)
@@ -49,5 +40,8 @@ class AivenConfig(
             put(SslConfigs.SSL_TRUSTSTORE_PASSWORD_CONFIG, credstorePassword)
             put(SslConfigs.SSL_KEYSTORE_LOCATION_CONFIG, keystorePath)
             put(SslConfigs.SSL_KEYSTORE_PASSWORD_CONFIG, credstorePassword)
+            put(ProducerConfig.ACKS_CONFIG, "all")
+            put(ProducerConfig.LINGER_MS_CONFIG, "0")
+            put(ProducerConfig.MAX_IN_FLIGHT_REQUESTS_PER_CONNECTION, "1")
         }
 }

@@ -1,6 +1,6 @@
 package no.nav.dagpenger.iverksett.utbetaling.api
 
-import no.nav.dagpenger.iverksett.ServerTest
+import no.nav.dagpenger.iverksett.Integrasjonstest
 import no.nav.dagpenger.iverksett.utbetaling.task.IverksettMotOppdragTask
 import no.nav.dagpenger.iverksett.utbetaling.util.enIverksettDto
 import no.nav.dagpenger.iverksett.utbetaling.util.enIverksettTilleggsstønaderDto
@@ -29,7 +29,7 @@ import org.springframework.http.ResponseEntity
 import java.time.LocalDateTime
 import java.util.UUID
 
-class IverksettingControllerTest : ServerTest() {
+class IverksettingControllerTest : Integrasjonstest() {
     private val behandlingId = GeneriskIdSomUUID(UUID.randomUUID())
     private val sakId = GeneriskIdSomUUID(UUID.randomUUID())
 

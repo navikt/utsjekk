@@ -2,6 +2,7 @@ package no.nav.dagpenger.iverksett.konfig
 
 import io.mockk.every
 import io.mockk.mockk
+import no.nav.dagpenger.iverksett.felles.Profiler
 import no.nav.security.token.support.client.core.oauth2.OAuth2AccessTokenResponse
 import no.nav.security.token.support.client.core.oauth2.OAuth2AccessTokenService
 import org.springframework.context.annotation.Bean
@@ -10,7 +11,7 @@ import org.springframework.context.annotation.Primary
 import org.springframework.context.annotation.Profile
 
 @Configuration
-@Profile("mock-oauth")
+@Profile(Profiler.MOCK_OAUTH)
 class OAuth2AccessTokenTestConfig {
     @Bean
     @Primary
