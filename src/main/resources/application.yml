@@ -87,7 +87,7 @@ PROSESSERING_GRUPPE: ${PROSESSERING_GRUPPE}
 konsumenter:
   dagpenger:
     fagsystem: DAGPENGER
-    klientapp: dp-vedtak-iverksett
+    klientapp: dp-iverksett
     grupper:
       saksbehandler: ${DAGPENGER_SAKSBEHANDLER_GRUPPE}
       beslutter: ${DAGPENGER_BESLUTTER_GRUPPE}
