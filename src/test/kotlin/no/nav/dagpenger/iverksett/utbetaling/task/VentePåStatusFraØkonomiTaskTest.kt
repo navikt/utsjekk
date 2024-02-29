@@ -8,6 +8,7 @@ import io.mockk.slot
 import io.mockk.verify
 import no.nav.dagpenger.iverksett.felles.oppdrag.OppdragClient
 import no.nav.dagpenger.iverksett.felles.util.mockFeatureToggleService
+import no.nav.dagpenger.iverksett.status.StatusEndretProdusent
 import no.nav.dagpenger.iverksett.utbetaling.domene.OppdragResultat
 import no.nav.dagpenger.iverksett.utbetaling.domene.TilkjentYtelse
 import no.nav.dagpenger.iverksett.utbetaling.lagIverksettingEntitet
@@ -15,6 +16,7 @@ import no.nav.dagpenger.iverksett.utbetaling.lagIverksettingsdata
 import no.nav.dagpenger.iverksett.utbetaling.tilstand.IverksettingRepository
 import no.nav.dagpenger.iverksett.utbetaling.tilstand.IverksettingService
 import no.nav.dagpenger.iverksett.utbetaling.tilstand.IverksettingsresultatService
+import no.nav.dagpenger.iverksett.utbetaling.util.etIverksettingsresultat
 import no.nav.dagpenger.kontrakter.felles.Fagsystem
 import no.nav.dagpenger.kontrakter.felles.GeneriskId
 import no.nav.dagpenger.kontrakter.felles.GeneriskIdSomUUID
@@ -41,6 +43,7 @@ internal class VentePåStatusFraØkonomiTaskTest {
     private val iverksettingRepository = mockk<IverksettingRepository>()
     private val taskService = mockk<TaskService>()
     private val iverksettingsresultatService = mockk<IverksettingsresultatService>()
+    private val statusEndretProdusent = mockk<StatusEndretProdusent>()
     private val behandlingId: GeneriskId = GeneriskIdSomUUID(UUID.randomUUID())
     private val sakId: GeneriskId = GeneriskIdSomUUID(UUID.randomUUID())
     private val taskPayload =
@@ -58,7 +61,7 @@ internal class VentePåStatusFraØkonomiTaskTest {
             iverksettingRepository = iverksettingRepository,
             iverksettingsresultatService = iverksettingsresultatService,
             featureToggleService = mockFeatureToggleService(),
-            statusEndretProdusent = mockk(),
+            statusEndretProdusent = statusEndretProdusent,
         )
 
     private val ventePåStatusFraØkonomiTask =
@@ -79,6 +82,8 @@ internal class VentePåStatusFraØkonomiTaskTest {
         every { iverksettingRepository.findByFagsakAndBehandlingAndIverksetting(any(), any(), any()) } returns
             listOf(lagIverksettingEntitet(iverksetting))
         every { iverksettingsresultatService.oppdaterOppdragResultat(any(), any(), behandlingId.somUUID, any(), any()) } just runs
+        every { iverksettingsresultatService.hentIverksettingsresultat(any(), any(), any(), any()) } returns etIverksettingsresultat()
+        every { statusEndretProdusent.sendStatusEndretEvent(any(), any()) } just runs
         every { taskService.save(any()) } answers { firstArg() }
     }
 
@@ -96,11 +101,11 @@ internal class VentePåStatusFraØkonomiTaskTest {
 
         verify(exactly = 1) {
             iverksettingsresultatService.oppdaterOppdragResultat(
-                any(),
-                sakId,
-                behandlingId.somUUID,
-                capture(oppdragResultatSlot),
-                any(),
+                fagsystem = any(),
+                sakId = sakId,
+                behandlingId = behandlingId.somUUID,
+                oppdragResultat = capture(oppdragResultatSlot),
+                iverksettingId = any(),
             )
         }
 

@@ -153,18 +153,13 @@ class IverksettingService(
         }
     }
 
-    fun sjekkStatusPåIverksettOgOppdaterTilstand(
-        fagsystem: Fagsystem,
-        sakId: GeneriskId,
-        behandlingId: GeneriskId,
-        iverksettingId: String? = null,
-    ) {
+    fun sjekkStatusPåIverksettOgOppdaterTilstand(iverksetting: Iverksetting) {
         val oppdragId =
             OppdragIdDto(
-                fagsystem = fagsystem,
-                sakId = sakId,
-                behandlingId = behandlingId,
-                iverksettingId = iverksettingId,
+                fagsystem = iverksetting.fagsak.fagsystem,
+                sakId = iverksetting.sakId,
+                behandlingId = iverksetting.behandlingId,
+                iverksettingId = iverksetting.behandling.iverksettingId,
             )
 
         val (status, melding) = oppdragClient.hentStatus(oppdragId)
@@ -174,12 +169,13 @@ class IverksettingService(
         }
 
         iverksettingsresultatService.oppdaterOppdragResultat(
-            fagsystem = fagsystem,
-            sakId = sakId,
-            behandlingId = behandlingId.somUUID,
-            iverksettingId = iverksettingId,
+            fagsystem = iverksetting.fagsak.fagsystem,
+            sakId = iverksetting.sakId,
+            behandlingId = iverksetting.behandlingId.somUUID,
+            iverksettingId = iverksetting.behandling.iverksettingId,
             oppdragResultat = OppdragResultat(oppdragStatus = status),
         )
+        publiserStatusmelding(iverksetting)
     }
 
     fun erFørsteVedtakPåSak(
