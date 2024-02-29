@@ -9,6 +9,7 @@ import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.apache.kafka.clients.consumer.KafkaConsumer
 import org.apache.kafka.common.TopicPartition
 import org.apache.kafka.common.config.SaslConfigs
+import org.apache.kafka.common.errors.UnknownTopicOrPartitionException
 import org.apache.kafka.common.serialization.StringDeserializer
 import org.springframework.boot.test.util.TestPropertyValues
 import org.springframework.context.ApplicationContextInitializer
@@ -44,12 +45,16 @@ class KafkaContainerInitializer : ApplicationContextInitializer<ConfigurableAppl
         }
 
         fun deleteAllRecords() {
-            val adminClient = AdminClient.create(connectionConfig())
-            val partition = TopicPartition(TOPIC, 0)
-            val offset = adminClient.listOffsets(mapOf(partition to OffsetSpec.latest())).all().get().values.first().offset()
+            try {
+                val adminClient = AdminClient.create(connectionConfig())
+                val partition = TopicPartition(TOPIC, 0)
+                val offset = adminClient.listOffsets(mapOf(partition to OffsetSpec.latest())).all().get().values.first().offset()
 
-            adminClient.deleteRecords(mapOf(partition to RecordsToDelete.beforeOffset(offset))).all().get()
-            adminClient.close()
+                adminClient.deleteRecords(mapOf(partition to RecordsToDelete.beforeOffset(offset))).all().get()
+                adminClient.close()
+            } catch (e: UnknownTopicOrPartitionException) {
+                // Noop
+            }
         }
 
         val records
