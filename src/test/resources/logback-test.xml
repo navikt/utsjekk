@@ -9,4 +9,5 @@
 
     <logger name="no" level="INFO"/>
     <logger name="no.nav.dagpenger" level="INFO"/>
+    <logger name="org.apache.kafka" level="WARN"/>
 </configuration>

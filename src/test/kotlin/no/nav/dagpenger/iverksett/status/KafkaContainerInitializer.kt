@@ -11,6 +11,7 @@ import org.apache.kafka.clients.consumer.KafkaConsumer
 import org.apache.kafka.common.TopicPartition
 import org.apache.kafka.common.config.SaslConfigs
 import org.apache.kafka.common.serialization.StringDeserializer
+import org.slf4j.LoggerFactory
 import org.springframework.boot.test.util.TestPropertyValues
 import org.springframework.context.ApplicationContextInitializer
 import org.springframework.context.ConfigurableApplicationContext
@@ -23,11 +24,15 @@ import java.util.UUID
 private const val TOPIC = "test_topic"
 
 class KafkaContainerInitializer : ApplicationContextInitializer<ConfigurableApplicationContext> {
+    private val logger = LoggerFactory.getLogger(this::class.java)
+
     override fun initialize(applicationContext: ConfigurableApplicationContext) {
         kafkaContainer.start().also {
             createTestTopic()
             updateTestProperties(applicationContext)
         }
+
+        logger.info("Kafka startet lokalt på localhost:${kafkaContainer.firstMappedPort}")
     }
 
     private fun createTestTopic() {

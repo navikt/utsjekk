@@ -28,5 +28,6 @@
     <springProfile name="dev,local">
         <logger name="no.nav.dagpenger" level="trace" />
     </springProfile>
+    <logger name="org.apache.kafka" level="WARN"/>
 </configuration>
 
