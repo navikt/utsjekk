@@ -28,7 +28,5 @@
     <springProfile name="dev,local">
         <logger name="no.nav.dagpenger" level="trace" />
     </springProfile>
-
-
 </configuration>
 

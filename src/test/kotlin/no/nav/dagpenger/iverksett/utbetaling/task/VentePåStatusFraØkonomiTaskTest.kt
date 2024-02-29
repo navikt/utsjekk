@@ -58,6 +58,7 @@ internal class VentePåStatusFraØkonomiTaskTest {
             iverksettingRepository = iverksettingRepository,
             iverksettingsresultatService = iverksettingsresultatService,
             featureToggleService = mockFeatureToggleService(),
+            statusEndretProdusent = mockk(),
         )
 
     private val ventePåStatusFraØkonomiTask =

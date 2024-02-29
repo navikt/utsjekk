@@ -2,9 +2,11 @@ package no.nav.dagpenger.iverksett.utbetaling.tilstand
 
 import no.nav.dagpenger.iverksett.felles.hovedflyt
 import no.nav.dagpenger.iverksett.felles.oppdrag.OppdragClient
+import no.nav.dagpenger.iverksett.status.StatusEndretProdusent
 import no.nav.dagpenger.iverksett.utbetaling.domene.Iverksetting
 import no.nav.dagpenger.iverksett.utbetaling.domene.IverksettingEntitet
 import no.nav.dagpenger.iverksett.utbetaling.domene.OppdragResultat
+import no.nav.dagpenger.iverksett.utbetaling.domene.behandlingId
 import no.nav.dagpenger.iverksett.utbetaling.domene.sakId
 import no.nav.dagpenger.iverksett.utbetaling.featuretoggle.FeatureToggleConfig
 import no.nav.dagpenger.iverksett.utbetaling.featuretoggle.FeatureToggleService
@@ -30,11 +32,12 @@ import java.util.UUID
 
 @Service
 class IverksettingService(
-    val taskService: TaskService,
-    val oppdragClient: OppdragClient,
-    val iverksettingRepository: IverksettingRepository,
-    val iverksettingsresultatService: IverksettingsresultatService,
-    val featureToggleService: FeatureToggleService,
+    private val taskService: TaskService,
+    private val oppdragClient: OppdragClient,
+    private val iverksettingRepository: IverksettingRepository,
+    private val iverksettingsresultatService: IverksettingsresultatService,
+    private val featureToggleService: FeatureToggleService,
+    private val statusEndretProdusent: StatusEndretProdusent,
 ) {
     @Transactional
     fun startIverksetting(iverksetting: Iverksetting) {
@@ -104,6 +107,17 @@ class IverksettingService(
         }
 
     private fun førsteHovedflytTask() = hovedflyt().first().type
+
+    fun publiserStatusmelding(iverksetting: Iverksetting) {
+        utledStatus(
+            fagsystem = iverksetting.fagsak.fagsystem,
+            sakId = iverksetting.sakId.somString,
+            behandlingId = iverksetting.behandlingId.somUUID,
+            iverksettingId = iverksetting.behandling.iverksettingId,
+        )?.also { status ->
+            statusEndretProdusent.sendStatusEndretEvent(iverksetting, status)
+        }
+    }
 
     fun utledStatus(
         fagsystem: Fagsystem,

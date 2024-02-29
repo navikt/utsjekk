@@ -40,6 +40,7 @@ internal class IverksettingServiceTest {
             iverksettingRepository = iverksettingRepository,
             oppdragClient = oppdragClient,
             featureToggleService = mockFeatureToggleService(),
+            statusEndretProdusent = mockk(relaxed = true),
         )
 
     @Test

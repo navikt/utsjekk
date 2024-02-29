@@ -53,6 +53,7 @@ abstract class Integrasjonstest {
         headers.clear()
         resetDatabase()
         resetWiremockServers()
+        KafkaContainerInitializer.deleteAllRecords()
     }
 
     private fun resetWiremockServers() {

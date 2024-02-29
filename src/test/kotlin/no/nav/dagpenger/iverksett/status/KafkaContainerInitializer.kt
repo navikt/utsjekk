@@ -1,9 +1,13 @@
 package no.nav.dagpenger.iverksett.status
 
 import org.apache.kafka.clients.CommonClientConfigs
+import org.apache.kafka.clients.admin.AdminClient
+import org.apache.kafka.clients.admin.OffsetSpec
+import org.apache.kafka.clients.admin.RecordsToDelete
 import org.apache.kafka.clients.consumer.ConsumerConfig
 import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.apache.kafka.clients.consumer.KafkaConsumer
+import org.apache.kafka.common.TopicPartition
 import org.apache.kafka.common.config.SaslConfigs
 import org.apache.kafka.common.serialization.StringDeserializer
 import org.springframework.boot.test.util.TestPropertyValues
@@ -27,7 +31,7 @@ class KafkaContainerInitializer : ApplicationContextInitializer<ConfigurableAppl
     }
 
     companion object {
-        fun connectionConfig(properties: Properties) =
+        fun connectionConfig(properties: Properties = Properties()) =
             properties.apply {
                 put(CommonClientConfigs.BOOTSTRAP_SERVERS_CONFIG, kafkaContainer.bootstrapServers)
                 put(CommonClientConfigs.SECURITY_PROTOCOL_CONFIG, "PLAINTEXT")
@@ -39,8 +43,17 @@ class KafkaContainerInitializer : ApplicationContextInitializer<ConfigurableAppl
                 .withEnv("KAFKA_AUTO_CREATE_TOPICS_ENABLE", "true")
         }
 
-        val singleRecord: ConsumerRecord<String, String>?
-            get(): ConsumerRecord<String, String>? {
+        fun deleteAllRecords() {
+            val adminClient = AdminClient.create(connectionConfig())
+            val partition = TopicPartition(TOPIC, 0)
+            val offset = adminClient.listOffsets(mapOf(partition to OffsetSpec.latest())).all().get().values.first().offset()
+
+            adminClient.deleteRecords(mapOf(partition to RecordsToDelete.beforeOffset(offset))).all().get()
+            adminClient.close()
+        }
+
+        val records
+            get(): Iterable<ConsumerRecord<String, String>> {
                 val properties =
                     Properties().apply {
                         put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "false")
@@ -51,9 +64,13 @@ class KafkaContainerInitializer : ApplicationContextInitializer<ConfigurableAppl
 
                 consumer.subscribe(listOf(TOPIC))
 
-                return consumer.poll(Duration.ofSeconds(1)).also {
-                    consumer.close()
-                }.records(TOPIC)?.first()
+                return try {
+                    consumer.poll(Duration.ofSeconds(1)).also {
+                        consumer.close()
+                    }.records(TOPIC)
+                } catch (e: NoSuchElementException) {
+                    throw RuntimeException("Fant ingen meldinger på topic \"$TOPIC\"")
+                }
             }
     }
 }

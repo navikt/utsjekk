@@ -98,6 +98,8 @@ class IverksettMotOppdragTask(
                 "Iverksetter ikke noe mot oppdrag. Ingen perioder i utbetalingsoppdraget. behandlingId=${payload.behandlingId.somString}",
             )
         }
+
+        iverksettingService.publiserStatusmelding(iverksetting)
     }
 
     private fun lagUtbetalingsoppdrag(

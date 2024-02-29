@@ -43,6 +43,7 @@ class IverksettingTilgangskontrollServiceTest {
             iverksettingRepository = iverksettingRepository,
             oppdragClient = mockk<OppdragClient>(),
             featureToggleService = mockFeatureToggleService(),
+            statusEndretProdusent = mockk(relaxed = true),
         )
     private val konsumentConfig = mockk<KonsumentConfig>()
     private val iverksettDtoMapper = IverksettDtoMapper(konsumentConfig)

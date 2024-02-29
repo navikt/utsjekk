@@ -1,11 +1,12 @@
-package no.nav.dagpenger.iverksett.utbetaling
+package no.nav.dagpenger.iverksett.utbetaling.task
 
 import no.nav.dagpenger.iverksett.Integrasjonstest
+import no.nav.dagpenger.iverksett.status.KafkaContainerInitializer
+import no.nav.dagpenger.iverksett.status.StatusEndretMelding
 import no.nav.dagpenger.iverksett.utbetaling.domene.AndelTilkjentYtelse
 import no.nav.dagpenger.iverksett.utbetaling.domene.Iverksetting
 import no.nav.dagpenger.iverksett.utbetaling.domene.behandlingId
 import no.nav.dagpenger.iverksett.utbetaling.domene.sakId
-import no.nav.dagpenger.iverksett.utbetaling.task.IverksettMotOppdragTask
 import no.nav.dagpenger.iverksett.utbetaling.tilstand.IverksettingService
 import no.nav.dagpenger.iverksett.utbetaling.tilstand.IverksettingsresultatService
 import no.nav.dagpenger.iverksett.utbetaling.util.behandlingsdetaljer
@@ -18,6 +19,7 @@ import no.nav.dagpenger.kontrakter.felles.GeneriskId
 import no.nav.dagpenger.kontrakter.felles.GeneriskIdSomString
 import no.nav.dagpenger.kontrakter.felles.GeneriskIdSomUUID
 import no.nav.dagpenger.kontrakter.felles.StønadTypeTiltakspenger
+import no.nav.dagpenger.kontrakter.felles.objectMapper
 import no.nav.dagpenger.kontrakter.felles.somString
 import no.nav.dagpenger.kontrakter.felles.somUUID
 import no.nav.dagpenger.kontrakter.iverksett.IverksettStatus
@@ -28,7 +30,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import java.time.LocalDate
 import java.util.UUID
 
-class IverksettingMotOppdragIntegrasjonsTest : Integrasjonstest() {
+class IverksettMotOppdragIntegrasjonsTest : Integrasjonstest() {
     @Autowired
     lateinit var iverksettingsresultatService: IverksettingsresultatService
 
@@ -168,6 +170,60 @@ class IverksettingMotOppdragIntegrasjonsTest : Integrasjonstest() {
         val status = utledStatus(iverksetting)
 
         assertEquals(IverksettStatus.OK_UTEN_UTBETALING, status)
+    }
+
+    @Test
+    fun `produserer statusmelding på kafka når utbetaling iverksettes, forventer SENDT_TIL_OPPDRAG`() {
+        val sakId = GeneriskIdSomString("54321")
+        val behandlingId = UUID.fromString("4ea75432-f1f7-4a36-9bc5-498023000af4")
+        val iverksettingId = "9f6eaa12-6b32-42a2-bde9-4b520833443d"
+        val iverksetting =
+            enIverksetting(
+                sakId = sakId,
+                behandlingsdetaljer =
+                    behandlingsdetaljer(
+                        behandlingId = behandlingId,
+                        iverksettingId = iverksettingId,
+                    ),
+                vedtaksdetaljer = vedtaksdetaljer(),
+            )
+
+        startIverksetting(iverksetting)
+
+        val raw = KafkaContainerInitializer.records.first().value()
+        val melding = objectMapper.readValue(raw, StatusEndretMelding::class.java)
+
+        assertEquals(sakId.somString, melding.sakId)
+        assertEquals(behandlingId.toString(), melding.behandlingId)
+        assertEquals(iverksettingId, melding.iverksettingId)
+        assertEquals(IverksettStatus.SENDT_TIL_OPPDRAG, melding.status)
+    }
+
+    @Test
+    fun `produserer statusmelding på kafka når iverksetting ikke har utbetaling, forventer OK_UTEN_UTBETALING`() {
+        val sakId = GeneriskIdSomString("54321")
+        val behandlingId = UUID.fromString("4ea75432-f1f7-4a36-9bc5-498023000af4")
+        val iverksettingId = "9f6eaa12-6b32-42a2-bde9-4b520833443d"
+        val iverksetting =
+            enIverksetting(
+                sakId = sakId,
+                behandlingsdetaljer =
+                    behandlingsdetaljer(
+                        behandlingId = behandlingId,
+                        iverksettingId = iverksettingId,
+                    ),
+                vedtaksdetaljer = vedtaksdetaljer(andeler = emptyList()),
+            )
+
+        startIverksetting(iverksetting)
+
+        val raw = KafkaContainerInitializer.records.first().value()
+        val melding = objectMapper.readValue(raw, StatusEndretMelding::class.java)
+
+        assertEquals(sakId.somString, melding.sakId)
+        assertEquals(behandlingId.toString(), melding.behandlingId)
+        assertEquals(iverksettingId, melding.iverksettingId)
+        assertEquals(IverksettStatus.OK_UTEN_UTBETALING, melding.status)
     }
 
     private fun startIverksetting(
