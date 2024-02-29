@@ -81,7 +81,11 @@ class IverksettingService(
         iverksettingId: String? = null,
     ): Iverksetting? {
         val iverksettingerForFagsystem =
-            iverksettingRepository.findByFagsakAndBehandlingAndIverksetting(sakId.somString, behandlingId.somUUID, iverksettingId)
+            iverksettingRepository.findByFagsakAndBehandlingAndIverksetting(
+                sakId.somString,
+                behandlingId.somUUID,
+                iverksettingId,
+            )
                 .filter { it.data.fagsak.fagsystem == fagsystem }
         return when (iverksettingerForFagsystem.size) {
             0 -> null
@@ -162,10 +166,10 @@ class IverksettingService(
                 iverksettingId = iverksetting.behandling.iverksettingId,
             )
 
-        val (status, melding) = oppdragClient.hentStatus(oppdragId)
+        val (status, _) = oppdragClient.hentStatus(oppdragId)
 
-        if (status != OppdragStatus.KVITTERT_OK) {
-            throw TaskExceptionUtenStackTrace("Status fra oppdrag er ikke ok, status=$status melding=$melding")
+        if (!status.erFerdigstilt()) {
+            throw TaskExceptionUtenStackTrace("Har ikke fått kvittering fra OS, status=$status")
         }
 
         iverksettingsresultatService.oppdaterOppdragResultat(
@@ -199,3 +203,7 @@ private fun String.tilGeneriskId(): GeneriskId =
         onSuccess = { GeneriskIdSomUUID(it) },
         onFailure = { GeneriskIdSomString(this) },
     )
+
+private fun OppdragStatus.erFerdigstilt(): Boolean =
+    this == OppdragStatus.KVITTERT_OK || this == OppdragStatus.KVITTERT_TEKNISK_FEIL ||
+        this == OppdragStatus.KVITTERT_FUNKSJONELL_FEIL || this == OppdragStatus.KVITTERT_MED_MANGLER

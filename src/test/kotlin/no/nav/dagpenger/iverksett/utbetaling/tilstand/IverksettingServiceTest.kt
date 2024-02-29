@@ -1,9 +1,12 @@
 package no.nav.dagpenger.iverksett.utbetaling.tilstand
 
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
+import io.mockk.runs
 import no.nav.dagpenger.iverksett.felles.oppdrag.OppdragClient
 import no.nav.dagpenger.iverksett.felles.util.mockFeatureToggleService
+import no.nav.dagpenger.iverksett.status.StatusEndretProdusent
 import no.nav.dagpenger.iverksett.utbetaling.domene.IverksettingEntitet
 import no.nav.dagpenger.iverksett.utbetaling.domene.OppdragResultat
 import no.nav.dagpenger.iverksett.utbetaling.util.enAndelTilkjentYtelse
@@ -20,11 +23,15 @@ import no.nav.dagpenger.kontrakter.felles.somString
 import no.nav.dagpenger.kontrakter.felles.somUUID
 import no.nav.dagpenger.kontrakter.iverksett.IverksettStatus
 import no.nav.dagpenger.kontrakter.oppdrag.OppdragStatus
+import no.nav.dagpenger.kontrakter.oppdrag.OppdragStatusDto
+import no.nav.familie.prosessering.error.TaskExceptionUtenStackTrace
 import no.nav.familie.prosessering.internal.TaskService
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertDoesNotThrow
+import org.junit.jupiter.api.assertThrows
 import java.util.UUID
 
 internal class IverksettingServiceTest {
@@ -32,6 +39,7 @@ internal class IverksettingServiceTest {
     private val taskService = mockk<TaskService>()
     private val iverksettingRepository = mockk<IverksettingRepository>()
     private val oppdragClient = mockk<OppdragClient>()
+    private val statusEndretProdusent = mockk<StatusEndretProdusent>(relaxed = true)
 
     private val iverksettingService: IverksettingService =
         IverksettingService(
@@ -40,7 +48,7 @@ internal class IverksettingServiceTest {
             iverksettingRepository = iverksettingRepository,
             oppdragClient = oppdragClient,
             featureToggleService = mockFeatureToggleService(),
-            statusEndretProdusent = mockk(relaxed = true),
+            statusEndretProdusent = statusEndretProdusent,
         )
 
     @Test
@@ -334,5 +342,41 @@ internal class IverksettingServiceTest {
 
         assertNotNull(hentetIverksettingSak1)
         assertEquals(iverksettingSak1, hentetIverksettingSak1)
+    }
+
+    @Test
+    fun `sjekkStatusOgOppdraterTilstand skal ikke kaste exception ved feilkvittering`() {
+        every { oppdragClient.hentStatus(any()) } returns
+            OppdragStatusDto(
+                status = OppdragStatus.KVITTERT_FUNKSJONELL_FEIL,
+                feilmelding = "Funksjonell feil",
+            )
+        every { iverksettingsresultatService.oppdaterOppdragResultat(any(), any(), any(), any(), any()) } just runs
+        every {
+            iverksettingsresultatService.hentIverksettingsresultat(
+                any(),
+                any(),
+                any(),
+                any(),
+            )
+        } returns etIverksettingsresultat(oppdragResultat = OppdragResultat(oppdragStatus = OppdragStatus.KVITTERT_FUNKSJONELL_FEIL))
+        every { statusEndretProdusent.sendStatusEndretEvent(any(), any()) } just runs
+
+        assertDoesNotThrow { iverksettingService.sjekkStatusPåIverksettOgOppdaterTilstand(enIverksetting()) }
+    }
+
+    @Test
+    fun `sjekkStatusOgOppdraterTilstand skal kaste exception ved manglende kvittering`() {
+        every { oppdragClient.hentStatus(any()) } returns
+            OppdragStatusDto(
+                status = OppdragStatus.LAGT_PÅ_KØ,
+                feilmelding = null,
+            )
+
+        assertThrows<TaskExceptionUtenStackTrace> {
+            iverksettingService.sjekkStatusPåIverksettOgOppdaterTilstand(
+                enIverksetting(),
+            )
+        }
     }
 }
