@@ -190,7 +190,7 @@ class IverksettMotOppdragIntegrasjonsTest : Integrasjonstest() {
 
         startIverksetting(iverksetting)
 
-        val raw = KafkaContainerInitializer.records.first().value()
+        val raw = KafkaContainerInitializer.getAllRecords().first().value()
         val melding = objectMapper.readValue(raw, StatusEndretMelding::class.java)
 
         assertEquals(sakId.somString, melding.sakId)
@@ -217,7 +217,7 @@ class IverksettMotOppdragIntegrasjonsTest : Integrasjonstest() {
 
         startIverksetting(iverksetting)
 
-        val raw = KafkaContainerInitializer.records.first().value()
+        val raw = KafkaContainerInitializer.getAllRecords().first().value()
         val melding = objectMapper.readValue(raw, StatusEndretMelding::class.java)
 
         assertEquals(sakId.somString, melding.sakId)

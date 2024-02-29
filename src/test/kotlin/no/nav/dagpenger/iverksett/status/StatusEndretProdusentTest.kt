@@ -31,7 +31,7 @@ class StatusEndretProdusentTest : Integrasjonstest() {
 
         produsent.sendStatusEndretEvent(iverksetting, IverksettStatus.OK)
 
-        val raw = KafkaContainerInitializer.records.first().value()
+        val raw = KafkaContainerInitializer.getAllRecords().first().value()
         val melding = objectMapper.readValue(raw, StatusEndretMelding::class.java)
 
         assertEquals(iverksetting.sakId.somString, melding.sakId)
