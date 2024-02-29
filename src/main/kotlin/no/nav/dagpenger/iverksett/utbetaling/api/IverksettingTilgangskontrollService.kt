@@ -26,8 +26,8 @@ class IverksettingTilgangskontrollService(
     }
 
     private fun validerSystemTilgangErLov(fagsystem: Fagsystem) {
-        val appMedSystemtilgang = konsumentConfig.configForFagsystem(fagsystem).klientapp
-        if (TokenContext.erSystemtoken() && TokenContext.hentKlientnavn() != appMedSystemtilgang) {
+        val apperMedSystemtilgang = konsumentConfig.configForFagsystem(fagsystem).apper.split(",")
+        if (TokenContext.erSystemtoken() && !apperMedSystemtilgang.contains(TokenContext.hentKlientnavn())) {
             throw ApiFeil(
                 "Forsøker å gjøre systemkall fra ${TokenContext.hentKlientnavn()} uten å være godkjent app",
                 HttpStatus.FORBIDDEN,

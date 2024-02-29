@@ -56,7 +56,7 @@ class IverksettingTilgangskontrollServiceTest {
         every { konsumentConfig.configForFagsystem(any()) } returns
             Konsument(
                 fagsystem = Fagsystem.DAGPENGER,
-                klientapp = APP_MED_SYSTEMTILGANG,
+                apper = APP_MED_SYSTEMTILGANG,
                 grupper = Grupper(beslutter = BESLUTTERGRUPPE),
             )
     }
