@@ -88,21 +88,12 @@ konsumenter:
   dagpenger:
     fagsystem: DAGPENGER
     apper: dp-vedtak-iverksett,dp-iverksett
-    grupper:
-      saksbehandler: ${DAGPENGER_SAKSBEHANDLER_GRUPPE}
-      beslutter: ${DAGPENGER_BESLUTTER_GRUPPE}
   tiltakspenger:
     fagsystem: TILTAKSPENGER
     apper: tiltakspenger-utbetaling,dp-iverksett
-    grupper:
-      saksbehandler: ${TILTAKSPENGER_SAKSBEHANDLER_GRUPPE}
-      beslutter: ${TILTAKSPENGER_BESLUTTER_GRUPPE}
   tilleggsstønader:
     fagsystem: TILLEGGSSTØNADER
     apper: tilleggsstonader-sak,dp-iverksett
-    grupper:
-      saksbehandler: TODO
-      beslutter: ${TILLEGGSSTONADER_BESLUTTER_GRUPPE}
 
 kafka:
   config:

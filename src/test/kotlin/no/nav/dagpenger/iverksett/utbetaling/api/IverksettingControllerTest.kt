@@ -41,7 +41,7 @@ class IverksettingControllerTest : Integrasjonstest() {
 
     @BeforeEach
     fun setUp() {
-        headers.setBearerAuth(lokalTestToken(grupper = listOf(konsumentConfig.konsumenter["dagpenger"]!!.grupper.beslutter)))
+        headers.setBearerAuth(lokalTestToken())
         headers.set(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
     }
 

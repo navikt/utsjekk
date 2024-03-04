@@ -12,10 +12,9 @@ import java.net.URI
 
 @ConfigurationProperties("funksjonsbrytere")
 class FeatureToggleConfig(
-        private val enabled: Boolean,
-        private val unleash: Unleash,
+    private val enabled: Boolean,
+    private val unleash: Unleash,
 ) {
-
     data class Unleash(
         val uri: URI,
         val apiKey: String,
@@ -39,18 +38,22 @@ class FeatureToggleConfig(
         }
 
     private fun lagUnleashFeatureToggleService(): FeatureToggleService {
-        val unleash = DefaultUnleash(
-            UnleashConfig.builder()
-                .appName(unleash.applicationName)
-                .unleashAPI("${unleash.uri}/api/")
-                .apiKey(unleash.apiKey)
-                .unleashContextProvider(lagUnleashContextProvider())
-                .build(),
-            ByEnvironmentStrategy(),
-        )
+        val unleash =
+            DefaultUnleash(
+                UnleashConfig.builder()
+                    .appName(unleash.applicationName)
+                    .unleashAPI("${unleash.uri}/api/")
+                    .apiKey(unleash.apiKey)
+                    .unleashContextProvider(lagUnleashContextProvider())
+                    .build(),
+                ByEnvironmentStrategy(),
+            )
 
         return object : FeatureToggleService {
-            override fun isEnabled(toggleId: String, defaultValue: Boolean): Boolean {
+            override fun isEnabled(
+                toggleId: String,
+                defaultValue: Boolean,
+            ): Boolean {
                 return unleash.isEnabled(toggleId, defaultValue)
             }
         }
@@ -67,7 +70,10 @@ class FeatureToggleConfig(
 
     private fun lagDummyFeatureToggleService(): FeatureToggleService {
         return object : FeatureToggleService {
-            override fun isEnabled(toggleId: String, defaultValue: Boolean): Boolean {
+            override fun isEnabled(
+                toggleId: String,
+                defaultValue: Boolean,
+            ): Boolean {
                 if (unleash.environment == "local") {
                     return System.getenv(toggleId)?.toBoolean() ?: true
                 }
@@ -78,6 +84,5 @@ class FeatureToggleConfig(
 
     companion object {
         const val STOPP_IVERKSETTING = "dp-iverksett.stopp-iverksetting"
-        const val TILGANGSKONTROLL = "dp-iverksett.tilgangskontroll"
     }
 }

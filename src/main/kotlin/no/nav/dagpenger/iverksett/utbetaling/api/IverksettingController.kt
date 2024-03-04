@@ -35,7 +35,6 @@ import java.util.UUID
 class IverksettingController(
     private val iverksettingService: IverksettingService,
     private val validatorService: IverksettingValidatorService,
-    private val tilgangskontrollService: TilgangskontrollService,
     private val iverksettDtoMapper: IverksettDtoMapper,
     private val konsumentConfig: KonsumentConfig,
 ) {
@@ -43,14 +42,7 @@ class IverksettingController(
     @Tag(name = "Iverksetting")
     @Operation(
         summary = "Start iverksetting av vedtak",
-        description = """
-Iverksetter rammevedtak og utbetalingsvedtak.
-Rammevedtak er som regel første vedtak og inneholder trenger bare å inneholde id'ene til sak, behandling, person og saksbehandlere
-Iverksetting av første vedtak må uansett være autorisert av en bruker med besluttermyndighet
-Utbetalingsvedtak inneholder som regel også utbetalingsperioder
-Iverksettinger kjedes ved at hver iverksetting inneholder informasjon som identifiserer forrige vedtak
-Det kjøres implisitt en konsistensavstemming av at nye utbetalinger stemmer overens med forrige iverksatte utbetalinger
-        """,
+        description = "Iverksetter utbetaling.",
         externalDocs =
             ExternalDocumentation(
                 url = "https://github.com/navikt/dp-iverksett/tree/3a8fecbc6076e278407ddd8ceb90291077bf8d99/doc",
@@ -63,10 +55,8 @@ Det kjøres implisitt en konsistensavstemming av at nye utbetalinger stemmer ove
     fun iverksett(
         @RequestBody iverksettDto: IverksettDto,
     ): ResponseEntity<Void> {
-        val iverksett = iverksettDtoMapper.tilDomene(iverksettDto)
-        tilgangskontrollService.valider(iverksett.fagsak)
-
         iverksettDto.valider()
+        val iverksett = iverksettDtoMapper.tilDomene(iverksettDto)
         validatorService.valider(iverksett)
         iverksettingService.startIverksetting(iverksett)
 
@@ -77,6 +67,7 @@ Det kjøres implisitt en konsistensavstemming av at nye utbetalinger stemmer ove
     @Tag(name = "Iverksetting for tilleggsstønader")
     @Operation(
         summary = "Start iverksetting av vedtak",
+        description = "Iverksetter utbetaling for tilleggsstønader.",
         externalDocs =
             ExternalDocumentation(
                 url = "https://github.com/navikt/dp-iverksett/tree/3a8fecbc6076e278407ddd8ceb90291077bf8d99/doc",
@@ -89,10 +80,8 @@ Det kjøres implisitt en konsistensavstemming av at nye utbetalinger stemmer ove
     fun iverksettTilleggsstønader(
         @RequestBody iverksettDto: IverksettTilleggsstønaderDto,
     ): ResponseEntity<Void> {
-        val iverksett = iverksettDto.toDomain()
-        tilgangskontrollService.valider(iverksett.fagsak)
-
         iverksettDto.valider()
+        val iverksett = iverksettDto.toDomain()
         validatorService.valider(iverksett)
         iverksettingService.startIverksetting(iverksett)
 

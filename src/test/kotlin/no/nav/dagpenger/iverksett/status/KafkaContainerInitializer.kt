@@ -76,7 +76,7 @@ class KafkaContainerInitializer : ApplicationContextInitializer<ConfigurableAppl
                     }.records(TOPIC)
                 }
             } catch (e: NoSuchElementException) {
-                throw RuntimeException("Fant ingen meldinger på topic \"$TOPIC\"")
+                throw RuntimeException("Fant ingen meldinger på topic $TOPIC")
             }
 
         private fun createConsumer() =

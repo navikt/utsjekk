@@ -40,16 +40,6 @@ spec:
       value: {{ springProfil }}
     - name: PROSESSERING_GRUPPE
       value: {{ groups.prosesseringAdmin }}
-    - name: DAGPENGER_SAKSBEHANDLER_GRUPPE
-      value: {{ groups.saksbehandlerDagpenger }}
-    - name: DAGPENGER_BESLUTTER_GRUPPE
-      value: {{ groups.beslutterDagpenger }}
-    - name: TILTAKSPENGER_SAKSBEHANDLER_GRUPPE
-      value: {{ groups.saksbehandlerTiltakspenger }}
-    - name: TILTAKSPENGER_BESLUTTER_GRUPPE
-      value: {{ groups.beslutterTiltakspenger }}
-    - name: TILLEGGSSTONADER_BESLUTTER_GRUPPE
-      value: {{ groups.beslutterTilleggsstønader }}
   envFrom:
     - secret: {{ unleash.apiToken }}
   azure:
@@ -61,7 +51,8 @@ spec:
           - id: {{ groups.saksbehandlerDagpenger }} # 0000-GA-Dagpenger-Saksbehandler
           - id: {{ groups.beslutterDagpenger }} # 0000-GA-Dagpenger-Beslutter
           - id: {{ groups.saksbehandlerTiltakspenger }}
-          - id: {{ groups.beslutterTiltakspenger}}
+          - id: {{ groups.beslutterTiltakspenger }}
+          - id: {{ groups.beslutterTilleggsstønader }}
         extra:
           - NAVident
           - azp_name
