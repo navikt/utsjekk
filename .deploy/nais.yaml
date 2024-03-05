@@ -89,6 +89,3 @@ spec:
         databases:
           - name: {{ db.name }}
             envVarPrefix: DB
-        flags:
-          - name: pgaudit.log_level
-            value: warning
