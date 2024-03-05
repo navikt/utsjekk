@@ -63,7 +63,7 @@ abstract class AbstractRestClient(
         } catch (e: Exception) {
             responsFailure.increment()
             secureLogger.warn("Feil ved kall mot uri=$uri", e)
-            throw RuntimeException("Feil ved kall mot uri=$uri", e)
+            throw e
         }
     }
 
