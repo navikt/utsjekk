@@ -4,7 +4,6 @@ import no.nav.dagpenger.iverksett.utbetaling.domene.TilkjentYtelse
 import no.nav.dagpenger.iverksett.utbetaling.tilstand.IverksettingService
 import no.nav.dagpenger.iverksett.utbetaling.tilstand.IverksettingsresultatService
 import no.nav.dagpenger.kontrakter.felles.objectMapper
-import no.nav.dagpenger.kontrakter.felles.somString
 import no.nav.dagpenger.kontrakter.felles.somUUID
 import no.nav.familie.prosessering.AsyncTaskStep
 import no.nav.familie.prosessering.TaskStepBeskrivelse
@@ -35,7 +34,7 @@ class VentePåStatusFraØkonomiTask(
                 behandlingId = payload.behandlingId,
                 iverksettingId = payload.iverksettingId,
             ) ?: error(
-                "Fant ikke iverksetting for fagsystem ${payload.fagsystem}, behandling ${payload.behandlingId.somString}" +
+                "Fant ikke iverksetting for fagsystem ${payload.fagsystem}, behandling ${payload.behandlingId}" +
                     " og iverksettingId ${payload.iverksettingId}",
             )
         val tilkjentYtelse =
@@ -48,7 +47,7 @@ class VentePåStatusFraØkonomiTask(
 
         if (tilkjentYtelse.harIngenUtbetaling()) {
             logger.info(
-                "Iverksetting for fagsystem ${payload.fagsystem} med behandlingsid ${payload.behandlingId.somString} " +
+                "Iverksetting for fagsystem ${payload.fagsystem} med behandlingsid ${payload.behandlingId} " +
                     "har ikke utbetalingsoppdrag. Sjekker ikke status fra OS/UR",
             )
             return

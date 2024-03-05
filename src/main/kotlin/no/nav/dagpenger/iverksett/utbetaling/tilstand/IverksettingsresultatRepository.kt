@@ -73,8 +73,7 @@ class IverksettingsresultatRepository(private val jdbcTemplate: JdbcTemplate) {
             0 -> null
             1 -> resultat.first()
             else -> throw IllegalStateException(
-                "Fant flere iverksettingsresultat for fagsystem $fagsystem, sak ${sakId.somString}, " +
-                    "behandling $behandlingId og iverksetting $iverksettingId",
+                "Fant flere iverksettingsresultat for fagsystem $fagsystem, sak $sakId, behandling $behandlingId og iverksetting $iverksettingId",
             )
         }
     }
@@ -94,13 +93,11 @@ class IverksettingsresultatRepository(private val jdbcTemplate: JdbcTemplate) {
             )
         return when (resultat.size) {
             0 -> throw NoSuchElementException(
-                "Fant ingen iverksettingsresultat for fagsystem $fagsystem, sak ${sakId.somString}, " +
-                    "behandling $behandlingId og iverksetting $iverksettingId",
+                "Fant ingen iverksettingsresultat for fagsystem $fagsystem, sak sakId, behandling $behandlingId og iverksetting $iverksettingId",
             )
             1 -> resultat.first()
             else -> throw IllegalStateException(
-                "Fant flere iverksettingsresultat for fagsystem $fagsystem, sak ${sakId.somString}, " +
-                    "behandling $behandlingId og iverksetting $iverksettingId",
+                "Fant flere iverksettingsresultat for fagsystem $fagsystem, sak $sakId, behandling $behandlingId og iverksetting $iverksettingId",
             )
         }
     }

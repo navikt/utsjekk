@@ -21,7 +21,6 @@ import no.nav.dagpenger.iverksett.utbetaling.utbetalingsoppdrag.domene.BeregnetU
 import no.nav.dagpenger.kontrakter.felles.Fagsystem
 import no.nav.dagpenger.kontrakter.felles.GeneriskId
 import no.nav.dagpenger.kontrakter.felles.objectMapper
-import no.nav.dagpenger.kontrakter.felles.somString
 import no.nav.dagpenger.kontrakter.felles.somUUID
 import no.nav.dagpenger.kontrakter.oppdrag.OppdragStatus
 import no.nav.familie.prosessering.AsyncTaskStep
@@ -56,7 +55,7 @@ class IverksettMotOppdragTask(
                 iverksettingId = payload.iverksettingId,
             )
                 ?: error(
-                    "Fant ikke iverksetting for fagsystem ${payload.fagsystem}, behandling ${payload.behandlingId.somString}" +
+                    "Fant ikke iverksetting for fagsystem ${payload.fagsystem}, behandling ${payload.behandlingId}" +
                         " og iverksettingId ${payload.iverksettingId}",
                 )
 
@@ -68,7 +67,7 @@ class IverksettMotOppdragTask(
                     behandlingId = it.somUUID,
                     iverksettingId = iverksetting.behandling.forrigeIverksettingId,
                 )
-                    ?: error("Kunne ikke finne iverksettresultat for behandlingId=${it.somString}")
+                    ?: error("Kunne ikke finne iverksettresultat for behandlingId=$it")
             }
 
         val beregnetUtbetalingsoppdrag = lagUtbetalingsoppdrag(iverksetting, forrigeIverksettResultat)
@@ -95,7 +94,7 @@ class IverksettMotOppdragTask(
                 iverksettingId = iverksetting.behandling.iverksettingId,
             )
             log.warn(
-                "Iverksetter ikke noe mot oppdrag. Ingen perioder i utbetalingsoppdraget. behandlingId=${payload.behandlingId.somString}",
+                "Iverksetter ikke noe mot oppdrag. Ingen perioder i utbetalingsoppdraget. behandlingId=${payload.behandlingId}",
             )
         }
 
