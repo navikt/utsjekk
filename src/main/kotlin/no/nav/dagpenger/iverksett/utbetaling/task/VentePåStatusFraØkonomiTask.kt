@@ -47,8 +47,7 @@ class VentePåStatusFraØkonomiTask(
 
         if (tilkjentYtelse.harIngenUtbetaling()) {
             logger.info(
-                "Iverksetting for fagsystem ${payload.fagsystem} med behandlingsid ${payload.behandlingId} " +
-                    "har ikke utbetalingsoppdrag. Sjekker ikke status fra OS/UR",
+                "Iverksetting $iverksett har ikke utbetalingsoppdrag. Sjekker ikke status fra OS/UR",
             )
             return
         }

@@ -25,6 +25,7 @@ import no.nav.familie.prosessering.domene.Status
 import no.nav.familie.prosessering.domene.Task
 import no.nav.familie.prosessering.error.TaskExceptionUtenStackTrace
 import no.nav.familie.prosessering.internal.TaskService
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.Properties
@@ -172,6 +173,10 @@ class IverksettingService(
             throw TaskExceptionUtenStackTrace("Har ikke fått kvittering fra OS, status=$status")
         }
 
+        if (status.erFeilkvittering()) {
+            logger.error("Fikk feilkvittering $status fra OS for iverksetting $iverksetting")
+        }
+
         iverksettingsresultatService.oppdaterOppdragResultat(
             fagsystem = iverksetting.fagsak.fagsystem,
             sakId = iverksetting.sakId,
@@ -182,14 +187,8 @@ class IverksettingService(
         publiserStatusmelding(iverksetting)
     }
 
-    fun erFørsteVedtakPåSak(
-        sakId: GeneriskId,
-        fagsystem: Fagsystem,
-    ): Boolean {
-        val vedtakForSak =
-            iverksettingRepository.findByFagsakId(sakId.somString)
-                .filter { it.data.fagsak.fagsystem == fagsystem }
-        return vedtakForSak.isEmpty()
+    companion object {
+        private val logger = LoggerFactory.getLogger(this::class.java)
     }
 }
 
@@ -207,3 +206,6 @@ private fun String.tilGeneriskId(): GeneriskId =
 private fun OppdragStatus.erFerdigstilt(): Boolean =
     this == OppdragStatus.KVITTERT_OK || this == OppdragStatus.KVITTERT_TEKNISK_FEIL ||
         this == OppdragStatus.KVITTERT_FUNKSJONELL_FEIL || this == OppdragStatus.KVITTERT_MED_MANGLER
+
+private fun OppdragStatus.erFeilkvittering(): Boolean =
+    this == OppdragStatus.KVITTERT_FUNKSJONELL_FEIL || this == OppdragStatus.KVITTERT_TEKNISK_FEIL

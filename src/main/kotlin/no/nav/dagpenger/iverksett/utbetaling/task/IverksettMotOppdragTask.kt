@@ -67,7 +67,7 @@ class IverksettMotOppdragTask(
                     behandlingId = it.somUUID,
                     iverksettingId = iverksetting.behandling.forrigeIverksettingId,
                 )
-                    ?: error("Kunne ikke finne iverksettresultat for behandlingId=$it")
+                    ?: error("Kunne ikke finne iverksettresultat for iverksetting $iverksetting")
             }
 
         val beregnetUtbetalingsoppdrag = lagUtbetalingsoppdrag(iverksetting, forrigeIverksettResultat)
@@ -94,7 +94,7 @@ class IverksettMotOppdragTask(
                 iverksettingId = iverksetting.behandling.iverksettingId,
             )
             log.warn(
-                "Iverksetter ikke noe mot oppdrag. Ingen perioder i utbetalingsoppdraget. behandlingId=${payload.behandlingId}",
+                "Iverksetter ikke noe mot oppdrag. Ingen perioder i utbetalingsoppdraget for iverksetting $iverksetting",
             )
         }
 
