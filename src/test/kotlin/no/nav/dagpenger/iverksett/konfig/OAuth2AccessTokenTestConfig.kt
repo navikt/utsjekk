@@ -18,6 +18,6 @@ class OAuth2AccessTokenTestConfig {
     fun oAuth2AccessTokenServiceMock() =
         mockk<OAuth2AccessTokenService>().also {
             every { it.getAccessToken(any()) }
-                .returns(OAuth2AccessTokenResponse("Mock-token-response", 60, 60, null))
+                .returns(OAuth2AccessTokenResponse("Mock-token-response", 60, 60))
         }
 }

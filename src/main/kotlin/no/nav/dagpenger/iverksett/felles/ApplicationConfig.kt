@@ -25,6 +25,7 @@ import org.springframework.context.annotation.Import
 import org.springframework.context.annotation.Primary
 import org.springframework.http.converter.xml.MappingJackson2XmlHttpMessageConverter
 import org.springframework.scheduling.annotation.EnableScheduling
+import org.springframework.web.client.RestClient
 import java.time.Duration
 import java.time.temporal.ChronoUnit
 
@@ -76,18 +77,17 @@ class ApplicationConfig {
     @Primary
     fun objectMapper() = ObjectMapperProvider.objectMapper
 
-    /**
-     * Overskrever OAuth2HttpClient som settes opp i token-support som ikke kan få med objectMapper fra felles
-     * pga .setVisibility(PropertyAccessor.SETTER, JsonAutoDetect.Visibility.NONE)
-     * og [OAuth2AccessTokenResponse] som burde settes med setters, då feltnavn heter noe annet enn feltet i json
-     */
     @Bean
     @Primary
     fun oAuth2HttpClient() =
         RetryOAuth2HttpClient(
-            RestTemplateBuilder()
-                .setConnectTimeout(Duration.of(2, ChronoUnit.SECONDS))
-                .setReadTimeout(Duration.of(2, ChronoUnit.SECONDS)),
+            restClient =
+                RestClient.create(
+                    RestTemplateBuilder()
+                        .setConnectTimeout(Duration.of(2, ChronoUnit.SECONDS))
+                        .setReadTimeout(Duration.of(2, ChronoUnit.SECONDS))
+                        .build(),
+                ),
         )
 
     @Bean
@@ -96,7 +96,8 @@ class ApplicationConfig {
     ) = object : ProsesseringInfoProvider {
         override fun hentBrukernavn(): String =
             try {
-                SpringTokenValidationContextHolder().tokenValidationContext.getClaims("azuread").getStringClaim("preferred_username")
+                SpringTokenValidationContextHolder().getTokenValidationContext().getClaims("azuread")
+                    .getStringClaim("preferred_username")
             } catch (e: Exception) {
                 "dp-iverksett"
             }
@@ -105,8 +106,8 @@ class ApplicationConfig {
 
         private fun grupper(): List<String> {
             return try {
-                SpringTokenValidationContextHolder().tokenValidationContext.getClaims("azuread")
-                    ?.getAsList("groups") ?: emptyList()
+                SpringTokenValidationContextHolder().getTokenValidationContext().getClaims("azuread")
+                    .getAsList("groups") ?: emptyList()
             } catch (e: Exception) {
                 emptyList()
             }
