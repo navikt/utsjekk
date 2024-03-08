@@ -7,6 +7,7 @@ import java.time.LocalDate
 
 data class Behandlingsinformasjon(
     val saksbehandlerId: String,
+    val beslutterId: String,
     val fagsakId: GeneriskId,
     val fagsystem: Fagsystem,
     val behandlingId: GeneriskId,

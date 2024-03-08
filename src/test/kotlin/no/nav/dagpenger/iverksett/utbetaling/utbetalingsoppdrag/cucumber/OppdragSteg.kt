@@ -152,6 +152,7 @@ class OppdragSteg {
             fagsakId = FAGSAK_ID,
             fagsystem = Fagsystem.DAGPENGER,
             saksbehandlerId = "saksbehandlerId",
+            beslutterId = "beslutterId",
             behandlingId = behandlingId,
             personident = "1",
             vedtaksdato = LocalDate.now(),

@@ -130,6 +130,7 @@ class IverksettingValidatorServiceTest {
         val behandlingsinformasjon =
             Behandlingsinformasjon(
                 saksbehandlerId = iverksettingData.vedtak.saksbehandlerId,
+                beslutterId = iverksettingData.vedtak.beslutterId,
                 fagsystem = iverksettingData.fagsak.fagsystem,
                 fagsakId = iverksettingData.sakId,
                 behandlingId = iverksettingData.behandlingId,

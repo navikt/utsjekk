@@ -18,6 +18,7 @@ class UtbetalingsgeneratorTest {
         private val behandlingsinformasjon =
             Behandlingsinformasjon(
                 saksbehandlerId = "A123456",
+                beslutterId = "B123456",
                 fagsystem = Fagsystem.DAGPENGER,
                 fagsakId = GeneriskIdSomUUID(UUID.randomUUID()),
                 behandlingId = GeneriskIdSomUUID(UUID.randomUUID()),

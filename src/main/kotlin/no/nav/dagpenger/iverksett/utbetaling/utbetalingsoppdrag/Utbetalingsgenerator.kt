@@ -58,6 +58,7 @@ object Utbetalingsgenerator {
         val utbetalingsoppdrag =
             Utbetalingsoppdrag(
                 saksbehandlerId = behandlingsinformasjon.saksbehandlerId,
+                beslutterId = behandlingsinformasjon.beslutterId,
                 erFørsteUtbetalingPåSak = erFørsteUtbetalingPåSak(sisteAndelPerKjede),
                 saksnummer = behandlingsinformasjon.fagsakId,
                 fagsystem = behandlingsinformasjon.fagsystem,
