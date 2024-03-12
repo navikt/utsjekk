@@ -71,7 +71,7 @@ class KafkaContainerInitializer : ApplicationContextInitializer<ConfigurableAppl
         fun getAllRecords(): Iterable<ConsumerRecord<String, String>> =
             try {
                 createConsumer().let { consumer ->
-                    consumer.poll(Duration.ofSeconds(1)).also {
+                    consumer.poll(Duration.ofSeconds(10)).also {
                         consumer.close()
                     }.records(TOPIC)
                 }
