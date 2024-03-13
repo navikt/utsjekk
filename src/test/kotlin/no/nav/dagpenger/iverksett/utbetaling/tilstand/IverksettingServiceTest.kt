@@ -6,9 +6,11 @@ import io.mockk.mockk
 import io.mockk.runs
 import no.nav.dagpenger.iverksett.felles.oppdrag.OppdragClient
 import no.nav.dagpenger.iverksett.felles.util.mockFeatureToggleService
+import no.nav.dagpenger.iverksett.konfig.FeatureToggleMock
 import no.nav.dagpenger.iverksett.status.StatusEndretProdusent
 import no.nav.dagpenger.iverksett.utbetaling.domene.IverksettingEntitet
 import no.nav.dagpenger.iverksett.utbetaling.domene.OppdragResultat
+import no.nav.dagpenger.iverksett.utbetaling.featuretoggle.IverksettingErSkruddAvException
 import no.nav.dagpenger.iverksett.utbetaling.util.enAndelTilkjentYtelse
 import no.nav.dagpenger.iverksett.utbetaling.util.enIverksetting
 import no.nav.dagpenger.iverksett.utbetaling.util.enTilkjentYtelse
@@ -26,6 +28,7 @@ import no.nav.dagpenger.kontrakter.oppdrag.OppdragStatus
 import no.nav.dagpenger.kontrakter.oppdrag.OppdragStatusDto
 import no.nav.familie.prosessering.error.TaskExceptionUtenStackTrace
 import no.nav.familie.prosessering.internal.TaskService
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertNull
@@ -39,6 +42,7 @@ internal class IverksettingServiceTest {
     private val taskService = mockk<TaskService>()
     private val iverksettingRepository = mockk<IverksettingRepository>()
     private val oppdragClient = mockk<OppdragClient>()
+    private val featureToggleService = mockFeatureToggleService()
     private val statusEndretProdusent = mockk<StatusEndretProdusent>(relaxed = true)
 
     private val iverksettingService: IverksettingService =
@@ -47,9 +51,60 @@ internal class IverksettingServiceTest {
             iverksettingsresultatService = iverksettingsresultatService,
             iverksettingRepository = iverksettingRepository,
             oppdragClient = oppdragClient,
-            featureToggleService = mockFeatureToggleService(),
+            featureToggleService = featureToggleService,
             statusEndretProdusent = statusEndretProdusent,
         )
+
+    @AfterEach
+    fun reset() {
+        FeatureToggleMock.resetMock()
+    }
+
+    @Test
+    fun `iverksetter ikke utbetaling for dagpenger når iverksetting er skrudd av for dagpenger`() {
+        every { featureToggleService.iverksettingErSkruddAvForFagsystem(Fagsystem.DAGPENGER) } returns true
+
+        assertThrows<IverksettingErSkruddAvException> {
+            iverksettingService.startIverksetting(
+                enIverksetting(fagsystem = Fagsystem.DAGPENGER),
+            )
+        }
+    }
+
+    @Test
+    fun `iverksetter ikke utbetaling for tiltakspenger når iverksetting er skrudd av for tiltakspenger`() {
+        every { featureToggleService.iverksettingErSkruddAvForFagsystem(Fagsystem.TILTAKSPENGER) } returns true
+
+        assertThrows<IverksettingErSkruddAvException> {
+            iverksettingService.startIverksetting(
+                enIverksetting(fagsystem = Fagsystem.TILTAKSPENGER),
+            )
+        }
+    }
+
+    @Test
+    fun `iverksetter ikke utbetaling for tilleggsstønader når iverksetting er skrudd av for tilleggsstønader`() {
+        every { featureToggleService.iverksettingErSkruddAvForFagsystem(Fagsystem.TILLEGGSSTØNADER) } returns true
+
+        assertThrows<IverksettingErSkruddAvException> {
+            iverksettingService.startIverksetting(enIverksetting(fagsystem = Fagsystem.TILLEGGSSTØNADER))
+        }
+    }
+
+    @Test
+    fun `iverksetter utbetaling for dagpenger når iverksetting for andre ytelser er skrudd av`() {
+        every { iverksettingRepository.insert(any()) } returns IverksettingEntitet(UUID.randomUUID(), enIverksetting())
+        every { iverksettingsresultatService.opprettTomtResultat(any(), any(), any(), any()) } just runs
+        every { taskService.save(any()) } returns mockk()
+
+        every { featureToggleService.iverksettingErSkruddAvForFagsystem(Fagsystem.DAGPENGER) } returns false
+        every { featureToggleService.iverksettingErSkruddAvForFagsystem(Fagsystem.TILTAKSPENGER) } returns true
+        every { featureToggleService.iverksettingErSkruddAvForFagsystem(Fagsystem.TILLEGGSSTØNADER) } returns true
+
+        assertDoesNotThrow {
+            iverksettingService.startIverksetting(enIverksetting(fagsystem = Fagsystem.DAGPENGER))
+        }
+    }
 
     @Test
     fun `forventer status SENDT_TIL_OPPDRAG for resultat med tilkjent ytelse`() {

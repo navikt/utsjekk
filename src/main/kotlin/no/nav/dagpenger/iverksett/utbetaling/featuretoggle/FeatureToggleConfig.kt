@@ -4,6 +4,7 @@ import io.getunleash.DefaultUnleash
 import io.getunleash.UnleashContext
 import io.getunleash.UnleashContextProvider
 import io.getunleash.util.UnleashConfig
+import no.nav.dagpenger.kontrakter.felles.Fagsystem
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.boot.context.properties.ConfigurationProperties
@@ -22,18 +23,13 @@ class FeatureToggleConfig(
         val applicationName: String,
     )
 
-    private val log: Logger = LoggerFactory.getLogger(this::class.java)
-
     @Bean
     fun featureToggle(): FeatureToggleService =
         if (enabled) {
             log.info("Funksjonsbryter-funksjonalitet er skrudd PÅ")
             lagUnleashFeatureToggleService()
         } else {
-            log.warn(
-                "Funksjonsbryter-funksjonalitet er skrudd AV. " +
-                    "Gir standardoppførsel for alle funksjonsbrytere, dvs 'false'",
-            )
+            log.warn("Funksjonsbryter-funksjonalitet er skrudd AV. Gir standardoppførsel for alle funksjonsbrytere, dvs 'false'")
             lagDummyFeatureToggleService()
         }
 
@@ -53,36 +49,49 @@ class FeatureToggleConfig(
             override fun isEnabled(
                 toggleId: String,
                 defaultValue: Boolean,
-            ): Boolean {
-                return unleash.isEnabled(toggleId, defaultValue)
-            }
+            ) = unleash.isEnabled(toggleId, defaultValue)
+
+            override fun iverksettingErSkruddAvForFagsystem(fagsystem: Fagsystem) =
+                when (fagsystem) {
+                    Fagsystem.DAGPENGER -> unleash.isEnabled(STOPP_IVERKSETTING_DAGPENGER)
+                    Fagsystem.TILTAKSPENGER -> unleash.isEnabled(STOPP_IVERKSETTING_TILTAKSPENGER)
+                    Fagsystem.TILLEGGSSTØNADER -> unleash.isEnabled(STOPP_IVERKSETTING_TILLEGGSSTØNADER)
+                }
         }
     }
 
-    private fun lagUnleashContextProvider(): UnleashContextProvider {
-        return UnleashContextProvider {
+    private fun lagUnleashContextProvider() =
+        UnleashContextProvider {
             UnleashContext.builder()
                 .environment(unleash.environment)
                 .appName(unleash.applicationName)
                 .build()
         }
-    }
 
-    private fun lagDummyFeatureToggleService(): FeatureToggleService {
-        return object : FeatureToggleService {
+    private fun lagDummyFeatureToggleService() =
+        object : FeatureToggleService {
             override fun isEnabled(
                 toggleId: String,
                 defaultValue: Boolean,
-            ): Boolean {
-                if (unleash.environment == "local") {
-                    return System.getenv(toggleId)?.toBoolean() ?: true
-                }
-                return defaultValue
+            ) = if (unleash.environment == "local") {
+                System.getenv(toggleId)?.toBoolean() ?: true
+            } else {
+                defaultValue
             }
+
+            override fun iverksettingErSkruddAvForFagsystem(fagsystem: Fagsystem) =
+                when (fagsystem) {
+                    Fagsystem.DAGPENGER -> isEnabled(STOPP_IVERKSETTING_DAGPENGER, false)
+                    Fagsystem.TILTAKSPENGER -> isEnabled(STOPP_IVERKSETTING_TILTAKSPENGER, false)
+                    Fagsystem.TILLEGGSSTØNADER -> isEnabled(STOPP_IVERKSETTING_TILLEGGSSTØNADER, false)
+                }
         }
-    }
 
     companion object {
-        const val STOPP_IVERKSETTING = "dp-iverksett.stopp-iverksetting"
+        private val log: Logger = LoggerFactory.getLogger(this::class.java)
+
+        const val STOPP_IVERKSETTING_DAGPENGER = "dp-iverksett.stopp-iverksetting-dagpenger"
+        const val STOPP_IVERKSETTING_TILLEGGSSTØNADER = "dp-iverksett.stopp-iverksetting-tilleggsstonader"
+        const val STOPP_IVERKSETTING_TILTAKSPENGER = "dp-iverksett.stopp-iverksetting-tiltakspenger"
     }
 }

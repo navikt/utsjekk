@@ -8,8 +8,8 @@ import no.nav.dagpenger.iverksett.utbetaling.domene.IverksettingEntitet
 import no.nav.dagpenger.iverksett.utbetaling.domene.OppdragResultat
 import no.nav.dagpenger.iverksett.utbetaling.domene.behandlingId
 import no.nav.dagpenger.iverksett.utbetaling.domene.sakId
-import no.nav.dagpenger.iverksett.utbetaling.featuretoggle.FeatureToggleConfig
 import no.nav.dagpenger.iverksett.utbetaling.featuretoggle.FeatureToggleService
+import no.nav.dagpenger.iverksett.utbetaling.featuretoggle.IverksettingErSkruddAvException
 import no.nav.dagpenger.iverksett.utbetaling.task.tilTaskPayload
 import no.nav.dagpenger.kontrakter.felles.Fagsystem
 import no.nav.dagpenger.kontrakter.felles.GeneriskId
@@ -42,8 +42,8 @@ class IverksettingService(
 ) {
     @Transactional
     fun startIverksetting(iverksetting: Iverksetting) {
-        if (featureToggleService.isEnabled(FeatureToggleConfig.STOPP_IVERKSETTING)) {
-            error("Kan ikke iverksette akkurat nå")
+        if (featureToggleService.iverksettingErSkruddAvForFagsystem(iverksetting.fagsak.fagsystem)) {
+            throw IverksettingErSkruddAvException()
         }
 
         iverksettingRepository.insert(
