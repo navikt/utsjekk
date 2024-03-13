@@ -1,5 +1,7 @@
 package no.nav.dagpenger.iverksett.felles.http.advice
 
+import no.nav.dagpenger.iverksett.utbetaling.featuretoggle.IverksettingErSkruddAvException
+import no.nav.dagpenger.kontrakter.felles.objectMapper
 import no.nav.security.token.support.spring.validation.interceptor.JwtTokenUnauthorizedException
 import org.slf4j.LoggerFactory
 import org.springframework.core.NestedExceptionUtils
@@ -29,6 +31,10 @@ class ApiExceptionHandler : ResponseEntityExceptionHandler() {
     ) = super.handleExceptionInternal(ex, body, headers, status, request).also {
         loggFeil(ex, status)
     }
+
+    @ExceptionHandler(IverksettingErSkruddAvException::class)
+    fun handleKillSwitchException(exception: IverksettingErSkruddAvException) =
+        ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(objectMapper.writeValueAsString(exception.message))
 
     @ExceptionHandler(Throwable::class)
     fun handleThrowable(throwable: Throwable): ResponseEntity<Nothing> {

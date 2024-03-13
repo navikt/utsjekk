@@ -22,27 +22,26 @@ import java.time.temporal.ChronoUnit
     BearerTokenClientInterceptor::class,
 )
 class RestTemplateAzure {
-
     @Bean
     @Primary
     fun restTemplateBuilder(): RestTemplateBuilder {
         val jackson2HttpMessageConverter = MappingJackson2HttpMessageConverter(objectMapper)
         return RestTemplateBuilder()
-                .setConnectTimeout(Duration.of(2, ChronoUnit.SECONDS))
-                .setReadTimeout(Duration.of(30, ChronoUnit.SECONDS))
-                .messageConverters(listOf(jackson2HttpMessageConverter) + RestTemplate().messageConverters)
+            .setConnectTimeout(Duration.of(2, ChronoUnit.SECONDS))
+            .setReadTimeout(Duration.of(30, ChronoUnit.SECONDS))
+            .messageConverters(listOf(jackson2HttpMessageConverter) + RestTemplate().messageConverters)
     }
 
     @Bean("azure")
     fun restTemplateJwtBearer(
-            restTemplateBuilder: RestTemplateBuilder,
-            consumerIdClientInterceptor: ConsumerIdClientInterceptor,
-            bearerTokenClientInterceptor: BearerTokenClientInterceptor
+        restTemplateBuilder: RestTemplateBuilder,
+        consumerIdClientInterceptor: ConsumerIdClientInterceptor,
+        bearerTokenClientInterceptor: BearerTokenClientInterceptor,
     ): RestOperations {
         return restTemplateBuilder.additionalInterceptors(
             consumerIdClientInterceptor,
             bearerTokenClientInterceptor,
-            MdcValuesPropagatingClientInterceptor()
+            MdcValuesPropagatingClientInterceptor(),
         ).build()
     }
 }

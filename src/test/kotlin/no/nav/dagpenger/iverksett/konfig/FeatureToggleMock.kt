@@ -21,6 +21,10 @@ class FeatureToggleMock {
     companion object {
         val featureToggleService = mockFeatureToggleService()
 
+        fun skruAvFagsystem(fagsystem: Fagsystem) {
+            every { featureToggleService.iverksettingErSkruddAvForFagsystem(fagsystem) } returns true
+        }
+
         fun resetMock(enabled: Boolean = true) {
             clearMocks(featureToggleService)
 

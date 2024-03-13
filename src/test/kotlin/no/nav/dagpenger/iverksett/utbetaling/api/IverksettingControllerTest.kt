@@ -1,9 +1,12 @@
 package no.nav.dagpenger.iverksett.utbetaling.api
 
 import no.nav.dagpenger.iverksett.Integrasjonstest
+import no.nav.dagpenger.iverksett.konfig.FeatureToggleMock
+import no.nav.dagpenger.iverksett.utbetaling.featuretoggle.IverksettingErSkruddAvException
 import no.nav.dagpenger.iverksett.utbetaling.task.IverksettMotOppdragTask
 import no.nav.dagpenger.iverksett.utbetaling.util.enIverksettDto
 import no.nav.dagpenger.iverksett.utbetaling.util.enIverksettTilleggsstønaderDto
+import no.nav.dagpenger.kontrakter.felles.Fagsystem
 import no.nav.dagpenger.kontrakter.felles.GeneriskIdSomString
 import no.nav.dagpenger.kontrakter.felles.GeneriskIdSomUUID
 import no.nav.dagpenger.kontrakter.felles.Personident
@@ -15,6 +18,7 @@ import no.nav.dagpenger.kontrakter.iverksett.IverksettTilleggsstønaderDto
 import no.nav.dagpenger.kontrakter.iverksett.VedtaksdetaljerDto
 import no.nav.dagpenger.kontrakter.iverksett.VedtaksdetaljerTilleggsstønaderDto
 import no.nav.familie.prosessering.internal.TaskService
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -43,6 +47,28 @@ class IverksettingControllerTest : Integrasjonstest() {
     fun setUp() {
         headers.setBearerAuth(lokalTestToken())
         headers.set(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+    }
+
+    @AfterEach
+    fun resetMocks() {
+        FeatureToggleMock.resetMock()
+    }
+
+    @Test
+    fun `iverksetter ikke når kill switch for ytelsen er skrudd på`() {
+        FeatureToggleMock.skruAvFagsystem(Fagsystem.DAGPENGER)
+
+        val iverksettJson = enIverksettDto(behandlingId = behandlingId, sakId = sakId)
+
+        val respons: ResponseEntity<Any> =
+            restTemplate.exchange(
+                localhostUrl("/api/iverksetting"),
+                HttpMethod.POST,
+                HttpEntity(iverksettJson, headers),
+            )
+
+        assertEquals(HttpStatus.SERVICE_UNAVAILABLE, respons.statusCode)
+        assertEquals(IverksettingErSkruddAvException().message, respons.body)
     }
 
     @Test
