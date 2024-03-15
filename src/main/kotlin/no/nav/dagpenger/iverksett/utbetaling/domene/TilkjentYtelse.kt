@@ -2,12 +2,12 @@ package no.nav.dagpenger.iverksett.utbetaling.domene
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
+import no.nav.dagpenger.iverksett.utbetaling.domene.transformer.RandomOSURId
 import no.nav.dagpenger.iverksett.utbetaling.utbetalingsoppdrag.domene.AndelData
 import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsoppdrag
-import java.util.UUID
 
 data class TilkjentYtelse(
-    val id: UUID = UUID.randomUUID(),
+    val id: String = RandomOSURId.generate(),
     val utbetalingsoppdrag: Utbetalingsoppdrag? = null,
     val andelerTilkjentYtelse: List<AndelTilkjentYtelse>,
     val sisteAndelIKjede: AndelTilkjentYtelse? = null,

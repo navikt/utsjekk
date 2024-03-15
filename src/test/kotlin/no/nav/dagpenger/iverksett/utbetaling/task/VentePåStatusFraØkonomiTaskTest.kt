@@ -11,6 +11,7 @@ import no.nav.dagpenger.iverksett.felles.util.mockFeatureToggleService
 import no.nav.dagpenger.iverksett.status.StatusEndretProdusent
 import no.nav.dagpenger.iverksett.utbetaling.domene.OppdragResultat
 import no.nav.dagpenger.iverksett.utbetaling.domene.TilkjentYtelse
+import no.nav.dagpenger.iverksett.utbetaling.domene.transformer.RandomOSURId
 import no.nav.dagpenger.iverksett.utbetaling.lagIverksettingEntitet
 import no.nav.dagpenger.iverksett.utbetaling.lagIverksettingsdata
 import no.nav.dagpenger.iverksett.utbetaling.tilstand.IverksettingRepository
@@ -18,11 +19,8 @@ import no.nav.dagpenger.iverksett.utbetaling.tilstand.IverksettingService
 import no.nav.dagpenger.iverksett.utbetaling.tilstand.IverksettingsresultatService
 import no.nav.dagpenger.iverksett.utbetaling.util.etIverksettingsresultat
 import no.nav.dagpenger.kontrakter.felles.Fagsystem
-import no.nav.dagpenger.kontrakter.felles.GeneriskId
-import no.nav.dagpenger.kontrakter.felles.GeneriskIdSomUUID
 import no.nav.dagpenger.kontrakter.felles.Satstype
 import no.nav.dagpenger.kontrakter.felles.objectMapper
-import no.nav.dagpenger.kontrakter.felles.somUUID
 import no.nav.dagpenger.kontrakter.oppdrag.OppdragStatus
 import no.nav.dagpenger.kontrakter.oppdrag.OppdragStatusDto
 import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsoppdrag
@@ -36,7 +34,6 @@ import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.Properties
-import java.util.UUID
 
 internal class VentePåStatusFraØkonomiTaskTest {
     private val oppdragClient = mockk<OppdragClient>()
@@ -44,8 +41,8 @@ internal class VentePåStatusFraØkonomiTaskTest {
     private val taskService = mockk<TaskService>()
     private val iverksettingsresultatService = mockk<IverksettingsresultatService>()
     private val statusEndretProdusent = mockk<StatusEndretProdusent>()
-    private val behandlingId: GeneriskId = GeneriskIdSomUUID(UUID.randomUUID())
-    private val sakId: GeneriskId = GeneriskIdSomUUID(UUID.randomUUID())
+    private val behandlingId = RandomOSURId.generate()
+    private val sakId = RandomOSURId.generate()
     private val taskPayload =
         objectMapper.writeValueAsString(
             TaskPayload(
@@ -74,14 +71,14 @@ internal class VentePåStatusFraØkonomiTaskTest {
     internal fun setUp() {
         val iverksetting =
             lagIverksettingsdata(
-                sakId = sakId.somUUID,
-                behandlingId = behandlingId.somUUID,
+                sakId = sakId,
+                behandlingId = behandlingId,
                 andelsdatoer = listOf(LocalDate.now(), LocalDate.now().minusDays(15)),
             )
         every { oppdragClient.hentStatus(any()) } returns OppdragStatusDto(OppdragStatus.KVITTERT_OK, null)
         every { iverksettingRepository.findByFagsakAndBehandlingAndIverksetting(any(), any(), any()) } returns
             listOf(lagIverksettingEntitet(iverksetting))
-        every { iverksettingsresultatService.oppdaterOppdragResultat(any(), any(), behandlingId.somUUID, any(), any()) } just runs
+        every { iverksettingsresultatService.oppdaterOppdragResultat(any(), any(), behandlingId, any(), any()) } just runs
         every { iverksettingsresultatService.hentIverksettingsresultat(any(), any(), any(), any()) } returns etIverksettingsresultat()
         every { statusEndretProdusent.sendStatusEndretEvent(any(), any()) } just runs
         every { taskService.save(any()) } answers { firstArg() }
@@ -90,7 +87,7 @@ internal class VentePåStatusFraØkonomiTaskTest {
     @Test
     internal fun `kjør doTask for VentePåStatusFraØkonomiTask, forvent ingen unntak`() {
         val oppdragResultatSlot = slot<OppdragResultat>()
-        every { iverksettingsresultatService.hentTilkjentYtelse(any(), any(), behandlingId.somUUID, any()) } returns
+        every { iverksettingsresultatService.hentTilkjentYtelse(any(), any(), behandlingId, any()) } returns
             tilkjentYtelse(
                 listOf(
                     utbetalingsperiode,
@@ -103,7 +100,7 @@ internal class VentePåStatusFraØkonomiTaskTest {
             iverksettingsresultatService.oppdaterOppdragResultat(
                 fagsystem = any(),
                 sakId = sakId,
-                behandlingId = behandlingId.somUUID,
+                behandlingId = behandlingId,
                 oppdragResultat = capture(oppdragResultatSlot),
                 iverksettingId = any(),
             )
@@ -118,14 +115,14 @@ internal class VentePåStatusFraØkonomiTaskTest {
             iverksettingsresultatService.hentTilkjentYtelse(
                 any(),
                 sakId,
-                behandlingId.somUUID,
+                behandlingId,
                 any(),
             )
         } returns tilkjentYtelse()
 
         runTask(Task(IverksettMotOppdragTask.TYPE, taskPayload, Properties()))
 
-        verify(exactly = 0) { iverksettingsresultatService.oppdaterOppdragResultat(any(), sakId, behandlingId.somUUID, any(), any()) }
+        verify(exactly = 0) { iverksettingsresultatService.oppdaterOppdragResultat(any(), sakId, behandlingId, any(), any()) }
     }
 
     private fun runTask(task: Task) {
@@ -145,18 +142,17 @@ internal class VentePåStatusFraØkonomiTaskTest {
             sats = BigDecimal.TEN,
             satstype = Satstype.DAGLIG,
             utbetalesTil = "x",
-            behandlingId = GeneriskIdSomUUID(UUID.randomUUID()),
+            behandlingId = RandomOSURId.generate(),
             utbetalingsgrad = null,
         )
 
-    private fun tilkjentYtelse(utbetalingsperioder: List<Utbetalingsperiode> = listOf()): TilkjentYtelse {
-        return TilkjentYtelse(
-            id = UUID.randomUUID(),
+    private fun tilkjentYtelse(utbetalingsperioder: List<Utbetalingsperiode> = listOf()) =
+        TilkjentYtelse(
             utbetalingsoppdrag =
                 Utbetalingsoppdrag(
                     erFørsteUtbetalingPåSak = true,
                     fagsystem = Fagsystem.DAGPENGER,
-                    saksnummer = GeneriskIdSomUUID(UUID.randomUUID()),
+                    saksnummer = RandomOSURId.generate(),
                     aktør = "",
                     saksbehandlerId = "",
                     avstemmingstidspunkt = LocalDateTime.now(),
@@ -165,5 +161,4 @@ internal class VentePåStatusFraØkonomiTaskTest {
                 ),
             andelerTilkjentYtelse = listOf(),
         )
-    }
 }

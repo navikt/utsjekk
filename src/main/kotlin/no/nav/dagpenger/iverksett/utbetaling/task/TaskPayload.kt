@@ -3,12 +3,11 @@ package no.nav.dagpenger.iverksett.utbetaling.task
 import no.nav.dagpenger.iverksett.utbetaling.domene.Iverksetting
 import no.nav.dagpenger.iverksett.utbetaling.domene.behandlingId
 import no.nav.dagpenger.kontrakter.felles.Fagsystem
-import no.nav.dagpenger.kontrakter.felles.GeneriskId
 
 data class TaskPayload(
     val fagsystem: Fagsystem,
-    val sakId: GeneriskId,
-    val behandlingId: GeneriskId,
+    val sakId: String,
+    val behandlingId: String,
     val iverksettingId: String? = null,
 )
 

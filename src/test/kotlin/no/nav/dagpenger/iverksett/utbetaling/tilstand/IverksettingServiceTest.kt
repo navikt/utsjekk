@@ -10,6 +10,7 @@ import no.nav.dagpenger.iverksett.konfig.FeatureToggleMock
 import no.nav.dagpenger.iverksett.status.StatusEndretProdusent
 import no.nav.dagpenger.iverksett.utbetaling.domene.IverksettingEntitet
 import no.nav.dagpenger.iverksett.utbetaling.domene.OppdragResultat
+import no.nav.dagpenger.iverksett.utbetaling.domene.transformer.RandomOSURId
 import no.nav.dagpenger.iverksett.utbetaling.featuretoggle.IverksettingErSkruddAvException
 import no.nav.dagpenger.iverksett.utbetaling.util.enAndelTilkjentYtelse
 import no.nav.dagpenger.iverksett.utbetaling.util.enIverksetting
@@ -17,12 +18,8 @@ import no.nav.dagpenger.iverksett.utbetaling.util.enTilkjentYtelse
 import no.nav.dagpenger.iverksett.utbetaling.util.etIverksettingsresultat
 import no.nav.dagpenger.iverksett.utbetaling.util.etTomtUtbetalingsoppdrag
 import no.nav.dagpenger.kontrakter.felles.Fagsystem
-import no.nav.dagpenger.kontrakter.felles.GeneriskIdSomString
-import no.nav.dagpenger.kontrakter.felles.GeneriskIdSomUUID
 import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
 import no.nav.dagpenger.kontrakter.felles.StønadTypeTiltakspenger
-import no.nav.dagpenger.kontrakter.felles.somString
-import no.nav.dagpenger.kontrakter.felles.somUUID
 import no.nav.dagpenger.kontrakter.iverksett.IverksettStatus
 import no.nav.dagpenger.kontrakter.oppdrag.OppdragStatus
 import no.nav.dagpenger.kontrakter.oppdrag.OppdragStatusDto
@@ -36,7 +33,6 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
 import java.time.LocalDateTime
-import java.util.UUID
 
 internal class IverksettingServiceTest {
     private val iverksettingsresultatService = mockk<IverksettingsresultatService>()
@@ -94,7 +90,7 @@ internal class IverksettingServiceTest {
 
     @Test
     fun `iverksetter utbetaling for dagpenger når iverksetting for andre ytelser er skrudd av`() {
-        every { iverksettingRepository.insert(any()) } returns IverksettingEntitet(UUID.randomUUID(), enIverksetting(), LocalDateTime.now())
+        every { iverksettingRepository.insert(any()) } returns IverksettingEntitet(RandomOSURId.generate(), enIverksetting(), LocalDateTime.now())
         every { iverksettingsresultatService.opprettTomtResultat(any(), any(), any(), any()) } just runs
         every { taskService.save(any()) } returns mockk()
 
@@ -109,7 +105,7 @@ internal class IverksettingServiceTest {
 
     @Test
     fun `forventer status SENDT_TIL_OPPDRAG for resultat med tilkjent ytelse`() {
-        val behandlingId = UUID.randomUUID()
+        val behandlingId = RandomOSURId.generate()
         val resultat =
             etIverksettingsresultat(
                 behandlingId = behandlingId,
@@ -128,7 +124,7 @@ internal class IverksettingServiceTest {
         val status =
             iverksettingService.utledStatus(
                 fagsystem = resultat.fagsystem,
-                sakId = resultat.sakId.somString,
+                sakId = resultat.sakId,
                 behandlingId = resultat.behandlingId,
                 iverksettingId = resultat.iverksettingId,
             )
@@ -138,7 +134,7 @@ internal class IverksettingServiceTest {
 
     @Test
     fun `forventer status FEILET_MOT_OPPDRAG for resultat med oppdragsresultat med status KVITTERT_FUNKSJONELL_FEIL`() {
-        val behandlingId = UUID.randomUUID()
+        val behandlingId = RandomOSURId.generate()
         val resultat =
             etIverksettingsresultat(
                 behandlingId = behandlingId,
@@ -158,7 +154,7 @@ internal class IverksettingServiceTest {
         val status =
             iverksettingService.utledStatus(
                 fagsystem = resultat.fagsystem,
-                sakId = resultat.sakId.somString,
+                sakId = resultat.sakId,
                 behandlingId = resultat.behandlingId,
                 iverksettingId = resultat.iverksettingId,
             )
@@ -168,7 +164,7 @@ internal class IverksettingServiceTest {
 
     @Test
     fun `forventer status OK for resultat med tilkjent ytelse og oppdrag som er kvittert ok`() {
-        val behandlingId = UUID.randomUUID()
+        val behandlingId = RandomOSURId.generate()
         val resultat =
             etIverksettingsresultat(
                 behandlingId = behandlingId,
@@ -189,7 +185,7 @@ internal class IverksettingServiceTest {
         val status =
             iverksettingService.utledStatus(
                 fagsystem = resultat.fagsystem,
-                sakId = resultat.sakId.somString,
+                sakId = resultat.sakId,
                 behandlingId = resultat.behandlingId,
                 iverksettingId = resultat.iverksettingId,
             )
@@ -199,7 +195,7 @@ internal class IverksettingServiceTest {
 
     @Test
     fun `forventer status OK_UTEN_UTBETALING for resultat med tom tilkjent ytelse uten kvittering fra oppdrag`() {
-        val behandlingId = UUID.randomUUID()
+        val behandlingId = RandomOSURId.generate()
         val resultat =
             etIverksettingsresultat(
                 behandlingId = behandlingId,
@@ -225,7 +221,7 @@ internal class IverksettingServiceTest {
         val status =
             iverksettingService.utledStatus(
                 fagsystem = resultat.fagsystem,
-                sakId = resultat.sakId.somString,
+                sakId = resultat.sakId,
                 behandlingId = resultat.behandlingId,
                 iverksettingId = resultat.iverksettingId,
             )
@@ -235,8 +231,8 @@ internal class IverksettingServiceTest {
 
     @Test
     fun `hentForrigeIverksett skal hente korrekt iverksetting når flere iverksettinger for samme behandling`() {
-        val sakId = GeneriskIdSomUUID(UUID.randomUUID())
-        val behandlingId = GeneriskIdSomUUID(UUID.randomUUID())
+        val sakId = RandomOSURId.generate()
+        val behandlingId = RandomOSURId.generate()
         val iverksettingId1 = "IVERK-1"
         val iverksettingId2 = "IVERK-2"
         val iverksetting1 =
@@ -252,18 +248,18 @@ internal class IverksettingServiceTest {
 
         every {
             iverksettingRepository.findByFagsakAndBehandlingAndIverksetting(
-                fagsakId = sakId.somString,
-                behandlingId = behandlingId.somUUID,
+                fagsakId = sakId,
+                behandlingId = behandlingId,
                 iverksettingId = iverksettingId1,
             )
-        } returns listOf(IverksettingEntitet(behandlingId.somUUID, iverksetting1, LocalDateTime.now()))
+        } returns listOf(IverksettingEntitet(behandlingId, iverksetting1, LocalDateTime.now()))
         every {
             iverksettingRepository.findByFagsakAndBehandlingAndIverksetting(
-                fagsakId = sakId.somString,
-                behandlingId = behandlingId.somUUID,
+                fagsakId = sakId,
+                behandlingId = behandlingId,
                 iverksettingId = iverksettingId2,
             )
-        } returns listOf(IverksettingEntitet(behandlingId.somUUID, iverksetting2, LocalDateTime.now()))
+        } returns listOf(IverksettingEntitet(behandlingId, iverksetting2, LocalDateTime.now()))
 
         val forrigeIverksetting1 = iverksettingService.hentForrigeIverksetting(iverksetting1)
         val forrigeIverksetting2 = iverksettingService.hentForrigeIverksetting(iverksetting2)
@@ -275,9 +271,9 @@ internal class IverksettingServiceTest {
 
     @Test
     fun `hentForrigeIverksett skal hente korrekt iverksetting for iverksettingId på annen behandling`() {
-        val sakId = GeneriskIdSomUUID(UUID.randomUUID())
-        val behandlingId1 = GeneriskIdSomUUID(UUID.randomUUID())
-        val behandlingId2 = GeneriskIdSomUUID(UUID.randomUUID())
+        val sakId = RandomOSURId.generate()
+        val behandlingId1 = RandomOSURId.generate()
+        val behandlingId2 = RandomOSURId.generate()
         val iverksettingId1 = "1"
         val iverksettingId2 = "1"
         val iverksetting1 =
@@ -293,18 +289,18 @@ internal class IverksettingServiceTest {
 
         every {
             iverksettingRepository.findByFagsakAndBehandlingAndIverksetting(
-                fagsakId = sakId.somString,
-                behandlingId = behandlingId1.somUUID,
+                fagsakId = sakId,
+                behandlingId = behandlingId1,
                 iverksettingId = iverksettingId1,
             )
-        } returns listOf(IverksettingEntitet(behandlingId1.somUUID, iverksetting1, LocalDateTime.now()))
+        } returns listOf(IverksettingEntitet(behandlingId1, iverksetting1, LocalDateTime.now()))
         every {
             iverksettingRepository.findByFagsakAndBehandlingAndIverksetting(
-                fagsakId = sakId.somString,
-                behandlingId = behandlingId2.somUUID,
+                fagsakId = sakId,
+                behandlingId = behandlingId2,
                 iverksettingId = iverksettingId2,
             )
-        } returns listOf(IverksettingEntitet(behandlingId2.somUUID, iverksetting2, LocalDateTime.now()))
+        } returns listOf(IverksettingEntitet(behandlingId2, iverksetting2, LocalDateTime.now()))
 
         val forrigeIverksetting1 = iverksettingService.hentForrigeIverksetting(iverksetting1)
         val forrigeIverksetting2 = iverksettingService.hentForrigeIverksetting(iverksetting2)
@@ -316,8 +312,8 @@ internal class IverksettingServiceTest {
 
     @Test
     fun `hentIverksett skal hente korrekt iverksetting når flere fagsystem har samme behandlingId`() {
-        val behandlingId = GeneriskIdSomUUID(UUID.randomUUID())
-        val sakId = GeneriskIdSomUUID(UUID.randomUUID())
+        val behandlingId = RandomOSURId.generate()
+        val sakId = RandomOSURId.generate()
         val iverksettingDagpenger =
             enIverksetting(
                 behandlingId = behandlingId,
@@ -331,14 +327,14 @@ internal class IverksettingServiceTest {
 
         every {
             iverksettingRepository.findByFagsakAndBehandlingAndIverksetting(
-                fagsakId = sakId.somString,
-                behandlingId = behandlingId.somUUID,
+                fagsakId = sakId,
+                behandlingId = behandlingId,
                 iverksettingId = null,
             )
         } returns
             listOf(
-                IverksettingEntitet(behandlingId.somUUID, iverksettingDagpenger, LocalDateTime.now()),
-                IverksettingEntitet(behandlingId.somUUID, iverksettingTiltakspenger, LocalDateTime.now()),
+                IverksettingEntitet(behandlingId, iverksettingDagpenger, LocalDateTime.now()),
+                IverksettingEntitet(behandlingId, iverksettingTiltakspenger, LocalDateTime.now()),
             )
 
         val hentetIverksettingTiltakspenger =
@@ -354,9 +350,9 @@ internal class IverksettingServiceTest {
 
     @Test
     fun `hentIverksett skal hente korrekt iverksetting når flere fagsaker har samme behandlingId`() {
-        val behandlingId = GeneriskIdSomString("1")
-        val sakId1 = GeneriskIdSomString("1")
-        val sakId2 = GeneriskIdSomString("2")
+        val behandlingId = RandomOSURId.generate()
+        val sakId1 = RandomOSURId.generate()
+        val sakId2 = RandomOSURId.generate()
         val iverksettingSak1 =
             enIverksetting(
                 sakId = sakId1,
@@ -370,23 +366,23 @@ internal class IverksettingServiceTest {
 
         every {
             iverksettingRepository.findByFagsakAndBehandlingAndIverksetting(
-                fagsakId = sakId1.somString,
-                behandlingId = behandlingId.somUUID,
+                fagsakId = sakId1,
+                behandlingId = behandlingId,
                 iverksettingId = null,
             )
         } returns
             listOf(
-                IverksettingEntitet(behandlingId.somUUID, iverksettingSak1, LocalDateTime.now()),
+                IverksettingEntitet(behandlingId, iverksettingSak1, LocalDateTime.now()),
             )
         every {
             iverksettingRepository.findByFagsakAndBehandlingAndIverksetting(
-                fagsakId = sakId2.somString,
-                behandlingId = behandlingId.somUUID,
+                fagsakId = sakId2,
+                behandlingId = behandlingId,
                 iverksettingId = null,
             )
         } returns
             listOf(
-                IverksettingEntitet(behandlingId.somUUID, iverksettingSak2, LocalDateTime.now()),
+                IverksettingEntitet(behandlingId, iverksettingSak2, LocalDateTime.now()),
             )
 
         val hentetIverksettingSak1 =

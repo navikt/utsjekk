@@ -3,12 +3,10 @@ package no.nav.dagpenger.iverksett.utbetaling.tilstand
 import no.nav.dagpenger.iverksett.Integrasjonstest
 import no.nav.dagpenger.iverksett.utbetaling.domene.OppdragResultat
 import no.nav.dagpenger.iverksett.utbetaling.domene.TilkjentYtelse
+import no.nav.dagpenger.iverksett.utbetaling.domene.transformer.RandomOSURId
 import no.nav.dagpenger.iverksett.utbetaling.util.enTilkjentYtelse
 import no.nav.dagpenger.iverksett.utbetaling.util.etIverksettingsresultat
 import no.nav.dagpenger.kontrakter.felles.Fagsystem
-import no.nav.dagpenger.kontrakter.felles.GeneriskIdSomString
-import no.nav.dagpenger.kontrakter.felles.GeneriskIdSomUUID
-import no.nav.dagpenger.kontrakter.felles.somUUID
 import no.nav.dagpenger.kontrakter.oppdrag.OppdragStatus
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
@@ -16,14 +14,13 @@ import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import java.util.UUID
 
 internal class HentIverksettingResultatServiceTest : Integrasjonstest() {
     @Autowired
     private lateinit var iverksettingsresultatService: IverksettingsresultatService
 
-    private val behandlingId: UUID = UUID.randomUUID()
-    private val sakId = GeneriskIdSomUUID(UUID.randomUUID())
+    private val behandlingId = RandomOSURId.generate()
+    private val sakId = RandomOSURId.generate()
     private val tilkjentYtelse: TilkjentYtelse = enTilkjentYtelse(behandlingId)
 
     @BeforeEach
@@ -48,13 +45,13 @@ internal class HentIverksettingResultatServiceTest : Integrasjonstest() {
     @Test
     fun `hent ikke-eksisterende tilstand, forvent nullverdi i retur og ingen unntak`() {
         val hentetTilkjentYtelse =
-            iverksettingsresultatService.hentTilkjentYtelse(Fagsystem.DAGPENGER, sakId, UUID.randomUUID(), null)
+            iverksettingsresultatService.hentTilkjentYtelse(Fagsystem.DAGPENGER, sakId, RandomOSURId.generate(), null)
         assertNull(hentetTilkjentYtelse)
     }
 
     @Test
     fun `hent korrekt iverksettingsresultat for behandling med to iverksettinger`() {
-        val behandlingId = UUID.randomUUID()
+        val behandlingId = RandomOSURId.generate()
         val iverksettingId1 = "IVERK-1"
         val iverksettingId2 = "IVERK-2"
         iverksettingsresultatService.opprettTomtResultat(
@@ -92,7 +89,7 @@ internal class HentIverksettingResultatServiceTest : Integrasjonstest() {
 
     @Test
     fun `hent korrekt iverksettingsresultat for flere fagsystem med samme behandlingId`() {
-        val behandlingId = UUID.randomUUID()
+        val behandlingId = RandomOSURId.generate()
         iverksettingsresultatService.opprettTomtResultat(
             fagsystem = Fagsystem.TILLEGGSSTØNADER,
             sakId = sakId,
@@ -128,26 +125,26 @@ internal class HentIverksettingResultatServiceTest : Integrasjonstest() {
 
     @Test
     fun `hent korrekt iverksettingsresultat for flere fagsaker med samme behandlingId`() {
-        val sakId1 = GeneriskIdSomString("1")
-        val sakId2 = GeneriskIdSomString("2")
-        val behandlingId = GeneriskIdSomString("1")
+        val sakId1 = RandomOSURId.generate()
+        val sakId2 = RandomOSURId.generate()
+        val behandlingId = RandomOSURId.generate()
         iverksettingsresultatService.opprettTomtResultat(
             fagsystem = Fagsystem.TILLEGGSSTØNADER,
             sakId = sakId1,
-            behandlingId = behandlingId.somUUID,
+            behandlingId = behandlingId,
             iverksettingId = null,
         )
         iverksettingsresultatService.oppdaterTilkjentYtelseForUtbetaling(
             fagsystem = Fagsystem.TILLEGGSSTØNADER,
             sakId = sakId1,
-            behandlingId = behandlingId.somUUID,
+            behandlingId = behandlingId,
             tilkjentYtelseForUtbetaling = tilkjentYtelse,
             iverksettingId = null,
         )
         iverksettingsresultatService.opprettTomtResultat(
             fagsystem = Fagsystem.TILLEGGSSTØNADER,
             sakId = sakId2,
-            behandlingId = behandlingId.somUUID,
+            behandlingId = behandlingId,
             iverksettingId = null,
         )
 
@@ -155,7 +152,7 @@ internal class HentIverksettingResultatServiceTest : Integrasjonstest() {
             iverksettingsresultatService.hentIverksettingsresultat(
                 fagsystem = Fagsystem.TILLEGGSSTØNADER,
                 sakId = sakId1,
-                behandlingId = behandlingId.somUUID,
+                behandlingId = behandlingId,
                 iverksettingId = null,
             )
 

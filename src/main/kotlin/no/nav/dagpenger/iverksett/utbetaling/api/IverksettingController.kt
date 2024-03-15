@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import java.util.UUID
 
 @RestController
 @RequestMapping(
@@ -95,7 +94,7 @@ class IverksettingController(
     @ApiResponse(responseCode = "404", description = "Kunne ikke finne iverksetting")
     fun hentStatus(
         @PathVariable sakId: String,
-        @PathVariable behandlingId: UUID,
+        @PathVariable behandlingId: String,
     ): ResponseEntity<IverksettStatus> {
         val fagsystem = konsumentConfig.finnFagsystem(TokenContext.hentKlientnavn())
         val status =
@@ -115,7 +114,7 @@ class IverksettingController(
     @ApiResponse(responseCode = "404", description = "Kunne ikke finne iverksetting")
     fun hentStatus(
         @PathVariable sakId: String,
-        @PathVariable behandlingId: UUID,
+        @PathVariable behandlingId: String,
         @PathVariable iverksettingId: String,
     ): ResponseEntity<IverksettStatus> {
         val status =

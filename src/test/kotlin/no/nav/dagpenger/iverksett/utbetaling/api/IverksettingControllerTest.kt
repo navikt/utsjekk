@@ -2,16 +2,13 @@ package no.nav.dagpenger.iverksett.utbetaling.api
 
 import no.nav.dagpenger.iverksett.Integrasjonstest
 import no.nav.dagpenger.iverksett.konfig.FeatureToggleMock
+import no.nav.dagpenger.iverksett.utbetaling.domene.transformer.RandomOSURId
 import no.nav.dagpenger.iverksett.utbetaling.featuretoggle.IverksettingErSkruddAvException
 import no.nav.dagpenger.iverksett.utbetaling.task.IverksettMotOppdragTask
 import no.nav.dagpenger.iverksett.utbetaling.util.enIverksettDto
 import no.nav.dagpenger.iverksett.utbetaling.util.enIverksettTilleggsstønaderDto
 import no.nav.dagpenger.kontrakter.felles.Fagsystem
-import no.nav.dagpenger.kontrakter.felles.GeneriskIdSomString
-import no.nav.dagpenger.kontrakter.felles.GeneriskIdSomUUID
 import no.nav.dagpenger.kontrakter.felles.Personident
-import no.nav.dagpenger.kontrakter.felles.somString
-import no.nav.dagpenger.kontrakter.felles.somUUID
 import no.nav.dagpenger.kontrakter.iverksett.IverksettDto
 import no.nav.dagpenger.kontrakter.iverksett.IverksettStatus
 import no.nav.dagpenger.kontrakter.iverksett.IverksettTilleggsstønaderDto
@@ -31,11 +28,10 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import java.time.LocalDateTime
-import java.util.UUID
 
 class IverksettingControllerTest : Integrasjonstest() {
-    private val behandlingId = GeneriskIdSomUUID(UUID.randomUUID())
-    private val sakId = GeneriskIdSomUUID(UUID.randomUUID())
+    private val behandlingId = "1"
+    private val sakId = "1234"
 
     @Autowired
     lateinit var taskService: TaskService
@@ -105,7 +101,7 @@ class IverksettingControllerTest : Integrasjonstest() {
         kjørTasks()
 
         restTemplate.exchange<IverksettStatus>(
-            localhostUrl("/api/iverksetting/${dto.sakId.somUUID}/${dto.behandlingId.somUUID}/${dto.iverksettingId}/status"),
+            localhostUrl("/api/iverksetting/${dto.sakId}/${dto.behandlingId}/${dto.iverksettingId}/status"),
             HttpMethod.GET,
             HttpEntity(null, headers),
         ).also {
@@ -142,7 +138,7 @@ class IverksettingControllerTest : Integrasjonstest() {
         kjørTasks()
 
         restTemplate.exchange<IverksettStatus>(
-            localhostUrl("/api/iverksetting/${sakId.somUUID}/${behandlingId.somUUID}/status"),
+            localhostUrl("/api/iverksetting/$sakId/$behandlingId/status"),
             HttpMethod.GET,
             HttpEntity(null, headers),
         ).also {
@@ -153,8 +149,8 @@ class IverksettingControllerTest : Integrasjonstest() {
 
     @Test
     fun `start iverksetting av rammevedtak for tilleggsstønader uten utbetaling`() {
-        val behandlingId = GeneriskIdSomUUID(UUID.fromString("c2502e75-6e78-40fa-9124-6549341855b4"))
-        val sakId = GeneriskIdSomString("988777274")
+        val behandlingId = RandomOSURId.generate()
+        val sakId = RandomOSURId.generate()
         val iverksettingId = "c2502e75-6e78-40fa-9124-6549341855b4"
 
         val dto =
@@ -183,7 +179,7 @@ class IverksettingControllerTest : Integrasjonstest() {
         kjørTasks()
 
         restTemplate.exchange<IverksettStatus>(
-            localhostUrl("/api/iverksetting/${sakId.somString}/${behandlingId.somUUID}/$iverksettingId/status"),
+            localhostUrl("/api/iverksetting/$sakId/$behandlingId/$iverksettingId/status"),
             HttpMethod.GET,
             HttpEntity(null, headers),
         ).also {

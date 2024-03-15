@@ -9,10 +9,9 @@ import no.nav.dagpenger.iverksett.utbetaling.domene.OppdragResultat
 import no.nav.dagpenger.iverksett.utbetaling.domene.Søker
 import no.nav.dagpenger.iverksett.utbetaling.domene.TilkjentYtelse
 import no.nav.dagpenger.iverksett.utbetaling.domene.Vedtaksdetaljer
+import no.nav.dagpenger.iverksett.utbetaling.domene.transformer.RandomOSURId
 import no.nav.dagpenger.kontrakter.felles.BrukersNavKontor
 import no.nav.dagpenger.kontrakter.felles.Fagsystem
-import no.nav.dagpenger.kontrakter.felles.GeneriskId
-import no.nav.dagpenger.kontrakter.felles.GeneriskIdSomUUID
 import no.nav.dagpenger.kontrakter.felles.Personident
 import no.nav.dagpenger.kontrakter.felles.StønadType
 import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
@@ -25,11 +24,10 @@ import no.nav.dagpenger.kontrakter.iverksett.VedtaksdetaljerDto
 import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsoppdrag
 import java.time.LocalDate
 import java.time.LocalDateTime
-import java.util.UUID
 
 fun enIverksettDto(
-    behandlingId: GeneriskId = GeneriskIdSomUUID(UUID.randomUUID()),
-    sakId: GeneriskId = GeneriskIdSomUUID(UUID.randomUUID()),
+    behandlingId: String = RandomOSURId.generate(),
+    sakId: String = RandomOSURId.generate(),
     andelsbeløp: Int = 500,
     stønadType: StønadType = StønadTypeDagpenger.DAGPENGER_ARBEIDSSØKER_ORDINÆR,
     ferietillegg: Ferietillegg? = null,
@@ -78,7 +76,7 @@ fun enAndelTilkjentYtelse(
 )
 
 fun enTilkjentYtelse(
-    behandlingId: UUID = UUID.randomUUID(),
+    behandlingId: String = RandomOSURId.generate(),
     andeler: List<AndelTilkjentYtelse> = listOf(enAndelTilkjentYtelse()),
     sisteAndelIKjede: AndelTilkjentYtelse? = null,
     utbetalingsoppdrag: Utbetalingsoppdrag? = null,
@@ -90,13 +88,13 @@ fun enTilkjentYtelse(
 )
 
 fun behandlingsdetaljer(
-    behandlingId: UUID = UUID.randomUUID(),
-    forrigeBehandlingId: UUID? = null,
+    behandlingId: String = RandomOSURId.generate(),
+    forrigeBehandlingId: String? = null,
     iverksettingId: String? = null,
     forrigeIverksettingId: String? = null,
 ) = Behandlingsdetaljer(
-    behandlingId = GeneriskIdSomUUID(behandlingId),
-    forrigeBehandlingId = forrigeBehandlingId?.let { GeneriskIdSomUUID(it) },
+    behandlingId = behandlingId,
+    forrigeBehandlingId = forrigeBehandlingId,
     iverksettingId = iverksettingId,
     forrigeIverksettingId = forrigeIverksettingId,
 )
@@ -113,20 +111,20 @@ fun vedtaksdetaljer(
 
 private fun enTilkjentYtelse(andeler: List<AndelTilkjentYtelse>): TilkjentYtelse =
     TilkjentYtelse(
-        id = UUID.randomUUID(),
+        id = RandomOSURId.generate(),
         utbetalingsoppdrag = null,
         andelerTilkjentYtelse = andeler,
     )
 
 fun enIverksetting(
     fagsystem: Fagsystem = Fagsystem.DAGPENGER,
-    sakId: GeneriskId? = null,
+    sakId: String? = null,
     behandlingsdetaljer: Behandlingsdetaljer = behandlingsdetaljer(),
     vedtaksdetaljer: Vedtaksdetaljer = vedtaksdetaljer(),
 ) = Iverksetting(
     fagsak =
         Fagsakdetaljer(
-            fagsakId = sakId ?: GeneriskIdSomUUID(UUID.randomUUID()),
+            fagsakId = sakId ?: RandomOSURId.generate(),
             fagsystem = fagsystem,
         ),
     behandling = behandlingsdetaljer,
@@ -138,10 +136,10 @@ fun enIverksetting(
 )
 
 fun enIverksetting(
-    behandlingId: GeneriskId = GeneriskIdSomUUID(UUID.randomUUID()),
-    forrigeBehandlingId: GeneriskId? = null,
+    behandlingId: String = RandomOSURId.generate(),
+    forrigeBehandlingId: String? = null,
     andeler: List<AndelTilkjentYtelse> = listOf(enAndelTilkjentYtelse()),
-    sakId: GeneriskId = GeneriskIdSomUUID(UUID.randomUUID()),
+    sakId: String = RandomOSURId.generate(),
     iverksettingId: String? = null,
     forrigeIverksettingId: String? = null,
 ): Iverksetting {
@@ -170,8 +168,8 @@ fun enIverksetting(
 
 fun etIverksettingsresultat(
     fagsystem: Fagsystem = Fagsystem.DAGPENGER,
-    sakId: GeneriskId = GeneriskIdSomUUID(UUID.randomUUID()),
-    behandlingId: UUID = UUID.randomUUID(),
+    sakId: String = RandomOSURId.generate(),
+    behandlingId: String = RandomOSURId.generate(),
     tilkjentYtelse: TilkjentYtelse? = null,
     iverksettingId: String? = null,
     oppdragResultat: OppdragResultat? = null,
@@ -191,7 +189,7 @@ fun etTomtUtbetalingsoppdrag() =
         brukersNavKontor = null,
         erFørsteUtbetalingPåSak = true,
         fagsystem = Fagsystem.DAGPENGER,
-        saksnummer = GeneriskIdSomUUID(UUID.randomUUID()),
+        saksnummer = RandomOSURId.generate(),
         saksbehandlerId = "en-saksbehandler",
         utbetalingsperiode = emptyList(),
         iverksettingId = null,

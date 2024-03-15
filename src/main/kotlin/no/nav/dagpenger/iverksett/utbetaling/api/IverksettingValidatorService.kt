@@ -6,7 +6,6 @@ import no.nav.dagpenger.iverksett.utbetaling.domene.personident
 import no.nav.dagpenger.iverksett.utbetaling.domene.sakId
 import no.nav.dagpenger.iverksett.utbetaling.tilstand.IverksettingService
 import no.nav.dagpenger.iverksett.utbetaling.tilstand.IverksettingsresultatService
-import no.nav.dagpenger.kontrakter.felles.somUUID
 import no.nav.dagpenger.kontrakter.oppdrag.OppdragStatus
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
@@ -54,7 +53,7 @@ class IverksettingValidatorService(
                 iverksettingsresultatService.hentIverksettingsresultat(
                     fagsystem = iverksetting.fagsak.fagsystem,
                     sakId = iverksetting.sakId,
-                    behandlingId = this.somUUID,
+                    behandlingId = this,
                     iverksettingId = iverksetting.behandling.forrigeIverksettingId,
                 )
 

@@ -115,7 +115,7 @@ enum class DomenebegrepUtbetalingsoppdrag(override val nøkkel: String) : Domene
 }
 
 data class ForventetUtbetalingsoppdrag(
-    val behandlingId: Long,
+    val behandlingId: String,
     val erFørsteUtbetalingPåSak: Boolean,
     val utbetalingsperiode: List<ForventetUtbetalingsperiode>,
 )

@@ -5,7 +5,6 @@ import no.nav.dagpenger.iverksett.felles.http.ObjectMapperProvider.objectMapper
 import no.nav.dagpenger.iverksett.utbetaling.domene.behandlingId
 import no.nav.dagpenger.iverksett.utbetaling.domene.sakId
 import no.nav.dagpenger.iverksett.utbetaling.util.enIverksetting
-import no.nav.dagpenger.kontrakter.felles.somString
 import no.nav.dagpenger.kontrakter.iverksett.IverksettStatus
 import no.nav.dagpenger.kontrakter.iverksett.StatusEndretMelding
 import org.apache.kafka.clients.producer.KafkaProducer
@@ -35,9 +34,9 @@ class StatusEndretProdusentTest : Integrasjonstest() {
         val raw = KafkaContainerInitializer.getAllRecords().first().value()
         val melding = objectMapper.readValue(raw, StatusEndretMelding::class.java)
 
-        assertEquals(iverksetting.sakId.somString, melding.sakId)
+        assertEquals(iverksetting.sakId, melding.sakId)
         assertEquals(iverksetting.fagsak.fagsystem, melding.fagsystem)
-        assertEquals(iverksetting.behandlingId.somString, melding.behandlingId)
+        assertEquals(iverksetting.behandlingId, melding.behandlingId)
         assertEquals(IverksettStatus.OK, melding.status)
         assertNull(melding.iverksettingId)
     }

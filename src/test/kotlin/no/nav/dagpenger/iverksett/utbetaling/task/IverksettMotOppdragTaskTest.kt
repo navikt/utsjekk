@@ -11,14 +11,13 @@ import no.nav.dagpenger.iverksett.utbetaling.domene.Iverksettingsresultat
 import no.nav.dagpenger.iverksett.utbetaling.domene.OppdragResultat
 import no.nav.dagpenger.iverksett.utbetaling.domene.TilkjentYtelse
 import no.nav.dagpenger.iverksett.utbetaling.domene.sakId
+import no.nav.dagpenger.iverksett.utbetaling.domene.transformer.RandomOSURId
 import no.nav.dagpenger.iverksett.utbetaling.domene.transformer.tomTilkjentYtelse
 import no.nav.dagpenger.iverksett.utbetaling.lagIverksettingsdata
 import no.nav.dagpenger.iverksett.utbetaling.tilstand.IverksettingService
 import no.nav.dagpenger.iverksett.utbetaling.tilstand.IverksettingsresultatService
 import no.nav.dagpenger.kontrakter.felles.Fagsystem
-import no.nav.dagpenger.kontrakter.felles.GeneriskIdSomUUID
 import no.nav.dagpenger.kontrakter.felles.objectMapper
-import no.nav.dagpenger.kontrakter.felles.somUUID
 import no.nav.dagpenger.kontrakter.oppdrag.OppdragStatus
 import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsoppdrag
 import no.nav.familie.prosessering.domene.Task
@@ -31,7 +30,6 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
 import java.util.Properties
-import java.util.UUID
 
 internal class IverksettMotOppdragTaskTest {
     private val oppdragClient = mockk<OppdragClient>()
@@ -39,8 +37,8 @@ internal class IverksettMotOppdragTaskTest {
     private val iverksettingService = mockk<IverksettingService>()
     private val iverksettingsresultatService = mockk<IverksettingsresultatService>()
 
-    private val behandlingId = GeneriskIdSomUUID(UUID.randomUUID())
-    private val sakId = GeneriskIdSomUUID(UUID.randomUUID())
+    private val behandlingId = RandomOSURId.generate()
+    private val sakId = RandomOSURId.generate()
     private val taskPayload =
         objectMapper.writeValueAsString(
             TaskPayload(
@@ -68,8 +66,8 @@ internal class IverksettMotOppdragTaskTest {
 
         every { iverksettingService.hentIverksetting(any(), any(), any()) } returns
             lagIverksettingsdata(
-                sakId = sakId.somUUID,
-                behandlingId = behandlingId.somUUID,
+                sakId = sakId,
+                behandlingId = behandlingId,
                 andelsdatoer = listOf(LocalDate.now(), LocalDate.now().minusDays(15)),
             )
         every { oppdragClient.iverksettOppdrag(capture(oppdragSlot)) } just Runs
@@ -77,12 +75,12 @@ internal class IverksettMotOppdragTaskTest {
             iverksettingsresultatService.oppdaterTilkjentYtelseForUtbetaling(
                 any(),
                 sakId,
-                behandlingId.somUUID,
+                behandlingId,
                 any(),
                 null,
             )
         } returns Unit
-        every { iverksettingsresultatService.hentTilkjentYtelse(any(), any(), any<UUID>(), any()) } returns null
+        every { iverksettingsresultatService.hentTilkjentYtelse(any(), any(), any<String>(), any()) } returns null
 
         iverksettMotOppdragTask.doTask(Task(IverksettMotOppdragTask.TYPE, taskPayload, Properties()))
 
@@ -91,7 +89,7 @@ internal class IverksettMotOppdragTaskTest {
             iverksettingsresultatService.oppdaterTilkjentYtelseForUtbetaling(
                 any(),
                 sakId,
-                behandlingId.somUUID,
+                behandlingId,
                 any(),
                 null,
             )
@@ -117,7 +115,7 @@ internal class IverksettMotOppdragTaskTest {
             iverksettingsresultatService.oppdaterTilkjentYtelseForUtbetaling(
                 any(),
                 sakId,
-                behandlingId.somUUID,
+                behandlingId,
                 any(),
                 null,
             )
@@ -146,8 +144,8 @@ internal class IverksettMotOppdragTaskTest {
 
         every { iverksettingService.hentIverksetting(any(), any(), any()) } returns
             lagIverksettingsdata(
-                behandlingId = behandlingId.somUUID,
-                sakId = sakId.somUUID,
+                behandlingId = behandlingId,
+                sakId = sakId,
                 andelsdatoer = listOf(LocalDate.now(), LocalDate.now().minusDays(15)),
             )
         every { taskService.save(capture(taskSlot)) } returns task
@@ -159,7 +157,7 @@ internal class IverksettMotOppdragTaskTest {
     }
 
     private fun tomUtbetaling() =
-        lagIverksettingsdata(sakId = sakId.somUUID).let {
+        lagIverksettingsdata(sakId = sakId).let {
             it.copy(vedtak = it.vedtak.copy(tilkjentYtelse = tomTilkjentYtelse()))
         }
 
@@ -171,15 +169,15 @@ internal class IverksettMotOppdragTaskTest {
     private val iverksettingsresultat get(): Iverksettingsresultat {
         val iverksetting =
             lagIverksettingsdata(
-                behandlingId = behandlingId.somUUID,
-                sakId = sakId.somUUID,
+                behandlingId = behandlingId,
+                sakId = sakId,
                 andelsdatoer = listOf(LocalDate.now(), LocalDate.now().minusDays(15)),
             )
         val sisteAndelIKjede = iverksetting.vedtak.tilkjentYtelse.andelerTilkjentYtelse.first().copy(periodeId = 0)
         return Iverksettingsresultat(
             fagsystem = iverksetting.fagsak.fagsystem,
             sakId = iverksetting.sakId,
-            behandlingId = behandlingId.somUUID,
+            behandlingId = behandlingId,
             iverksettingId = iverksetting.behandling.iverksettingId,
             tilkjentYtelseForUtbetaling =
                 TilkjentYtelse(

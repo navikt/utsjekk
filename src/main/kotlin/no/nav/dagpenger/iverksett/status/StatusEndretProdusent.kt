@@ -4,7 +4,6 @@ import no.nav.dagpenger.iverksett.felles.http.ObjectMapperProvider.objectMapper
 import no.nav.dagpenger.iverksett.utbetaling.domene.Iverksetting
 import no.nav.dagpenger.iverksett.utbetaling.domene.behandlingId
 import no.nav.dagpenger.iverksett.utbetaling.domene.sakId
-import no.nav.dagpenger.kontrakter.felles.somString
 import no.nav.dagpenger.kontrakter.iverksett.IverksettStatus
 import no.nav.dagpenger.kontrakter.iverksett.StatusEndretMelding
 import org.apache.kafka.clients.producer.KafkaProducer
@@ -23,8 +22,8 @@ class StatusEndretProdusent(
     ) {
         val melding =
             StatusEndretMelding(
-                sakId = iverksetting.sakId.somString,
-                behandlingId = iverksetting.behandlingId.somString,
+                sakId = iverksetting.sakId,
+                behandlingId = iverksetting.behandlingId,
                 iverksettingId = iverksetting.behandling.iverksettingId,
                 fagsystem = iverksetting.fagsak.fagsystem,
                 status = iverksettStatus,

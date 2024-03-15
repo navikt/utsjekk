@@ -7,7 +7,6 @@ import no.nav.dagpenger.iverksett.utbetaling.domene.sakId
 import no.nav.dagpenger.iverksett.utbetaling.tilstand.IverksettingService
 import no.nav.dagpenger.iverksett.utbetaling.util.enIverksetting
 import no.nav.dagpenger.kontrakter.felles.objectMapper
-import no.nav.dagpenger.kontrakter.felles.somString
 import no.nav.dagpenger.kontrakter.iverksett.IverksettStatus
 import no.nav.dagpenger.kontrakter.iverksett.StatusEndretMelding
 import no.nav.familie.prosessering.internal.TaskService
@@ -54,10 +53,10 @@ class VentePåStatusFraØkonomiIntegrasjonsTest : Integrasjonstest() {
         val andreMelding = objectMapper.readValue(alleMeldinger.last().value(), StatusEndretMelding::class.java)
 
         assertEquals(2, alleMeldinger.count())
-        assertEquals(iverksetting.sakId.somString, førsteMelding.sakId)
-        assertEquals(iverksetting.sakId.somString, andreMelding.sakId)
-        assertEquals(iverksetting.behandlingId.somString, førsteMelding.behandlingId)
-        assertEquals(iverksetting.behandlingId.somString, andreMelding.behandlingId)
+        assertEquals(iverksetting.sakId, førsteMelding.sakId)
+        assertEquals(iverksetting.sakId, andreMelding.sakId)
+        assertEquals(iverksetting.behandlingId, førsteMelding.behandlingId)
+        assertEquals(iverksetting.behandlingId, andreMelding.behandlingId)
         assertEquals(iverksetting.behandling.iverksettingId, førsteMelding.iverksettingId)
         assertEquals(iverksetting.behandling.iverksettingId, andreMelding.iverksettingId)
         assertEquals(IverksettStatus.SENDT_TIL_OPPDRAG, førsteMelding.status)

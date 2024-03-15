@@ -4,12 +4,10 @@ import no.nav.dagpenger.iverksett.utbetaling.domene.Iverksetting
 import no.nav.dagpenger.iverksett.utbetaling.domene.IverksettingEntitet
 import no.nav.dagpenger.iverksett.utbetaling.domene.sakId
 import no.nav.dagpenger.kontrakter.felles.objectMapper
-import no.nav.dagpenger.kontrakter.felles.somString
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.jdbc.core.RowMapper
 import org.springframework.stereotype.Repository
 import java.sql.ResultSet
-import java.util.UUID
 
 @Repository
 class IverksettingRepository(private val jdbcTemplate: JdbcTemplate) {
@@ -26,13 +24,13 @@ class IverksettingRepository(private val jdbcTemplate: JdbcTemplate) {
 
     fun findByFagsakId(fagsakId: String): List<IverksettingEntitet> {
         val sql =
-            "select behandling_id, data, mottatt_tidspunkt from iverksetting where data -> 'fagsak' -> 'fagsakId' ->> 'id' = ?"
+            "select behandling_id, data, mottatt_tidspunkt from iverksetting where data -> 'fagsak' ->> 'fagsakId' = ?"
         return jdbcTemplate.query(sql, IverksettingRowMapper(), fagsakId)
     }
 
     fun findByFagsakAndBehandlingAndIverksetting(
         fagsakId: String,
-        behandlingId: UUID,
+        behandlingId: String,
         iverksettingId: String?,
     ): List<IverksettingEntitet> {
         return if (iverksettingId != null) {
@@ -44,22 +42,22 @@ class IverksettingRepository(private val jdbcTemplate: JdbcTemplate) {
 
     private fun findByFagsakIdAndBehandlingIdAndIverksettingId(
         fagsakId: String,
-        behandlingId: UUID,
+        behandlingId: String,
         iverksettingId: String,
     ): List<IverksettingEntitet> {
         val sql =
             "select behandling_id, data, mottatt_tidspunkt from iverksetting where behandling_id = ? " +
-                "and data -> 'fagsak' -> 'fagsakId' ->> 'id' = ? and data -> 'behandling' ->> 'iverksettingId' = ?"
+                "and data -> 'fagsak' ->> 'fagsakId' = ? and data -> 'behandling' ->> 'iverksettingId' = ?"
         return jdbcTemplate.query(sql, IverksettingRowMapper(), behandlingId, fagsakId, iverksettingId)
     }
 
     private fun findByFagsakIdAndBehandlingId(
         fagsakId: String,
-        behandlingId: UUID,
+        behandlingId: String,
     ): List<IverksettingEntitet> {
         val sql =
             "select behandling_id, data, mottatt_tidspunkt from iverksetting where behandling_id = ? " +
-                "and data -> 'fagsak' -> 'fagsakId' ->> 'id' = ? and data -> 'behandling' ->> 'iverksettingId' is null"
+                "and data -> 'fagsak' ->> 'fagsakId' = ? and data -> 'behandling' ->> 'iverksettingId' is null"
         return jdbcTemplate.query(sql, IverksettingRowMapper(), behandlingId, fagsakId)
     }
 
@@ -77,7 +75,7 @@ class IverksettingRepository(private val jdbcTemplate: JdbcTemplate) {
                 sql,
                 iverksetting.mottattTidspunkt,
                 iverksetting.behandlingId,
-                iverksetting.data.sakId.somString,
+                iverksetting.data.sakId,
             )
         } else {
             val sql =
@@ -87,7 +85,7 @@ class IverksettingRepository(private val jdbcTemplate: JdbcTemplate) {
                 sql,
                 iverksetting.mottattTidspunkt,
                 iverksetting.behandlingId,
-                iverksetting.data.sakId.somString,
+                iverksetting.data.sakId,
                 iverksetting.data.behandling.iverksettingId,
             )
         }
@@ -98,11 +96,8 @@ internal class IverksettingRowMapper : RowMapper<IverksettingEntitet> {
     override fun mapRow(
         resultSet: ResultSet,
         rowNum: Int,
-    ): IverksettingEntitet {
-        return IverksettingEntitet(
-            behandlingId = UUID.fromString(resultSet.getString("behandling_id")),
-            data = objectMapper.readValue(resultSet.getString("data"), Iverksetting::class.java),
-            mottattTidspunkt = resultSet.getTimestamp("mottatt_tidspunkt")?.toLocalDateTime(),
-        )
-    }
+    ) = IverksettingEntitet(
+        behandlingId = resultSet.getString("behandling_id"),
+        data = objectMapper.readValue(resultSet.getString("data"), Iverksetting::class.java),
+    mottattTidspunkt = resultSet.getTimestamp("mottatt_tidspunkt")?.toLocalDateTime(),)
 }

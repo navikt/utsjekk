@@ -5,17 +5,15 @@ import no.nav.dagpenger.iverksett.utbetaling.domene.Iverksetting
 import no.nav.dagpenger.iverksett.utbetaling.domene.IverksettingEntitet
 import no.nav.dagpenger.iverksett.utbetaling.domene.behandlingId
 import no.nav.dagpenger.iverksett.utbetaling.domene.sakId
+import no.nav.dagpenger.iverksett.utbetaling.domene.transformer.RandomOSURId
 import no.nav.dagpenger.iverksett.utbetaling.lagIverksettingEntitet
 import no.nav.dagpenger.iverksett.utbetaling.lagIverksettingsdata
-import no.nav.dagpenger.kontrakter.felles.somString
-import no.nav.dagpenger.kontrakter.felles.somUUID
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
-import java.util.UUID
 
 class IverksettingRepositoryTest : Integrasjonstest() {
     @Autowired
@@ -25,18 +23,18 @@ class IverksettingRepositoryTest : Integrasjonstest() {
     fun `lagre og hent iverksett på fagsakId, forvent likhet`() {
         val iverksettingData: Iverksetting =
             lagIverksettingsdata(
-                sakId = UUID.randomUUID(),
-                behandlingId = UUID.randomUUID(),
+                sakId = RandomOSURId.generate(),
+                behandlingId = RandomOSURId.generate(),
                 andelsdatoer = listOf(LocalDate.now(), LocalDate.now().minusDays(15)),
             )
 
-        iverksettingRepository.findByFagsakId(iverksettingData.fagsak.fagsakId.somString).also {
+        iverksettingRepository.findByFagsakId(iverksettingData.fagsak.fagsakId).also {
             assertEquals(0, it.size)
         }
 
         val iverksett = iverksettingRepository.insert(lagIverksettingEntitet(iverksettingData))
 
-        iverksettingRepository.findByFagsakId(iverksettingData.fagsak.fagsakId.somString).also {
+        iverksettingRepository.findByFagsakId(iverksettingData.fagsak.fagsakId).also {
             assertEquals(1, it.size)
             assertSammeIverksetting(it[0], iverksett)
         }
@@ -46,16 +44,16 @@ class IverksettingRepositoryTest : Integrasjonstest() {
     fun `lagre og hent iverksett på behandlingId og iverksettingId, forvent likhet`() {
         val tmp: Iverksetting =
             lagIverksettingsdata(
-                sakId = UUID.randomUUID(),
-                behandlingId = UUID.randomUUID(),
+                sakId = RandomOSURId.generate(),
+                behandlingId = RandomOSURId.generate(),
                 andelsdatoer = listOf(LocalDate.now(), LocalDate.now().minusDays(15)),
             )
         val iverksettingData = tmp.copy(behandling = tmp.behandling.copy(iverksettingId = "TEST123"))
 
         val iverksetting =
             iverksettingRepository.findByFagsakAndBehandlingAndIverksetting(
-                fagsakId = iverksettingData.sakId.somString,
-                behandlingId = iverksettingData.behandlingId.somUUID,
+                fagsakId = iverksettingData.sakId,
+                behandlingId = iverksettingData.behandlingId,
                 iverksettingId = iverksettingData.behandling.iverksettingId,
             )
         assertTrue(iverksetting.isEmpty())
@@ -64,8 +62,8 @@ class IverksettingRepositoryTest : Integrasjonstest() {
 
         val iverksetting2 =
             iverksettingRepository.findByFagsakAndBehandlingAndIverksetting(
-                fagsakId = iverksettingData.sakId.somString,
-                behandlingId = iverksettingData.behandlingId.somUUID,
+                fagsakId = iverksettingData.sakId,
+                behandlingId = iverksettingData.behandlingId,
                 iverksettingId = iverksettingData.behandling.iverksettingId,
             )
         assertTrue(iverksetting2.isNotEmpty())
@@ -76,15 +74,15 @@ class IverksettingRepositoryTest : Integrasjonstest() {
     fun `lagre og hent iverksett på behandlingId og tom iverksettingId, forvent likhet`() {
         val iverksettingData: Iverksetting =
             lagIverksettingsdata(
-                sakId = UUID.randomUUID(),
-                behandlingId = UUID.randomUUID(),
+                sakId = RandomOSURId.generate(),
+                behandlingId = RandomOSURId.generate(),
                 andelsdatoer = listOf(LocalDate.now(), LocalDate.now().minusDays(15)),
             )
 
         val iverksetting =
             iverksettingRepository.findByFagsakAndBehandlingAndIverksetting(
-                fagsakId = iverksettingData.sakId.somString,
-                behandlingId = iverksettingData.behandlingId.somUUID,
+                fagsakId = iverksettingData.sakId,
+                behandlingId = iverksettingData.behandlingId,
                 iverksettingId = iverksettingData.behandling.iverksettingId,
             )
         assertTrue(iverksetting.isEmpty())
@@ -93,8 +91,8 @@ class IverksettingRepositoryTest : Integrasjonstest() {
 
         val iverksetting2 =
             iverksettingRepository.findByFagsakAndBehandlingAndIverksetting(
-                fagsakId = iverksettingData.sakId.somString,
-                behandlingId = iverksettingData.behandlingId.somUUID,
+                fagsakId = iverksettingData.sakId,
+                behandlingId = iverksettingData.behandlingId,
                 iverksettingId = iverksettingData.behandling.iverksettingId,
             )
         assertTrue(iverksetting2.isNotEmpty())
@@ -103,9 +101,9 @@ class IverksettingRepositoryTest : Integrasjonstest() {
 
     @Test
     fun `lagre og hent iverksett på fagsakId, behandlingId og tom iverksettingId, forvent 1 iverksetting per fagsak`() {
-        val sakId1 = UUID.randomUUID()
-        val sakId2 = UUID.randomUUID()
-        val behandlingId = UUID.randomUUID()
+        val sakId1 = RandomOSURId.generate()
+        val sakId2 = RandomOSURId.generate()
+        val behandlingId = RandomOSURId.generate()
         val iverksettingData1 =
             lagIverksettingsdata(
                 sakId = sakId1,
@@ -125,14 +123,14 @@ class IverksettingRepositoryTest : Integrasjonstest() {
 
         val iverksetting1 =
             iverksettingRepository.findByFagsakAndBehandlingAndIverksetting(
-                fagsakId = iverksettingData1.sakId.somString,
-                behandlingId = iverksettingData1.behandlingId.somUUID,
+                fagsakId = iverksettingData1.sakId,
+                behandlingId = iverksettingData1.behandlingId,
                 iverksettingId = iverksettingData1.behandling.iverksettingId,
             )
         val iverksetting2 =
             iverksettingRepository.findByFagsakAndBehandlingAndIverksetting(
-                fagsakId = iverksettingData2.sakId.somString,
-                behandlingId = iverksettingData2.behandlingId.somUUID,
+                fagsakId = iverksettingData2.sakId,
+                behandlingId = iverksettingData2.behandlingId,
                 iverksettingId = iverksettingData2.behandling.iverksettingId,
             )
 

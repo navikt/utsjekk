@@ -19,9 +19,7 @@ import no.nav.dagpenger.iverksett.utbetaling.utbetalingsoppdrag.Utbetalingsgener
 import no.nav.dagpenger.iverksett.utbetaling.utbetalingsoppdrag.domene.Behandlingsinformasjon
 import no.nav.dagpenger.iverksett.utbetaling.utbetalingsoppdrag.domene.BeregnetUtbetalingsoppdrag
 import no.nav.dagpenger.kontrakter.felles.Fagsystem
-import no.nav.dagpenger.kontrakter.felles.GeneriskId
 import no.nav.dagpenger.kontrakter.felles.objectMapper
-import no.nav.dagpenger.kontrakter.felles.somUUID
 import no.nav.dagpenger.kontrakter.oppdrag.OppdragStatus
 import no.nav.familie.prosessering.AsyncTaskStep
 import no.nav.familie.prosessering.TaskStepBeskrivelse
@@ -64,7 +62,7 @@ class IverksettMotOppdragTask(
                 iverksettingsresultatService.hentIverksettingsresultat(
                     fagsystem = iverksetting.fagsak.fagsystem,
                     sakId = iverksetting.sakId,
-                    behandlingId = it.somUUID,
+                    behandlingId = it,
                     iverksettingId = iverksetting.behandling.forrigeIverksettingId,
                 )
                     ?: error("Kunne ikke finne iverksettresultat for iverksetting $iverksetting")
@@ -89,7 +87,7 @@ class IverksettMotOppdragTask(
             iverksettingsresultatService.oppdaterOppdragResultat(
                 fagsystem = iverksetting.fagsak.fagsystem,
                 sakId = iverksetting.sakId,
-                behandlingId = iverksetting.behandlingId.somUUID,
+                behandlingId = iverksetting.behandlingId,
                 oppdragResultat = OppdragResultat(OppdragStatus.OK_UTEN_UTBETALING),
                 iverksettingId = iverksetting.behandling.iverksettingId,
             )
@@ -137,9 +135,9 @@ class IverksettMotOppdragTask(
         tilkjentYtelse: TilkjentYtelse,
         beregnetUtbetalingsoppdrag: BeregnetUtbetalingsoppdrag,
         forrigeIverksettingsresultat: Iverksettingsresultat?,
-        behandlingId: GeneriskId,
+        behandlingId: String,
         fagsystem: Fagsystem,
-        sakId: GeneriskId,
+        sakId: String,
         iverksettingId: String?,
     ): TilkjentYtelse {
         val nyeAndelerMedPeriodeId =
@@ -168,7 +166,7 @@ class IverksettMotOppdragTask(
         iverksettingsresultatService.oppdaterTilkjentYtelseForUtbetaling(
             fagsystem = fagsystem,
             sakId = sakId,
-            behandlingId = behandlingId.somUUID,
+            behandlingId = behandlingId,
             iverksettingId = iverksettingId,
             tilkjentYtelseForUtbetaling = nyTilkjentYtelseMedSisteAndelIKjede,
         )

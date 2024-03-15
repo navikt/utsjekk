@@ -1,7 +1,5 @@
 package no.nav.dagpenger.iverksett.utbetaling.util
 
-import no.nav.dagpenger.kontrakter.felles.GeneriskId
-import no.nav.dagpenger.kontrakter.felles.GeneriskIdSomString
 import no.nav.dagpenger.kontrakter.felles.Personident
 import no.nav.dagpenger.kontrakter.felles.Satstype
 import no.nav.dagpenger.kontrakter.felles.StønadTypeTilleggsstønader
@@ -12,8 +10,8 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 
 fun enIverksettTilleggsstønaderDto(
-    behandlingId: GeneriskId = GeneriskIdSomString("TEST123"),
-    sakId: GeneriskId = GeneriskIdSomString("TEST456"),
+    behandlingId: String = "TEST123",
+    sakId: String = "TEST456",
     andelsbeløp: Int = 500,
     iverksettingId: String? = null,
 ) = IverksettTilleggsstønaderDto(

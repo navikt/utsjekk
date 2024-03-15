@@ -2,16 +2,15 @@ package no.nav.dagpenger.iverksett.utbetaling.utbetalingsoppdrag
 
 import no.nav.dagpenger.iverksett.utbetaling.domene.StønadsdataDagpenger
 import no.nav.dagpenger.iverksett.utbetaling.domene.StønadsdataTiltakspenger
+import no.nav.dagpenger.iverksett.utbetaling.domene.transformer.RandomOSURId
 import no.nav.dagpenger.iverksett.utbetaling.utbetalingsoppdrag.domene.AndelData
 import no.nav.dagpenger.iverksett.utbetaling.utbetalingsoppdrag.domene.Behandlingsinformasjon
 import no.nav.dagpenger.kontrakter.felles.Fagsystem
-import no.nav.dagpenger.kontrakter.felles.GeneriskIdSomUUID
 import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
 import no.nav.dagpenger.kontrakter.felles.StønadTypeTiltakspenger
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
-import java.util.UUID
 
 class UtbetalingsgeneratorTest {
     companion object {
@@ -20,8 +19,8 @@ class UtbetalingsgeneratorTest {
                 saksbehandlerId = "A123456",
                 beslutterId = "B123456",
                 fagsystem = Fagsystem.DAGPENGER,
-                fagsakId = GeneriskIdSomUUID(UUID.randomUUID()),
-                behandlingId = GeneriskIdSomUUID(UUID.randomUUID()),
+                fagsakId = RandomOSURId.generate(),
+                behandlingId = RandomOSURId.generate(),
                 personident = "12345678911",
                 vedtaksdato = LocalDate.now(),
                 iverksettingId = null,

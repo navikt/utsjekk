@@ -6,6 +6,7 @@ import no.nav.dagpenger.iverksett.utbetaling.domene.AndelTilkjentYtelse
 import no.nav.dagpenger.iverksett.utbetaling.domene.Iverksetting
 import no.nav.dagpenger.iverksett.utbetaling.domene.behandlingId
 import no.nav.dagpenger.iverksett.utbetaling.domene.sakId
+import no.nav.dagpenger.iverksett.utbetaling.domene.transformer.RandomOSURId
 import no.nav.dagpenger.iverksett.utbetaling.tilstand.IverksettingService
 import no.nav.dagpenger.iverksett.utbetaling.tilstand.IverksettingsresultatService
 import no.nav.dagpenger.iverksett.utbetaling.util.behandlingsdetaljer
@@ -14,13 +15,8 @@ import no.nav.dagpenger.iverksett.utbetaling.util.enIverksetting
 import no.nav.dagpenger.iverksett.utbetaling.util.lagAndelTilkjentYtelse
 import no.nav.dagpenger.iverksett.utbetaling.util.vedtaksdetaljer
 import no.nav.dagpenger.kontrakter.felles.Fagsystem
-import no.nav.dagpenger.kontrakter.felles.GeneriskId
-import no.nav.dagpenger.kontrakter.felles.GeneriskIdSomString
-import no.nav.dagpenger.kontrakter.felles.GeneriskIdSomUUID
 import no.nav.dagpenger.kontrakter.felles.StønadTypeTiltakspenger
 import no.nav.dagpenger.kontrakter.felles.objectMapper
-import no.nav.dagpenger.kontrakter.felles.somString
-import no.nav.dagpenger.kontrakter.felles.somUUID
 import no.nav.dagpenger.kontrakter.iverksett.IverksettStatus
 import no.nav.dagpenger.kontrakter.iverksett.StatusEndretMelding
 import no.nav.familie.prosessering.internal.TaskService
@@ -28,7 +24,6 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import java.time.LocalDate
-import java.util.UUID
 
 class IverksettMotOppdragIntegrasjonsTest : Integrasjonstest() {
     @Autowired
@@ -158,10 +153,10 @@ class IverksettMotOppdragIntegrasjonsTest : Integrasjonstest() {
             startIverksetting(
                 enIverksetting(
                     fagsystem = Fagsystem.TILLEGGSSTØNADER,
-                    sakId = GeneriskIdSomString("54321"),
+                    sakId = "54321",
                     behandlingsdetaljer =
                         behandlingsdetaljer(
-                            behandlingId = UUID.fromString("4ea75432-f1f7-4a36-9bc5-498023000af4"),
+                            behandlingId = RandomOSURId.generate(),
                             iverksettingId = "9f6eaa12-6b32-42a2-bde9-4b520833443d",
                         ),
                     vedtaksdetaljer = vedtaksdetaljer(andeler = emptyList()),
@@ -174,8 +169,8 @@ class IverksettMotOppdragIntegrasjonsTest : Integrasjonstest() {
 
     @Test
     fun `produserer statusmelding på kafka når utbetaling iverksettes, forventer SENDT_TIL_OPPDRAG`() {
-        val sakId = GeneriskIdSomString("54321")
-        val behandlingId = UUID.fromString("4ea75432-f1f7-4a36-9bc5-498023000af4")
+        val sakId = "54321"
+        val behandlingId = RandomOSURId.generate()
         val iverksettingId = "9f6eaa12-6b32-42a2-bde9-4b520833443d"
         val iverksetting =
             enIverksetting(
@@ -193,16 +188,16 @@ class IverksettMotOppdragIntegrasjonsTest : Integrasjonstest() {
         val raw = KafkaContainerInitializer.getAllRecords().first().value()
         val melding = objectMapper.readValue(raw, StatusEndretMelding::class.java)
 
-        assertEquals(sakId.somString, melding.sakId)
-        assertEquals(behandlingId.toString(), melding.behandlingId)
+        assertEquals(sakId, melding.sakId)
+        assertEquals(behandlingId, melding.behandlingId)
         assertEquals(iverksettingId, melding.iverksettingId)
         assertEquals(IverksettStatus.SENDT_TIL_OPPDRAG, melding.status)
     }
 
     @Test
     fun `produserer statusmelding på kafka når iverksetting ikke har utbetaling, forventer OK_UTEN_UTBETALING`() {
-        val sakId = GeneriskIdSomString("54321")
-        val behandlingId = UUID.fromString("4ea75432-f1f7-4a36-9bc5-498023000af4")
+        val sakId = "54321"
+        val behandlingId = RandomOSURId.generate()
         val iverksettingId = "9f6eaa12-6b32-42a2-bde9-4b520833443d"
         val iverksetting =
             enIverksetting(
@@ -220,15 +215,15 @@ class IverksettMotOppdragIntegrasjonsTest : Integrasjonstest() {
         val raw = KafkaContainerInitializer.getAllRecords().first().value()
         val melding = objectMapper.readValue(raw, StatusEndretMelding::class.java)
 
-        assertEquals(sakId.somString, melding.sakId)
-        assertEquals(behandlingId.toString(), melding.behandlingId)
+        assertEquals(sakId, melding.sakId)
+        assertEquals(behandlingId, melding.behandlingId)
         assertEquals(iverksettingId, melding.iverksettingId)
         assertEquals(IverksettStatus.OK_UTEN_UTBETALING, melding.status)
     }
 
     private fun startIverksetting(
-        sakId: GeneriskId = GeneriskIdSomUUID(UUID.randomUUID()),
-        behandlingId: GeneriskId = GeneriskIdSomUUID(UUID.randomUUID()),
+        sakId: String = RandomOSURId.generate(),
+        behandlingId: String = RandomOSURId.generate(),
         andeler: List<AndelTilkjentYtelse> =
             listOf(
                 lagAndelTilkjentYtelse(
@@ -270,7 +265,7 @@ class IverksettMotOppdragIntegrasjonsTest : Integrasjonstest() {
             iverksettingsresultatService.hentTilkjentYtelse(
                 fagsystem = iverksetting.fagsak.fagsystem,
                 sakId = iverksetting.sakId,
-                behandlingId = iverksetting.behandlingId.somUUID,
+                behandlingId = iverksetting.behandlingId,
                 iverksettingId = iverksetting.behandling.iverksettingId,
             ),
         ) {
@@ -281,8 +276,8 @@ class IverksettMotOppdragIntegrasjonsTest : Integrasjonstest() {
         requireNotNull(
             iverksettingService.utledStatus(
                 fagsystem = iverksetting.fagsak.fagsystem,
-                sakId = iverksetting.sakId.somString,
-                behandlingId = iverksetting.behandlingId.somUUID,
+                sakId = iverksetting.sakId,
+                behandlingId = iverksetting.behandlingId,
                 iverksettingId = iverksetting.behandling.iverksettingId,
             ),
         ) {

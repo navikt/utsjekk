@@ -16,8 +16,6 @@ import no.nav.dagpenger.kontrakter.felles.GeneriskId
 import no.nav.dagpenger.kontrakter.felles.GeneriskIdSomString
 import no.nav.dagpenger.kontrakter.felles.GeneriskIdSomUUID
 import no.nav.dagpenger.kontrakter.felles.objectMapper
-import no.nav.dagpenger.kontrakter.felles.somString
-import no.nav.dagpenger.kontrakter.felles.somUUID
 import no.nav.dagpenger.kontrakter.iverksett.IverksettStatus
 import no.nav.dagpenger.kontrakter.oppdrag.OppdragIdDto
 import no.nav.dagpenger.kontrakter.oppdrag.OppdragStatus
@@ -49,7 +47,7 @@ class IverksettingService(
 
         iverksettingRepository.insert(
             IverksettingEntitet(
-                behandlingId = iverksetting.behandling.behandlingId.somUUID,
+                behandlingId = iverksetting.behandling.behandlingId,
                 data = iverksetting,
                 mottattTidspunkt = LocalDateTime.now(),
             ),
@@ -58,7 +56,7 @@ class IverksettingService(
         iverksettingsresultatService.opprettTomtResultat(
             fagsystem = iverksetting.fagsak.fagsystem,
             sakId = iverksetting.sakId,
-            behandlingId = iverksetting.behandling.behandlingId.somUUID,
+            behandlingId = iverksetting.behandling.behandlingId,
             iverksettingId = iverksetting.behandling.iverksettingId,
         )
 
@@ -79,14 +77,14 @@ class IverksettingService(
 
     fun hentIverksetting(
         fagsystem: Fagsystem,
-        sakId: GeneriskId,
-        behandlingId: GeneriskId,
+        sakId: String,
+        behandlingId: String,
         iverksettingId: String? = null,
     ): Iverksetting? {
         val iverksettingerForFagsystem =
             iverksettingRepository.findByFagsakAndBehandlingAndIverksetting(
-                sakId.somString,
-                behandlingId.somUUID,
+                sakId,
+                behandlingId,
                 iverksettingId,
             )
                 .filter { it.data.fagsak.fagsystem == fagsystem }
@@ -118,8 +116,8 @@ class IverksettingService(
     fun publiserStatusmelding(iverksetting: Iverksetting) {
         utledStatus(
             fagsystem = iverksetting.fagsak.fagsystem,
-            sakId = iverksetting.sakId.somString,
-            behandlingId = iverksetting.behandlingId.somUUID,
+            sakId = iverksetting.sakId,
+            behandlingId = iverksetting.behandlingId,
             iverksettingId = iverksetting.behandling.iverksettingId,
         )?.also { status ->
             statusEndretProdusent.sendStatusEndretEvent(iverksetting, status)
@@ -129,13 +127,13 @@ class IverksettingService(
     fun utledStatus(
         fagsystem: Fagsystem,
         sakId: String,
-        behandlingId: UUID,
+        behandlingId: String,
         iverksettingId: String?,
     ): IverksettStatus? {
         val resultat =
             iverksettingsresultatService.hentIverksettingsresultat(
                 fagsystem = fagsystem,
-                sakId = sakId.tilGeneriskId(),
+                sakId = sakId,
                 behandlingId = behandlingId,
                 iverksettingId = iverksettingId,
             )
@@ -182,7 +180,7 @@ class IverksettingService(
         iverksettingsresultatService.oppdaterOppdragResultat(
             fagsystem = iverksetting.fagsak.fagsystem,
             sakId = iverksetting.sakId,
-            behandlingId = iverksetting.behandlingId.somUUID,
+            behandlingId = iverksetting.behandlingId,
             iverksettingId = iverksetting.behandling.iverksettingId,
             oppdragResultat = OppdragResultat(oppdragStatus = status),
         )

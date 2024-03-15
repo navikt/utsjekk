@@ -4,13 +4,12 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import no.nav.dagpenger.iverksett.ResourceLoaderTestUtil
 import no.nav.dagpenger.iverksett.felles.http.ObjectMapperProvider.objectMapper
 import no.nav.dagpenger.iverksett.utbetaling.domene.Iverksetting
+import no.nav.dagpenger.iverksett.utbetaling.domene.transformer.RandomOSURId
 import no.nav.dagpenger.iverksett.utbetaling.util.enIverksetting
-import no.nav.dagpenger.kontrakter.felles.GeneriskIdSomUUID
 import no.nav.dagpenger.kontrakter.iverksett.IverksettDto
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
-import java.util.UUID
 
 class IverksettingJsonTransformTest {
     @Test
@@ -23,14 +22,14 @@ class IverksettingJsonTransformTest {
 
     @Test
     fun `deserialiser JSON til Iverksett, forvent ingen unntak`() {
-        val json: String = ResourceLoaderTestUtil.readResource("json/IverksettEksempel.json")
+        val json = ResourceLoaderTestUtil.readResource("json/IverksettEksempel.json")
         val iverksetting = objectMapper.readValue<Iverksetting>(json)
         assertNotNull(iverksetting)
     }
 
     @Test
     internal fun `deserialiser iverksettDagpenger til json og serialiser tilbake til object, forvent likhet`() {
-        val behandlingId = GeneriskIdSomUUID(UUID.randomUUID())
+        val behandlingId = RandomOSURId.generate()
         val iverksetting = enIverksetting(behandlingId)
         val parsetIverksetting = objectMapper.readValue<Iverksetting>(objectMapper.writeValueAsString(iverksetting))
         assertEquals(iverksetting, parsetIverksetting)

@@ -6,6 +6,7 @@ import io.cucumber.java.no.Når
 import io.cucumber.java.no.Så
 import no.nav.dagpenger.iverksett.utbetaling.domene.StønadsdataDagpenger
 import no.nav.dagpenger.iverksett.utbetaling.domene.StønadsdataTiltakspenger
+import no.nav.dagpenger.iverksett.utbetaling.domene.transformer.RandomOSURId
 import no.nav.dagpenger.iverksett.utbetaling.utbetalingsoppdrag.Utbetalingsgenerator
 import no.nav.dagpenger.iverksett.utbetaling.utbetalingsoppdrag.cucumber.ValideringUtil.assertSjekkBehandlingIder
 import no.nav.dagpenger.iverksett.utbetaling.utbetalingsoppdrag.cucumber.domeneparser.Domenebegrep
@@ -25,8 +26,6 @@ import no.nav.dagpenger.iverksett.utbetaling.utbetalingsoppdrag.domene.Behandlin
 import no.nav.dagpenger.iverksett.utbetaling.utbetalingsoppdrag.domene.BeregnetUtbetalingsoppdrag
 import no.nav.dagpenger.iverksett.utbetaling.utbetalingsoppdrag.domene.uten0beløp
 import no.nav.dagpenger.kontrakter.felles.Fagsystem
-import no.nav.dagpenger.kontrakter.felles.GeneriskId
-import no.nav.dagpenger.kontrakter.felles.GeneriskIdSomUUID
 import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
 import no.nav.dagpenger.kontrakter.felles.StønadTypeTiltakspenger
 import no.nav.dagpenger.kontrakter.oppdrag.Utbetalingsoppdrag
@@ -38,7 +37,7 @@ import org.slf4j.LoggerFactory
 import java.time.LocalDate
 import java.util.UUID
 
-val FAGSAK_ID = GeneriskIdSomUUID(UUID.randomUUID())
+val FAGSAK_ID = RandomOSURId.generate()
 
 class OppdragSteg {
     private val logger = LoggerFactory.getLogger(javaClass)
@@ -132,7 +131,7 @@ class OppdragSteg {
             val behandlingIdAsUUID = behandlingIdTilUUID[behandlingId.toInt()]!!
             behandlingsinformasjon[behandlingIdAsUUID] =
                 lagBehandlingsinformasjon(
-                    behandlingId = GeneriskIdSomUUID(behandlingIdAsUUID),
+                    behandlingId = behandlingId,
                 )
         }
     }
@@ -142,12 +141,12 @@ class OppdragSteg {
             val behandlingIdAsUUID = behandlingIdTilUUID[behandlingId.toInt()]!!
             if (!behandlingsinformasjon.containsKey(behandlingIdAsUUID)) {
                 behandlingsinformasjon[behandlingIdAsUUID] =
-                    lagBehandlingsinformasjon(GeneriskIdSomUUID(behandlingIdAsUUID))
+                    lagBehandlingsinformasjon(behandlingId)
             }
         }
     }
 
-    private fun lagBehandlingsinformasjon(behandlingId: GeneriskId) =
+    private fun lagBehandlingsinformasjon(behandlingId: String) =
         Behandlingsinformasjon(
             fagsakId = FAGSAK_ID,
             fagsystem = Fagsystem.DAGPENGER,

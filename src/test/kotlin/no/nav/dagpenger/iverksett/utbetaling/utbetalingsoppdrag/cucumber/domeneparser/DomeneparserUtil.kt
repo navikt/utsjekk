@@ -14,6 +14,6 @@ enum class Domenebegrep(override val nøkkel: String) : Domenenøkkel {
 }
 
 object DomeneparserUtil {
-    fun DataTable.groupByBehandlingId(): Map<Long, List<Map<String, String>>> =
-        this.asMaps().groupBy { rad -> parseLong(Domenebegrep.BEHANDLING_ID, rad) }
+    fun DataTable.groupByBehandlingId(): Map<String, List<Map<String, String>>> =
+        this.asMaps().groupBy { rad -> parseString(Domenebegrep.BEHANDLING_ID, rad) }
 }

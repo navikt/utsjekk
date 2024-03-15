@@ -2,7 +2,6 @@ package no.nav.dagpenger.iverksett.utbetaling.domene
 
 import no.nav.dagpenger.kontrakter.felles.BrukersNavKontor
 import no.nav.dagpenger.kontrakter.felles.Fagsystem
-import no.nav.dagpenger.kontrakter.felles.GeneriskId
 import java.time.LocalDateTime
 
 data class Iverksetting(
@@ -10,14 +9,14 @@ data class Iverksetting(
     val behandling: Behandlingsdetaljer,
     val søker: Søker,
     val vedtak: Vedtaksdetaljer,
-    val forrigeIverksettingBehandlingId: GeneriskId? = null,
+    val forrigeIverksettingBehandlingId: String? = null,
 ) {
     override fun toString() =
         "fagsystem ${fagsak.fagsystem}, sak $sakId, behandling $behandlingId, iverksettingId ${behandling.iverksettingId}"
 }
 
 data class Fagsakdetaljer(
-    val fagsakId: GeneriskId,
+    val fagsakId: String,
     val fagsystem: Fagsystem,
 )
 
@@ -34,9 +33,9 @@ data class Vedtaksdetaljer(
 )
 
 data class Behandlingsdetaljer(
-    val forrigeBehandlingId: GeneriskId? = null,
+    val forrigeBehandlingId: String? = null,
     val forrigeIverksettingId: String? = null,
-    val behandlingId: GeneriskId,
+    val behandlingId: String,
     val iverksettingId: String? = null,
 )
 

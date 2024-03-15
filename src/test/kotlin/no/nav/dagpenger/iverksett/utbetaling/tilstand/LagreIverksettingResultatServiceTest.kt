@@ -2,9 +2,9 @@ package no.nav.dagpenger.iverksett.utbetaling.tilstand
 
 import no.nav.dagpenger.iverksett.Integrasjonstest
 import no.nav.dagpenger.iverksett.utbetaling.domene.OppdragResultat
+import no.nav.dagpenger.iverksett.utbetaling.domene.transformer.RandomOSURId
 import no.nav.dagpenger.iverksett.utbetaling.util.enTilkjentYtelse
 import no.nav.dagpenger.kontrakter.felles.Fagsystem
-import no.nav.dagpenger.kontrakter.felles.GeneriskIdSomUUID
 import no.nav.dagpenger.kontrakter.oppdrag.OppdragStatus
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertNull
@@ -12,14 +12,13 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.springframework.beans.factory.annotation.Autowired
-import java.util.UUID
 
 internal class LagreIverksettingResultatServiceTest : Integrasjonstest() {
     @Autowired
     private lateinit var iverksettingsresultatService: IverksettingsresultatService
 
-    private val behandlingsId: UUID = UUID.randomUUID()
-    private val sakId = GeneriskIdSomUUID(UUID.randomUUID())
+    private val behandlingsId = RandomOSURId.generate()
+    private val sakId = RandomOSURId.generate()
 
     @BeforeEach
     fun beforeEach() {

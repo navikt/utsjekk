@@ -4,18 +4,16 @@ import no.nav.dagpenger.iverksett.utbetaling.domene.Iverksettingsresultat
 import no.nav.dagpenger.iverksett.utbetaling.domene.OppdragResultat
 import no.nav.dagpenger.iverksett.utbetaling.domene.TilkjentYtelse
 import no.nav.dagpenger.kontrakter.felles.Fagsystem
-import no.nav.dagpenger.kontrakter.felles.GeneriskId
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
-import java.util.UUID
 
 @Service
 class IverksettingsresultatService(private val iverksettingsresultatRepository: IverksettingsresultatRepository) {
     fun opprettTomtResultat(
         fagsystem: Fagsystem,
-        sakId: GeneriskId,
-        behandlingId: UUID,
+        sakId: String,
+        behandlingId: String,
         iverksettingId: String?,
     ) {
         iverksettingsresultatRepository.insert(Iverksettingsresultat(fagsystem, sakId, behandlingId, iverksettingId))
@@ -24,8 +22,8 @@ class IverksettingsresultatService(private val iverksettingsresultatRepository: 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     fun oppdaterTilkjentYtelseForUtbetaling(
         fagsystem: Fagsystem,
-        sakId: GeneriskId,
-        behandlingId: UUID,
+        sakId: String,
+        behandlingId: String,
         tilkjentYtelseForUtbetaling: TilkjentYtelse,
         iverksettingId: String?,
     ) {
@@ -36,8 +34,8 @@ class IverksettingsresultatService(private val iverksettingsresultatRepository: 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     fun oppdaterOppdragResultat(
         fagsystem: Fagsystem,
-        sakId: GeneriskId,
-        behandlingId: UUID,
+        sakId: String,
+        behandlingId: String,
         oppdragResultat: OppdragResultat,
         iverksettingId: String?,
     ) {
@@ -47,8 +45,8 @@ class IverksettingsresultatService(private val iverksettingsresultatRepository: 
 
     fun hentTilkjentYtelse(
         fagsystem: Fagsystem,
-        sakId: GeneriskId,
-        behandlingId: UUID,
+        sakId: String,
+        behandlingId: String,
         iverksettingId: String?,
     ): TilkjentYtelse? {
         return iverksettingsresultatRepository.findByIdOrNull(fagsystem, sakId, behandlingId, iverksettingId)?.tilkjentYtelseForUtbetaling
@@ -56,8 +54,8 @@ class IverksettingsresultatService(private val iverksettingsresultatRepository: 
 
     fun hentIverksettingsresultat(
         fagsystem: Fagsystem,
-        sakId: GeneriskId,
-        behandlingId: UUID,
+        sakId: String,
+        behandlingId: String,
         iverksettingId: String?,
     ): Iverksettingsresultat? {
         return iverksettingsresultatRepository.findByIdOrNull(fagsystem, sakId, behandlingId, iverksettingId)

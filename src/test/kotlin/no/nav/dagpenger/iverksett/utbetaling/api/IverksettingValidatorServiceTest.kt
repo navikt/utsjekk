@@ -16,7 +16,6 @@ import no.nav.dagpenger.iverksett.utbetaling.utbetalingsoppdrag.Utbetalingsgener
 import no.nav.dagpenger.iverksett.utbetaling.utbetalingsoppdrag.domene.Behandlingsinformasjon
 import no.nav.dagpenger.iverksett.utbetaling.utbetalingsoppdrag.domene.BeregnetUtbetalingsoppdrag
 import no.nav.dagpenger.iverksett.utbetaling.util.mai
-import no.nav.dagpenger.kontrakter.felles.somUUID
 import no.nav.dagpenger.kontrakter.oppdrag.OppdragStatus
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -41,7 +40,7 @@ class IverksettingValidatorServiceTest {
         val forrigeIverksetting = lagIverksettingsdata()
         val nåværendeIverksetting =
             lagIverksettingsdata(
-                forrigeBehandlingId = forrigeIverksetting.behandlingId.somUUID,
+                forrigeBehandlingId = forrigeIverksetting.behandlingId,
             )
         every { iverksettingServiceMock.hentForrigeIverksetting(nåværendeIverksetting) } returns forrigeIverksetting
 
@@ -94,8 +93,8 @@ class IverksettingValidatorServiceTest {
             )
         val nåværendeIverksetting =
             lagIverksettingsdata(
-                sakId = forrigeIverksetting.sakId.somUUID,
-                forrigeBehandlingId = forrigeIverksetting.behandlingId.somUUID,
+                sakId = forrigeIverksetting.sakId,
+                forrigeBehandlingId = forrigeIverksetting.behandlingId,
             )
 
         val beregnetUtbetalingsoppdrag = beregnUtbetalingsoppdrag(forrigeIverksetting)
@@ -103,7 +102,7 @@ class IverksettingValidatorServiceTest {
             Iverksettingsresultat(
                 fagsystem = forrigeIverksetting.fagsak.fagsystem,
                 sakId = forrigeIverksetting.sakId,
-                behandlingId = forrigeIverksetting.behandlingId.somUUID,
+                behandlingId = forrigeIverksetting.behandlingId,
                 iverksettingId = forrigeIverksetting.behandling.iverksettingId,
                 tilkjentYtelseForUtbetaling =
                     forrigeIverksetting.vedtak.tilkjentYtelse.copy(
