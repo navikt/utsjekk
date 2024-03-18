@@ -10,14 +10,20 @@ import no.nav.dagpenger.iverksett.utbetaling.lagIverksettingEntitet
 import no.nav.dagpenger.iverksett.utbetaling.lagIverksettingsdata
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
+import org.junit.jupiter.api.TestInstance
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class IverksettingRepositoryTest : Integrasjonstest() {
-    @Autowired
     private lateinit var iverksettingRepository: IverksettingRepository
+
+    @BeforeAll
+    fun setup() {
+        iverksettingRepository = IverksettingRepository(namedParameterJdbcTemplate)
+    }
 
     @Test
     fun `lagre og hent iverksett på fagsakId, forvent likhet`() {

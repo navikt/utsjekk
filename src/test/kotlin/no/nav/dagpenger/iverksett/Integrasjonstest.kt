@@ -36,7 +36,7 @@ abstract class Integrasjonstest {
     private lateinit var applicationContext: ApplicationContext
 
     @Autowired
-    private lateinit var namedParameterJdbcTemplate: NamedParameterJdbcTemplate
+    protected lateinit var namedParameterJdbcTemplate: NamedParameterJdbcTemplate
 
     @Autowired
     private lateinit var mockOAuth2Server: MockOAuth2Server
