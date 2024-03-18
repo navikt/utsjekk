@@ -2,7 +2,9 @@ package no.nav.dagpenger.iverksett.utbetaling.tilstand
 
 import no.nav.dagpenger.iverksett.utbetaling.domene.Iverksetting
 import no.nav.dagpenger.iverksett.utbetaling.domene.IverksettingEntitet
+import no.nav.dagpenger.iverksett.utbetaling.domene.sakId
 import no.nav.dagpenger.kontrakter.felles.objectMapper
+import no.nav.dagpenger.kontrakter.felles.somString
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.jdbc.core.RowMapper
 import org.springframework.stereotype.Repository
@@ -23,7 +25,8 @@ class IverksettingRepository(private val jdbcTemplate: JdbcTemplate) {
     }
 
     fun findByFagsakId(fagsakId: String): List<IverksettingEntitet> {
-        val sql = "select behandling_id, data, mottatt_tidspunkt from iverksetting where data -> 'fagsak' -> 'fagsakId' ->> 'id' = ?"
+        val sql =
+            "select behandling_id, data, mottatt_tidspunkt from iverksetting where data -> 'fagsak' -> 'fagsakId' ->> 'id' = ?"
         return jdbcTemplate.query(sql, IverksettingRowMapper(), fagsakId)
     }
 
@@ -58,6 +61,36 @@ class IverksettingRepository(private val jdbcTemplate: JdbcTemplate) {
             "select behandling_id, data, mottatt_tidspunkt from iverksetting where behandling_id = ? " +
                 "and data -> 'fagsak' -> 'fagsakId' ->> 'id' = ? and data -> 'behandling' ->> 'iverksettingId' is null"
         return jdbcTemplate.query(sql, IverksettingRowMapper(), behandlingId, fagsakId)
+    }
+
+    fun findByEmptyMottattTidspunkt(): List<IverksettingEntitet> {
+        val sql = "select behandling_id, data, mottatt_tidspunkt from iverksetting where mottatt_tidspunkt is null"
+        return jdbcTemplate.query(sql, IverksettingRowMapper())
+    }
+
+    fun settMottattTidspunktForIverksetting(iverksetting: IverksettingEntitet) {
+        if (iverksetting.data.behandling.iverksettingId == null) {
+            val sql =
+                "update iverksetting set mottatt_tidspunkt = ? where behandling_id = ? " +
+                    "and data -> 'fagsak' -> 'fagsakId' ->> 'id' = ? and data -> 'behandling' ->> 'iverksettingId' is null"
+            jdbcTemplate.update(
+                sql,
+                iverksetting.mottattTidspunkt,
+                iverksetting.behandlingId,
+                iverksetting.data.sakId.somString,
+            )
+        } else {
+            val sql =
+                "update iverksetting set mottatt_tidspunkt = ? where behandling_id = ? " +
+                    "and data -> 'fagsak' -> 'fagsakId' ->> 'id' = ? and data -> 'behandling' ->> 'iverksettingId' = ?"
+            jdbcTemplate.update(
+                sql,
+                iverksetting.mottattTidspunkt,
+                iverksetting.behandlingId,
+                iverksetting.data.sakId.somString,
+                iverksetting.data.behandling.iverksettingId,
+            )
+        }
     }
 }
 
