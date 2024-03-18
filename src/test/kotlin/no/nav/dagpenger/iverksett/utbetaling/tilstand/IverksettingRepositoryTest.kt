@@ -2,6 +2,7 @@ package no.nav.dagpenger.iverksett.utbetaling.tilstand
 
 import no.nav.dagpenger.iverksett.Integrasjonstest
 import no.nav.dagpenger.iverksett.utbetaling.domene.Iverksetting
+import no.nav.dagpenger.iverksett.utbetaling.domene.IverksettingEntitet
 import no.nav.dagpenger.iverksett.utbetaling.domene.behandlingId
 import no.nav.dagpenger.iverksett.utbetaling.domene.sakId
 import no.nav.dagpenger.iverksett.utbetaling.lagIverksettingEntitet
@@ -13,6 +14,7 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import java.time.LocalDate
+import java.time.temporal.ChronoUnit
 import java.util.UUID
 
 class IverksettingRepositoryTest : Integrasjonstest() {
@@ -36,7 +38,7 @@ class IverksettingRepositoryTest : Integrasjonstest() {
 
         iverksettingRepository.findByFagsakId(iverksettingData.fagsak.fagsakId.somString).also {
             assertEquals(1, it.size)
-            assertEquals(it[0], iverksett)
+            assertSammeIverksetting(it[0], iverksett)
         }
     }
 
@@ -67,7 +69,7 @@ class IverksettingRepositoryTest : Integrasjonstest() {
                 iverksettingId = iverksettingData.behandling.iverksettingId,
             )
         assertTrue(iverksetting2.isNotEmpty())
-        assertEquals(iverksett, iverksetting2.first())
+        assertSammeIverksetting(iverksett, iverksetting2.first())
     }
 
     @Test
@@ -96,7 +98,7 @@ class IverksettingRepositoryTest : Integrasjonstest() {
                 iverksettingId = iverksettingData.behandling.iverksettingId,
             )
         assertTrue(iverksetting2.isNotEmpty())
-        assertEquals(iverksett, iverksetting2.first())
+        assertSammeIverksetting(iverksett, iverksetting2.first())
     }
 
     @Test
@@ -135,8 +137,17 @@ class IverksettingRepositoryTest : Integrasjonstest() {
             )
 
         assertEquals(1, iverksetting1.size)
-        assertEquals(iverksett1, iverksetting1.first())
+        assertSammeIverksetting(iverksett1, iverksetting1.first())
         assertEquals(1, iverksetting2.size)
-        assertEquals(iverksett2, iverksetting2.first())
+        assertSammeIverksetting(iverksett2, iverksetting2.first())
+    }
+
+    private fun assertSammeIverksetting(
+        forventet: IverksettingEntitet,
+        faktisk: IverksettingEntitet,
+    ) {
+        assertEquals(forventet.behandlingId, faktisk.behandlingId)
+        assertEquals(forventet.data, faktisk.data)
+        assertEquals(forventet.mottattTidspunkt?.truncatedTo(ChronoUnit.SECONDS), faktisk.mottattTidspunkt?.truncatedTo(ChronoUnit.SECONDS))
     }
 }

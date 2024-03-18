@@ -28,6 +28,7 @@ import no.nav.familie.prosessering.internal.TaskService
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.time.LocalDateTime
 import java.util.Properties
 import java.util.UUID
 
@@ -48,8 +49,9 @@ class IverksettingService(
 
         iverksettingRepository.insert(
             IverksettingEntitet(
-                iverksetting.behandling.behandlingId.somUUID,
-                iverksetting,
+                behandlingId = iverksetting.behandling.behandlingId.somUUID,
+                data = iverksetting,
+                mottattTidspunkt = LocalDateTime.now(),
             ),
         )
 

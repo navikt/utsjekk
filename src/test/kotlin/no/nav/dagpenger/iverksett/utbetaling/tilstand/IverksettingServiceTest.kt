@@ -35,6 +35,7 @@ import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
+import java.time.LocalDateTime
 import java.util.UUID
 
 internal class IverksettingServiceTest {
@@ -93,7 +94,7 @@ internal class IverksettingServiceTest {
 
     @Test
     fun `iverksetter utbetaling for dagpenger når iverksetting for andre ytelser er skrudd av`() {
-        every { iverksettingRepository.insert(any()) } returns IverksettingEntitet(UUID.randomUUID(), enIverksetting())
+        every { iverksettingRepository.insert(any()) } returns IverksettingEntitet(UUID.randomUUID(), enIverksetting(), LocalDateTime.now())
         every { iverksettingsresultatService.opprettTomtResultat(any(), any(), any(), any()) } just runs
         every { taskService.save(any()) } returns mockk()
 
@@ -255,14 +256,14 @@ internal class IverksettingServiceTest {
                 behandlingId = behandlingId.somUUID,
                 iverksettingId = iverksettingId1,
             )
-        } returns listOf(IverksettingEntitet(behandlingId.somUUID, iverksetting1))
+        } returns listOf(IverksettingEntitet(behandlingId.somUUID, iverksetting1, LocalDateTime.now()))
         every {
             iverksettingRepository.findByFagsakAndBehandlingAndIverksetting(
                 fagsakId = sakId.somString,
                 behandlingId = behandlingId.somUUID,
                 iverksettingId = iverksettingId2,
             )
-        } returns listOf(IverksettingEntitet(behandlingId.somUUID, iverksetting2))
+        } returns listOf(IverksettingEntitet(behandlingId.somUUID, iverksetting2, LocalDateTime.now()))
 
         val forrigeIverksetting1 = iverksettingService.hentForrigeIverksetting(iverksetting1)
         val forrigeIverksetting2 = iverksettingService.hentForrigeIverksetting(iverksetting2)
@@ -296,14 +297,14 @@ internal class IverksettingServiceTest {
                 behandlingId = behandlingId1.somUUID,
                 iverksettingId = iverksettingId1,
             )
-        } returns listOf(IverksettingEntitet(behandlingId1.somUUID, iverksetting1))
+        } returns listOf(IverksettingEntitet(behandlingId1.somUUID, iverksetting1, LocalDateTime.now()))
         every {
             iverksettingRepository.findByFagsakAndBehandlingAndIverksetting(
                 fagsakId = sakId.somString,
                 behandlingId = behandlingId2.somUUID,
                 iverksettingId = iverksettingId2,
             )
-        } returns listOf(IverksettingEntitet(behandlingId2.somUUID, iverksetting2))
+        } returns listOf(IverksettingEntitet(behandlingId2.somUUID, iverksetting2, LocalDateTime.now()))
 
         val forrigeIverksetting1 = iverksettingService.hentForrigeIverksetting(iverksetting1)
         val forrigeIverksetting2 = iverksettingService.hentForrigeIverksetting(iverksetting2)
@@ -336,8 +337,8 @@ internal class IverksettingServiceTest {
             )
         } returns
             listOf(
-                IverksettingEntitet(behandlingId.somUUID, iverksettingDagpenger),
-                IverksettingEntitet(behandlingId.somUUID, iverksettingTiltakspenger),
+                IverksettingEntitet(behandlingId.somUUID, iverksettingDagpenger, LocalDateTime.now()),
+                IverksettingEntitet(behandlingId.somUUID, iverksettingTiltakspenger, LocalDateTime.now()),
             )
 
         val hentetIverksettingTiltakspenger =
@@ -375,7 +376,7 @@ internal class IverksettingServiceTest {
             )
         } returns
             listOf(
-                IverksettingEntitet(behandlingId.somUUID, iverksettingSak1),
+                IverksettingEntitet(behandlingId.somUUID, iverksettingSak1, LocalDateTime.now()),
             )
         every {
             iverksettingRepository.findByFagsakAndBehandlingAndIverksetting(
@@ -385,7 +386,7 @@ internal class IverksettingServiceTest {
             )
         } returns
             listOf(
-                IverksettingEntitet(behandlingId.somUUID, iverksettingSak2),
+                IverksettingEntitet(behandlingId.somUUID, iverksettingSak2, LocalDateTime.now()),
             )
 
         val hentetIverksettingSak1 =

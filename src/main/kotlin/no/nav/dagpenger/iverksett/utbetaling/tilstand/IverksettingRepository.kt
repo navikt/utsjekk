@@ -12,13 +12,18 @@ import java.util.UUID
 @Repository
 class IverksettingRepository(private val jdbcTemplate: JdbcTemplate) {
     fun insert(iverksetting: IverksettingEntitet): IverksettingEntitet {
-        val sql = "insert into iverksetting (behandling_id, data) values (?,to_json(?::json))"
-        jdbcTemplate.update(sql, iverksetting.behandlingId, objectMapper.writeValueAsString(iverksetting.data))
+        val sql = "insert into iverksetting (behandling_id, data, mottatt_tidspunkt) values (?,to_json(?::json), ?)"
+        jdbcTemplate.update(
+            sql,
+            iverksetting.behandlingId,
+            objectMapper.writeValueAsString(iverksetting.data),
+            iverksetting.mottattTidspunkt,
+        )
         return iverksetting
     }
 
     fun findByFagsakId(fagsakId: String): List<IverksettingEntitet> {
-        val sql = "select behandling_id, data from iverksetting where data -> 'fagsak' -> 'fagsakId' ->> 'id' = ?"
+        val sql = "select behandling_id, data, mottatt_tidspunkt from iverksetting where data -> 'fagsak' -> 'fagsakId' ->> 'id' = ?"
         return jdbcTemplate.query(sql, IverksettingRowMapper(), fagsakId)
     }
 
@@ -40,7 +45,7 @@ class IverksettingRepository(private val jdbcTemplate: JdbcTemplate) {
         iverksettingId: String,
     ): List<IverksettingEntitet> {
         val sql =
-            "select behandling_id, data from iverksetting where behandling_id = ? " +
+            "select behandling_id, data, mottatt_tidspunkt from iverksetting where behandling_id = ? " +
                 "and data -> 'fagsak' -> 'fagsakId' ->> 'id' = ? and data -> 'behandling' ->> 'iverksettingId' = ?"
         return jdbcTemplate.query(sql, IverksettingRowMapper(), behandlingId, fagsakId, iverksettingId)
     }
@@ -50,7 +55,7 @@ class IverksettingRepository(private val jdbcTemplate: JdbcTemplate) {
         behandlingId: UUID,
     ): List<IverksettingEntitet> {
         val sql =
-            "select behandling_id, data from iverksetting where behandling_id = ? " +
+            "select behandling_id, data, mottatt_tidspunkt from iverksetting where behandling_id = ? " +
                 "and data -> 'fagsak' -> 'fagsakId' ->> 'id' = ? and data -> 'behandling' ->> 'iverksettingId' is null"
         return jdbcTemplate.query(sql, IverksettingRowMapper(), behandlingId, fagsakId)
     }
@@ -64,6 +69,7 @@ internal class IverksettingRowMapper : RowMapper<IverksettingEntitet> {
         return IverksettingEntitet(
             behandlingId = UUID.fromString(resultSet.getString("behandling_id")),
             data = objectMapper.readValue(resultSet.getString("data"), Iverksetting::class.java),
+            mottattTidspunkt = resultSet.getTimestamp("mottatt_tidspunkt")?.toLocalDateTime(),
         )
     }
 }

@@ -41,6 +41,7 @@ fun lagIverksettingsdata(
 
 fun lagIverksettingEntitet(iverksettingData: Iverksetting) =
     IverksettingEntitet(
-        iverksettingData.behandling.behandlingId.somUUID,
-        iverksettingData,
+        behandlingId = iverksettingData.behandling.behandlingId.somUUID,
+        data = iverksettingData,
+        mottattTidspunkt = LocalDateTime.now(),
     )
