@@ -1,6 +1,7 @@
 package no.nav.dagpenger.iverksett.status
 
 import no.nav.dagpenger.iverksett.felles.Profiler
+import no.nav.dagpenger.iverksett.initializers.KafkaContainerInitializer
 import org.apache.kafka.clients.producer.KafkaProducer
 import org.apache.kafka.clients.producer.ProducerConfig
 import org.apache.kafka.common.serialization.StringSerializer

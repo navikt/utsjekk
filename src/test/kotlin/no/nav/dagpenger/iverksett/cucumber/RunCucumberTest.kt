@@ -1,4 +1,4 @@
-package no.nav.dagpenger.iverksett
+package no.nav.dagpenger.iverksett.cucumber
 
 import io.cucumber.core.options.Constants.PLUGIN_PROPERTY_NAME
 import org.junit.platform.suite.api.ConfigurationParameter

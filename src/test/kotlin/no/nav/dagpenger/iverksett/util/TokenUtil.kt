@@ -1,4 +1,4 @@
-package no.nav.dagpenger.iverksett.felles.util
+package no.nav.dagpenger.iverksett.util
 
 import no.nav.security.mock.oauth2.MockOAuth2Server
 import java.util.UUID

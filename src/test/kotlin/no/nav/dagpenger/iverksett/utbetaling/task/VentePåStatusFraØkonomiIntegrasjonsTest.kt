@@ -1,7 +1,7 @@
 package no.nav.dagpenger.iverksett.utbetaling.task
 
 import no.nav.dagpenger.iverksett.Integrasjonstest
-import no.nav.dagpenger.iverksett.status.KafkaContainerInitializer
+import no.nav.dagpenger.iverksett.initializers.KafkaContainerInitializer
 import no.nav.dagpenger.iverksett.utbetaling.domene.behandlingId
 import no.nav.dagpenger.iverksett.utbetaling.domene.sakId
 import no.nav.dagpenger.iverksett.utbetaling.tilstand.IverksettingService

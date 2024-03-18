@@ -1,4 +1,4 @@
-package no.nav.dagpenger.iverksett.status
+package no.nav.dagpenger.iverksett.initializers
 
 import org.apache.kafka.clients.CommonClientConfigs
 import org.apache.kafka.clients.admin.AdminClient

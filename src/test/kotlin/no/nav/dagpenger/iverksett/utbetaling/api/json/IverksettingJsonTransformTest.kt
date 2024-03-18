@@ -1,11 +1,11 @@
 package no.nav.dagpenger.iverksett.utbetaling.api.json
 
 import com.fasterxml.jackson.module.kotlin.readValue
-import no.nav.dagpenger.iverksett.ResourceLoaderTestUtil
 import no.nav.dagpenger.iverksett.felles.http.ObjectMapperProvider.objectMapper
 import no.nav.dagpenger.iverksett.utbetaling.domene.Iverksetting
 import no.nav.dagpenger.iverksett.utbetaling.domene.transformer.RandomOSURId
 import no.nav.dagpenger.iverksett.utbetaling.util.enIverksetting
+import no.nav.dagpenger.iverksett.util.ResourceLoaderTestUtil
 import no.nav.dagpenger.kontrakter.iverksett.IverksettDto
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull

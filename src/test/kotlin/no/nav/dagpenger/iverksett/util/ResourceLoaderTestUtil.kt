@@ -1,4 +1,4 @@
-package no.nav.dagpenger.iverksett
+package no.nav.dagpenger.iverksett.util
 
 import java.nio.charset.StandardCharsets
 

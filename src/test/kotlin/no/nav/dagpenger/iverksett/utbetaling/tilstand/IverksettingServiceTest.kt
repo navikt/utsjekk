@@ -5,7 +5,6 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
 import no.nav.dagpenger.iverksett.felles.oppdrag.OppdragClient
-import no.nav.dagpenger.iverksett.felles.util.mockFeatureToggleService
 import no.nav.dagpenger.iverksett.konfig.FeatureToggleMock
 import no.nav.dagpenger.iverksett.status.StatusEndretProdusent
 import no.nav.dagpenger.iverksett.utbetaling.domene.IverksettingEntitet
@@ -17,6 +16,7 @@ import no.nav.dagpenger.iverksett.utbetaling.util.enIverksetting
 import no.nav.dagpenger.iverksett.utbetaling.util.enTilkjentYtelse
 import no.nav.dagpenger.iverksett.utbetaling.util.etIverksettingsresultat
 import no.nav.dagpenger.iverksett.utbetaling.util.etTomtUtbetalingsoppdrag
+import no.nav.dagpenger.iverksett.utbetaling.util.mockFeatureToggleService
 import no.nav.dagpenger.kontrakter.felles.Fagsystem
 import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
 import no.nav.dagpenger.kontrakter.felles.StønadTypeTiltakspenger

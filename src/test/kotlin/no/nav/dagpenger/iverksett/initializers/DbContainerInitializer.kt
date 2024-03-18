@@ -1,4 +1,4 @@
-package no.nav.dagpenger.iverksett.felles.database
+package no.nav.dagpenger.iverksett.initializers
 
 import org.slf4j.LoggerFactory
 import org.springframework.boot.test.util.TestPropertyValues

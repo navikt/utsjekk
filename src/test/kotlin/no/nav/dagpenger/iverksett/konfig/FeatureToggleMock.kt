@@ -3,8 +3,8 @@ package no.nav.dagpenger.iverksett.konfig
 import io.mockk.clearMocks
 import io.mockk.every
 import no.nav.dagpenger.iverksett.felles.Profiler
-import no.nav.dagpenger.iverksett.felles.util.mockFeatureToggleService
 import no.nav.dagpenger.iverksett.utbetaling.featuretoggle.FeatureToggleConfig
+import no.nav.dagpenger.iverksett.utbetaling.util.mockFeatureToggleService
 import no.nav.dagpenger.kontrakter.felles.Fagsystem
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

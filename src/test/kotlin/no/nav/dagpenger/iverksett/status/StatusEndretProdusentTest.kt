@@ -2,6 +2,7 @@ package no.nav.dagpenger.iverksett.status
 
 import no.nav.dagpenger.iverksett.Integrasjonstest
 import no.nav.dagpenger.iverksett.felles.http.ObjectMapperProvider.objectMapper
+import no.nav.dagpenger.iverksett.initializers.KafkaContainerInitializer
 import no.nav.dagpenger.iverksett.utbetaling.domene.behandlingId
 import no.nav.dagpenger.iverksett.utbetaling.domene.sakId
 import no.nav.dagpenger.iverksett.utbetaling.util.enIverksetting

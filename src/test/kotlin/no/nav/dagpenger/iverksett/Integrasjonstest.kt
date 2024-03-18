@@ -2,11 +2,10 @@ package no.nav.dagpenger.iverksett
 
 import com.github.tomakehurst.wiremock.WireMockServer
 import no.nav.dagpenger.iverksett.felles.Profiler
-import no.nav.dagpenger.iverksett.felles.database.DbContainerInitializer
 import no.nav.dagpenger.iverksett.felles.oppdrag.konfig.RestTemplateAzure
-import no.nav.dagpenger.iverksett.felles.util.TokenUtil
-import no.nav.dagpenger.iverksett.status.KafkaContainerInitializer
-import no.nav.dagpenger.iverksett.utbetaling.domene.KonsumentConfig
+import no.nav.dagpenger.iverksett.initializers.DbContainerInitializer
+import no.nav.dagpenger.iverksett.initializers.KafkaContainerInitializer
+import no.nav.dagpenger.iverksett.util.TokenUtil
 import no.nav.security.mock.oauth2.MockOAuth2Server
 import no.nav.security.token.support.spring.test.EnableMockOAuth2Server
 import org.junit.jupiter.api.AfterEach
@@ -42,9 +41,6 @@ abstract class Integrasjonstest {
     @Autowired
     private lateinit var mockOAuth2Server: MockOAuth2Server
 
-    @Autowired
-    protected lateinit var konsumentConfig: KonsumentConfig
-
     @LocalServerPort
     private var port: Int? = 0
 
@@ -68,25 +64,15 @@ abstract class Integrasjonstest {
         namedParameterJdbcTemplate.update("TRUNCATE TABLE task, task_logg CASCADE", MapSqlParameterSource())
     }
 
-    protected fun getPort(): String {
-        return port.toString()
-    }
-
-    protected fun localhostUrl(uri: String): String {
-        return "http://localhost:" + getPort() + uri
-    }
+    protected fun localhostUrl(uri: String) = "http://localhost:${port}$uri"
 
     protected fun lokalTestToken(
         saksbehandler: String = "julenissen",
         grupper: List<String> = emptyList(),
-    ): String {
-        return TokenUtil.onBehalfOfToken(mockOAuth2Server, saksbehandler, grupper)
-    }
+    ) = TokenUtil.onBehalfOfToken(mockOAuth2Server, saksbehandler, grupper)
 
     protected fun lokalClientCredentialsTestToken(
         accessAsApplication: Boolean,
         clientId: String = UUID.randomUUID().toString(),
-    ): String {
-        return TokenUtil.clientToken(mockOAuth2Server, accessAsApplication, clientId)
-    }
+    ) = TokenUtil.clientToken(mockOAuth2Server, accessAsApplication, clientId)
 }

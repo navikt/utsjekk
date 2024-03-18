@@ -7,7 +7,6 @@ import io.mockk.runs
 import io.mockk.slot
 import io.mockk.verify
 import no.nav.dagpenger.iverksett.felles.oppdrag.OppdragClient
-import no.nav.dagpenger.iverksett.felles.util.mockFeatureToggleService
 import no.nav.dagpenger.iverksett.status.StatusEndretProdusent
 import no.nav.dagpenger.iverksett.utbetaling.domene.OppdragResultat
 import no.nav.dagpenger.iverksett.utbetaling.domene.TilkjentYtelse
@@ -18,6 +17,7 @@ import no.nav.dagpenger.iverksett.utbetaling.tilstand.IverksettingRepository
 import no.nav.dagpenger.iverksett.utbetaling.tilstand.IverksettingService
 import no.nav.dagpenger.iverksett.utbetaling.tilstand.IverksettingsresultatService
 import no.nav.dagpenger.iverksett.utbetaling.util.etIverksettingsresultat
+import no.nav.dagpenger.iverksett.utbetaling.util.mockFeatureToggleService
 import no.nav.dagpenger.kontrakter.felles.Fagsystem
 import no.nav.dagpenger.kontrakter.felles.Satstype
 import no.nav.dagpenger.kontrakter.felles.objectMapper
