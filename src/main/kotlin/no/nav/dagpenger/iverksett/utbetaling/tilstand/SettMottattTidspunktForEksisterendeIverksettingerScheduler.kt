@@ -7,20 +7,19 @@ import no.nav.dagpenger.iverksett.utbetaling.task.tilTaskPayload
 import no.nav.dagpenger.kontrakter.felles.objectMapper
 import no.nav.familie.prosessering.internal.TaskService
 import org.slf4j.LoggerFactory
-import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
-import java.util.concurrent.TimeUnit
 
 @Service
 class SettMottattTidspunktForEksisterendeIverksettingerScheduler(
     private val iverksettingRepository: IverksettingRepository,
     private val taskService: TaskService,
 ) {
-    @Scheduled(initialDelay = 5, fixedDelay = 500, timeUnit = TimeUnit.MINUTES)
+    // @Scheduled(initialDelay = 3, fixedDelay = 500, timeUnit = TimeUnit.MINUTES)
     fun migrer() {
         logger.info("Starter jobb for å sette mottatt tidspunkt på iverksettinger som mangler det")
         val iverksettingerUtenTimestamp = iverksettingRepository.findByEmptyMottattTidspunkt()
+        logger.info("Fant ${iverksettingerUtenTimestamp.size} iverksettinger uten mottatt tidspunkt")
         iverksettingerUtenTimestamp.forEach {
             logger.info("Finner task-tidspunkt for iverksetting ${it.data}")
             val taskTimestamp = hentOpprettetTidspunktForIverksettingstask(it)
@@ -31,6 +30,7 @@ class SettMottattTidspunktForEksisterendeIverksettingerScheduler(
     }
 
     private fun hentOpprettetTidspunktForIverksettingstask(iverksetting: IverksettingEntitet): LocalDateTime? {
+        logger.info("Finner task for iverksetting")
         val iverksettTaskForIverksetting =
             taskService.finnTaskMedPayloadOgType(
                 payload = objectMapper.writeValueAsString(iverksetting.data.tilTaskPayload()),
