@@ -90,7 +90,12 @@ internal class IverksettingServiceTest {
 
     @Test
     fun `iverksetter utbetaling for dagpenger når iverksetting for andre ytelser er skrudd av`() {
-        every { iverksettingRepository.insert(any()) } returns IverksettingEntitet(RandomOSURId.generate(), enIverksetting(), LocalDateTime.now())
+        every { iverksettingRepository.insert(any()) } returns
+            IverksettingEntitet(
+                RandomOSURId.generate(),
+                enIverksetting(),
+                LocalDateTime.now(),
+            )
         every { iverksettingsresultatService.opprettTomtResultat(any(), any(), any(), any()) } just runs
         every { taskService.save(any()) } returns mockk()
 
