@@ -16,10 +16,10 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import java.time.LocalDateTime
 
-class SettMottattTidspunktForEksisterendeIverksettingerSchedulerTest : Integrasjonstest() {
+class SettMottattTidspunktForEksisterendeIverksettingerTest : Integrasjonstest() {
     @Autowired
-    private lateinit var settMottattTidspunktForEksisterendeIverksettingerScheduler:
-        SettMottattTidspunktForEksisterendeIverksettingerScheduler
+    private lateinit var settMottattTidspunktForEksisterendeIverksettinger:
+        SettMottattTidspunktForEksisterendeIverksettinger
 
     @Autowired
     private lateinit var taskService: TaskService
@@ -86,7 +86,7 @@ class SettMottattTidspunktForEksisterendeIverksettingerSchedulerTest : Integrasj
 
         assertEquals(4, iverksettingRepository.findByEmptyMottattTidspunkt().size)
 
-        settMottattTidspunktForEksisterendeIverksettingerScheduler.migrer()
+        settMottattTidspunktForEksisterendeIverksettinger.migrer()
 
         assertEquals(0, iverksettingRepository.findByEmptyMottattTidspunkt().size)
     }
