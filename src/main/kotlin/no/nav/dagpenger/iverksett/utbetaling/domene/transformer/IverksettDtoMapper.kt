@@ -19,7 +19,6 @@ class IverksettDtoMapper(val konsumentConfig: KonsumentConfig) {
             søker = dto.personident.verdi.tilSøker(),
             behandling = dto.tilBehandling(),
             vedtak = dto.vedtak.toDomain(),
-            forrigeIverksettingBehandlingId = dto.forrigeIverksetting?.behandlingId,
         )
 
     private fun VedtaksdetaljerDto.toDomain() =

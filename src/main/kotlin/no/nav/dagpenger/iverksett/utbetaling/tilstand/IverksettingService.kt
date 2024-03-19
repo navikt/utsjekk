@@ -12,9 +12,6 @@ import no.nav.dagpenger.iverksett.utbetaling.featuretoggle.FeatureToggleService
 import no.nav.dagpenger.iverksett.utbetaling.featuretoggle.IverksettingErSkruddAvException
 import no.nav.dagpenger.iverksett.utbetaling.task.tilTaskPayload
 import no.nav.dagpenger.kontrakter.felles.Fagsystem
-import no.nav.dagpenger.kontrakter.felles.GeneriskId
-import no.nav.dagpenger.kontrakter.felles.GeneriskIdSomString
-import no.nav.dagpenger.kontrakter.felles.GeneriskIdSomUUID
 import no.nav.dagpenger.kontrakter.felles.objectMapper
 import no.nav.dagpenger.kontrakter.iverksett.IverksettStatus
 import no.nav.dagpenger.kontrakter.oppdrag.OppdragIdDto
@@ -28,7 +25,6 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
 import java.util.Properties
-import java.util.UUID
 
 @Service
 class IverksettingService(
@@ -196,12 +192,6 @@ fun Task.erAktiv() =
     this.status != Status.AVVIKSHÅNDTERT &&
         this.status != Status.MANUELL_OPPFØLGING &&
         this.status != Status.FERDIG
-
-private fun String.tilGeneriskId(): GeneriskId =
-    Result.runCatching { UUID.fromString(this@tilGeneriskId) }.fold(
-        onSuccess = { GeneriskIdSomUUID(it) },
-        onFailure = { GeneriskIdSomString(this) },
-    )
 
 private fun OppdragStatus.erFerdigstilt(): Boolean =
     this == OppdragStatus.KVITTERT_OK || this == OppdragStatus.KVITTERT_TEKNISK_FEIL ||

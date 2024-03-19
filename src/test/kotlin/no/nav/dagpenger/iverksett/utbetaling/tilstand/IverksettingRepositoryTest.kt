@@ -38,11 +38,12 @@ class IverksettingRepositoryTest : Integrasjonstest() {
             assertEquals(0, it.size)
         }
 
-        val iverksett = iverksettingRepository.insert(lagIverksettingEntitet(iverksettingData))
+        val iverksetting = lagIverksettingEntitet(iverksettingData)
+        iverksettingRepository.insert(iverksetting)
 
         iverksettingRepository.findByFagsakId(iverksettingData.fagsak.fagsakId).also {
             assertEquals(1, it.size)
-            assertSammeIverksetting(it[0], iverksett)
+            assertSammeIverksetting(it.first(), iverksetting)
         }
     }
 
@@ -56,24 +57,25 @@ class IverksettingRepositoryTest : Integrasjonstest() {
             )
         val iverksettingData = tmp.copy(behandling = tmp.behandling.copy(iverksettingId = "TEST123"))
 
-        val iverksetting =
-            iverksettingRepository.findByFagsakAndBehandlingAndIverksetting(
-                fagsakId = iverksettingData.sakId,
-                behandlingId = iverksettingData.behandlingId,
-                iverksettingId = iverksettingData.behandling.iverksettingId,
-            )
-        assertTrue(iverksetting.isEmpty())
+        iverksettingRepository.findByFagsakAndBehandlingAndIverksetting(
+            fagsakId = iverksettingData.sakId,
+            behandlingId = iverksettingData.behandlingId,
+            iverksettingId = iverksettingData.behandling.iverksettingId,
+        ).also {
+            assertTrue(it.isEmpty())
+        }
 
-        val iverksett = iverksettingRepository.insert(lagIverksettingEntitet(iverksettingData))
+        val iverksetting = lagIverksettingEntitet(iverksettingData)
+        iverksettingRepository.insert(iverksetting)
 
-        val iverksetting2 =
-            iverksettingRepository.findByFagsakAndBehandlingAndIverksetting(
-                fagsakId = iverksettingData.sakId,
-                behandlingId = iverksettingData.behandlingId,
-                iverksettingId = iverksettingData.behandling.iverksettingId,
-            )
-        assertTrue(iverksetting2.isNotEmpty())
-        assertSammeIverksetting(iverksett, iverksetting2.first())
+        iverksettingRepository.findByFagsakAndBehandlingAndIverksetting(
+            fagsakId = iverksettingData.sakId,
+            behandlingId = iverksettingData.behandlingId,
+            iverksettingId = iverksettingData.behandling.iverksettingId,
+        ).also {
+            assertTrue(it.isNotEmpty())
+            assertSammeIverksetting(iverksetting, it.first())
+        }
     }
 
     @Test
@@ -85,24 +87,25 @@ class IverksettingRepositoryTest : Integrasjonstest() {
                 andelsdatoer = listOf(LocalDate.now(), LocalDate.now().minusDays(15)),
             )
 
-        val iverksetting =
-            iverksettingRepository.findByFagsakAndBehandlingAndIverksetting(
-                fagsakId = iverksettingData.sakId,
-                behandlingId = iverksettingData.behandlingId,
-                iverksettingId = iverksettingData.behandling.iverksettingId,
-            )
-        assertTrue(iverksetting.isEmpty())
+        iverksettingRepository.findByFagsakAndBehandlingAndIverksetting(
+            fagsakId = iverksettingData.sakId,
+            behandlingId = iverksettingData.behandlingId,
+            iverksettingId = iverksettingData.behandling.iverksettingId,
+        ).also {
+            assertTrue(it.isEmpty())
+        }
 
-        val iverksett = iverksettingRepository.insert(lagIverksettingEntitet(iverksettingData))
+        val iverksetting = lagIverksettingEntitet(iverksettingData)
+        iverksettingRepository.insert(iverksetting)
 
-        val iverksetting2 =
-            iverksettingRepository.findByFagsakAndBehandlingAndIverksetting(
-                fagsakId = iverksettingData.sakId,
-                behandlingId = iverksettingData.behandlingId,
-                iverksettingId = iverksettingData.behandling.iverksettingId,
-            )
-        assertTrue(iverksetting2.isNotEmpty())
-        assertSammeIverksetting(iverksett, iverksetting2.first())
+        iverksettingRepository.findByFagsakAndBehandlingAndIverksetting(
+            fagsakId = iverksettingData.sakId,
+            behandlingId = iverksettingData.behandlingId,
+            iverksettingId = iverksettingData.behandling.iverksettingId,
+        ).also {
+            assertTrue(it.isNotEmpty())
+            assertSammeIverksetting(iverksetting, it.first())
+        }
     }
 
     @Test
@@ -124,26 +127,28 @@ class IverksettingRepositoryTest : Integrasjonstest() {
                 andelsdatoer = listOf(LocalDate.now(), LocalDate.now().minusDays(15)),
             )
 
-        val iverksett1 = iverksettingRepository.insert(lagIverksettingEntitet(iverksettingData1))
-        val iverksett2 = iverksettingRepository.insert(lagIverksettingEntitet(iverksettingData2))
+        val forventet1 = lagIverksettingEntitet(iverksettingData1)
+        val forventet2 = lagIverksettingEntitet(iverksettingData2)
+        iverksettingRepository.insert(forventet1)
+        iverksettingRepository.insert(forventet2)
 
-        val iverksetting1 =
+        val faktisk1 =
             iverksettingRepository.findByFagsakAndBehandlingAndIverksetting(
                 fagsakId = iverksettingData1.sakId,
                 behandlingId = iverksettingData1.behandlingId,
                 iverksettingId = iverksettingData1.behandling.iverksettingId,
             )
-        val iverksetting2 =
+        val faktisk2 =
             iverksettingRepository.findByFagsakAndBehandlingAndIverksetting(
                 fagsakId = iverksettingData2.sakId,
                 behandlingId = iverksettingData2.behandlingId,
                 iverksettingId = iverksettingData2.behandling.iverksettingId,
             )
 
-        assertEquals(1, iverksetting1.size)
-        assertSammeIverksetting(iverksett1, iverksetting1.first())
-        assertEquals(1, iverksetting2.size)
-        assertSammeIverksetting(iverksett2, iverksetting2.first())
+        assertEquals(1, faktisk1.size)
+        assertSammeIverksetting(forventet1, faktisk1.first())
+        assertEquals(1, faktisk2.size)
+        assertSammeIverksetting(forventet2, faktisk2.first())
     }
 
     private fun assertSammeIverksetting(

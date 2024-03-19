@@ -20,7 +20,6 @@ fun IverksettTilleggsstønaderDto.toDomain(): Iverksetting =
         søker = Søker(personident = this.personident.verdi),
         behandling = this.tilBehandling(),
         vedtak = this.vedtak.toDomain(),
-        forrigeIverksettingBehandlingId = this.forrigeIverksetting?.behandlingId,
     )
 
 fun IverksettTilleggsstønaderDto.tilFagsak(): Fagsakdetaljer {

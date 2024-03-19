@@ -9,7 +9,6 @@ data class Iverksetting(
     val behandling: Behandlingsdetaljer,
     val søker: Søker,
     val vedtak: Vedtaksdetaljer,
-    val forrigeIverksettingBehandlingId: String? = null,
 ) {
     override fun toString() =
         "fagsystem ${fagsak.fagsystem}, sak $sakId, behandling $behandlingId, iverksettingId ${behandling.iverksettingId}"

@@ -162,7 +162,6 @@ fun enIverksetting(
             vedtaksdetaljer(
                 andeler = andeler,
             ),
-        forrigeIverksettingBehandlingId = forrigeBehandlingId,
     )
 }
 

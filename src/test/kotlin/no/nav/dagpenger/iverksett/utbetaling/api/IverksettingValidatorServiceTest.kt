@@ -56,7 +56,6 @@ class IverksettingValidatorServiceTest {
         val nåværendeIverksetting =
             iverksettingTmp.copy(
                 fagsak = forrigeIverksetting.fagsak,
-                forrigeIverksettingBehandlingId = forrigeIverksetting.behandlingId,
                 søker = iverksettingTmp.søker.copy(personident = "12345678911"),
             )
         every { iverksettingServiceMock.hentForrigeIverksetting(nåværendeIverksetting) } returns forrigeIverksetting
