@@ -24,7 +24,7 @@ class MigrerIverksettingController(
             }
             .forEach { (id, data) ->
                 jdbcTemplate.update(
-                    "update iverksetting set data = :data where id = :id",
+                    "update iverksetting set data = to_json(:data::json) where id = :id",
                     mapOf("id" to id, "data" to data),
                 )
             }
