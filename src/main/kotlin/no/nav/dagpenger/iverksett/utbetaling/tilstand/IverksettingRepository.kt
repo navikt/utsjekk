@@ -91,6 +91,6 @@ internal class IverksettingRowMapper : RowMapper<IverksettingEntitet> {
     ) = IverksettingEntitet(
         behandlingId = resultSet.getString("behandling_id"),
         data = objectMapper.readValue(resultSet.getString("data"), Iverksetting::class.java),
-        mottattTidspunkt = resultSet.getTimestamp("mottatt_tidspunkt")?.toLocalDateTime(),
+        mottattTidspunkt = resultSet.getTimestamp("mottatt_tidspunkt").toLocalDateTime(),
     )
 }

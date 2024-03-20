@@ -7,5 +7,5 @@ import java.time.LocalDateTime
 data class IverksettingEntitet(
     val behandlingId: String,
     val data: Iverksetting,
-    val mottattTidspunkt: LocalDateTime?,
+    val mottattTidspunkt: LocalDateTime,
 )

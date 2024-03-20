@@ -157,6 +157,6 @@ class IverksettingRepositoryTest : Integrasjonstest() {
     ) {
         assertEquals(forventet.behandlingId, faktisk.behandlingId)
         assertEquals(forventet.data, faktisk.data)
-        assertEquals(forventet.mottattTidspunkt?.truncatedTo(ChronoUnit.SECONDS), faktisk.mottattTidspunkt?.truncatedTo(ChronoUnit.SECONDS))
+        assertEquals(forventet.mottattTidspunkt.truncatedTo(ChronoUnit.SECONDS), faktisk.mottattTidspunkt.truncatedTo(ChronoUnit.SECONDS))
     }
 }
