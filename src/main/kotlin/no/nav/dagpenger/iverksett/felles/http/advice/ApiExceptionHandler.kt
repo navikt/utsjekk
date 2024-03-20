@@ -52,7 +52,7 @@ class ApiExceptionHandler : ResponseEntityExceptionHandler() {
         throwable: Throwable,
         status: HttpStatusCode,
     ) {
-        logger.error("En feil har oppstått", throwable)
+        secureLogger.error("En feil har oppstått", throwable)
         log.error("En feil har oppstått - throwable=${rootCause(throwable)} status=${status.value()}")
     }
 
