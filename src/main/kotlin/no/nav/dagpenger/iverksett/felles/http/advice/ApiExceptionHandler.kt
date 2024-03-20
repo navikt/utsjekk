@@ -2,6 +2,7 @@ package no.nav.dagpenger.iverksett.felles.http.advice
 
 import no.nav.dagpenger.iverksett.utbetaling.featuretoggle.IverksettingErSkruddAvException
 import no.nav.dagpenger.kontrakter.felles.objectMapper
+import no.nav.security.token.support.core.exceptions.JwtTokenMissingException
 import no.nav.security.token.support.spring.validation.interceptor.JwtTokenUnauthorizedException
 import org.slf4j.LoggerFactory
 import org.springframework.core.NestedExceptionUtils
@@ -17,10 +18,10 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 @ControllerAdvice
 class ApiExceptionHandler : ResponseEntityExceptionHandler() {
-    private val log = LoggerFactory.getLogger(javaClass)
-    private val secureLogger = LoggerFactory.getLogger("secureLogger")
-
-    private fun rootCause(throwable: Throwable) = NestedExceptionUtils.getMostSpecificCause(throwable).javaClass.simpleName
+    companion object {
+        private val log = LoggerFactory.getLogger(ApiExceptionHandler::class.java)
+        private val secureLogger = LoggerFactory.getLogger("secureLogger")
+    }
 
     override fun handleExceptionInternal(
         ex: java.lang.Exception,
@@ -33,11 +34,14 @@ class ApiExceptionHandler : ResponseEntityExceptionHandler() {
     }
 
     @ExceptionHandler(IverksettingErSkruddAvException::class)
-    fun handleKillSwitchException(exception: IverksettingErSkruddAvException) =
+    fun håndterKillSwitchException(exception: IverksettingErSkruddAvException) =
         ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(objectMapper.writeValueAsString(exception.message))
 
+    @ExceptionHandler(JwtTokenMissingException::class, JwtTokenUnauthorizedException::class)
+    fun håndterManglendeToken() = ResponseEntity.status(HttpStatus.UNAUTHORIZED).build<Nothing>()
+
     @ExceptionHandler(Throwable::class)
-    fun handleThrowable(throwable: Throwable): ResponseEntity<Nothing> {
+    fun håndterFeil(throwable: Throwable): ResponseEntity<Nothing> {
         val responseStatus = throwable::class.annotations.find { it is ResponseStatus }?.let { it as ResponseStatus }
         if (responseStatus != null) {
             return håndtertResponseStatusFeil(throwable, responseStatus)
@@ -47,6 +51,9 @@ class ApiExceptionHandler : ResponseEntityExceptionHandler() {
             loggFeil(throwable, HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }
+
+    @ExceptionHandler(ApiFeil::class)
+    fun håndterApiFeil(feil: ApiFeil) = ResponseEntity.status(feil.httpStatus).body(feil.feil)
 
     private fun loggFeil(
         throwable: Throwable,
@@ -80,6 +87,5 @@ class ApiExceptionHandler : ResponseEntityExceptionHandler() {
         return ResponseEntity.status(status).build()
     }
 
-    @ExceptionHandler(ApiFeil::class)
-    fun handleApiFeil(feil: ApiFeil) = ResponseEntity.status(feil.httpStatus).body(feil.feil)
+    private fun rootCause(throwable: Throwable) = NestedExceptionUtils.getMostSpecificCause(throwable).javaClass.simpleName
 }
