@@ -45,23 +45,7 @@ class IverksettingValidatorServiceTest {
         every { iverksettingServiceMock.hentForrigeIverksetting(nåværendeIverksetting) } returns forrigeIverksetting
 
         assertApiFeil(HttpStatus.BAD_REQUEST) {
-            iverksettingValidatorService.validerAtIverksettingErForSammeSakOgPersonSomForrige(nåværendeIverksetting)
-        }
-    }
-
-    @Test
-    fun `skal få BAD_REQUEST når forrige iverksetting er knyttet til en annen person`() {
-        val forrigeIverksetting = lagIverksettingsdata()
-        val iverksettingTmp = lagIverksettingsdata()
-        val nåværendeIverksetting =
-            iverksettingTmp.copy(
-                fagsak = forrigeIverksetting.fagsak,
-                søker = iverksettingTmp.søker.copy(personident = "12345678911"),
-            )
-        every { iverksettingServiceMock.hentForrigeIverksetting(nåværendeIverksetting) } returns forrigeIverksetting
-
-        assertApiFeil(HttpStatus.BAD_REQUEST) {
-            iverksettingValidatorService.validerAtIverksettingErForSammeSakOgPersonSomForrige(nåværendeIverksetting)
+            iverksettingValidatorService.validerAtIverksettingErForSammeSakSomForrige(nåværendeIverksetting)
         }
     }
 
