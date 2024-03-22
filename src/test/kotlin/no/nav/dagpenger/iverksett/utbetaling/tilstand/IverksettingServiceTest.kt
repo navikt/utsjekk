@@ -9,8 +9,10 @@ import no.nav.dagpenger.iverksett.konfig.FeatureToggleMock
 import no.nav.dagpenger.iverksett.status.StatusEndretProdusent
 import no.nav.dagpenger.iverksett.utbetaling.domene.IverksettingEntitet
 import no.nav.dagpenger.iverksett.utbetaling.domene.OppdragResultat
+import no.nav.dagpenger.iverksett.utbetaling.domene.behandlingId
 import no.nav.dagpenger.iverksett.utbetaling.domene.transformer.RandomOSURId
 import no.nav.dagpenger.iverksett.utbetaling.featuretoggle.IverksettingErSkruddAvException
+import no.nav.dagpenger.iverksett.utbetaling.lagIverksettingEntitet
 import no.nav.dagpenger.iverksett.utbetaling.util.enAndelTilkjentYtelse
 import no.nav.dagpenger.iverksett.utbetaling.util.enIverksetting
 import no.nav.dagpenger.iverksett.utbetaling.util.enTilkjentYtelse
@@ -394,6 +396,39 @@ internal class IverksettingServiceTest {
 
         assertNotNull(hentetIverksettingSak1)
         assertEquals(iverksettingSak1, hentetIverksettingSak1)
+    }
+
+    @Test
+    fun `hent siste mottatte iverksetting skal hente nyeste iverksetting ved flere iverksettinger på sak`() {
+        val sakId = RandomOSURId.generate()
+        val fagsystem = Fagsystem.DAGPENGER
+        val eldsteIverksetting =
+            lagIverksettingEntitet(
+                iverksettingData = enIverksetting(sakId = sakId, fagsystem = fagsystem),
+                mottattTidspunkt = LocalDateTime.now().minusDays(14),
+            )
+        val mellomsteIverksetting =
+            lagIverksettingEntitet(
+                iverksettingData = enIverksetting(sakId = sakId, fagsystem = fagsystem),
+                mottattTidspunkt = LocalDateTime.now().minusDays(7),
+            )
+        val nyesteIverksetting =
+            lagIverksettingEntitet(
+                iverksettingData = enIverksetting(sakId = sakId, fagsystem = fagsystem),
+                mottattTidspunkt = LocalDateTime.now().minusDays(1),
+            )
+        every { iverksettingRepository.findByFagsakIdAndFagsystem(sakId, fagsystem) } returns
+            listOf(
+                nyesteIverksetting,
+                eldsteIverksetting,
+                mellomsteIverksetting,
+            )
+
+        val sisteMottatteIverksetting =
+            iverksettingService.hentSisteMottatteIverksetting(enIverksetting(sakId = sakId, fagsystem = fagsystem))
+
+        assertNotNull(sisteMottatteIverksetting)
+        assertEquals(nyesteIverksetting.behandlingId, sisteMottatteIverksetting?.behandlingId)
     }
 
     @Test

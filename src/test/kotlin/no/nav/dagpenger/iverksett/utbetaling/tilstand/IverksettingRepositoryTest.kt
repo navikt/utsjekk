@@ -8,12 +8,15 @@ import no.nav.dagpenger.iverksett.utbetaling.domene.sakId
 import no.nav.dagpenger.iverksett.utbetaling.domene.transformer.RandomOSURId
 import no.nav.dagpenger.iverksett.utbetaling.lagIverksettingEntitet
 import no.nav.dagpenger.iverksett.utbetaling.lagIverksettingsdata
+import no.nav.dagpenger.iverksett.utbetaling.util.enIverksetting
+import no.nav.dagpenger.kontrakter.felles.Fagsystem
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -151,12 +154,64 @@ class IverksettingRepositoryTest : Integrasjonstest() {
         assertSammeIverksetting(forventet2, faktisk2.first())
     }
 
+    @Test
+    fun `skal hente alle mottatte iverksettinger på sak`() {
+        val sakId = RandomOSURId.generate()
+        val fagsystem = Fagsystem.DAGPENGER
+        val eldsteIverksetting =
+            lagIverksettingEntitet(
+                iverksettingData = enIverksetting(sakId = sakId, fagsystem = fagsystem),
+                mottattTidspunkt = LocalDateTime.now().minusDays(14),
+            )
+        val mellomsteIverksetting =
+            lagIverksettingEntitet(
+                iverksettingData = enIverksetting(sakId = sakId, fagsystem = fagsystem),
+                mottattTidspunkt = LocalDateTime.now().minusDays(7),
+            )
+        val nyesteIverksetting =
+            lagIverksettingEntitet(
+                iverksettingData = enIverksetting(sakId = sakId, fagsystem = fagsystem),
+                mottattTidspunkt = LocalDateTime.now().minusDays(1),
+            )
+        val annenSakIverksetting =
+            lagIverksettingEntitet(
+                iverksettingData = enIverksetting(sakId = RandomOSURId.generate(), fagsystem = fagsystem),
+                mottattTidspunkt = LocalDateTime.now().minusDays(2),
+            )
+        val annetFagsystemIverksetting =
+            lagIverksettingEntitet(
+                iverksettingData = enIverksetting(sakId = sakId, fagsystem = Fagsystem.TILLEGGSSTØNADER),
+                mottattTidspunkt = LocalDateTime.now(),
+            )
+        iverksettingRepository.insert(eldsteIverksetting)
+        iverksettingRepository.insert(mellomsteIverksetting)
+        iverksettingRepository.insert(nyesteIverksetting)
+        iverksettingRepository.insert(annenSakIverksetting)
+        iverksettingRepository.insert(annetFagsystemIverksetting)
+
+        val alleIverksettingerPåSak =
+            iverksettingRepository.findByFagsakIdAndFagsystem(fagsakId = sakId, fagsystem = fagsystem)
+
+        assertEquals(3, alleIverksettingerPåSak.size)
+    }
+
+    @Test
+    fun `findByFagsakIdAndFagsystem skal gi tom liste når det ikke finnes iverksettinger på sak`() {
+        val alleIverksettingerPåSak =
+            iverksettingRepository.findByFagsakIdAndFagsystem(fagsakId = RandomOSURId.generate(), fagsystem = Fagsystem.DAGPENGER)
+
+        assertEquals(0, alleIverksettingerPåSak.size)
+    }
+
     private fun assertSammeIverksetting(
         forventet: IverksettingEntitet,
         faktisk: IverksettingEntitet,
     ) {
         assertEquals(forventet.behandlingId, faktisk.behandlingId)
         assertEquals(forventet.data, faktisk.data)
-        assertEquals(forventet.mottattTidspunkt.truncatedTo(ChronoUnit.SECONDS), faktisk.mottattTidspunkt.truncatedTo(ChronoUnit.SECONDS))
+        assertEquals(
+            forventet.mottattTidspunkt.truncatedTo(ChronoUnit.SECONDS),
+            faktisk.mottattTidspunkt.truncatedTo(ChronoUnit.SECONDS),
+        )
     }
 }

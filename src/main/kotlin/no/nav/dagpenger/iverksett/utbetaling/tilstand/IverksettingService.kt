@@ -107,6 +107,12 @@ class IverksettingService(
                 )
         }
 
+    fun hentSisteMottatteIverksetting(iverksetting: Iverksetting): Iverksetting? =
+        iverksettingRepository.findByFagsakIdAndFagsystem(
+            fagsakId = iverksetting.sakId,
+            fagsystem = iverksetting.fagsak.fagsystem,
+        ).maxByOrNull { it.mottattTidspunkt }?.data
+
     private fun førsteHovedflytTask() = hovedflyt().first().type
 
     fun publiserStatusmelding(iverksetting: Iverksetting) {

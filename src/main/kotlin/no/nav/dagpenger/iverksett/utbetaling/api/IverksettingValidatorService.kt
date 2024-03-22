@@ -2,6 +2,7 @@ package no.nav.dagpenger.iverksett.utbetaling.api
 
 import no.nav.dagpenger.iverksett.felles.http.advice.ApiFeil
 import no.nav.dagpenger.iverksett.utbetaling.domene.Iverksetting
+import no.nav.dagpenger.iverksett.utbetaling.domene.behandlingId
 import no.nav.dagpenger.iverksett.utbetaling.domene.sakId
 import no.nav.dagpenger.iverksett.utbetaling.tilstand.IverksettingService
 import no.nav.dagpenger.iverksett.utbetaling.tilstand.IverksettingsresultatService
@@ -16,11 +17,12 @@ class IverksettingValidatorService(
 ) {
     fun valider(iverksetting: Iverksetting) {
         validerAtIverksettingIkkeAlleredeErMottatt(iverksetting)
-        validerAtIverksettingErForSammeSakSomForrige(iverksetting)
-        validerAtForrigeBehandlingErFerdigIverksattMotOppdrag(iverksetting)
+        validerAtIverksettingGjelderSammeSakSomForrigeIverksetting(iverksetting)
+        validerAtForrigeIverksettingErLikSisteMottatteIverksetting(iverksetting)
+        validerAtForrigeIverksettingErFerdigIverksattMotOppdrag(iverksetting)
     }
 
-    internal fun validerAtIverksettingErForSammeSakSomForrige(iverksetting: Iverksetting) {
+    internal fun validerAtIverksettingGjelderSammeSakSomForrigeIverksetting(iverksetting: Iverksetting) {
         val forrigeIverksett =
             try {
                 iverksettingService.hentForrigeIverksetting(iverksetting)
@@ -38,8 +40,33 @@ class IverksettingValidatorService(
         }
     }
 
-    internal fun validerAtForrigeBehandlingErFerdigIverksattMotOppdrag(iverksetting: Iverksetting?) {
-        iverksetting?.behandling?.forrigeBehandlingId?.apply {
+    internal fun validerAtForrigeIverksettingErLikSisteMottatteIverksetting(iverksetting: Iverksetting) {
+        val sisteMottatteIverksetting = iverksettingService.hentSisteMottatteIverksetting(iverksetting)
+        sisteMottatteIverksetting?.let {
+            if (it.behandlingId != iverksetting.behandling.forrigeBehandlingId ||
+                it.behandling.iverksettingId != iverksetting.behandling.forrigeIverksettingId
+            ) {
+                throw ApiFeil(
+                    "Forrige iverksetting stemmer ikke med siste mottatte iverksetting på saken. BehandlingId/IverksettingId forrige" +
+                        " iverksetting: ${iverksetting.behandling.forrigeBehandlingId}/${iverksetting.behandling.forrigeIverksettingId}," +
+                        " behandlingId/iverksettingId siste mottatte iverksetting: ${it.behandlingId}/${it.behandling.iverksettingId}",
+                    HttpStatus.BAD_REQUEST,
+                )
+            }
+        } ?: run {
+            if (iverksetting.behandling.forrigeBehandlingId != null || iverksetting.behandling.forrigeIverksettingId != null) {
+                throw ApiFeil(
+                    "Det er ikke registrert noen tidligere iverksettinger på saken, men forrigeIverksetting er satt til " +
+                        "behandling ${iverksetting.behandling.forrigeBehandlingId}/iverksetting " +
+                        "${iverksetting.behandling.forrigeIverksettingId}",
+                    HttpStatus.BAD_REQUEST,
+                )
+            }
+        }
+    }
+
+    internal fun validerAtForrigeIverksettingErFerdigIverksattMotOppdrag(iverksetting: Iverksetting) {
+        iverksetting.behandling.forrigeBehandlingId?.apply {
             val forrigeResultat =
                 iverksettingsresultatService.hentIverksettingsresultat(
                     fagsystem = iverksetting.fagsak.fagsystem,

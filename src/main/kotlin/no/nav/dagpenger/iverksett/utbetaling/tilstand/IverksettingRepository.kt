@@ -2,6 +2,7 @@ package no.nav.dagpenger.iverksett.utbetaling.tilstand
 
 import no.nav.dagpenger.iverksett.utbetaling.domene.Iverksetting
 import no.nav.dagpenger.iverksett.utbetaling.domene.IverksettingEntitet
+import no.nav.dagpenger.kontrakter.felles.Fagsystem
 import no.nav.dagpenger.kontrakter.felles.objectMapper
 import org.springframework.jdbc.core.RowMapper
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
@@ -32,6 +33,20 @@ class IverksettingRepository(private val jdbcTemplate: NamedParameterJdbcTemplat
                 or data -> 'fagsak' -> 'fagsakId' ->> 'id' = :sakId;
             """.trimIndent(),
             mapOf("sakId" to fagsakId),
+            IverksettingRowMapper(),
+        )
+
+    fun findByFagsakIdAndFagsystem(
+        fagsakId: String,
+        fagsystem: Fagsystem,
+    ): List<IverksettingEntitet> =
+        jdbcTemplate.query(
+            """
+            select behandling_id, data, mottatt_tidspunkt 
+            from iverksetting 
+            where data -> 'fagsak' ->> 'fagsakId' = :sakId and data -> 'fagsak' ->> 'fagsystem' = :fagsystem
+            """.trimIndent(),
+            mapOf("sakId" to fagsakId, "fagsystem" to fagsystem.name),
             IverksettingRowMapper(),
         )
 

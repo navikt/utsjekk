@@ -16,6 +16,8 @@ fun lagIverksettingsdata(
     sakId: String? = null,
     behandlingId: String? = null,
     forrigeBehandlingId: String? = null,
+    iverksettingId: String? = null,
+    forrigeIverksettingId: String? = null,
     andelsdatoer: List<LocalDate> = emptyList(),
     beløp: Int = 100,
     vedtakstidspunkt: LocalDateTime = LocalDateTime.now(),
@@ -26,6 +28,8 @@ fun lagIverksettingsdata(
         behandlingsdetaljer(
             behandlingId = behandlingId ?: RandomOSURId.generate(),
             forrigeBehandlingId = forrigeBehandlingId,
+            iverksettingId = iverksettingId,
+            forrigeIverksettingId = forrigeIverksettingId,
         ),
     vedtaksdetaljer =
         vedtaksdetaljer(
@@ -37,9 +41,11 @@ fun lagIverksettingsdata(
         ),
 )
 
-fun lagIverksettingEntitet(iverksettingData: Iverksetting) =
-    IverksettingEntitet(
-        behandlingId = iverksettingData.behandling.behandlingId,
-        data = iverksettingData,
-        mottattTidspunkt = LocalDateTime.now(),
-    )
+fun lagIverksettingEntitet(
+    iverksettingData: Iverksetting,
+    mottattTidspunkt: LocalDateTime = LocalDateTime.now(),
+) = IverksettingEntitet(
+    behandlingId = iverksettingData.behandling.behandlingId,
+    data = iverksettingData,
+    mottattTidspunkt = mottattTidspunkt,
+)

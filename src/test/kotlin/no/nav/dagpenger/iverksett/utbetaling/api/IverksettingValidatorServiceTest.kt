@@ -9,6 +9,8 @@ import no.nav.dagpenger.iverksett.utbetaling.domene.behandlingId
 import no.nav.dagpenger.iverksett.utbetaling.domene.personident
 import no.nav.dagpenger.iverksett.utbetaling.domene.sakId
 import no.nav.dagpenger.iverksett.utbetaling.domene.tilAndelData
+import no.nav.dagpenger.iverksett.utbetaling.domene.transformer.RandomOSURId
+import no.nav.dagpenger.iverksett.utbetaling.lagIverksettingEntitet
 import no.nav.dagpenger.iverksett.utbetaling.lagIverksettingsdata
 import no.nav.dagpenger.iverksett.utbetaling.tilstand.IverksettingService
 import no.nav.dagpenger.iverksett.utbetaling.tilstand.IverksettingsresultatService
@@ -20,6 +22,7 @@ import no.nav.dagpenger.kontrakter.oppdrag.OppdragStatus
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
+import java.time.LocalDateTime
 
 class IverksettingValidatorServiceTest {
     private val iverksettingsresultatServiceMock = mockk<IverksettingsresultatService>()
@@ -45,7 +48,103 @@ class IverksettingValidatorServiceTest {
         every { iverksettingServiceMock.hentForrigeIverksetting(nåværendeIverksetting) } returns forrigeIverksetting
 
         assertApiFeil(HttpStatus.BAD_REQUEST) {
-            iverksettingValidatorService.validerAtIverksettingErForSammeSakSomForrige(nåværendeIverksetting)
+            iverksettingValidatorService.validerAtIverksettingGjelderSammeSakSomForrigeIverksetting(
+                nåværendeIverksetting,
+            )
+        }
+    }
+
+    @Test
+    fun `skal få BAD_REQUEST når forrige iverksetting har annen behandlingId enn siste mottatte iverksetting`() {
+        val nyeste = LocalDateTime.now().minusDays(2)
+        val sakId = RandomOSURId.generate()
+        val sisteMottatteIverksetting =
+            lagIverksettingEntitet(iverksettingData = lagIverksettingsdata(sakId = sakId), mottattTidspunkt = nyeste)
+        val forrigeIverksetting = lagIverksettingsdata(sakId = sakId)
+        val nåværendeIverksetting =
+            lagIverksettingsdata(
+                sakId = sakId,
+                forrigeBehandlingId = forrigeIverksetting.behandlingId,
+            )
+        every { iverksettingServiceMock.hentSisteMottatteIverksetting(nåværendeIverksetting) } returns sisteMottatteIverksetting.data
+
+        assertApiFeil(HttpStatus.BAD_REQUEST) {
+            iverksettingValidatorService.validerAtForrigeIverksettingErLikSisteMottatteIverksetting(
+                nåværendeIverksetting,
+            )
+        }
+    }
+
+    @Test
+    fun `skal få BAD_REQUEST når forrige iverksetting har annen iverksettingId enn siste mottatte iverksetting`() {
+        val nyeste = LocalDateTime.now().minusDays(2)
+        val sakId = RandomOSURId.generate()
+        val behandlingId = RandomOSURId.generate()
+        val sisteMottatteIverksetting =
+            lagIverksettingEntitet(
+                iverksettingData =
+                    lagIverksettingsdata(
+                        sakId = sakId,
+                        behandlingId = behandlingId,
+                        iverksettingId = RandomOSURId.generate(),
+                    ),
+                mottattTidspunkt = nyeste,
+            )
+        val forrigeIverksetting =
+            lagIverksettingsdata(sakId = sakId, behandlingId = behandlingId, iverksettingId = RandomOSURId.generate())
+        val nåværendeIverksetting =
+            lagIverksettingsdata(
+                sakId = sakId,
+                behandlingId = behandlingId,
+                forrigeBehandlingId = forrigeIverksetting.behandlingId,
+                forrigeIverksettingId = forrigeIverksetting.behandling.iverksettingId,
+            )
+        every { iverksettingServiceMock.hentSisteMottatteIverksetting(nåværendeIverksetting) } returns sisteMottatteIverksetting.data
+
+        assertApiFeil(HttpStatus.BAD_REQUEST) {
+            iverksettingValidatorService.validerAtForrigeIverksettingErLikSisteMottatteIverksetting(
+                nåværendeIverksetting,
+            )
+        }
+    }
+
+    @Test
+    fun `skal få BAD_REQUEST når forrige iverksetting ikke er satt og vi har mottatt iverksetting på saken før`() {
+        val nyeste = LocalDateTime.now().minusDays(2)
+        val sakId = RandomOSURId.generate()
+        val sisteMottatteIverksetting =
+            lagIverksettingEntitet(
+                iverksettingData =
+                    lagIverksettingsdata(
+                        sakId = sakId,
+                    ),
+                mottattTidspunkt = nyeste,
+            )
+        val nåværendeIverksetting =
+            lagIverksettingsdata(
+                sakId = sakId,
+            )
+        every { iverksettingServiceMock.hentSisteMottatteIverksetting(nåværendeIverksetting) } returns sisteMottatteIverksetting.data
+
+        assertApiFeil(HttpStatus.BAD_REQUEST) {
+            iverksettingValidatorService.validerAtForrigeIverksettingErLikSisteMottatteIverksetting(
+                nåværendeIverksetting,
+            )
+        }
+    }
+
+    @Test
+    fun `skal få BAD_REQUEST når forrige iverksetting er satt og vi ikke har mottatt iverksetting på saken før`() {
+        val nåværendeIverksetting =
+            lagIverksettingsdata(
+                forrigeBehandlingId = RandomOSURId.generate(),
+            )
+        every { iverksettingServiceMock.hentSisteMottatteIverksetting(nåværendeIverksetting) } returns null
+
+        assertApiFeil(HttpStatus.BAD_REQUEST) {
+            iverksettingValidatorService.validerAtForrigeIverksettingErLikSisteMottatteIverksetting(
+                nåværendeIverksetting,
+            )
         }
     }
 
@@ -104,7 +203,7 @@ class IverksettingValidatorServiceTest {
         } returns forrigeIverksettingsresultat
 
         assertApiFeil(HttpStatus.CONFLICT) {
-            iverksettingValidatorService.validerAtForrigeBehandlingErFerdigIverksattMotOppdrag(nåværendeIverksetting)
+            iverksettingValidatorService.validerAtForrigeIverksettingErFerdigIverksattMotOppdrag(nåværendeIverksetting)
         }
     }
 
