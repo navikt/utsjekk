@@ -4,11 +4,11 @@ import no.nav.dagpenger.iverksett.utbetaling.domene.AndelTilkjentYtelse
 import no.nav.dagpenger.iverksett.utbetaling.domene.Behandlingsdetaljer
 import no.nav.dagpenger.iverksett.utbetaling.domene.Fagsakdetaljer
 import no.nav.dagpenger.iverksett.utbetaling.domene.Iverksetting
+import no.nav.dagpenger.iverksett.utbetaling.domene.Periode
 import no.nav.dagpenger.iverksett.utbetaling.domene.StønadsdataTilleggsstønader
 import no.nav.dagpenger.iverksett.utbetaling.domene.Søker
 import no.nav.dagpenger.iverksett.utbetaling.domene.TilkjentYtelse
 import no.nav.dagpenger.iverksett.utbetaling.domene.Vedtaksdetaljer
-import no.nav.dagpenger.kontrakter.felles.Datoperiode
 import no.nav.dagpenger.kontrakter.felles.Fagsystem
 import no.nav.dagpenger.kontrakter.iverksett.IverksettTilleggsstønaderDto
 import no.nav.dagpenger.kontrakter.iverksett.UtbetalingTilleggsstønaderDto
@@ -58,7 +58,7 @@ fun UtbetalingTilleggsstønaderDto.toDomain() =
     AndelTilkjentYtelse(
         beløp = this.beløp,
         satstype = this.satstype,
-        periode = Datoperiode(this.fraOgMedDato, this.tilOgMedDato),
+        periode = Periode(this.fraOgMedDato, this.tilOgMedDato),
         stønadsdata =
             StønadsdataTilleggsstønader(
                 brukersNavKontor = this.brukersNavKontor,

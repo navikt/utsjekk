@@ -1,9 +1,9 @@
 package no.nav.dagpenger.iverksett.utbetaling.util
 
 import no.nav.dagpenger.iverksett.utbetaling.domene.AndelTilkjentYtelse
+import no.nav.dagpenger.iverksett.utbetaling.domene.Periode
 import no.nav.dagpenger.iverksett.utbetaling.domene.StønadsdataDagpenger
 import no.nav.dagpenger.iverksett.utbetaling.domene.StønadsdataTiltakspenger
-import no.nav.dagpenger.kontrakter.felles.Datoperiode
 import no.nav.dagpenger.kontrakter.felles.StønadType
 import no.nav.dagpenger.kontrakter.felles.StønadTypeDagpenger
 import no.nav.dagpenger.kontrakter.felles.StønadTypeTiltakspenger
@@ -24,7 +24,7 @@ fun lagAndelTilkjentYtelse(
 ) = if (stønadstype is StønadTypeDagpenger) {
     AndelTilkjentYtelse(
         beløp = beløp,
-        periode = Datoperiode(fraOgMed, tilOgMed),
+        periode = Periode(fraOgMed, tilOgMed),
         periodeId = periodeId,
         forrigePeriodeId = forrigePeriodeId,
         stønadsdata = StønadsdataDagpenger(stønadstype, ferietillegg),
@@ -32,7 +32,7 @@ fun lagAndelTilkjentYtelse(
 } else {
     AndelTilkjentYtelse(
         beløp = beløp,
-        periode = Datoperiode(fraOgMed, tilOgMed),
+        periode = Periode(fraOgMed, tilOgMed),
         periodeId = periodeId,
         forrigePeriodeId = forrigePeriodeId,
         stønadsdata = StønadsdataTiltakspenger(stønadstype as StønadTypeTiltakspenger),
