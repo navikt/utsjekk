@@ -1,5 +1,5 @@
 application:
-  name: dp-iverksett
+  name: utsjekk
 server:
   servlet:
     context-path: /
@@ -18,7 +18,7 @@ spring:
       max-lifetime: 30000
       minimum-idle: 1
   application:
-    name: iverksett
+    name: utsjekk
   jackson:
     mapper:
       accept-case-insensitive-properties: true
@@ -87,13 +87,13 @@ PROSESSERING_GRUPPE: ${PROSESSERING_GRUPPE}
 konsumenter:
   dagpenger:
     fagsystem: DAGPENGER
-    apper: dp-vedtak-iverksett,dp-iverksett
+    apper: dp-vedtak-iverksett,utsjekk
   tiltakspenger:
     fagsystem: TILTAKSPENGER
-    apper: tiltakspenger-utbetaling,dp-iverksett
+    apper: tiltakspenger-utbetaling,utsjekk
   tilleggsstønader:
     fagsystem: TILLEGGSSTØNADER
-    apper: tilleggsstonader-sak,dp-iverksett
+    apper: tilleggsstonader-sak,utsjekk
 
 kafka:
   config:

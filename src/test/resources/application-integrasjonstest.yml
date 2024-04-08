@@ -14,7 +14,7 @@ funksjonsbrytere:
     uri: http://localhost:4242/api
     apiKey: test
     environment: local
-    applicationName: dp-iverksett
+    applicationName: utsjekk
 
 
 DP_OPPDRAG_API_URL: http://localhost:8087

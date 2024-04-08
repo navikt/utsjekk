@@ -99,7 +99,7 @@ class ApplicationConfig {
                 SpringTokenValidationContextHolder().getTokenValidationContext().getClaims("azuread")
                     .getStringClaim("preferred_username")
             } catch (e: Exception) {
-                "dp-iverksett"
+                "utsjekk"
             }
 
         override fun harTilgang(): Boolean = grupper().contains(gruppe)
