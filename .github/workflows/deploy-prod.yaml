@@ -7,7 +7,6 @@ on:
       - 'dependabot/**'
 
 env:
-  IMAGE: ghcr.io/${{ github.repository }}:${{ github.sha }}
   CI: true
   TZ: Europe/Oslo
 
@@ -15,7 +14,9 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
-    permissions: write-all
+    permissions:
+      contents: read
+      id-token: write
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -38,15 +39,22 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           mvn -B --no-transfer-progress package --settings .m2/maven-settings.xml --file pom.xml
-          echo ${GITHUB_TOKEN} | docker login ghcr.io --username ${GITHUB_REPOSITORY} --password-stdin
-          docker build --tag ${IMAGE} .
-          docker push ${IMAGE}
+      - name: Push docker image til GAR og signer
+        uses: nais/docker-build-push@v0
+        id: docker-build-push
+        with:
+          team: helved
+          identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
+          project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
 
   deploy-dev:
     name: Deploy til dev-gcp
     timeout-minutes: 30
     needs: build
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
     steps:
       - uses: actions/checkout@v4
       - uses: nais/deploy/actions/deploy@v2
@@ -55,6 +63,7 @@ jobs:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-gcp
           RESOURCE: .deploy/unleash-apitoken.yaml,.deploy/nais.yaml
+          IMAGE: ${{ needs.build.outputs.image }}
           VARS: .deploy/vars-preprod.yaml
 
   deploy-prod:
@@ -63,6 +72,9 @@ jobs:
     needs: deploy-dev
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
     steps:
       - uses: actions/checkout@v4
       - uses: nais/deploy/actions/deploy@v2
@@ -71,4 +83,5 @@ jobs:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: prod-gcp
           RESOURCE: .deploy/unleash-apitoken.yaml,.deploy/nais.yaml
+          IMAGE: ${{ needs.build.outputs.image }}
           VARS: .deploy/vars-prod.yaml
