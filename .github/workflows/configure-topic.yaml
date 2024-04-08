@@ -18,10 +18,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: nais/deploy/actions/deploy@v2
-        with:
-          team: helved
-          identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
-          project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
         env:
           CLUSTER: dev-gcp
           RESOURCE: .deploy/topic.yaml
@@ -36,10 +32,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: nais/deploy/actions/deploy@v2
-        with:
-          team: helved
-          identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
-          project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
         env:
           CLUSTER: prod-gcp
           RESOURCE: .deploy/topic.yaml
