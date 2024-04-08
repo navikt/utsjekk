@@ -1,16 +1,16 @@
 package no.nav.utsjekk.felles
 
 import com.fasterxml.jackson.module.kotlin.KotlinModule
-import no.nav.utsjekk.felles.http.ObjectMapperProvider
-import no.nav.utsjekk.felles.oppdrag.konfig.RestTemplateAzure
-import no.nav.utsjekk.felles.oppdrag.konfig.RetryOAuth2HttpClient
-import no.nav.utsjekk.utbetaling.domene.KonsumentConfig
 import no.nav.familie.log.filter.LogFilter
 import no.nav.familie.log.filter.RequestTimeFilter
 import no.nav.familie.prosessering.config.ProsesseringInfoProvider
 import no.nav.security.token.support.client.spring.oauth2.EnableOAuth2Client
 import no.nav.security.token.support.spring.SpringTokenValidationContextHolder
 import no.nav.security.token.support.spring.api.EnableJwtTokenValidation
+import no.nav.utsjekk.felles.http.ObjectMapperProvider
+import no.nav.utsjekk.felles.oppdrag.konfig.RestTemplateAzure
+import no.nav.utsjekk.felles.oppdrag.konfig.RetryOAuth2HttpClient
+import no.nav.utsjekk.utbetaling.domene.KonsumentConfig
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.SpringBootConfiguration
@@ -31,11 +31,11 @@ import java.time.temporal.ChronoUnit
 
 @SpringBootConfiguration
 @ConfigurationPropertiesScan(
-    "no.nav.dagpenger.iverksett",
+    "no.nav.utsjekk",
 )
 @ComponentScan(
     "no.nav.familie.prosessering",
-    "no.nav.dagpenger.iverksett",
+    "no.nav.utsjekk",
     "no.nav.security.token.support",
     excludeFilters = [
         ComponentScan.Filter(

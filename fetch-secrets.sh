@@ -1,7 +1,7 @@
 #!/bin/zsh
 
-secret_name=$(kubectl -n teamdagpenger get secrets | grep azure-dp-iverksett | awk '{print ($1)}' )
-secret_value=$(kubectl -n teamdagpenger get secret "${secret_name}" -o json | jq '.data | map_values(@base64d)')
+secret_name=$(kubectl -n helved get secrets | grep azure-helved | awk '{print ($1)}' )
+secret_value=$(kubectl -n helved get secret "${secret_name}" -o json | jq '.data | map_values(@base64d)')
 
 client_id=$(echo "${secret_value}" | jq -r '.AZURE_APP_CLIENT_ID')
 printf "AZURE_APP_CLIENT_ID:\t %s\n" "${client_id}"

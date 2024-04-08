@@ -32,7 +32,7 @@ logging:
   config: "classpath:logback-spring.xml"
 
 springdoc:
-  packagesToScan: no.nav.dagpenger.iverksett
+  packagesToScan: no.nav.utsjekk
   pathsToMatch: /v3/api-docs,/api/**
   swagger-ui:
     disable-swagger-default-url: true
@@ -97,7 +97,7 @@ konsumenter:
 
 kafka:
   config:
-    topic: "teamdagpenger.iverksetting-status-v1"
+    topic: "helved.iverksetting-status-v1"
   brokers: ${KAFKA_BROKERS}
   truststorePath: ${KAFKA_TRUSTSTORE_PATH}
   keystorePath: ${KAFKA_KEYSTORE_PATH}

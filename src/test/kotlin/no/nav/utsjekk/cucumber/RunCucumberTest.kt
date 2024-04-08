@@ -8,6 +8,6 @@ import org.junit.platform.suite.api.Suite
 
 @Suite
 @IncludeEngines("cucumber")
-@SelectClasspathResource("no/nav/dagpenger/iverksett/cucumber")
+@SelectClasspathResource("no/nav/utsjekk/iverksett/cucumber")
 @ConfigurationParameter(key = PLUGIN_PROPERTY_NAME, value = "pretty")
 class RunCucumberTest
