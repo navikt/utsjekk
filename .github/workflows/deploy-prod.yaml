@@ -49,39 +49,36 @@ jobs:
 
   deploy-dev:
     name: Deploy til dev-gcp
-    timeout-minutes: 30
     needs: build
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
       id-token: write
     steps:
       - uses: actions/checkout@v4
       - uses: nais/deploy/actions/deploy@v2
         timeout-minutes: 30
         env:
-          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-gcp
           RESOURCE: .deploy/unleash-apitoken.yaml,.deploy/nais.yaml
           IMAGE: ${{ needs.build.outputs.image }}
+          VAR: image=${{ needs.build.outputs.image }}
           VARS: .deploy/vars-preprod.yaml
 
   deploy-prod:
     name: Deploy til prod-gcp
-    timeout-minutes: 30
     needs: deploy-dev
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
       id-token: write
     steps:
       - uses: actions/checkout@v4
       - uses: nais/deploy/actions/deploy@v2
-        timeout-minutes: 30
         env:
-          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: prod-gcp
           RESOURCE: .deploy/unleash-apitoken.yaml,.deploy/nais.yaml
           IMAGE: ${{ needs.build.outputs.image }}
+          VAR: image=${{ needs.build.outputs.image }}
           VARS: .deploy/vars-prod.yaml
