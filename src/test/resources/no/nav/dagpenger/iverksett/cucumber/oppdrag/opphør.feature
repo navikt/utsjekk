@@ -77,6 +77,21 @@ Egenskap: Opphør
       | 1            | 01.03.2021 | 01.06.2021 |             | 700   | Ja                    | Nei        | 0          |                    |
       | 2            | 01.03.2021 | 01.06.2021 | 02.04.2021  | 700   | Nei                   | Ja         | 0          |                    |
 
+  Scenario: Opphører første måned av en lang periode
+
+    Gitt følgende tilkjente ytelser
+      | BehandlingId | Fra dato   | Til dato   | Beløp |
+      | 1            | 01.03.2021 | 01.06.2021 | 700   |
+      | 2            | 01.04.2021 | 01.06.2021 | 700   |
+
+    Når beregner utbetalingsoppdrag
+
+    Så forvent følgende utbetalingsoppdrag
+      | BehandlingId | Fra dato   | Til dato   | Opphørsdato | Beløp | Første utbetaling sak | Er endring | Periode id | Forrige periode id |
+      | 1            | 01.03.2021 | 01.06.2021 |             | 700   | Ja                    | Nei        | 0          |                    |
+      | 2            | 01.03.2021 | 01.06.2021 | 01.03.2021  | 700   | Nei                   | Ja         | 0          |                    |
+      | 2            | 01.04.2021 | 01.06.2021 |             | 700   | Nei                   | Nei        | 1          | 0                  |
+
   Scenario: Opphører en lang periode med månedssats
 
     Gitt følgende tilkjente ytelser
