@@ -2,12 +2,12 @@ apiVersion: kafka.nais.io/v1
 kind: Topic
 metadata:
   name: iverksetting-status-v1
-  namespace: teamdagpenger
+  namespace: helved
   labels:
-    team: teamdagpenger
+    team: helved
 spec:
   pool: {{ kafka.pool }}
   acl:
-    - team: teamdagpenger
-      application: dp-iverksett
+    - team: helved
+      application: utsjekk
       access: readwrite

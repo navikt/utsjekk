@@ -9,23 +9,23 @@
         <version>3.2.4</version>
     </parent>
 
-    <groupId>no.nav.dagpenger</groupId>
-    <artifactId>dp-iverksett</artifactId>
+    <groupId>no.nav.utsjekk</groupId>
+    <artifactId>utsjekk</artifactId>
     <version>${revision}${sha1}${changelist}</version>
 
-    <name>Iverksett</name>
+    <name>Utsjekk</name>
 
     <properties>
         <revision>1.0</revision>
         <sha1/>
         <changelist>-SNAPSHOT</changelist>
         <maven.deploy.skip>true</maven.deploy.skip>
-        <start-class>no.nav.dagpenger.iverksett.ApplicationKt</start-class>
+        <start-class>no.nav.utsjekk.ApplicationKt</start-class>
         <java.version>21</java.version>
         <kotlin.version>1.9.23</kotlin.version>
 
         <!-- Versjoner -->
-        <dp-kontrakter.version>3.0_20240321094104_fcbc34f</dp-kontrakter.version>
+        <utsjekk-kontrakter.version>1.0_20240408113510_4a2db84</utsjekk-kontrakter.version>
         <springdoc.version>2.4.0</springdoc.version>
         <prosessering.version>2.20240110093731_0eda75e</prosessering.version>
         <maven-surefire-plugin.version>3.2.5</maven-surefire-plugin.version>
@@ -38,7 +38,7 @@
     <repositories>
         <repository>
             <id>github</id>
-            <url>https://maven.pkg.github.com/navikt/dp-kontrakter</url>
+            <url>https://maven.pkg.github.com/navikt/utsjekk-kontrakter</url>
         </repository>
         <repository>
             <id>central</id>
@@ -53,19 +53,14 @@
     <dependencies>
         <!-- Kontrakter -->
         <dependency>
-            <groupId>no.nav.dagpenger.kontrakter</groupId>
+            <groupId>no.nav.utsjekk.kontrakter</groupId>
             <artifactId>oppdrag</artifactId>
-            <version>${dp-kontrakter.version}</version>
+            <version>${utsjekk-kontrakter.version}</version>
         </dependency>
         <dependency>
-            <groupId>no.nav.dagpenger.kontrakter</groupId>
+            <groupId>no.nav.utsjekk.kontrakter</groupId>
             <artifactId>iverksett</artifactId>
-            <version>${dp-kontrakter.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>no.nav.dagpenger.kontrakter</groupId>
-            <artifactId>iverksett-integrasjoner</artifactId>
-            <version>${dp-kontrakter.version}</version>
+            <version>${utsjekk-kontrakter.version}</version>
         </dependency>
 
         <!-- Spring -->

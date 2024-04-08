@@ -23,9 +23,9 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-cache-dp-iverksett-${{ hashFiles('**/pom.xml') }}
+          key: ${{ runner.os }}-maven-cache-utsjekk-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
-            ${{ runner.os }}-maven-cache-dp-iverksett-
+            ${{ runner.os }}-maven-cache-utsjekk-
             ${{ runner.os }}-
       - name: Set up JDK 21
         uses: actions/setup-java@v4

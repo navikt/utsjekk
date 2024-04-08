@@ -1,10 +1,10 @@
 apiVersion: "nais.io/v1alpha1"
 kind: "Application"
 metadata:
-  name: dp-iverksett
-  namespace: teamdagpenger
+  name: utsjekk
+  namespace: helved
   labels:
-    team: teamdagpenger
+    team: helved
 spec:
   image: {{ image }}
   ingresses:
@@ -59,7 +59,7 @@ spec:
   accessPolicy:
     inbound:
       rules:
-        - application: dp-iverksett # For å sette i gang grensesnittavstemming første gang
+        - application: utsjekk # For å sette i gang grensesnittavstemming første gang
         - application: dp-vedtak-iverksett
         - application: dp-prosessering #frontend for task-rammeverket
         - application: tiltakspenger-utbetaling
@@ -69,8 +69,9 @@ spec:
     outbound:
       rules:
         - application: dp-oppdrag
+          namespace: teamdagpenger
       external:
-        - host: dagpenger-unleash-api.nav.cloud.nais.io
+        - host: helved-unleash-api.nav.cloud.nais.io
   gcp:
     sqlInstances:
       - type: {{ db.version }} # IF This is changed, all data will be lost. Read on nais.io how to upgrade
