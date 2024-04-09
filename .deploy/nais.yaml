@@ -68,8 +68,7 @@ spec:
           namespace: tilleggsstonader
     outbound:
       rules:
-        - application: dp-oppdrag
-          namespace: teamdagpenger
+        - application: utsjekk-oppdrag
       external:
         - host: helved-unleash-api.nav.cloud.nais.io
   gcp:
