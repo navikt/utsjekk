@@ -1,6 +1,6 @@
 #!/bin/zsh
 
-secret_name=$(kubectl -n helved get secrets | grep -e '^azure-utsjekk\(.*-oppdrag\).*$' | awk '{print ($1)}' )
+secret_name=$(kubectl -n helved get secrets | grep -v oppdrag | grep azure-utsjekk | awk '{print ($1)}' )
 secret_value=$(kubectl -n helved get secret "${secret_name}" -o json | jq '.data | map_values(@base64d)')
 
 client_id=$(echo "${secret_value}" | jq -r '.AZURE_APP_CLIENT_ID')
