@@ -37,7 +37,7 @@ class IverksettingController(
     private val iverksettDtoMapper: IverksettDtoMapper,
     private val konsumentConfig: KonsumentConfig,
 ) {
-    @PostMapping(path = ["/v1"], consumes = [MediaType.APPLICATION_JSON_VALUE])
+    @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE])
     @Tag(name = "Iverksetting")
     @Operation(
         summary = "Start iverksetting av vedtak",
@@ -62,7 +62,7 @@ class IverksettingController(
         return ResponseEntity.accepted().build()
     }
 
-    @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE], path = ["/tilleggsstonader/v1"])
+    @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE], path = ["/tilleggsstonader"])
     @Tag(name = "Iverksetting for tilleggsstønader")
     @Operation(
         summary = "Start iverksetting av vedtak",
@@ -87,7 +87,7 @@ class IverksettingController(
         return ResponseEntity.accepted().build()
     }
 
-    @GetMapping("{sakId}/{behandlingId}/status/v1", produces = ["application/json"])
+    @GetMapping("{sakId}/{behandlingId}/status", produces = ["application/json"])
     @Operation(summary = "Sjekk status på iverksetting med gitt behandlingId")
     @Tag(name = "Iverksetting")
     @ApiResponse(responseCode = "200", description = "Status returnert i body")
@@ -107,7 +107,7 @@ class IverksettingController(
         return status?.let { ResponseEntity(status, HttpStatus.OK) } ?: ResponseEntity(null, HttpStatus.NOT_FOUND)
     }
 
-    @GetMapping("{sakId}/{behandlingId}/{iverksettingId}/status/v1", produces = ["application/json"])
+    @GetMapping("{sakId}/{behandlingId}/{iverksettingId}/status", produces = ["application/json"])
     @Operation(summary = "Sjekk status på iverksetting med gitt behandlingId og iverksettingId")
     @Tag(name = "Iverksetting")
     @ApiResponse(responseCode = "200", description = "Status returnert i body")

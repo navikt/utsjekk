@@ -58,7 +58,7 @@ class IverksettingControllerTest : Integrasjonstest() {
 
         val respons: ResponseEntity<Any> =
             restTemplate.exchange(
-                localhostUrl("/api/iverksetting/v1"),
+                localhostUrl("/api/iverksetting"),
                 HttpMethod.POST,
                 HttpEntity(iverksettJson, headers),
             )
@@ -73,7 +73,7 @@ class IverksettingControllerTest : Integrasjonstest() {
 
         val respons: ResponseEntity<Any> =
             restTemplate.exchange(
-                localhostUrl("/api/iverksetting/v1"),
+                localhostUrl("/api/iverksetting"),
                 HttpMethod.POST,
                 HttpEntity(iverksettJson, headers),
             )
@@ -91,7 +91,7 @@ class IverksettingControllerTest : Integrasjonstest() {
             )
 
         restTemplate.exchange<Unit>(
-            localhostUrl("/api/iverksetting/tilleggsstonader/v1"),
+            localhostUrl("/api/iverksetting/tilleggsstonader"),
             HttpMethod.POST,
             HttpEntity(dto, headers),
         ).also {
@@ -101,7 +101,7 @@ class IverksettingControllerTest : Integrasjonstest() {
         kjørTasks()
 
         restTemplate.exchange<IverksettStatus>(
-            localhostUrl("/api/iverksetting/${dto.sakId}/${dto.behandlingId}/${dto.iverksettingId}/status/v1"),
+            localhostUrl("/api/iverksetting/${dto.sakId}/${dto.behandlingId}/${dto.iverksettingId}/status"),
             HttpMethod.GET,
             HttpEntity(null, headers),
         ).also {
@@ -111,7 +111,7 @@ class IverksettingControllerTest : Integrasjonstest() {
     }
 
     @Test
-    fun `start iverksetting av vedtak uten utbetaling`() {
+    fun `start iverksetting av rammevedtak uten utbetaling`() {
         val dto =
             IverksettDto(
                 behandlingId = behandlingId,
@@ -128,7 +128,7 @@ class IverksettingControllerTest : Integrasjonstest() {
             )
 
         restTemplate.exchange<Unit>(
-            localhostUrl("/api/iverksetting/v1"),
+            localhostUrl("/api/iverksetting"),
             HttpMethod.POST,
             HttpEntity(dto, headers),
         ).also {
@@ -138,7 +138,7 @@ class IverksettingControllerTest : Integrasjonstest() {
         kjørTasks()
 
         restTemplate.exchange<IverksettStatus>(
-            localhostUrl("/api/iverksetting/$sakId/$behandlingId/status/v1"),
+            localhostUrl("/api/iverksetting/$sakId/$behandlingId/status"),
             HttpMethod.GET,
             HttpEntity(null, headers),
         ).also {
@@ -148,7 +148,7 @@ class IverksettingControllerTest : Integrasjonstest() {
     }
 
     @Test
-    fun `start iverksetting av vedtak for tilleggsstønader uten utbetaling`() {
+    fun `start iverksetting av rammevedtak for tilleggsstønader uten utbetaling`() {
         val behandlingId = RandomOSURId.generate()
         val sakId = RandomOSURId.generate()
         val iverksettingId = "c2502e75-6e78-40fa-9124-6549341855b4"
@@ -169,7 +169,7 @@ class IverksettingControllerTest : Integrasjonstest() {
             )
 
         restTemplate.exchange<Unit>(
-            localhostUrl("/api/iverksetting/tilleggsstonader/v1"),
+            localhostUrl("/api/iverksetting/tilleggsstonader"),
             HttpMethod.POST,
             HttpEntity(dto, headers),
         ).also {
@@ -179,7 +179,7 @@ class IverksettingControllerTest : Integrasjonstest() {
         kjørTasks()
 
         restTemplate.exchange<IverksettStatus>(
-            localhostUrl("/api/iverksetting/$sakId/$behandlingId/$iverksettingId/status/v1"),
+            localhostUrl("/api/iverksetting/$sakId/$behandlingId/$iverksettingId/status"),
             HttpMethod.GET,
             HttpEntity(null, headers),
         ).also {
