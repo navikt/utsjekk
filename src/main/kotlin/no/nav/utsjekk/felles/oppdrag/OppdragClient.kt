@@ -17,7 +17,7 @@ import java.net.URI
 
 @Service
 class OppdragClient(
-    @Value("\${DP_OPPDRAG_API_URL}")
+    @Value("\${UTSJEKK_OPPDRAG_API_URL}")
     private val dagpengerOppdragUri: URI,
     @Qualifier("azure")
     restOperations: RestOperations,
@@ -35,7 +35,7 @@ class OppdragClient(
         } catch (e: HttpClientErrorException) {
             if (e.statusCode == HttpStatus.CONFLICT) {
                 logger.warn(
-                    "dp-oppdrag har allerede iverksatt utbetaling for fagsystem ${utbetalingsoppdrag.fagsystem}, sak: " +
+                    "utsjekk-oppdrag har allerede iverksatt utbetaling for fagsystem ${utbetalingsoppdrag.fagsystem}, sak: " +
                         "${utbetalingsoppdrag.saksnummer}, behandling: ${utbetalingsoppdrag.utbetalingsperiode.firstOrNull()?.behandlingId}" +
                         ", iverksetting: ${utbetalingsoppdrag.iverksettingId}",
                 )

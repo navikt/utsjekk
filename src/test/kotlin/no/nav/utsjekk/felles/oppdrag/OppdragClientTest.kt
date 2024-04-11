@@ -31,7 +31,7 @@ class OppdragClientTest {
     }
 
     @Test
-    fun `skal ikke feile hvis dp-oppdrag svarer med 409-feil`() {
+    fun `skal ikke feile hvis utsjekk-oppdrag svarer med 409-feil`() {
         stubFor(post(urlEqualTo("/oppdrag")).willReturn(aResponse().withStatus(409)))
 
         assertDoesNotThrow { oppdragClient.iverksettOppdrag(etTomtUtbetalingsoppdrag()) }

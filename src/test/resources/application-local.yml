@@ -18,7 +18,7 @@ funksjonsbrytere:
     environment: local
     applicationName: utsjekk
 
-DP_OPPDRAG_API_URL: http://localhost:8087
+UTSJEKK_OPPDRAG_API_URL: http://localhost:8087
 AZURE_OPENID_CONFIG_TOKEN_ENDPOINT: https://login.microsoftonline.com/navq.onmicrosoft.com/oauth2/v2.0/token
 NAIS_CLUSTER_NAME: dev-gcp
 

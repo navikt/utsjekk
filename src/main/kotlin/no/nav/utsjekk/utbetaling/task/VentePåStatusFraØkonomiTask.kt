@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service
     maxAntallFeil = 50,
     settTilManuellOppfølgning = true,
     triggerTidVedFeilISekunder = 30L,
-    beskrivelse = "Sjekker status på utbetalingsoppdraget i dp-oppdrag.",
+    beskrivelse = "Sjekker status på utbetalingsoppdraget i utsjekk-oppdrag.",
 )
 class VentePåStatusFraØkonomiTask(
     private val iverksettingService: IverksettingService,
