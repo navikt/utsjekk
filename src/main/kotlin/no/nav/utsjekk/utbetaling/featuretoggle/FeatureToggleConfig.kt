@@ -90,8 +90,8 @@ class FeatureToggleConfig(
     companion object {
         private val log: Logger = LoggerFactory.getLogger(this::class.java)
 
-        const val STOPP_IVERKSETTING_DAGPENGER = "dp-iverksett.stopp-iverksetting-dagpenger"
-        const val STOPP_IVERKSETTING_TILLEGGSSTØNADER = "dp-iverksett.stopp-iverksetting-tilleggsstonader"
-        const val STOPP_IVERKSETTING_TILTAKSPENGER = "dp-iverksett.stopp-iverksetting-tiltakspenger"
+        const val STOPP_IVERKSETTING_DAGPENGER = "utsjekk.stopp-iverksetting-dagpenger"
+        const val STOPP_IVERKSETTING_TILLEGGSSTØNADER = "utsjekk.stopp-iverksetting-tilleggsstonader"
+        const val STOPP_IVERKSETTING_TILTAKSPENGER = "utsjekk.stopp-iverksetting-tiltakspenger"
     }
 }

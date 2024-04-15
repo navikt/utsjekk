@@ -1,6 +1,5 @@
 package no.nav.utsjekk.utbetaling.api
 
-import io.swagger.v3.oas.annotations.ExternalDocumentation
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.tags.Tag
@@ -42,10 +41,6 @@ class IverksettingController(
     @Operation(
         summary = "Start iverksetting av vedtak",
         description = "Iverksetter utbetaling.",
-        externalDocs =
-            ExternalDocumentation(
-                url = "https://github.com/navikt/dp-iverksett/tree/3a8fecbc6076e278407ddd8ceb90291077bf8d99/doc",
-            ),
     )
     @ApiResponse(responseCode = "202", description = "iverksetting er mottatt")
     @ApiResponse(responseCode = "400", description = "ugyldig format på iverksetting")
@@ -67,10 +62,6 @@ class IverksettingController(
     @Operation(
         summary = "Start iverksetting av vedtak",
         description = "Iverksetter utbetaling for tilleggsstønader.",
-        externalDocs =
-            ExternalDocumentation(
-                url = "https://github.com/navikt/dp-iverksett/tree/3a8fecbc6076e278407ddd8ceb90291077bf8d99/doc",
-            ),
     )
     @ApiResponse(responseCode = "202", description = "iverksetting er mottatt")
     @ApiResponse(responseCode = "400", description = "ugyldig format på iverksetting")
