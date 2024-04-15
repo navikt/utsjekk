@@ -60,8 +60,7 @@ spec:
     inbound:
       rules:
         - application: utsjekk # For å sette i gang grensesnittavstemming første gang
-        - application: dp-prosessering #frontend for task-rammeverket
-          namespace: teamdagpenger
+        - application: utsjekk-prosessering #frontend for task-rammeverket
         - application: tiltakspenger-utbetaling
           namespace: tpts
         - application: tilleggsstonader-sak
