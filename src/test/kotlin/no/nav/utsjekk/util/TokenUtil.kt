@@ -8,7 +8,7 @@ object TokenUtil {
         mockOAuth2Server: MockOAuth2Server,
         saksbehandler: String,
         grupper: List<String> = emptyList(),
-        klientnavn: String = "dev-gcp:teamdagpenger:dp-vedtak-iverksett",
+        klientnavn: String = "dev-gcp:tiltakspenger:tiltakspenger-utbetaling",
     ): String {
         val thisId = UUID.randomUUID().toString()
         val clientId = UUID.randomUUID().toString()

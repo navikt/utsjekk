@@ -23,5 +23,5 @@ AZURE_OPENID_CONFIG_TOKEN_ENDPOINT: https://login.microsoftonline.com/navq.onmic
 NAIS_CLUSTER_NAME: dev-gcp
 
 BESLUTTER_GRUPPE: 11b8475a-fb12-41aa-b1f6-8497c1b5385b
-APP_MED_SYSTEMTILGANG: dev-gcp:teamdagpenger:dp-vedtak-iverksett
+APP_MED_SYSTEMTILGANG:
 PROSESSERING_GRUPPE: 97140b9a-07c5-414c-beeb-69824d04c044
