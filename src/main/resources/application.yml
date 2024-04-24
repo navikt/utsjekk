@@ -85,9 +85,6 @@ prosessering:
 PROSESSERING_GRUPPE: ${PROSESSERING_GRUPPE}
 
 konsumenter:
-  dagpenger:
-    fagsystem: DAGPENGER
-    apper: dp-vedtak-iverksett,utsjekk
   tiltakspenger:
     fagsystem: TILTAKSPENGER
     apper: tiltakspenger-utbetaling,utsjekk

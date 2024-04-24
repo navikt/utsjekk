@@ -52,7 +52,7 @@ class IverksettingControllerTest : Integrasjonstest() {
 
     @Test
     fun `iverksetter ikke når kill switch for ytelsen er skrudd på`() {
-        FeatureToggleMock.skruAvFagsystem(Fagsystem.DAGPENGER)
+        FeatureToggleMock.skruAvFagsystem(Fagsystem.TILTAKSPENGER)
 
         val iverksettJson = enIverksettDto(behandlingId = behandlingId, sakId = sakId)
 
