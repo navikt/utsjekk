@@ -64,7 +64,7 @@ class IverksettingControllerTest : Integrasjonstest() {
             )
 
         assertEquals(HttpStatus.SERVICE_UNAVAILABLE, respons.statusCode)
-        assertEquals(IverksettingErSkruddAvException().message, respons.body)
+        assertEquals(IverksettingErSkruddAvException(Fagsystem.TILTAKSPENGER).message, respons.body)
     }
 
     @Test

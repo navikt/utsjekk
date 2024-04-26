@@ -1,3 +1,6 @@
 package no.nav.utsjekk.utbetaling.featuretoggle
 
-class IverksettingErSkruddAvException : IllegalStateException("Kan ikke iverksette akkurat nå")
+import no.nav.utsjekk.kontrakter.felles.Fagsystem
+
+class IverksettingErSkruddAvException(fagsystem: Fagsystem) :
+    IllegalStateException("Iverksetting er skrudd av for fagsystem $fagsystem")

@@ -38,7 +38,7 @@ class IverksettingService(
     @Transactional
     fun startIverksetting(iverksetting: Iverksetting) {
         if (featureToggleService.iverksettingErSkruddAvForFagsystem(iverksetting.fagsak.fagsystem)) {
-            throw IverksettingErSkruddAvException()
+            throw IverksettingErSkruddAvException(iverksetting.fagsak.fagsystem)
         }
 
         iverksettingRepository.insert(
