@@ -1,4 +1,4 @@
-package no.nav.familie.log.filter
+package no.nav.utsjekk.felles.http.filter
 
 import jakarta.servlet.Filter
 import jakarta.servlet.FilterChain
@@ -13,9 +13,12 @@ import org.springframework.util.StopWatch
 import java.io.IOException
 
 open class RequestTimeFilter : Filter {
-
     @Throws(IOException::class, ServletException::class)
-    override fun doFilter(servletRequest: ServletRequest, servletResponse: ServletResponse, filterChain: FilterChain) {
+    override fun doFilter(
+        servletRequest: ServletRequest,
+        servletResponse: ServletResponse,
+        filterChain: FilterChain,
+    ) {
         val response = servletResponse as HttpServletResponse
         val request = servletRequest as HttpServletRequest
         val timer = StopWatch()
@@ -28,23 +31,27 @@ open class RequestTimeFilter : Filter {
         }
     }
 
-    private fun log(request: HttpServletRequest, code: Int, timer: StopWatch) {
+    private fun log(
+        request: HttpServletRequest,
+        code: Int,
+        timer: StopWatch,
+    ) {
+        val loggForRequest = "${request.method} - ${request.requestURI} - ($code). Dette tok ${timer.totalTimeMillis} ms"
         if (HttpStatus.valueOf(code).isError) {
-            LOG.warn("{} - {} - ({}). Dette tok {}ms", request.method, request.requestURI, code, timer.totalTimeMillis)
+            logger.warn(loggForRequest)
         } else {
-            if (!shouldNotFilter(request.requestURI)) {
-                LOG.info("{} - {} - ({}). Dette tok {}ms", request.method, request.requestURI, code, timer.totalTimeMillis)
+            if (!erInterntEndepunkt(request.requestURI)) {
+                logger.info(loggForRequest)
             }
         }
     }
 
-    @Suppress("MemberVisibilityCanBePrivate") // kan overrides hvis det ønskes
-    fun shouldNotFilter(uri: String): Boolean {
-        return uri.contains("/internal")
-    }
-
     companion object {
+        @Suppress("MemberVisibilityCanBePrivate") // kan overrides hvis det ønskes
+        fun erInterntEndepunkt(uri: String): Boolean {
+            return uri.contains("/internal")
+        }
 
-        private val LOG = LoggerFactory.getLogger(RequestTimeFilter::class.java)
+        private val logger = LoggerFactory.getLogger(RequestTimeFilter::class.java)
     }
 }
