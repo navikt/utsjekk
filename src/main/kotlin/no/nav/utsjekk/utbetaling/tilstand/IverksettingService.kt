@@ -71,6 +71,10 @@ class IverksettingService(
         )
     }
 
+    fun hentFeaturetoggle(): Boolean {
+        return featureToggleService.iverksettingErSkruddAvForFagsystem(Fagsystem.TILLEGGSSTØNADER)
+    }
+
     fun hentIverksetting(
         fagsystem: Fagsystem,
         sakId: String,
