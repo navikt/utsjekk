@@ -117,9 +117,4 @@ class IverksettingController(
             )
         return status?.let { ResponseEntity(status, HttpStatus.OK) } ?: ResponseEntity(null, HttpStatus.NOT_FOUND)
     }
-
-    @GetMapping("/featuretoggle")
-    fun testHentFeaturetoggle(): ResponseEntity<String> {
-        return ResponseEntity.ok("Iverksetting er skrudd av for tilleggsstønader: ${iverksettingService.hentFeaturetoggle()}")
-    }
 }
