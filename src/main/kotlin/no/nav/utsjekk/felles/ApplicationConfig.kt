@@ -53,6 +53,7 @@ import java.time.temporal.ChronoUnit
 @EnableConfigurationProperties(KonsumentConfig::class)
 class ApplicationConfig {
     private val logger = LoggerFactory.getLogger(this::class.java)
+    private val secureLogger = LoggerFactory.getLogger("secureLogger")
 
     @Bean
     fun kotlinModule(): KotlinModule = KotlinModule.Builder().build()
@@ -102,7 +103,10 @@ class ApplicationConfig {
                 "utsjekk"
             }
 
-        override fun harTilgang(): Boolean = grupper().contains(gruppe)
+        override fun harTilgang(): Boolean {
+            secureLogger.info("Grupper på token: ${grupper()}, prosesseringGruppe: $gruppe")
+            return grupper().contains(gruppe)
+        }
 
         private fun grupper(): List<String> {
             return try {
