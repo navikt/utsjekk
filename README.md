@@ -19,7 +19,7 @@ I IntelliJ legges de inn under ApplicationLocal -> Edit Configurations -> Enviro
 
 ### Overstyre funksjonsbrytere
 Funksjonsbrytere lokalt er i utgangspunktet PÅ (enabled=true), men kan overstyres med miljøvariabler:
-* `utsjekk.stopp-iverksetting' = false`    
+* `utsjekk.stopp-iverksetting-<fagsystem>' = false`    
 
 ### Kjøring med in-memory-database
 For å kjøre opp appen lokalt, kan en kjøre `ApplicationLocal`.

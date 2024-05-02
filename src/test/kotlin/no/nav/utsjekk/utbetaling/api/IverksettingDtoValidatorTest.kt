@@ -6,12 +6,15 @@ import no.nav.utsjekk.kontrakter.felles.StønadTypeDagpenger
 import no.nav.utsjekk.kontrakter.felles.StønadTypeTiltakspenger
 import no.nav.utsjekk.kontrakter.iverksett.Ferietillegg
 import no.nav.utsjekk.kontrakter.iverksett.StønadsdataTiltakspengerDto
+import no.nav.utsjekk.utbetaling.api.IverksettDtoValidator.behandlingIdTilfredsstillerLengdebegrensning
 import no.nav.utsjekk.utbetaling.api.IverksettDtoValidator.brukersNavKontorErSattForTiltakspenger
 import no.nav.utsjekk.utbetaling.api.IverksettDtoValidator.fraOgMedKommerFørTilOgMedIUtbetalingsperioder
 import no.nav.utsjekk.utbetaling.api.IverksettDtoValidator.ingenUtbetalingsperioderHarStønadstypeEØSOgFerietilleggTilAvdød
+import no.nav.utsjekk.utbetaling.api.IverksettDtoValidator.sakIdTilfredsstillerLengdebegrensning
 import no.nav.utsjekk.utbetaling.api.IverksettDtoValidator.utbetalingerHarIngenBeløpOverMaksgrense
 import no.nav.utsjekk.utbetaling.api.IverksettDtoValidator.utbetalingerHarKunPositiveBeløp
 import no.nav.utsjekk.utbetaling.api.IverksettDtoValidator.utbetalingsperioderOverlapperIkkeITid
+import no.nav.utsjekk.utbetaling.domene.transformer.RandomOSURId
 import no.nav.utsjekk.utbetaling.util.enIverksettDto
 import no.nav.utsjekk.utbetaling.util.lagUtbetalingDto
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -21,6 +24,24 @@ import org.springframework.http.HttpStatus
 import java.time.LocalDate
 
 class IverksettingDtoValidatorTest {
+    @Test
+    fun `skal få BAD_REQUEST hvis sakId er for lang`() {
+        val iverksettDto = enIverksettDto(sakId = RandomOSURId.generate() + RandomOSURId.generate())
+
+        assertApiFeil(HttpStatus.BAD_REQUEST) {
+            sakIdTilfredsstillerLengdebegrensning(iverksettDto)
+        }
+    }
+
+    @Test
+    fun `skal få BAD_REQUEST hvis behandlingId er for lang`() {
+        val iverksettDto = enIverksettDto(behandlingId = RandomOSURId.generate() + RandomOSURId.generate())
+
+        assertApiFeil(HttpStatus.BAD_REQUEST) {
+            behandlingIdTilfredsstillerLengdebegrensning(iverksettDto)
+        }
+    }
+
     @Test
     fun `skal få BAD_REQUEST hvis beløp på utbetaling er negativt`() {
         val iverksettDto = enIverksettDto(andelsbeløp = -5)

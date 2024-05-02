@@ -1,6 +1,8 @@
 package no.nav.utsjekk.utbetaling.api
 
 import no.nav.utsjekk.felles.http.advice.ApiFeil
+import no.nav.utsjekk.kontrakter.felles.GyldigBehandlingId
+import no.nav.utsjekk.kontrakter.felles.GyldigSakId
 import no.nav.utsjekk.kontrakter.felles.Satstype
 import no.nav.utsjekk.kontrakter.iverksett.IverksettTilleggsstønaderDto
 import org.springframework.http.HttpStatus
@@ -8,11 +10,31 @@ import java.time.YearMonth
 
 object IverksettTilleggsstønaderDtoValidator {
     fun IverksettTilleggsstønaderDto.valider() {
+        sakIdTilfredsstillerLengdebegrensning(this)
+        behandlingIdTilfredsstillerLengdebegrensning(this)
         fraOgMedKommerFørTilOgMedIUtbetalingsperioder(this)
         utbetalingsperioderOverlapperIkkeITid(this)
         utbetalingerHarKunPositiveBeløp(this)
         utbetalingsperioderSamsvarerMedSatstype(this)
         iverksettingIdSkalEntenIkkeVæreSattEllerVæreSattForNåværendeOgForrige(this)
+    }
+
+    private fun sakIdTilfredsstillerLengdebegrensning(iverksettDto: IverksettTilleggsstønaderDto) {
+        if (iverksettDto.sakId.length !in 1..GyldigSakId.MAKSLENGDE) {
+            throw ApiFeil(
+                "SakId må være mellom 1 og ${GyldigSakId.MAKSLENGDE} tegn lang",
+                HttpStatus.BAD_REQUEST,
+            )
+        }
+    }
+
+    private fun behandlingIdTilfredsstillerLengdebegrensning(iverksettDto: IverksettTilleggsstønaderDto) {
+        if (iverksettDto.behandlingId.length !in 1..GyldigBehandlingId.MAKSLENGDE) {
+            throw ApiFeil(
+                "BehandlingId må være mellom 1 og ${GyldigBehandlingId.MAKSLENGDE} tegn lang",
+                HttpStatus.BAD_REQUEST,
+            )
+        }
     }
 
     private fun fraOgMedKommerFørTilOgMedIUtbetalingsperioder(iverksettDto: IverksettTilleggsstønaderDto) {
