@@ -1,5 +1,6 @@
 package no.nav.utsjekk.utbetaling.tilstand
 
+import io.micrometer.core.instrument.Metrics
 import no.nav.familie.prosessering.domene.Status
 import no.nav.familie.prosessering.domene.Task
 import no.nav.familie.prosessering.error.TaskExceptionUtenStackTrace
@@ -177,6 +178,7 @@ class IverksettingService(
 
         if (status.erFeilkvittering()) {
             logger.error("Fikk feilkvittering $status fra OS for iverksetting $iverksetting")
+            feilKvitteringCounter.increment()
         }
 
         iverksettingsresultatService.oppdaterOppdragResultat(
@@ -191,6 +193,7 @@ class IverksettingService(
 
     companion object {
         private val logger = LoggerFactory.getLogger(this::class.java)
+        private val feilKvitteringCounter = Metrics.counter("iverksetting.feilkvittering")
     }
 }
 
