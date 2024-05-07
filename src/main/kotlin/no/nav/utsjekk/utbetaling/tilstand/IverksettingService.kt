@@ -21,6 +21,7 @@ import no.nav.utsjekk.utbetaling.domene.sakId
 import no.nav.utsjekk.utbetaling.featuretoggle.FeatureToggleService
 import no.nav.utsjekk.utbetaling.featuretoggle.IverksettingErSkruddAvException
 import no.nav.utsjekk.utbetaling.task.tilTaskPayload
+import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -170,7 +171,7 @@ class IverksettingService(
                 iverksettingId = iverksetting.behandling.iverksettingId,
             )
 
-        val (status, _) = oppdragClient.hentStatus(oppdragId)
+        val (status, feilmelding) = oppdragClient.hentStatus(oppdragId)
 
         if (!status.erFerdigstilt()) {
             throw TaskExceptionUtenStackTrace("Har ikke fått kvittering fra OS, status=$status")
@@ -178,6 +179,7 @@ class IverksettingService(
 
         if (status.erFeilkvittering()) {
             logger.error("Fikk feilkvittering $status fra OS for iverksetting $iverksetting")
+            secureLogger.error("Fikk feilkvittering fra OS for iverksetting $iverksetting: Status $status, feilmelding $feilmelding")
             feilKvitteringCounter.increment()
         }
 
@@ -193,6 +195,7 @@ class IverksettingService(
 
     companion object {
         private val logger = LoggerFactory.getLogger(this::class.java)
+        private val secureLogger: Logger = LoggerFactory.getLogger("secureLogger")
         private val feilKvitteringCounter = Metrics.counter("iverksetting.feilkvittering")
     }
 }
