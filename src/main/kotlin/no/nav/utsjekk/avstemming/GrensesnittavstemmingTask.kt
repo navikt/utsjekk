@@ -29,7 +29,7 @@ class GrensesnittavstemmingTask(
             val fraTidspunkt = fraDato.atStartOfDay()
             val tilTidspunkt = task.triggerTid.toLocalDate().atStartOfDay()
 
-            logger.info("Gjør ${task.id} avstemming for $fagsystem mot oppdrag fra $fraTidspunkt til $tilTidspunkt")
+            logger.info("Gjør avstemming for $fagsystem mot oppdrag fra $fraTidspunkt til $tilTidspunkt, task-id ${task.id}")
             val grensesnittavstemmingRequest =
                 GrensesnittavstemmingRequest(
                     fagsystem = fagsystem,
