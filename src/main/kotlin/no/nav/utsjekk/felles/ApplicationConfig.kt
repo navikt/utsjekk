@@ -93,24 +93,37 @@ class ApplicationConfig {
     @Bean
     fun prosesseringInfoProvider(
         @Value("\${PROSESSERING_GRUPPE}") gruppe: String,
+        @Value("\${PROSESSERING_ROLLE}") rolle: String,
     ) = object : ProsesseringInfoProvider {
         override fun hentBrukernavn(): String =
             try {
-                SpringTokenValidationContextHolder().getTokenValidationContext().getClaims("azuread")
-                    .getStringClaim("preferred_username")
+                claims()?.getStringClaim("preferred_username") ?: "utsjekk"
             } catch (e: Exception) {
                 "utsjekk"
             }
 
-        override fun harTilgang(): Boolean = grupper().contains(gruppe)
+        override fun harTilgang(): Boolean = grupper().contains(gruppe) || roller().contains(rolle)
 
         private fun grupper(): List<String> {
             return try {
-                SpringTokenValidationContextHolder().getTokenValidationContext().getClaims("azuread")
-                    .getAsList("groups") ?: emptyList()
+                claims()?.getAsList("groups") ?: emptyList()
             } catch (e: Exception) {
                 emptyList()
             }
+        }
+
+        private fun roller(): List<String> {
+            return try {
+                claims()?.getAsList("roles") ?: emptyList()
+            } catch (e: Exception) {
+                emptyList()
+            }
+        }
+
+        private fun claims() = try {
+            SpringTokenValidationContextHolder().getTokenValidationContext().getClaims("azuread")
+        } catch (e: Exception) {
+            null
         }
 
         override fun isLeader(): Boolean = LeaderClient.isLeader() ?: true
