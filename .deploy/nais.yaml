@@ -62,9 +62,9 @@ spec:
         - application: utsjekk # For å sette i gang grensesnittavstemming første gang
         - application: utsjekk-prosessering #frontend for task-rammeverket
         - application: utsjekk-prosessering-test # Tester ny frontend for task-rammeverket
-          permissions:
-            roles:
-              - "prosessering-admin"
+#          permissions:
+#            roles:
+#              - "prosessering-admin"
         - application: tiltakspenger-utbetaling
           namespace: tpts
         - application: tilleggsstonader-sak
