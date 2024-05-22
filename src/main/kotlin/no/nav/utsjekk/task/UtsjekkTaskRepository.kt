@@ -40,7 +40,15 @@ class UtsjekkTaskRepository(
     ): List<TaskDto> =
         jdbcTemplate.query(
             """
-            select T.id, T.type, status, T.opprettet_tid, trigger_tid, (select count(*) from task_logg L where T.id = L.task_id) as antall_logger, T.metadata
+            select 
+                T.id, 
+                T.type, 
+                status, 
+                T.opprettet_tid, 
+                trigger_tid, 
+                (select count(*) from task_logg L where T.id = L.task_id) as antall_logger,
+                (select max(L.opprettet_tid) from task_logg L where T.id = L.task_id) as sist_opprettet_tid,
+                T.metadata
             from task T
             where status in (:statuser)
                 and (:type::text is null or type = :type::text)
@@ -61,6 +69,7 @@ class UtsjekkTaskRepository(
                 type = rs.getString("type"),
                 status = Status.valueOf(rs.getString("status")),
                 opprettetTidspunkt = rs.getTimestamp("opprettet_tid").toLocalDateTime(),
+                sistKjørt = rs.getTimestamp("sist_opprettet_tid").toLocalDateTime(),
                 triggerTid = rs.getTimestamp("trigger_tid").toLocalDateTime(),
                 antallLogger = rs.getInt("antall_logger"),
                 metadata = rs.getString("metadata").split("\n").let { metadata ->
@@ -92,6 +101,7 @@ data class TaskDto(
     val type: String,
     val status: Status,
     val opprettetTidspunkt: LocalDateTime,
+    val sistKjørt: LocalDateTime,
     val triggerTid: LocalDateTime,
     val antallLogger: Int,
     val metadata: Metadata,
