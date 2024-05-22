@@ -53,6 +53,7 @@ class UtsjekkTaskRepository(
             where status in (:statuser)
                 and (:type::text is null or type = :type::text)
                 and (:callId::text is null or metadata like concat('%callId=', concat(:callId::text, '%')))
+            order by sist_opprettet_tid
             offset :offset
                 limit :limit
         """.trimIndent(),
