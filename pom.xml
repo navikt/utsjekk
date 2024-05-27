@@ -30,7 +30,7 @@
         <prosessering.version>2.20240110093731_0eda75e</prosessering.version>
         <maven-surefire-plugin.version>3.2.5</maven-surefire-plugin.version>
         <mockk.version>1.13.11</mockk.version>
-        <cucumber.version>7.17.0</cucumber.version>
+        <cucumber.version>7.18.0</cucumber.version>
         <nav.security.token.version>4.1.4</nav.security.token.version>
         <unleash.version>9.2.0</unleash.version>
     </properties>
