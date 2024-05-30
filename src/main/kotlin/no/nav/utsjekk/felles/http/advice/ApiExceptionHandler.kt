@@ -2,8 +2,8 @@ package no.nav.utsjekk.felles.http.advice
 
 import no.nav.security.token.support.core.exceptions.JwtTokenMissingException
 import no.nav.security.token.support.spring.validation.interceptor.JwtTokenUnauthorizedException
+import no.nav.utsjekk.iverksetting.featuretoggle.IverksettingErSkruddAvException
 import no.nav.utsjekk.kontrakter.felles.objectMapper
-import no.nav.utsjekk.utbetaling.featuretoggle.IverksettingErSkruddAvException
 import org.slf4j.LoggerFactory
 import org.springframework.core.NestedExceptionUtils
 import org.springframework.http.HttpHeaders

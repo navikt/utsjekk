@@ -2,8 +2,8 @@ package no.nav.utsjekk.avstemming
 
 import no.nav.familie.prosessering.internal.TaskService
 import no.nav.utsjekk.felles.http.advice.ApiFeil
+import no.nav.utsjekk.iverksetting.tilstand.erAktiv
 import no.nav.utsjekk.kontrakter.felles.Fagsystem
-import no.nav.utsjekk.utbetaling.tilstand.erAktiv
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service

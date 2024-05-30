@@ -3,9 +3,9 @@ package no.nav.utsjekk.konfig
 import io.mockk.clearMocks
 import io.mockk.every
 import no.nav.utsjekk.felles.Profiler
+import no.nav.utsjekk.iverksetting.featuretoggle.FeatureToggleConfig
+import no.nav.utsjekk.iverksetting.util.mockFeatureToggleService
 import no.nav.utsjekk.kontrakter.felles.Fagsystem
-import no.nav.utsjekk.utbetaling.featuretoggle.FeatureToggleConfig
-import no.nav.utsjekk.utbetaling.util.mockFeatureToggleService
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Primary

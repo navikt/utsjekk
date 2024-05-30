@@ -1,11 +1,11 @@
 package no.nav.utsjekk.status
 
 import no.nav.utsjekk.felles.http.ObjectMapperProvider.objectMapper
+import no.nav.utsjekk.iverksetting.domene.Iverksetting
+import no.nav.utsjekk.iverksetting.domene.behandlingId
+import no.nav.utsjekk.iverksetting.domene.sakId
 import no.nav.utsjekk.kontrakter.iverksett.IverksettStatus
 import no.nav.utsjekk.kontrakter.iverksett.StatusEndretMelding
-import no.nav.utsjekk.utbetaling.domene.Iverksetting
-import no.nav.utsjekk.utbetaling.domene.behandlingId
-import no.nav.utsjekk.utbetaling.domene.sakId
 import org.apache.kafka.clients.producer.KafkaProducer
 import org.apache.kafka.clients.producer.ProducerRecord
 import org.springframework.beans.factory.annotation.Value

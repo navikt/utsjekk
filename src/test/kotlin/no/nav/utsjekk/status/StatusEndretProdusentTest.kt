@@ -3,11 +3,11 @@ package no.nav.utsjekk.status
 import no.nav.utsjekk.Integrasjonstest
 import no.nav.utsjekk.felles.http.ObjectMapperProvider.objectMapper
 import no.nav.utsjekk.initializers.KafkaContainerInitializer
+import no.nav.utsjekk.iverksetting.domene.behandlingId
+import no.nav.utsjekk.iverksetting.domene.sakId
+import no.nav.utsjekk.iverksetting.util.enIverksetting
 import no.nav.utsjekk.kontrakter.iverksett.IverksettStatus
 import no.nav.utsjekk.kontrakter.iverksett.StatusEndretMelding
-import no.nav.utsjekk.utbetaling.domene.behandlingId
-import no.nav.utsjekk.utbetaling.domene.sakId
-import no.nav.utsjekk.utbetaling.util.enIverksetting
 import org.apache.kafka.clients.producer.KafkaProducer
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull

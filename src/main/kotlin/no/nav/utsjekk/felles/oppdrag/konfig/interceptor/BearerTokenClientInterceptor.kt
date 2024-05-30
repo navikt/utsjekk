@@ -1,10 +1,10 @@
 package no.nav.utsjekk.felles.oppdrag.konfig.interceptor
 
 import com.nimbusds.oauth2.sdk.GrantType
-import no.nav.utsjekk.utbetaling.api.TokenContext
 import no.nav.security.token.support.client.core.ClientProperties
 import no.nav.security.token.support.client.core.oauth2.OAuth2AccessTokenService
 import no.nav.security.token.support.client.spring.ClientConfigurationProperties
+import no.nav.utsjekk.iverksetting.api.TokenContext
 import org.springframework.http.HttpRequest
 import org.springframework.http.client.ClientHttpRequestExecution
 import org.springframework.http.client.ClientHttpRequestInterceptor

@@ -5,7 +5,7 @@ import com.github.tomakehurst.wiremock.client.WireMock.aResponse
 import com.github.tomakehurst.wiremock.client.WireMock.post
 import com.github.tomakehurst.wiremock.client.WireMock.stubFor
 import com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo
-import no.nav.utsjekk.utbetaling.util.etTomtUtbetalingsoppdrag
+import no.nav.utsjekk.iverksetting.util.etTomtUtbetalingsoppdrag
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test

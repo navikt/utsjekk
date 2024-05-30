@@ -10,7 +10,7 @@ import no.nav.utsjekk.felles.http.filter.LogFilter
 import no.nav.utsjekk.felles.http.filter.RequestTimeFilter
 import no.nav.utsjekk.felles.oppdrag.konfig.RestTemplateAzure
 import no.nav.utsjekk.felles.oppdrag.konfig.RetryOAuth2HttpClient
-import no.nav.utsjekk.utbetaling.domene.KonsumentConfig
+import no.nav.utsjekk.iverksetting.domene.KonsumentConfig
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.SpringBootConfiguration
@@ -120,11 +120,12 @@ class ApplicationConfig {
             }
         }
 
-        private fun claims() = try {
-            SpringTokenValidationContextHolder().getTokenValidationContext().getClaims("azuread")
-        } catch (e: Exception) {
-            null
-        }
+        private fun claims() =
+            try {
+                SpringTokenValidationContextHolder().getTokenValidationContext().getClaims("azuread")
+            } catch (e: Exception) {
+                null
+            }
 
         override fun isLeader(): Boolean = LeaderClient.isLeader() ?: true
     }

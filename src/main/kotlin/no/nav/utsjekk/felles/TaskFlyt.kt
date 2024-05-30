@@ -1,8 +1,8 @@
 package no.nav.utsjekk.felles
 
-import no.nav.utsjekk.utbetaling.task.IverksettMotOppdragTask
-import no.nav.utsjekk.utbetaling.task.VentePåStatusFraØkonomiTask
 import no.nav.familie.prosessering.domene.Task
+import no.nav.utsjekk.iverksetting.task.IverksettMotOppdragTask
+import no.nav.utsjekk.iverksetting.task.VentePåStatusFraØkonomiTask
 import java.time.LocalDateTime
 
 class TaskType(
