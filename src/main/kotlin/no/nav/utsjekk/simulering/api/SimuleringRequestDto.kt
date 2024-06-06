@@ -9,6 +9,7 @@ data class SimuleringRequestDto(
     val sakId: String,
     val behandlingId: String,
     val personident: Personident,
+    val saksbehandler: String,
     val vedtakstidspunkt: LocalDateTime,
     val utbetalinger: List<UtbetalingTilleggsstønaderDto>,
     val forrigeIverksetting: ForrigeIverksettingTilleggsstønaderDto? = null,

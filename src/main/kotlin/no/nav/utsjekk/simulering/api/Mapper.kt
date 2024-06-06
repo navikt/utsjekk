@@ -11,10 +11,10 @@ object Mapper {
         return Simulering(
             behandlingsinformasjon =
                 Behandlingsinformasjon(
-                    saksbehandlerId = "",
-                    beslutterId = "",
+                    saksbehandlerId = this.saksbehandler,
+                    beslutterId = this.saksbehandler,
                     fagsakId = this.sakId,
-                    fagsystem = Fagsystem.TILLEGGSSTØNADER,
+                    fagsystem = Fagsystem.TILLEGGSSTØNADER, // TODO støtte flere fagsystem
                     behandlingId = this.behandlingId,
                     personident = this.personident.verdi,
                     vedtaksdato = this.vedtakstidspunkt.toLocalDate(),
