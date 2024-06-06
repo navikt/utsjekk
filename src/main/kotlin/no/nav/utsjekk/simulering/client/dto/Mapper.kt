@@ -1,6 +1,7 @@
 package no.nav.utsjekk.simulering.client.dto
 
 import no.nav.utsjekk.kontrakter.felles.Personident
+import no.nav.utsjekk.kontrakter.felles.Satstype
 import no.nav.utsjekk.kontrakter.oppdrag.Utbetalingsoppdrag
 import no.nav.utsjekk.kontrakter.oppdrag.Utbetalingsperiode
 
@@ -26,7 +27,7 @@ object Mapper {
             fom = this.fom,
             tom = this.tom,
             sats = this.sats.toInt(),
-            satstype = this.satstype.name,
+            satstype = this.satstype.tilSimuleringFormat(),
             refDelytelseId = "$sakId#${this.forrigePeriodeId}",
             refFagsystemId = sakId,
             datoStatusFom = this.opphør?.fom,
@@ -34,4 +35,11 @@ object Mapper {
             utbetalesTil = this.utbetalesTil,
         )
     }
+
+    private fun Satstype.tilSimuleringFormat(): String =
+        when (this) {
+            Satstype.DAGLIG -> "DAG"
+            Satstype.MÅNEDLIG -> "MND"
+            Satstype.ENGANGS -> "ENG"
+        }
 }
