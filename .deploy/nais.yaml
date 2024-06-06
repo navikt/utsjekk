@@ -74,6 +74,7 @@ spec:
     outbound:
       rules:
         - application: utsjekk-oppdrag
+        - application: utsjekk-simulering
       external:
         - host: helved-unleash-api.nav.cloud.nais.io
   gcp:
