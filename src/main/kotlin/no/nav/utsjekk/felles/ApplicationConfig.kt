@@ -84,8 +84,8 @@ class ApplicationConfig {
             restClient =
                 RestClient.create(
                     RestTemplateBuilder()
-                        .setConnectTimeout(Duration.of(2, ChronoUnit.SECONDS))
-                        .setReadTimeout(Duration.of(2, ChronoUnit.SECONDS))
+                        .setConnectTimeout(Duration.of(30, ChronoUnit.SECONDS))
+                        .setReadTimeout(Duration.of(30, ChronoUnit.SECONDS))
                         .build(),
                 ),
         )
