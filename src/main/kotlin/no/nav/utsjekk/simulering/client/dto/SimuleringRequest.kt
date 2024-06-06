@@ -1,6 +1,5 @@
 package no.nav.utsjekk.simulering.client.dto
 
-import no.nav.utsjekk.kontrakter.felles.Ident
 import no.nav.utsjekk.kontrakter.felles.Personident
 import java.time.LocalDate
 
@@ -8,29 +7,22 @@ data class SimuleringRequest(
     val fagområde: String,
     val fagsystemId: String,
     val personident: Personident,
-    val mottaker: Ident,
-    val endringskode: String,
+    val erFørsteUtbetalingPåSak: Boolean,
     val saksbehandler: String,
-    val utbetalingsfrekvens: String,
-    val utbetalingslinjer: List<Utbetalingslinje>,
+    val utbetalingsperioder: List<Utbetalingsperiode>,
 )
 
-data class Utbetalingslinje(
-    val delytelseId: String,
-    val endringskode: String,
+data class Utbetalingsperiode(
+    val periodeId: String,
+    val forrigePeriodeId: String?,
+    val erEndringPåEksisterendePeriode: Boolean,
     val klassekode: String,
     val fom: LocalDate,
     val tom: LocalDate,
     val sats: Int,
-    val grad: Grad = Grad(type = GradType.UFOR, prosent = null),
-    val refDelytelseId: String?,
-    val refFagsystemId: String?,
-    val datoStatusFom: LocalDate?,
-    val statuskode: String?,
     val satstype: String,
+    val opphør: Opphør?,
     val utbetalesTil: String,
-) {
-    data class Grad(val type: GradType, val prosent: Int?)
+)
 
-    enum class GradType { UFOR }
-}
+data class Opphør(val fom: LocalDate)

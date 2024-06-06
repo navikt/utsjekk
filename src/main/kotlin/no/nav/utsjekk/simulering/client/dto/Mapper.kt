@@ -11,27 +11,23 @@ object Mapper {
             fagsystemId = this.saksnummer,
             fagområde = this.fagsystem.kode,
             personident = Personident(this.aktør),
-            mottaker = Personident(this.aktør),
-            endringskode = if (this.erFørsteUtbetalingPåSak) "NY" else "ENDR",
+            erFørsteUtbetalingPåSak = this.erFørsteUtbetalingPåSak,
             saksbehandler = this.saksbehandlerId,
-            utbetalingsfrekvens = "MND",
-            utbetalingslinjer = this.utbetalingsperiode.map { it.tilUtbetalingslinje(this.saksnummer) },
+            utbetalingsperioder = this.utbetalingsperiode.map { it.tilUtbetalingslinje() },
         )
     }
 
-    private fun Utbetalingsperiode.tilUtbetalingslinje(sakId: String): Utbetalingslinje {
-        return Utbetalingslinje(
-            delytelseId = "$sakId#${this.periodeId}",
-            endringskode = if (this.erEndringPåEksisterendePeriode) "ENDR" else "NY",
+    private fun Utbetalingsperiode.tilUtbetalingslinje(): no.nav.utsjekk.simulering.client.dto.Utbetalingsperiode {
+        return Utbetalingsperiode(
+            periodeId = this.periodeId.toString(),
+            forrigePeriodeId = this.forrigePeriodeId.toString(),
+            erEndringPåEksisterendePeriode = this.erEndringPåEksisterendePeriode,
             klassekode = this.klassifisering,
             fom = this.fom,
             tom = this.tom,
             sats = this.sats.toInt(),
             satstype = this.satstype.tilSimuleringFormat(),
-            refDelytelseId = "$sakId#${this.forrigePeriodeId}",
-            refFagsystemId = sakId,
-            datoStatusFom = this.opphør?.fom,
-            statuskode = this.opphør?.let { "OPPH" },
+            opphør = this.opphør?.let { Opphør(it.fom) },
             utbetalesTil = this.utbetalesTil,
         )
     }
