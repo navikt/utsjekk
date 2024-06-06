@@ -5,8 +5,9 @@ import no.nav.utsjekk.iverksetting.domene.tilAndelData
 import no.nav.utsjekk.iverksetting.tilstand.IverksettingsresultatService
 import no.nav.utsjekk.iverksetting.utbetalingsoppdrag.Utbetalingsgenerator
 import no.nav.utsjekk.kontrakter.felles.Fagsystem
+import no.nav.utsjekk.simulering.api.SimuleringResponsDto
 import no.nav.utsjekk.simulering.client.SimuleringClient
-import no.nav.utsjekk.simulering.client.dto.SimuleringResponse
+import no.nav.utsjekk.simulering.domene.OppsummeringGenerator
 import no.nav.utsjekk.simulering.domene.Simulering
 import org.springframework.stereotype.Service
 
@@ -15,7 +16,7 @@ class SimuleringService(
     private val iverksettingsresultatService: IverksettingsresultatService,
     private val simuleringClient: SimuleringClient,
 ) {
-    fun hentSimuleringsresultatMedOppsummering(simulering: Simulering): SimuleringResponse {
+    fun hentSimuleringsresultatMedOppsummering(simulering: Simulering): SimuleringResponsDto {
         val forrigeTilkjentYtelse =
             simulering.forrigeIverksetting?.let {
                 val forrigeIverksetting =
@@ -43,6 +44,6 @@ class SimuleringService(
                 sisteAndelPerKjede = sisteAndelPerKjede,
             ).utbetalingsoppdrag
 
-        return simuleringClient.hentSimulering(utbetalingsoppdrag)
+        return OppsummeringGenerator.lagOppsummering(simuleringClient.hentSimulering(utbetalingsoppdrag))
     }
 }
