@@ -25,7 +25,7 @@
         <kotlin.version>2.0.0</kotlin.version>
 
         <!-- Versjoner -->
-        <utsjekk-kontrakter.version>1.0_20240502154138_e9c5f16</utsjekk-kontrakter.version>
+        <utsjekk-kontrakter.version>1.0_20240606152736_ac08381</utsjekk-kontrakter.version>
         <springdoc.version>2.5.0</springdoc.version>
         <prosessering.version>2.20240110093731_0eda75e</prosessering.version>
         <maven-surefire-plugin.version>3.2.5</maven-surefire-plugin.version>
