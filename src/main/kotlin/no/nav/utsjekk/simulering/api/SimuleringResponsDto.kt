@@ -1,9 +1,9 @@
 package no.nav.utsjekk.simulering.api
 
-import no.nav.utsjekk.simulering.client.dto.SimuleringResponse
+import no.nav.utsjekk.simulering.domene.SimuleringDetaljer
 import java.time.LocalDate
 
-data class SimuleringResponsDto(val oppsummeringer: List<OppsummeringForPeriode>, val rådata: SimuleringResponse)
+data class SimuleringResponsDto(val oppsummeringer: List<OppsummeringForPeriode>, val detaljer: SimuleringDetaljer)
 
 data class OppsummeringForPeriode(
     val fom: LocalDate,

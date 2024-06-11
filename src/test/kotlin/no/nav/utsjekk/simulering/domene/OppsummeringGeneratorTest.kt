@@ -2,10 +2,6 @@ package no.nav.utsjekk.simulering.domene
 
 import no.nav.utsjekk.simulering.api.OppsummeringForPeriode
 import no.nav.utsjekk.simulering.api.SimuleringResponsDto
-import no.nav.utsjekk.simulering.client.dto.Postering
-import no.nav.utsjekk.simulering.client.dto.SimuleringResponse
-import no.nav.utsjekk.simulering.client.dto.SimulertPeriode
-import no.nav.utsjekk.simulering.client.dto.Utbetaling
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
@@ -15,38 +11,25 @@ class OppsummeringGeneratorTest {
     @Test
     @Disabled
     fun `skal lage oppsummering for ny utbetaling`() {
-        val simuleringRespons =
-            SimuleringResponse(
+        val simuleringDetaljer =
+            SimuleringDetaljer(
                 gjelderId = "22479409483",
                 datoBeregnet = LocalDate.of(2024, 5, 28),
-                totalBelop = 800,
+                totalBeløp = 800,
                 perioder =
                     listOf(
-                        SimulertPeriode(
+                        Periode(
                             fom = LocalDate.of(2024, 5, 1),
                             tom = LocalDate.of(2024, 5, 1),
-                            utbetalinger =
+                            posteringer =
                                 listOf(
-                                    Utbetaling(
-                                        fagområde = "TILLST",
-                                        fagSystemId = "200000237",
-                                        utbetalesTilId = "22479409483",
-                                        forfall = LocalDate.of(2024, 5, 28),
-                                        feilkonto = false,
-                                        detaljer =
-                                            listOf(
-                                                Postering(
-                                                    type = "YTEL",
-                                                    faktiskFom = LocalDate.of(2024, 5, 1),
-                                                    faktiskTom = LocalDate.of(2024, 5, 1),
-                                                    belop = 800,
-                                                    sats = 800.0,
-                                                    satstype = "DAG",
-                                                    klassekode = "TSTBASISP4-OP",
-                                                    trekkVedtakId = null,
-                                                    refunderesOrgNr = null,
-                                                ),
-                                            ),
+                                    SimulertPostering(
+                                        fagområde = Fagområde.TILLEGGSSTØNADER,
+                                        sakId = "200000237",
+                                        fom = LocalDate.of(2024, 5, 1),
+                                        tom = LocalDate.of(2024, 5, 1),
+                                        beløp = 800,
+                                        type = PosteringType.YTELSE,
                                     ),
                                 ),
                         ),
@@ -67,58 +50,42 @@ class OppsummeringGeneratorTest {
                             totalFeilutbetaling = 0,
                         ),
                     ),
-                rådata = simuleringRespons,
+                detaljer = simuleringDetaljer,
             )
 
-        assertEquals(forventetOppsummering, OppsummeringGenerator.lagOppsummering(simuleringRespons))
+        assertEquals(forventetOppsummering, OppsummeringGenerator.lagOppsummering(simuleringDetaljer))
     }
 
     @Test
     @Disabled
     fun `skal lage oppsummering for etterbetaling`() {
-        val simuleringRespons =
-            SimuleringResponse(
+        val simuleringDetaljer =
+            SimuleringDetaljer(
                 gjelderId = "22479409483",
                 datoBeregnet = LocalDate.of(2024, 5, 28),
-                totalBelop = 100,
+                totalBeløp = 100,
                 perioder =
                     listOf(
-                        SimulertPeriode(
+                        Periode(
                             fom = LocalDate.of(2024, 5, 1),
                             tom = LocalDate.of(2024, 5, 1),
-                            utbetalinger =
+                            posteringer =
                                 listOf(
-                                    Utbetaling(
-                                        fagområde = "TILLST",
-                                        fagSystemId = "200000237",
-                                        utbetalesTilId = "22479409483",
-                                        forfall = LocalDate.of(2024, 5, 28),
-                                        feilkonto = false,
-                                        detaljer =
-                                            listOf(
-                                                Postering(
-                                                    type = "YTEL",
-                                                    faktiskFom = LocalDate.of(2024, 5, 1),
-                                                    faktiskTom = LocalDate.of(2024, 5, 1),
-                                                    belop = 800,
-                                                    sats = 800.0,
-                                                    satstype = "DAG",
-                                                    klassekode = "TSTBASISP4-OP",
-                                                    trekkVedtakId = null,
-                                                    refunderesOrgNr = null,
-                                                ),
-                                                Postering(
-                                                    type = "YTEL",
-                                                    faktiskFom = LocalDate.of(2024, 5, 1),
-                                                    faktiskTom = LocalDate.of(2024, 5, 1),
-                                                    belop = -700,
-                                                    sats = 700.0,
-                                                    satstype = "DAG",
-                                                    klassekode = "TSTBASISP4-OP",
-                                                    trekkVedtakId = null,
-                                                    refunderesOrgNr = null,
-                                                ),
-                                            ),
+                                    SimulertPostering(
+                                        type = PosteringType.YTELSE,
+                                        fom = LocalDate.of(2024, 5, 1),
+                                        tom = LocalDate.of(2024, 5, 1),
+                                        beløp = 800,
+                                        fagområde = Fagområde.TILLEGGSSTØNADER,
+                                        sakId = "200000237",
+                                    ),
+                                    SimulertPostering(
+                                        type = PosteringType.YTELSE,
+                                        fom = LocalDate.of(2024, 5, 1),
+                                        tom = LocalDate.of(2024, 5, 1),
+                                        beløp = -700,
+                                        fagområde = Fagområde.TILLEGGSSTØNADER,
+                                        sakId = "200000237",
                                     ),
                                 ),
                         ),
@@ -138,91 +105,66 @@ class OppsummeringGeneratorTest {
                             totalFeilutbetaling = 0,
                         ),
                     ),
-                rådata = simuleringRespons,
+                detaljer = simuleringDetaljer,
             )
 
-        assertEquals(forventetOppsummering, OppsummeringGenerator.lagOppsummering(simuleringRespons))
+        assertEquals(forventetOppsummering, OppsummeringGenerator.lagOppsummering(simuleringDetaljer))
     }
 
     @Test
     @Disabled
     fun `skal lage oppsummering for feilutbetaling`() {
-        val simuleringRespons =
-            SimuleringResponse(
+        val simuleringDetaljer =
+            SimuleringDetaljer(
                 gjelderId = "22479409483",
                 datoBeregnet = LocalDate.of(2024, 5, 28),
-                totalBelop = 0,
+                totalBeløp = 0,
                 perioder =
                     listOf(
-                        SimulertPeriode(
+                        Periode(
                             fom = LocalDate.of(2024, 5, 1),
                             tom = LocalDate.of(2024, 5, 1),
-                            utbetalinger =
+                            posteringer =
                                 listOf(
-                                    Utbetaling(
-                                        fagområde = "TILLST",
-                                        fagSystemId = "200000237",
-                                        utbetalesTilId = "22479409483",
-                                        forfall = LocalDate.of(2024, 5, 28),
-                                        feilkonto = true,
-                                        detaljer =
-                                            listOf(
-                                                Postering(
-                                                    type = "YTEL",
-                                                    faktiskFom = LocalDate.of(2024, 5, 1),
-                                                    faktiskTom = LocalDate.of(2024, 5, 1),
-                                                    belop = 100,
-                                                    sats = 0.0,
-                                                    satstype = "",
-                                                    klassekode = "TSTBASISP4-OP",
-                                                    trekkVedtakId = null,
-                                                    refunderesOrgNr = null,
-                                                ),
-                                                Postering(
-                                                    type = "YTEL",
-                                                    faktiskFom = LocalDate.of(2024, 5, 1),
-                                                    faktiskTom = LocalDate.of(2024, 5, 1),
-                                                    belop = 600,
-                                                    sats = 600.0,
-                                                    satstype = "DAG",
-                                                    klassekode = "TSTBASISP4-OP",
-                                                    trekkVedtakId = null,
-                                                    refunderesOrgNr = null,
-                                                ),
-                                                Postering(
-                                                    type = "FEIL",
-                                                    faktiskFom = LocalDate.of(2024, 5, 1),
-                                                    faktiskTom = LocalDate.of(2024, 5, 1),
-                                                    belop = 100,
-                                                    sats = 0.0,
-                                                    satstype = "",
-                                                    klassekode = "KL_KODE_FEIL_ARBYT",
-                                                    trekkVedtakId = null,
-                                                    refunderesOrgNr = null,
-                                                ),
-                                                Postering(
-                                                    type = "MOTP",
-                                                    faktiskFom = LocalDate.of(2024, 5, 1),
-                                                    faktiskTom = LocalDate.of(2024, 5, 1),
-                                                    belop = -100,
-                                                    sats = 0.0,
-                                                    satstype = "",
-                                                    klassekode = "TBMOTOBS",
-                                                    trekkVedtakId = null,
-                                                    refunderesOrgNr = null,
-                                                ),
-                                                Postering(
-                                                    type = "YTEL",
-                                                    faktiskFom = LocalDate.of(2024, 5, 1),
-                                                    faktiskTom = LocalDate.of(2024, 5, 1),
-                                                    belop = -700,
-                                                    sats = 700.0,
-                                                    satstype = "DAG",
-                                                    klassekode = "TSTBASISP4-OP",
-                                                    trekkVedtakId = null,
-                                                    refunderesOrgNr = null,
-                                                ),
-                                            ),
+                                    SimulertPostering(
+                                        type = PosteringType.YTELSE,
+                                        fom = LocalDate.of(2024, 5, 1),
+                                        tom = LocalDate.of(2024, 5, 1),
+                                        beløp = 100,
+                                        fagområde = Fagområde.TILLEGGSSTØNADER,
+                                        sakId = "200000237",
+                                    ),
+                                    SimulertPostering(
+                                        type = PosteringType.YTELSE,
+                                        fom = LocalDate.of(2024, 5, 1),
+                                        tom = LocalDate.of(2024, 5, 1),
+                                        beløp = 600,
+                                        fagområde = Fagområde.TILLEGGSSTØNADER,
+                                        sakId = "200000237",
+                                    ),
+                                    SimulertPostering(
+                                        type = PosteringType.FEILUTBETALING,
+                                        fom = LocalDate.of(2024, 5, 1),
+                                        tom = LocalDate.of(2024, 5, 1),
+                                        beløp = 100,
+                                        fagområde = Fagområde.TILLEGGSSTØNADER,
+                                        sakId = "200000237",
+                                    ),
+                                    SimulertPostering(
+                                        type = PosteringType.MOTPOSTERING,
+                                        fom = LocalDate.of(2024, 5, 1),
+                                        tom = LocalDate.of(2024, 5, 1),
+                                        beløp = -100,
+                                        fagområde = Fagområde.TILLEGGSSTØNADER,
+                                        sakId = "200000237",
+                                    ),
+                                    SimulertPostering(
+                                        type = PosteringType.YTELSE,
+                                        fom = LocalDate.of(2024, 5, 1),
+                                        tom = LocalDate.of(2024, 5, 1),
+                                        beløp = -700,
+                                        fagområde = Fagområde.TILLEGGSSTØNADER,
+                                        sakId = "200000237",
                                     ),
                                 ),
                         ),
@@ -242,9 +184,9 @@ class OppsummeringGeneratorTest {
                             totalFeilutbetaling = 100,
                         ),
                     ),
-                rådata = simuleringRespons,
+                detaljer = simuleringDetaljer,
             )
 
-        assertEquals(forventetOppsummering, OppsummeringGenerator.lagOppsummering(simuleringRespons))
+        assertEquals(forventetOppsummering, OppsummeringGenerator.lagOppsummering(simuleringDetaljer))
     }
 }
