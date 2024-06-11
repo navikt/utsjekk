@@ -5,7 +5,7 @@ import java.time.LocalDate
 
 data class SimuleringRequest(
     val fagområde: String,
-    val fagsystemId: String,
+    val sakId: String,
     val personident: Personident,
     val erFørsteUtbetalingPåSak: Boolean,
     val saksbehandler: String,

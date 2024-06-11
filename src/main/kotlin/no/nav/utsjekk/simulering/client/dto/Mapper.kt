@@ -8,7 +8,7 @@ import no.nav.utsjekk.kontrakter.oppdrag.Utbetalingsperiode
 object Mapper {
     fun Utbetalingsoppdrag.tilSimuleringRequest(): SimuleringRequest {
         return SimuleringRequest(
-            fagsystemId = this.saksnummer,
+            sakId = this.saksnummer,
             fagområde = this.fagsystem.kode,
             personident = Personident(this.aktør),
             erFørsteUtbetalingPåSak = this.erFørsteUtbetalingPåSak,
