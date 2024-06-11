@@ -13,7 +13,64 @@ import java.time.LocalDate
 
 class OppsummeringGeneratorTest {
     @Test
+    @Disabled
     fun `skal lage oppsummering for ny utbetaling`() {
+        val simuleringRespons =
+            SimuleringResponse(
+                gjelderId = "22479409483",
+                datoBeregnet = LocalDate.of(2024, 5, 28),
+                totalBelop = 800,
+                perioder =
+                    listOf(
+                        SimulertPeriode(
+                            fom = LocalDate.of(2024, 5, 1),
+                            tom = LocalDate.of(2024, 5, 1),
+                            utbetalinger =
+                                listOf(
+                                    Utbetaling(
+                                        fagområde = "TILLST",
+                                        fagSystemId = "200000237",
+                                        utbetalesTilId = "22479409483",
+                                        forfall = LocalDate.of(2024, 5, 28),
+                                        feilkonto = false,
+                                        detaljer =
+                                            listOf(
+                                                Postering(
+                                                    type = "YTEL",
+                                                    faktiskFom = LocalDate.of(2024, 5, 1),
+                                                    faktiskTom = LocalDate.of(2024, 5, 1),
+                                                    belop = 800,
+                                                    sats = 800.0,
+                                                    satstype = "DAG",
+                                                    klassekode = "TSTBASISP4-OP",
+                                                    trekkVedtakId = null,
+                                                    refunderesOrgNr = null,
+                                                ),
+                                            ),
+                                    ),
+                                ),
+                        ),
+                    ),
+            )
+
+        val forventetOppsummering =
+            SimuleringResponsDto(
+                oppsummeringer =
+                    listOf(
+                        OppsummeringForPeriode(
+                            fom = LocalDate.of(2024, 5, 1),
+                            tom = LocalDate.of(2024, 5, 1),
+                            tidligereUtbetalt = 0,
+                            nyUtbetaling = 800,
+                            // TODO hva bør denne logisk være for nye utbetalinger? Etterbetaling for perioder tom. dagens dato, ikke etterbetaling for fremtidig?
+                            totalEtterbetaling = 800,
+                            totalFeilutbetaling = 0,
+                        ),
+                    ),
+                rådata = simuleringRespons,
+            )
+
+        assertEquals(forventetOppsummering, OppsummeringGenerator.lagOppsummering(simuleringRespons))
     }
 
     @Test
