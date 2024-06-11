@@ -20,7 +20,7 @@ object Mapper {
     private fun Utbetalingsperiode.tilUtbetalingslinje(): no.nav.utsjekk.simulering.client.dto.Utbetalingsperiode {
         return Utbetalingsperiode(
             periodeId = this.periodeId.toString(),
-            forrigePeriodeId = this.forrigePeriodeId.toString(),
+            forrigePeriodeId = this.forrigePeriodeId?.toString(),
             erEndringPåEksisterendePeriode = this.erEndringPåEksisterendePeriode,
             klassekode = this.klassifisering,
             fom = this.fom,
