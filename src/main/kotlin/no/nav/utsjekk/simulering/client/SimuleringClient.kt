@@ -34,6 +34,6 @@ class SimuleringClient(
 
     companion object {
         private val logger = LoggerFactory.getLogger(this::class.java)
-        private val secureLogger = LoggerFactory.getLogger("secureLog")
+        private val secureLogger = LoggerFactory.getLogger("secureLogger")
     }
 }
