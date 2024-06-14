@@ -78,6 +78,7 @@ object Mapper {
                     tom = postering.faktiskTom,
                     beløp = postering.belop,
                     type = PosteringType.fraKode(postering.type),
+                    klassekode = postering.klassekode,
                 )
             }
         }

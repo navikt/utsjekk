@@ -22,4 +22,5 @@ data class SimulertPostering(
     val tom: LocalDate,
     val beløp: Int,
     val type: PosteringType,
+    val klassekode: String,
 )
