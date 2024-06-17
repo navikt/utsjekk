@@ -20,7 +20,6 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 
 class SimuleringControllerTest : Integrasjonstest() {
-
     @BeforeEach
     fun setUp() {
         headers.setBearerAuth(lokalTestToken())
@@ -29,18 +28,19 @@ class SimuleringControllerTest : Integrasjonstest() {
 
     @Test
     fun `ingen utbetalinger`() {
-        val body = SimuleringRequestDto(
-            sakId = "en-sakid",
-            behandlingId = "en-behandlingId",
-            personident = Personident("15507600333"),
-            saksbehandler = "A123456",
-            vedtakstidspunkt = LocalDateTime.now(),
-            utbetalinger = emptyList()
-        )
+        val body =
+            SimuleringRequestTilleggsstønaderDto(
+                sakId = "en-sakid",
+                behandlingId = "en-behandlingId",
+                personident = Personident("15507600333"),
+                saksbehandler = "A123456",
+                vedtakstidspunkt = LocalDateTime.now(),
+                utbetalinger = emptyList(),
+            )
 
         val respons: ResponseEntity<Any> =
             restTemplate.exchange(
-                localhostUrl("/api/simulering"),
+                localhostUrl("/api/simulering/tilleggsstonader"),
                 HttpMethod.POST,
                 HttpEntity(body, headers),
             )
@@ -50,30 +50,33 @@ class SimuleringControllerTest : Integrasjonstest() {
 
     @Test
     fun `endring på ikke-eksisterende utbetaling`() {
-        val body = SimuleringRequestDto(
-            sakId = "en-sakid",
-            behandlingId = "en-behandlingId",
-            personident = Personident("15507600333"),
-            saksbehandler = "A123456",
-            vedtakstidspunkt = LocalDateTime.now(),
-            utbetalinger = listOf(
-                UtbetalingTilleggsstønaderDto(
-                    beløp = 100,
-                    satstype = Satstype.DAGLIG,
-                    fraOgMedDato = LocalDate.of(2024, 4, 2),
-                    tilOgMedDato = LocalDate.of(2024, 4, 10),
-                    stønadstype = StønadTypeTilleggsstønader.TILSYN_BARN_AAP,
-                )
-            ),
-            forrigeIverksetting = ForrigeIverksettingTilleggsstønaderDto(
-                behandlingId = "noe-tull",
-                iverksettingId = "noe-tull",
+        val body =
+            SimuleringRequestTilleggsstønaderDto(
+                sakId = "en-sakid",
+                behandlingId = "en-behandlingId",
+                personident = Personident("15507600333"),
+                saksbehandler = "A123456",
+                vedtakstidspunkt = LocalDateTime.now(),
+                utbetalinger =
+                    listOf(
+                        UtbetalingTilleggsstønaderDto(
+                            beløp = 100,
+                            satstype = Satstype.DAGLIG,
+                            fraOgMedDato = LocalDate.of(2024, 4, 2),
+                            tilOgMedDato = LocalDate.of(2024, 4, 10),
+                            stønadstype = StønadTypeTilleggsstønader.TILSYN_BARN_AAP,
+                        ),
+                    ),
+                forrigeIverksetting =
+                    ForrigeIverksettingTilleggsstønaderDto(
+                        behandlingId = "noe-tull",
+                        iverksettingId = "noe-tull",
+                    ),
             )
-        )
 
         val respons: ResponseEntity<Any> =
             restTemplate.exchange(
-                localhostUrl("/api/simulering"),
+                localhostUrl("/api/simulering/tilleggsstonader"),
                 HttpMethod.POST,
                 HttpEntity(body, headers),
             )

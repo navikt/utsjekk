@@ -14,6 +14,6 @@ class ApplicationLocal
 fun main(args: Array<String>) {
     SpringApplicationBuilder(ApplicationConfig::class.java)
         .initializers(DbContainerInitializer(), KafkaContainerInitializer())
-        .profiles(Profiler.LOKAL, Profiler.MOCK_OPPDRAG)
+        .profiles(Profiler.LOKAL, Profiler.MOCK_OPPDRAG, Profiler.MOCK_SIMULERING)
         .run(*args)
 }

@@ -2,9 +2,10 @@ package no.nav.utsjekk.simulering.api
 
 import no.nav.security.token.support.core.api.ProtectedWithClaims
 import no.nav.utsjekk.felles.http.advice.ApiFeil
+import no.nav.utsjekk.iverksetting.api.TokenContext
+import no.nav.utsjekk.iverksetting.domene.KonsumentConfig
 import no.nav.utsjekk.kontrakter.felles.objectMapper
 import no.nav.utsjekk.simulering.SimuleringService
-import no.nav.utsjekk.simulering.api.Mapper.tilInterntFormat
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
@@ -16,10 +17,13 @@ import org.springframework.web.client.HttpClientErrorException
 @RestController
 @RequestMapping("/api/simulering")
 @ProtectedWithClaims(issuer = "azuread")
-class SimuleringController(private val simuleringService: SimuleringService) {
-    @PostMapping
+class SimuleringController(
+    private val simuleringService: SimuleringService,
+    private val konsumentConfig: KonsumentConfig,
+) {
+    @PostMapping("/tilleggsstonader")
     fun hentSimulering(
-        @RequestBody requestDto: SimuleringRequestDto,
+        @RequestBody requestDto: SimuleringRequestTilleggsstønaderDto,
     ) = try {
         requestDto.valider()
         val respons = simuleringService.hentSimuleringsresultatMedOppsummering(requestDto.tilInterntFormat())
@@ -29,7 +33,8 @@ class SimuleringController(private val simuleringService: SimuleringService) {
             HttpStatus.NOT_FOUND,
             HttpStatus.BAD_REQUEST,
             HttpStatus.SERVICE_UNAVAILABLE,
-            HttpStatus.CONFLICT -> ResponseEntity.status(e.statusCode).body(e.message)
+            HttpStatus.CONFLICT,
+            -> ResponseEntity.status(e.statusCode).body(e.message)
 
             else -> ResponseEntity.internalServerError()
         }
@@ -38,14 +43,35 @@ class SimuleringController(private val simuleringService: SimuleringService) {
             HttpStatus.NOT_FOUND,
             HttpStatus.BAD_REQUEST,
             HttpStatus.SERVICE_UNAVAILABLE,
-            HttpStatus.CONFLICT -> ResponseEntity.status(e.httpStatus).body(objectMapper.writeValueAsString(e.feil))
+            HttpStatus.CONFLICT,
+            -> ResponseEntity.status(e.httpStatus).body(objectMapper.writeValueAsString(e.feil))
+
+            else -> ResponseEntity.internalServerError()
+        }
+    }
+
+    @PostMapping
+    fun hentSimulering(
+        @RequestBody requestDto: SimuleringRequestDto,
+    ) = try {
+        val fagsystem = konsumentConfig.finnFagsystem(TokenContext.hentKlientnavn())
+        val respons = simuleringService.hentSimuleringsresultatMedOppsummering(requestDto.tilInterntFormat(fagsystem))
+        ResponseEntity.ok(respons)
+    } catch (e: HttpClientErrorException) {
+        when (e.statusCode) {
+            HttpStatus.NOT_FOUND,
+            HttpStatus.BAD_REQUEST,
+            HttpStatus.SERVICE_UNAVAILABLE,
+            HttpStatus.CONFLICT,
+            -> ResponseEntity.status(e.statusCode).body(e.message)
 
             else -> ResponseEntity.internalServerError()
         }
     }
 }
 
-fun SimuleringRequestDto.valider() {
+// TODO bør vi feile på dette? Det er lov å iverksette med tom liste, da vil evt. tidligere utbetalinger opphøres.
+fun SimuleringRequestTilleggsstønaderDto.valider() {
     if (utbetalinger.isEmpty()) {
         throw ApiFeil("Ingen utbetalinger å simulere", HttpStatus.BAD_REQUEST)
     }
