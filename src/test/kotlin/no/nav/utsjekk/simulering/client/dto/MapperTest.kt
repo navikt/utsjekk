@@ -4,9 +4,9 @@ import no.nav.utsjekk.kontrakter.felles.Fagsystem
 import no.nav.utsjekk.simulering.client.dto.Mapper.tilSimuleringDetaljer
 import no.nav.utsjekk.simulering.domene.Fagområde
 import no.nav.utsjekk.simulering.domene.Periode
+import no.nav.utsjekk.simulering.domene.Postering
 import no.nav.utsjekk.simulering.domene.PosteringType
 import no.nav.utsjekk.simulering.domene.SimuleringDetaljer
-import no.nav.utsjekk.simulering.domene.SimulertPostering
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
@@ -44,7 +44,7 @@ class MapperTest {
                                         feilkonto = false,
                                         detaljer =
                                             listOf(
-                                                Postering(
+                                                PosteringDto(
                                                     type = "YTEL",
                                                     faktiskFom = DATO_1_MAI,
                                                     faktiskTom = DATO_1_MAI,
@@ -74,7 +74,7 @@ class MapperTest {
                             tom = DATO_1_MAI,
                             posteringer =
                                 listOf(
-                                    SimulertPostering(
+                                    Postering(
                                         fagområde = Fagområde.TILLEGGSSTØNADER,
                                         sakId = SAK_ID,
                                         fom = DATO_1_MAI,
@@ -113,7 +113,7 @@ class MapperTest {
                                         feilkonto = false,
                                         detaljer =
                                             listOf(
-                                                Postering(
+                                                PosteringDto(
                                                     type = "YTEL",
                                                     faktiskFom = DATO_1_MAI,
                                                     faktiskTom = DATO_1_MAI,
@@ -134,7 +134,7 @@ class MapperTest {
                                         feilkonto = false,
                                         detaljer =
                                             listOf(
-                                                Postering(
+                                                PosteringDto(
                                                     type = "YTEL",
                                                     faktiskFom = DATO_15_MAI,
                                                     faktiskTom = DATO_15_MAI,
@@ -164,7 +164,7 @@ class MapperTest {
                             tom = DATO_1_MAI,
                             posteringer =
                                 listOf(
-                                    SimulertPostering(
+                                    Postering(
                                         fagområde = Fagområde.TILLEGGSSTØNADER,
                                         sakId = SAK_ID,
                                         fom = DATO_1_MAI,
@@ -173,7 +173,7 @@ class MapperTest {
                                         type = PosteringType.YTELSE,
                                         klassekode = KLASSEKODE,
                                     ),
-                                    SimulertPostering(
+                                    Postering(
                                         fagområde = Fagområde.TILLEGGSSTØNADER_ARENA,
                                         sakId = "ARENA-ID",
                                         fom = DATO_15_MAI,
@@ -212,7 +212,7 @@ class MapperTest {
                                         feilkonto = false,
                                         detaljer =
                                             listOf(
-                                                Postering(
+                                                PosteringDto(
                                                     type = "YTEL",
                                                     faktiskFom = DATO_1_MAI,
                                                     faktiskTom = DATO_1_MAI,
@@ -233,7 +233,7 @@ class MapperTest {
                                         feilkonto = false,
                                         detaljer =
                                             listOf(
-                                                Postering(
+                                                PosteringDto(
                                                     type = "YTEL",
                                                     faktiskFom = DATO_15_MAI,
                                                     faktiskTom = DATO_15_MAI,
@@ -263,7 +263,7 @@ class MapperTest {
                             tom = DATO_1_MAI,
                             posteringer =
                                 listOf(
-                                    SimulertPostering(
+                                    Postering(
                                         fagområde = Fagområde.TILLEGGSSTØNADER,
                                         sakId = SAK_ID,
                                         fom = DATO_1_MAI,

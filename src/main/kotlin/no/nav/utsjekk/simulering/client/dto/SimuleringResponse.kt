@@ -22,11 +22,11 @@ data class Utbetaling(
     val utbetalesTilId: String,
     val forfall: LocalDate,
     val feilkonto: Boolean,
-    val detaljer: List<Postering>,
+    val detaljer: List<PosteringDto>,
 )
 
 // Tilsvarer én rad i regnskapet
-data class Postering(
+data class PosteringDto(
     val type: String,
     val faktiskFom: LocalDate,
     val faktiskTom: LocalDate,

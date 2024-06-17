@@ -12,10 +12,10 @@ data class SimuleringDetaljer(
 data class Periode(
     val fom: LocalDate,
     val tom: LocalDate,
-    val posteringer: List<SimulertPostering>,
+    val posteringer: List<Postering>,
 )
 
-data class SimulertPostering(
+data class Postering(
     val fagområde: Fagområde,
     val sakId: String,
     val fom: LocalDate,
