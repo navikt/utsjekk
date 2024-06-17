@@ -7,6 +7,7 @@ object Profiler {
     const val LOKAL = "local"
     const val MOCK_OPPDRAG = "mock-oppdrag"
     const val MOCK_OAUTH = "mock-oauth"
+    const val MOCK_SIMULERING = "mock-simulering"
 }
 
 @Profile("!${Profiler.LOKAL} && !${Profiler.INTEGRASJONSTEST}")

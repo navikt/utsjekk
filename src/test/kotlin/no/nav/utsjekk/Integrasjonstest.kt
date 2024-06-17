@@ -26,7 +26,7 @@ import java.util.UUID
 @ExtendWith(SpringExtension::class)
 @ContextConfiguration(initializers = [DbContainerInitializer::class, KafkaContainerInitializer::class])
 @SpringBootTest(classes = [ApplicationLocal::class], webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ActiveProfiles(Profiler.INTEGRASJONSTEST, Profiler.MOCK_OPPDRAG, Profiler.MOCK_OAUTH)
+@ActiveProfiles(Profiler.INTEGRASJONSTEST, Profiler.MOCK_OPPDRAG, Profiler.MOCK_OAUTH, Profiler.MOCK_SIMULERING)
 @EnableMockOAuth2Server
 abstract class Integrasjonstest {
     protected val restTemplate = TestRestTemplate(RestTemplateAzure().restTemplateBuilder())
