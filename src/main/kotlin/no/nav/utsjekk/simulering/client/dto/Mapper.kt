@@ -7,9 +7,9 @@ import no.nav.utsjekk.kontrakter.oppdrag.Utbetalingsoppdrag
 import no.nav.utsjekk.kontrakter.oppdrag.Utbetalingsperiode
 import no.nav.utsjekk.simulering.domene.Fagområde
 import no.nav.utsjekk.simulering.domene.Periode
+import no.nav.utsjekk.simulering.domene.Postering
 import no.nav.utsjekk.simulering.domene.PosteringType
 import no.nav.utsjekk.simulering.domene.SimuleringDetaljer
-import no.nav.utsjekk.simulering.domene.SimulertPostering
 import no.nav.utsjekk.simulering.domene.hentFagområdeKoderFor
 
 object Mapper {
@@ -68,10 +68,10 @@ object Mapper {
         }
     }
 
-    private fun List<Utbetaling>.tilPosteringer(): List<SimulertPostering> {
+    private fun List<Utbetaling>.tilPosteringer(): List<Postering> {
         return this.flatMap {
             it.detaljer.map { postering ->
-                SimulertPostering(
+                Postering(
                     fagområde = Fagområde.fraKode(it.fagområde),
                     sakId = it.fagSystemId,
                     fom = postering.faktiskFom,

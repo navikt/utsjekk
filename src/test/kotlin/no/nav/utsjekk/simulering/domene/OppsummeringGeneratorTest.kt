@@ -3,7 +3,6 @@ package no.nav.utsjekk.simulering.domene
 import no.nav.utsjekk.simulering.api.OppsummeringForPeriode
 import no.nav.utsjekk.simulering.api.SimuleringResponsDto
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
 
@@ -17,8 +16,8 @@ class OppsummeringGeneratorTest {
     }
 
     @Test
-    @Disabled
     fun `skal lage oppsummering for ny utbetaling`() {
+        val fremtidigPeriode = LocalDate.now().plusMonths(1)
         val simuleringDetaljer =
             SimuleringDetaljer(
                 gjelderId = PERSONIDENT,
@@ -27,15 +26,15 @@ class OppsummeringGeneratorTest {
                 perioder =
                     listOf(
                         Periode(
-                            fom = DATO_1_MAI,
-                            tom = DATO_1_MAI,
+                            fom = fremtidigPeriode,
+                            tom = fremtidigPeriode,
                             posteringer =
                                 listOf(
-                                    SimulertPostering(
+                                    Postering(
                                         fagområde = Fagområde.TILLEGGSSTØNADER,
                                         sakId = SAK_ID,
-                                        fom = DATO_1_MAI,
-                                        tom = DATO_1_MAI,
+                                        fom = fremtidigPeriode,
+                                        tom = fremtidigPeriode,
                                         beløp = 800,
                                         type = PosteringType.YTELSE,
                                         klassekode = KLASSEKODE,
@@ -50,12 +49,11 @@ class OppsummeringGeneratorTest {
                 oppsummeringer =
                     listOf(
                         OppsummeringForPeriode(
-                            fom = DATO_1_MAI,
-                            tom = DATO_1_MAI,
+                            fom = fremtidigPeriode,
+                            tom = fremtidigPeriode,
                             tidligereUtbetalt = 0,
                             nyUtbetaling = 800,
-                            // TODO hva bør denne logisk være for nye utbetalinger? Etterbetaling for perioder tom. dagens dato, ikke etterbetaling for fremtidig?
-                            totalEtterbetaling = 800,
+                            totalEtterbetaling = 0,
                             totalFeilutbetaling = 0,
                         ),
                     ),
@@ -66,7 +64,6 @@ class OppsummeringGeneratorTest {
     }
 
     @Test
-    @Disabled
     fun `skal lage oppsummering for etterbetaling`() {
         val simuleringDetaljer =
             SimuleringDetaljer(
@@ -80,7 +77,7 @@ class OppsummeringGeneratorTest {
                             tom = DATO_1_MAI,
                             posteringer =
                                 listOf(
-                                    SimulertPostering(
+                                    Postering(
                                         type = PosteringType.YTELSE,
                                         fom = DATO_1_MAI,
                                         tom = DATO_1_MAI,
@@ -89,7 +86,7 @@ class OppsummeringGeneratorTest {
                                         sakId = SAK_ID,
                                         klassekode = KLASSEKODE,
                                     ),
-                                    SimulertPostering(
+                                    Postering(
                                         type = PosteringType.YTELSE,
                                         fom = DATO_1_MAI,
                                         tom = DATO_1_MAI,
@@ -123,7 +120,6 @@ class OppsummeringGeneratorTest {
     }
 
     @Test
-    @Disabled
     fun `skal lage oppsummering for feilutbetaling`() {
         val simuleringDetaljer =
             SimuleringDetaljer(
@@ -137,7 +133,7 @@ class OppsummeringGeneratorTest {
                             tom = DATO_1_MAI,
                             posteringer =
                                 listOf(
-                                    SimulertPostering(
+                                    Postering(
                                         type = PosteringType.YTELSE,
                                         fom = DATO_1_MAI,
                                         tom = DATO_1_MAI,
@@ -146,7 +142,7 @@ class OppsummeringGeneratorTest {
                                         sakId = SAK_ID,
                                         klassekode = KLASSEKODE,
                                     ),
-                                    SimulertPostering(
+                                    Postering(
                                         type = PosteringType.YTELSE,
                                         fom = DATO_1_MAI,
                                         tom = DATO_1_MAI,
@@ -155,7 +151,7 @@ class OppsummeringGeneratorTest {
                                         sakId = SAK_ID,
                                         klassekode = KLASSEKODE,
                                     ),
-                                    SimulertPostering(
+                                    Postering(
                                         type = PosteringType.FEILUTBETALING,
                                         fom = DATO_1_MAI,
                                         tom = DATO_1_MAI,
@@ -164,7 +160,7 @@ class OppsummeringGeneratorTest {
                                         sakId = SAK_ID,
                                         klassekode = KLASSEKODE,
                                     ),
-                                    SimulertPostering(
+                                    Postering(
                                         type = PosteringType.MOTPOSTERING,
                                         fom = DATO_1_MAI,
                                         tom = DATO_1_MAI,
@@ -173,7 +169,7 @@ class OppsummeringGeneratorTest {
                                         sakId = SAK_ID,
                                         klassekode = KLASSEKODE,
                                     ),
-                                    SimulertPostering(
+                                    Postering(
                                         type = PosteringType.YTELSE,
                                         fom = DATO_1_MAI,
                                         tom = DATO_1_MAI,
