@@ -1,5 +1,6 @@
 package no.nav.utsjekk.simulering
 
+import no.nav.utsjekk.felles.http.advice.ApiFeil
 import no.nav.utsjekk.iverksetting.domene.lagAndelData
 import no.nav.utsjekk.iverksetting.domene.tilAndelData
 import no.nav.utsjekk.iverksetting.tilstand.IverksettingsresultatService
@@ -11,6 +12,7 @@ import no.nav.utsjekk.simulering.client.SimuleringClient
 import no.nav.utsjekk.simulering.client.dto.Mapper.tilSimuleringDetaljer
 import no.nav.utsjekk.simulering.domene.OppsummeringGenerator
 import no.nav.utsjekk.simulering.domene.Simulering
+import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 
 @Service
@@ -35,8 +37,9 @@ class SimuleringService(
                         behandlingId = it.behandlingId,
                         iverksettingId = it.iverksettingId,
                     )
-                        ?: error(
-                            "Kunne ikke finne iverksettingsresultat for behandling ${it.behandlingId}/iverksetting ${it.iverksettingId}",
+                        ?: throw ApiFeil(
+                            "Fant ikke iverksettingsresultat for behandling ${it.behandlingId}/iverksetting ${it.iverksettingId}",
+                            HttpStatus.BAD_REQUEST,
                         )
                 forrigeIverksetting.tilkjentYtelseForUtbetaling
             }
