@@ -37,12 +37,12 @@
 
     <repositories>
         <repository>
-            <id>github</id>
-            <url>https://maven.pkg.github.com/navikt/utsjekk-kontrakter</url>
-        </repository>
-        <repository>
             <id>central</id>
             <url>https://repo.maven.apache.org/maven2</url>
+        </repository>
+        <repository>
+            <id>github</id>
+            <url>https://github-package-registry-mirror.gc.nav.no/cached/maven-release</url>
         </repository>
         <repository>
             <id>confluent</id>
