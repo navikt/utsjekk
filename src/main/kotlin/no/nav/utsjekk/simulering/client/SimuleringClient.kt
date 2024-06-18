@@ -1,6 +1,7 @@
 package no.nav.utsjekk.simulering.client
 
 import no.nav.utsjekk.felles.oppdrag.konfig.AbstractRestClient
+import no.nav.utsjekk.kontrakter.felles.objectMapper
 import no.nav.utsjekk.kontrakter.oppdrag.Utbetalingsoppdrag
 import no.nav.utsjekk.simulering.client.dto.Mapper.tilSimuleringRequest
 import no.nav.utsjekk.simulering.client.dto.SimuleringResponse
@@ -24,8 +25,9 @@ class SimuleringClient(
 
     fun hentSimulering(utbetalingsoppdrag: Utbetalingsoppdrag): SimuleringResponse {
         try {
-            secureLogger.info("Prøver å simulere utbetalingsoppdrag: $utbetalingsoppdrag")
-            return postForEntity<SimuleringResponse>(postSimuleringUri, utbetalingsoppdrag.tilSimuleringRequest())
+            val request = utbetalingsoppdrag.tilSimuleringRequest()
+            secureLogger.info("Prøver å simulere utbetalingsoppdrag: ${objectMapper.writeValueAsString(request)}")
+            return postForEntity<SimuleringResponse>(postSimuleringUri, request)
         } catch (e: Throwable) {
             logger.warn("Feil fra simulering")
             secureLogger.warn("Feil fra simulering:", e)
