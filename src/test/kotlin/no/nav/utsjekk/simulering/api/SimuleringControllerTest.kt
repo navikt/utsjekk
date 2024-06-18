@@ -27,28 +27,6 @@ class SimuleringControllerTest : Integrasjonstest() {
     }
 
     @Test
-    fun `ingen utbetalinger`() {
-        val body =
-            SimuleringRequestTilleggsstønaderDto(
-                sakId = "en-sakid",
-                behandlingId = "en-behandlingId",
-                personident = Personident("15507600333"),
-                saksbehandler = "A123456",
-                vedtakstidspunkt = LocalDateTime.now(),
-                utbetalinger = emptyList(),
-            )
-
-        val respons: ResponseEntity<Any> =
-            restTemplate.exchange(
-                localhostUrl("/api/simulering/tilleggsstonader"),
-                HttpMethod.POST,
-                HttpEntity(body, headers),
-            )
-
-        assertEquals(HttpStatus.BAD_REQUEST, respons.statusCode)
-    }
-
-    @Test
     fun `endring på ikke-eksisterende utbetaling`() {
         val body =
             SimuleringRequestTilleggsstønaderDto(

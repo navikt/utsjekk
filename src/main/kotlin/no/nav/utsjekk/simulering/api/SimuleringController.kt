@@ -25,7 +25,6 @@ class SimuleringController(
     fun hentSimulering(
         @RequestBody requestDto: SimuleringRequestTilleggsstønaderDto,
     ) = try {
-        requestDto.valider()
         val respons = simuleringService.hentSimuleringsresultatMedOppsummering(requestDto.tilInterntFormat())
         ResponseEntity.ok(respons)
     } catch (e: HttpClientErrorException) {
@@ -67,12 +66,5 @@ class SimuleringController(
 
             else -> ResponseEntity.internalServerError()
         }
-    }
-}
-
-// TODO bør vi feile på dette? Det er lov å iverksette med tom liste, da vil evt. tidligere utbetalinger opphøres.
-fun SimuleringRequestTilleggsstønaderDto.valider() {
-    if (utbetalinger.isEmpty()) {
-        throw ApiFeil("Ingen utbetalinger å simulere", HttpStatus.BAD_REQUEST)
     }
 }
