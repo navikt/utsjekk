@@ -24,6 +24,7 @@ class SimuleringClient(
 
     fun hentSimulering(utbetalingsoppdrag: Utbetalingsoppdrag): SimuleringResponse {
         try {
+            secureLogger.info("Prøver å simulere utbetalingsoppdrag: $utbetalingsoppdrag")
             return postForEntity<SimuleringResponse>(postSimuleringUri, utbetalingsoppdrag.tilSimuleringRequest())
         } catch (e: Throwable) {
             logger.warn("Feil fra simulering")
