@@ -12,7 +12,7 @@ object TokenContext {
     }
 
     fun erSystemkontekst(): Boolean {
-        return SpringTokenValidationContextHolder().getTokenValidationContext().getClaims("azuread").getAsList("roles")
-            .contains("access_as_application")
+        return SpringTokenValidationContextHolder().getTokenValidationContext().getClaims("azuread")
+            .containsClaim("roles", "access_as_application")
     }
 }
