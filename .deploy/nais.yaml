@@ -71,6 +71,9 @@ spec:
           namespace: tpts
         - application: tilleggsstonader-sak
           namespace: tilleggsstonader
+        - application: azure-token-generator
+          namespace: aura
+          cluster: dev-gcp
     outbound:
       rules:
         - application: utsjekk-oppdrag
