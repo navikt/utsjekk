@@ -53,10 +53,19 @@ no.nav.security.jwt:
           client-id: ${AZURE_APP_CLIENT_ID}
           client-secret: ${AZURE_APP_CLIENT_SECRET}
           client-auth-method: client_secret_basic
-      utsjekk-simulering:
+      utsjekk-simulering-cc:
         resource-url: ${UTSJEKK_SIMULERING_API_URL}
         token-endpoint-url: ${AZURE_OPENID_CONFIG_TOKEN_ENDPOINT}
-        grant-type: client_credentials # TODO på sikt bør dette være jwt-bearer for å støtte obo-flyt
+        grant-type: client_credentials
+        scope: ${UTSJEKK_SIMULERING_SCOPE}
+        authentication:
+          client-id: ${AZURE_APP_CLIENT_ID}
+          client-secret: ${AZURE_APP_CLIENT_SECRET}
+          client-auth-method: client_secret_basic
+      utsjekk-simulering-obo:
+        resource-url: ${UTSJEKK_SIMULERING_API_URL}
+        token-endpoint-url: ${AZURE_OPENID_CONFIG_TOKEN_ENDPOINT}
+        grant-type: urn:ietf:params:oauth:grant-type:jwt-bearer
         scope: ${UTSJEKK_SIMULERING_SCOPE}
         authentication:
           client-id: ${AZURE_APP_CLIENT_ID}
