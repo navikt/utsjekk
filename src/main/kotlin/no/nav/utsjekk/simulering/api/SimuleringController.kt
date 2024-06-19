@@ -24,38 +24,22 @@ class SimuleringController(
     @PostMapping("/tilleggsstonader")
     fun hentSimulering(
         @RequestBody requestDto: SimuleringRequestTilleggsstønaderDto,
-    ) = try {
+    ) = catchSimuleringsfeil {
         val respons = simuleringService.hentSimuleringsresultatMedOppsummering(requestDto.tilInterntFormat())
         ResponseEntity.ok(respons)
-    } catch (e: HttpClientErrorException) {
-        when (e.statusCode) {
-            HttpStatus.NOT_FOUND,
-            HttpStatus.BAD_REQUEST,
-            HttpStatus.SERVICE_UNAVAILABLE,
-            HttpStatus.CONFLICT,
-            -> ResponseEntity.status(e.statusCode).body(e.message)
-
-            else -> ResponseEntity.internalServerError()
-        }
-    } catch (e: ApiFeil) {
-        when (e.httpStatus) {
-            HttpStatus.NOT_FOUND,
-            HttpStatus.BAD_REQUEST,
-            HttpStatus.SERVICE_UNAVAILABLE,
-            HttpStatus.CONFLICT,
-            -> ResponseEntity.status(e.httpStatus).body(objectMapper.writeValueAsString(e.feil))
-
-            else -> ResponseEntity.internalServerError()
-        }
     }
 
     @PostMapping
     fun hentSimulering(
         @RequestBody requestDto: SimuleringRequestDto,
-    ) = try {
+    ) = catchSimuleringsfeil {
         val fagsystem = konsumentConfig.finnFagsystem(TokenContext.hentKlientnavn())
         val respons = simuleringService.hentSimuleringsresultatMedOppsummering(requestDto.tilInterntFormat(fagsystem))
         ResponseEntity.ok(respons)
+    }
+
+    private fun <T>catchSimuleringsfeil(block: () -> T) = try {
+        block.invoke()
     } catch (e: HttpClientErrorException) {
         when (e.statusCode) {
             HttpStatus.NOT_FOUND,

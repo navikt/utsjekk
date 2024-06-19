@@ -61,4 +61,26 @@ class SimuleringControllerTest : Integrasjonstest() {
 
         assertEquals(HttpStatus.BAD_REQUEST, respons.statusCode)
     }
+
+    @Test
+    fun `422 ved simulering av tom utbetaling som ikke er opphør`() {
+        val body =
+            SimuleringRequestTilleggsstønaderDto(
+                sakId = "en-sakid",
+                behandlingId = "en-behandlingId",
+                personident = Personident("15507600333"),
+                saksbehandler = "A123456",
+                vedtakstidspunkt = LocalDateTime.now(),
+                utbetalinger = emptyList(),
+            )
+
+        val respons: ResponseEntity<Any> =
+            restTemplate.exchange(
+                localhostUrl("/api/simulering/tilleggsstonader"),
+                HttpMethod.POST,
+                HttpEntity(body, headers),
+            )
+
+        assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, respons.statusCode)
+    }
 }

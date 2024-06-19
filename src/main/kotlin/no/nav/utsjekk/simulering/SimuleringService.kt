@@ -22,6 +22,9 @@ class SimuleringService(
 ) {
     fun hentSimuleringsresultatMedOppsummering(simulering: Simulering): SimuleringResponsDto {
         val utbetalingsoppdrag = hentUtbetalingsoppdrag(simulering)
+
+        utbetalingsoppdrag.valider()
+
         val hentetSimulering = simuleringClient.hentSimulering(utbetalingsoppdrag)
 
         return OppsummeringGenerator.lagOppsummering(hentetSimulering.tilSimuleringDetaljer(simulering.behandlingsinformasjon.fagsystem))
@@ -54,5 +57,11 @@ class SimuleringService(
             forrigeAndeler = forrigeTilkjentYtelse?.lagAndelData() ?: emptyList(),
             sisteAndelPerKjede = sisteAndelPerKjede,
         ).utbetalingsoppdrag
+    }
+
+    private fun Utbetalingsoppdrag.valider() {
+        if (erFørsteUtbetalingPåSak && utbetalingsperiode.isEmpty()) {
+            throw ApiFeil("Kan ikke simulere en tom utbetaling", HttpStatus.UNPROCESSABLE_ENTITY)
+        }
     }
 }

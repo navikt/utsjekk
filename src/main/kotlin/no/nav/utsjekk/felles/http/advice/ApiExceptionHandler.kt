@@ -53,7 +53,7 @@ class ApiExceptionHandler : ResponseEntityExceptionHandler() {
     }
 
     @ExceptionHandler(ApiFeil::class)
-    fun håndterApiFeil(feil: ApiFeil) = ResponseEntity.status(feil.httpStatus).body(feil.feil)
+    fun håndterApiFeil(feil: ApiFeil) = ResponseEntity.status(feil.httpStatus).body("\"${feil.feil}\"")
 
     private fun loggFeil(
         throwable: Throwable,
