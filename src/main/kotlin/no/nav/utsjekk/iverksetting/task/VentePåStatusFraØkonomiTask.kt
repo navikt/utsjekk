@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service
 @TaskStepBeskrivelse(
     taskStepType = VentePåStatusFraØkonomiTask.TYPE,
     maxAntallFeil = 50,
-    settTilManuellOppfølgning = true,
     triggerTidVedFeilISekunder = 30L,
     beskrivelse = "Sjekker status på utbetalingsoppdraget i utsjekk-oppdrag.",
 )
