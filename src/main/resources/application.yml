@@ -108,10 +108,13 @@ PROSESSERING_ROLLE: ${PROSESSERING_ROLLE}
 konsumenter:
   tiltakspenger:
     fagsystem: TILTAKSPENGER
-    apper: tiltakspenger-utbetaling,utsjekk
+    apper: tiltakspenger-utbetaling
   tilleggsstønader:
     fagsystem: TILLEGGSSTØNADER
-    apper: tilleggsstonader-sak,utsjekk
+    apper: tilleggsstonader-sak
+  dagpenger:
+    fagsystem: DAGPENGER
+    apper: utsjekk
 
 kafka:
   config:
