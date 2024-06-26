@@ -37,7 +37,10 @@ object OppsummeringGenerator {
         if (detFinnesPositivFeilutbetaling(posteringer)) {
             0
         } else {
-            beregnResultat(posteringer) - abs(posteringer.summerBareNegativePosteringer(PosteringType.FEILUTBETALING))
+            maxOf(
+                0,
+                beregnResultat(posteringer) - abs(posteringer.summerBareNegativePosteringer(PosteringType.FEILUTBETALING)),
+            )
         }
 
     private fun beregnFeilutbetaling(posteringer: List<Postering>): Int =
