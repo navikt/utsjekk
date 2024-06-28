@@ -30,6 +30,10 @@ spec:
     requests:
       memory: 256Mi
       cpu: 100m
+  observability:
+    autoInstrumentation:
+      enabled: true
+      runtime: java
   secureLogs:
     enabled: true
   leaderElection: true
