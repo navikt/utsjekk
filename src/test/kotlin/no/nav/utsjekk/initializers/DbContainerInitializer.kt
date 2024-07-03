@@ -26,6 +26,8 @@ class DbContainerInitializer : ApplicationContextInitializer<ConfigurableApplica
                 .withDatabaseName("utsjekk")
                 .withUsername("postgres")
                 .withPassword("test")
+                .withReuse(true)
+                .withNetwork(null)
         }
     }
 }

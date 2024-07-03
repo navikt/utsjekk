@@ -57,6 +57,7 @@ class KafkaContainerInitializer : ApplicationContextInitializer<ConfigurableAppl
 
         private val kafkaContainer: KafkaContainer by lazy {
             KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:7.5.1"))
+                .withReuse(true)
         }
 
         fun deleteAllRecords() {
