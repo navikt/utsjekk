@@ -3,6 +3,7 @@ package no.nav.utsjekk.utbetaling
 import com.fasterxml.jackson.annotation.JsonSubTypes
 import com.fasterxml.jackson.annotation.JsonTypeInfo
 import no.nav.utsjekk.felles.http.advice.ApiFeil
+import no.nav.utsjekk.kontrakter.felles.Fagsystem
 import no.nav.utsjekk.kontrakter.felles.GyldigBehandlingId
 import no.nav.utsjekk.kontrakter.felles.GyldigSakId
 import no.nav.utsjekk.kontrakter.felles.Satstype
@@ -15,7 +16,7 @@ fun badRequest(msg: String): Nothing = throw ApiFeil(msg, HttpStatus.BAD_REQUEST
 fun notFound(msg: String): Nothing = throw ApiFeil(msg, HttpStatus.NOT_FOUND)
 
 sealed interface Stønadstype {
-    fun fagsystem(): String
+    fun fagsystem(): Fagsystem
     fun navn(): String
 
     enum class Tilleggsstønader(val kode: String) : Stønadstype {
@@ -23,7 +24,7 @@ sealed interface Stønadstype {
         TILSYN_BARN_AAP("TSTBASISP4-OP"),
         TILSYN_BARN_ETTERLATTE("TSTBASISP5-OP");
 
-        override fun fagsystem(): String = "Tilleggsstønader"
+        override fun fagsystem(): Fagsystem = Fagsystem.TILLEGGSSTØNADER
         override fun navn(): String = name
     }
 }

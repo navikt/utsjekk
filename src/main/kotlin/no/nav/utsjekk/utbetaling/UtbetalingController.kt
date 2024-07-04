@@ -9,7 +9,6 @@ import no.nav.utsjekk.iverksetting.domene.*
 import no.nav.utsjekk.iverksetting.domene.transformer.IverksettDtoMapper
 import no.nav.utsjekk.iverksetting.tilstand.IverksettingService
 import no.nav.utsjekk.kontrakter.felles.BrukersNavKontor
-import no.nav.utsjekk.kontrakter.felles.Fagsystem
 import no.nav.utsjekk.kontrakter.felles.Satstype
 import no.nav.utsjekk.kontrakter.felles.StønadTypeTilleggsstønader
 import org.springframework.http.MediaType
@@ -44,25 +43,24 @@ class UtbetalingController(
     fun utbetal(
         @RequestBody utbetalingDto: UtbetalingDto,
     ): ResponseEntity<UUID> {
-//        utbetalingDto.valider()
 //        val iverksett = iverksettDtoMapper.tilDomene(utbetalingDto)
 //        validatorService.valider(iverksett)
 //        iverksettingService.startIverksetting(iverksett)
 
-        val id = UUID.randomUUID()
+        val utbetalingId = UUID.randomUUID()
         val iverksetting = iverksetting(
             dto = utbetalingDto,
-            utbetalingId = id
+            utbetalingId = utbetalingId
         )
 
-        datasource[id] = iverksetting
+        datasource[utbetalingId] = iverksetting
 
         val location = ServletUriComponentsBuilder
             .fromCurrentRequest()
-            .path("/$id") // relative path
+            .path("/$utbetalingId") // relative path
             .build()
             .toUri()
-        return ResponseEntity.created(location).build()
+        return ResponseEntity.accepted().location(location).build()
     }
 
     private val datasource = mutableMapOf<UUID, Iverksetting>()
@@ -120,15 +118,17 @@ class UtbetalingController(
         )
     }
 
-    fun iverksetting(dto: UtbetalingDto, utbetalingId: UUID, utbetalingIdRef: UUID? = null): Iverksetting {
+    fun iverksetting(
+        dto: UtbetalingDto,
+        utbetalingId: UUID,
+        utbetalingIdRef: UUID? = null
+    ): Iverksetting {
         val tidligereUtbetaling = utbetalingIdRef?.let {
             datasource[utbetalingIdRef] ?: notFound("utbetaling med id $utbetalingIdRef")
         }
 
         val stønadstype = dto.vedtak.utbetalinger.first().stønadstype.let { Stønadstype.Tilleggsstønader.valueOf(it) }
-        val fagsystem = stønadstype.fagsystem().let(Fagsystem::valueOf)
         val navkontor = dto.vedtak.utbetalinger.first().brukersNavKontor
-
 
         fun periode(sats: UtbetalingDto.VedtakDto.SatsDto): Periode =
             when (sats) {
@@ -150,7 +150,7 @@ class UtbetalingController(
             }
 
         return Iverksetting(
-            fagsak = Fagsakdetaljer(dto.sakId, fagsystem),
+            fagsak = Fagsakdetaljer(dto.sakId, stønadstype.fagsystem()),
             behandling = Behandlingsdetaljer(
                 forrigeBehandlingId = tidligereUtbetaling?.behandlingId,
                 forrigeIverksettingId = utbetalingIdRef.toString(),
@@ -207,7 +207,7 @@ class UtbetalingController(
             .build()
             .toUri()
 
-        return ResponseEntity.created(location).build()
+        return ResponseEntity.accepted().location(location).build()
     }
 }
 
