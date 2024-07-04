@@ -11,6 +11,23 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.YearMonth
 
+fun badRequest(msg: String): Nothing = throw ApiFeil(msg, HttpStatus.BAD_REQUEST)
+fun notFound(msg: String): Nothing = throw ApiFeil(msg, HttpStatus.NOT_FOUND)
+
+sealed interface Stønadstype {
+    fun fagsystem(): String
+    fun navn(): String
+
+    enum class Tilleggsstønader(val kode: String) : Stønadstype {
+        TILSYN_BARN_ENSLIG_FORSØRGER("TSTBASISP2-OP"),
+        TILSYN_BARN_AAP("TSTBASISP4-OP"),
+        TILSYN_BARN_ETTERLATTE("TSTBASISP5-OP");
+
+        override fun fagsystem(): String = "Tilleggsstønader"
+        override fun navn(): String = name
+    }
+}
+
 data class UtbetalingDto(
     val sakId: String,
     val behandlingId: String,
@@ -29,11 +46,11 @@ data class UtbetalingDto(
         val utbetalinger: List<SatsDto>,
     ) {
         init {
+            if (utbetalinger.isEmpty()) {
+                badRequest("Vedtaket må inneholde minst 1 utbetaling")
+            }
             if (utbetalinger.overlapper()) {
-                throw ApiFeil(
-                    "Utbetalingen inneholder perioder som overlapper i tid",
-                    HttpStatus.BAD_REQUEST,
-                )
+                badRequest("Vedtaket inneholder utbetalinger som overlapper i tid")
             }
         }
 
@@ -47,13 +64,13 @@ data class UtbetalingDto(
             open val beløp: UInt,
             open val type: Satstype,
             open val stønadstype: String,
-            open val brukersNavKontor: String,
+            open val brukersNavKontor: String?,
         )
 
         data class DagsatsDto(
             override val beløp: UInt,
             override val stønadstype: String,
-            override val brukersNavKontor: String,
+            override val brukersNavKontor: String?,
             val dato: LocalDate,
         ) : SatsDto(
             beløp = beløp,
@@ -65,7 +82,7 @@ data class UtbetalingDto(
         data class MånedsatsDto(
             override val beløp: UInt,
             override val stønadstype: String,
-            override val brukersNavKontor: String,
+            override val brukersNavKontor: String?,
             val måned: YearMonth,
         ) : SatsDto(
             beløp = beløp,
@@ -77,7 +94,7 @@ data class UtbetalingDto(
         data class EngangssatsDto(
             override val beløp: UInt,
             override val stønadstype: String,
-            override val brukersNavKontor: String,
+            override val brukersNavKontor: String?,
             val fom: LocalDate,
             val tom: LocalDate,
         ) : SatsDto(
@@ -88,10 +105,7 @@ data class UtbetalingDto(
         ) {
             init {
                 if (tom.isBefore(fom)) {
-                    throw ApiFeil(
-                        "Utbetalingen inneholder periode der tom er før fom",
-                        HttpStatus.BAD_REQUEST,
-                    )
+                    badRequest("Utbetalingen inneholder periode der tom er før fom")
                 }
             }
         }
@@ -109,27 +123,21 @@ data class UtbetalingDto(
                     is EngangssatsDto -> Periode(fom = it.fom, tom = it.tom)
                 }
             }
-            .sortedBy { it.fom }
-            .windowed(2, 1, false)
-            .all { (a, b) -> a.tom.isBefore(b.fom) }
-            .not()
+                .sortedBy { it.fom }
+                .windowed(2, 1, false)
+                .all { (a, b) -> a.tom.isBefore(b.fom) }
+                .not()
     }
 }
 
 private fun validerSakId(sakId: String) {
     if (sakId.length !in 1..GyldigSakId.MAKSLENGDE) {
-        throw ApiFeil(
-            "SakId må være mellom 1 og ${GyldigSakId.MAKSLENGDE} tegn lang",
-            HttpStatus.BAD_REQUEST,
-        )
+        badRequest("SakId må være mellom 1 og ${GyldigSakId.MAKSLENGDE} tegn lang")
     }
 }
 
 private fun validerBehandlingId(behandlingId: String) {
     if (behandlingId.length !in 1..GyldigBehandlingId.MAKSLENGDE) {
-        throw ApiFeil(
-            "BehandlingId må være mellom 1 og ${GyldigBehandlingId.MAKSLENGDE} tegn lang",
-            HttpStatus.BAD_REQUEST,
-        )
+        badRequest("BehandlingId må være mellom 1 og ${GyldigBehandlingId.MAKSLENGDE} tegn lang")
     }
 }

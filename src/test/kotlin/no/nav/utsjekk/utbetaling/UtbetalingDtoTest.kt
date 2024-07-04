@@ -12,8 +12,69 @@ import java.time.LocalDateTime
 import java.time.YearMonth
 
 class UtbetalingDtoTest {
+
+
     @Test
-    fun `serialiserer og deserialiserer`() {
+    fun `kan sende inn engangsutbetaling`() {
+        @Language("JSON")
+        val json = """
+            {
+              "sakId": "string",
+              "behandlingId": "string",
+              "personident": "string",
+              "vedtak": {
+                "vedtakstidspunkt": "2024-07-02T13:56:46.124112",
+                "saksbehandlerId": "string",
+                "beslutterId": "string",
+                "utbetalinger": [
+                  {
+                    "beløp": 10234,
+                    "type": "ENGANGS",
+                    "fom": "2024-07-01",
+                    "tom": "2024-07-20",
+                    "stønadstype": "string",
+                    "brukersNavKontor": "1234"
+                  }
+                ]
+              }
+            }
+        """.trimIndent()
+        assertDoesNotThrow {
+            objectMapper.writeValueAsString(objectMapper.readValue<UtbetalingDto>(json))
+        }
+    }
+
+    @Test
+    fun `kan sende inn ubetaling for mnd`() {
+        @Language("JSON")
+        val json = """
+            {
+              "sakId": "string",
+              "behandlingId": "string",
+              "personident": "string",
+              "vedtak": {
+                "vedtakstidspunkt": "2024-07-02T13:56:46.124112",
+                "saksbehandlerId": "string",
+                "beslutterId": "string",
+                "utbetalinger": [
+                  {
+                    "beløp": 10234,
+                    "type": "MÅNEDLIG",
+                    "måned": "2020-03",
+                    "stønadstype": "string",
+                    "brukersNavKontor": "1234"
+                  }
+                ]
+              }
+            }
+        """.trimIndent()
+        assertDoesNotThrow {
+            objectMapper.writeValueAsString(objectMapper.readValue<UtbetalingDto>(json))
+        }
+    }
+
+    @Test
+    fun `kan sende inn utbetaling for dag`() {
         @Language("JSON")
         val json = """
             {
@@ -57,20 +118,20 @@ class UtbetalingDtoTest {
                         UtbetalingDto.VedtakDto.DagsatsDto(
                             beløp = 1234u,
                             dato = LocalDate.of(2020, 3, 1),
-                            stønadstype = "string",
+                            stønadstype = Stønadstype.Tilleggsstønader.TILSYN_BARN_AAP.navn(),
                             brukersNavKontor = "1234"
                         ),
                         UtbetalingDto.VedtakDto.MånedsatsDto(
                             beløp = 1234u,
                             måned = YearMonth.of(2020, 3),
-                            stønadstype = "string",
+                            stønadstype = Stønadstype.Tilleggsstønader.TILSYN_BARN_AAP.navn(),
                             brukersNavKontor = "1234"
                         ),
                         UtbetalingDto.VedtakDto.EngangssatsDto(
                             beløp = 1234u,
                             fom = LocalDate.of(2020, 1, 1),
                             tom = LocalDate.of(2020, 1, 21),
-                            stønadstype = "string",
+                            stønadstype = Stønadstype.Tilleggsstønader.TILSYN_BARN_AAP.navn(),
                             brukersNavKontor = "1234"
                         ),
                     )
