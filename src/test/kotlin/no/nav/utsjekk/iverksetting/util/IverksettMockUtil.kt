@@ -85,6 +85,7 @@ fun enTilkjentYtelse(
     utbetalingsoppdrag = utbetalingsoppdrag,
     andelerTilkjentYtelse = andeler,
     sisteAndelIKjede = sisteAndelIKjede,
+    sisteAndelPerKjede = andeler.firstOrNull()?.let { mapOf(it.stønadsdata.tilKjedenøkkel() to it) } ?: emptyMap(),
 )
 
 fun behandlingsdetaljer(
@@ -143,7 +144,12 @@ fun enIverksetting(
     iverksettingId: String? = null,
     forrigeIverksettingId: String? = null,
 ): Iverksetting {
-    val fagsystem = andeler.firstOrNull()?.stønadsdata?.stønadstype?.tilFagsystem() ?: Fagsystem.DAGPENGER
+    val fagsystem =
+        andeler
+            .firstOrNull()
+            ?.stønadsdata
+            ?.stønadstype
+            ?.tilFagsystem() ?: Fagsystem.DAGPENGER
 
     return Iverksetting(
         fagsak = Fagsakdetaljer(fagsakId = sakId, fagsystem = fagsystem),

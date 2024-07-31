@@ -9,8 +9,8 @@ import no.nav.utsjekk.felles.opprettNesteTask
 import no.nav.utsjekk.iverksetting.domene.AndelTilkjentYtelse
 import no.nav.utsjekk.iverksetting.domene.Iverksetting
 import no.nav.utsjekk.iverksetting.domene.Iverksettingsresultat
+import no.nav.utsjekk.iverksetting.domene.Kjedenøkkel
 import no.nav.utsjekk.iverksetting.domene.OppdragResultat
-import no.nav.utsjekk.iverksetting.domene.Stønadsdata
 import no.nav.utsjekk.iverksetting.domene.TilkjentYtelse
 import no.nav.utsjekk.iverksetting.domene.behandlingId
 import no.nav.utsjekk.iverksetting.domene.lagAndelData
@@ -119,7 +119,9 @@ class IverksettMotOppdragTask(
         val nyeAndeler = iverksetting.vedtak.tilkjentYtelse.lagAndelData()
         val forrigeAndeler = forrigeIverksettingsresultat?.tilkjentYtelseForUtbetaling.lagAndelData()
         val sisteAndelPerKjede =
-            forrigeIverksettingsresultat?.tilkjentYtelseForUtbetaling?.sisteAndelPerKjede
+            forrigeIverksettingsresultat
+                ?.tilkjentYtelseForUtbetaling
+                ?.sisteAndelPerKjede
                 ?.mapValues { it.value.tilAndelData() }
                 ?: emptyMap()
 
@@ -186,16 +188,17 @@ class IverksettMotOppdragTask(
 
     private fun lagTilkjentYtelseMedSisteAndelPerKjede(
         tilkjentYtelse: TilkjentYtelse,
-        forrigeSisteAndelPerKjede: Map<Stønadsdata, AndelTilkjentYtelse>,
+        forrigeSisteAndelPerKjede: Map<Kjedenøkkel, AndelTilkjentYtelse>,
     ): TilkjentYtelse {
         val beregnetSisteAndePerKjede =
-            tilkjentYtelse.andelerTilkjentYtelse.groupBy {
-                it.stønadsdata
-            }.mapValues {
-                it.value.maxBy { andel -> andel.periodeId!! }
-            }
+            tilkjentYtelse.andelerTilkjentYtelse
+                .groupBy {
+                    it.stønadsdata.tilKjedenøkkel()
+                }.mapValues {
+                    it.value.maxBy { andel -> andel.periodeId!! }
+                }
 
-        val nySisteAndelerPerKjede: Map<Stønadsdata, AndelTilkjentYtelse> =
+        val nySisteAndelerPerKjede: Map<Kjedenøkkel, AndelTilkjentYtelse> =
             finnSisteAndelPerKjede(beregnetSisteAndePerKjede, forrigeSisteAndelPerKjede)
 
         return tilkjentYtelse.copy(
@@ -205,21 +208,21 @@ class IverksettMotOppdragTask(
 
     /**
      * Finner riktig siste andel per kjede av andeler
-     * Key er definert av stønadstype + ferietillegg
-     * Funksjonen lager en map med kjedeId som key og en liste med de to andelene fra hver map
+     * Funksjonen lager en map med kjedenøkkel som key og en liste med de to andelene fra hver map
      * Deretter finner vi hvilke av de to vi skal bruke, Regelen er
      * 1. Bruk den med største periodeId
      * 2. Hvis periodeIdene er like, bruk den med størst til-og-med-dato
      */
     private fun finnSisteAndelPerKjede(
-        nySisteAndePerKjede: Map<Stønadsdata, AndelTilkjentYtelse>,
-        forrigeSisteAndelPerKjede: Map<Stønadsdata, AndelTilkjentYtelse>,
+        nySisteAndePerKjede: Map<Kjedenøkkel, AndelTilkjentYtelse>,
+        forrigeSisteAndelPerKjede: Map<Kjedenøkkel, AndelTilkjentYtelse>,
     ) = (nySisteAndePerKjede.asSequence() + forrigeSisteAndelPerKjede.asSequence())
         .groupBy({ it.key }, { it.value })
         .mapValues { entry ->
-            entry.value.sortedWith(
-                compareByDescending<AndelTilkjentYtelse> { it.periodeId }.thenByDescending { it.periode.tom },
-            ).first()
+            entry.value
+                .sortedWith(
+                    compareByDescending<AndelTilkjentYtelse> { it.periodeId }.thenByDescending { it.periode.tom },
+                ).first()
         }
 
     override fun onCompletion(task: Task) {

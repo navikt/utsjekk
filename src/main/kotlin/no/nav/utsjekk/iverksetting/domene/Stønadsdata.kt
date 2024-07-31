@@ -7,12 +7,12 @@ import com.fasterxml.jackson.databind.DeserializationContext
 import com.fasterxml.jackson.databind.JsonSerializer
 import com.fasterxml.jackson.databind.KeyDeserializer
 import com.fasterxml.jackson.databind.SerializerProvider
+import no.nav.utsjekk.felles.http.ObjectMapperProvider.objectMapper
 import no.nav.utsjekk.kontrakter.felles.BrukersNavKontor
 import no.nav.utsjekk.kontrakter.felles.StønadType
 import no.nav.utsjekk.kontrakter.felles.StønadTypeDagpenger
 import no.nav.utsjekk.kontrakter.felles.StønadTypeTilleggsstønader
 import no.nav.utsjekk.kontrakter.felles.StønadTypeTiltakspenger
-import no.nav.utsjekk.kontrakter.felles.objectMapper
 import no.nav.utsjekk.kontrakter.iverksett.Ferietillegg
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME)
@@ -21,17 +21,23 @@ import no.nav.utsjekk.kontrakter.iverksett.Ferietillegg
     JsonSubTypes.Type(StønadsdataTiltakspenger::class, name = "tiltakspenger"),
     JsonSubTypes.Type(StønadsdataTilleggsstønader::class, name = "tilleggsstønader"),
 )
-sealed class Stønadsdata(open val stønadstype: StønadType) {
+sealed class Stønadsdata(
+    open val stønadstype: StønadType,
+) {
     fun tilKlassifisering(): String =
         when (this) {
             is StønadsdataDagpenger -> this.tilKlassifiseringDagpenger()
             is StønadsdataTiltakspenger -> this.tilKlassifiseringTiltakspenger()
             is StønadsdataTilleggsstønader -> this.tilKlassifiseringTilleggsstønader()
         }
+
+    abstract fun tilKjedenøkkel(): Kjedenøkkel
 }
 
-data class StønadsdataDagpenger(override val stønadstype: StønadTypeDagpenger, val ferietillegg: Ferietillegg? = null) :
-    Stønadsdata(stønadstype) {
+data class StønadsdataDagpenger(
+    override val stønadstype: StønadTypeDagpenger,
+    val ferietillegg: Ferietillegg? = null,
+) : Stønadsdata(stønadstype) {
     fun tilKlassifiseringDagpenger(): String =
         when (this.stønadstype) {
             StønadTypeDagpenger.DAGPENGER_ARBEIDSSØKER_ORDINÆR ->
@@ -62,6 +68,9 @@ data class StønadsdataDagpenger(override val stønadstype: StønadTypeDagpenger
                     null -> "DPDPASISP1"
                 }
         }
+
+    override fun tilKjedenøkkel(): Kjedenøkkel =
+        KjedenøkkelMeldeplikt(klassifiseringskode = this.tilKlassifiseringDagpenger(), meldekortId = "test")
 }
 
 data class StønadsdataTiltakspenger(
@@ -110,6 +119,9 @@ data class StønadsdataTiltakspenger(
                 StønadTypeTiltakspenger.UTVIDET_OPPFØLGING_I_OPPLÆRING -> "TPTPUOPPFOPPL"
             }
         }
+
+    override fun tilKjedenøkkel(): Kjedenøkkel =
+        KjedenøkkelMeldeplikt(klassifiseringskode = this.tilKlassifiseringTiltakspenger(), meldekortId = "test")
 }
 
 data class StønadsdataTilleggsstønader(
@@ -122,6 +134,8 @@ data class StønadsdataTilleggsstønader(
             StønadTypeTilleggsstønader.TILSYN_BARN_AAP -> "TSTBASISP4-OP"
             StønadTypeTilleggsstønader.TILSYN_BARN_ETTERLATTE -> "TSTBASISP5-OP"
         }
+
+    override fun tilKjedenøkkel(): Kjedenøkkel = KjedenøkkelTilleggsstønader(klassifiseringskode = this.tilKlassifiseringTilleggsstønader())
 }
 
 class StønadsdataKeySerializer : JsonSerializer<Stønadsdata>() {
@@ -142,7 +156,5 @@ class StønadsdataKeyDeserializer : KeyDeserializer() {
     override fun deserializeKey(
         key: String?,
         ctx: DeserializationContext?,
-    ): Stønadsdata? {
-        return key?.let { objectMapper.readValue(key, Stønadsdata::class.java) }
-    }
+    ): Stønadsdata? = key?.let { objectMapper.readValue(key, Stønadsdata::class.java) }
 }
