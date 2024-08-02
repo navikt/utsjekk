@@ -1,5 +1,7 @@
 package no.nav.utsjekk.iverksetting.api
 
+import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.module.kotlin.readValue
 import no.nav.familie.prosessering.internal.TaskService
 import no.nav.utsjekk.Integrasjonstest
 import no.nav.utsjekk.iverksetting.domene.transformer.RandomOSURId
@@ -10,11 +12,13 @@ import no.nav.utsjekk.iverksetting.util.enIverksettTilleggsstønaderDto
 import no.nav.utsjekk.konfig.FeatureToggleMock
 import no.nav.utsjekk.kontrakter.felles.Fagsystem
 import no.nav.utsjekk.kontrakter.felles.Personident
+import no.nav.utsjekk.kontrakter.felles.objectMapper
 import no.nav.utsjekk.kontrakter.iverksett.IverksettDto
 import no.nav.utsjekk.kontrakter.iverksett.IverksettStatus
 import no.nav.utsjekk.kontrakter.iverksett.IverksettTilleggsstønaderDto
 import no.nav.utsjekk.kontrakter.iverksett.VedtaksdetaljerDto
 import no.nav.utsjekk.kontrakter.iverksett.VedtaksdetaljerTilleggsstønaderDto
+import org.intellij.lang.annotations.Language
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
@@ -79,6 +83,47 @@ class IverksettingControllerTest : Integrasjonstest() {
             )
 
         assertEquals(HttpStatus.ACCEPTED, respons.statusCode)
+    }
+
+    @Test
+    fun `returnerer beskrivende feilmelding når jackson ikke greier å deserialisere request`() {
+        @Language("JSON")
+        val payload = """
+{
+  "sakId": "1234",
+  "behandlingId": "1",
+  "personident": {
+    "verdi": "15507600333"
+  },
+  "vedtak": {
+    "vedtakstidspunkt": "2021-05-12T00:00:00",
+    "saksbehandlerId": "A12345",
+    "brukersNavKontor": null,
+    "utbetalinger": [
+      {
+        "beløpPerDag": 500,
+        "fraOgMedDato": "2021-01-01",
+        "tilOgMedDato": "2021-12-31",
+        "stønadsdata": {
+          "stønadstype": "DAGPENGER_ARBEIDSSØKER_ORDINÆR",
+          "ferietillegg": null
+        }
+      }
+    ]
+  },
+  "forrigeIverksetting": null
+}
+        """.trimIndent()
+
+        val respons: ResponseEntity<Any> =
+            restTemplate.exchange(
+                localhostUrl("/api/iverksetting"),
+                HttpMethod.POST,
+                HttpEntity(objectMapper.readValue<JsonNode>(payload), headers),
+            )
+
+        assertEquals(HttpStatus.BAD_REQUEST, respons.statusCode)
+        assertEquals("Mangler påkrevd felt: vedtak.beslutterId", respons.body)
     }
 
     @Test

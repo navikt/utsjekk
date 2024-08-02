@@ -1,5 +1,6 @@
 package no.nav.utsjekk.felles.http.advice
 
+import com.fasterxml.jackson.databind.exc.MismatchedInputException
 import no.nav.security.token.support.core.exceptions.JwtTokenMissingException
 import no.nav.security.token.support.spring.validation.interceptor.JwtTokenUnauthorizedException
 import no.nav.utsjekk.iverksetting.featuretoggle.IverksettingErSkruddAvException
@@ -10,6 +11,7 @@ import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.HttpStatusCode
 import org.springframework.http.ResponseEntity
+import org.springframework.http.converter.HttpMessageNotReadableException
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseStatus
@@ -29,8 +31,18 @@ class ApiExceptionHandler : ResponseEntityExceptionHandler() {
         headers: HttpHeaders,
         status: HttpStatusCode,
         request: WebRequest,
-    ) = super.handleExceptionInternal(ex, body, headers, status, request).also {
-        loggFeil(ex, status)
+    ) = when (ex) {
+        is HttpMessageNotReadableException -> håndterDeserialiseringsfeil(ex)
+        else -> super.handleExceptionInternal(ex, body, headers, status, request).also {
+            loggFeil(ex, status)
+        }
+    }
+
+    private fun håndterDeserialiseringsfeil(exception: HttpMessageNotReadableException): ResponseEntity<Any> {
+        val message = (exception.rootCause as MismatchedInputException).let { cause ->
+            "Mangler påkrevd felt: ${cause.path.joinToString(".") { it.fieldName }}"
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(objectMapper.writeValueAsString(message))
     }
 
     @ExceptionHandler(IverksettingErSkruddAvException::class)
@@ -75,9 +87,9 @@ class ApiExceptionHandler : ResponseEntityExceptionHandler() {
 
         val loggMelding =
             "En håndtert feil har oppstått" +
-                " throwable=${rootCause(throwable)}" +
-                " reason=${responseStatus.reason}" +
-                " status=$status"
+                    " throwable=${rootCause(throwable)}" +
+                    " reason=${responseStatus.reason}" +
+                    " status=$status"
 
         when (throwable) {
             is JwtTokenUnauthorizedException -> logger.debug(loggMelding)
@@ -87,5 +99,6 @@ class ApiExceptionHandler : ResponseEntityExceptionHandler() {
         return ResponseEntity.status(status).build()
     }
 
-    private fun rootCause(throwable: Throwable) = NestedExceptionUtils.getMostSpecificCause(throwable).javaClass.simpleName
+    private fun rootCause(throwable: Throwable) =
+        NestedExceptionUtils.getMostSpecificCause(throwable).javaClass.simpleName
 }
