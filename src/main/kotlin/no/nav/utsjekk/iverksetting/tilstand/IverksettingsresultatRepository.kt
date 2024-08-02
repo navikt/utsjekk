@@ -1,5 +1,7 @@
 package no.nav.utsjekk.iverksetting.tilstand
 
+import no.nav.utsjekk.iverksetting.domene.GammelTilkjentYtelse
+import no.nav.utsjekk.iverksetting.domene.GammeltIverksettingsresultat
 import no.nav.utsjekk.iverksetting.domene.Iverksettingsresultat
 import no.nav.utsjekk.iverksetting.domene.OppdragResultat
 import no.nav.utsjekk.iverksetting.domene.TilkjentYtelse
@@ -12,7 +14,9 @@ import java.sql.ResultSet
 
 @Suppress("ktlint:standard:max-line-length")
 @Repository
-class IverksettingsresultatRepository(private val jdbcTemplate: JdbcTemplate) {
+class IverksettingsresultatRepository(
+    private val jdbcTemplate: JdbcTemplate,
+) {
     fun insert(iverksettingsresultat: Iverksettingsresultat): Iverksettingsresultat {
         val sql =
             "insert into iverksettingsresultat (fagsystem, sakId, behandling_id, iverksetting_id, tilkjentytelseforutbetaling) " +
@@ -104,8 +108,8 @@ class IverksettingsresultatRepository(private val jdbcTemplate: JdbcTemplate) {
         fagsystem: Fagsystem,
         sakId: String,
         behandlingId: String,
-    ): List<Iverksettingsresultat> {
-        return if (iverksettingId != null) {
+    ): List<Iverksettingsresultat> =
+        if (iverksettingId != null) {
             val sql =
                 "select * from iverksettingsresultat where fagsystem = ? and sakId = ? and behandling_id = ? and iverksetting_id = ?"
             jdbcTemplate.query(
@@ -122,15 +126,20 @@ class IverksettingsresultatRepository(private val jdbcTemplate: JdbcTemplate) {
                     "and behandling_id = ? and iverksetting_id is null"
             jdbcTemplate.query(sql, IverksettingsresultatRowMapper(), fagsystem.name, sakId, behandlingId)
         }
-    }
+
+    fun hentGammelVersjon(): List<GammeltIverksettingsresultat> =
+        jdbcTemplate.query(
+            "select * from iverksettingsresultat",
+            GammelIverksettingsresultatRowMapper(),
+        )
 }
 
 internal class IverksettingsresultatRowMapper : RowMapper<Iverksettingsresultat> {
     override fun mapRow(
         resultSet: ResultSet,
         rowNum: Int,
-    ): Iverksettingsresultat {
-        return Iverksettingsresultat(
+    ): Iverksettingsresultat =
+        Iverksettingsresultat(
             fagsystem = Fagsystem.valueOf(resultSet.getString("fagsystem")),
             sakId = resultSet.getString("sakId"),
             behandlingId = resultSet.getString("behandling_id"),
@@ -140,8 +149,29 @@ internal class IverksettingsresultatRowMapper : RowMapper<Iverksettingsresultat>
                     objectMapper.readValue(it, TilkjentYtelse::class.java)
                 },
             oppdragResultat =
-                resultSet.getString("oppdragresultat")
+                resultSet
+                    .getString("oppdragresultat")
                     ?.let { objectMapper.readValue(it, OppdragResultat::class.java) },
         )
-    }
+}
+
+internal class GammelIverksettingsresultatRowMapper : RowMapper<GammeltIverksettingsresultat> {
+    override fun mapRow(
+        resultSet: ResultSet,
+        rowNum: Int,
+    ): GammeltIverksettingsresultat =
+        GammeltIverksettingsresultat(
+            fagsystem = Fagsystem.valueOf(resultSet.getString("fagsystem")),
+            sakId = resultSet.getString("sakId"),
+            behandlingId = resultSet.getString("behandling_id"),
+            iverksettingId = resultSet.getString("iverksetting_id"),
+            tilkjentYtelseForUtbetaling =
+                resultSet.getString("tilkjentytelseforutbetaling")?.let {
+                    objectMapper.readValue(it, GammelTilkjentYtelse::class.java)
+                },
+            oppdragResultat =
+                resultSet
+                    .getString("oppdragresultat")
+                    ?.let { objectMapper.readValue(it, OppdragResultat::class.java) },
+        )
 }
