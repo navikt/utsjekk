@@ -60,7 +60,10 @@ class UtbetalingsgeneratorTest {
                 behandlingsinformasjon = behandlingsinformasjon,
                 nyeAndeler = emptyList(),
                 forrigeAndeler = listOf(forrigeAndel),
-                sisteAndelPerKjede = mapOf(StønadsdataDagpenger(StønadTypeDagpenger.DAGPENGER_ARBEIDSSØKER_ORDINÆR) to forrigeAndel),
+                sisteAndelPerKjede =
+                    mapOf(
+                        StønadsdataDagpenger(StønadTypeDagpenger.DAGPENGER_ARBEIDSSØKER_ORDINÆR).tilKjedenøkkel() to forrigeAndel,
+                    ),
             )
 
         assertEquals(Fagsystem.DAGPENGER, beregnetUtbetalingsoppdrag.utbetalingsoppdrag.fagsystem)

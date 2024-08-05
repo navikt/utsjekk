@@ -1,6 +1,6 @@
 package no.nav.utsjekk.iverksetting.utbetalingsoppdrag
 
-import no.nav.utsjekk.iverksetting.domene.Stønadsdata
+import no.nav.utsjekk.iverksetting.domene.Kjedenøkkel
 import no.nav.utsjekk.iverksetting.utbetalingsoppdrag.AndelValidator.validerAndeler
 import no.nav.utsjekk.iverksetting.utbetalingsoppdrag.BeståendeAndelerBeregner.finnBeståendeAndeler
 import no.nav.utsjekk.iverksetting.utbetalingsoppdrag.domene.AndelData
@@ -33,11 +33,11 @@ object Utbetalingsgenerator {
         behandlingsinformasjon: Behandlingsinformasjon,
         nyeAndeler: List<AndelData>,
         forrigeAndeler: List<AndelData>,
-        sisteAndelPerKjede: Map<Stønadsdata, AndelData>,
+        sisteAndelPerKjede: Map<Kjedenøkkel, AndelData>,
     ): BeregnetUtbetalingsoppdrag {
         validerAndeler(forrigeAndeler, nyeAndeler)
-        val nyeAndelerGruppert = nyeAndeler.groupByStønadsdata()
-        val forrigeKjeder = forrigeAndeler.groupByStønadsdata()
+        val nyeAndelerGruppert = nyeAndeler.groupByKjedenøkkel()
+        val forrigeKjeder = forrigeAndeler.groupByKjedenøkkel()
 
         return lagUtbetalingsoppdrag(
             nyeAndeler = nyeAndelerGruppert,
@@ -48,9 +48,9 @@ object Utbetalingsgenerator {
     }
 
     private fun lagUtbetalingsoppdrag(
-        nyeAndeler: Map<Stønadsdata, List<AndelData>>,
-        forrigeKjeder: Map<Stønadsdata, List<AndelData>>,
-        sisteAndelPerKjede: Map<Stønadsdata, AndelData>,
+        nyeAndeler: Map<Kjedenøkkel, List<AndelData>>,
+        forrigeKjeder: Map<Kjedenøkkel, List<AndelData>>,
+        sisteAndelPerKjede: Map<Kjedenøkkel, AndelData>,
         behandlingsinformasjon: Behandlingsinformasjon,
     ): BeregnetUtbetalingsoppdrag {
         val nyeKjeder = lagNyeKjeder(nyeAndeler, forrigeKjeder, sisteAndelPerKjede)
@@ -75,16 +75,16 @@ object Utbetalingsgenerator {
     }
 
     private fun lagNyeKjeder(
-        nyeKjeder: Map<Stønadsdata, List<AndelData>>,
-        forrigeKjeder: Map<Stønadsdata, List<AndelData>>,
-        sisteAndelPerKjede: Map<Stønadsdata, AndelData>,
+        nyeKjeder: Map<Kjedenøkkel, List<AndelData>>,
+        forrigeKjeder: Map<Kjedenøkkel, List<AndelData>>,
+        sisteAndelPerKjede: Map<Kjedenøkkel, AndelData>,
     ): List<ResultatForKjede> {
-        val alleStønadsdata = nyeKjeder.keys + forrigeKjeder.keys
+        val alleKjedenøkler = nyeKjeder.keys + forrigeKjeder.keys
         var sistePeriodeId = sisteAndelPerKjede.values.mapNotNull { it.periodeId }.maxOrNull() ?: -1
-        return alleStønadsdata.map { stønadsdata ->
-            val forrigeAndeler = forrigeKjeder[stønadsdata] ?: emptyList()
-            val nyeAndeler = nyeKjeder[stønadsdata] ?: emptyList()
-            val sisteAndel = sisteAndelPerKjede[stønadsdata]
+        return alleKjedenøkler.map { kjedenøkkel ->
+            val forrigeAndeler = forrigeKjeder[kjedenøkkel] ?: emptyList()
+            val nyeAndeler = nyeKjeder[kjedenøkkel] ?: emptyList()
+            val sisteAndel = sisteAndelPerKjede[kjedenøkkel]
             val opphørsdato = finnOpphørsdato(forrigeAndeler, nyeAndeler)
 
             val nyKjede =
@@ -111,8 +111,10 @@ object Utbetalingsgenerator {
         val forrigeFørsteAndel = forrigeAndeler.firstOrNull()
         val nyFørsteAndel = nyeAndeler.firstOrNull()
         if (
-            forrigeFørsteAndel != null && nyFørsteAndel != null &&
-            nyFørsteAndel.beløp == 0 && nyFørsteAndel.fom < forrigeFørsteAndel.fom
+            forrigeFørsteAndel != null &&
+            nyFørsteAndel != null &&
+            nyFørsteAndel.beløp == 0 &&
+            nyFørsteAndel.fom < forrigeFørsteAndel.fom
         ) {
             return nyFørsteAndel.fom
         }
@@ -136,7 +138,7 @@ object Utbetalingsgenerator {
                 }
         }
 
-    private fun erFørsteUtbetalingPåSak(sisteAndelMedPeriodeId: Map<Stønadsdata, AndelData>) = sisteAndelMedPeriodeId.isEmpty()
+    private fun erFørsteUtbetalingPåSak(sisteAndelMedPeriodeId: Map<Kjedenøkkel, AndelData>) = sisteAndelMedPeriodeId.isEmpty()
 
     private fun beregnNyKjede(
         forrige: List<AndelData>,
@@ -177,8 +179,8 @@ object Utbetalingsgenerator {
         return Pair(nyeAndelerMedPeriodeId, gjeldendePeriodeId)
     }
 
-    private fun List<AndelData>.groupByStønadsdata(): Map<Stønadsdata, List<AndelData>> =
-        groupBy { it.stønadsdata }.mapValues { andel -> andel.value.sortedBy { it.fom } }
+    private fun List<AndelData>.groupByKjedenøkkel(): Map<Kjedenøkkel, List<AndelData>> =
+        groupBy { it.stønadsdata.tilKjedenøkkel() }.mapValues { andel -> andel.value.sortedBy { it.fom } }
 
     private fun lagOpphørsperioder(
         behandlingsinformasjon: Behandlingsinformasjon,

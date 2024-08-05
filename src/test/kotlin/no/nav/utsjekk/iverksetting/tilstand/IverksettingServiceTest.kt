@@ -9,6 +9,7 @@ import no.nav.familie.prosessering.internal.TaskService
 import no.nav.utsjekk.felles.oppdrag.OppdragClient
 import no.nav.utsjekk.iverksetting.domene.IverksettingEntitet
 import no.nav.utsjekk.iverksetting.domene.OppdragResultat
+import no.nav.utsjekk.iverksetting.domene.StønadsdataTiltakspenger
 import no.nav.utsjekk.iverksetting.domene.behandlingId
 import no.nav.utsjekk.iverksetting.domene.transformer.RandomOSURId
 import no.nav.utsjekk.iverksetting.featuretoggle.IverksettingErSkruddAvException
@@ -21,7 +22,6 @@ import no.nav.utsjekk.iverksetting.util.lagIverksettingEntitet
 import no.nav.utsjekk.iverksetting.util.mockFeatureToggleService
 import no.nav.utsjekk.konfig.FeatureToggleMock
 import no.nav.utsjekk.kontrakter.felles.Fagsystem
-import no.nav.utsjekk.kontrakter.felles.StønadTypeDagpenger
 import no.nav.utsjekk.kontrakter.felles.StønadTypeTiltakspenger
 import no.nav.utsjekk.kontrakter.iverksett.IverksettStatus
 import no.nav.utsjekk.kontrakter.oppdrag.OppdragStatus
@@ -319,12 +319,15 @@ internal class IverksettingServiceTest {
         val iverksettingDagpenger =
             enIverksetting(
                 behandlingId = behandlingId,
-                andeler = listOf(enAndelTilkjentYtelse(stønadstype = StønadTypeDagpenger.DAGPENGER_ARBEIDSSØKER_ORDINÆR)),
+                andeler = listOf(enAndelTilkjentYtelse()),
             )
         val iverksettingTiltakspenger =
             enIverksetting(
                 behandlingId = behandlingId,
-                andeler = listOf(enAndelTilkjentYtelse(stønadstype = StønadTypeTiltakspenger.JOBBKLUBB)),
+                andeler =
+                    listOf(
+                        enAndelTilkjentYtelse(stønadsdata = StønadsdataTiltakspenger(stønadstype = StønadTypeTiltakspenger.JOBBKLUBB)),
+                    ),
             )
 
         every {

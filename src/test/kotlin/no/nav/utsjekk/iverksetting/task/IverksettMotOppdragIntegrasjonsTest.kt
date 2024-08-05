@@ -5,6 +5,8 @@ import no.nav.utsjekk.Integrasjonstest
 import no.nav.utsjekk.initializers.KafkaContainerInitializer
 import no.nav.utsjekk.iverksetting.domene.AndelTilkjentYtelse
 import no.nav.utsjekk.iverksetting.domene.Iverksetting
+import no.nav.utsjekk.iverksetting.domene.StønadsdataTilleggsstønader
+import no.nav.utsjekk.iverksetting.domene.StønadsdataTiltakspenger
 import no.nav.utsjekk.iverksetting.domene.behandlingId
 import no.nav.utsjekk.iverksetting.domene.sakId
 import no.nav.utsjekk.iverksetting.domene.transformer.RandomOSURId
@@ -13,9 +15,10 @@ import no.nav.utsjekk.iverksetting.tilstand.IverksettingsresultatService
 import no.nav.utsjekk.iverksetting.util.behandlingsdetaljer
 import no.nav.utsjekk.iverksetting.util.enAndelTilkjentYtelse
 import no.nav.utsjekk.iverksetting.util.enIverksetting
-import no.nav.utsjekk.iverksetting.util.lagAndelTilkjentYtelse
 import no.nav.utsjekk.iverksetting.util.vedtaksdetaljer
+import no.nav.utsjekk.kontrakter.felles.BrukersNavKontor
 import no.nav.utsjekk.kontrakter.felles.Fagsystem
+import no.nav.utsjekk.kontrakter.felles.StønadTypeTilleggsstønader
 import no.nav.utsjekk.kontrakter.felles.StønadTypeTiltakspenger
 import no.nav.utsjekk.kontrakter.felles.objectMapper
 import no.nav.utsjekk.kontrakter.iverksett.IverksettStatus
@@ -57,15 +60,15 @@ class IverksettMotOppdragIntegrasjonsTest : Integrasjonstest() {
                 forrigeBehandlingId = iverksetting.behandlingId,
                 andeler =
                     listOf(
-                        lagAndelTilkjentYtelse(
+                        enAndelTilkjentYtelse(
                             beløp = 1000,
-                            fraOgMed = LocalDate.of(2021, 1, 1),
-                            tilOgMed = LocalDate.of(2021, 1, 31),
+                            fra = LocalDate.of(2021, 1, 1),
+                            til = LocalDate.of(2021, 1, 31),
                         ),
-                        lagAndelTilkjentYtelse(
+                        enAndelTilkjentYtelse(
                             beløp = 1000,
-                            fraOgMed = LocalDate.now(),
-                            tilOgMed = LocalDate.now().plusMonths(1),
+                            fra = LocalDate.now(),
+                            til = LocalDate.now().plusMonths(1),
                         ),
                     ),
             )
@@ -89,15 +92,15 @@ class IverksettMotOppdragIntegrasjonsTest : Integrasjonstest() {
                 forrigeBehandlingId = iverksetting.behandlingId,
                 andeler =
                     listOf(
-                        lagAndelTilkjentYtelse(
+                        enAndelTilkjentYtelse(
                             beløp = 299,
-                            fraOgMed = LocalDate.of(2021, 1, 1),
-                            tilOgMed = LocalDate.of(2021, 1, 31),
+                            fra = LocalDate.of(2021, 1, 1),
+                            til = LocalDate.of(2021, 1, 31),
                         ),
-                        lagAndelTilkjentYtelse(
+                        enAndelTilkjentYtelse(
                             beløp = 1000,
-                            fraOgMed = LocalDate.now(),
-                            tilOgMed = LocalDate.now().plusMonths(1),
+                            fra = LocalDate.now(),
+                            til = LocalDate.now().plusMonths(1),
                         ),
                     ),
             )
@@ -132,7 +135,12 @@ class IverksettMotOppdragIntegrasjonsTest : Integrasjonstest() {
     @Test
     fun `iverksett skal persisteres med korrekt fagsystem`() {
         val iverksetting =
-            startIverksetting(andeler = listOf(enAndelTilkjentYtelse(stønadstype = StønadTypeTiltakspenger.JOBBKLUBB)))
+            startIverksetting(
+                andeler =
+                    listOf(
+                        enAndelTilkjentYtelse(stønadsdata = StønadsdataTiltakspenger(stønadstype = StønadTypeTiltakspenger.JOBBKLUBB)),
+                    ),
+            )
 
         hentPersistertIverksetting(iverksetting).also {
             assertEquals(Fagsystem.TILTAKSPENGER, it?.fagsak?.fagsystem)
@@ -165,6 +173,62 @@ class IverksettMotOppdragIntegrasjonsTest : Integrasjonstest() {
         val status = utledStatus(iverksetting)
 
         assertEquals(IverksettStatus.OK_UTEN_UTBETALING, status)
+    }
+
+    @Test
+    fun `utbetalingsperioder for tilleggsstønader med ulike NAV-kontor skal havne på samme kjede`() {
+        val iverksetting =
+            startIverksetting(
+                enIverksetting(
+                    fagsystem = Fagsystem.TILLEGGSSTØNADER,
+                    sakId = "54321",
+                    behandlingsdetaljer =
+                        behandlingsdetaljer(
+                            behandlingId = RandomOSURId.generate(),
+                            iverksettingId = "9f6eaa12-6b32-42a2-bde9-4b520833443d",
+                        ),
+                    vedtaksdetaljer =
+                        vedtaksdetaljer(
+                            andeler =
+                                listOf(
+                                    enAndelTilkjentYtelse(
+                                        beløp = 100,
+                                        fra = LocalDate.of(2021, 1, 1),
+                                        til = LocalDate.of(2021, 1, 31),
+                                        stønadsdata =
+                                            StønadsdataTilleggsstønader(
+                                                stønadstype = StønadTypeTilleggsstønader.TILSYN_BARN_AAP,
+                                                brukersNavKontor = null,
+                                            ),
+                                    ),
+                                    enAndelTilkjentYtelse(
+                                        beløp = 400,
+                                        fra = LocalDate.of(2021, 2, 1),
+                                        til = LocalDate.of(2021, 2, 28),
+                                        stønadsdata =
+                                            StønadsdataTilleggsstønader(
+                                                stønadstype = StønadTypeTilleggsstønader.TILSYN_BARN_AAP,
+                                                brukersNavKontor = BrukersNavKontor(enhet = "4000"),
+                                            ),
+                                    ),
+                                    enAndelTilkjentYtelse(
+                                        beløp = 500,
+                                        fra = LocalDate.of(2021, 3, 1),
+                                        til = LocalDate.of(2021, 3, 31),
+                                        stønadsdata =
+                                            StønadsdataTilleggsstønader(
+                                                stønadstype = StønadTypeTilleggsstønader.TILSYN_BARN_AAP,
+                                                brukersNavKontor = BrukersNavKontor(enhet = "3200"),
+                                            ),
+                                    ),
+                                ),
+                        ),
+                ),
+            )
+
+        hentPersistertTilkjentYtelse(iverksetting).also {
+            assertEquals(1, it.sisteAndelPerKjede.size)
+        }
     }
 
     @Test
@@ -226,10 +290,10 @@ class IverksettMotOppdragIntegrasjonsTest : Integrasjonstest() {
         behandlingId: String = RandomOSURId.generate(),
         andeler: List<AndelTilkjentYtelse> =
             listOf(
-                lagAndelTilkjentYtelse(
+                enAndelTilkjentYtelse(
                     beløp = 1000,
-                    fraOgMed = LocalDate.of(2021, 1, 1),
-                    tilOgMed = LocalDate.of(2021, 1, 31),
+                    fra = LocalDate.of(2021, 1, 1),
+                    til = LocalDate.of(2021, 1, 31),
                 ),
             ),
     ) = startIverksetting(

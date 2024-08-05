@@ -11,7 +11,7 @@ import no.nav.utsjekk.iverksetting.api.IverksettDtoValidator.utbetalingerHarKunP
 import no.nav.utsjekk.iverksetting.api.IverksettDtoValidator.utbetalingsperioderOverlapperIkkeITid
 import no.nav.utsjekk.iverksetting.domene.transformer.RandomOSURId
 import no.nav.utsjekk.iverksetting.util.enIverksettDto
-import no.nav.utsjekk.iverksetting.util.lagUtbetalingDto
+import no.nav.utsjekk.iverksetting.util.enUtbetalingDto
 import no.nav.utsjekk.kontrakter.felles.BrukersNavKontor
 import no.nav.utsjekk.kontrakter.felles.StønadTypeDagpenger
 import no.nav.utsjekk.kontrakter.felles.StønadTypeTiltakspenger
@@ -78,7 +78,7 @@ class IverksettingDtoValidatorTest {
                     tmpIverksettDto.vedtak.copy(
                         utbetalinger =
                             listOf(
-                                lagUtbetalingDto(
+                                enUtbetalingDto(
                                     beløp = 100,
                                     fraOgMed = LocalDate.of(2023, 5, 15),
                                     tilOgMed = LocalDate.of(2023, 5, 5),
@@ -101,12 +101,12 @@ class IverksettingDtoValidatorTest {
                     tmpIverksettDto.vedtak.copy(
                         utbetalinger =
                             listOf(
-                                lagUtbetalingDto(
+                                enUtbetalingDto(
                                     beløp = 100,
                                     fraOgMed = LocalDate.of(2023, 5, 15),
                                     tilOgMed = LocalDate.of(2023, 5, 30),
                                 ),
-                                lagUtbetalingDto(
+                                enUtbetalingDto(
                                     beløp = 100,
                                     fraOgMed = LocalDate.of(2023, 5, 20),
                                     tilOgMed = LocalDate.of(2023, 6, 3),
@@ -129,13 +129,13 @@ class IverksettingDtoValidatorTest {
                     tmpIverksettDto.vedtak.copy(
                         utbetalinger =
                             listOf(
-                                lagUtbetalingDto(
+                                enUtbetalingDto(
                                     beløp = 100,
                                     fraOgMed = LocalDate.of(2023, 5, 15),
                                     tilOgMed = LocalDate.of(2023, 5, 30),
                                     stønadsdata = StønadsdataTiltakspengerDto(stønadstype = StønadTypeTiltakspenger.JOBBKLUBB),
                                 ),
-                                lagUtbetalingDto(
+                                enUtbetalingDto(
                                     beløp = 100,
                                     fraOgMed = LocalDate.of(2023, 5, 20),
                                     tilOgMed = LocalDate.of(2023, 6, 3),
