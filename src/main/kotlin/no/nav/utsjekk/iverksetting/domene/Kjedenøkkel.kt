@@ -12,7 +12,7 @@ import no.nav.utsjekk.kontrakter.felles.objectMapper
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME)
 @JsonSubTypes(
     JsonSubTypes.Type(KjedenøkkelMeldeplikt::class, name = "meldeplikt"),
-    JsonSubTypes.Type(KjedenøkkelTilleggsstønader::class, name = "tilleggsstønader"),
+    JsonSubTypes.Type(KjedenøkkelStandard::class, name = "standard"),
 )
 sealed class Kjedenøkkel(
     open val klassifiseringskode: String,
@@ -23,7 +23,7 @@ data class KjedenøkkelMeldeplikt(
     val meldekortId: String,
 ) : Kjedenøkkel(klassifiseringskode)
 
-data class KjedenøkkelTilleggsstønader(
+data class KjedenøkkelStandard(
     override val klassifiseringskode: String,
 ) : Kjedenøkkel(klassifiseringskode)
 

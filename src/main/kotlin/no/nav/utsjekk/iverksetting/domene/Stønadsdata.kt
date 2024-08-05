@@ -137,7 +137,7 @@ data class StønadsdataTilleggsstønader(
             StønadTypeTilleggsstønader.TILSYN_BARN_ETTERLATTE -> "TSTBASISP5-OP"
         }
 
-    override fun tilKjedenøkkel(): Kjedenøkkel = KjedenøkkelTilleggsstønader(klassifiseringskode = this.tilKlassifiseringTilleggsstønader())
+    override fun tilKjedenøkkel(): Kjedenøkkel = KjedenøkkelStandard(klassifiseringskode = this.tilKlassifiseringTilleggsstønader())
 }
 
 class StønadsdataKeySerializer : JsonSerializer<Stønadsdata>() {
