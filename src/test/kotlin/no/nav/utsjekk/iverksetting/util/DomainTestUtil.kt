@@ -31,7 +31,7 @@ fun lagIverksettingsdata(
         vedtaksdetaljer(
             andeler =
                 andelsdatoer.map {
-                    lagAndelTilkjentYtelse(beløp = beløp, fraOgMed = it, tilOgMed = it)
+                    enAndelTilkjentYtelse(beløp = beløp, fra = it, til = it)
                 },
             vedtakstidspunkt = vedtakstidspunkt,
         ),

@@ -6,6 +6,9 @@ import no.nav.utsjekk.iverksetting.domene.Fagsakdetaljer
 import no.nav.utsjekk.iverksetting.domene.Iverksetting
 import no.nav.utsjekk.iverksetting.domene.Iverksettingsresultat
 import no.nav.utsjekk.iverksetting.domene.OppdragResultat
+import no.nav.utsjekk.iverksetting.domene.Periode
+import no.nav.utsjekk.iverksetting.domene.Stønadsdata
+import no.nav.utsjekk.iverksetting.domene.StønadsdataDagpenger
 import no.nav.utsjekk.iverksetting.domene.Søker
 import no.nav.utsjekk.iverksetting.domene.TilkjentYtelse
 import no.nav.utsjekk.iverksetting.domene.Vedtaksdetaljer
@@ -19,7 +22,9 @@ import no.nav.utsjekk.kontrakter.felles.StønadTypeTiltakspenger
 import no.nav.utsjekk.kontrakter.iverksett.Ferietillegg
 import no.nav.utsjekk.kontrakter.iverksett.IverksettDto
 import no.nav.utsjekk.kontrakter.iverksett.StønadsdataDagpengerDto
+import no.nav.utsjekk.kontrakter.iverksett.StønadsdataDto
 import no.nav.utsjekk.kontrakter.iverksett.StønadsdataTiltakspengerDto
+import no.nav.utsjekk.kontrakter.iverksett.UtbetalingDto
 import no.nav.utsjekk.kontrakter.iverksett.VedtaksdetaljerDto
 import no.nav.utsjekk.kontrakter.oppdrag.Utbetalingsoppdrag
 import java.time.LocalDate
@@ -44,7 +49,7 @@ fun enIverksettDto(
             brukersNavKontor = brukersNavKontor,
             utbetalinger =
                 listOf(
-                    lagUtbetalingDto(
+                    enUtbetalingDto(
                         beløp = andelsbeløp,
                         fraOgMed = LocalDate.of(2021, 1, 1),
                         tilOgMed = LocalDate.of(2021, 12, 31),
@@ -53,6 +58,19 @@ fun enIverksettDto(
                 ),
         ),
 )
+
+fun enUtbetalingDto(
+    beløp: Int,
+    fraOgMed: LocalDate = LocalDate.of(2021, 1, 1),
+    tilOgMed: LocalDate = LocalDate.of(2021, 1, 31),
+    stønadsdata: StønadsdataDto = StønadsdataDagpengerDto(stønadstype = StønadTypeDagpenger.DAGPENGER_ARBEIDSSØKER_ORDINÆR),
+): UtbetalingDto =
+    UtbetalingDto(
+        beløpPerDag = beløp,
+        fraOgMedDato = fraOgMed,
+        tilOgMedDato = tilOgMed,
+        stønadsdata = stønadsdata,
+    )
 
 private fun stønadsdata(
     stønadType: StønadType,
@@ -67,12 +85,15 @@ fun enAndelTilkjentYtelse(
     beløp: Int = 5000,
     fra: LocalDate = LocalDate.of(2021, 1, 1),
     til: LocalDate = LocalDate.of(2021, 12, 31),
-    stønadstype: StønadType = StønadTypeDagpenger.DAGPENGER_ARBEIDSSØKER_ORDINÆR,
-) = lagAndelTilkjentYtelse(
+    periodeId: Long? = null,
+    forrigePeriodeId: Long? = null,
+    stønadsdata: Stønadsdata = StønadsdataDagpenger(stønadstype = StønadTypeDagpenger.DAGPENGER_ARBEIDSSØKER_ORDINÆR),
+) = AndelTilkjentYtelse(
     beløp = beløp,
-    fraOgMed = fra,
-    tilOgMed = til,
-    stønadstype = stønadstype,
+    periode = Periode(fra, til),
+    periodeId = periodeId,
+    forrigePeriodeId = forrigePeriodeId,
+    stønadsdata = stønadsdata,
 )
 
 fun enTilkjentYtelse(
