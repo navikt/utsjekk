@@ -32,7 +32,7 @@
         <mockk.version>1.13.12</mockk.version>
         <cucumber.version>7.18.1</cucumber.version>
         <nav.security.token.version>5.0.1</nav.security.token.version>
-        <unleash.version>9.2.3</unleash.version>
+        <unleash.version>9.2.4</unleash.version>
     </properties>
 
     <repositories>
