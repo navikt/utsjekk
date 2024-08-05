@@ -69,8 +69,9 @@ data class StønadsdataDagpenger(
                 }
         }
 
+    // TODO faktisk meldekortId må inn her når grensesnittet er utvidet
     override fun tilKjedenøkkel(): Kjedenøkkel =
-        KjedenøkkelMeldeplikt(klassifiseringskode = this.tilKlassifiseringDagpenger(), meldekortId = "test")
+        KjedenøkkelMeldeplikt(klassifiseringskode = this.tilKlassifiseringDagpenger(), meldekortId = "TODO")
 }
 
 data class StønadsdataTiltakspenger(
@@ -120,8 +121,9 @@ data class StønadsdataTiltakspenger(
             }
         }
 
+    // TODO faktisk meldekortId må inn her når grensesnittet er utvidet
     override fun tilKjedenøkkel(): Kjedenøkkel =
-        KjedenøkkelMeldeplikt(klassifiseringskode = this.tilKlassifiseringTiltakspenger(), meldekortId = "test")
+        KjedenøkkelMeldeplikt(klassifiseringskode = this.tilKlassifiseringTiltakspenger(), meldekortId = "TODO")
 }
 
 data class StønadsdataTilleggsstønader(
