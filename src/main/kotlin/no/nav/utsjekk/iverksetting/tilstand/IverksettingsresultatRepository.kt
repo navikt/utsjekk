@@ -1,7 +1,5 @@
 package no.nav.utsjekk.iverksetting.tilstand
 
-import no.nav.utsjekk.iverksetting.domene.GammelTilkjentYtelse
-import no.nav.utsjekk.iverksetting.domene.GammeltIverksettingsresultat
 import no.nav.utsjekk.iverksetting.domene.Iverksettingsresultat
 import no.nav.utsjekk.iverksetting.domene.OppdragResultat
 import no.nav.utsjekk.iverksetting.domene.TilkjentYtelse
@@ -126,12 +124,6 @@ class IverksettingsresultatRepository(
                     "and behandling_id = ? and iverksetting_id is null"
             jdbcTemplate.query(sql, IverksettingsresultatRowMapper(), fagsystem.name, sakId, behandlingId)
         }
-
-    fun hentGammelVersjon(): List<GammeltIverksettingsresultat> =
-        jdbcTemplate.query(
-            "select * from iverksettingsresultat",
-            GammelIverksettingsresultatRowMapper(),
-        )
 }
 
 internal class IverksettingsresultatRowMapper : RowMapper<Iverksettingsresultat> {
@@ -147,27 +139,6 @@ internal class IverksettingsresultatRowMapper : RowMapper<Iverksettingsresultat>
             tilkjentYtelseForUtbetaling =
                 resultSet.getString("tilkjentytelseforutbetaling")?.let {
                     objectMapper.readValue(it, TilkjentYtelse::class.java)
-                },
-            oppdragResultat =
-                resultSet
-                    .getString("oppdragresultat")
-                    ?.let { objectMapper.readValue(it, OppdragResultat::class.java) },
-        )
-}
-
-internal class GammelIverksettingsresultatRowMapper : RowMapper<GammeltIverksettingsresultat> {
-    override fun mapRow(
-        resultSet: ResultSet,
-        rowNum: Int,
-    ): GammeltIverksettingsresultat =
-        GammeltIverksettingsresultat(
-            fagsystem = Fagsystem.valueOf(resultSet.getString("fagsystem")),
-            sakId = resultSet.getString("sakId"),
-            behandlingId = resultSet.getString("behandling_id"),
-            iverksettingId = resultSet.getString("iverksetting_id"),
-            tilkjentYtelseForUtbetaling =
-                resultSet.getString("tilkjentytelseforutbetaling")?.let {
-                    objectMapper.readValue(it, GammelTilkjentYtelse::class.java)
                 },
             oppdragResultat =
                 resultSet

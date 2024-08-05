@@ -20,24 +20,3 @@ data class OppdragResultat(
     val oppdragStatus: OppdragStatus,
     val oppdragStatusOppdatert: LocalDateTime = LocalDateTime.now(),
 )
-
-data class GammeltIverksettingsresultat(
-    val fagsystem: Fagsystem,
-    val sakId: String,
-    val behandlingId: String,
-    val iverksettingId: String? = null,
-    @Column("tilkjentytelseforutbetaling")
-    val tilkjentYtelseForUtbetaling: GammelTilkjentYtelse? = null,
-    @Column("oppdragresultat")
-    val oppdragResultat: OppdragResultat? = null,
-) {
-    fun tilNy(): Iverksettingsresultat =
-        Iverksettingsresultat(
-            fagsystem = this.fagsystem,
-            sakId = this.sakId,
-            behandlingId = this.behandlingId,
-            iverksettingId = this.iverksettingId,
-            tilkjentYtelseForUtbetaling = this.tilkjentYtelseForUtbetaling?.tilNy(),
-            oppdragResultat = this.oppdragResultat,
-        )
-}

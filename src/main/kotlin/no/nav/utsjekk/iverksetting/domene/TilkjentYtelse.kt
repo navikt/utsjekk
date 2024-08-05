@@ -23,25 +23,3 @@ fun TilkjentYtelse?.lagAndelData(): List<AndelData> =
     this?.andelerTilkjentYtelse?.map {
         it.tilAndelData()
     } ?: emptyList()
-
-data class GammelTilkjentYtelse(
-    val id: String = RandomOSURId.generate(),
-    val utbetalingsoppdrag: Utbetalingsoppdrag? = null,
-    val andelerTilkjentYtelse: List<AndelTilkjentYtelse>,
-    val sisteAndelIKjede: AndelTilkjentYtelse? = null,
-    @JsonSerialize(keyUsing = StønadsdataKeySerializer::class)
-    @JsonDeserialize(keyUsing = StønadsdataKeyDeserializer::class)
-    val sisteAndelPerKjede: Map<Stønadsdata, AndelTilkjentYtelse> =
-        sisteAndelIKjede?.let {
-            mapOf(it.stønadsdata to it)
-        } ?: emptyMap(),
-) {
-    fun tilNy(): TilkjentYtelse =
-        TilkjentYtelse(
-            id = this.id,
-            utbetalingsoppdrag = this.utbetalingsoppdrag,
-            andelerTilkjentYtelse = this.andelerTilkjentYtelse,
-            sisteAndelIKjede = this.sisteAndelIKjede,
-            sisteAndelPerKjede = this.sisteAndelPerKjede.mapKeys { it.key.tilKjedenøkkel() },
-        )
-}
