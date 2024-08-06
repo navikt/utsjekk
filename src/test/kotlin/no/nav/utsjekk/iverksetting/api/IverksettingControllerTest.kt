@@ -9,6 +9,7 @@ import no.nav.utsjekk.iverksetting.featuretoggle.IverksettingErSkruddAvException
 import no.nav.utsjekk.iverksetting.task.IverksettMotOppdragTask
 import no.nav.utsjekk.iverksetting.util.enIverksettDto
 import no.nav.utsjekk.iverksetting.util.enIverksettTilleggsstønaderDto
+import no.nav.utsjekk.iverksetting.util.enIverksettV2Dto
 import no.nav.utsjekk.konfig.FeatureToggleMock
 import no.nav.utsjekk.kontrakter.felles.Fagsystem
 import no.nav.utsjekk.kontrakter.felles.Personident
@@ -22,6 +23,7 @@ import org.intellij.lang.annotations.Language
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.web.client.exchange
@@ -137,6 +139,38 @@ class IverksettingControllerTest : Integrasjonstest() {
 
         restTemplate.exchange<Unit>(
             localhostUrl("/api/iverksetting/tilleggsstonader"),
+            HttpMethod.POST,
+            HttpEntity(dto, headers),
+        ).also {
+            assertEquals(HttpStatus.ACCEPTED, it.statusCode)
+        }
+
+        kjørTasks()
+
+        restTemplate.exchange<IverksettStatus>(
+            localhostUrl("/api/iverksetting/${dto.sakId}/${dto.behandlingId}/${dto.iverksettingId}/status"),
+            HttpMethod.GET,
+            HttpEntity(null, headers),
+        ).also {
+            assertEquals(HttpStatus.OK, it.statusCode)
+            assertEquals(IverksettStatus.SENDT_TIL_OPPDRAG, it.body)
+        }
+    }
+
+    @Disabled
+    @Test
+    fun `start iverksetting v2 av tilleggsstønader`() {
+        settFagsystem(Fagsystem.TILLEGGSSTØNADER)
+
+        val dto =
+            enIverksettV2Dto(
+                behandlingId = behandlingId,
+                sakId = sakId,
+                iverksettingId = "en-iverksetting",
+            )
+
+        restTemplate.exchange<Unit>(
+            localhostUrl("/api/iverksetting/v2"),
             HttpMethod.POST,
             HttpEntity(dto, headers),
         ).also {

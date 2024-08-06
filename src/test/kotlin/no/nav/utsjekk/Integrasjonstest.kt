@@ -8,13 +8,15 @@ import no.nav.utsjekk.initializers.KafkaContainerInitializer
 import no.nav.utsjekk.util.TokenUtil
 import no.nav.security.mock.oauth2.MockOAuth2Server
 import no.nav.security.token.support.spring.test.EnableMockOAuth2Server
+import no.nav.utsjekk.kontrakter.felles.Fagsystem
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.test.util.TestPropertyValues
 import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.boot.test.web.server.LocalServerPort
-import org.springframework.context.ApplicationContext
+import org.springframework.context.ConfigurableApplicationContext
 import org.springframework.http.HttpHeaders
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
@@ -33,7 +35,7 @@ abstract class Integrasjonstest {
     protected val headers = HttpHeaders()
 
     @Autowired
-    private lateinit var applicationContext: ApplicationContext
+    private lateinit var applicationContext: ConfigurableApplicationContext
 
     @Autowired
     protected lateinit var namedParameterJdbcTemplate: NamedParameterJdbcTemplate
@@ -75,4 +77,10 @@ abstract class Integrasjonstest {
         accessAsApplication: Boolean,
         clientId: String = UUID.randomUUID().toString(),
     ) = TokenUtil.clientToken(mockOAuth2Server, accessAsApplication, clientId)
+
+    protected fun settFagsystem(fagsystem: Fagsystem) {
+        TestPropertyValues.of(
+            "konsumenter.${fagsystem.name.lowercase()}.apper=utsjekk"
+        ).applyTo(applicationContext.environment)
+    }
 }
