@@ -39,9 +39,16 @@ class ApiExceptionHandler : ResponseEntityExceptionHandler() {
     }
 
     private fun håndterDeserialiseringsfeil(exception: HttpMessageNotReadableException): ResponseEntity<Any> {
-        val message = (exception.rootCause as MismatchedInputException).let { cause ->
-            "Mangler påkrevd felt: ${cause.path.joinToString(".") { it.fieldName }}"
+        val message = when (exception.rootCause) {
+            is MismatchedInputException -> "Mangler påkrevd felt: ${
+                (exception.rootCause as MismatchedInputException).path
+                    .filter { it.fieldName != null }
+                    .joinToString(".") { it.fieldName }
+            }"
+            else -> "Klarte ikke deserialisere request"
         }
+
+        loggFeil(exception, HttpStatus.BAD_REQUEST)
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(objectMapper.writeValueAsString(message))
     }
 
