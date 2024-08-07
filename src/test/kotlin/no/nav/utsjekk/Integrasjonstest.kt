@@ -1,19 +1,17 @@
 package no.nav.utsjekk
 
 import com.github.tomakehurst.wiremock.WireMockServer
+import no.nav.security.mock.oauth2.MockOAuth2Server
+import no.nav.security.token.support.spring.test.EnableMockOAuth2Server
 import no.nav.utsjekk.felles.Profiler
 import no.nav.utsjekk.felles.oppdrag.konfig.RestTemplateAzure
 import no.nav.utsjekk.initializers.DbContainerInitializer
 import no.nav.utsjekk.initializers.KafkaContainerInitializer
 import no.nav.utsjekk.util.TokenUtil
-import no.nav.security.mock.oauth2.MockOAuth2Server
-import no.nav.security.token.support.spring.test.EnableMockOAuth2Server
-import no.nav.utsjekk.kontrakter.felles.Fagsystem
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.util.TestPropertyValues
 import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.context.ConfigurableApplicationContext
@@ -71,16 +69,22 @@ abstract class Integrasjonstest {
     protected fun lokalTestToken(
         saksbehandler: String = "julenissen",
         grupper: List<String> = emptyList(),
-    ) = TokenUtil.onBehalfOfToken(mockOAuth2Server, saksbehandler, grupper)
+        klientapp: String = "dev-gcp:tiltakspenger:tiltakspenger-utbetaling",
+    ) = TokenUtil.onBehalfOfToken(
+        mockOAuth2Server = mockOAuth2Server,
+        saksbehandler = saksbehandler,
+        grupper = grupper,
+        klientnavn = klientapp,
+    )
 
     protected fun lokalClientCredentialsTestToken(
         accessAsApplication: Boolean,
         clientId: String = UUID.randomUUID().toString(),
-    ) = TokenUtil.clientToken(mockOAuth2Server, accessAsApplication, clientId)
-
-    protected fun settFagsystem(fagsystem: Fagsystem) {
-        TestPropertyValues.of(
-            "konsumenter.${fagsystem.name.lowercase()}.apper=utsjekk"
-        ).applyTo(applicationContext.environment)
-    }
+        klientapp: String = "dev-gcp:tiltakspenger:tiltakspenger-utbetaling",
+    ) = TokenUtil.clientToken(
+        mockOAuth2Server = mockOAuth2Server,
+        accessAsApplication = accessAsApplication,
+        clientId = clientId,
+        klientnavn = klientapp,
+    )
 }

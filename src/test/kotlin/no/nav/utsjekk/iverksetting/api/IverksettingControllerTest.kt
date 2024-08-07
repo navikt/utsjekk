@@ -90,32 +90,33 @@ class IverksettingControllerTest : Integrasjonstest() {
     @Test
     fun `returnerer beskrivende feilmelding når jackson ikke greier å deserialisere request`() {
         @Language("JSON")
-        val payload = """
-{
-  "sakId": "1234",
-  "behandlingId": "1",
-  "personident": {
-    "verdi": "15507600333"
-  },
-  "vedtak": {
-    "vedtakstidspunkt": "2021-05-12T00:00:00",
-    "saksbehandlerId": "A12345",
-    "brukersNavKontor": null,
-    "utbetalinger": [
-      {
-        "beløpPerDag": 500,
-        "fraOgMedDato": "2021-01-01",
-        "tilOgMedDato": "2021-12-31",
-        "stønadsdata": {
-          "stønadstype": "DAGPENGER_ARBEIDSSØKER_ORDINÆR",
-          "ferietillegg": null
-        }
-      }
-    ]
-  },
-  "forrigeIverksetting": null
-}
-        """.trimIndent()
+        val payload =
+            """
+            {
+              "sakId": "1234",
+              "behandlingId": "1",
+              "personident": {
+                "verdi": "15507600333"
+              },
+              "vedtak": {
+                "vedtakstidspunkt": "2021-05-12T00:00:00",
+                "saksbehandlerId": "A12345",
+                "brukersNavKontor": null,
+                "utbetalinger": [
+                  {
+                    "beløpPerDag": 500,
+                    "fraOgMedDato": "2021-01-01",
+                    "tilOgMedDato": "2021-12-31",
+                    "stønadsdata": {
+                      "stønadstype": "DAGPENGER_ARBEIDSSØKER_ORDINÆR",
+                      "ferietillegg": null
+                    }
+                  }
+                ]
+              },
+              "forrigeIverksetting": null
+            }
+            """.trimIndent()
 
         val respons: ResponseEntity<Any> =
             restTemplate.exchange(
@@ -137,30 +138,32 @@ class IverksettingControllerTest : Integrasjonstest() {
                 iverksettingId = "en-iverksetting",
             )
 
-        restTemplate.exchange<Unit>(
-            localhostUrl("/api/iverksetting/tilleggsstonader"),
-            HttpMethod.POST,
-            HttpEntity(dto, headers),
-        ).also {
-            assertEquals(HttpStatus.ACCEPTED, it.statusCode)
-        }
+        restTemplate
+            .exchange<Unit>(
+                localhostUrl("/api/iverksetting/tilleggsstonader"),
+                HttpMethod.POST,
+                HttpEntity(dto, headers),
+            ).also {
+                assertEquals(HttpStatus.ACCEPTED, it.statusCode)
+            }
 
         kjørTasks()
 
-        restTemplate.exchange<IverksettStatus>(
-            localhostUrl("/api/iverksetting/${dto.sakId}/${dto.behandlingId}/${dto.iverksettingId}/status"),
-            HttpMethod.GET,
-            HttpEntity(null, headers),
-        ).also {
-            assertEquals(HttpStatus.OK, it.statusCode)
-            assertEquals(IverksettStatus.SENDT_TIL_OPPDRAG, it.body)
-        }
+        restTemplate
+            .exchange<IverksettStatus>(
+                localhostUrl("/api/iverksetting/${dto.sakId}/${dto.behandlingId}/${dto.iverksettingId}/status"),
+                HttpMethod.GET,
+                HttpEntity(null, headers),
+            ).also {
+                assertEquals(HttpStatus.OK, it.statusCode)
+                assertEquals(IverksettStatus.SENDT_TIL_OPPDRAG, it.body)
+            }
     }
 
     @Disabled
     @Test
     fun `start iverksetting v2 av tilleggsstønader`() {
-        settFagsystem(Fagsystem.TILLEGGSSTØNADER)
+        headers.setBearerAuth(lokalTestToken(klientapp = "dev-gcp:tilleggsstonader:tilleggsstonader-sak"))
 
         val dto =
             enIverksettV2Dto(
@@ -169,28 +172,30 @@ class IverksettingControllerTest : Integrasjonstest() {
                 iverksettingId = "en-iverksetting",
             )
 
-        restTemplate.exchange<Unit>(
-            localhostUrl("/api/iverksetting/v2"),
-            HttpMethod.POST,
-            HttpEntity(dto, headers),
-        ).also {
-            assertEquals(HttpStatus.ACCEPTED, it.statusCode)
-        }
+        restTemplate
+            .exchange<Unit>(
+                localhostUrl("/api/iverksetting/v2"),
+                HttpMethod.POST,
+                HttpEntity(dto, headers),
+            ).also {
+                assertEquals(HttpStatus.ACCEPTED, it.statusCode)
+            }
 
         kjørTasks()
 
-        restTemplate.exchange<IverksettStatus>(
-            localhostUrl("/api/iverksetting/${dto.sakId}/${dto.behandlingId}/${dto.iverksettingId}/status"),
-            HttpMethod.GET,
-            HttpEntity(null, headers),
-        ).also {
-            assertEquals(HttpStatus.OK, it.statusCode)
-            assertEquals(IverksettStatus.SENDT_TIL_OPPDRAG, it.body)
-        }
+        restTemplate
+            .exchange<IverksettStatus>(
+                localhostUrl("/api/iverksetting/${dto.sakId}/${dto.behandlingId}/${dto.iverksettingId}/status"),
+                HttpMethod.GET,
+                HttpEntity(null, headers),
+            ).also {
+                assertEquals(HttpStatus.OK, it.statusCode)
+                assertEquals(IverksettStatus.SENDT_TIL_OPPDRAG, it.body)
+            }
     }
 
     @Test
-    fun `start iverksetting av rammevedtak uten utbetaling`() {
+    fun `start iverksetting av vedtak uten utbetaling`() {
         val dto =
             IverksettDto(
                 behandlingId = behandlingId,
@@ -206,28 +211,30 @@ class IverksettingControllerTest : Integrasjonstest() {
                     ),
             )
 
-        restTemplate.exchange<Unit>(
-            localhostUrl("/api/iverksetting"),
-            HttpMethod.POST,
-            HttpEntity(dto, headers),
-        ).also {
-            assertEquals(HttpStatus.ACCEPTED, it.statusCode)
-        }
+        restTemplate
+            .exchange<Unit>(
+                localhostUrl("/api/iverksetting"),
+                HttpMethod.POST,
+                HttpEntity(dto, headers),
+            ).also {
+                assertEquals(HttpStatus.ACCEPTED, it.statusCode)
+            }
 
         kjørTasks()
 
-        restTemplate.exchange<IverksettStatus>(
-            localhostUrl("/api/iverksetting/$sakId/$behandlingId/status"),
-            HttpMethod.GET,
-            HttpEntity(null, headers),
-        ).also {
-            assertEquals(HttpStatus.OK, it.statusCode)
-            assertEquals(IverksettStatus.OK_UTEN_UTBETALING, it.body)
-        }
+        restTemplate
+            .exchange<IverksettStatus>(
+                localhostUrl("/api/iverksetting/$sakId/$behandlingId/status"),
+                HttpMethod.GET,
+                HttpEntity(null, headers),
+            ).also {
+                assertEquals(HttpStatus.OK, it.statusCode)
+                assertEquals(IverksettStatus.OK_UTEN_UTBETALING, it.body)
+            }
     }
 
     @Test
-    fun `start iverksetting av rammevedtak for tilleggsstønader uten utbetaling`() {
+    fun `start iverksetting av vedtak for tilleggsstønader uten utbetaling`() {
         val behandlingId = RandomOSURId.generate()
         val sakId = RandomOSURId.generate()
         val iverksettingId = "c2502e75-6e78-40fa-9124-6549341855b4"
@@ -247,24 +254,26 @@ class IverksettingControllerTest : Integrasjonstest() {
                 iverksettingId = iverksettingId,
             )
 
-        restTemplate.exchange<Unit>(
-            localhostUrl("/api/iverksetting/tilleggsstonader"),
-            HttpMethod.POST,
-            HttpEntity(dto, headers),
-        ).also {
-            assertEquals(HttpStatus.ACCEPTED, it.statusCode)
-        }
+        restTemplate
+            .exchange<Unit>(
+                localhostUrl("/api/iverksetting/tilleggsstonader"),
+                HttpMethod.POST,
+                HttpEntity(dto, headers),
+            ).also {
+                assertEquals(HttpStatus.ACCEPTED, it.statusCode)
+            }
 
         kjørTasks()
 
-        restTemplate.exchange<IverksettStatus>(
-            localhostUrl("/api/iverksetting/$sakId/$behandlingId/$iverksettingId/status"),
-            HttpMethod.GET,
-            HttpEntity(null, headers),
-        ).also {
-            assertEquals(HttpStatus.OK, it.statusCode)
-            assertEquals(IverksettStatus.OK_UTEN_UTBETALING, it.body)
-        }
+        restTemplate
+            .exchange<IverksettStatus>(
+                localhostUrl("/api/iverksetting/$sakId/$behandlingId/$iverksettingId/status"),
+                HttpMethod.GET,
+                HttpEntity(null, headers),
+            ).also {
+                assertEquals(HttpStatus.OK, it.statusCode)
+                assertEquals(IverksettStatus.OK_UTEN_UTBETALING, it.body)
+            }
     }
 
     private fun kjørTasks() {

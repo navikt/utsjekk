@@ -23,18 +23,20 @@ object TokenUtil {
                 "groups" to grupper,
             )
 
-        return mockOAuth2Server.issueToken(
-            issuerId = "azuread",
-            subject = thisId,
-            audience = "aud-localhost",
-            claims = claims,
-        ).serialize()
+        return mockOAuth2Server
+            .issueToken(
+                issuerId = "azuread",
+                subject = thisId,
+                audience = "aud-localhost",
+                claims = claims,
+            ).serialize()
     }
 
     fun clientToken(
         mockOAuth2Server: MockOAuth2Server,
         accessAsApplication: Boolean,
         clientId: String,
+        klientnavn: String = "dev-gcp:tiltakspenger:tiltakspenger-utbetaling",
     ): String {
         val thisId = UUID.randomUUID().toString()
 
@@ -42,14 +44,16 @@ object TokenUtil {
             mapOf(
                 "oid" to thisId,
                 "azp" to clientId,
+                "azp_name" to klientnavn,
                 "roles" to if (accessAsApplication) listOf("access_as_application") else emptyList(),
             )
 
-        return mockOAuth2Server.issueToken(
-            issuerId = "azuread",
-            subject = thisId,
-            audience = "aud-localhost",
-            claims = claims,
-        ).serialize()
+        return mockOAuth2Server
+            .issueToken(
+                issuerId = "azuread",
+                subject = thisId,
+                audience = "aud-localhost",
+                claims = claims,
+            ).serialize()
     }
 }
