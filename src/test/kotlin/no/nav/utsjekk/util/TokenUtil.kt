@@ -7,8 +7,8 @@ object TokenUtil {
     fun onBehalfOfToken(
         mockOAuth2Server: MockOAuth2Server,
         saksbehandler: String,
-        grupper: List<String> = emptyList(),
-        klientnavn: String = "dev-gcp:tiltakspenger:tiltakspenger-utbetaling",
+        grupper: List<String>,
+        klientnavn: String,
     ): String {
         val thisId = UUID.randomUUID().toString()
         val clientId = UUID.randomUUID().toString()
@@ -36,7 +36,7 @@ object TokenUtil {
         mockOAuth2Server: MockOAuth2Server,
         accessAsApplication: Boolean,
         clientId: String,
-        klientnavn: String = "dev-gcp:tiltakspenger:tiltakspenger-utbetaling",
+        klientnavn: String,
     ): String {
         val thisId = UUID.randomUUID().toString()
 
