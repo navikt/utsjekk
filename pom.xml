@@ -26,7 +26,7 @@
 
         <!-- Versjoner -->
         <utsjekk-kontrakter.version>1.0_20240806133347_fac03ce</utsjekk-kontrakter.version>
-        <springdoc.version>2.6.0</springdoc.version>
+        <springdoc.version>2.5.0</springdoc.version>
         <prosessering.version>2.20240603145215_c56e179</prosessering.version>
         <maven-surefire-plugin.version>3.3.1</maven-surefire-plugin.version>
         <mockk.version>1.13.12</mockk.version>
