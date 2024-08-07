@@ -51,7 +51,9 @@ object IverksettV2DtoMapper {
     private fun IverksettV2Dto.tilBehandling(): Behandlingsdetaljer =
         Behandlingsdetaljer(
             behandlingId = this.behandlingId,
+            iverksettingId = this.iverksettingId,
             forrigeBehandlingId = this.forrigeIverksetting?.behandlingId,
+            forrigeIverksettingId = this.forrigeIverksetting?.iverksettingId,
         )
 
     private fun List<UtbetalingV2Dto>.tilTilkjentYtelse(): TilkjentYtelse =

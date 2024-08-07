@@ -23,7 +23,6 @@ import org.intellij.lang.annotations.Language
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.web.client.exchange
@@ -160,7 +159,6 @@ class IverksettingControllerTest : Integrasjonstest() {
             }
     }
 
-    @Disabled
     @Test
     fun `start iverksetting v2 av tilleggsstønader`() {
         headers.setBearerAuth(lokalTestToken(klientapp = "dev-gcp:tilleggsstonader:tilleggsstonader-sak"))
