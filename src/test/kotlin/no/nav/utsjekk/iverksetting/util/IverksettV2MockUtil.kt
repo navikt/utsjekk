@@ -4,6 +4,7 @@ import no.nav.utsjekk.kontrakter.felles.Personident
 import no.nav.utsjekk.kontrakter.felles.Satstype
 import no.nav.utsjekk.kontrakter.felles.StønadTypeTilleggsstønader
 import no.nav.utsjekk.kontrakter.iverksett.IverksettV2Dto
+import no.nav.utsjekk.kontrakter.iverksett.StønadsdataDto
 import no.nav.utsjekk.kontrakter.iverksett.StønadsdataTilleggsstønaderDto
 import no.nav.utsjekk.kontrakter.iverksett.UtbetalingV2Dto
 import no.nav.utsjekk.kontrakter.iverksett.VedtaksdetaljerV2Dto
@@ -37,10 +38,11 @@ fun enUtbetalingV2Dto(
     beløp: UInt,
     fraOgMed: LocalDate = LocalDate.of(2024, 1, 1),
     tilOgMed: LocalDate = LocalDate.of(2024, 1, 31),
+    stønadsdata: StønadsdataDto = StønadsdataTilleggsstønaderDto(StønadTypeTilleggsstønader.TILSYN_BARN_ENSLIG_FORSØRGER),
 ) = UtbetalingV2Dto(
     beløp = beløp,
     satstype = Satstype.MÅNEDLIG,
     fraOgMedDato = fraOgMed,
     tilOgMedDato = tilOgMed,
-    stønadsdata = StønadsdataTilleggsstønaderDto(StønadTypeTilleggsstønader.TILSYN_BARN_ENSLIG_FORSØRGER),
+    stønadsdata = stønadsdata,
 )

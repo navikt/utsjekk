@@ -1,10 +1,13 @@
 package no.nav.utsjekk.simulering.api
 
 import no.nav.utsjekk.Integrasjonstest
+import no.nav.utsjekk.iverksetting.util.enUtbetalingV2Dto
 import no.nav.utsjekk.kontrakter.felles.Personident
 import no.nav.utsjekk.kontrakter.felles.Satstype
 import no.nav.utsjekk.kontrakter.felles.StønadTypeTilleggsstønader
+import no.nav.utsjekk.kontrakter.felles.StønadTypeTiltakspenger
 import no.nav.utsjekk.kontrakter.iverksett.ForrigeIverksettingTilleggsstønaderDto
+import no.nav.utsjekk.kontrakter.iverksett.StønadsdataTiltakspengerV2Dto
 import no.nav.utsjekk.kontrakter.iverksett.UtbetalingTilleggsstønaderDto
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
@@ -82,5 +85,37 @@ class SimuleringControllerTest : Integrasjonstest() {
             )
 
         assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, respons.statusCode)
+    }
+
+    @Test
+    fun `Simulerer for tiltakspenger`() {
+        val body =
+            SimuleringRequestV2Dto(
+                sakId = "en-sakid",
+                behandlingId = "en-behandlingId",
+                personident = Personident("15507600333"),
+                saksbehandlerId = "A123456",
+                utbetalinger = listOf(
+                    enUtbetalingV2Dto(
+                        beløp = 100u,
+                        fraOgMed = LocalDate.of(2020, 1, 1),
+                        tilOgMed = LocalDate.of(2020, 1, 31),
+                        stønadsdata = StønadsdataTiltakspengerV2Dto(
+                            StønadTypeTiltakspenger.ARBEIDSTRENING,
+                            false,
+                            "4400"
+                        )
+                    )
+                ),
+            )
+
+        val respons: ResponseEntity<Any> =
+            restTemplate.exchange(
+                localhostUrl("/api/simulering/v2"),
+                HttpMethod.POST,
+                HttpEntity(body, headers),
+            )
+
+        assertEquals(HttpStatus.OK, respons.statusCode)
     }
 }

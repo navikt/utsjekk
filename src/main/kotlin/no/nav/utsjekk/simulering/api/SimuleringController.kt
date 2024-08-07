@@ -1,10 +1,8 @@
 package no.nav.utsjekk.simulering.api
 
 import no.nav.security.token.support.core.api.ProtectedWithClaims
-import no.nav.utsjekk.felles.http.advice.ApiFeil
 import no.nav.utsjekk.iverksetting.api.TokenContext
 import no.nav.utsjekk.iverksetting.domene.KonsumentConfig
-import no.nav.utsjekk.kontrakter.felles.objectMapper
 import no.nav.utsjekk.simulering.SimuleringService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -29,16 +27,16 @@ class SimuleringController(
         ResponseEntity.ok(respons)
     }
 
-    @PostMapping
+    @PostMapping("/v2")
     fun hentSimulering(
-        @RequestBody requestDto: SimuleringRequestDto,
+        @RequestBody requestDto: SimuleringRequestV2Dto,
     ) = catchSimuleringsfeil {
         val fagsystem = konsumentConfig.finnFagsystem(TokenContext.hentKlientnavn())
         val respons = simuleringService.hentSimuleringsresultatMedOppsummering(requestDto.tilInterntFormat(fagsystem))
         ResponseEntity.ok(respons)
     }
 
-    private fun <T>catchSimuleringsfeil(block: () -> T) = try {
+    private fun <T> catchSimuleringsfeil(block: () -> T) = try {
         block.invoke()
     } catch (e: HttpClientErrorException) {
         when (e.statusCode) {

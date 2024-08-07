@@ -56,7 +56,7 @@ object IverksettV2DtoMapper {
             forrigeIverksettingId = this.forrigeIverksetting?.iverksettingId,
         )
 
-    private fun List<UtbetalingV2Dto>.tilTilkjentYtelse(): TilkjentYtelse =
+    internal fun List<UtbetalingV2Dto>.tilTilkjentYtelse(): TilkjentYtelse =
         TilkjentYtelse(andelerTilkjentYtelse = this.map { it.tilAndel() })
 
     private fun UtbetalingV2Dto.tilAndel(): AndelTilkjentYtelse =
