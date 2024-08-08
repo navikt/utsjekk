@@ -140,24 +140,3 @@ data class StønadsdataTilleggsstønader(
 
     override fun tilKjedenøkkel(): Kjedenøkkel = KjedenøkkelStandard(klassifiseringskode = this.tilKlassifiseringTilleggsstønader())
 }
-
-class StønadsdataKeySerializer : JsonSerializer<Stønadsdata>() {
-    override fun serialize(
-        value: Stønadsdata?,
-        gen: JsonGenerator?,
-        serializers: SerializerProvider?,
-    ) {
-        gen?.let { jGen ->
-            value?.let { stønadsdata ->
-                jGen.writeFieldName(objectMapper.writeValueAsString(stønadsdata))
-            } ?: jGen.writeNull()
-        }
-    }
-}
-
-class StønadsdataKeyDeserializer : KeyDeserializer() {
-    override fun deserializeKey(
-        key: String?,
-        ctx: DeserializationContext?,
-    ): Stønadsdata? = key?.let { objectMapper.readValue(key, Stønadsdata::class.java) }
-}
