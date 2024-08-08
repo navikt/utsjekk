@@ -26,8 +26,7 @@ class IverksettDtoMapper(val konsumentConfig: KonsumentConfig) {
             vedtakstidspunkt = this.vedtakstidspunkt,
             saksbehandlerId = this.saksbehandlerId,
             beslutterId = this.beslutterId,
-            brukersNavKontor = this.brukersNavKontor,
-            tilkjentYtelse = this.utbetalinger.tilTilkjentYtelse(),
+            tilkjentYtelse = this.utbetalinger.tilTilkjentYtelse(this.brukersNavKontor?.enhet),
         )
 
     private fun IverksettDto.tilFagsak() =

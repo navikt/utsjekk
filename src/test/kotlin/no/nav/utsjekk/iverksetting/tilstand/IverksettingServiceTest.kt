@@ -21,6 +21,7 @@ import no.nav.utsjekk.iverksetting.util.etTomtUtbetalingsoppdrag
 import no.nav.utsjekk.iverksetting.util.lagIverksettingEntitet
 import no.nav.utsjekk.iverksetting.util.mockFeatureToggleService
 import no.nav.utsjekk.konfig.FeatureToggleMock
+import no.nav.utsjekk.kontrakter.felles.BrukersNavKontor
 import no.nav.utsjekk.kontrakter.felles.Fagsystem
 import no.nav.utsjekk.kontrakter.felles.StønadTypeTiltakspenger
 import no.nav.utsjekk.kontrakter.iverksett.IverksettStatus
@@ -182,7 +183,7 @@ internal class IverksettingServiceTest {
                 any(),
             )
         } returns
-            resultat
+                resultat
 
         val status =
             iverksettingService.utledStatus(
@@ -202,11 +203,11 @@ internal class IverksettingServiceTest {
             etIverksettingsresultat(
                 behandlingId = behandlingId,
                 tilkjentYtelse =
-                    enTilkjentYtelse(
-                        behandlingId = behandlingId,
-                        andeler = emptyList(),
-                        utbetalingsoppdrag = etTomtUtbetalingsoppdrag(),
-                    ),
+                enTilkjentYtelse(
+                    behandlingId = behandlingId,
+                    andeler = emptyList(),
+                    utbetalingsoppdrag = etTomtUtbetalingsoppdrag(),
+                ),
                 oppdragResultat = OppdragResultat(OppdragStatus.OK_UTEN_UTBETALING),
             )
 
@@ -218,7 +219,7 @@ internal class IverksettingServiceTest {
                 any(),
             )
         } returns
-            resultat
+                resultat
 
         val status =
             iverksettingService.utledStatus(
@@ -325,9 +326,14 @@ internal class IverksettingServiceTest {
             enIverksetting(
                 behandlingId = behandlingId,
                 andeler =
-                    listOf(
-                        enAndelTilkjentYtelse(stønadsdata = StønadsdataTiltakspenger(stønadstype = StønadTypeTiltakspenger.JOBBKLUBB)),
+                listOf(
+                    enAndelTilkjentYtelse(
+                        stønadsdata = StønadsdataTiltakspenger(
+                            stønadstype = StønadTypeTiltakspenger.JOBBKLUBB,
+                            brukersNavKontor = BrukersNavKontor("4400")
+                        )
                     ),
+                ),
             )
 
         every {
@@ -337,10 +343,10 @@ internal class IverksettingServiceTest {
                 iverksettingId = null,
             )
         } returns
-            listOf(
-                IverksettingEntitet(behandlingId, iverksettingDagpenger, LocalDateTime.now()),
-                IverksettingEntitet(behandlingId, iverksettingTiltakspenger, LocalDateTime.now()),
-            )
+                listOf(
+                    IverksettingEntitet(behandlingId, iverksettingDagpenger, LocalDateTime.now()),
+                    IverksettingEntitet(behandlingId, iverksettingTiltakspenger, LocalDateTime.now()),
+                )
 
         val hentetIverksettingTiltakspenger =
             iverksettingService.hentIverksetting(
@@ -376,9 +382,9 @@ internal class IverksettingServiceTest {
                 iverksettingId = null,
             )
         } returns
-            listOf(
-                IverksettingEntitet(behandlingId, iverksettingSak1, LocalDateTime.now()),
-            )
+                listOf(
+                    IverksettingEntitet(behandlingId, iverksettingSak1, LocalDateTime.now()),
+                )
         every {
             iverksettingRepository.findByFagsakAndBehandlingAndIverksetting(
                 fagsakId = sakId2,
@@ -386,9 +392,9 @@ internal class IverksettingServiceTest {
                 iverksettingId = null,
             )
         } returns
-            listOf(
-                IverksettingEntitet(behandlingId, iverksettingSak2, LocalDateTime.now()),
-            )
+                listOf(
+                    IverksettingEntitet(behandlingId, iverksettingSak2, LocalDateTime.now()),
+                )
 
         val hentetIverksettingSak1 =
             iverksettingService.hentIverksetting(
@@ -421,11 +427,11 @@ internal class IverksettingServiceTest {
                 mottattTidspunkt = LocalDateTime.now().minusDays(1),
             )
         every { iverksettingRepository.findByFagsakIdAndFagsystem(sakId, fagsystem) } returns
-            listOf(
-                nyesteIverksetting,
-                eldsteIverksetting,
-                mellomsteIverksetting,
-            )
+                listOf(
+                    nyesteIverksetting,
+                    eldsteIverksetting,
+                    mellomsteIverksetting,
+                )
 
         val sisteMottatteIverksetting =
             iverksettingService.hentSisteMottatteIverksetting(enIverksetting(sakId = sakId, fagsystem = fagsystem))
@@ -437,10 +443,10 @@ internal class IverksettingServiceTest {
     @Test
     fun `sjekkStatusOgOppdraterTilstand skal ikke kaste exception ved feilkvittering`() {
         every { oppdragClient.hentStatus(any()) } returns
-            OppdragStatusDto(
-                status = OppdragStatus.KVITTERT_FUNKSJONELL_FEIL,
-                feilmelding = "Funksjonell feil",
-            )
+                OppdragStatusDto(
+                    status = OppdragStatus.KVITTERT_FUNKSJONELL_FEIL,
+                    feilmelding = "Funksjonell feil",
+                )
         every { iverksettingsresultatService.oppdaterOppdragResultat(any(), any(), any(), any(), any()) } just runs
         every {
             iverksettingsresultatService.hentIverksettingsresultat(
@@ -458,10 +464,10 @@ internal class IverksettingServiceTest {
     @Test
     fun `sjekkStatusOgOppdraterTilstand skal kaste exception ved manglende kvittering`() {
         every { oppdragClient.hentStatus(any()) } returns
-            OppdragStatusDto(
-                status = OppdragStatus.LAGT_PÅ_KØ,
-                feilmelding = null,
-            )
+                OppdragStatusDto(
+                    status = OppdragStatus.LAGT_PÅ_KØ,
+                    feilmelding = null,
+                )
 
         assertThrows<TaskExceptionUtenStackTrace> {
             iverksettingService.sjekkStatusPåIverksettOgOppdaterTilstand(

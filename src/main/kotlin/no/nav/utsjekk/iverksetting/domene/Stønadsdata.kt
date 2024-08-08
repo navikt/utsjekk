@@ -77,6 +77,7 @@ data class StønadsdataDagpenger(
 data class StønadsdataTiltakspenger(
     override val stønadstype: StønadTypeTiltakspenger,
     val barnetillegg: Boolean = false,
+    val brukersNavKontor: BrukersNavKontor,
 ) : Stønadsdata(stønadstype) {
     fun tilKlassifiseringTiltakspenger(): String =
         if (barnetillegg) {

@@ -5,6 +5,7 @@ import no.nav.utsjekk.iverksetting.domene.StønadsdataTiltakspenger
 import no.nav.utsjekk.iverksetting.domene.transformer.RandomOSURId
 import no.nav.utsjekk.iverksetting.utbetalingsoppdrag.domene.AndelData
 import no.nav.utsjekk.iverksetting.utbetalingsoppdrag.domene.Behandlingsinformasjon
+import no.nav.utsjekk.kontrakter.felles.BrukersNavKontor
 import no.nav.utsjekk.kontrakter.felles.Fagsystem
 import no.nav.utsjekk.kontrakter.felles.StønadTypeDagpenger
 import no.nav.utsjekk.kontrakter.felles.StønadTypeTiltakspenger
@@ -38,7 +39,14 @@ class UtbetalingsgeneratorTest {
     @Test
     fun `utbetaling for tiltakspenger skal ha fagsystem tiltakspenger`() {
         val nyeAndeler =
-            listOf(basisAndelData.copy(stønadsdata = StønadsdataTiltakspenger(StønadTypeTiltakspenger.JOBBKLUBB)))
+            listOf(
+                basisAndelData.copy(
+                    stønadsdata = StønadsdataTiltakspenger(
+                        stønadstype = StønadTypeTiltakspenger.JOBBKLUBB,
+                        brukersNavKontor = BrukersNavKontor("4400")
+                    )
+                )
+            )
         val behandlingsinformasjonTiltakspenger = behandlingsinformasjon.copy(fagsystem = Fagsystem.TILTAKSPENGER)
 
         val beregnetUtbetalingsoppdrag =
@@ -61,9 +69,9 @@ class UtbetalingsgeneratorTest {
                 nyeAndeler = emptyList(),
                 forrigeAndeler = listOf(forrigeAndel),
                 sisteAndelPerKjede =
-                    mapOf(
-                        StønadsdataDagpenger(StønadTypeDagpenger.DAGPENGER_ARBEIDSSØKER_ORDINÆR).tilKjedenøkkel() to forrigeAndel,
-                    ),
+                mapOf(
+                    StønadsdataDagpenger(StønadTypeDagpenger.DAGPENGER_ARBEIDSSØKER_ORDINÆR).tilKjedenøkkel() to forrigeAndel,
+                ),
             )
 
         assertEquals(Fagsystem.DAGPENGER, beregnetUtbetalingsoppdrag.utbetalingsoppdrag.fagsystem)

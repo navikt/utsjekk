@@ -25,6 +25,7 @@ import no.nav.utsjekk.iverksetting.utbetalingsoppdrag.domene.AndelMedPeriodeId
 import no.nav.utsjekk.iverksetting.utbetalingsoppdrag.domene.Behandlingsinformasjon
 import no.nav.utsjekk.iverksetting.utbetalingsoppdrag.domene.BeregnetUtbetalingsoppdrag
 import no.nav.utsjekk.iverksetting.utbetalingsoppdrag.domene.uten0beløp
+import no.nav.utsjekk.kontrakter.felles.BrukersNavKontor
 import no.nav.utsjekk.kontrakter.felles.Fagsystem
 import no.nav.utsjekk.kontrakter.felles.StønadTypeDagpenger
 import no.nav.utsjekk.kontrakter.felles.StønadTypeTiltakspenger
@@ -255,7 +256,11 @@ private fun assertUtbetalingsperiode(
         if (forventetUtbetalingsperiode.ytelse is StønadTypeDagpenger) {
             StønadsdataDagpenger(forventetUtbetalingsperiode.ytelse)
         } else {
-            StønadsdataTiltakspenger(forventetUtbetalingsperiode.ytelse as StønadTypeTiltakspenger, false)
+            StønadsdataTiltakspenger(
+                stønadstype = forventetUtbetalingsperiode.ytelse as StønadTypeTiltakspenger,
+                barnetillegg = false,
+                brukersNavKontor = BrukersNavKontor("4400")
+            )
         }
 
     assertEquals(

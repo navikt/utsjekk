@@ -1,6 +1,5 @@
 package no.nav.utsjekk.iverksetting.domene
 
-import no.nav.utsjekk.kontrakter.felles.BrukersNavKontor
 import no.nav.utsjekk.kontrakter.felles.Fagsystem
 import java.time.LocalDateTime
 
@@ -27,7 +26,6 @@ data class Vedtaksdetaljer(
     val vedtakstidspunkt: LocalDateTime,
     val saksbehandlerId: String,
     val beslutterId: String,
-    val brukersNavKontor: BrukersNavKontor? = null,
     val tilkjentYtelse: TilkjentYtelse,
 )
 

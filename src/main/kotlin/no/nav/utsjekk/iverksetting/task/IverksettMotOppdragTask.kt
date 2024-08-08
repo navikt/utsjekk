@@ -11,6 +11,8 @@ import no.nav.utsjekk.iverksetting.domene.Iverksetting
 import no.nav.utsjekk.iverksetting.domene.Iverksettingsresultat
 import no.nav.utsjekk.iverksetting.domene.Kjedenøkkel
 import no.nav.utsjekk.iverksetting.domene.OppdragResultat
+import no.nav.utsjekk.iverksetting.domene.StønadsdataTilleggsstønader
+import no.nav.utsjekk.iverksetting.domene.StønadsdataTiltakspenger
 import no.nav.utsjekk.iverksetting.domene.TilkjentYtelse
 import no.nav.utsjekk.iverksetting.domene.behandlingId
 import no.nav.utsjekk.iverksetting.domene.lagAndelData
@@ -22,6 +24,7 @@ import no.nav.utsjekk.iverksetting.tilstand.IverksettingsresultatService
 import no.nav.utsjekk.iverksetting.utbetalingsoppdrag.Utbetalingsgenerator
 import no.nav.utsjekk.iverksetting.utbetalingsoppdrag.domene.Behandlingsinformasjon
 import no.nav.utsjekk.iverksetting.utbetalingsoppdrag.domene.BeregnetUtbetalingsoppdrag
+import no.nav.utsjekk.kontrakter.felles.BrukersNavKontor
 import no.nav.utsjekk.kontrakter.felles.Fagsystem
 import no.nav.utsjekk.kontrakter.felles.objectMapper
 import no.nav.utsjekk.kontrakter.oppdrag.OppdragStatus
@@ -54,7 +57,7 @@ class IverksettMotOppdragTask(
             )
                 ?: error(
                     "Fant ikke iverksetting for fagsystem ${payload.fagsystem}, behandling ${payload.behandlingId}" +
-                        " og iverksettingId ${payload.iverksettingId}",
+                            " og iverksettingId ${payload.iverksettingId}",
                 )
 
         val forrigeIverksettResultat =
@@ -111,7 +114,7 @@ class IverksettMotOppdragTask(
                 fagsakId = iverksetting.sakId,
                 behandlingId = iverksetting.behandlingId,
                 personident = iverksetting.personident,
-                brukersNavKontor = iverksetting.vedtak.brukersNavKontor,
+                brukersNavKontor = iverksetting.vedtak.tilkjentYtelse.andelerTilkjentYtelse.finnBrukersNavKontor(),
                 vedtaksdato = iverksetting.vedtak.vedtakstidspunkt.toLocalDate(),
                 iverksettingId = iverksetting.behandling.iverksettingId,
             )
@@ -231,5 +234,13 @@ class IverksettMotOppdragTask(
 
     companion object {
         const val TYPE = "utførIverksettingAvUtbetaling"
+    }
+}
+
+private fun List<AndelTilkjentYtelse>.finnBrukersNavKontor(): BrukersNavKontor? = firstNotNullOfOrNull {
+    when (it.stønadsdata) {
+        is StønadsdataTilleggsstønader -> it.stønadsdata.brukersNavKontor
+        is StønadsdataTiltakspenger -> it.stønadsdata.brukersNavKontor
+        else -> null
     }
 }

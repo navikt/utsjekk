@@ -83,9 +83,16 @@ private fun StønadsdataTilleggsstønaderDto.tilDomene(): StønadsdataTilleggsst
         brukersNavKontor = this.brukersNavKontor?.let { BrukersNavKontor(enhet = it) },
     )
 
-// TODO Må legge til brukersNavKontor på intern Stønadsdata-klasse. Denne skal så inn på toppnivå i Utbetalingsoppdraget, så må plukke ut feks. første frem til vi støtter endringer
 private fun StønadsdataTiltakspengerV2Dto.tilDomene(): StønadsdataTiltakspenger =
-    StønadsdataTiltakspenger(stønadstype = this.stønadstype, barnetillegg = this.barnetillegg)
+    StønadsdataTiltakspenger(
+        stønadstype = this.stønadstype,
+        barnetillegg = this.barnetillegg,
+        brukersNavKontor = BrukersNavKontor(enhet = this.brukersNavKontor)
+    )
 
 private fun StønadsdataTiltakspengerDto.tilDomene(): StønadsdataTiltakspenger =
-    StønadsdataTiltakspenger(stønadstype = this.stønadstype, barnetillegg = this.barnetillegg)
+    StønadsdataTiltakspenger(
+        stønadstype = this.stønadstype,
+        barnetillegg = this.barnetillegg,
+        brukersNavKontor = BrukersNavKontor(enhet = "DENNE_SKAL_FJERNES") // TODO: Fjern denne
+    )
