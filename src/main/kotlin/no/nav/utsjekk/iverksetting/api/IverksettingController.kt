@@ -44,6 +44,7 @@ class IverksettingController(
     @Operation(
         summary = "Start iverksetting av vedtak",
         description = "Iverksetter utbetaling.",
+        deprecated = true,
     )
     @ApiResponse(responseCode = "202", description = "iverksetting er mottatt")
     @ApiResponse(responseCode = "400", description = "ugyldig format på iverksetting")
@@ -65,6 +66,7 @@ class IverksettingController(
     @Operation(
         summary = "Start iverksetting av vedtak",
         description = "Iverksetter utbetaling for tilleggsstønader.",
+        deprecated = true,
     )
     @ApiResponse(responseCode = "202", description = "iverksetting er mottatt")
     @ApiResponse(responseCode = "400", description = "ugyldig format på iverksetting")
