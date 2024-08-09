@@ -210,7 +210,7 @@ fun etIverksettingsresultat(
 
 fun etTomtUtbetalingsoppdrag() =
     Utbetalingsoppdrag(
-        aktør = "en-aktør",
+        aktør = "12345678911",
         avstemmingstidspunkt = LocalDateTime.now(),
         brukersNavKontor = null,
         erFørsteUtbetalingPåSak = true,

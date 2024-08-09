@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.client.HttpClientErrorException
+import org.springframework.web.client.HttpServerErrorException
 
 @RestController
 @RequestMapping("/api/simulering")
@@ -36,17 +37,22 @@ class SimuleringController(
         ResponseEntity.ok(respons)
     }
 
-    private fun <T> catchSimuleringsfeil(block: () -> T) = try {
-        block.invoke()
-    } catch (e: HttpClientErrorException) {
-        when (e.statusCode) {
-            HttpStatus.NOT_FOUND,
-            HttpStatus.BAD_REQUEST,
-            HttpStatus.SERVICE_UNAVAILABLE,
-            HttpStatus.CONFLICT,
-            -> ResponseEntity.status(e.statusCode).body(e.message)
+    private fun <T> catchSimuleringsfeil(block: () -> T) =
+        try {
+            block.invoke()
+        } catch (e: HttpClientErrorException) {
+            when (e.statusCode) {
+                HttpStatus.NOT_FOUND,
+                HttpStatus.BAD_REQUEST,
+                HttpStatus.CONFLICT,
+                -> ResponseEntity.status(e.statusCode).body(e.message)
 
-            else -> ResponseEntity.internalServerError()
+                else -> ResponseEntity.internalServerError()
+            }
+        } catch (e: HttpServerErrorException) {
+            when (e.statusCode) {
+                HttpStatus.SERVICE_UNAVAILABLE -> ResponseEntity.status(e.statusCode).body(e.message)
+                else -> ResponseEntity.internalServerError()
+            }
         }
-    }
 }
