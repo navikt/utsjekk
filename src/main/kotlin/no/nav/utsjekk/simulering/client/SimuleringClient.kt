@@ -1,7 +1,6 @@
 package no.nav.utsjekk.simulering.client
 
 import no.nav.utsjekk.felles.oppdrag.konfig.AbstractRestClient
-import no.nav.utsjekk.kontrakter.felles.objectMapper
 import no.nav.utsjekk.kontrakter.oppdrag.Utbetalingsoppdrag
 import no.nav.utsjekk.simulering.client.dto.Mapper.tilSimuleringRequest
 import no.nav.utsjekk.simulering.client.dto.SimuleringResponse
@@ -21,15 +20,18 @@ class SimuleringClient(
     restOperations: RestOperations,
 ) : AbstractRestClient(restOperations, "utsjekk.simulering") {
     private val postSimuleringUri: URI =
-        UriComponentsBuilder.fromUri(utsjekkSimuleringUri).pathSegment("simulering").build().toUri()
+        UriComponentsBuilder
+            .fromUri(utsjekkSimuleringUri)
+            .pathSegment("simulering")
+            .build()
+            .toUri()
 
     fun hentSimulering(utbetalingsoppdrag: Utbetalingsoppdrag): SimuleringResponse {
         try {
             val request = utbetalingsoppdrag.tilSimuleringRequest()
-            secureLogger.info("Prøver å simulere utbetalingsoppdrag: ${objectMapper.writeValueAsString(request)}")
             return postForEntity<SimuleringResponse>(postSimuleringUri, request)
         } catch (e: Throwable) {
-            logger.warn("Feil fra simulering")
+            logger.error("Feil fra simulering, se securelogs")
             secureLogger.warn("Feil fra simulering:", e)
             throw e
         }
