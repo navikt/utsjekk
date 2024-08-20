@@ -71,7 +71,7 @@ spec:
           permissions:
             roles:
               - "prosessering-admin"
-        - application: tiltakspenger-utbetaling
+        - application: tiltakspenger-vedtak
           namespace: tpts
         - application: tilleggsstonader-sak
           namespace: tilleggsstonader

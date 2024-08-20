@@ -69,7 +69,7 @@ abstract class Integrasjonstest {
     protected fun lokalTestToken(
         saksbehandler: String = "julenissen",
         grupper: List<String> = emptyList(),
-        klientapp: String = "dev-gcp:tiltakspenger:tiltakspenger-utbetaling",
+        klientapp: String = "dev-gcp:tiltakspenger:tiltakspenger-vedtak",
     ) = TokenUtil.onBehalfOfToken(
         mockOAuth2Server = mockOAuth2Server,
         saksbehandler = saksbehandler,
@@ -80,7 +80,7 @@ abstract class Integrasjonstest {
     protected fun lokalClientCredentialsTestToken(
         accessAsApplication: Boolean,
         clientId: String = UUID.randomUUID().toString(),
-        klientapp: String = "dev-gcp:tiltakspenger:tiltakspenger-utbetaling",
+        klientapp: String = "dev-gcp:tiltakspenger:tiltakspenger-vedtak",
     ) = TokenUtil.clientToken(
         mockOAuth2Server = mockOAuth2Server,
         accessAsApplication = accessAsApplication,

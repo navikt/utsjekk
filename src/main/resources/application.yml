@@ -108,7 +108,7 @@ PROSESSERING_ROLLE: ${PROSESSERING_ROLLE}
 konsumenter:
   tiltakspenger:
     fagsystem: TILTAKSPENGER
-    apper: tiltakspenger-utbetaling
+    apper: tiltakspenger-vedtak
   tilleggsstønader:
     fagsystem: TILLEGGSSTØNADER
     apper: tilleggsstonader-sak
