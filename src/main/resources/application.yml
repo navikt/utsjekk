@@ -33,7 +33,7 @@ logging:
 
 springdoc:
   packagesToScan: no.nav.utsjekk
-  pathsToMatch: /v3/api-docs,/api/**
+  pathsToMatch: /v3/api-docs,/api/simulering/**,/api/iverksetting/**
   swagger-ui:
     disable-swagger-default-url: true
 

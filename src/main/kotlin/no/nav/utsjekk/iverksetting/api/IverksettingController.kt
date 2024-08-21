@@ -6,7 +6,6 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import no.nav.security.token.support.core.api.ProtectedWithClaims
 import no.nav.utsjekk.iverksetting.api.IverksettDtoValidator.valider
 import no.nav.utsjekk.iverksetting.api.IverksettTilleggsstønaderDtoValidator.valider
-import no.nav.utsjekk.iverksetting.api.IverksettV2DtoValidator.valider
 import no.nav.utsjekk.iverksetting.domene.KonsumentConfig
 import no.nav.utsjekk.iverksetting.domene.transformer.IverksettDtoMapper
 import no.nav.utsjekk.iverksetting.domene.transformer.IverksettV2DtoMapper
@@ -33,6 +32,7 @@ import org.springframework.web.bind.annotation.RestController
     produces = [MediaType.APPLICATION_JSON_VALUE],
 )
 @ProtectedWithClaims(issuer = "azuread")
+@Tag(name = "Iverksetting")
 class IverksettingController(
     private val iverksettingService: IverksettingService,
     private val validatorService: IverksettingValidatorService,
@@ -40,7 +40,6 @@ class IverksettingController(
     private val konsumentConfig: KonsumentConfig,
 ) {
     @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE])
-    @Tag(name = "Iverksetting")
     @Operation(
         summary = "Start iverksetting av vedtak",
         description = "Iverksetter utbetaling.",
@@ -62,7 +61,6 @@ class IverksettingController(
     }
 
     @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE], path = ["/tilleggsstonader"])
-    @Tag(name = "Iverksetting for tilleggsstønader")
     @Operation(
         summary = "Start iverksetting av vedtak",
         description = "Iverksetter utbetaling for tilleggsstønader.",
@@ -84,7 +82,6 @@ class IverksettingController(
     }
 
     @PostMapping("/v2", consumes = [MediaType.APPLICATION_JSON_VALUE])
-    @Tag(name = "Iverksetting V2")
     @Operation(
         summary = "Start iverksetting av vedtak",
         description = "Iverksetter utbetaling.",
@@ -107,7 +104,6 @@ class IverksettingController(
 
     @GetMapping("{sakId}/{behandlingId}/status", produces = ["application/json"])
     @Operation(summary = "Sjekk status på iverksetting med gitt behandlingId")
-    @Tag(name = "Iverksetting")
     @ApiResponse(responseCode = "200", description = "Status returnert i body")
     @ApiResponse(responseCode = "404", description = "Kunne ikke finne iverksetting")
     fun hentStatus(
@@ -127,7 +123,6 @@ class IverksettingController(
 
     @GetMapping("{sakId}/{behandlingId}/{iverksettingId}/status", produces = ["application/json"])
     @Operation(summary = "Sjekk status på iverksetting med gitt behandlingId og iverksettingId")
-    @Tag(name = "Iverksetting")
     @ApiResponse(responseCode = "200", description = "Status returnert i body")
     @ApiResponse(responseCode = "404", description = "Kunne ikke finne iverksetting")
     fun hentStatus(
