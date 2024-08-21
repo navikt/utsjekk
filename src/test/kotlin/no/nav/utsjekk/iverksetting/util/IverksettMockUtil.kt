@@ -13,73 +13,11 @@ import no.nav.utsjekk.iverksetting.domene.Søker
 import no.nav.utsjekk.iverksetting.domene.TilkjentYtelse
 import no.nav.utsjekk.iverksetting.domene.Vedtaksdetaljer
 import no.nav.utsjekk.iverksetting.domene.transformer.RandomOSURId
-import no.nav.utsjekk.kontrakter.felles.BrukersNavKontor
 import no.nav.utsjekk.kontrakter.felles.Fagsystem
-import no.nav.utsjekk.kontrakter.felles.Personident
-import no.nav.utsjekk.kontrakter.felles.StønadType
 import no.nav.utsjekk.kontrakter.felles.StønadTypeDagpenger
-import no.nav.utsjekk.kontrakter.felles.StønadTypeTiltakspenger
-import no.nav.utsjekk.kontrakter.iverksett.Ferietillegg
-import no.nav.utsjekk.kontrakter.iverksett.IverksettDto
-import no.nav.utsjekk.kontrakter.iverksett.StønadsdataDagpengerDto
-import no.nav.utsjekk.kontrakter.iverksett.StønadsdataDto
-import no.nav.utsjekk.kontrakter.iverksett.StønadsdataTiltakspengerDto
-import no.nav.utsjekk.kontrakter.iverksett.UtbetalingDto
-import no.nav.utsjekk.kontrakter.iverksett.VedtaksdetaljerDto
 import no.nav.utsjekk.kontrakter.oppdrag.Utbetalingsoppdrag
 import java.time.LocalDate
 import java.time.LocalDateTime
-
-fun enIverksettDto(
-    behandlingId: String = RandomOSURId.generate(),
-    sakId: String = RandomOSURId.generate(),
-    andelsbeløp: Int = 500,
-    stønadType: StønadType = StønadTypeDagpenger.DAGPENGER_ARBEIDSSØKER_ORDINÆR,
-    ferietillegg: Ferietillegg? = null,
-    brukersNavKontor: BrukersNavKontor? = null,
-) = IverksettDto(
-    behandlingId = behandlingId,
-    sakId = sakId,
-    personident = Personident("15507600333"),
-    vedtak =
-        VedtaksdetaljerDto(
-            vedtakstidspunkt = LocalDateTime.of(2021, 5, 12, 0, 0),
-            saksbehandlerId = "A12345",
-            beslutterId = "B23456",
-            brukersNavKontor = brukersNavKontor,
-            utbetalinger =
-                listOf(
-                    enUtbetalingDto(
-                        beløp = andelsbeløp,
-                        fraOgMed = LocalDate.of(2021, 1, 1),
-                        tilOgMed = LocalDate.of(2021, 12, 31),
-                        stønadsdata = stønadsdata(stønadType, ferietillegg),
-                    ),
-                ),
-        ),
-)
-
-fun enUtbetalingDto(
-    beløp: Int,
-    fraOgMed: LocalDate = LocalDate.of(2021, 1, 1),
-    tilOgMed: LocalDate = LocalDate.of(2021, 1, 31),
-    stønadsdata: StønadsdataDto = StønadsdataDagpengerDto(stønadstype = StønadTypeDagpenger.DAGPENGER_ARBEIDSSØKER_ORDINÆR),
-): UtbetalingDto =
-    UtbetalingDto(
-        beløpPerDag = beløp,
-        fraOgMedDato = fraOgMed,
-        tilOgMedDato = tilOgMed,
-        stønadsdata = stønadsdata,
-    )
-
-private fun stønadsdata(
-    stønadType: StønadType,
-    ferietillegg: Ferietillegg?,
-) = when (stønadType) {
-    is StønadTypeDagpenger -> StønadsdataDagpengerDto(stønadType, ferietillegg)
-    is StønadTypeTiltakspenger -> StønadsdataTiltakspengerDto(stønadType)
-    else -> throw UnsupportedOperationException("Støtter ikke opprettelse av IverksettDto for tilleggsstønader")
-}
 
 fun enAndelTilkjentYtelse(
     beløp: Int = 5000,

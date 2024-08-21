@@ -8,7 +8,6 @@ import no.nav.utsjekk.kontrakter.felles.StønadTypeDagpenger
 import no.nav.utsjekk.kontrakter.iverksett.Ferietillegg
 import no.nav.utsjekk.kontrakter.iverksett.IverksettV2Dto
 import no.nav.utsjekk.kontrakter.iverksett.StønadsdataDagpengerDto
-import no.nav.utsjekk.kontrakter.iverksett.StønadsdataTiltakspengerDto
 import org.springframework.http.HttpStatus
 import java.time.YearMonth
 
@@ -20,10 +19,9 @@ fun IverksettV2Dto.valider() {
     utbetalingsperioderSamsvarerMedSatstype(this)
     iverksettingIdSkalEntenIkkeVæreSattEllerVæreSattForNåværendeOgForrige(this)
     ingenUtbetalingsperioderHarStønadstypeEØSOgFerietilleggTilAvdød(this)
-    brukersNavKontorErSattForTiltakspenger(this)
 }
 
-private fun sakIdTilfredsstillerLengdebegrensning(iverksettDto: IverksettV2Dto) {
+internal fun sakIdTilfredsstillerLengdebegrensning(iverksettDto: IverksettV2Dto) {
     if (iverksettDto.sakId.length !in 1..GyldigSakId.MAKSLENGDE) {
         throw ApiFeil(
             "SakId må være mellom 1 og ${GyldigSakId.MAKSLENGDE} tegn lang",
@@ -32,7 +30,7 @@ private fun sakIdTilfredsstillerLengdebegrensning(iverksettDto: IverksettV2Dto) 
     }
 }
 
-private fun behandlingIdTilfredsstillerLengdebegrensning(iverksettDto: IverksettV2Dto) {
+internal fun behandlingIdTilfredsstillerLengdebegrensning(iverksettDto: IverksettV2Dto) {
     if (iverksettDto.behandlingId.length !in 1..GyldigBehandlingId.MAKSLENGDE) {
         throw ApiFeil(
             "BehandlingId må være mellom 1 og ${GyldigBehandlingId.MAKSLENGDE} tegn lang",
@@ -41,7 +39,7 @@ private fun behandlingIdTilfredsstillerLengdebegrensning(iverksettDto: Iverksett
     }
 }
 
-private fun fraOgMedKommerFørTilOgMedIUtbetalingsperioder(iverksettDto: IverksettV2Dto) {
+internal fun fraOgMedKommerFørTilOgMedIUtbetalingsperioder(iverksettDto: IverksettV2Dto) {
     val alleErOk =
         iverksettDto.vedtak.utbetalinger.all {
             !it.tilOgMedDato.isBefore(it.fraOgMedDato)
@@ -55,7 +53,7 @@ private fun fraOgMedKommerFørTilOgMedIUtbetalingsperioder(iverksettDto: Iverkse
     }
 }
 
-private fun utbetalingsperioderOverlapperIkkeITid(iverksettDto: IverksettV2Dto) {
+internal fun utbetalingsperioderOverlapperIkkeITid(iverksettDto: IverksettV2Dto) {
     val allePerioderErUavhengige =
         iverksettDto.vedtak.utbetalinger
             .sortedBy { it.fraOgMedDato }
@@ -74,7 +72,7 @@ private fun utbetalingsperioderOverlapperIkkeITid(iverksettDto: IverksettV2Dto) 
     }
 }
 
-private fun utbetalingsperioderSamsvarerMedSatstype(iverksettDto: IverksettV2Dto) {
+internal fun utbetalingsperioderSamsvarerMedSatstype(iverksettDto: IverksettV2Dto) {
     val satstype =
         iverksettDto.vedtak.utbetalinger
             .firstOrNull()
@@ -97,7 +95,7 @@ private fun utbetalingsperioderSamsvarerMedSatstype(iverksettDto: IverksettV2Dto
     }
 }
 
-private fun iverksettingIdSkalEntenIkkeVæreSattEllerVæreSattForNåværendeOgForrige(iverksettDto: IverksettV2Dto) {
+internal fun iverksettingIdSkalEntenIkkeVæreSattEllerVæreSattForNåværendeOgForrige(iverksettDto: IverksettV2Dto) {
     if (iverksettDto.iverksettingId != null &&
         iverksettDto.forrigeIverksetting != null &&
         iverksettDto.forrigeIverksetting?.iverksettingId == null
@@ -119,7 +117,7 @@ private fun iverksettingIdSkalEntenIkkeVæreSattEllerVæreSattForNåværendeOgFo
     }
 }
 
-private fun ingenUtbetalingsperioderHarStønadstypeEØSOgFerietilleggTilAvdød(iverksettDto: IverksettV2Dto) {
+internal fun ingenUtbetalingsperioderHarStønadstypeEØSOgFerietilleggTilAvdød(iverksettDto: IverksettV2Dto) {
     val ugyldigKombinasjon =
         iverksettDto.vedtak.utbetalinger.any {
             if (it.stønadsdata is StønadsdataDagpengerDto) {
@@ -133,21 +131,6 @@ private fun ingenUtbetalingsperioderHarStønadstypeEØSOgFerietilleggTilAvdød(i
     if (ugyldigKombinasjon) {
         throw ApiFeil(
             "Ferietillegg til avdød er ikke tillatt for stønadstypen ${StønadTypeDagpenger.DAGPENGER_EØS}",
-            HttpStatus.BAD_REQUEST,
-        )
-    }
-}
-
-// TODO denne valideringen kan fjernes når vi fjerner gamle IverksettDto og StønadsdataTiltakspengerDto
-private fun brukersNavKontorErSattForTiltakspenger(iverksettDto: IverksettV2Dto) {
-    val stønadsdata =
-        iverksettDto.vedtak.utbetalinger
-            .firstOrNull()
-            ?.stønadsdata
-
-    if (stønadsdata is StønadsdataTiltakspengerDto) {
-        throw ApiFeil(
-            "Må bruke StønadsdataTiltakspengerV2Dto sammen med IverksettV2Dto",
             HttpStatus.BAD_REQUEST,
         )
     }

@@ -7,18 +7,17 @@ import no.nav.utsjekk.Integrasjonstest
 import no.nav.utsjekk.iverksetting.domene.transformer.RandomOSURId
 import no.nav.utsjekk.iverksetting.featuretoggle.IverksettingErSkruddAvException
 import no.nav.utsjekk.iverksetting.task.IverksettMotOppdragTask
-import no.nav.utsjekk.iverksetting.util.enIverksettDto
 import no.nav.utsjekk.iverksetting.util.enIverksettTilleggsstønaderDto
 import no.nav.utsjekk.iverksetting.util.enIverksettV2Dto
 import no.nav.utsjekk.konfig.FeatureToggleMock
 import no.nav.utsjekk.kontrakter.felles.Fagsystem
 import no.nav.utsjekk.kontrakter.felles.Personident
 import no.nav.utsjekk.kontrakter.felles.objectMapper
-import no.nav.utsjekk.kontrakter.iverksett.IverksettDto
 import no.nav.utsjekk.kontrakter.iverksett.IverksettStatus
 import no.nav.utsjekk.kontrakter.iverksett.IverksettTilleggsstønaderDto
-import no.nav.utsjekk.kontrakter.iverksett.VedtaksdetaljerDto
+import no.nav.utsjekk.kontrakter.iverksett.IverksettV2Dto
 import no.nav.utsjekk.kontrakter.iverksett.VedtaksdetaljerTilleggsstønaderDto
+import no.nav.utsjekk.kontrakter.iverksett.VedtaksdetaljerV2Dto
 import org.intellij.lang.annotations.Language
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -59,11 +58,11 @@ class IverksettingControllerTest : Integrasjonstest() {
     fun `iverksetter ikke når kill switch for ytelsen er skrudd på`() {
         FeatureToggleMock.skruAvFagsystem(Fagsystem.TILTAKSPENGER)
 
-        val iverksettJson = enIverksettDto(behandlingId = behandlingId, sakId = sakId)
+        val iverksettJson = enIverksettV2Dto(behandlingId = behandlingId, sakId = sakId)
 
         val respons: ResponseEntity<Any> =
             restTemplate.exchange(
-                localhostUrl("/api/iverksetting"),
+                localhostUrl("/api/iverksetting/v2"),
                 HttpMethod.POST,
                 HttpEntity(iverksettJson, headers),
             )
@@ -74,11 +73,11 @@ class IverksettingControllerTest : Integrasjonstest() {
 
     @Test
     fun `start iverksetting`() {
-        val iverksettJson = enIverksettDto(behandlingId = behandlingId, sakId = sakId)
+        val iverksettJson = enIverksettV2Dto(behandlingId = behandlingId, sakId = sakId)
 
         val respons: ResponseEntity<Any> =
             restTemplate.exchange(
-                localhostUrl("/api/iverksetting"),
+                localhostUrl("/api/iverksetting/v2"),
                 HttpMethod.POST,
                 HttpEntity(iverksettJson, headers),
             )
@@ -100,10 +99,10 @@ class IverksettingControllerTest : Integrasjonstest() {
               "vedtak": {
                 "vedtakstidspunkt": "2021-05-12T00:00:00",
                 "saksbehandlerId": "A12345",
-                "brukersNavKontor": null,
                 "utbetalinger": [
                   {
-                    "beløpPerDag": 500,
+                    "beløp": 500,
+                    "satstype": "DAGLIG",
                     "fraOgMedDato": "2021-01-01",
                     "tilOgMedDato": "2021-12-31",
                     "stønadsdata": {
@@ -119,7 +118,7 @@ class IverksettingControllerTest : Integrasjonstest() {
 
         val respons: ResponseEntity<Any> =
             restTemplate.exchange(
-                localhostUrl("/api/iverksetting"),
+                localhostUrl("/api/iverksetting/v2"),
                 HttpMethod.POST,
                 HttpEntity(objectMapper.readValue<JsonNode>(payload), headers),
             )
@@ -195,23 +194,22 @@ class IverksettingControllerTest : Integrasjonstest() {
     @Test
     fun `start iverksetting av vedtak uten utbetaling`() {
         val dto =
-            IverksettDto(
+            IverksettV2Dto(
                 behandlingId = behandlingId,
                 sakId = sakId,
                 personident = Personident("15507600333"),
                 vedtak =
-                    VedtaksdetaljerDto(
+                    VedtaksdetaljerV2Dto(
                         vedtakstidspunkt = LocalDateTime.of(2021, 5, 12, 0, 0),
                         saksbehandlerId = "A12345",
                         beslutterId = "B23456",
-                        brukersNavKontor = null,
                         utbetalinger = emptyList(),
                     ),
             )
 
         restTemplate
             .exchange<Unit>(
-                localhostUrl("/api/iverksetting"),
+                localhostUrl("/api/iverksetting/v2"),
                 HttpMethod.POST,
                 HttpEntity(dto, headers),
             ).also {

@@ -6,7 +6,6 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import no.nav.security.token.support.core.api.ProtectedWithClaims
 import no.nav.utsjekk.iverksetting.api.IverksettingValidatorService
 import no.nav.utsjekk.iverksetting.domene.KonsumentConfig
-import no.nav.utsjekk.iverksetting.domene.transformer.IverksettDtoMapper
 import no.nav.utsjekk.iverksetting.tilstand.IverksettingService
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
@@ -26,7 +25,6 @@ import java.util.UUID
 class UtbetalingController(
     private val iverksettingService: IverksettingService,
     private val validatorService: IverksettingValidatorService,
-    private val iverksettDtoMapper: IverksettDtoMapper,
     private val konsumentConfig: KonsumentConfig,
 ) {
     @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE])
@@ -43,16 +41,17 @@ class UtbetalingController(
         @RequestBody utbetalingDto: UtbetalingDto,
     ): ResponseEntity<UUID> {
 //        utbetalingDto.valider()
-//        val iverksett = iverksettDtoMapper.tilDomene(utbetalingDto)
+//        val iverksett = IverksettV2DtoMapper.tilDomene(utbetalingDto)
 //        validatorService.valider(iverksett)
 //        iverksettingService.startIverksetting(iverksett)
 
         val utbetalingId = UUID.randomUUID()
-        val location = ServletUriComponentsBuilder
-            .fromCurrentRequest()
-            .path("/api/utbetalinger/$utbetalingId")
-            .build()
-            .toUri()
+        val location =
+            ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/api/utbetalinger/$utbetalingId")
+                .build()
+                .toUri()
         return ResponseEntity.created(location).build()
     }
 }

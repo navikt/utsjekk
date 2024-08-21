@@ -14,7 +14,6 @@ import no.nav.utsjekk.iverksetting.domene.OppdragResultat
 import no.nav.utsjekk.iverksetting.domene.TilkjentYtelse
 import no.nav.utsjekk.iverksetting.domene.sakId
 import no.nav.utsjekk.iverksetting.domene.transformer.RandomOSURId
-import no.nav.utsjekk.iverksetting.domene.transformer.tomTilkjentYtelse
 import no.nav.utsjekk.iverksetting.tilstand.IverksettingService
 import no.nav.utsjekk.iverksetting.tilstand.IverksettingsresultatService
 import no.nav.utsjekk.iverksetting.util.lagIverksettingsdata
@@ -123,7 +122,11 @@ internal class IverksettMotOppdragTaskTest {
 
         assertFalse(oppdragSlot.captured.erFørsteUtbetalingPåSak)
         assertEquals(1, oppdragSlot.captured.utbetalingsperiode.size)
-        assertNotNull(oppdragSlot.captured.utbetalingsperiode.first().opphør)
+        assertNotNull(
+            oppdragSlot.captured.utbetalingsperiode
+                .first()
+                .opphør,
+        )
     }
 
     @Test
@@ -158,7 +161,7 @@ internal class IverksettMotOppdragTaskTest {
 
     private fun tomUtbetaling() =
         lagIverksettingsdata(sakId = sakId).let {
-            it.copy(vedtak = it.vedtak.copy(tilkjentYtelse = tomTilkjentYtelse()))
+            it.copy(vedtak = it.vedtak.copy(tilkjentYtelse = TilkjentYtelse(andelerTilkjentYtelse = emptyList())))
         }
 
     private fun opphørAvUtbetaling() =
@@ -173,7 +176,10 @@ internal class IverksettMotOppdragTaskTest {
                 sakId = sakId,
                 andelsdatoer = listOf(LocalDate.now(), LocalDate.now().minusDays(15)),
             )
-        val sisteAndelIKjede = iverksetting.vedtak.tilkjentYtelse.andelerTilkjentYtelse.first().copy(periodeId = 0)
+        val sisteAndelIKjede =
+            iverksetting.vedtak.tilkjentYtelse.andelerTilkjentYtelse
+                .first()
+                .copy(periodeId = 0)
         return Iverksettingsresultat(
             fagsystem = iverksetting.fagsak.fagsystem,
             sakId = iverksetting.sakId,

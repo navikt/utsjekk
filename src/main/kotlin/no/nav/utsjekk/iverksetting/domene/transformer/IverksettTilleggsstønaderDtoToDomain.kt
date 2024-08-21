@@ -22,12 +22,11 @@ fun IverksettTilleggsstønaderDto.toDomain(): Iverksetting =
         vedtak = this.vedtak.toDomain(),
     )
 
-fun IverksettTilleggsstønaderDto.tilFagsak(): Fagsakdetaljer {
-    return Fagsakdetaljer(
+fun IverksettTilleggsstønaderDto.tilFagsak(): Fagsakdetaljer =
+    Fagsakdetaljer(
         fagsakId = this.sakId,
         fagsystem = Fagsystem.TILLEGGSSTØNADER,
     )
-}
 
 fun IverksettTilleggsstønaderDto.tilBehandling() =
     Behandlingsdetaljer(
@@ -49,7 +48,7 @@ fun List<UtbetalingTilleggsstønaderDto>.tilTilkjentYtelse(): TilkjentYtelse {
     val andeler = this.map { it.toDomain() }
 
     return when (andeler.size) {
-        0 -> tomTilkjentYtelse()
+        0 -> TilkjentYtelse(andelerTilkjentYtelse = emptyList())
         else -> TilkjentYtelse(andelerTilkjentYtelse = andeler)
     }
 }

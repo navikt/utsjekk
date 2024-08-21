@@ -5,7 +5,7 @@ import no.nav.utsjekk.felles.http.ObjectMapperProvider.objectMapper
 import no.nav.utsjekk.iverksetting.domene.Iverksetting
 import no.nav.utsjekk.iverksetting.domene.transformer.RandomOSURId
 import no.nav.utsjekk.iverksetting.util.enIverksetting
-import no.nav.utsjekk.kontrakter.iverksett.IverksettDto
+import no.nav.utsjekk.kontrakter.iverksett.IverksettV2Dto
 import no.nav.utsjekk.util.ResourceLoaderTestUtil
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
@@ -13,9 +13,9 @@ import org.junit.jupiter.api.Test
 
 class IverksettingJsonTransformTest {
     @Test
-    fun `deserialiser dagpenger JSON til IverksettDtoJson, kall toDomain, forvent likhet`() {
+    fun `deserialiser dagpenger JSON til IverksettV2Dto`() {
         val json: String = ResourceLoaderTestUtil.readResource("json/IverksettDtoEksempel.json")
-        val iverksettDto = objectMapper.readValue<IverksettDto>(json)
+        val iverksettDto = objectMapper.readValue<IverksettV2Dto>(json)
 
         assertNotNull(iverksettDto)
     }

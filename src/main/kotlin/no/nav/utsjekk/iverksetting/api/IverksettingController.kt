@@ -4,15 +4,12 @@ import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.tags.Tag
 import no.nav.security.token.support.core.api.ProtectedWithClaims
-import no.nav.utsjekk.iverksetting.api.IverksettDtoValidator.valider
 import no.nav.utsjekk.iverksetting.api.IverksettTilleggsstønaderDtoValidator.valider
 import no.nav.utsjekk.iverksetting.domene.KonsumentConfig
-import no.nav.utsjekk.iverksetting.domene.transformer.IverksettDtoMapper
 import no.nav.utsjekk.iverksetting.domene.transformer.IverksettV2DtoMapper
 import no.nav.utsjekk.iverksetting.domene.transformer.toDomain
 import no.nav.utsjekk.iverksetting.tilstand.IverksettingService
 import no.nav.utsjekk.kontrakter.felles.Fagsystem
-import no.nav.utsjekk.kontrakter.iverksett.IverksettDto
 import no.nav.utsjekk.kontrakter.iverksett.IverksettStatus
 import no.nav.utsjekk.kontrakter.iverksett.IverksettTilleggsstønaderDto
 import no.nav.utsjekk.kontrakter.iverksett.IverksettV2Dto
@@ -36,30 +33,8 @@ import org.springframework.web.bind.annotation.RestController
 class IverksettingController(
     private val iverksettingService: IverksettingService,
     private val validatorService: IverksettingValidatorService,
-    private val iverksettDtoMapper: IverksettDtoMapper,
     private val konsumentConfig: KonsumentConfig,
 ) {
-    @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE])
-    @Operation(
-        summary = "Start iverksetting av vedtak",
-        description = "Iverksetter utbetaling.",
-        deprecated = true,
-    )
-    @ApiResponse(responseCode = "202", description = "iverksetting er mottatt")
-    @ApiResponse(responseCode = "400", description = "ugyldig format på iverksetting")
-    @ApiResponse(responseCode = "403", description = "ikke autorisert til å starte iverksetting")
-    @ApiResponse(responseCode = "409", description = "iverksetting er i konflikt med tidligere iverksetting")
-    fun iverksett(
-        @RequestBody iverksettDto: IverksettDto,
-    ): ResponseEntity<Void> {
-        iverksettDto.valider()
-        val iverksett = iverksettDtoMapper.tilDomene(iverksettDto)
-        validatorService.valider(iverksett)
-        iverksettingService.startIverksetting(iverksett)
-
-        return ResponseEntity.accepted().build()
-    }
-
     @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE], path = ["/tilleggsstonader"])
     @Operation(
         summary = "Start iverksetting av vedtak",

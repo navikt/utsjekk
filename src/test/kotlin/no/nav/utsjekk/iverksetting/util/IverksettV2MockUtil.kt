@@ -16,22 +16,25 @@ fun enIverksettV2Dto(
     sakId: String = "TEST456",
     andelsbeløp: UInt = 500u,
     iverksettingId: String? = null,
+    stønadsdata: StønadsdataDto = StønadsdataTilleggsstønaderDto(StønadTypeTilleggsstønader.TILSYN_BARN_ENSLIG_FORSØRGER),
 ) = IverksettV2Dto(
     behandlingId = behandlingId,
     iverksettingId = iverksettingId,
     sakId = sakId,
     personident = Personident("15507600333"),
-    vedtak = VedtaksdetaljerV2Dto(
-        vedtakstidspunkt = LocalDateTime.of(2021, 5, 12, 0, 0),
-        saksbehandlerId = "A12345",
-        beslutterId = "B23456",
-        utbetalinger =
-        listOf(
-            enUtbetalingV2Dto(
-                beløp = andelsbeløp,
-            ),
+    vedtak =
+        VedtaksdetaljerV2Dto(
+            vedtakstidspunkt = LocalDateTime.of(2021, 5, 12, 0, 0),
+            saksbehandlerId = "A12345",
+            beslutterId = "B23456",
+            utbetalinger =
+                listOf(
+                    enUtbetalingV2Dto(
+                        beløp = andelsbeløp,
+                        stønadsdata = stønadsdata,
+                    ),
+                ),
         ),
-    ),
 )
 
 fun enUtbetalingV2Dto(

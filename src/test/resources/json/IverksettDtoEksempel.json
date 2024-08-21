@@ -3,27 +3,19 @@
   "behandlingId": "1",
   "personident": "15507600333",
   "vedtak": {
-    "vedtakstype": "RAMMEVEDTAK",
     "vedtakstidspunkt": "2021-05-10T01:00:00",
-    "resultat": "AVSLÅTT",
     "saksbehandlerId": "A123456",
     "beslutterId": "B123456",
     "utbetalinger": [
       {
-        "beløpPerDag": 10,
+        "beløp": 10,
+        "satstype": "DAGLIG",
         "fraOgMedDato": "2021-05-01",
         "tilOgMedDato": "2021-05-31",
         "stønadsdata": {
           "stønadstype": "DAGPENGER_ARBEIDSSØKER_ORDINÆR",
           "ferietillegg": "ORDINÆR"
         }
-      }
-    ],
-    "vedtaksperioder": [
-      {
-        "fraOgMedDato": "2021-06-01",
-        "tilOgMedDato": null,
-        "periodeType": "HOVEDPERIODE"
       }
     ]
   },

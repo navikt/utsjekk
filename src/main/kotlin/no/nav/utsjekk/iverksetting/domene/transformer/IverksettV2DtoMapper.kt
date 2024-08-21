@@ -16,7 +16,6 @@ import no.nav.utsjekk.kontrakter.felles.Fagsystem
 import no.nav.utsjekk.kontrakter.iverksett.IverksettV2Dto
 import no.nav.utsjekk.kontrakter.iverksett.StønadsdataDagpengerDto
 import no.nav.utsjekk.kontrakter.iverksett.StønadsdataTilleggsstønaderDto
-import no.nav.utsjekk.kontrakter.iverksett.StønadsdataTiltakspengerDto
 import no.nav.utsjekk.kontrakter.iverksett.StønadsdataTiltakspengerV2Dto
 import no.nav.utsjekk.kontrakter.iverksett.UtbetalingV2Dto
 import no.nav.utsjekk.kontrakter.iverksett.VedtaksdetaljerV2Dto
@@ -68,7 +67,6 @@ object IverksettV2DtoMapper {
                 when (this.stønadsdata) {
                     is StønadsdataDagpengerDto -> (this.stønadsdata as StønadsdataDagpengerDto).tilDomene()
                     is StønadsdataTilleggsstønaderDto -> (this.stønadsdata as StønadsdataTilleggsstønaderDto).tilDomene()
-                    is StønadsdataTiltakspengerDto -> (this.stønadsdata as StønadsdataTiltakspengerDto).tilDomene()
                     is StønadsdataTiltakspengerV2Dto -> (this.stønadsdata as StønadsdataTiltakspengerV2Dto).tilDomene()
                 },
         )
@@ -87,12 +85,5 @@ private fun StønadsdataTiltakspengerV2Dto.tilDomene(): StønadsdataTiltakspenge
     StønadsdataTiltakspenger(
         stønadstype = this.stønadstype,
         barnetillegg = this.barnetillegg,
-        brukersNavKontor = BrukersNavKontor(enhet = this.brukersNavKontor)
-    )
-
-private fun StønadsdataTiltakspengerDto.tilDomene(): StønadsdataTiltakspenger =
-    StønadsdataTiltakspenger(
-        stønadstype = this.stønadstype,
-        barnetillegg = this.barnetillegg,
-        brukersNavKontor = BrukersNavKontor(enhet = "DENNE_SKAL_FJERNES") // TODO: Fjern denne
+        brukersNavKontor = BrukersNavKontor(enhet = this.brukersNavKontor),
     )
