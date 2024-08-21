@@ -15,7 +15,7 @@ fun IverksettV2Dto.valider() {
     sakIdTilfredsstillerLengdebegrensning(this)
     behandlingIdTilfredsstillerLengdebegrensning(this)
     fraOgMedKommerFørTilOgMedIUtbetalingsperioder(this)
-    utbetalingsperioderOverlapperIkkeITid(this)
+    utbetalingsperioderMedLikStønadsdataOverlapperIkkeITid(this)
     utbetalingsperioderSamsvarerMedSatstype(this)
     iverksettingIdSkalEntenIkkeVæreSattEllerVæreSattForNåværendeOgForrige(this)
     ingenUtbetalingsperioderHarStønadstypeEØSOgFerietilleggTilAvdød(this)
@@ -53,16 +53,20 @@ internal fun fraOgMedKommerFørTilOgMedIUtbetalingsperioder(iverksettDto: Iverks
     }
 }
 
-internal fun utbetalingsperioderOverlapperIkkeITid(iverksettDto: IverksettV2Dto) {
+internal fun utbetalingsperioderMedLikStønadsdataOverlapperIkkeITid(iverksettDto: IverksettV2Dto) {
     val allePerioderErUavhengige =
         iverksettDto.vedtak.utbetalinger
-            .sortedBy { it.fraOgMedDato }
-            .windowed(2, 1, false) {
-                val førstePeriodeTom = it.first().tilOgMedDato
-                val sistePeriodeFom = it.last().fraOgMedDato
+            .groupBy { it.stønadsdata }
+            .all { utbetalinger ->
+                utbetalinger.value
+                    .sortedBy { it.fraOgMedDato }
+                    .windowed(2, 1, false) {
+                        val førstePeriodeTom = it.first().tilOgMedDato
+                        val sistePeriodeFom = it.last().fraOgMedDato
 
-                førstePeriodeTom.isBefore(sistePeriodeFom)
-            }.all { it }
+                        førstePeriodeTom.isBefore(sistePeriodeFom)
+                    }.all { it }
+            }
 
     if (!allePerioderErUavhengige) {
         throw ApiFeil(

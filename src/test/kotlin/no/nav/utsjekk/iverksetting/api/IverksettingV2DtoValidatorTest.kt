@@ -81,7 +81,7 @@ class IverksettingV2DtoValidatorTest {
             )
 
         assertApiFeil(HttpStatus.BAD_REQUEST) {
-            utbetalingsperioderOverlapperIkkeITid(iverksettDto)
+            utbetalingsperioderMedLikStønadsdataOverlapperIkkeITid(iverksettDto)
         }
     }
 
@@ -120,7 +120,32 @@ class IverksettingV2DtoValidatorTest {
             )
 
         assertDoesNotThrow {
-            utbetalingsperioderOverlapperIkkeITid(iverksettDto)
+            utbetalingsperioderMedLikStønadsdataOverlapperIkkeITid(iverksettDto)
+        }
+    }
+
+    @Test
+    fun `Utbetalingsperioder med lik stønadsdata som overlapper skal gi ApiFeil`() {
+        val tmpIverksettDto = enIverksettV2Dto()
+        val enUtbetalingsperiode =
+            enUtbetalingV2Dto(
+                beløp = 100u,
+                fraOgMed = LocalDate.of(2023, 5, 15),
+                tilOgMed = LocalDate.of(2023, 5, 30),
+                stønadsdata =
+                    StønadsdataTiltakspengerV2Dto(
+                        stønadstype = StønadTypeTiltakspenger.JOBBKLUBB,
+                        brukersNavKontor = "4401",
+                    ),
+            )
+        val iverksettDto =
+            tmpIverksettDto.copy(
+                vedtak =
+                    tmpIverksettDto.vedtak.copy(utbetalinger = listOf(enUtbetalingsperiode, enUtbetalingsperiode)),
+            )
+
+        assertApiFeil(HttpStatus.BAD_REQUEST) {
+            utbetalingsperioderMedLikStønadsdataOverlapperIkkeITid(iverksettDto)
         }
     }
 
