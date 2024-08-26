@@ -4,7 +4,6 @@ import no.nav.familie.prosessering.AsyncTaskStep
 import no.nav.familie.prosessering.TaskStepBeskrivelse
 import no.nav.familie.prosessering.domene.Task
 import no.nav.familie.prosessering.internal.TaskService
-import no.nav.utsjekk.felles.Profiler
 import no.nav.utsjekk.felles.oppdrag.OppdragClient
 import no.nav.utsjekk.felles.opprettNesteTask
 import no.nav.utsjekk.iverksetting.domene.AndelTilkjentYtelse
@@ -31,7 +30,6 @@ import no.nav.utsjekk.kontrakter.felles.objectMapper
 import no.nav.utsjekk.kontrakter.oppdrag.OppdragStatus
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import org.springframework.core.env.Environment
 import org.springframework.stereotype.Service
 
 @Service
@@ -44,7 +42,6 @@ class IverksettMotOppdragTask(
     private val oppdragClient: OppdragClient,
     private val taskService: TaskService,
     private val iverksettingsresultatService: IverksettingsresultatService,
-    private val environment: Environment,
 ) : AsyncTaskStep {
     private val log: Logger = LoggerFactory.getLogger(this::class.java)
 
@@ -60,7 +57,7 @@ class IverksettMotOppdragTask(
             )
                 ?: error(
                     "Fant ikke iverksetting for fagsystem ${payload.fagsystem}, behandling ${payload.behandlingId}" +
-                        " og iverksettingId ${payload.iverksettingId}",
+                            " og iverksettingId ${payload.iverksettingId}",
                 )
 
         val forrigeIverksettResultat =
@@ -88,15 +85,7 @@ class IverksettMotOppdragTask(
             )
 
         if (beregnetUtbetalingsoppdrag.utbetalingsoppdrag.utbetalingsperiode.isNotEmpty()) {
-            if (iverksetting.fagsak.fagsystem == Fagsystem.TILLEGGSSTØNADER &&
-                iverksetting.behandlingId == "499" &&
-                iverksetting.behandling.iverksettingId == "3121bfe5-d232-4f19-92c2-f552fb984f19" &&
-                environment.activeProfiles.contains(Profiler.DEV)
-            ) {
-                iverksettUtbetalingPåNytt(tilkjentYtelse)
-            } else {
-                iverksettUtbetaling(tilkjentYtelse)
-            }
+            iverksettUtbetaling(tilkjentYtelse)
         } else {
             iverksettingsresultatService.oppdaterOppdragResultat(
                 fagsystem = iverksetting.fagsak.fagsystem,
@@ -125,9 +114,7 @@ class IverksettMotOppdragTask(
                 fagsakId = iverksetting.sakId,
                 behandlingId = iverksetting.behandlingId,
                 personident = iverksetting.personident,
-                brukersNavKontor =
-                    iverksetting.vedtak.tilkjentYtelse.andelerTilkjentYtelse
-                        .finnBrukersNavKontor(),
+                brukersNavKontor = iverksetting.vedtak.tilkjentYtelse.andelerTilkjentYtelse.finnBrukersNavKontor(),
                 vedtaksdato = iverksetting.vedtak.vedtakstidspunkt.toLocalDate(),
                 iverksettingId = iverksetting.behandling.iverksettingId,
             )
@@ -202,16 +189,6 @@ class IverksettMotOppdragTask(
         }
     }
 
-    private fun iverksettUtbetalingPåNytt(tilkjentYtelse: TilkjentYtelse) {
-        tilkjentYtelse.utbetalingsoppdrag?.let { utbetalingsoppdrag ->
-            if (utbetalingsoppdrag.utbetalingsperiode.isNotEmpty()) {
-                oppdragClient.iverksettOppdragPåNytt(utbetalingsoppdrag)
-            } else {
-                log.warn("Iverksetter ikke noe mot oppdrag. Ingen utbetalingsperioder i utbetalingsoppdraget.")
-            }
-        }
-    }
-
     private fun lagTilkjentYtelseMedSisteAndelPerKjede(
         tilkjentYtelse: TilkjentYtelse,
         forrigeSisteAndelPerKjede: Map<Kjedenøkkel, AndelTilkjentYtelse>,
@@ -260,11 +237,10 @@ class IverksettMotOppdragTask(
     }
 }
 
-private fun List<AndelTilkjentYtelse>.finnBrukersNavKontor(): BrukersNavKontor? =
-    firstNotNullOfOrNull {
-        when (it.stønadsdata) {
-            is StønadsdataTilleggsstønader -> it.stønadsdata.brukersNavKontor
-            is StønadsdataTiltakspenger -> it.stønadsdata.brukersNavKontor
-            else -> null
-        }
+private fun List<AndelTilkjentYtelse>.finnBrukersNavKontor(): BrukersNavKontor? = firstNotNullOfOrNull {
+    when (it.stønadsdata) {
+        is StønadsdataTilleggsstønader -> it.stønadsdata.brukersNavKontor
+        is StønadsdataTiltakspenger -> it.stønadsdata.brukersNavKontor
+        else -> null
     }
+}

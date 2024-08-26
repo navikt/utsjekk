@@ -8,7 +8,6 @@ import io.mockk.slot
 import io.mockk.verify
 import no.nav.familie.prosessering.domene.Task
 import no.nav.familie.prosessering.internal.TaskService
-import no.nav.utsjekk.felles.Profiler
 import no.nav.utsjekk.felles.oppdrag.OppdragClient
 import no.nav.utsjekk.iverksetting.domene.Iverksettingsresultat
 import no.nav.utsjekk.iverksetting.domene.OppdragResultat
@@ -28,7 +27,6 @@ import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.springframework.core.env.Environment
 import java.time.LocalDate
 import java.util.Properties
 
@@ -37,7 +35,6 @@ internal class IverksettMotOppdragTaskTest {
     private val taskService = mockk<TaskService>()
     private val iverksettingService = mockk<IverksettingService>()
     private val iverksettingsresultatService = mockk<IverksettingsresultatService>()
-    private val environment = mockk<Environment>()
 
     private val behandlingId = RandomOSURId.generate()
     private val sakId = RandomOSURId.generate()
@@ -55,13 +52,11 @@ internal class IverksettMotOppdragTaskTest {
             oppdragClient = oppdragClient,
             taskService = taskService,
             iverksettingsresultatService = iverksettingsresultatService,
-            environment = environment,
         )
 
     @BeforeEach
     fun setup() {
         every { iverksettingService.publiserStatusmelding(any()) } just Runs
-        every { environment.activeProfiles } returns arrayOf(Profiler.LOKAL)
     }
 
     @Test
