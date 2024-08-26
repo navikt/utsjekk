@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Profile
 object Profiler {
     const val INTEGRASJONSTEST = "integrasjonstest"
     const val LOKAL = "local"
+    const val DEV = "dev"
     const val MOCK_OPPDRAG = "mock-oppdrag"
     const val MOCK_OAUTH = "mock-oauth"
     const val MOCK_SIMULERING = "mock-simulering"

@@ -23,11 +23,29 @@ class OppdragClient(
     restOperations: RestOperations,
 ) : AbstractRestClient(restOperations, "dp.oppdrag") {
     private val postOppdragUri: URI =
-        UriComponentsBuilder.fromUri(utsjekkOppdragUri).pathSegment("oppdrag").build().toUri()
+        UriComponentsBuilder
+            .fromUri(utsjekkOppdragUri)
+            .pathSegment("oppdrag")
+            .build()
+            .toUri()
+    private val postOppdragPåNyttUri: URI =
+        UriComponentsBuilder
+            .fromUri(utsjekkOppdragUri)
+            .pathSegment("oppdragPaaNytt/1")
+            .build()
+            .toUri()
     private val getStatusUri: URI =
-        UriComponentsBuilder.fromUri(utsjekkOppdragUri).pathSegment("status").build().toUri()
+        UriComponentsBuilder
+            .fromUri(utsjekkOppdragUri)
+            .pathSegment("status")
+            .build()
+            .toUri()
     private val grensesnittavstemmingUri: URI =
-        UriComponentsBuilder.fromUri(utsjekkOppdragUri).pathSegment("grensesnittavstemming").build().toUri()
+        UriComponentsBuilder
+            .fromUri(utsjekkOppdragUri)
+            .pathSegment("grensesnittavstemming")
+            .build()
+            .toUri()
 
     fun iverksettOppdrag(utbetalingsoppdrag: Utbetalingsoppdrag) {
         try {
@@ -43,6 +61,10 @@ class OppdragClient(
                 throw e
             }
         }
+    }
+
+    fun iverksettOppdragPåNytt(utbetalingsoppdrag: Utbetalingsoppdrag) {
+        postForEntity<Unit>(postOppdragPåNyttUri, utbetalingsoppdrag)
     }
 
     fun hentStatus(oppdragId: OppdragIdDto) = postForEntity<OppdragStatusDto>(getStatusUri, oppdragId)
