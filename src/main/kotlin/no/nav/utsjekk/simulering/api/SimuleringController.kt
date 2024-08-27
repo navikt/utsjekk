@@ -68,12 +68,12 @@ class SimuleringController(
                 HttpStatus.CONFLICT,
                 -> ResponseEntity.status(e.statusCode).body(e.message)
 
-                else -> ResponseEntity.internalServerError()
+                else -> ResponseEntity.internalServerError().build()
             }
         } catch (e: HttpServerErrorException) {
             when (e.statusCode) {
                 HttpStatus.SERVICE_UNAVAILABLE -> ResponseEntity.status(e.statusCode).body(e.message)
-                else -> ResponseEntity.internalServerError()
+                else -> ResponseEntity.internalServerError().build()
             }
         }
 }
