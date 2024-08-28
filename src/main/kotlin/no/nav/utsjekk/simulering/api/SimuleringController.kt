@@ -38,7 +38,7 @@ class SimuleringController(
         @RequestBody requestDto: SimuleringRequestTilleggsstønaderDto,
     ) = catchSimuleringsfeil {
         val respons = simuleringService.hentSimuleringsresultatMedOppsummering(requestDto.tilInterntFormat())
-        ResponseEntity.ok(respons)
+        respons?.let { ResponseEntity.ok(it) } ?: ResponseEntity.noContent().build()
     }
 
     @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE], path = ["/v2"])
@@ -47,6 +47,7 @@ class SimuleringController(
         description = "Simulerer iverksetting",
     )
     @ApiResponse(responseCode = "200", description = "simulering utført ok")
+    @ApiResponse(responseCode = "204", description = "ingen endring i utbetaling på saken, simulering utføres ikke")
     @ApiResponse(responseCode = "400", description = "ugyldig format på simulering")
     @ApiResponse(responseCode = "409", description = "simuleringen er i konflikt med tidligere utbetalinger")
     @ApiResponse(responseCode = "503", description = "OS/UR er midlertidig stengt")
@@ -55,7 +56,7 @@ class SimuleringController(
     ) = catchSimuleringsfeil {
         val fagsystem = konsumentConfig.finnFagsystem(TokenContext.hentKlientnavn())
         val respons = simuleringService.hentSimuleringsresultatMedOppsummering(requestDto.tilInterntFormat(fagsystem))
-        ResponseEntity.ok(respons)
+        respons?.let { ResponseEntity.ok(it) } ?: ResponseEntity.noContent().build()
     }
 
     private fun <T> catchSimuleringsfeil(block: () -> T) =
