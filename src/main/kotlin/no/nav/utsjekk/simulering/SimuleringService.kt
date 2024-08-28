@@ -5,7 +5,6 @@ import no.nav.utsjekk.iverksetting.domene.lagAndelData
 import no.nav.utsjekk.iverksetting.domene.tilAndelData
 import no.nav.utsjekk.iverksetting.tilstand.IverksettingsresultatService
 import no.nav.utsjekk.iverksetting.utbetalingsoppdrag.Utbetalingsgenerator
-import no.nav.utsjekk.kontrakter.felles.Fagsystem
 import no.nav.utsjekk.kontrakter.oppdrag.Utbetalingsoppdrag
 import no.nav.utsjekk.simulering.api.SimuleringResponsDto
 import no.nav.utsjekk.simulering.client.SimuleringClient
@@ -35,28 +34,30 @@ class SimuleringService(
             simulering.forrigeIverksetting?.let {
                 val forrigeIverksetting =
                     iverksettingsresultatService.hentIverksettingsresultat(
-                        fagsystem = Fagsystem.TILLEGGSSTØNADER,
+                        fagsystem = simulering.behandlingsinformasjon.fagsystem,
                         sakId = simulering.behandlingsinformasjon.fagsakId,
                         behandlingId = it.behandlingId,
                         iverksettingId = it.iverksettingId,
                     )
                         ?: throw ApiFeil(
-                            "Fant ikke iverksettingsresultat for behandling ${it.behandlingId}/iverksetting ${it.iverksettingId}",
+                            "Fant ikke iverksettingsresultat for fagsystem ${simulering.behandlingsinformasjon.fagsystem}/behandling ${it.behandlingId}/iverksetting ${it.iverksettingId}",
                             HttpStatus.BAD_REQUEST,
                         )
                 forrigeIverksetting.tilkjentYtelseForUtbetaling
             }
         val sisteAndelPerKjede =
-            forrigeTilkjentYtelse?.sisteAndelPerKjede
+            forrigeTilkjentYtelse
+                ?.sisteAndelPerKjede
                 ?.mapValues { it.value.tilAndelData() }
                 ?: emptyMap()
 
-        return Utbetalingsgenerator.lagUtbetalingsoppdrag(
-            behandlingsinformasjon = simulering.behandlingsinformasjon,
-            nyeAndeler = simulering.nyTilkjentYtelse.lagAndelData(),
-            forrigeAndeler = forrigeTilkjentYtelse?.lagAndelData() ?: emptyList(),
-            sisteAndelPerKjede = sisteAndelPerKjede,
-        ).utbetalingsoppdrag
+        return Utbetalingsgenerator
+            .lagUtbetalingsoppdrag(
+                behandlingsinformasjon = simulering.behandlingsinformasjon,
+                nyeAndeler = simulering.nyTilkjentYtelse.lagAndelData(),
+                forrigeAndeler = forrigeTilkjentYtelse?.lagAndelData() ?: emptyList(),
+                sisteAndelPerKjede = sisteAndelPerKjede,
+            ).utbetalingsoppdrag
     }
 
     private fun Utbetalingsoppdrag.valider() {
