@@ -28,19 +28,6 @@ class SimuleringController(
     private val simuleringService: SimuleringService,
     private val konsumentConfig: KonsumentConfig,
 ) {
-    @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE], path = ["/tilleggsstonader"])
-    @Operation(
-        summary = "Simulering av utbetaling for tilleggsstønader",
-        description = "Simulerer iverksetting",
-        deprecated = true,
-    )
-    fun hentSimulering(
-        @RequestBody requestDto: SimuleringRequestTilleggsstønaderDto,
-    ) = catchSimuleringsfeil {
-        val respons = simuleringService.hentSimuleringsresultatMedOppsummering(requestDto.tilInterntFormat())
-        respons?.let { ResponseEntity.ok(it) } ?: ResponseEntity.noContent().build()
-    }
-
     @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE], path = ["/v2"])
     @Operation(
         summary = "Simulering av utbetaling",

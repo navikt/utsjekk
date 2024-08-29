@@ -4,19 +4,15 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.module.kotlin.readValue
 import no.nav.familie.prosessering.internal.TaskService
 import no.nav.utsjekk.Integrasjonstest
-import no.nav.utsjekk.iverksetting.domene.transformer.RandomOSURId
 import no.nav.utsjekk.iverksetting.featuretoggle.IverksettingErSkruddAvException
 import no.nav.utsjekk.iverksetting.task.IverksettMotOppdragTask
-import no.nav.utsjekk.iverksetting.util.enIverksettTilleggsstønaderDto
 import no.nav.utsjekk.iverksetting.util.enIverksettV2Dto
 import no.nav.utsjekk.konfig.FeatureToggleMock
 import no.nav.utsjekk.kontrakter.felles.Fagsystem
 import no.nav.utsjekk.kontrakter.felles.Personident
 import no.nav.utsjekk.kontrakter.felles.objectMapper
 import no.nav.utsjekk.kontrakter.iverksett.IverksettStatus
-import no.nav.utsjekk.kontrakter.iverksett.IverksettTilleggsstønaderDto
 import no.nav.utsjekk.kontrakter.iverksett.IverksettV2Dto
-import no.nav.utsjekk.kontrakter.iverksett.VedtaksdetaljerTilleggsstønaderDto
 import no.nav.utsjekk.kontrakter.iverksett.VedtaksdetaljerV2Dto
 import org.intellij.lang.annotations.Language
 import org.junit.jupiter.api.AfterEach
@@ -128,37 +124,6 @@ class IverksettingControllerTest : Integrasjonstest() {
     }
 
     @Test
-    fun `start iverksetting av tilleggsstønader`() {
-        val dto =
-            enIverksettTilleggsstønaderDto(
-                behandlingId = behandlingId,
-                sakId = sakId,
-                iverksettingId = "en-iverksetting",
-            )
-
-        restTemplate
-            .exchange<Unit>(
-                localhostUrl("/api/iverksetting/tilleggsstonader"),
-                HttpMethod.POST,
-                HttpEntity(dto, headers),
-            ).also {
-                assertEquals(HttpStatus.ACCEPTED, it.statusCode)
-            }
-
-        kjørTasks()
-
-        restTemplate
-            .exchange<IverksettStatus>(
-                localhostUrl("/api/iverksetting/${dto.sakId}/${dto.behandlingId}/${dto.iverksettingId}/status"),
-                HttpMethod.GET,
-                HttpEntity(null, headers),
-            ).also {
-                assertEquals(HttpStatus.OK, it.statusCode)
-                assertEquals(IverksettStatus.SENDT_TIL_OPPDRAG, it.body)
-            }
-    }
-
-    @Test
     fun `start iverksetting v2 av tilleggsstønader`() {
         headers.setBearerAuth(lokalTestToken(klientapp = "dev-gcp:tilleggsstonader:tilleggsstonader-sak"))
 
@@ -221,49 +186,6 @@ class IverksettingControllerTest : Integrasjonstest() {
         restTemplate
             .exchange<IverksettStatus>(
                 localhostUrl("/api/iverksetting/$sakId/$behandlingId/status"),
-                HttpMethod.GET,
-                HttpEntity(null, headers),
-            ).also {
-                assertEquals(HttpStatus.OK, it.statusCode)
-                assertEquals(IverksettStatus.OK_UTEN_UTBETALING, it.body)
-            }
-    }
-
-    @Test
-    fun `start iverksetting av vedtak for tilleggsstønader uten utbetaling`() {
-        val behandlingId = RandomOSURId.generate()
-        val sakId = RandomOSURId.generate()
-        val iverksettingId = "c2502e75-6e78-40fa-9124-6549341855b4"
-
-        val dto =
-            IverksettTilleggsstønaderDto(
-                behandlingId = behandlingId,
-                sakId = sakId,
-                personident = Personident("18498636957"),
-                vedtak =
-                    VedtaksdetaljerTilleggsstønaderDto(
-                        beslutterId = "Z994230",
-                        saksbehandlerId = "Z994230",
-                        utbetalinger = emptyList(),
-                        vedtakstidspunkt = LocalDateTime.of(2024, 2, 19, 13, 10),
-                    ),
-                iverksettingId = iverksettingId,
-            )
-
-        restTemplate
-            .exchange<Unit>(
-                localhostUrl("/api/iverksetting/tilleggsstonader"),
-                HttpMethod.POST,
-                HttpEntity(dto, headers),
-            ).also {
-                assertEquals(HttpStatus.ACCEPTED, it.statusCode)
-            }
-
-        kjørTasks()
-
-        restTemplate
-            .exchange<IverksettStatus>(
-                localhostUrl("/api/iverksetting/$sakId/$behandlingId/$iverksettingId/status"),
                 HttpMethod.GET,
                 HttpEntity(null, headers),
             ).also {
