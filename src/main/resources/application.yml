@@ -111,7 +111,7 @@ konsumenter:
     apper: tiltakspenger-vedtak
   tilleggsstønader:
     fagsystem: TILLEGGSSTØNADER
-    apper: tilleggsstonader-sak, utsjekk
+    apper: tilleggsstonader-sak,utsjekk
   dagpenger:
     fagsystem: DAGPENGER
     apper: ingen
