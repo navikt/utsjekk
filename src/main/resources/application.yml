@@ -111,10 +111,10 @@ konsumenter:
     apper: tiltakspenger-vedtak
   tilleggsstønader:
     fagsystem: TILLEGGSSTØNADER
-    apper: tilleggsstonader-sak,utsjekk
+    apper: tilleggsstonader-sak
   dagpenger:
     fagsystem: DAGPENGER
-    apper: ingen
+    apper: utsjekk
 
 kafka:
   config:
