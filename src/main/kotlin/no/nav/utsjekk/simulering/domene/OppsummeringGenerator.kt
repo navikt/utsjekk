@@ -13,7 +13,7 @@ object OppsummeringGenerator {
                     fom = it.fom,
                     tom = it.tom,
                     tidligereUtbetalt = beregnTidligereUtbetalt(it.posteringer),
-                    nyUtbetaling = beregnNyUtbetaling(it.posteringer),
+                    nyUtbetaling = beregnNyttBeløp(it.posteringer),
                     totalEtterbetaling = if (it.fom > LocalDate.now()) 0 else beregnEtterbetaling(it.posteringer),
                     totalFeilutbetaling = beregnFeilutbetaling(it.posteringer),
                 )
@@ -24,9 +24,12 @@ object OppsummeringGenerator {
     private fun beregnTidligereUtbetalt(posteringer: List<Postering>): Int =
         abs(posteringer.summerBareNegativePosteringer(PosteringType.YTELSE))
 
-    private fun beregnNyUtbetaling(posteringer: List<Postering>): Int =
-        posteringer.summerBarePositivePosteringer(PosteringType.YTELSE) -
-            posteringer.summerBarePositivePosteringer(PosteringType.FEILUTBETALING)
+    private fun beregnNyttBeløp(posteringer: List<Postering>): Int =
+        if (posteringer.any { it.type == PosteringType.FEILUTBETALING }) {
+            beregnTidligereUtbetalt(posteringer) - posteringer.summerPosteringer(PosteringType.FEILUTBETALING)
+        } else {
+            posteringer.summerBarePositivePosteringer(PosteringType.YTELSE)
+        }
 
     /**
      * Hvis perioden har en positiv feilutbetaling, kan det per def ikke være noen etterbetaling (det overskytende beløpet ville i så fall kansellert ut feilutbetalingen)
@@ -50,7 +53,7 @@ object OppsummeringGenerator {
         if (detFinnesPositivFeilutbetaling(posteringer)) {
             -posteringer.summerBarePositivePosteringer(PosteringType.FEILUTBETALING)
         } else {
-            beregnNyUtbetaling(posteringer) - beregnTidligereUtbetalt(posteringer)
+            beregnNyttBeløp(posteringer) - beregnTidligereUtbetalt(posteringer)
         }
 
     private fun detFinnesPositivFeilutbetaling(posteringer: List<Postering>): Boolean =
@@ -61,4 +64,7 @@ object OppsummeringGenerator {
 
     private fun List<Postering>.summerBareNegativePosteringer(type: PosteringType): Int =
         this.filter { it.beløp < 0 && it.type == type }.sumOf { it.beløp }
+
+    private fun List<Postering>.summerPosteringer(type: PosteringType): Int =
+        this.filter { it.type == type }.sumOf { it.beløp }
 }
