@@ -71,8 +71,8 @@ class IverksettingRepository(private val jdbcTemplate: NamedParameterJdbcTemplat
             select behandling_id, data, mottatt_tidspunkt 
             from iverksetting 
             where behandling_id = :behandlingId 
-                and (data -> 'fagsak' ->> 'fagsakId' = :sakId or data -> 'fagsak' -> 'fagsakId' ->> 'id' = :sakId) 
-                and (data -> 'behandling' ->> 'iverksettingId' = :iverksettingId or data -> 'behandling' -> 'iverksettingId' ->> 'id' = :iverksettingId)
+                and data -> 'fagsak' ->> 'fagsakId' = :sakId 
+                and data -> 'behandling' ->> 'iverksettingId' = :iverksettingId
             """.trimIndent(),
             mapOf(
                 "behandlingId" to behandlingId,
@@ -91,8 +91,8 @@ class IverksettingRepository(private val jdbcTemplate: NamedParameterJdbcTemplat
             select behandling_id, data, mottatt_tidspunkt 
             from iverksetting 
             where behandling_id = :behandlingId 
-                and (data -> 'fagsak' ->> 'fagsakId' = :sakId or data -> 'fagsak' -> 'fagsakId' ->> 'id' = :sakId) 
-                and (data -> 'behandling' ->> 'iverksettingId' is null and data -> 'behandling' -> 'iverksettingId' ->> 'id' is null)
+                and data -> 'fagsak' ->> 'fagsakId' = :sakId 
+                and data -> 'behandling' ->> 'iverksettingId' is null
             """.trimIndent(),
             mapOf("behandlingId" to behandlingId, "sakId" to fagsakId),
             IverksettingRowMapper(),
