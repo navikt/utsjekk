@@ -1,18 +1,19 @@
 package no.nav.utsjekk.simulering.api
 
+import no.nav.familie.prosessering.internal.TaskService
 import no.nav.utsjekk.Integrasjonstest
+import no.nav.utsjekk.iverksetting.task.IverksettMotOppdragTask
 import no.nav.utsjekk.iverksetting.util.enIverksettV2Dto
-import no.nav.utsjekk.iverksetting.util.enUtbetalingV2Dto
-import no.nav.utsjekk.kontrakter.felles.Personident
 import no.nav.utsjekk.kontrakter.felles.StønadTypeTilleggsstønader
 import no.nav.utsjekk.kontrakter.felles.StønadTypeTiltakspenger
 import no.nav.utsjekk.kontrakter.iverksett.ForrigeIverksettingV2Dto
-import no.nav.utsjekk.kontrakter.iverksett.StønadsdataDto
 import no.nav.utsjekk.kontrakter.iverksett.StønadsdataTilleggsstønaderDto
 import no.nav.utsjekk.kontrakter.iverksett.StønadsdataTiltakspengerV2Dto
+import no.nav.utsjekk.simulering.enSimuleringRequestV2Dto
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.web.client.exchange
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
@@ -20,10 +21,15 @@ import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
-import java.time.LocalDate
 import java.util.UUID
 
 class SimuleringControllerTest : Integrasjonstest() {
+    @Autowired
+    lateinit var taskService: TaskService
+
+    @Autowired
+    lateinit var iverksettMotOppdragTask: IverksettMotOppdragTask
+
     @BeforeEach
     fun setUp() {
         headers.setBearerAuth(lokalTestToken())
@@ -31,7 +37,7 @@ class SimuleringControllerTest : Integrasjonstest() {
     }
 
     @Test
-    fun `400 ved endring på ikke-eksisterende utbetaling`() {
+    fun `409 ved endring på ikke-eksisterende utbetaling`() {
         val body =
             enSimuleringRequestV2Dto(stønadsdataDto = StønadsdataTilleggsstønaderDto(StønadTypeTilleggsstønader.TILSYN_BARN_AAP))
                 .copy(
@@ -49,7 +55,7 @@ class SimuleringControllerTest : Integrasjonstest() {
                 HttpEntity(body, headers),
             )
 
-        assertEquals(HttpStatus.BAD_REQUEST, respons.statusCode)
+        assertEquals(HttpStatus.CONFLICT, respons.statusCode)
     }
 
     @Test
@@ -97,17 +103,22 @@ class SimuleringControllerTest : Integrasjonstest() {
     fun `Simulerer for tilleggsstønader med eksisterende iverksetting`() {
         val forrigeIverksettingId = UUID.randomUUID().toString()
         val forrigeBehandlingId = "forrige-behandling"
-        val forrigeIverksetting =
+        val sakId = "en-sakid"
+        val forrigeIverksettingTmp =
             enIverksettV2Dto(
                 behandlingId = forrigeBehandlingId,
-                sakId = "en-sakid",
+                sakId = sakId,
                 iverksettingId = forrigeIverksettingId,
             )
+        val forrigeIverksetting = forrigeIverksettingTmp.copy(vedtak = forrigeIverksettingTmp.vedtak.copy(utbetalinger = emptyList()))
         restTemplate.exchange<Any>(
             localhostUrl("/api/iverksetting/v2"),
             HttpMethod.POST,
             HttpEntity(forrigeIverksetting, headers),
         )
+        taskService.findAll().let { tasks ->
+            iverksettMotOppdragTask.doTask(tasks.first())
+        }
 
         val body =
             enSimuleringRequestV2Dto(
@@ -116,6 +127,7 @@ class SimuleringControllerTest : Integrasjonstest() {
                         stønadstype = StønadTypeTilleggsstønader.TILSYN_BARN_ETTERLATTE,
                     ),
             ).copy(
+                sakId = sakId,
                 forrigeIverksetting =
                     ForrigeIverksettingV2Dto(
                         behandlingId = forrigeBehandlingId,
@@ -132,21 +144,4 @@ class SimuleringControllerTest : Integrasjonstest() {
 
         assertEquals(HttpStatus.OK, respons.statusCode)
     }
-
-    private fun enSimuleringRequestV2Dto(stønadsdataDto: StønadsdataDto) =
-        SimuleringRequestV2Dto(
-            sakId = "en-sakid",
-            behandlingId = "en-behandlingId",
-            personident = Personident("15507600333"),
-            saksbehandlerId = "A123456",
-            utbetalinger =
-                listOf(
-                    enUtbetalingV2Dto(
-                        beløp = 100u,
-                        fraOgMed = LocalDate.of(2020, 1, 1),
-                        tilOgMed = LocalDate.of(2020, 1, 31),
-                        stønadsdata = stønadsdataDto,
-                    ),
-                ),
-        )
 }

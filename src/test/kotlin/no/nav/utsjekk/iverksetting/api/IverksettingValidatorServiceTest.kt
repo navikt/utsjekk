@@ -66,7 +66,12 @@ class IverksettingValidatorServiceTest {
                 sakId = sakId,
                 forrigeBehandlingId = forrigeIverksetting.behandlingId,
             )
-        every { iverksettingServiceMock.hentSisteMottatteIverksetting(nåværendeIverksetting) } returns sisteMottatteIverksetting.data
+        every {
+            iverksettingServiceMock.hentSisteMottatteIverksetting(
+                fagsystem = nåværendeIverksetting.fagsak.fagsystem,
+                sakId = nåværendeIverksetting.sakId,
+            )
+        } returns sisteMottatteIverksetting.data
 
         assertApiFeil(HttpStatus.BAD_REQUEST) {
             iverksettingValidatorService.validerAtForrigeIverksettingErLikSisteMottatteIverksetting(
@@ -99,7 +104,12 @@ class IverksettingValidatorServiceTest {
                 forrigeBehandlingId = forrigeIverksetting.behandlingId,
                 forrigeIverksettingId = forrigeIverksetting.behandling.iverksettingId,
             )
-        every { iverksettingServiceMock.hentSisteMottatteIverksetting(nåværendeIverksetting) } returns sisteMottatteIverksetting.data
+        every {
+            iverksettingServiceMock.hentSisteMottatteIverksetting(
+                fagsystem = nåværendeIverksetting.fagsak.fagsystem,
+                sakId = nåværendeIverksetting.sakId,
+            )
+        } returns sisteMottatteIverksetting.data
 
         assertApiFeil(HttpStatus.BAD_REQUEST) {
             iverksettingValidatorService.validerAtForrigeIverksettingErLikSisteMottatteIverksetting(
@@ -124,7 +134,12 @@ class IverksettingValidatorServiceTest {
             lagIverksettingsdata(
                 sakId = sakId,
             )
-        every { iverksettingServiceMock.hentSisteMottatteIverksetting(nåværendeIverksetting) } returns sisteMottatteIverksetting.data
+        every {
+            iverksettingServiceMock.hentSisteMottatteIverksetting(
+                fagsystem = nåværendeIverksetting.fagsak.fagsystem,
+                sakId = nåværendeIverksetting.sakId,
+            )
+        } returns sisteMottatteIverksetting.data
 
         assertApiFeil(HttpStatus.BAD_REQUEST) {
             iverksettingValidatorService.validerAtForrigeIverksettingErLikSisteMottatteIverksetting(
@@ -139,7 +154,12 @@ class IverksettingValidatorServiceTest {
             lagIverksettingsdata(
                 forrigeBehandlingId = RandomOSURId.generate(),
             )
-        every { iverksettingServiceMock.hentSisteMottatteIverksetting(nåværendeIverksetting) } returns null
+        every {
+            iverksettingServiceMock.hentSisteMottatteIverksetting(
+                fagsystem = nåværendeIverksetting.fagsak.fagsystem,
+                sakId = nåværendeIverksetting.sakId,
+            )
+        } returns null
 
         assertApiFeil(HttpStatus.BAD_REQUEST) {
             iverksettingValidatorService.validerAtForrigeIverksettingErLikSisteMottatteIverksetting(
@@ -222,9 +242,13 @@ class IverksettingValidatorServiceTest {
 
         return Utbetalingsgenerator.lagUtbetalingsoppdrag(
             behandlingsinformasjon = behandlingsinformasjon,
-            nyeAndeler = iverksettingData.vedtak.tilkjentYtelse.andelerTilkjentYtelse.map { it.tilAndelData() },
+            nyeAndeler =
+                iverksettingData.vedtak.tilkjentYtelse.andelerTilkjentYtelse
+                    .map { it.tilAndelData() },
             forrigeAndeler = emptyList(),
-            sisteAndelPerKjede = iverksettingData.vedtak.tilkjentYtelse.sisteAndelPerKjede.mapValues { it.value.tilAndelData() },
+            sisteAndelPerKjede =
+                iverksettingData.vedtak.tilkjentYtelse.sisteAndelPerKjede
+                    .mapValues { it.value.tilAndelData() },
         )
     }
 }

@@ -26,6 +26,7 @@ import org.springframework.web.client.HttpServerErrorException
 @Tag(name = "Simulering")
 class SimuleringController(
     private val simuleringService: SimuleringService,
+    private val simuleringValidator: SimuleringValidator,
     private val konsumentConfig: KonsumentConfig,
 ) {
     @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE], path = ["/v2"])
@@ -42,7 +43,9 @@ class SimuleringController(
         @RequestBody requestDto: SimuleringRequestV2Dto,
     ) = catchSimuleringsfeil {
         val fagsystem = konsumentConfig.finnFagsystem(TokenContext.hentKlientnavn())
-        val respons = simuleringService.hentSimuleringsresultatMedOppsummering(requestDto.tilInterntFormat(fagsystem))
+        val simulering = requestDto.tilInterntFormat(fagsystem)
+        simuleringValidator.valider(simulering)
+        val respons = simuleringService.hentSimuleringsresultatMedOppsummering(simulering)
         respons?.let { ResponseEntity.ok(it) } ?: ResponseEntity.noContent().build()
     }
 

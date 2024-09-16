@@ -80,12 +80,12 @@ class IverksettingService(
         iverksettingId: String? = null,
     ): Iverksetting? {
         val iverksettingerForFagsystem =
-            iverksettingRepository.findByFagsakAndBehandlingAndIverksetting(
-                sakId,
-                behandlingId,
-                iverksettingId,
-            )
-                .filter { it.data.fagsak.fagsystem == fagsystem }
+            iverksettingRepository
+                .findByFagsakAndBehandlingAndIverksetting(
+                    sakId,
+                    behandlingId,
+                    iverksettingId,
+                ).filter { it.data.fagsak.fagsystem == fagsystem }
         return when (iverksettingerForFagsystem.size) {
             0 -> null
             1 -> iverksettingerForFagsystem.first().data
@@ -109,11 +109,16 @@ class IverksettingService(
                 )
         }
 
-    fun hentSisteMottatteIverksetting(iverksetting: Iverksetting): Iverksetting? =
-        iverksettingRepository.findByFagsakIdAndFagsystem(
-            fagsakId = iverksetting.sakId,
-            fagsystem = iverksetting.fagsak.fagsystem,
-        ).maxByOrNull { it.mottattTidspunkt }?.data
+    fun hentSisteMottatteIverksetting(
+        fagsystem: Fagsystem,
+        sakId: String,
+    ): Iverksetting? =
+        iverksettingRepository
+            .findByFagsakIdAndFagsystem(
+                fagsakId = sakId,
+                fagsystem = fagsystem,
+            ).maxByOrNull { it.mottattTidspunkt }
+            ?.data
 
     private fun førsteHovedflytTask() = hovedflyt().first().type
 
@@ -206,8 +211,10 @@ fun Task.erAktiv() =
         this.status != Status.FERDIG
 
 private fun OppdragStatus.erFerdigstilt(): Boolean =
-    this == OppdragStatus.KVITTERT_OK || this == OppdragStatus.KVITTERT_TEKNISK_FEIL ||
-        this == OppdragStatus.KVITTERT_FUNKSJONELL_FEIL || this == OppdragStatus.KVITTERT_MED_MANGLER
+    this == OppdragStatus.KVITTERT_OK ||
+        this == OppdragStatus.KVITTERT_TEKNISK_FEIL ||
+        this == OppdragStatus.KVITTERT_FUNKSJONELL_FEIL ||
+        this == OppdragStatus.KVITTERT_MED_MANGLER
 
 private fun OppdragStatus.erFeilkvittering(): Boolean =
     this == OppdragStatus.KVITTERT_FUNKSJONELL_FEIL || this == OppdragStatus.KVITTERT_TEKNISK_FEIL

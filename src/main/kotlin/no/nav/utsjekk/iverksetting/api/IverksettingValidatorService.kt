@@ -41,7 +41,11 @@ class IverksettingValidatorService(
     }
 
     internal fun validerAtForrigeIverksettingErLikSisteMottatteIverksetting(iverksetting: Iverksetting) {
-        val sisteMottatteIverksetting = iverksettingService.hentSisteMottatteIverksetting(iverksetting)
+        val sisteMottatteIverksetting =
+            iverksettingService.hentSisteMottatteIverksetting(
+                fagsystem = iverksetting.fagsak.fagsystem,
+                sakId = iverksetting.sakId,
+        )
         sisteMottatteIverksetting?.let {
             if (it.behandlingId != iverksetting.behandling.forrigeBehandlingId ||
                 it.behandling.iverksettingId != iverksetting.behandling.forrigeIverksettingId
