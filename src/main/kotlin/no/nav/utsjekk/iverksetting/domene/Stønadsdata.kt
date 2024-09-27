@@ -2,12 +2,6 @@ package no.nav.utsjekk.iverksetting.domene
 
 import com.fasterxml.jackson.annotation.JsonSubTypes
 import com.fasterxml.jackson.annotation.JsonTypeInfo
-import com.fasterxml.jackson.core.JsonGenerator
-import com.fasterxml.jackson.databind.DeserializationContext
-import com.fasterxml.jackson.databind.JsonSerializer
-import com.fasterxml.jackson.databind.KeyDeserializer
-import com.fasterxml.jackson.databind.SerializerProvider
-import no.nav.utsjekk.felles.http.ObjectMapperProvider.objectMapper
 import no.nav.utsjekk.kontrakter.felles.BrukersNavKontor
 import no.nav.utsjekk.kontrakter.felles.StønadType
 import no.nav.utsjekk.kontrakter.felles.StønadTypeDagpenger
@@ -37,6 +31,7 @@ sealed class Stønadsdata(
 data class StønadsdataDagpenger(
     override val stønadstype: StønadTypeDagpenger,
     val ferietillegg: Ferietillegg? = null,
+    val meldekortId: String,
 ) : Stønadsdata(stønadstype) {
     fun tilKlassifiseringDagpenger(): String =
         when (this.stønadstype) {
@@ -69,15 +64,15 @@ data class StønadsdataDagpenger(
                 }
         }
 
-    // TODO faktisk meldekortId må inn her når grensesnittet er utvidet
     override fun tilKjedenøkkel(): Kjedenøkkel =
-        KjedenøkkelMeldeplikt(klassifiseringskode = this.tilKlassifiseringDagpenger(), meldekortId = "TODO")
+        KjedenøkkelMeldeplikt(klassifiseringskode = this.tilKlassifiseringDagpenger(), meldekortId = this.meldekortId)
 }
 
 data class StønadsdataTiltakspenger(
     override val stønadstype: StønadTypeTiltakspenger,
     val barnetillegg: Boolean = false,
     val brukersNavKontor: BrukersNavKontor,
+    val meldekortId: String,
 ) : Stønadsdata(stønadstype) {
     fun tilKlassifiseringTiltakspenger(): String =
         if (barnetillegg) {
@@ -122,9 +117,8 @@ data class StønadsdataTiltakspenger(
             }
         }
 
-    // TODO faktisk meldekortId må inn her når grensesnittet er utvidet
     override fun tilKjedenøkkel(): Kjedenøkkel =
-        KjedenøkkelMeldeplikt(klassifiseringskode = this.tilKlassifiseringTiltakspenger(), meldekortId = "TODO")
+        KjedenøkkelMeldeplikt(klassifiseringskode = this.tilKlassifiseringTiltakspenger(), meldekortId = this.meldekortId)
 }
 
 data class StønadsdataTilleggsstønader(

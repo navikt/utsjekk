@@ -73,7 +73,11 @@ object IverksettV2DtoMapper {
 }
 
 private fun StønadsdataDagpengerDto.tilDomene(): StønadsdataDagpenger =
-    StønadsdataDagpenger(stønadstype = this.stønadstype, ferietillegg = this.ferietillegg)
+    StønadsdataDagpenger(
+        stønadstype = this.stønadstype,
+        ferietillegg = this.ferietillegg,
+        meldekortId = this.meldekortId,
+    )
 
 private fun StønadsdataTilleggsstønaderDto.tilDomene(): StønadsdataTilleggsstønader =
     StønadsdataTilleggsstønader(
@@ -86,4 +90,5 @@ private fun StønadsdataTiltakspengerV2Dto.tilDomene(): StønadsdataTiltakspenge
         stønadstype = this.stønadstype,
         barnetillegg = this.barnetillegg,
         brukersNavKontor = BrukersNavKontor(enhet = this.brukersNavKontor),
+        meldekortId = this.meldekortId,
     )

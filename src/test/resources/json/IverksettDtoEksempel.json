@@ -14,7 +14,8 @@
         "tilOgMedDato": "2021-05-31",
         "stønadsdata": {
           "stønadstype": "DAGPENGER_ARBEIDSSØKER_ORDINÆR",
-          "ferietillegg": "ORDINÆR"
+          "ferietillegg": "ORDINÆR",
+          "meldekortId": "UKE_1_2_2024"
         }
       }
     ]

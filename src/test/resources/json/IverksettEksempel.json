@@ -24,7 +24,8 @@
           "tilOgMed": null,
           "stønadsdata": {
             "@type": "dagpenger",
-            "stønadstype": "DAGPENGER_ARBEIDSSØKER_ORDINÆR"
+            "stønadstype": "DAGPENGER_ARBEIDSSØKER_ORDINÆR",
+            "meldekortId": "M1"
           },
           "periode": {
             "fom": "2021-05-01",

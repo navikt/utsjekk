@@ -25,7 +25,7 @@ fun enAndelTilkjentYtelse(
     til: LocalDate = LocalDate.of(2021, 12, 31),
     periodeId: Long? = null,
     forrigePeriodeId: Long? = null,
-    stønadsdata: Stønadsdata = StønadsdataDagpenger(stønadstype = StønadTypeDagpenger.DAGPENGER_ARBEIDSSØKER_ORDINÆR),
+    stønadsdata: Stønadsdata = StønadsdataDagpenger(stønadstype = StønadTypeDagpenger.DAGPENGER_ARBEIDSSØKER_ORDINÆR, meldekortId = "M1"),
 ) = AndelTilkjentYtelse(
     beløp = beløp,
     periode = Periode(fra, til),

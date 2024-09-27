@@ -164,7 +164,7 @@ class AndelValidatorTest {
         tom = tom,
         beløp = beløp,
         satstype = satstype,
-        stønadsdata = StønadsdataDagpenger(ytelseType),
+        stønadsdata = StønadsdataDagpenger(stønadstype = ytelseType, meldekortId = "M1"),
         periodeId = periodeId,
         forrigePeriodeId = forrigePeriodeId,
     )

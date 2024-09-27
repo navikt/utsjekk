@@ -83,9 +83,10 @@ class SimuleringControllerTest : Integrasjonstest() {
             enSimuleringRequestV2Dto(
                 stønadsdataDto =
                     StønadsdataTiltakspengerV2Dto(
-                        StønadTypeTiltakspenger.ARBEIDSTRENING,
-                        false,
-                        "4400",
+                        stønadstype = StønadTypeTiltakspenger.ARBEIDSTRENING,
+                        barnetillegg = false,
+                        brukersNavKontor = "4400",
+                        meldekortId = "M1",
                     ),
             )
 

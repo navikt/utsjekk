@@ -332,6 +332,7 @@ internal class IverksettingServiceTest {
                                 StønadsdataTiltakspenger(
                                     stønadstype = StønadTypeTiltakspenger.JOBBKLUBB,
                                     brukersNavKontor = BrukersNavKontor("4400"),
+                                    meldekortId = "M1",
                                 ),
                         ),
                     ),

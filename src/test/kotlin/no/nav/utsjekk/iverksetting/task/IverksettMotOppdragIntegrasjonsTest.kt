@@ -138,7 +138,14 @@ class IverksettMotOppdragIntegrasjonsTest : Integrasjonstest() {
             startIverksetting(
                 andeler =
                     listOf(
-                        enAndelTilkjentYtelse(stønadsdata = StønadsdataTiltakspenger(stønadstype = StønadTypeTiltakspenger.JOBBKLUBB, brukersNavKontor = BrukersNavKontor("4400"))),
+                        enAndelTilkjentYtelse(
+                            stønadsdata =
+                                StønadsdataTiltakspenger(
+                                    stønadstype = StønadTypeTiltakspenger.JOBBKLUBB,
+                                    brukersNavKontor = BrukersNavKontor("4400"),
+                                    meldekortId = "M1",
+                                ),
+                        ),
                     ),
             )
 

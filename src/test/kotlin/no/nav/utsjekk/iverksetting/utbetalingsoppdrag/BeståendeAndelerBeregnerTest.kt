@@ -359,7 +359,7 @@ class BeståendeAndelerBeregnerTest {
         fom = fom,
         tom = tom,
         beløp = beløp,
-        stønadsdata = StønadsdataDagpenger(type),
+        stønadsdata = StønadsdataDagpenger(stønadstype = type, meldekortId = "M1"),
         periodeId = periodeId,
         forrigePeriodeId = forrigePeriodeId,
     )

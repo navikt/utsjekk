@@ -15,11 +15,13 @@ import java.util.UUID
 object OppdragParser {
     fun mapAndeler(dataTable: DataTable): Map<UUID, List<AndelData>> {
         var index = 0L
-        return dataTable.groupByBehandlingId().map { (behandlingId, rader) ->
-            val andeler = parseAndeler(rader, index)
-            index += andeler.size
-            behandlingIdTilUUID[behandlingId.toInt()]!! to andeler
-        }.toMap()
+        return dataTable
+            .groupByBehandlingId()
+            .map { (behandlingId, rader) ->
+                val andeler = parseAndeler(rader, index)
+                index += andeler.size
+                behandlingIdTilUUID[behandlingId.toInt()]!! to andeler
+            }.toMap()
     }
 
     private fun parseAndeler(
@@ -45,6 +47,7 @@ object OppdragParser {
                     parseValgfriEnum<StønadTypeDagpenger>(DomenebegrepAndeler.YTELSE_TYPE, rad)
                         ?: StønadTypeDagpenger.DAGPENGER_ARBEIDSSØKER_ORDINÆR,
                 ferietillegg = null,
+                meldekortId = "M1",
             )
         return AndelData(
             id = andelId.toString(),
@@ -60,8 +63,8 @@ object OppdragParser {
         )
     }
 
-    fun mapForventetUtbetalingsoppdrag(dataTable: DataTable): List<ForventetUtbetalingsoppdrag> {
-        return dataTable.groupByBehandlingId().map { (behandlingId, rader) ->
+    fun mapForventetUtbetalingsoppdrag(dataTable: DataTable): List<ForventetUtbetalingsoppdrag> =
+        dataTable.groupByBehandlingId().map { (behandlingId, rader) ->
             val rad = rader.first()
             validerAlleKodeEndringerLike(rader)
             ForventetUtbetalingsoppdrag(
@@ -70,7 +73,6 @@ object OppdragParser {
                 utbetalingsperiode = rader.map { mapForventetUtbetalingsperiode(it) },
             )
         }
-    }
 
     private fun mapForventetUtbetalingsperiode(it: Map<String, String>) =
         ForventetUtbetalingsperiode(
@@ -90,21 +92,27 @@ object OppdragParser {
         )
 
     private fun validerAlleKodeEndringerLike(rader: List<Map<String, String>>) {
-        rader.map { parseBoolean(DomenebegrepUtbetalingsoppdrag.FØRSTE_UTBETALING_SAK, it) }
-            .zipWithNext().forEach {
+        rader
+            .map { parseBoolean(DomenebegrepUtbetalingsoppdrag.FØRSTE_UTBETALING_SAK, it) }
+            .zipWithNext()
+            .forEach {
                 assertEquals(it.second, it.first)
             }
     }
 }
 
-enum class DomenebegrepAndeler(override val nøkkel: String) : Domenenøkkel {
+enum class DomenebegrepAndeler(
+    override val nøkkel: String,
+) : Domenenøkkel {
     YTELSE_TYPE("Ytelse"),
     UTEN_ANDELER("Uten andeler"),
     BELØP("Beløp"),
     SATSTYPE("Satstype"),
 }
 
-enum class DomenebegrepUtbetalingsoppdrag(override val nøkkel: String) : Domenenøkkel {
+enum class DomenebegrepUtbetalingsoppdrag(
+    override val nøkkel: String,
+) : Domenenøkkel {
     FØRSTE_UTBETALING_SAK("Første utbetaling sak"),
     ER_ENDRING("Er endring"),
     PERIODE_ID("Periode id"),

@@ -32,7 +32,7 @@ class UtbetalingsgeneratorTest {
                 fom = LocalDate.of(2023, 10, 10),
                 tom = LocalDate.of(2023, 10, 20),
                 beløp = 250,
-                stønadsdata = StønadsdataDagpenger(StønadTypeDagpenger.DAGPENGER_ARBEIDSSØKER_ORDINÆR),
+                stønadsdata = StønadsdataDagpenger(stønadstype = StønadTypeDagpenger.DAGPENGER_ARBEIDSSØKER_ORDINÆR, meldekortId = "M1"),
             )
     }
 
@@ -41,11 +41,13 @@ class UtbetalingsgeneratorTest {
         val nyeAndeler =
             listOf(
                 basisAndelData.copy(
-                    stønadsdata = StønadsdataTiltakspenger(
-                        stønadstype = StønadTypeTiltakspenger.JOBBKLUBB,
-                        brukersNavKontor = BrukersNavKontor("4400")
-                    )
-                )
+                    stønadsdata =
+                        StønadsdataTiltakspenger(
+                            stønadstype = StønadTypeTiltakspenger.JOBBKLUBB,
+                            brukersNavKontor = BrukersNavKontor("4400"),
+                            meldekortId = "M1",
+                        ),
+                ),
             )
         val behandlingsinformasjonTiltakspenger = behandlingsinformasjon.copy(fagsystem = Fagsystem.TILTAKSPENGER)
 
@@ -69,9 +71,13 @@ class UtbetalingsgeneratorTest {
                 nyeAndeler = emptyList(),
                 forrigeAndeler = listOf(forrigeAndel),
                 sisteAndelPerKjede =
-                mapOf(
-                    StønadsdataDagpenger(StønadTypeDagpenger.DAGPENGER_ARBEIDSSØKER_ORDINÆR).tilKjedenøkkel() to forrigeAndel,
-                ),
+                    mapOf(
+                        StønadsdataDagpenger(
+                            stønadstype = StønadTypeDagpenger.DAGPENGER_ARBEIDSSØKER_ORDINÆR,
+                            meldekortId = "M1",
+                        ).tilKjedenøkkel() to
+                            forrigeAndel,
+                    ),
             )
 
         assertEquals(Fagsystem.DAGPENGER, beregnetUtbetalingsoppdrag.utbetalingsoppdrag.fagsystem)

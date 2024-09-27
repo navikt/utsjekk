@@ -102,6 +102,7 @@ class IverksettingV2DtoValidatorTest {
                                         StønadsdataTiltakspengerV2Dto(
                                             stønadstype = StønadTypeTiltakspenger.JOBBKLUBB,
                                             brukersNavKontor = "4401",
+                                            meldekortId = "M1",
                                         ),
                                 ),
                                 enUtbetalingV2Dto(
@@ -113,6 +114,7 @@ class IverksettingV2DtoValidatorTest {
                                             stønadstype = StønadTypeTiltakspenger.JOBBKLUBB,
                                             barnetillegg = true,
                                             brukersNavKontor = "4401",
+                                            meldekortId = "M1",
                                         ),
                                 ),
                             ),
@@ -136,6 +138,7 @@ class IverksettingV2DtoValidatorTest {
                     StønadsdataTiltakspengerV2Dto(
                         stønadstype = StønadTypeTiltakspenger.JOBBKLUBB,
                         brukersNavKontor = "4401",
+                        meldekortId = "M1",
                     ),
             )
         val iverksettDto =
@@ -153,8 +156,13 @@ class IverksettingV2DtoValidatorTest {
     fun `Ferietillegg til avdød for stønadstype EØS skal gi BAD_REQUEST`() {
         val iverksettDto =
             enIverksettV2Dto(
-                stønadsdata = StønadsdataDagpengerDto(stønadstype = StønadTypeDagpenger.DAGPENGER_EØS, ferietillegg = Ferietillegg.AVDØD),
-            )
+                stønadsdata =
+                    StønadsdataDagpengerDto(
+                        stønadstype = StønadTypeDagpenger.DAGPENGER_EØS,
+                        ferietillegg = Ferietillegg.AVDØD,
+                        meldekortId = "M1",
+                    ),
+                    )
 
         assertApiFeil(HttpStatus.BAD_REQUEST) {
             ingenUtbetalingsperioderHarStønadstypeEØSOgFerietilleggTilAvdød(iverksettDto)

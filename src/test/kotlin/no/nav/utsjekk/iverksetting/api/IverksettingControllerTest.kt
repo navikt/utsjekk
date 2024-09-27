@@ -103,7 +103,8 @@ class IverksettingControllerTest : Integrasjonstest() {
                     "tilOgMedDato": "2021-12-31",
                     "stønadsdata": {
                       "stønadstype": "DAGPENGER_ARBEIDSSØKER_ORDINÆR",
-                      "ferietillegg": null
+                      "ferietillegg": null,
+                      "meldekortId": "UKE_40_41_2024"
                     }
                   }
                 ]
