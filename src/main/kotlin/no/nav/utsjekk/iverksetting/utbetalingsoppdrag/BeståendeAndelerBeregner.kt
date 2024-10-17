@@ -1,15 +1,21 @@
 package no.nav.utsjekk.iverksetting.utbetalingsoppdrag
 
 import no.nav.utsjekk.iverksetting.utbetalingsoppdrag.domene.AndelData
+import org.slf4j.LoggerFactory
 import java.time.LocalDate
 
 private sealed interface BeståendeAndelResultat
 
 private object NyAndelSkriverOver : BeståendeAndelResultat
 
-private class Opphørsdato(val opphør: LocalDate) : BeståendeAndelResultat
+private class Opphørsdato(
+    val opphør: LocalDate,
+) : BeståendeAndelResultat
 
-private class AvkortAndel(val andel: AndelData, val opphør: LocalDate? = null) : BeståendeAndelResultat
+private class AvkortAndel(
+    val andel: AndelData,
+    val opphør: LocalDate? = null,
+) : BeståendeAndelResultat
 
 internal data class BeståendeAndeler(
     val andeler: List<AndelData>,
@@ -36,8 +42,9 @@ internal object BeståendeAndelerBeregner {
         forrigeAndeler: List<AndelData>,
         nyeAndeler: List<AndelData>,
         indexPåFørsteEndring: Int?,
-    ): BeståendeAndeler {
-        return if (indexPåFørsteEndring != null) {
+    ): BeståendeAndeler =
+        if (indexPåFørsteEndring != null) {
+            logger.error("Gjør korrigering på allerede utbetalt periode. OS har en prodfeil på dette for tilleggsstønader. Må følges opp.")
             finnBeståendeAndelerNårDetFinnesEndring(
                 forrigeAndeler = forrigeAndeler,
                 nyeAndeler = nyeAndeler,
@@ -46,7 +53,6 @@ internal object BeståendeAndelerBeregner {
         } else {
             BeståendeAndeler(forrigeAndeler, null)
         }
-    }
 
     fun finnBeståendeAndelerNårDetFinnesEndring(
         forrigeAndeler: List<AndelData>,
@@ -137,4 +143,6 @@ internal object BeståendeAndelerBeregner {
         this.fom == other.fom &&
             this.tom == other.tom &&
             this.beløp == other.beløp
+
+    private val logger = LoggerFactory.getLogger(BeståendeAndelerBeregner::class.java)
 }
