@@ -1,7 +1,6 @@
 package no.nav.utsjekk.iverksetting.utbetalingsoppdrag
 
 import no.nav.utsjekk.iverksetting.utbetalingsoppdrag.domene.AndelData
-import org.slf4j.LoggerFactory
 import java.time.LocalDate
 
 private sealed interface BeståendeAndelResultat
@@ -44,7 +43,6 @@ internal object BeståendeAndelerBeregner {
         indexPåFørsteEndring: Int?,
     ): BeståendeAndeler =
         if (indexPåFørsteEndring != null) {
-            logger.error("Gjør korrigering på allerede utbetalt periode. OS har en prodfeil på dette for tilleggsstønader. Må følges opp.")
             finnBeståendeAndelerNårDetFinnesEndring(
                 forrigeAndeler = forrigeAndeler,
                 nyeAndeler = nyeAndeler,
@@ -143,6 +141,4 @@ internal object BeståendeAndelerBeregner {
         this.fom == other.fom &&
             this.tom == other.tom &&
             this.beløp == other.beløp
-
-    private val logger = LoggerFactory.getLogger(BeståendeAndelerBeregner::class.java)
 }
